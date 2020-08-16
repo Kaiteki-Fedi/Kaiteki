@@ -1,0 +1,77 @@
+import 'package:kaiteki/api/model/misskey/misskey_emoji.dart';
+
+class MisskeyUser {
+  String id;
+  String name;
+  String username;
+  String host;
+  String avatarUrl;
+//	dynamic avatarBlurhash;
+//	dynamic avatarColor;
+  bool isAdmin;
+  bool isModerator;
+  bool isBot;
+  bool isCat;
+  List<MisskeyEmoji> emojis;
+  String url;
+//	dynamic createdAt;
+//	dynamic updatedAt;
+  String bannerUrl;
+  String bannerBlurhash;
+//	dynamic bannerColor;
+  bool isLocked;
+  bool isSilenced;
+  bool isSuspended;
+  String description;
+//	dynamic location;
+//	dynamic birthday;
+  List<dynamic> fields;
+  int followersCount;
+  int followingCount;
+  int notesCount;
+  List<dynamic> pinnedNoteIds;
+  List<dynamic> pinnedNotes;
+//	dynamic pinnedPageId;
+//	dynamic pinnedPage;
+  bool twoFactorEnabled;
+  bool usePasswordLessLogin;
+  bool securityKeys;
+
+  MisskeyUser.fromJson(Map<String, dynamic> json) {
+    id = json["id"];
+    name = json["name"];
+    username = json["username"];
+    host = json["host"];
+    avatarUrl = json["avatarUrl"];
+//		avatarBlurhash = json["avatarBlurhash"];
+//		avatarColor = json["avatarColor"];
+    isAdmin = json["isAdmin"];
+    isModerator = json["isModerator"];
+    isBot = json["isBot"];
+    isCat = json["isCat"];
+    emojis = json["emojis"].map<MisskeyEmoji>((j) => MisskeyEmoji.fromJson(j));
+    url = json["url"];
+//		createdAt = json["createdAt"];
+//		updatedAt = json["updatedAt"];
+    bannerUrl = json["bannerUrl"];
+    bannerBlurhash = json["bannerBlurhash"];
+//		bannerColor = json["bannerColor"];
+    isLocked = json["isLocked"];
+    isSilenced = json["isSilenced"];
+    isSuspended = json["isSuspended"];
+    description = json["description"];
+//		location = json["location"];
+//		birthday = json["birthday"];
+    //fields = json.map<Field>((j) => Field.fromJson(j));
+    followersCount = json["followersCount"];
+    followingCount = json["followingCount"];
+    notesCount = json["notesCount"];
+    //pinnedNoteIds = json.map<PinnedNoteId>((j) => PinnedNoteId.fromJson(j));
+    //pinnedNotes = json.map<PinnedNote>((j) => PinnedNote.fromJson(j));
+//		pinnedPageId = json["pinnedPageId"];
+//		pinnedPage = json["pinnedPage"];
+    twoFactorEnabled = json["twoFactorEnabled"];
+    usePasswordLessLogin = json["usePasswordLessLogin"];
+    securityKeys = json["securityKeys"];
+  }
+}
