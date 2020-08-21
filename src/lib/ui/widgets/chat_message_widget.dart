@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/TextRenderer.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
+import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
 import 'package:kaiteki/api/model/pleroma/pleroma_chat.dart';
 import 'package:kaiteki/api/model/pleroma/pleroma_chat_message.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -68,7 +70,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
                   ),
                 ).render(widget.chatMessage.content)
               )
-              : Image.network(widget.chatMessage.attachment.previewUrl),
+              : getAttachmentWidget(widget.chatMessage.attachment),
           ),
         ]),
       ),
@@ -87,5 +89,16 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
       return list.reversed.toList(growable: false);
 
     return list;
+  }
+
+  Widget getAttachmentWidget(MediaAttachment attachment) {
+    switch (attachment.type) {
+      case "image": return ImageAttachmentWidget(attachment);
+    //case "video": return VideoAttachmentWidget(attachment);
+      default: {
+        print("Tried to present an unsupported attachment type: ${attachment.type}");
+        return Container();
+      }
+    }
   }
 }
