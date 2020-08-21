@@ -46,7 +46,7 @@ class AccountScreen extends StatelessWidget {
                   SizedBox(width: 16),
                   Flexible(
                     child: SingleChildScrollView(
-                      child: getStatusBody(pleroma, true),
+                      child: getStatusBody(pleroma),
                     ),
                   ),
                 ],
@@ -54,7 +54,15 @@ class AccountScreen extends StatelessWidget {
             );
           }
 
-          return Container();
+          return ListView(
+            children: [
+              Material(
+                child: getAccountHeader(pleroma),
+                elevation: 4,
+              ),
+              getStatusBody(pleroma),
+            ]
+          );
         },
       )
     );
@@ -79,7 +87,7 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget getStatusBody(MastodonClient client, bool shrinkWrap) {
+  Widget getStatusBody(MastodonClient client) {
     return FutureBuilder(
       future: client.getStatuses(id),
       builder: (BuildContext context, AsyncSnapshot<Iterable<Status>> snapshot) {
