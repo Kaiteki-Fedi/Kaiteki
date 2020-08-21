@@ -56,7 +56,8 @@ class _AppBackgroundScreenState extends State<AppBackgroundScreen> {
             title: Text("Opacity"),
           ),
           Slider(
-            value: container?.getCurrentPleromaTheme()?.getOpacity("bg") ?? 0,
+            value: container.backgroundOpacity,
+            onChanged: (v) => container.backgroundOpacity = v,
           ),
         ],
       )

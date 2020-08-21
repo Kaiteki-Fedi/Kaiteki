@@ -45,8 +45,15 @@ class _KaitekiAppState extends State<KaitekiApp> {
       ],
       child: Builder(
         builder: (context) {
-          var appBackground = _themeContainer.getBackground();
           var themeContainer = Provider.of<ThemeContainer>(context);
+          var appBackground = themeContainer.getBackground();
+          var materialTheme = themeContainer.getCurrentTheme();
+          var backgroundColor = materialTheme.canvasColor;
+
+          backgroundColor = backgroundColor.withOpacity(themeContainer.backgroundOpacity);
+
+          // if (!themeContainer.hasBackground)
+          //   assert(themeContainer.backgroundOpacity != 1);
 
           return Stack(
             alignment: Alignment.topLeft,
@@ -58,10 +65,10 @@ class _KaitekiAppState extends State<KaitekiApp> {
                   fit: BoxFit.cover,
                 ),
               Container(
-                color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.75),
+                color: backgroundColor,
                 child: MaterialApp(
                   title: 'Kaiteki',
-                  theme: themeContainer.getCurrentTheme(),
+                  theme: materialTheme,
                   home: MainScreen(),
                   routes: {
                     "/debug": (_) => DebugScreen(),

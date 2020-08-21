@@ -6,14 +6,28 @@ class ThemeContainer extends ChangeNotifier {
   ThemeData _initial;
   PleromaTheme _currentPleroma;
 
+  double _backgroundOpacity = 1.0;
+
+  double get backgroundOpacity => _backgroundOpacity;
+  set backgroundOpacity(double value) {
+    _backgroundOpacity = value;
+    notifyListeners();
+  }
 
   ThemeData getCurrentTheme() {
+    var materialTheme = _initial;
+
     var pleroma = getCurrentPleromaTheme();
-
     if (pleroma != null)
-      return pleroma.toMaterialTheme();
+      materialTheme = pleroma.toMaterialTheme();
 
-    return _initial;
+    if (backgroundOpacity < 1.0)
+      materialTheme = materialTheme.copyWith(
+        scaffoldBackgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+      );
+
+    return materialTheme;
   }
   PleromaTheme getCurrentPleromaTheme() => _currentPleroma;
 
