@@ -45,6 +45,9 @@ class _KaitekiAppState extends State<KaitekiApp> {
       ],
       child: Builder(
         builder: (context) {
+          var appPreferences = _preferences.getPreferredAppName();
+
+
           var themeContainer = Provider.of<ThemeContainer>(context);
           var appBackground = themeContainer.getBackground();
           var materialTheme = themeContainer.getCurrentTheme();
@@ -67,7 +70,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
               Container(
                 color: backgroundColor,
                 child: MaterialApp(
-                  title: 'Kaiteki',
+                  title: appPreferences,
                   theme: materialTheme,
                   home: MainScreen(),
                   routes: {

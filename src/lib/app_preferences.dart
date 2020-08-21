@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
+import 'package:kaiteki/constants.dart';
 
 class AppPreferences extends ChangeNotifier {
   ButtonPlacement submitButtonLocation = ButtonPlacement.AppBar;
   TextFieldSize textFieldSize = TextFieldSize.Mobile;
   NameMode appNameMode = NameMode.Romaji;
-  /// you won't get any horny today.
-  bool get antiHornyMode => true;
-  // hmm...
+  bool atWorkMode = true;
+
+  String getPreferredAppName() => Constants.getPreferredAppName(appNameMode);
 }
 
 enum TextFieldSize {

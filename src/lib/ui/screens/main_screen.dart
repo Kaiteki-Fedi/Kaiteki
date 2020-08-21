@@ -43,7 +43,10 @@ class _MainScreenState extends State<MainScreen> {
           return Scaffold(
             appBar: AppBar(
               leading: AccountSwitcherWidget(),
-              title: Text("快適", style: TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(
+                preferences.getPreferredAppName(),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             body: Row(
               children: [
@@ -91,7 +94,10 @@ class _MainScreenState extends State<MainScreen> {
           return Scaffold(
             appBar: AppBar(
               leading: AccountSwitcherWidget(),
-              title: Text("快適", style: TextStyle(fontWeight: FontWeight.bold)),
+              title: Text(
+                preferences.getPreferredAppName(),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               actions: [
                 IconButton(
                   icon: Icon(Icons.settings),
