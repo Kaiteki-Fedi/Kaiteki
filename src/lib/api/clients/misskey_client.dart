@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
+import 'package:kaiteki/api/model/misskey/pages/misskey_page.dart';
 import 'package:kaiteki/api/responses/misskey/misskey_create_app_response.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:http/http.dart' as http;
@@ -47,6 +48,25 @@ class MisskeyClient extends FediverseClientBase {
 
     var json = jsonDecode(response.body);
     return MisskeyGenerateSessionResponse.fromJson(json);
+  }
+
+  Future<MisskeyPage> getPage(String i, String username, String name) async {
+    var body = {
+      "i": i,
+      "username": username,
+      "name": name,
+    };
+
+    var response = await http.post(
+        "$baseUrl/api/pages/show",
+        body: jsonEncode(body),
+        headers: getHeaders()
+    );
+
+    Utils.checkResponse(response);
+
+    var json = jsonDecode(response.body);
+    return MisskeyPage.fromJson(json);
   }
 }
 
