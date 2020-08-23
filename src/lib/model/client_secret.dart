@@ -4,8 +4,6 @@ import 'package:kaiteki/utils/string_extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClientSecret {
-  static const bool usePreferences = true;
-
   String clientId;
   String clientSecret;
   String instance;
@@ -36,14 +34,8 @@ class ClientSecret {
     var key = "c;$instance";
 
     try {
-      if (usePreferences) {
-        var preferences = await SharedPreferences.getInstance();
-        secret = preferences.getString(key);
-      } else {
-        var secureStorage = FlutterSecureStorage();
-        secret = await secureStorage.read(key: key);
-      }
-
+      var preferences = await SharedPreferences.getInstance();
+      secret = preferences.getString(key);
     } catch (e) {
       print("Failed to read for secret:\n$e");
       return null;
@@ -60,16 +52,7 @@ class ClientSecret {
   }
 
   Future<void> save() async {
-    if (usePreferences) {
-      var preferences = await SharedPreferences.getInstance();
-      await preferences.setString(toKey(), toValue());
-    } else {
-      var secureStorage = FlutterSecureStorage();
-      await secureStorage.write(
-          key: toKey(),
-          value: toValue()
-      );
-    }
-
+    var preferences = await SharedPreferences.getInstance();
+    await preferences.setString(toKey(), toValue());
   }
 }

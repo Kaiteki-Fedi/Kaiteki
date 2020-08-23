@@ -1,9 +1,6 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountSecret {
-  static const bool usePreferences = true;
-
   String instance;
   String username;
   String accessToken;
@@ -39,35 +36,18 @@ class AccountSecret {
 
   static Future<List<AccountSecret>> getSecrets() async {
     var accounts = <String>[];
-    Iterable<Future<AccountSecret>> futures = <Future<AccountSecret>>[];
+    var preferences = await SharedPreferences.getInstance();
+    accounts = await getAvailableSecrets() ?? <String>[];
 
-    if (usePreferences) {
-      var preferences = await SharedPreferences.getInstance();
-      accounts = await getAvailableSecrets() ?? <String>[];
+    var futures = accounts.map((a) async {
+      var key = "a;$a";
+      var value = preferences.getString(key);
 
-      futures = accounts.map((a) async {
-        var key = "a;$a";
-        var value = preferences.getString(key);
+      if (value == null)
+        return null;
 
-        if (value == null)
-          return null;
-
-        return AccountSecret.fromValue(key, value);
-      });
-    } else {
-      var secureStorage = FlutterSecureStorage();
-      accounts = await getAvailableSecrets() ?? <String>[];
-
-      futures = accounts.map((a) async {
-        var key = "a;$a";
-        var value = await secureStorage.read(key: key);
-
-        if (value == null)
-          return null;
-
-        return AccountSecret.fromValue(key, value);
-      });
-    }
+      return AccountSecret.fromValue(key, value);
+    });
 
     var secrets = await Future.wait(futures);
 
@@ -75,14 +55,7 @@ class AccountSecret {
   }
 
   Future<void> save() async {
-    var key = toKey();
-    var value = toValue();
-
-    if (usePreferences) {
-      await (await SharedPreferences.getInstance()).setString(key, value);
-    } else {
-      await FlutterSecureStorage().write(key: key, value: value);
-    }
-
+    var preferences = await SharedPreferences.getInstance();
+    await preferences.setString(toKey(), toValue());
   }
 }
