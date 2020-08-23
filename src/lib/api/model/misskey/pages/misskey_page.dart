@@ -1,3 +1,4 @@
+import 'package:kaiteki/api/model/misskey/misskey_user.dart';
 import 'package:kaiteki/api/model/misskey/pages/components/misskey_page_component.dart';
 
 class MisskeyPage {
@@ -5,9 +6,9 @@ class MisskeyPage {
   //dynamic createdAt;
   //dynamic updatedAt;
   String userId;
-  //dynamic user;
+  MisskeyUser user;
   Iterable<MisskeyPageComponent> content;
-  List<dynamic> variables;
+  Iterable<MisskeyPageComponent> variables;
   String title;
   String name;
   //dynamic summary;
@@ -26,9 +27,19 @@ class MisskeyPage {
     //createdAt = json["createdAt"];
     //updatedAt = json["updatedAt"];
     userId = json["userId"];
-    //user = json["user"];
-    content = json["content"].map<MisskeyPageComponent>((j) => MisskeyPageComponent.fromJson(j));
-    variables = json["variables"];
+
+    if (json["user"] != null)
+      user = MisskeyUser.fromJson(json["user"]);
+
+    content = json["content"]
+      .map<MisskeyPageComponent>((j) => MisskeyPageComponent.fromJson(j));
+
+    if (json["variables"] != null) {
+      var mapped =  json["variables"]
+          .map<MisskeyPageComponent>((j) => MisskeyPageComponent.fromJson(j));
+          variables = mapped;
+    }
+
     title = json["title"];
     name = json["name"];
     //summary = json["summary"];

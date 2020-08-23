@@ -12,7 +12,7 @@ class MisskeyUser {
   bool isModerator;
   bool isBot;
   bool isCat;
-  List<MisskeyEmoji> emojis;
+  Iterable<MisskeyEmoji> emojis;
   String url;
 //	dynamic createdAt;
 //	dynamic updatedAt;
