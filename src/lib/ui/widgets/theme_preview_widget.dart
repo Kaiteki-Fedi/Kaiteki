@@ -27,7 +27,7 @@ class ThemePreviewWidget extends StatelessWidget {
               automaticallyImplyLeading: false,
               title: Text(pleromaTheme?.name ?? defaultName),
             ),
-            body: StatusWidget(Status.example()),
+            body: StatusWidget(MastodonStatus.example()),
           ),
         ),
       ),

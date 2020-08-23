@@ -1,6 +1,6 @@
 import 'package:kaiteki/api/model/mastodon/account.dart';
 
-class Instance {
+class MastodonInstance {
   String uri;
   String title;
   String shortDescription;
@@ -14,9 +14,9 @@ class Instance {
   bool registrations;
   bool approvalRequired;
   bool invitesEnabled;
-  Account contactAccount;
+  MastodonAccount contactAccount;
 
-  Instance.fromJson(Map<String, dynamic> json) {
+  MastodonInstance.fromJson(Map<String, dynamic> json) {
     uri = json["uri"];
     title = json["title"];
     shortDescription = json["short_description"];
@@ -30,6 +30,6 @@ class Instance {
     registrations = json["registrations"];
     approvalRequired = json["approval_required"];
     invitesEnabled = json["invites_enabled"];
-    contactAccount = Account.fromJson(json["contact_account"]);
+    contactAccount = MastodonAccount.fromJson(json["contact_account"]);
   }
 }

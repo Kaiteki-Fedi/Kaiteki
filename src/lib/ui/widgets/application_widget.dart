@@ -5,7 +5,7 @@ import 'package:kaiteki/utils/string_extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApplicationWidget extends StatelessWidget {
-  final Application application;
+  final MastodonApplication application;
 
   const ApplicationWidget(this.application, {Key key}) : super(key: key);
 

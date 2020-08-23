@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/TextRenderer.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
-import 'package:kaiteki/api/model/pleroma/pleroma_chat.dart';
-import 'package:kaiteki/api/model/pleroma/pleroma_chat_message.dart';
+import 'package:kaiteki/api/model/pleroma/chat.dart';
+import 'package:kaiteki/api/model/pleroma/chat_message.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
@@ -48,7 +48,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
           Padding(
 
             padding: getAvatarPadding(isOwnMessage),
-            child: AvatarWidget(isOwnMessage ? Account.example() : widget.chat.account, size: avatarSize),
+            child: AvatarWidget(isOwnMessage ? MastodonAccount.example() : widget.chat.account, size: avatarSize),
           ),
           Container(
             constraints: BoxConstraints.tightFor(width: b.maxWidth * 0.8),
@@ -91,7 +91,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
     return list;
   }
 
-  Widget getAttachmentWidget(MediaAttachment attachment) {
+  Widget getAttachmentWidget(MastodonMediaAttachment attachment) {
     switch (attachment.type) {
       case "image": return ImageAttachmentWidget(attachment);
     //case "video": return VideoAttachmentWidget(attachment);

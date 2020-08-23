@@ -1,8 +1,8 @@
-class AccountField {
+class MastodonAccountField {
 	String name;
 	String value;
 
-	AccountField.fromJson(Map<String, dynamic> json) {
+	MastodonAccountField.fromJson(Map<String, dynamic> json) {
 		name = json["name"];
 		value = json["value"];
 	}

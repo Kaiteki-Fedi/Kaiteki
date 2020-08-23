@@ -71,7 +71,7 @@ class AccountScreen extends StatelessWidget {
   Widget getAccountHeader(MastodonClient client) {
     return FutureBuilder(
       future: client.getAccount(id),
-      builder: (_, AsyncSnapshot<Account> snapshot) {
+      builder: (_, AsyncSnapshot<MastodonAccount> snapshot) {
         if (snapshot.hasError) {
           return Text("oops: " + snapshot.error.toString());
         }
@@ -90,7 +90,7 @@ class AccountScreen extends StatelessWidget {
   Widget getStatusBody(MastodonClient client) {
     return FutureBuilder(
       future: client.getStatuses(id),
-      builder: (BuildContext context, AsyncSnapshot<Iterable<Status>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<Iterable<MastodonStatus>> snapshot) {
         if (snapshot.hasData) {
           var statuses = snapshot.data;
 
@@ -117,7 +117,7 @@ class AccountHeader extends StatelessWidget {
     @required this.linkColor,
   }) : super(key: key);
 
-  final Account account;
+  final MastodonAccount account;
   final Color linkColor;
 
   @override

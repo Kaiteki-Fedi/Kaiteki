@@ -1,15 +1,15 @@
 import 'package:kaiteki/api/model/mastodon/account.dart';
-import 'package:kaiteki/api/model/pleroma/pleroma_chat_message.dart';
+import 'package:kaiteki/api/model/pleroma/chat_message.dart';
 
 class PleromaChat {
-  Account account;
+  MastodonAccount account;
   String id;
 	PleromaChatMessage lastMessage;
   int unread;
 //	dynamic updatedAt;
 
   PleromaChat.fromJson(Map<String, dynamic> json) {
-    account = Account.fromJson(json["account"]);
+    account = MastodonAccount.fromJson(json["account"]);
     id = json["id"];
 
     if (json["last_message"] != null)

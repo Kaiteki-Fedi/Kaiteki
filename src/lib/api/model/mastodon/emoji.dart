@@ -1,10 +1,10 @@
-class Emoji {
+class MastodonEmoji {
   String shortcode;
   String staticUrl;
   String url;
   bool visibleInPicker;
 
-  Emoji.fromJson(Map<String, dynamic> json) {
+  MastodonEmoji.fromJson(Map<String, dynamic> json) {
     shortcode = json["shortcode"];
     staticUrl = json["static_url"];
     url = json["url"];

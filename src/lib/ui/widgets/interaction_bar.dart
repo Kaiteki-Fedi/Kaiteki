@@ -8,7 +8,7 @@ class InteractionBar extends StatelessWidget {
   final Color color;
   final String text;
   final IconData icon;
-  final Account account;
+  final MastodonAccount account;
 
   const InteractionBar({
     @required this.color,

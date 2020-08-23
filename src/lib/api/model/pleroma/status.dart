@@ -1,4 +1,4 @@
-import 'package:kaiteki/api/model/pleroma/pleroma_emoji_reaction.dart';
+import 'package:kaiteki/api/model/pleroma/emoji_reaction.dart';
 
 class PleromaStatus {
   //dynamic content;

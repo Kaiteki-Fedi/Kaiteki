@@ -7,7 +7,7 @@ class PreviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        StatusWidget(Status.example()),
+        StatusWidget(MastodonStatus.example()),
         Divider(),
         Padding(
           padding: const EdgeInsets.all(8),

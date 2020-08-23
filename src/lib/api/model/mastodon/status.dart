@@ -2,29 +2,29 @@ import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/api/model/mastodon/application.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
-import 'package:kaiteki/api/model/pleroma/pleroma_status.dart';
+import 'package:kaiteki/api/model/pleroma/status.dart';
 
-class Status {
-  Account account;
-  Application application;
+class MastodonStatus {
+  MastodonAccount account;
+  MastodonApplication application;
   bool bookmarked;
 //	dynamic card;
   String content;
 //	dynamic createdAt;
-  Iterable<Emoji> emojis;
+  Iterable<MastodonEmoji> emojis;
   bool favourited;
   int favouritesCount;
   String id;
 //	dynamic inReplyToAccountId;
 //	dynamic inReplyToId;
 //	dynamic language;
-  Iterable<MediaAttachment> mediaAttachments;
+  Iterable<MastodonMediaAttachment> mediaAttachments;
 //	List<dynamic> mentions;
   bool muted;
   bool pinned;
   PleromaStatus pleroma;
 //	dynamic poll;
-  Status reblog;
+  MastodonStatus reblog;
   bool reblogged;
   int reblogsCount;
   int repliesCount;
@@ -36,9 +36,9 @@ class Status {
   String url;
   String visibility;
 
-  Status.fromJson(Map<String, dynamic> json) {
-    account = Account.fromJson(json["account"]);
-    application = Application.fromJson(json["application"]);
+  MastodonStatus.fromJson(Map<String, dynamic> json) {
+    account = MastodonAccount.fromJson(json["account"]);
+    application = MastodonApplication.fromJson(json["application"]);
     bookmarked = json["bookmarked"];
 //		card = json["card"];
     content = json["content"];
@@ -67,19 +67,19 @@ class Status {
     visibility = json["visibility"];
 
     if (json["media_attachments"] != null)
-      mediaAttachments = json["media_attachments"].map<MediaAttachment>((j) => MediaAttachment.fromJson(j));
+      mediaAttachments = json["media_attachments"].map<MastodonMediaAttachment>((j) => MastodonMediaAttachment.fromJson(j));
 
     if (json["emojis"] != null)
-      emojis = json["emojis"].map<Emoji>((j) => Emoji.fromJson(j));
+      emojis = json["emojis"].map<MastodonEmoji>((j) => MastodonEmoji.fromJson(j));
 
     if (json["reblog"] != null)
-      reblog = Status.fromJson(json["reblog"]);
+      reblog = MastodonStatus.fromJson(json["reblog"]);
   }
 
-  Status.example() {
-    account = Account.example();
+  MastodonStatus.example() {
+    account = MastodonAccount.example();
     content = "Hello everyone!";
-    application = Application.example();
+    application = MastodonApplication.example();
 
     favourited = true;
     reblogged = true;

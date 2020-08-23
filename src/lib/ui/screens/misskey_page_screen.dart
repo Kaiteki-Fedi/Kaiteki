@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/misskey/pages/misskey_page.dart';
-import 'package:kaiteki/api/model/misskey/pages/misskey_page_sandbox.dart';
+import 'package:kaiteki/api/model/misskey/pages/page.dart';
+import 'package:kaiteki/api/model/misskey/pages/sandbox.dart';
 import 'package:mdi/mdi.dart';
 
 class MisskeyPageScreen extends StatefulWidget {

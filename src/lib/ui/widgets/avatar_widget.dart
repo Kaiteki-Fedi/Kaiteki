@@ -5,7 +5,7 @@ import 'package:mdi/mdi.dart';
 
 // A tap-able avatar.
 class AvatarWidget extends StatelessWidget {
-  final Account _account;
+  final MastodonAccount _account;
   final double size;
   final bool openOnTap;
 

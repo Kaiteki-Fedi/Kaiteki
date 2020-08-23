@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/misskey/pages/components/misskey_page_component.dart';
-import 'package:kaiteki/api/model/misskey/pages/misskey_page.dart';
+import 'package:kaiteki/api/model/misskey/pages/components/component.dart';
+import 'package:kaiteki/api/model/misskey/pages/page.dart';
 import 'package:kaiteki/ui/widgets/misskey_page_post_widget.dart';
 import 'package:kaiteki/utils/logger.dart';
 

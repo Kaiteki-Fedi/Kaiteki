@@ -13,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 //       2. Being for reading the results of the TextParser and mapping it to
 //          different widgets.
 class TextRenderer {
-  Iterable<Emoji> emojis;
+  Iterable<MastodonEmoji> emojis;
 
   TextStyle textStyle;
   TextStyle linkTextStyle;

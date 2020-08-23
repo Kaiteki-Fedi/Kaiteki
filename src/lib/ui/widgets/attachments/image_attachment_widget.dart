@@ -7,7 +7,7 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class ImageAttachmentWidget extends StatelessWidget {
-  final MediaAttachment attachment;
+  final MastodonMediaAttachment attachment;
 
   const ImageAttachmentWidget(this.attachment);
 

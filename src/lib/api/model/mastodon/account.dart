@@ -1,16 +1,16 @@
 import 'package:kaiteki/api/model/mastodon/account_field.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
-import 'package:kaiteki/api/model/pleroma/pleroma_account.dart';
+import 'package:kaiteki/api/model/pleroma/account.dart';
 
-class Account {
+class MastodonAccount {
 	String acct;
 	String avatar;
 	String avatarStatic;
 	bool bot;
 //	dynamic createdAt;
 	String displayName;
-	Iterable<Emoji> emojis;
-	Iterable<AccountField> fields;
+	Iterable<MastodonEmoji> emojis;
+	Iterable<MastodonAccountField> fields;
 	int followersCount;
 	int followingCount;
 	String header;
@@ -24,7 +24,7 @@ class Account {
 	String url;
 	String username;
 
-	Account.fromJson(Map<String, dynamic> json) {
+	MastodonAccount.fromJson(Map<String, dynamic> json) {
 		acct = json["acct"];
 		avatar = json["avatar"];
 		avatarStatic = json["avatar_static"];
@@ -42,10 +42,10 @@ class Account {
 			pleroma = PleromaAccount.fromJson(json["pleroma"]);
 
 		if (json["media_attachments"] != null)
-			fields = json["fields"].map<AccountField>((j) => AccountField.fromJson(j));
+			fields = json["fields"].map<MastodonAccountField>((j) => MastodonAccountField.fromJson(j));
 
 		if (json["emojis"] != null)
-			emojis = json["emojis"].map<Emoji>((j) => Emoji.fromJson(j));
+			emojis = json["emojis"].map<MastodonEmoji>((j) => MastodonEmoji.fromJson(j));
 
 		statusesCount = json["statuses_count"];
 		url = json["url"];
@@ -56,7 +56,7 @@ class Account {
 		// createdAt = json["created_at"];
 	}
 
-	Account.example() {
+	MastodonAccount.example() {
 		username = "NyaNya";
 		displayName = "banned for being a cute neko";
 		avatar = "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F24.media.tumblr.com%2Ftumblr_me574zdKgg1rhcknwo1_1280.jpg&f=1&nofb=1";

@@ -1,4 +1,4 @@
-import 'package:kaiteki/api/model/misskey/misskey_emoji.dart';
+import 'package:kaiteki/api/model/misskey/emoji.dart';
 
 class MisskeyNote {
   String id;

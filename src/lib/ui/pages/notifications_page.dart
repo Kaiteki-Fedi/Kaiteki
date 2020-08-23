@@ -41,7 +41,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
     return FutureBuilder(
       future: pleroma.getNotifications(),
-      builder: (_, AsyncSnapshot<Iterable<Notification>> snapshot) {
+      builder: (_, AsyncSnapshot<Iterable<MastodonNotification>> snapshot) {
         if (!snapshot.hasData)
           return Center(child: CircularProgressIndicator());
 
@@ -62,7 +62,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  InteractionBar getInteractionBar(Notification notification) {
+  InteractionBar getInteractionBar(MastodonNotification notification) {
     switch (notification.type) {
       case "follow": {
         return InteractionBar(

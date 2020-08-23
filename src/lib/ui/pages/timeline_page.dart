@@ -40,7 +40,7 @@ class _TimelinePageState extends State<TimelinePage> {
 
     return FutureBuilder(
       future: pleroma.getTimeline(),
-      builder: (_, AsyncSnapshot<Iterable<Status>> snapshot) {
+      builder: (_, AsyncSnapshot<Iterable<MastodonStatus>> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
             itemCount: snapshot.data.length,

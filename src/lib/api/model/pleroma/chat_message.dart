@@ -4,11 +4,11 @@ import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
 class PleromaChatMessage {
   String accountId;
   String chatId;
-  MediaAttachment attachment;
+  MastodonMediaAttachment attachment;
   dynamic card;
   String content;
 //	dynamic createdAt;
-  Iterable<Emoji> emojis;
+  Iterable<MastodonEmoji> emojis;
   String id;
   bool unread;
 
@@ -19,10 +19,10 @@ class PleromaChatMessage {
 //		createdAt = json["created_at"];
 
     if (json["emojis"] != null)
-      emojis = json["emojis"].map<Emoji>((j) => Emoji.fromJson(j));
+      emojis = json["emojis"].map<MastodonEmoji>((j) => MastodonEmoji.fromJson(j));
 
     if (json["attachment"] != null)
-      attachment = MediaAttachment.fromJson(json["attachment"]);
+      attachment = MastodonMediaAttachment.fromJson(json["attachment"]);
 
     id = json["id"];
     unread = json["unread"];

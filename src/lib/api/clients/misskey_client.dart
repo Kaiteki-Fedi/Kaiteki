@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
-import 'package:kaiteki/api/model/misskey/pages/misskey_page.dart';
+import 'package:kaiteki/api/model/misskey/pages/page.dart';
 import 'package:kaiteki/api/responses/misskey/misskey_create_app_response.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:http/http.dart' as http;

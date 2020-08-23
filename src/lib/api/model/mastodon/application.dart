@@ -1,6 +1,6 @@
 import 'package:kaiteki/constants.dart';
 
-class Application {
+class MastodonApplication {
   String name;
   String website;
 
@@ -10,7 +10,7 @@ class Application {
   String vapidKey;
   String redirectUri;
 
-  Application.fromJson(Map<String, dynamic> json) {
+  MastodonApplication.fromJson(Map<String, dynamic> json) {
     name = json["name"];
     website = json["website"];
     id = json["id"];
@@ -20,7 +20,7 @@ class Application {
     redirectUri = json["redirect_uri"];
   }
 
-  Application.example() {
+  MastodonApplication.example() {
     name = Constants.appName;
     website = Constants.appWebsite;
   }

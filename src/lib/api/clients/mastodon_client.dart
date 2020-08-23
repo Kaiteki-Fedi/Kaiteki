@@ -17,29 +17,29 @@ class MastodonClient extends FediverseClientBase {
   @override
   ApiType get type => ApiType.Mastodon;
 
-  Future<Instance> getInstance() async {
+  Future<MastodonInstance> getInstance() async {
     var response = await http.get("$baseUrl/api/v1/instance");
     Utils.checkResponse(response);
     var jsonObject = jsonDecode(response.body);
 
-    return Instance.fromJson(jsonObject);
+    return MastodonInstance.fromJson(jsonObject);
   }
 
-  Future<Account> getAccount(String id) async {
+  Future<MastodonAccount> getAccount(String id) async {
     var response = await http.get("$baseUrl/api/v1/accounts/$id");
     Utils.checkResponse(response);
 
     var jsonObject = jsonDecode(response.body);
 
-    return Account.fromJson(jsonObject);
+    return MastodonAccount.fromJson(jsonObject);
   }
 
-  Future<Iterable<Status>> getStatuses(String id) async {
+  Future<Iterable<MastodonStatus>> getStatuses(String id) async {
     var response = await http.get("$baseUrl/api/v1/accounts/$id/statuses");
     Utils.checkResponse(response);
 
     var jsonObject = jsonDecode(response.body);
-    var statuses = jsonObject.map<Status>((j) => Status.fromJson(j));
+    var statuses = jsonObject.map<MastodonStatus>((j) => MastodonStatus.fromJson(j));
     return statuses;
   }
 
@@ -85,7 +85,7 @@ class MastodonClient extends FediverseClientBase {
     return LoginResponse.fromJson(json);
   }
 
-  Future<Account> verifyCredentials() async {
+  Future<MastodonAccount> verifyCredentials() async {
     var response = await http.get(
       "$baseUrl/api/v1/accounts/verify_credentials",
       headers: getHeaders()
@@ -97,10 +97,10 @@ class MastodonClient extends FediverseClientBase {
       return null;
 
     var json = jsonDecode(response.body);
-    return Account.fromJson(json);
+    return MastodonAccount.fromJson(json);
   }
 
-  Future<Application> createApplication(
+  Future<MastodonApplication> createApplication(
     String instance,
     String clientName,
     String website,
@@ -123,10 +123,10 @@ class MastodonClient extends FediverseClientBase {
     Utils.checkResponse(response);
 
     var json = jsonDecode(response.body);
-    return Application.fromJson(json);
+    return MastodonApplication.fromJson(json);
   }
 
-  Future<Iterable<Status>> getPublicTimeline() async {
+  Future<Iterable<MastodonStatus>> getPublicTimeline() async {
     var response = await http.get(
       "$baseUrl/api/v1/timelines/public",
       headers: getHeaders()
@@ -135,10 +135,10 @@ class MastodonClient extends FediverseClientBase {
     Utils.checkResponse(response);
 
     var json = jsonDecode(response.body);
-    return json.map<Status>((j) => Status.fromJson(j));
+    return json.map<MastodonStatus>((j) => MastodonStatus.fromJson(j));
   }
 
-  Future<Iterable<Status>> getTimeline() async {
+  Future<Iterable<MastodonStatus>> getTimeline() async {
     var response = await http.get(
       "$baseUrl/api/v1/timelines/home",
       headers: getHeaders()
@@ -147,10 +147,10 @@ class MastodonClient extends FediverseClientBase {
     Utils.checkResponse(response);
 
     var json = jsonDecode(response.body);
-    return json.map<Status>((j) => Status.fromJson(j));
+    return json.map<MastodonStatus>((j) => MastodonStatus.fromJson(j));
   }
 
-  Future<Status> postStatus(String status, {String spoilerText, String contentType}) async {
+  Future<MastodonStatus> postStatus(String status, {String spoilerText, String contentType}) async {
     var body = <String, String> {
       "status": status,
       "source": Constants.appName,
@@ -168,10 +168,10 @@ class MastodonClient extends FediverseClientBase {
     Utils.checkResponse(response);
 
     var json = jsonDecode(response.body);
-    return Status.fromJson(json);
+    return MastodonStatus.fromJson(json);
   }
 
-  Future<Iterable<Notification>> getNotifications() async {
+  Future<Iterable<MastodonNotification>> getNotifications() async {
     var response = await http.get(
       "$baseUrl/api/v1/notifications",
       headers: getHeaders()
@@ -180,6 +180,6 @@ class MastodonClient extends FediverseClientBase {
     Utils.checkResponse(response);
 
     var json = jsonDecode(response.body);
-    return json.map<Notification>((j) => Notification.fromJson(j));
+    return json.map<MastodonNotification>((j) => MastodonNotification.fromJson(j));
   }
 }

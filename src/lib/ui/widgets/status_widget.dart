@@ -11,7 +11,7 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class StatusWidget extends StatelessWidget {
-  final Status _status;
+  final MastodonStatus _status;
 
   const StatusWidget(this._status);
 
@@ -123,7 +123,7 @@ class StatusWidget extends StatelessWidget {
     );
   }
 
-  Widget getAttachmentWidget(MediaAttachment attachment) {
+  Widget getAttachmentWidget(MastodonMediaAttachment attachment) {
     switch (attachment.type) {
       case "image": return ImageAttachmentWidget(attachment);
       //case "video": return VideoAttachmentWidget(attachment);

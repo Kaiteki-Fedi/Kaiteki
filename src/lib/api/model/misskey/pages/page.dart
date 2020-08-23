@@ -1,5 +1,5 @@
-import 'package:kaiteki/api/model/misskey/misskey_user.dart';
-import 'package:kaiteki/api/model/misskey/pages/components/misskey_page_component.dart';
+import 'package:kaiteki/api/model/misskey/user.dart';
+import 'package:kaiteki/api/model/misskey/pages/components/component.dart';
 
 class MisskeyPage {
   String id;

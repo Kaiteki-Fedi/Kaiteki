@@ -1,4 +1,4 @@
-class MediaAttachment {
+class MastodonMediaAttachment {
   String description;
   String id;
   //dynamic pleroma;
@@ -8,7 +8,7 @@ class MediaAttachment {
   String type;
   String url;
 
-  MediaAttachment.fromJson(Map<String, dynamic> json) {
+  MastodonMediaAttachment.fromJson(Map<String, dynamic> json) {
     description = json["description"];
     id = json["id"];
     //pleroma = json["pleroma"];
