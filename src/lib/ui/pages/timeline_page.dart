@@ -22,10 +22,10 @@ class _TimelinePageState extends State<TimelinePage> {
 
     if (!container.loggedIn)
       return Center(
-          child: IconLandingWidget(
-              Mdi.key,
-              "You need to be signed in, to view your timeline"
-          )
+        child: IconLandingWidget(
+          Mdi.key,
+          "You need to be signed in to view your timeline"
+        )
       );
 
     if (!(container.client is PleromaClient))

@@ -28,7 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return Center(
         child: IconLandingWidget(
           Mdi.key,
-          "You need to be signed in, to use Chats"
+          "You need to be signed in to use chats"
         )
       );
 

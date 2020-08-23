@@ -25,7 +25,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       return Center(
           child: IconLandingWidget(
               Mdi.key,
-              "You need to be signed in, to view your notifications"
+              "You need to be signed in to view your notifications"
           )
       );
 
