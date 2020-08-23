@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -15,15 +14,6 @@ class MisskeyPageSandbox {
   final Function() onRebuildRequired;
   
   MisskeyPageSandbox(this.page, {this.onRebuildRequired});
-
-  Widget build(BuildContext context) {
-    var widgets = this.page.content
-      .map<Widget>((c) => getComponent(context, c))
-      .where((w) => w != null)
-      .toList(growable: false);
-
-    return Column(children: widgets);
-  }
 
   String interpolateText(String input) {
     var regex = RegExp("{(.+?)}");
@@ -45,49 +35,6 @@ class MisskeyPageSandbox {
     }
 
     return input;
-  }
-
-  Widget getComponent(BuildContext context, MisskeyPageComponent component) {
-    switch (component.type) {
-      case "text":
-        return buildText(context, component);
-
-      case "counter":
-        return buildCounter(context, component);
-
-      case "post": {
-        var text = interpolateText(component.text);
-        return MisskeyPagePostWidget(text);
-      }
-
-      case "if": {
-        var name = component.raw["var"] as String;
-        var isTrue = getVariable(name) as bool;
-
-        // construct actual component if condition is true.
-        if (isTrue) {
-          var widgets = component.raw["children"]
-            .map<MisskeyPageComponent>((j) => MisskeyPageComponent.fromJson(j))
-            .map<Widget>((c) => getComponent(context, c))
-            .toList(growable: false);
-
-          return Column(children: widgets);
-        }
-
-        return null;
-      }
-
-      default:
-        return Stack(
-          children: [
-            Placeholder(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Unsupported page type: ${component.type}\n${jsonEncode(component.raw)}"),
-            )
-          ],
-        );
-    }
   }
 
   dynamic getVariable(String name) {
@@ -117,7 +64,6 @@ class MisskeyPageSandbox {
 
     throw "${variable.type} not supported.";
   }
-
   dynamic resolveValue(MisskeyPageComponent component) {
     switch (component.type) {
       case "ref": {
@@ -133,10 +79,59 @@ class MisskeyPageSandbox {
     }
   }
 
+  Widget build(BuildContext context) {
+    var widgets = this.page.content
+        .map<Widget>((c) => getComponent(context, c))
+        .where((w) => w != null)
+        .toList(growable: false);
+
+    return Column(children: widgets);
+  }
+  Widget getComponent(BuildContext context, MisskeyPageComponent component) {
+    switch (component.type) {
+      case "text":
+        return buildText(context, component);
+
+      case "counter":
+        return buildCounter(context, component);
+
+      case "post": {
+        var text = interpolateText(component.text);
+        return MisskeyPagePostWidget(text);
+      }
+
+      case "if": {
+        var name = component.raw["var"] as String;
+        var isTrue = getVariable(name) as bool;
+
+        // construct actual component if condition is true.
+        if (isTrue) {
+          var widgets = component.raw["children"]
+              .map<MisskeyPageComponent>((j) => MisskeyPageComponent.fromJson(j))
+              .map<Widget>((c) => getComponent(context, c))
+              .toList(growable: false);
+
+          return Column(children: widgets);
+        }
+
+        return null;
+      }
+
+      default:
+        return Stack(
+          children: [
+            Placeholder(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("Unsupported page type: ${component.type}\n${jsonEncode(component.raw)}"),
+            )
+          ],
+        );
+    }
+  }
   Widget buildText(BuildContext context, MisskeyPageComponent component) {
     return Text(component.text);
   }
-
   Widget buildCounter(BuildContext context, MisskeyPageComponent component) {
     return RaisedButton(
       child: Text(component.text),

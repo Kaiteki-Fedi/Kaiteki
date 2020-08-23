@@ -4,7 +4,7 @@ import 'package:mdi/mdi.dart';
 class MisskeyPagePostWidget extends StatefulWidget {
   const MisskeyPagePostWidget(this.content, {Key key}) : super(key: key);
 
-  final cString content;
+  final String content;
 
   @override
   _MisskeyPagePostWidgetState createState() => _MisskeyPagePostWidgetState();
