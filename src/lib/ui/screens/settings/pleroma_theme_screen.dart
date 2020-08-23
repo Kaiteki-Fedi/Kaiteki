@@ -1,9 +1,5 @@
-import 'dart:convert';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/theming/theme_container.dart';
-import 'package:kaiteki/theming/pleroma_theme.dart';
 import 'package:kaiteki/ui/pages/theme/common_page.dart';
 import 'package:kaiteki/ui/pages/theme/fonts_page.dart';
 import 'package:kaiteki/ui/pages/theme/preview_page.dart';

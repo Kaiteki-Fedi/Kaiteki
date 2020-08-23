@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/pleroma_theme.dart';
+import 'package:kaiteki/api/model/pleroma/theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/ui/widgets/theme_preview_widget.dart';
 

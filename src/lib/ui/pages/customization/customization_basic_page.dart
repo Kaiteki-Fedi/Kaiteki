@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/pleroma_theme.dart';
+import 'package:kaiteki/api/model/pleroma/theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/screens/settings/pleroma_presets_screen.dart';
 import 'package:kaiteki/ui/screens/settings/pleroma_theme_screen.dart';

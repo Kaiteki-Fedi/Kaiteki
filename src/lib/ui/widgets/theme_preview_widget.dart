@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/api/model/mastodon/status.dart';
-import 'package:kaiteki/theming/pleroma_theme.dart';
+import 'package:kaiteki/api/model/pleroma/theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:provider/provider.dart';

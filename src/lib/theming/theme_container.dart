@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/pleroma_theme.dart';
+import 'package:kaiteki/api/model/pleroma/theme.dart';
 
 class ThemeContainer extends ChangeNotifier {
   // ThemeData _current;
