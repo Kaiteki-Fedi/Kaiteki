@@ -28,18 +28,17 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
 
       itemBuilder: (_) => [
         PopupMenuItem(
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Icon(Mdi.dotsHorizontal),
-                ),
-                Text("Manage Accounts"),
-              ],
-            ),
-
-            value: "!"
-        )
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Icon(Mdi.dotsHorizontal),
+              ),
+              Text("Manage Accounts"),
+            ],
+          ),
+          value: "!",
+        ),
       ],
     );
   }

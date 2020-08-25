@@ -5,9 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/api/model/pleroma/theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
-import 'package:kaiteki/ui/screens/settings/pleroma_presets_screen.dart';
-import 'package:kaiteki/ui/screens/settings/pleroma_theme_screen.dart';
-import 'package:kaiteki/ui/screens/settings/theming/app_background_screen.dart';
+import 'package:kaiteki/ui/screens/settings/customization/pleroma_presets_screen.dart';
+import 'package:kaiteki/ui/screens/settings/customization/pleroma_theme_screen.dart';
+import 'package:kaiteki/ui/screens/settings/customization/app_background_screen.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 

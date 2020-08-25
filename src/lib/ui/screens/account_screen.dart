@@ -135,11 +135,10 @@ class AccountHeader extends StatelessWidget {
             Row(
               children: [
                 Image.network(
-                    account.avatar,
-                    width: 56,
-                    height: 56
+                  account.avatar,
+                  width: 56,
+                  height: 56
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(left: 8.4),
                   child: Column(
@@ -153,25 +152,25 @@ class AccountHeader extends StatelessWidget {
               ],
             ),
             RichText(
-
-                text: TextSpan(
-                    children: [
-                      TextRenderer(
-                          emojis: account.emojis,
-                          linkTextStyle: TextStyle(
-                              color: linkColor
-                          )
-                      ).render(account.note)
-                    ],
-                    style: TextStyle(
-                        shadows: [
-                          Shadow(
-                              blurRadius: 2,
-                              offset: Offset(0, 1)
-                          )
-                        ]
+              text: TextSpan(
+                children: [
+                  TextRenderer(
+                    emojis: account.emojis,
+                    linkTextStyle: TextStyle(
+                      color: linkColor
+                    ),
+                    textStyle: TextStyle(),
+                  ).render(account.note)
+                ],
+                style: TextStyle(
+                  shadows: [
+                    Shadow(
+                      blurRadius: 2,
+                      offset: Offset(0, 1)
                     )
+                  ]
                 )
+              )
             )
           ],
         )
