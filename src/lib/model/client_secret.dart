@@ -1,4 +1,3 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/string_extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +27,7 @@ class ClientSecret {
   String toValue() => "$clientId;$clientSecret";
 
   static Future<ClientSecret> getSecret(String instance) async {
-    Logger.debug("looking for client secret for $instance in secure storage");
+    Logger.debug("looking for client secret for $instance");
 
     String secret;
     var key = "c;$instance";
