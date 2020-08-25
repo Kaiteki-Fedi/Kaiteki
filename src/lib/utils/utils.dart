@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class Utils {
@@ -21,7 +22,22 @@ class Utils {
     );
   }
 
+  static Color parseRgb(String input) {
+    var startIndex = input.indexOf("(");
+    // var pre = input.substring(0, startIndex);
+    var endIndex = input.indexOf(")");
+    var values = input
+        .substring(startIndex, endIndex)
+        .split(",")
+        .map((v) => int.parse(v));
 
+    return Color.fromARGB(
+        255,
+        values.elementAt(0),
+        values.elementAt(1),
+        values.elementAt(2)
+    );
+  }
 
   static bool isLightBackground(Color background) {
     var bgDelta =
