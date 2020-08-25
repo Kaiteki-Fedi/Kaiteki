@@ -7,6 +7,7 @@ class MisskeyTheme extends MaterialThemeConvertible {
   String desc;
   String base;
   Map<String, String> vars;
+  Map<String, String> props;
   String id;
 
   MisskeyTheme.fromJson(Map<String, dynamic> json) {
@@ -15,9 +16,11 @@ class MisskeyTheme extends MaterialThemeConvertible {
     desc = json["desc"];
     base = json["base"];
     vars = json["vars"].cast<String, String>();
+    vars = json["props"].cast<String, String>();
     id = json["id"];
   }
 
+  // TODO: add property calculation
   @override
   ThemeData toMaterialTheme() {
     // TODO: implement toMaterialTheme
