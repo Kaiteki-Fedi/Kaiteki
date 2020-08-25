@@ -57,11 +57,16 @@ class AccountContainer extends ChangeNotifier {
     _accounts.add(compound);
 
     await changeAccount(compound);
+    await _saveAccountList();
   }
 
   Future<void> _saveAccountList() async {
     var preferences = await SharedPreferences.getInstance();
-    var ids = _accounts.map((a) => "${a.accountSecret.username}@${a.accountSecret.instance}");
+
+    var ids = _accounts
+      .map((a) => "${a.accountSecret.username}@${a.accountSecret.instance}")
+      .toList(growable: false);
+
     await preferences.setStringList("accounts", ids);
   }
 
@@ -107,6 +112,7 @@ class AccountContainer extends ChangeNotifier {
 
       if (account == null) {
         print("No account data was recovered, assuming account info is incorrect.");
+        return;
       }
 
       var accountCompound = AccountCompound(this, client, account, clientSecret, accountSecret);
@@ -134,7 +140,9 @@ class AccountContainer extends ChangeNotifier {
           var mastodonClient = compound.client as MastodonClient;
           var account = mastodonClient.verifyCredentials();
 
-          if (account == null) throw "Account was null";
+          if (account == null) {
+            throw "Account was null";
+          }
 
           compound.account = account;
         } else {
