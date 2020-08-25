@@ -1,12 +1,16 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:html/dom.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/tag.dart';
 import 'package:kaiteki/utils/text_buffer.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:html/parser.dart' show parseFragment;
+import 'package:html/dom.dart' as dom;
 
 // TODO: It might be worth to make this into two parts
 //       1. Being for breaking down the text, that being the TextParser.
@@ -27,78 +31,30 @@ class TextRenderer {
   bool get _supportEmoji => emojis != null && emojis.length != 0;
   
   TextRenderer({this.emojis, this.textStyle, this.linkTextStyle});
-  
+
+
+
   InlineSpan render(String text) {
+    var html = parseFragment(text);
+    return renderNode(html);
+
+  }
+
+  InlineSpan renderSpecial(String text, {List<InlineSpan> children}) {
     var spans = <InlineSpan>[];
     var buffer = TextBuffer();
 
-    var tags = <Tag>[];
+
+    print("=======");
 
     var readingEmoji = false;
-    var readingTag = false;
-    var insideTag = tags.isNotEmpty;
-
-    if (_supportEmoji) {
-      Logger.debug("-----");
-      Logger.debug("Starting to render text (${emojis.length}):");
-      Logger.debug(text);
-    }
-
-
     for (var i = 0; i < text.length; i++) {
       var char = text[i];
 
       switch (char) {
-        case tagStartChar: {
-          spans.add(plain(buffer));
-          readingTag = true;
-          break;
-        }
-        case tagEndChar: {
-          var tag = Tag.parse(buffer.cut());
-
-          // seems a bit shitty but tbh, how could this go wrong?
-          if (tag.isClosing) {
-
-            switch (tag.name.toLowerCase()) {
-              case "br": {
-                spans.add(TextSpan(text: "\n"));
-                break;
-              }
-
-              case "a": {
-                var openingTag = tags.removeLast();
-                var label = buffer.cut();
-                var location = openingTag.attributes["href"];
-
-                spans.add(
-                  TextSpan(
-                    text: label,
-                    style: linkTextStyle,
-                    recognizer: TapGestureRecognizer()..onTap = () {
-                      launch(location);
-                    }
-                  )
-                );
-
-                break;
-              }
-
-              default:
-                tags.removeLast();
-                break;
-            }
-          } else {
-            tags.add(tag);
-          }
-
-          readingTag = false;
-          break;
-        }
         case emojiChar: {
-          if (!_supportEmoji || readingTag)
+          if (!_supportEmoji)
             continue;
-
 
           if (readingEmoji) {
             var emojiName = buffer.text;
@@ -134,9 +90,9 @@ class TextRenderer {
             spans.add(plain(buffer));
             readingEmoji = true;
           }
+
           break;
         }
-
         default: {
           buffer.append(char);
           break;
@@ -147,7 +103,46 @@ class TextRenderer {
     if (buffer.text.isNotEmpty)
       spans.add(plain(buffer));
 
-    return TextSpan(children: spans);
+    return TextSpan(children: spans..addAll(children));
+  }
+
+  InlineSpan renderNode(Node node) {
+    InlineSpan resultingSpan;
+
+    var renderedSubNodes = node.nodes
+      .map<InlineSpan>((n) => renderNode(n))
+      .toList(growable: false);
+
+    if (node is dom.Element) {
+      if (node.localName == "a") {
+        resultingSpan = TextSpan(
+          text: node.text,
+          recognizer: new TapGestureRecognizer()..onTap = () {
+            launch(node.attributes["href"]);
+          },
+          style: textStyle.copyWith(
+            decoration: TextDecoration.underline,
+            color: Colors.blue
+          )
+        );
+      } else {
+        print(node.localName);
+      }
+    } else if (node is dom.Text) {
+      dom.Text textElement = node;
+      resultingSpan = renderSpecial(
+        textElement.text,
+        children: renderedSubNodes,
+      );
+    }
+
+    if (resultingSpan == null) {
+      resultingSpan = TextSpan(
+        children: renderedSubNodes
+      );
+    }
+
+    return resultingSpan;
   }
 
   TextSpan plain(TextBuffer buffer) => TextSpan(
