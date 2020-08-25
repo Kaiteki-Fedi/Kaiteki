@@ -1,4 +1,7 @@
-class MisskeyTheme {
+import 'package:flutter/material.dart';
+import 'package:kaiteki/theming/material_theme_convertible.dart';
+
+class MisskeyTheme extends MaterialThemeConvertible {
   String name;
   String author;
   String desc;
@@ -13,5 +16,11 @@ class MisskeyTheme {
     base = json["base"];
     vars = json["vars"].cast<String, String>();
     id = json["id"];
+  }
+
+  @override
+  ThemeData toMaterialTheme() {
+    // TODO: implement toMaterialTheme
+    throw UnimplementedError();
   }
 }

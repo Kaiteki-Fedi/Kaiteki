@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/theming/material_theme_convertible.dart';
 import 'package:kaiteki/utils/string_extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:supercharged/supercharged.dart';
 
-class PleromaTheme {
+class PleromaTheme extends MaterialThemeConvertible {
   Map<String, Color> colors;
   Map<String, double> opacities;
   Map<String, double> radii;
