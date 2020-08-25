@@ -11,7 +11,6 @@ import 'package:kaiteki/api/model/mastodon/instance.dart';
 import 'package:kaiteki/api/model/mastodon/notification.dart';
 import 'package:kaiteki/api/model/mastodon/status.dart';
 import 'package:kaiteki/utils/utils.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
 
 class MastodonClient extends FediverseClientBase {
   @override

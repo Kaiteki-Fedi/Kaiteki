@@ -6,9 +6,7 @@ import 'package:kaiteki/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';
 import 'package:kaiteki/model/client_secret.dart';
-import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/utils/logger.dart';
-import 'package:kaiteki/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountContainer extends ChangeNotifier {

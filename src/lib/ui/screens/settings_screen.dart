@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/ui/screens/settings/customization_settings_screen.dart';
-import 'package:kaiteki/ui/screens/settings/pleroma_theme_screen.dart';
 import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
 

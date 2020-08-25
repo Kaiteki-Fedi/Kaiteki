@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';
 import 'package:kaiteki/api/model/mastodon/status.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';

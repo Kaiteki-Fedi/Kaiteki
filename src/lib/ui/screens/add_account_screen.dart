@@ -1,15 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/model/account_secret.dart';
-import 'package:kaiteki/api/clients/pleroma_client.dart';
 import 'package:kaiteki/app_colors.dart';
-import 'package:kaiteki/model/client_secret.dart';
-import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/ui/screens/login_screen.dart';
-import 'package:kaiteki/utils/logger.dart';
-import 'package:provider/provider.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
 
 class AddAccountScreen extends StatefulWidget {
   AddAccountScreen({Key key}) : super(key: key);

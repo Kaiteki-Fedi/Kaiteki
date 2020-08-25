@@ -1,31 +1,9 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:kaiteki/utils/string_extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:supercharged/supercharged.dart';
 
 class PleromaTheme {
-  // Static colors
-  static const Color defaultBg = Color(0xFF121a24);
-  static const Color defaultFg = Color(0xFF182230);
-  static const Color defaultAccent = Color(0xFFd8a070);
-  static const Color defaultText = Color(0xFFb9b9ba);
-  static const Color defaultIcon = Color(0xFF666666);
-  static const Color defaultRed = Color(0xFFd31014);
-  static const Color defaultGreen = Color(0xFF0fa00f);
-  static const Color defaultBlue = Color(0xFF0095ff);
-  static const Color defaultOrange = Color(0xFFffa500);
-
-
-  // Inheriting colors
-  static const Color defaultButtonBg = defaultFg;
-  static const Color defaultTopBarBg = defaultBg;
-  static const Color defaultInputBg = defaultBg;
-  static const Color defaultInputFg = defaultText;
-  static const Color defaultButtonFg = defaultText;
-  static const Color defaultPopover = defaultFg;
-
   Map<String, Color> colors;
   Map<String, double> opacities;
   Map<String, double> radii;
