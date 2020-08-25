@@ -4,6 +4,7 @@ import 'package:kaiteki/model/account_secret.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
+import 'package:kaiteki/api/clients/misskey_client.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';
 import 'package:kaiteki/model/client_secret.dart';
 import 'package:kaiteki/utils/logger.dart';
@@ -117,6 +118,7 @@ class AccountContainer extends ChangeNotifier {
     switch (type) {
       case ApiType.Mastodon: return MastodonClient();
       case ApiType.Pleroma: return PleromaClient();
+      case ApiType.Misskey: return MisskeyClient();
       default: throw "out of range";
     }
   }
