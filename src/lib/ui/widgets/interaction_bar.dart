@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/TextRenderer.dart';
+import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
 

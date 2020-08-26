@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kaiteki/model/account_compound.dart';
-import 'package:kaiteki/utils/LowerCaseTextFormatter.dart';
+import 'package:kaiteki/utils/lower_case_text_formatter.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/model/account_secret.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';

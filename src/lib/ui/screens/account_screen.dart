@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:kaiteki/TextRenderer.dart';
+import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';

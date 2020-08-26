@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/utils/logger.dart';
-import 'package:kaiteki/utils/tag.dart';
 import 'package:kaiteki/utils/text_buffer.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';

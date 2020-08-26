@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/TextRenderer.dart';
+import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
 import 'package:kaiteki/api/model/pleroma/chat.dart';
