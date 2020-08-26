@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kaiteki/model/account_compound.dart';
+import 'package:kaiteki/model/login_result.dart';
 import 'package:kaiteki/utils/lower_case_text_formatter.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/model/account_secret.dart';
@@ -25,14 +26,6 @@ class LoginScreen extends StatefulWidget {
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
-}
-
-class LoginResult {
-  String reason;
-  bool get failed => reason != null;
-  bool pop = true;
-
-  LoginResult({this.reason, this.pop});
 }
 
 class _LoginScreenState extends State<LoginScreen> {
