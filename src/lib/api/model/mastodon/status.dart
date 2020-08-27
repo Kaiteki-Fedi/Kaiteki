@@ -1,5 +1,6 @@
 import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/api/model/mastodon/application.dart';
+import 'package:kaiteki/api/model/mastodon/card.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
 import 'package:kaiteki/api/model/pleroma/status.dart';
@@ -8,7 +9,7 @@ class MastodonStatus {
   MastodonAccount account;
   MastodonApplication application;
   bool bookmarked;
-//	dynamic card;
+  MastodonCard card;
   String content;
 //	dynamic createdAt;
   Iterable<MastodonEmoji> emojis;
@@ -23,7 +24,7 @@ class MastodonStatus {
   bool muted;
   bool pinned;
   PleromaStatus pleroma;
-//	dynamic poll;
+  // dynamic poll;
   MastodonStatus reblog;
   bool reblogged;
   int reblogsCount;
@@ -40,7 +41,10 @@ class MastodonStatus {
     account = MastodonAccount.fromJson(json["account"]);
     application = MastodonApplication.fromJson(json["application"]);
     bookmarked = json["bookmarked"];
-//		card = json["card"];
+
+    if (json["card"] != null)
+  		card = MastodonCard.fromJson(json["card"]);
+
     content = json["content"];
 //		createdAt = json["created_at"];
 //		emojis = json["emojis"];
@@ -53,7 +57,9 @@ class MastodonStatus {
 //		mentions = json["mentions"];
     muted = json["muted"];
     pinned = json["pinned"];
-    pleroma = PleromaStatus.fromJson(json["pleroma"]);
+
+    if (json["pleroma"] != null)
+      pleroma = PleromaStatus.fromJson(json["pleroma"]);
 //		poll = json["poll"];
     reblogged = json["reblogged"];
     reblogsCount = json["reblogs_count"];
