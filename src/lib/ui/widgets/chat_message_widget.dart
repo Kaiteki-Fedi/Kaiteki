@@ -29,15 +29,15 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<ThemeContainer>(context);
-    var pleromaTheme = container.getCurrentPleromaTheme();
+    var appTheme = container.currentTheme;
 
     var background = isOwnMessage
-        ? pleromaTheme.colors["chatMessageIncomingBg"]
-        : pleromaTheme.colors["chatMessageOutgoingBg"];
+        ? appTheme.outgoingChatMessageBackgroundColor
+        : appTheme.incomingChatMessageBackgroundColor;
 
     var border = isOwnMessage
-        ? pleromaTheme.colors["chatMessageIncomingBorder"]
-        : pleromaTheme.colors["chatMessageOutgoingBorder"];
+        ? appTheme.outgoingChatMessageBorderColor
+        : appTheme.incomingChatMessageBorderColor;
 
     return LayoutBuilder(
       builder: (_, b) => Row(
@@ -55,7 +55,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
             padding: const EdgeInsets.all(10.5),
             decoration: BoxDecoration(
               color: background,
-              borderRadius: pleromaTheme.getRadius("chatMessage", 10),
+              borderRadius: BorderRadius.circular(appTheme.chatMessageRounding),
               border: Border.all(
                 color: border,
                 width: 1
@@ -65,9 +65,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
               ? RichText(
                 text: TextRenderer(
                   emojis: widget.chatMessage.emojis,
-                  textStyle: TextStyle(
-                      color: pleromaTheme.colors["text"]
-                  ),
+                  textStyle: TextStyle(color: appTheme.textColor),
                 ).render(widget.chatMessage.content)
               )
               : getAttachmentWidget(widget.chatMessage.attachment),

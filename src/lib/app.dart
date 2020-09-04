@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/app_preferences.dart';
+import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/screens/main_screen.dart';
 import 'package:kaiteki/ui/screens/settings/about_screen.dart';
@@ -25,7 +26,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
       brightness: Brightness.dark,
       accentColor: Colors.pinkAccent.shade100
     );
-    _themeContainer = ThemeContainer(defaultTheme);
+    _themeContainer = ThemeContainer(MaterialAppTheme(defaultTheme));
 
     _accountContainer = AccountContainer();
     _accountContainer.loadAllAccounts();
@@ -49,8 +50,8 @@ class _KaitekiAppState extends State<KaitekiApp> {
 
 
           var themeContainer = Provider.of<ThemeContainer>(context);
-          var appBackground = themeContainer.getBackground();
-          var materialTheme = themeContainer.getCurrentTheme();
+          var appBackground = themeContainer.background;
+          var materialTheme = themeContainer.materialTheme;
           var backgroundColor = materialTheme.canvasColor;
 
           backgroundColor = backgroundColor.withOpacity(themeContainer.backgroundOpacity);

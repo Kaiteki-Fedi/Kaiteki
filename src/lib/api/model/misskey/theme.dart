@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/material_theme_convertible.dart';
+import 'package:kaiteki/theming/app_theme.dart';
+import 'package:kaiteki/theming/app_theme_convertible.dart';
 
-class MisskeyTheme extends MaterialThemeConvertible {
+// TODO: add property calculation
+class MisskeyTheme extends AppThemeConvertible {
   String name;
   String author;
   String desc;
@@ -20,10 +21,9 @@ class MisskeyTheme extends MaterialThemeConvertible {
     id = json["id"];
   }
 
-  // TODO: add property calculation
   @override
-  ThemeData toMaterialTheme() {
-    // TODO: implement toMaterialTheme
+  AppTheme toTheme() {
+    // TODO: implement toTheme
     throw UnimplementedError();
   }
 }

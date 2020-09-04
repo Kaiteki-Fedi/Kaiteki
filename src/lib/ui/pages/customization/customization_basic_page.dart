@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/api/model/pleroma/theme.dart';
+import 'package:kaiteki/theming/app_theme_convertible.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/theming/theme_type.dart';
 import 'package:kaiteki/ui/screens/settings/customization/pleroma_presets_screen.dart';
 import 'package:kaiteki/ui/screens/settings/customization/pleroma_theme_screen.dart';
 import 'package:kaiteki/ui/screens/settings/customization/app_background_screen.dart';
@@ -22,7 +24,7 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
   @override
   Widget build(BuildContext context) {
     var themeContainer = Provider.of<ThemeContainer>(context);
-    var pleromaTheme = themeContainer.getCurrentPleromaTheme();
+    var type = getThemeType(themeContainer.rawTheme);
 
     return ListView(
       children: [

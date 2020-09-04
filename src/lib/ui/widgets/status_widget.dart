@@ -17,20 +17,11 @@ class StatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var green = Colors.greenAccent.shade200;
-    var orange = Colors.orangeAccent.shade200;
+
     var textStyle = TextStyle();
 
     var container = Provider.of<ThemeContainer>(context);
-
-    var pleromaTheme = container.getCurrentPleromaTheme();
-    if (pleromaTheme != null) {
-      green = pleromaTheme.colors["cGreen"];
-      orange = pleromaTheme.colors["cOrange"];
-      textStyle = TextStyle(
-        color: pleromaTheme.colors["text"]
-      );
-    }
+    var theme = container.currentTheme;
 
     if (_status.reblog != null) {
       return Column(
@@ -38,7 +29,7 @@ class StatusWidget extends StatelessWidget {
           InteractionBar(
             icon: Mdi.repeat,
             text: "repeated",
-            color: green,
+            color: theme.repeatColor,
             account: _status.account,
           ),
           StatusWidget(_status.reblog),
@@ -96,12 +87,12 @@ class StatusWidget extends StatelessWidget {
                       IconButton(
                         icon: Icon(Icons.repeat),
                         onPressed: (){},
-                        color: _status.reblogged ? green : null
+                        color: _status.reblogged ? theme.repeatColor : null
                       ),
                       IconButton(
                         icon: Icon(_status.favourited ? Mdi.star : Mdi.starOutline),
                         onPressed: (){},
-                        color: _status.favourited ? orange : null
+                        color: _status.favourited ? theme.favoriteColor : null
                       ),
                       IconButton(
                         icon: Icon(Icons.insert_emoticon),

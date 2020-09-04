@@ -13,10 +13,7 @@ class ImageAttachmentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var themeContainer = Provider.of<ThemeContainer>(context);
-
-    var fallbackBorder = Theme.of(context).dividerColor;
-    var border = themeContainer.getCurrentPleromaTheme()?.getColor("border")
-      ?? fallbackBorder;
+    var border = themeContainer.currentTheme.borderColor;
 
     var borderRadius = BorderRadius.circular(8);
 

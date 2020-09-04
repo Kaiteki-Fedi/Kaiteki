@@ -44,12 +44,12 @@ class _AppBackgroundScreenState extends State<AppBackgroundScreen> {
                 return;
 
               var image = Image.file(file).image;
-              container.setBackground(image);
+              container.background = image;
             },
           ),
           ListTile(
             title: Text("Reset"),
-            onTap: () => container.setBackground(null),
+            onTap: () => container.background = null,
           ),
           Divider(),
           ListTile(

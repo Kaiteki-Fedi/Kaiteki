@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/api/model/pleroma/theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,7 @@ class _CommonPageState extends State<CommonPage> {
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<ThemeContainer>(context);
-    var theme = container.getCurrentPleromaTheme();
+    var theme = container.rawTheme as PleromaTheme;
     var keys = theme.colors.keys;
 
     return ListView.builder(

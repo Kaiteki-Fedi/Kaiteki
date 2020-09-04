@@ -74,7 +74,7 @@ class _PleromaThemeScreenState extends State<PleromaThemeScreen> with SingleTick
 
   void resetTheme() {
     var container = Provider.of<ThemeContainer>(context, listen: false);
-    container.changePleromaTheme(null);
+    container.rawTheme = null;
   }
 
   @override

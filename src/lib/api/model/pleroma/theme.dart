@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/material_theme_convertible.dart';
+import 'package:kaiteki/theming/app_theme.dart';
+import 'package:kaiteki/theming/app_theme_convertible.dart';
 import 'package:kaiteki/utils/string_extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:supercharged/supercharged.dart';
 
-class PleromaTheme extends MaterialThemeConvertible {
+class PleromaTheme extends AppThemeConvertible {
   Map<String, Color> colors;
   Map<String, double> opacities;
   Map<String, double> radii;
@@ -169,7 +170,7 @@ class PleromaTheme extends MaterialThemeConvertible {
         disabledColor: colors["btnDisabled"],
         buttonColor: colors["btn"],
         shape: RoundedRectangleBorder(
-          borderRadius: getRadius("btn", 8),
+          borderRadius: getRadius("btn") ?? 8,
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -186,7 +187,6 @@ class PleromaTheme extends MaterialThemeConvertible {
         iconTheme: IconThemeData(
             color: colors["topBarLink"],
         ),
-        centerTitle: true,
         actionsIconTheme: IconThemeData(
             color: colors["topBarLink"],
         ),
@@ -213,7 +213,7 @@ class PleromaTheme extends MaterialThemeConvertible {
         filled: true,
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: getRadius("input", 24),
+          borderRadius: getRadius("input") ?? 24,
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 7,
@@ -230,11 +230,11 @@ class PleromaTheme extends MaterialThemeConvertible {
     );
   }
 
-  BorderRadius getRadius(String key, double fallback) {
+  BorderRadius getRadius(String key) {
     if (radii.containsKey(key))
       return BorderRadius.circular(radii[key]);
-    else
-      return BorderRadius.circular(fallback);
+
+    return null;
   }
 
   //Color getColor(List<String> keys, {Color fallback, Map<String, String> source}) {
@@ -267,5 +267,13 @@ class PleromaTheme extends MaterialThemeConvertible {
       displayColor: color,
     );
     return textTheme;
+  }
+
+  @override
+  AppTheme toTheme() {
+    return AppTheme(
+      materialTheme: toMaterialTheme(),
+      linkColor: getColor("link")
+    );
   }
 }
