@@ -24,7 +24,6 @@ class _MfaScreenState extends State<MfaScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Multi-Factor-Authentication"),
-        centerTitle: true,
       ),
       body: Form(
         child: Column(

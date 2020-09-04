@@ -15,7 +15,6 @@ class _PostScreenState extends State<PostScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Post new status"),
-        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Mdi.send),
