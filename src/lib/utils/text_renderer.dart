@@ -4,17 +4,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
-import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/text_buffer.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/parser.dart' show parseFragment;
 import 'package:html/dom.dart' as dom;
 
-// TODO: It might be worth to make this into two parts
-//       1. Being for breaking down the text, that being the TextParser.
-//       2. Being for reading the results of the TextParser and mapping it to
-//          different widgets.
 class TextRenderer {
   Iterable<MastodonEmoji> emojis;
 
@@ -22,29 +17,17 @@ class TextRenderer {
   TextStyle linkTextStyle;
 
   static const String emojiChar = ":";
-  static const String tagStartChar = "<";
-  static const String tagEndChar = ">";
   static const String linkTag = "a";
-  static const String tagSeparator = " ";
 
   bool get _supportEmoji => emojis != null && emojis.length != 0;
   
   TextRenderer({this.emojis, this.textStyle, this.linkTextStyle});
 
-
-
-  InlineSpan render(String text) {
-    var html = parseFragment(text);
-    return renderNode(html);
-
-  }
+  InlineSpan render(String text) => renderNode(parseFragment(text));
 
   InlineSpan renderSpecial(String text, {List<InlineSpan> children}) {
     var spans = <InlineSpan>[];
     var buffer = TextBuffer();
-
-
-    print("=======");
 
     var readingEmoji = false;
     for (var i = 0; i < text.length; i++) {
@@ -57,10 +40,7 @@ class TextRenderer {
 
           if (readingEmoji) {
             var emojiName = buffer.text;
-
             var emojiFound = emojis.any((e) => Utils.compareCaseInsensitive(e.shortcode, emojiName));
-
-            Logger.debug("$emojiName => $emojiFound");
 
             if (emojiFound) {
               var emoji = emojis.firstWhere((e) => Utils.compareCaseInsensitive(e.shortcode, emojiName));
@@ -113,12 +93,22 @@ class TextRenderer {
       .toList(growable: false);
 
     if (node is dom.Element) {
-      if (node.localName == "a") {
+      if (node.localName == linkTag) {
+        var recognizer = new TapGestureRecognizer();
+        recognizer.onTap = () {
+          if (node.classes.contains("mention")) {
+            print("user!");
+            print(node.classes.join(";"));
+            return;
+          }
+
+          var linkTarget = node.attributes["href"];
+          launch(linkTarget);
+        };
+
         resultingSpan = TextSpan(
           text: node.text,
-          recognizer: new TapGestureRecognizer()..onTap = () {
-            launch(node.attributes["href"]);
-          },
+          recognizer: recognizer,
           style: textStyle.copyWith(
             decoration: TextDecoration.underline,
             color: Colors.blue
