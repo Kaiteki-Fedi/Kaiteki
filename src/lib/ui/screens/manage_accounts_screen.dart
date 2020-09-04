@@ -39,10 +39,7 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
                 return ListTile(
                   leading: Icon(Mdi.plus),
                   title: Text("Add Account"),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => AddAccountScreen())
-                  ),
+                  onTap: () => onTapAdd(context),
                 );
 
               var compound = snapshot.data[i];
@@ -64,6 +61,8 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
     );
   }
 
+  void onTapAdd(BuildContext context) {
+    Navigator.of(context).pushNamed("/accounts/add");
   void onTapRemove(BuildContext context, AccountContainer container, AccountCompound account) {
     showDialog<void>(
       context: context,

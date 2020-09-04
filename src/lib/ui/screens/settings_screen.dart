@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/screens/settings/customization/customization_settings_screen.dart';
 import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
 
@@ -51,9 +50,9 @@ class SettingsScreen extends StatelessWidget {
           Divider(),
           SeparatorText("Kaiteki Settings"),
           ListTile(
-            leading: Icon(Mdi.brush),
-            title: Text("Theme"),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CustomizationSettingsScreen()))
+            leading: Icon(Mdi.palette),
+            title: Text("Customization"),
+            onTap: () => Navigator.pushNamed(context, "/settings/customization"),
           ),
           ListTile(
             leading: Icon(Mdi.tab),

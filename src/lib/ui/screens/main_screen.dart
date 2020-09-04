@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
                           switch (fakeI) {
                             case 0: return Divider();
                             case 1: return ListTile(
-                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
+                              onTap: () => Navigator.pushNamed(context, "/settings"),
                               leading: Icon(Mdi.cog),
                               title: Text("Settings"),
                             );

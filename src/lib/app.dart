@@ -5,9 +5,13 @@ import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/ui/screens/add_account_screen.dart';
 import 'package:kaiteki/ui/screens/main_screen.dart';
+import 'package:kaiteki/ui/screens/manage_accounts_screen.dart';
 import 'package:kaiteki/ui/screens/settings/about_screen.dart';
+import 'package:kaiteki/ui/screens/settings/customization/customization_settings_screen.dart';
 import 'package:kaiteki/ui/screens/settings/debug_screen.dart';
+import 'package:kaiteki/ui/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 class KaitekiApp extends StatefulWidget {
@@ -88,8 +92,12 @@ class _KaitekiAppState extends State<KaitekiApp> {
                   theme: materialTheme,
                   home: MainScreen(),
                   routes: {
+                    "/accounts": (_) => ManageAccountsScreen(),
+                    "/accounts/add": (_) => AddAccountScreen(),
                     "/debug": (_) => DebugScreen(),
                     "/about": (_) => AboutScreen(),
+                    "/settings": (_) => SettingsScreen(),
+                    "/settings/customization": (_) => CustomizationSettingsScreen(),
                   },
                 ),
               ),

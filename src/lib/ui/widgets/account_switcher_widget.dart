@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/ui/screens/manage_accounts_screen.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,7 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
           : Icon(Mdi.accountCircle),
       onSelected: (choice) {
         assert(choice == "!");
-        Navigator.push(context, MaterialPageRoute(builder: (_) => ManageAccountsScreen()));
+        Navigator.of(context).pushNamed("/accounts");
       },
 
       itemBuilder: (_) => [
