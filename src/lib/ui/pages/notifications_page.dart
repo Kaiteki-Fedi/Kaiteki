@@ -23,18 +23,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
     if (!container.loggedIn)
       return Center(
-          child: IconLandingWidget(
-              Mdi.key,
-              "You need to be signed in to view your notifications"
-          )
+        child: IconLandingWidget(
+          icon: Mdi.key,
+          text: "You need to be signed in to view your notifications"
+        )
       );
 
     if (!(container.client is PleromaClient))
       return Center(
-          child: IconLandingWidget(
-              Mdi.emoticonFrown,
-              "Unsupported client"
-          )
+        child: IconLandingWidget(
+          icon: Mdi.emoticonFrown,
+          text: "Unsupported client"
+        )
       );
 
     var pleroma = container.client as PleromaClient;

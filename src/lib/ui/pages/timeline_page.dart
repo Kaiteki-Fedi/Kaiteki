@@ -22,16 +22,16 @@ class _TimelinePageState extends State<TimelinePage> {
     if (!container.loggedIn)
       return Center(
         child: IconLandingWidget(
-          Mdi.key,
-          "You need to be signed in to view your timeline"
+          icon: Mdi.key,
+          text: "You need to be signed in to view your timeline"
         )
       );
 
     if (!(container.client is PleromaClient))
       return Center(
         child: IconLandingWidget(
-          Mdi.emoticonSad,
-          "Unsupported client"
+          icon: Mdi.emoticonSad,
+          text: "Unsupported client"
         )
       );
 
@@ -50,7 +50,7 @@ class _TimelinePageState extends State<TimelinePage> {
             }
           );
         } else if (snapshot.hasError) {
-          return Center(child: IconLandingWidget(Mdi.close, snapshot.error.toString()));
+          return Center(child: IconLandingWidget(icon: Mdi.close, text: snapshot.error.toString()));
         } else {
           return Center(child: CircularProgressIndicator());
         }

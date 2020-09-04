@@ -27,16 +27,16 @@ class _ChatScreenState extends State<ChatScreen> {
     if (!container.loggedIn)
       return Center(
         child: IconLandingWidget(
-          Mdi.key,
-          "You need to be signed in to use chats"
+          icon: Mdi.key,
+          text: "You need to be signed in to use chats"
         )
       );
 
     if (!(container.client is PleromaClient))
       return Center(
         child: IconLandingWidget(
-          Mdi.emoticonFrown,
-          "Unsupported client"
+          icon: Mdi.emoticonFrown,
+          text: "Unsupported client"
         )
       );
 
@@ -64,7 +64,12 @@ class _ChatScreenState extends State<ChatScreen> {
               future: pleroma.getChatMessages(widget.chat.id),
               builder: (_, AsyncSnapshot<Iterable<PleromaChatMessage>> snapshot) {
                 if (snapshot.hasError)
-                  return Center(child: IconLandingWidget(Mdi.close, snapshot.error.toString()));
+                  return Center(
+                    child: IconLandingWidget(
+                      icon: Mdi.close,
+                      text: snapshot.error.toString()
+                    )
+                  );
 
                 if (snapshot.hasData)
                   return ListView.builder(

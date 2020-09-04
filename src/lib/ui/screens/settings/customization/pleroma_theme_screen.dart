@@ -100,13 +100,13 @@ class _PleromaThemeScreenState extends State<PleromaThemeScreen> with SingleTick
           PreviewPage(),
           CommonPage(),
           IconLandingWidget(
-            Mdi.cat,
-            "Proper color screens are not implemented yet~",
+            icon: Mdi.cat,
+            text: "Proper color screens are not implemented yet~",
           ),
           RoundnessPage(),
           IconLandingWidget(
-            Mdi.cat,
-            "Shadow effects are not implemented yet~",
+            icon: Mdi.cat,
+            text: "Shadow effects are not implemented yet~",
           ),
           FontsPage(),
         ],

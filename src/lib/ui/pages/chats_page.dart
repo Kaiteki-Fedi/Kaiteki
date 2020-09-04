@@ -23,16 +23,16 @@ class _ChatsPageState extends State<ChatsPage> {
     if (!container.loggedIn)
       return Center(
         child: IconLandingWidget(
-          Mdi.key,
-          "You need to be signed in to use chats"
+          icon: Mdi.key,
+            text: "You need to be signed in to use chats"
         )
       );
 
     if (!(container.client is PleromaClient))
       return Center(
         child: IconLandingWidget(
-          Mdi.emoticonFrown,
-          "Unsupported client"
+          icon: Mdi.emoticonFrown,
+            text: "Unsupported client"
         )
       );
 
@@ -67,7 +67,7 @@ class _ChatsPageState extends State<ChatsPage> {
           );
 
         if (snapshot.hasError)
-          return Center(child: IconLandingWidget(Mdi.close, snapshot.error.toString()));
+          return Center(child: IconLandingWidget(icon: Mdi.close, text: snapshot.error.toString()));
 
         return Center(child: CircularProgressIndicator());
       },
