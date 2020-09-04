@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/app_preferences.dart';
+import 'package:kaiteki/repositories/account_secret_repository.dart';
+import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/screens/main_screen.dart';
@@ -9,8 +11,16 @@ import 'package:kaiteki/ui/screens/settings/debug_screen.dart';
 import 'package:provider/provider.dart';
 
 class KaitekiApp extends StatefulWidget {
+  const KaitekiApp(
+    this.accountSecrets,
+    this.clientSecrets,
+  );
+
   @override
   _KaitekiAppState createState() => _KaitekiAppState();
+
+  final AccountSecretRepository accountSecrets;
+  final ClientSecretRepository clientSecrets;
 }
 
 class _KaitekiAppState extends State<KaitekiApp> {
@@ -28,7 +38,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
     );
     _themeContainer = ThemeContainer(MaterialAppTheme(defaultTheme));
 
-    _accountContainer = AccountContainer();
+    _accountContainer = AccountContainer(widget.accountSecrets, widget.clientSecrets);
     _accountContainer.loadAllAccounts();
 
     _preferences = AppPreferences();
@@ -42,7 +52,10 @@ class _KaitekiAppState extends State<KaitekiApp> {
       providers: [
         ChangeNotifierProvider.value(value: _themeContainer),
         ChangeNotifierProvider.value(value: _accountContainer),
-        ChangeNotifierProvider.value(value: _preferences)
+        ChangeNotifierProvider.value(value: _preferences),
+        ChangeNotifierProvider.value(value: widget.accountSecrets),
+        ChangeNotifierProvider.value(value: widget.clientSecrets),
+        Provider.value(value: widget.notifications),
       ],
       child: Builder(
         builder: (context) {

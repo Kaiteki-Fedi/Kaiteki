@@ -7,8 +7,9 @@ import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/api/clients/misskey_client.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';
 import 'package:kaiteki/model/client_secret.dart';
+import 'package:kaiteki/repositories/account_secret_repository.dart';
+import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/utils/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountContainer extends ChangeNotifier {
   AccountCompound _currentAccount;
@@ -21,18 +22,14 @@ class AccountContainer extends ChangeNotifier {
   String get instance => clientSecret.instance;
   bool get loggedIn => currentAccount != null;
 
+  final AccountSecretRepository _accountSecrets;
+  final ClientSecretRepository _clientSecrets;
   List<AccountCompound> _accounts = List<AccountCompound>();
+
+  AccountContainer(this._accountSecrets, this._clientSecrets);
 
   Future<List<AccountCompound>> getAvailableAccounts() async {
     return _accounts;
-  }
-
-  Future<void> reset() async {
-    throw "check";
-
-    notifyListeners();
-
-    Logger.debug("reset account container");
   }
 
   Future<void> clear() async {
@@ -46,6 +43,8 @@ class AccountContainer extends ChangeNotifier {
 
   void remove(AccountCompound compound) {
     _accounts.remove(compound);
+    _accountSecrets.remove(compound.accountSecret);
+    // _clientSecrets.remove(compound.accountSecret);
 
     notifyListeners();
 
@@ -57,17 +56,6 @@ class AccountContainer extends ChangeNotifier {
     _accounts.add(compound);
 
     await changeAccount(compound);
-    await _saveAccountList();
-  }
-
-  Future<void> _saveAccountList() async {
-    var preferences = await SharedPreferences.getInstance();
-
-    var ids = _accounts
-      .map((a) => "${a.accountSecret.username}@${a.accountSecret.instance}")
-      .toList(growable: false);
-
-    await preferences.setStringList("accounts", ids);
   }
 
   Future<void> changeAccount(AccountCompound account) async {
@@ -79,10 +67,8 @@ class AccountContainer extends ChangeNotifier {
   }
 
   Future<void> loadAllAccounts() async {
-    var secrets = await AccountSecret.getSecrets();
-
     _accounts.clear();
-    secrets.forEach((accountSecret) async {
+    _accountSecrets.secrets.forEach((accountSecret) async {
       if (accountSecret == null)
         return;
 
