@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiteki/ui/widgets/card_widget.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
 import 'package:kaiteki/api/model/mastodon/status.dart';
@@ -78,6 +79,13 @@ class StatusWidget extends StatelessWidget {
                           )
                       ],
                     ),
+
+                  if (_status.card != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: CardWidget(card: _status.card),
+                    ),
+
                   Row(
                     children: [
                       IconButton(
