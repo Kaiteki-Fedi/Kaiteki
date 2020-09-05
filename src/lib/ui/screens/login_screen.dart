@@ -77,110 +77,114 @@ class _LoginScreenState extends State<LoginScreen> {
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                if (o == Orientation.portrait)
-                  Image(
-                    image: widget.image,
-                    width: 96,
-                    height: 96,
-                  ),
+                Image(
+                  image: widget.image,
+                  width: 96,
+                  height: 96,
+                ),
                 Form(
                   key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _instanceController,
-                        decoration: InputDecoration(
-                          hintText: "Instance",
-                          prefixIcon: Icon(Mdi.earth),
-                          prefixIconConstraints: iconConstraint,
-                          // TODO: verify instance
-                          // suffixIcon: Icon(Mdi.check),//CircularProgressIndicator(),
-                          // suffixIconConstraints: iconConstraint
-                        ),
-                        keyboardType: TextInputType.url,
-                        autocorrect: false,
-                        enableSuggestions: true,
-                        inputFormatters: [ LowerCaseTextFormatter() ],
-                        validator: (v) {
-                          if (v.isEmpty)
-                            return "Please enter an instance";
-
-                          var lowerCase = v.toLowerCase();
-                          if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://"))
-                            return "Please only provide the domain name";
-
-                          return null;
-                        },
-                        autofillHints: [AutofillHints.url],
-                      ),
-                      Divider(),
-                      TextFormField(
-                        controller: _usernameController,
-                        decoration: InputDecoration(
-                          hintText: "Username",
-                          prefixIcon: Icon(Mdi.account),
-                          prefixIconConstraints: iconConstraint,
-                        ),
-                        autofillHints: [AutofillHints.username, AutofillHints.email ],
-                        keyboardType: TextInputType.text,
-                        autocorrect: false,
-                        enableSuggestions: true,
-                        validator: (v) {
-                          if (v.isEmpty)
-                            return "Please enter an username";
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: "Password",
-                          prefixIcon: Icon(Mdi.key),
-                          prefixIconConstraints: iconConstraint,
-                        ),
-                        keyboardType: TextInputType.text,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        autofillHints: [AutofillHints.password],
-                        validator: (v) {
-                          if (v.isEmpty)
-                            return "Please enter a password";
-                          return null;
-                        },
-                      ),
-
-                      if (_error != null)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(_error, style: TextStyle(color: Theme.of(context).errorColor)),
-                        ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FlatButton(
-                            child: Text("Need an account?"),
-                            onPressed: null,
+                  child: AutofillGroup(
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _instanceController,
+                          decoration: InputDecoration(
+                            hintText: "Instance",
+                            prefixIcon: Icon(Mdi.earth),
+                            prefixIconConstraints: iconConstraint,
+                            // TODO: verify instance
+                            // suffixIcon: Icon(Mdi.check),//CircularProgressIndicator(),
+                            // suffixIconConstraints: iconConstraint
                           ),
-                          RaisedButton(
-                            child: Text("Login"),
-                            onPressed: loginButtonPress,
+                          keyboardType: TextInputType.url,
+                          autofillHints: [AutofillHints.url ],
+                          inputFormatters: [ LowerCaseTextFormatter() ],
+                          validator: validateInstance,
+                        ),
+                        Divider(),
+                        TextFormField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            hintText: "Username",
+                            prefixIcon: Icon(Mdi.account),
+                            prefixIconConstraints: iconConstraint,
                           ),
-                        ],
-                      )
-                    ],
+                          autofillHints: [ AutofillHints.username ],
+                          keyboardType: TextInputType.text,
+                          validator: validateUsername,
+                        ),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            hintText: "Password",
+                            prefixIcon: Icon(Mdi.key),
+                            prefixIconConstraints: iconConstraint,
+                          ),
+                          keyboardType: TextInputType.text,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          autofillHints: [ AutofillHints.password ],
+                          validator: validatePassword,
+                        ),
+
+                        if (_error != null)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(_error, style: TextStyle(color: Theme.of(context).errorColor)),
+                          ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // TODO: https://github.com/Craftplacer/kaiteki/projects/1#card-42937000
+                            FlatButton(
+                              child: Text("Need an account?"),
+                              onPressed: null,
+                            ),
+                            RaisedButton(
+                              child: Text("Login"),
+                              onPressed: loginButtonPress,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             );
           },
         )
-          : Center(
-            child: CircularProgressIndicator()
-          ),
+        : Center(child: CircularProgressIndicator()),
       ),
     );
+  }
+
+  String validateInstance(String instance) {
+    if (instance.isEmpty)
+      return "Please enter an instance";
+
+    var lowerCase = instance.toLowerCase();
+    if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://"))
+      return "Please only provide the domain name";
+
+    return null;
+  }
+
+  String validatePassword(String password) {
+    if (password.isEmpty)
+      return "Please enter a password";
+
+    return null;
+  }
+
+  String validateUsername(String username) {
+    if (username.isEmpty)
+      return "Please enter an username";
+
+    return null;
   }
 
   Future<ClientSecret> getClientSecret(PleromaClient client, String instance) async {
@@ -248,12 +252,13 @@ class _LoginScreenState extends State<LoginScreen> {
     var account = await client.verifyCredentials();
     if (account == null) {
       return LoginResult(reason: "Failed to verify credentials");
-    } else {
-      var container = Provider.of<AccountContainer>(context, listen: false);
-      var compound = AccountCompound(container, client, account, clientSecret, accountSecret);
-
-      await container.addCurrentAccount(compound);
     }
+
+    var container = Provider.of<AccountContainer>(context, listen: false);
+    var compound = AccountCompound(container, client, account, clientSecret, accountSecret);
+
+    await container.addCurrentAccount(compound);
+    return LoginResult();
   }
 
   void loginButtonPress() async {
@@ -268,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
       var result = await login(instance, username, password);
 
       if (result.pop)
-        Navigator.pop(context);
+        Navigator.of(context).pop();
     } catch (e) {
       setState(() => _error = e.toString());
     } finally {
