@@ -8,7 +8,6 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
-        centerTitle: true,
       ),
       body: ListView(
         children: [

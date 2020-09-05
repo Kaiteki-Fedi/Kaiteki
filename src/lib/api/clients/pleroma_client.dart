@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
-import 'package:kaiteki/api/model/mastodon/status.dart';
 import 'package:kaiteki/api/model/pleroma/chat.dart';
 import 'package:kaiteki/api/model/pleroma/chat_message.dart';
 import 'package:http/http.dart' as http;
@@ -35,19 +34,6 @@ class PleromaClient extends MastodonClient {
     var json = jsonDecode(response.body);
     var messages = json.map<PleromaChatMessage>((o) => PleromaChatMessage.fromJson(o));
     return messages;
-  }
-
-  Future<MastodonStatus> getPreview(String statusText, String contentType, String visibility) async {
-    //var response = await http.get(
-    //    "$baseUrl/api/v1/pleroma/chats/$id/messages",
-    //    headers: getHeaders()
-    //);
-
-    //Utils.checkResponse(response);
-
-    //var json = jsonDecode(response.body);
-    //var messages = json.map<PleromaChatMessage>((o) => PleromaChatMessage.fromJson(o));
-    //return messages;
   }
 
   Future<PleromaChatMessage> postChatMessage(String id, String message) async {

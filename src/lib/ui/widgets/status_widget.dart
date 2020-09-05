@@ -53,11 +53,18 @@ class StatusWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  RichText(
-                    text: TextRenderer(
-                      emojis: _status.account.emojis,
-                      textStyle: textStyle.copyWith(fontWeight: FontWeight.bold),
-                    ).render(_status.account.displayName)
+                  Row(
+                    children: [
+                      RichText(
+                          text: TextRenderer(
+                            emojis: _status.account.emojis,
+                            textStyle: textStyle.copyWith(fontWeight: FontWeight.bold),
+                          ).render(_status.account.displayName)
+                      ),
+                      Text(_status.account.username),
+                      Spacer(),
+                      Text(_status.visibility),
+                    ],
                   ),
                   RichText(
                     text: TextRenderer(

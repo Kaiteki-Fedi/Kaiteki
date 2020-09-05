@@ -149,12 +149,13 @@ class MastodonClient extends FediverseClientBase {
     return json.map<MastodonStatus>((j) => MastodonStatus.fromJson(j));
   }
 
-  Future<MastodonStatus> postStatus(String status, {String spoilerText, String contentType}) async {
+  Future<MastodonStatus> postStatus(String status, {String spoilerText, String contentType, bool pleromaPreview}) async {
     var body = <String, String> {
       "status": status,
       "source": Constants.appName,
       "spoiler_text": spoilerText,
       "content_type": contentType,
+      "preview": pleromaPreview.toString(),
       //"visibility": "public"
     };
 

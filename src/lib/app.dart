@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/app_preferences.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
@@ -18,6 +19,7 @@ class KaitekiApp extends StatefulWidget {
   const KaitekiApp(
     this.accountSecrets,
     this.clientSecrets,
+    this.notifications,
   );
 
   @override
@@ -25,6 +27,7 @@ class KaitekiApp extends StatefulWidget {
 
   final AccountSecretRepository accountSecrets;
   final ClientSecretRepository clientSecrets;
+  final FlutterLocalNotificationsPlugin notifications;
 }
 
 class _KaitekiAppState extends State<KaitekiApp> {
@@ -38,7 +41,8 @@ class _KaitekiAppState extends State<KaitekiApp> {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       primarySwatch: Colors.blue,
       brightness: Brightness.dark,
-      accentColor: Colors.pinkAccent.shade100
+      accentColor: Colors.pinkAccent.shade100,
+      fontFamily: "Noto Sans CJK"
     );
     _themeContainer = ThemeContainer(MaterialAppTheme(defaultTheme));
 
@@ -64,7 +68,6 @@ class _KaitekiAppState extends State<KaitekiApp> {
       child: Builder(
         builder: (context) {
           var appPreferences = _preferences.getPreferredAppName();
-
 
           var themeContainer = Provider.of<ThemeContainer>(context);
           var appBackground = themeContainer.background;

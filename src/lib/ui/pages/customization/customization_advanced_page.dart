@@ -31,7 +31,11 @@ class _CustomizationAdvancedPageState extends State<CustomizationAdvancedPage> {
           trailing: IconButton(
             icon: Icon(Mdi.helpCircle),
           ),
-        )
+        ),
+        ListTile(
+          title: Text("App name preference"),
+          subtitle: Text(preferences.appNameMode.toString())
+        ),
       ],
     );
   }

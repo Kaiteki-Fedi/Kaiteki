@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/api/clients/misskey_client.dart';
 import 'package:kaiteki/app_preferences.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
 import 'package:kaiteki/ui/pages/chats_page.dart';
+import 'package:kaiteki/ui/pages/deck_page.dart';
 import 'package:kaiteki/ui/pages/notifications_page.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
+import 'package:kaiteki/ui/screens/misskey_page_screen.dart';
 import 'package:kaiteki/ui/screens/settings_screen.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
 import 'package:mdi/mdi.dart';
@@ -21,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     _MainScreenTab(Mdi.home, "Timeline"),
     _MainScreenTab(Mdi.bell, "Notifications"),
     _MainScreenTab(Mdi.forum, "Chats"),
-    _MainScreenTab(Mdi.earth, "Fediverse"),
+    _MainScreenTab(Mdi.viewColumn, "Deck"),
   ];
 
   PageController _pageController = PageController();
@@ -31,7 +33,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountContainer>(context);
     var preferences = Provider.of<AppPreferences>(context);
 
     return LayoutBuilder(
@@ -53,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
                   Drawer(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: _tabs.length + 3,
+                      itemCount: _tabs.length + 4,
                       itemBuilder: (_, int i) {
                         if (_tabs.length <= i) {
                           var fakeI = i - _tabs.length;
@@ -64,9 +65,14 @@ class _MainScreenState extends State<MainScreen> {
                               leading: Icon(Mdi.cog),
                               title: Text("Settings"),
                             );
-                            case 2: return SwitchListTile(
-                              title: Text("Anti Horny Mode"),
-                              value: preferences.antiHornyMode
+                            case 2: return ListTile(
+                              onTap: () => debugAction(context),
+                              leading: Icon(Mdi.bug),
+                              title: Text("Debug Action"),
+                            );
+                            case 3: return SwitchListTile(
+                              title: Text("At Work Mode"),
+                              value: preferences.atWorkMode
                             );
                           }
                         }
@@ -99,6 +105,10 @@ class _MainScreenState extends State<MainScreen> {
               ),
               actions: [
                 IconButton(
+                  icon: Icon(Mdi.bug),
+                  onPressed: () => debugAction(context)
+                ),
+                IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
                 ),
@@ -121,7 +131,7 @@ class _MainScreenState extends State<MainScreen> {
       TimelinePage(key: ValueKey(0)),
       NotificationsPage(key: ValueKey(1)),
       ChatsPage(key: ValueKey(2)),
-      Container(key: ValueKey(3)),
+      DeckPage(key: ValueKey(3))
     ],
   );
 
@@ -193,6 +203,18 @@ class _MainScreenState extends State<MainScreen> {
       );
     }
     return null;
+  }
+
+  void debugAction(BuildContext context) async {
+    var client = MisskeyClient();
+    client.instance = "misskey.io";
+    var page = await client.getPage(
+      "sWwuYT3qpmh3g9EW",
+      "Craftplacer",
+      "1597983613670",
+    );
+
+    Navigator.push(context, MaterialPageRoute(builder: (_) => MisskeyPageScreen(page)));
   }
 
   void onComposeStatus(BuildContext context) async {

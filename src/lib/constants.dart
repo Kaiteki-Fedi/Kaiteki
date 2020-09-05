@@ -20,6 +20,11 @@ class Constants {
     }
   }
 
+  static const List<String> fontFallback = [
+    "Nono Sans",
+    "Noto Sans CJK",
+    "Noto Sans Symbols"
+  ];
   static const List<String> defaultScopes = [
     "read",
     "write",

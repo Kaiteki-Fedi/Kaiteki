@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';
+import 'package:kaiteki/notification_poster.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/interaction_bar.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
@@ -45,6 +46,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
         if (!snapshot.hasData)
           return Center(child: CircularProgressIndicator());
 
+        NotificationPoster.sendNotifications(context, snapshot.data).then((value) => null);
+
         return ListView(
           children: [
             for (var notification in snapshot.data)
@@ -74,26 +77,26 @@ class _NotificationsPageState extends State<NotificationsPage> {
       }
       case "favourite": {
         return InteractionBar(
-            color: Colors.yellowAccent,
-            icon: Mdi.star,
-            text: "favorited your status",
-            account: notification.account
+          color: Colors.yellowAccent,
+          icon: Mdi.star,
+          text: "favorited your status",
+          account: notification.account
         );
       }
       case "reblog": {
         return InteractionBar(
-            color: Colors.lightGreenAccent,
-            icon: Mdi.repeat,
-            text: "repeated your status",
-            account: notification.account
+          color: Colors.lightGreenAccent,
+          icon: Mdi.repeat,
+          text: "repeated your status",
+          account: notification.account
         );
       }
       case "mention": {
         return InteractionBar(
-            color: Colors.indigoAccent,
-            icon: Mdi.reply,
-            text: "replied to you",
-            account: notification.account
+          color: Colors.indigoAccent,
+          icon: Mdi.reply,
+          text: "replied to you",
+          account: notification.account
         );
       }
 

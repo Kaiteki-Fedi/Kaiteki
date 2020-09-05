@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 
@@ -20,4 +21,18 @@ void main() async {
   // run.
   runApp(app);
 }
+
+Future<FlutterLocalNotificationsPlugin> initializeNotifications() async {
+  var plugin =  FlutterLocalNotificationsPlugin();
+  var androidSettings = AndroidInitializationSettings("@mipmap/ic_launcher");
+  var iosSettings = IOSInitializationSettings(
+    requestSoundPermission: false,
+    requestBadgePermission: false,
+    requestAlertPermission: false,
+  );
+
+  var initSettings = InitializationSettings(androidSettings, iosSettings);
+  await plugin.initialize(initSettings);
+
+  return plugin;
 }

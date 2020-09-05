@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/model/account_compound.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/ui/screens/add_account_screen.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
+import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,32 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
 
+
+
           var length = snapshot.data.length;
+
+          if (length == 0) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: IconLandingWidget(
+                      icon: Mdi.accountOutline,
+                      text: "No accounts"
+                    ),
+                  ),
+                  OutlineButton.icon(
+                    icon: Icon(Mdi.plus),
+                    label: Text("Add Account"),
+                    onPressed: () => onTapAdd(context),
+                  )
+                ],
+              ),
+            );
+          }
+
           return ListView.builder(
             itemCount: length + 2,
             itemBuilder: (_, i) {
@@ -63,6 +88,8 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
 
   void onTapAdd(BuildContext context) {
     Navigator.of(context).pushNamed("/accounts/add");
+  }
+
   void onTapRemove(BuildContext context, AccountContainer container, AccountCompound account) {
     showDialog<void>(
       context: context,

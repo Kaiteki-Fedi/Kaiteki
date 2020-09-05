@@ -13,83 +13,110 @@ import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:provider/provider.dart';
 
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
 
   final String id;
 
   AccountScreen(this.id);
 
   @override
+  _AccountScreenState createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen>
+    with TickerProviderStateMixin {
+  @override
   Widget build(BuildContext context) {
     var container = Provider.of<AccountContainer>(context);
     var pleroma = container.client as PleromaClient;
 
-    var theme = Provider.of<ThemeContainer>(context);
-    var pleromaTheme = theme.getCurrentPleromaTheme();
-    var linkColor = pleromaTheme?.getColor("link")
-        ?? Theme.of(context).accentColor;
+    var tabController = TabController(length: 2, vsync: this);
 
     return Scaffold(
       appBar: AppBar(),
-      body: LayoutBuilder(
-        builder: (_, c) {
-          var desktopMode = Constants.desktopThreshold <= c.maxWidth;
-          if (desktopMode) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 256,
-                    child: getAccountHeader(pleroma),
-                  ),
-                  SizedBox(width: 16),
-                  Flexible(
-                    child: SingleChildScrollView(
-                      child: getStatusBody(pleroma),
-                    ),
-                  ),
-                ],
-              ),
-            );
+      body: FutureBuilder(
+        future: pleroma.getAccount(widget.id),
+        builder: (_, AsyncSnapshot<MastodonAccount> snapshot) {
+          if (snapshot.hasError) {
+            return Text("oops: " + snapshot.error.toString());
           }
 
-          return ListView(
-            children: [
-              Material(
-                child: getAccountHeader(pleroma),
-                elevation: 4,
-              ),
-              getStatusBody(pleroma),
-            ]
+          if (!snapshot.hasData) {
+            return Center(child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: CircularProgressIndicator(),
+            ));
+          }
+
+          return LayoutBuilder(
+            builder: (_, c) {
+              var desktopMode = Constants.desktopThreshold <= c.maxWidth;
+              if (desktopMode) {
+                return Column(
+                  children: [
+                    Image.network(
+                      snapshot.data.header,
+                      height: 350,
+                      fit: BoxFit.cover,
+                    ),
+                    Flexible(
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Text(snapshot.data.displayName)
+                            ]
+                          ),
+                          Column(
+                            children: [
+                              TabBar(
+                                controller: tabController,
+                                tabs: [
+                                  Tab(
+                                      text: "Posts"
+                                  ),
+                                  Tab(
+                                      text: "owo"
+                                  )
+                                ],
+                              ),
+                              Flexible(
+                                child: TabBarView(
+                                  controller: tabController,
+                                  children: [
+                                    getStatusBody(pleroma),
+                                    Container(),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                );
+              }
+
+              return ListView(
+                children: [
+                  Material(
+                    child: Container(), // getAccountHeader(pleroma),
+                    elevation: 4,
+                  ),
+                  getStatusBody(pleroma),
+                ]
+              );
+            },
           );
         },
       )
     );
   }
 
-  Widget getAccountHeader(MastodonClient client) {
-    return FutureBuilder(
-      future: client.getAccount(id),
-      builder: (_, AsyncSnapshot<MastodonAccount> snapshot) {
-        if (snapshot.hasError) {
-          return Text("oops: " + snapshot.error.toString());
-        }
-
-        if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
-        }
-
-        return AccountHeader(
-          account: snapshot.data
-        );
-      },
-    );
-  }
-
   Widget getStatusBody(MastodonClient client) {
     return FutureBuilder(
-      future: client.getStatuses(id),
+      future: client.getStatuses(widget.id),
       builder: (BuildContext context, AsyncSnapshot<Iterable<MastodonStatus>> snapshot) {
         if (snapshot.hasData) {
           var statuses = snapshot.data;
@@ -103,7 +130,7 @@ class AccountScreen extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text("oof: " + snapshot.error.toString());
         } else{
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );
