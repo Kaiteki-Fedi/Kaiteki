@@ -25,6 +25,16 @@ class Constants {
     "write",
     "follow",
     "push",
-    "admin"
+    "admin",
+  ];
+
+  static const List<String> defaultMisskeyPermissions = [
+    "read:account",
+    "write:account",
+    "read:pages",
+    "read:notifications",
+    "write:notifications",
+    "read:favorites",
+    "write:favorites",
   ];
 }
