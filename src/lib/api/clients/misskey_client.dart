@@ -26,7 +26,7 @@ class MisskeyClient extends FediverseClientBase {
     };
 
     var response = await http.post(
-      "$baseUrl/app/create",
+      "$baseUrl/api/app/create",
       body: jsonEncode(body),
       headers: getHeaders()
     );
@@ -40,7 +40,7 @@ class MisskeyClient extends FediverseClientBase {
     var body = {"appSecret": appSecret};
 
     var response = await http.post(
-      "$baseUrl/auth/session/generate",
+      "$baseUrl/api/auth/session/generate",
       body: jsonEncode(body),
       headers: getHeaders()
     );
