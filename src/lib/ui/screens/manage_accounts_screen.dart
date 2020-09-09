@@ -67,7 +67,7 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
 
               var compound = snapshot.data[i];
               return ListTile(
-                selected: i == 0,
+                selected: container.currentAccount == compound,
                 leading: AvatarWidget(
                   compound.account,
                   openOnTap: false,
