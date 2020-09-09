@@ -28,8 +28,6 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
 
-
-
           var length = snapshot.data.length;
 
           if (length == 0) {
@@ -70,7 +68,10 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
               var compound = snapshot.data[i];
               return ListTile(
                 selected: i == 0,
-                leading: AvatarWidget(compound.account, openOnTap: false),
+                leading: AvatarWidget(
+                  compound.account,
+                  openOnTap: false,
+                ),
                 title: Text(compound.accountSecret.username),
                 subtitle: Text(compound.instance),
                 onTap: () async => await container.changeAccount(compound),

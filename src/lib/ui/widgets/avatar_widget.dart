@@ -3,7 +3,7 @@ import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/ui/screens/account_screen.dart';
 import 'package:mdi/mdi.dart';
 
-// A tap-able avatar.
+/// A tap-able avatar.
 class AvatarWidget extends StatelessWidget {
   final MastodonAccount _account;
   final double size;
@@ -17,12 +17,12 @@ class AvatarWidget extends StatelessWidget {
       return _getAvatarImageWidget();
 
     return GestureDetector(
-        child: _getAvatarImageWidget(),
-        onTap: () {
-          var screen = AccountScreen(_account.id);
-          var route = MaterialPageRoute(builder: (_) => screen);
-          Navigator.push(context, route);
-        },
+      child: _getAvatarImageWidget(),
+      onTap: () {
+        var screen = AccountScreen(_account.id);
+        var route = MaterialPageRoute(builder: (_) => screen);
+        Navigator.push(context, route);
+      },
     );
   }
 

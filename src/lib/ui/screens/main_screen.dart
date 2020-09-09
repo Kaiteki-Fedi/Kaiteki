@@ -180,7 +180,6 @@ class _MainScreenState extends State<MainScreen> {
     }
     return null;
   }
-
   FloatingActionButton getFloatingActionButtonDesktop(BuildContext context, int index) {
     switch (index) {
       case 0: return FloatingActionButton.extended(

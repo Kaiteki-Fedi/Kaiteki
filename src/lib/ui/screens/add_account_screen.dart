@@ -39,14 +39,14 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
             title: Text("Mastodon"),
             enabled: false,
             onTap: () => Navigator.push(
-                context,
-                getRoute(
-                    LoginScreen(
-                      image: AssetImage("assets/icons/mastodon.png"),
-                      color: AppColors.mastodonPrimary,
-                      backgroundColor: AppColors.mastodonSecondary,
-                    )
+              context,
+              getRoute(
+                LoginScreen(
+                  image: AssetImage("assets/icons/mastodon.png"),
+                  color: AppColors.mastodonPrimary,
+                  backgroundColor: AppColors.mastodonSecondary,
                 )
+              )
             ),
           ),
           ListTile(
