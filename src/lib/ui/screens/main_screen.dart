@@ -144,7 +144,7 @@ class _MainScreenState extends State<MainScreen> {
       for (var tab in _tabs)
         BottomNavigationBarItem(
           icon: Icon(tab.icon),
-          title: Text(tab.text),
+          label: tab.text,
         ),
     ],
   );
