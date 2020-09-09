@@ -1,11 +1,15 @@
-import 'package:kaiteki/model/mfa_data.dart';
-
 class LoginResult {
   String reason;
-  bool get failed => reason != null;
-  bool pop = true;
+  bool successful = true;
+  bool aborted = false;
 
-  MfaData mfa;
+  LoginResult.successful();
 
-  LoginResult({this.reason, this.pop, this.mfa});
+  LoginResult.failed(this.reason) {
+    successful = false;
+  }
+
+  LoginResult.aborted() {
+    aborted = true;
+  }
 }

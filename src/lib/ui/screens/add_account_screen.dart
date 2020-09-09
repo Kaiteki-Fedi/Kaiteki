@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/app_colors.dart';
+import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/ui/screens/login_screen.dart';
 import 'package:mdi/mdi.dart';
 
@@ -62,6 +63,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   image: AssetImage("assets/icons/pleroma.png"),
                   color: AppColors.pleromaPrimary,
                   backgroundColor: AppColors.pleromaSecondary,
+                  onLogin: LoginFunctions.loginPleroma,
                 )
               )
             ),
@@ -72,7 +74,6 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
               height: 24,
             ),
             title: Text("Misskey"),
-            enabled: false,
             onTap: () => Navigator.push(
               context,
               getRoute(
@@ -80,6 +81,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   image: AssetImage("assets/icons/misskey.png"),
                   color: AppColors.misskeyPrimary,
                   backgroundColor: AppColors.misskeySecondary,
+                  onLogin: LoginFunctions.loginMisskey,
                 )
               )
             ),

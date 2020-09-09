@@ -42,6 +42,7 @@ class MastodonClient extends FediverseClientBase {
     return statuses;
   }
 
+  /// This method does not error-check on its own!
   Future<LoginResponse> login(String username, String password) async {
     var body = <String, String> {
       "username": username,
@@ -57,7 +58,8 @@ class MastodonClient extends FediverseClientBase {
       headers: getHeaders()
     );
 
-    Utils.checkResponse(response);
+    // FIXME: Failures should be handled using exceptions OR LoginResponses.
+    // Utils.checkResponse(response);
 
     var json = jsonDecode(response.body);
     return LoginResponse.fromJson(json);
