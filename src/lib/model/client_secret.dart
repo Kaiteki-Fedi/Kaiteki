@@ -1,3 +1,4 @@
+import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/string_extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +8,9 @@ class ClientSecret {
   String clientSecret;
   String instance;
 
-  ClientSecret(this.instance, this.clientId, this.clientSecret) {
+  ApiType apiType;
+
+  ClientSecret(this.instance, this.clientId, this.clientSecret, {this.apiType}) {
     assert(this.instance != null);
     assert(this.clientId != null);
     assert(this.clientSecret != null);
@@ -26,6 +29,7 @@ class ClientSecret {
   String toKey() => "c;$instance";
   String toValue() => "$clientId;$clientSecret";
 
+  // TODO: port over to repository design
   static Future<ClientSecret> getSecret(String instance) async {
     Logger.debug("looking for client secret for $instance");
 
