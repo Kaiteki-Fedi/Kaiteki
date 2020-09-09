@@ -20,7 +20,7 @@ class AccountSecretRepository extends ChangeNotifier {
   }
 
   Future<void> _initialize() async {
-    _secrets = await getAll();
+    _secrets = (await getAll()).toList();
   }
 
   Future<Iterable<AccountSecret>> getAll() async {
@@ -45,7 +45,7 @@ class AccountSecretRepository extends ChangeNotifier {
 
     var secrets = await Future.wait(futures);
 
-    return secrets.toList(growable: false);
+    return secrets;
   }
 
   /// Gets a list of every account
@@ -72,7 +72,7 @@ class AccountSecretRepository extends ChangeNotifier {
       "Account secret is already present in repository's list"
     );
 
-    var value = accounts.followedBy([key]);
+    var value = accounts.followedBy([key]).toList(growable: false);
     await _preferences.setStringList(_accountListKey, value);
 
     // add to public account list and notify listeners
