@@ -54,6 +54,7 @@ class AccountContainer extends ChangeNotifier {
   Future<void> addCurrentAccount(AccountCompound compound) async {
     // TODO: add duplicate check
     _accounts.add(compound);
+    _accountSecrets.insert(compound.accountSecret);
 
     await changeAccount(compound);
   }
@@ -78,8 +79,8 @@ class AccountContainer extends ChangeNotifier {
       assert(clientSecret != null);
 
       // TODO: Add support for other client types
-      var type = ApiType.Pleroma;
-      var client = createClient(type);
+      // var type = ApiType.Pleroma;
+      var client = createClient(clientSecret.apiType);
 
       dynamic account;
 
