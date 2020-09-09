@@ -16,6 +16,8 @@ class ClientSecret {
     assert(this.clientSecret != null);
   }
 
+  ClientSecret.empty(this.instance, {this.apiType});
+
   ClientSecret.fromValue(String key, String value) {
     assert(key.substring(0, 2) == "c;", "Key doesn't have the correct prefix");
 
