@@ -3,7 +3,7 @@ import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/ui/forms/login_form.dart';
-import 'package:kaiteki/ui/screens/mfa_screen.dart';
+import 'package:kaiteki/ui/screens/auth/mfa_screen.dart';
 import 'package:provider/provider.dart';
 
 // TODO: Try to make this screen standalone and not rely on any specific client
@@ -36,28 +36,80 @@ class _LoginScreenState extends State<LoginScreen> {
       data: _getTheme(),
       child: Scaffold(
         appBar: AppBar(title: Text("Log into an instance")),
-        body: !_loading
-        ? ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Image(
-              image: widget.image,
-              width: 96,
-              height: 96,
-            ),
-            LoginForm(
-              onValidateInstance: validateInstance,
-              onValidateUsername: validateUsername,
-              onValidatePassword: validatePassword,
-              currentError: _error,
-              onLogin: loginButtonPress,
-              instanceController: _instanceController,
-              usernameController: _usernameController,
-              passwordController: _passwordController,
-            )
-          ],
+        body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            if (_loading)
+              Center(child: CircularProgressIndicator());
+
+            const double contentWidth = 450;
+            const double contentHeight = 600;
+
+            if (contentWidth <= constraints.maxWidth && contentHeight <= constraints.maxHeight)
+              return Stack(
+                children: [
+                  Center(
+                    child: Card(
+                      child: Container(
+                        width: contentWidth,
+                        height: contentHeight,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24.0,
+                          vertical: 64.0,
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 24.0),
+                              child: Image(
+                                image: widget.image,
+                                width: 64,
+                                height: 64,
+                              ),
+                            ),
+                            LoginForm(
+                              onValidateInstance: validateInstance,
+                              onValidateUsername: validateUsername,
+                              onValidatePassword: validatePassword,
+                              currentError: _error,
+                              onLogin: loginButtonPress,
+                              instanceController: _instanceController,
+                              usernameController: _usernameController,
+                              passwordController: _passwordController,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              );
+
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24.0),
+                  child: Image(
+                    image: widget.image,
+                    width: 64,
+                    height: 64,
+                  ),
+                ),
+                LoginForm(
+                  onValidateInstance: validateInstance,
+                  onValidateUsername: validateUsername,
+                  onValidatePassword: validatePassword,
+                  currentError: _error,
+                  onLogin: loginButtonPress,
+                  instanceController: _instanceController,
+                  usernameController: _usernameController,
+                  passwordController: _passwordController,
+                )
+              ],
+            );
+          },
+
         )
-        : Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -86,7 +138,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return ThemeData
       .from(colorScheme: colorScheme)
       .copyWith(
-        buttonTheme: ButtonThemeData(colorScheme: colorScheme),
+        buttonColor: widget.color,
+        buttonTheme: ButtonThemeData(
+          textTheme: ButtonTextTheme.primary,
+        ),
+        cursorColor: widget.color,
         appBarTheme: AppBarTheme(elevation: 0),
       );
   }

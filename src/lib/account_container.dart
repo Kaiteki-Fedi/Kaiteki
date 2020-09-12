@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:kaiteki/model/account_compound.dart';
-import 'package:kaiteki/model/account_secret.dart';
+import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/api/clients/misskey_client.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';
-import 'package:kaiteki/model/client_secret.dart';
+import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/utils/logger.dart';

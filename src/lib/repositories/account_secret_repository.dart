@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:kaiteki/model/account_secret.dart';
+import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountSecretRepository extends ChangeNotifier {

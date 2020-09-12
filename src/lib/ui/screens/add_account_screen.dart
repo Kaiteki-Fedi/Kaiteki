@@ -2,7 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/auth/login_functions.dart';
-import 'package:kaiteki/ui/screens/login_screen.dart';
+import 'package:kaiteki/ui/screens/auth/login_screen.dart';
 import 'package:mdi/mdi.dart';
 
 class AddAccountScreen extends StatefulWidget {

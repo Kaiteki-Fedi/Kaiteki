@@ -1,8 +1,8 @@
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/api_type.dart';
-import 'package:kaiteki/model/account_secret.dart';
+import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
-import 'package:kaiteki/model/client_secret.dart';
+import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class AccountCompound<A, C extends FediverseClientBase> {
