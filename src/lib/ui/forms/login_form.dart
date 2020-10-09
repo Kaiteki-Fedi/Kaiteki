@@ -35,54 +35,70 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     var iconConstraint = BoxConstraints.tightFor(width: 48, height: 24);
     var theme = Theme.of(context);
+    var fieldMargin = const EdgeInsets.symmetric(vertical: 8.0);
+    var fieldPadding = const EdgeInsets.all(8.0);
 
     return Form(
       key: _formKey,
       child: AutofillGroup(
         child: Column(
           children: [
-            TextFormField(
-              controller: widget.instanceController,
-              decoration: InputDecoration(
-                labelText: "Instance",
-                prefixIcon: Icon(Mdi.earth),
-                prefixIconConstraints: iconConstraint,
-                // TODO: verify instance
-                // suffixIcon: Icon(Mdi.check),//CircularProgressIndicator(),
-                // suffixIconConstraints: iconConstraint
+            Padding(
+              padding: fieldMargin,
+              child: TextFormField(
+                controller: widget.instanceController,
+                decoration: InputDecoration(
+                  hintText: "Instance",
+                  prefixIcon: Icon(Mdi.earth),
+                  prefixIconConstraints: iconConstraint,
+                  // TODO: verify instance
+                  // suffixIcon: Icon(Mdi.check),//CircularProgressIndicator(),
+                  // suffixIconConstraints: iconConstraint
+                  border: OutlineInputBorder(),
+                  contentPadding: fieldPadding,
+                ),
+                validator: widget.onValidateInstance,
+                // ---
+                keyboardType: TextInputType.url,
+                autofillHints: [AutofillHints.url],
+                inputFormatters: [LowerCaseTextFormatter()],
               ),
-              validator: widget.onValidateInstance,
-              // ---
-              keyboardType: TextInputType.url,
-              autofillHints: [AutofillHints.url],
-              inputFormatters: [LowerCaseTextFormatter()],
             ),
             Divider(),
-            TextFormField(
-              controller: widget.usernameController,
-              decoration: InputDecoration(
-                labelText: "Username",
-                prefixIcon: Icon(Mdi.account),
-                prefixIconConstraints: iconConstraint,
+            Padding(
+              padding: fieldMargin,
+              child: TextFormField(
+                controller: widget.usernameController,
+                decoration: InputDecoration(
+                  hintText: "Username",
+                  prefixIcon: Icon(Mdi.account),
+                  prefixIconConstraints: iconConstraint,
+                  border: OutlineInputBorder(),
+                  contentPadding: fieldPadding,
+                ),
+                validator: widget.onValidateUsername,
+                // ---
+                autofillHints: [AutofillHints.username],
+                keyboardType: TextInputType.text,
               ),
-              validator: widget.onValidateUsername,
-              // ---
-              autofillHints: [AutofillHints.username],
-              keyboardType: TextInputType.text,
             ),
-            TextFormField(
-              controller: widget.passwordController,
-              decoration: InputDecoration(
-                labelText: "Password",
-                prefixIcon: Icon(Mdi.key),
-                prefixIconConstraints: iconConstraint,
-
+            Padding(
+              padding: fieldMargin,
+              child: TextFormField(
+                controller: widget.passwordController,
+                decoration: InputDecoration(
+                  hintText: "Password",
+                  prefixIcon: Icon(Mdi.key),
+                  prefixIconConstraints: iconConstraint,
+                  border: OutlineInputBorder(),
+                  contentPadding: fieldPadding,
+                ),
+                validator: widget.onValidatePassword,
+                // ---
+                keyboardType: TextInputType.text,
+                autofillHints: [AutofillHints.password],
+                obscureText: true,
               ),
-              validator: widget.onValidatePassword,
-              // ---
-              keyboardType: TextInputType.text,
-              autofillHints: [AutofillHints.password],
-              obscureText: true,
             ),
             if (widget.currentError != null)
               Padding(
