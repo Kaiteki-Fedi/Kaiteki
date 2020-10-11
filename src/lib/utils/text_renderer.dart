@@ -40,10 +40,10 @@ class TextRenderer {
 
           if (readingEmoji) {
             var emojiName = buffer.text;
-            var emojiFound = emojis.any((e) => Utils.compareCaseInsensitive(e.shortcode, emojiName));
+            var emojiFound = emojis.any((e) => e.shortcode == emojiName);
 
             if (emojiFound) {
-              var emoji = emojis.firstWhere((e) => Utils.compareCaseInsensitive(e.shortcode, emojiName));
+              var emoji = emojis.firstWhere((e) => e.shortcode == emojiName);
 
               buffer.clear();
 
