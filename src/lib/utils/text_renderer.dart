@@ -96,11 +96,8 @@ class TextRenderer {
       if (node.localName == linkTag) {
         var recognizer = new TapGestureRecognizer();
         recognizer.onTap = () {
-          if (node.classes.contains("mention")) {
-            print("user!");
-            print(node.classes.join(";"));
-            return;
-          }
+          // TODO: add user mention link support
+          // node.classes.contains("mention")
 
           var linkTarget = node.attributes["href"];
           launch(linkTarget);
