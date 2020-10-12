@@ -25,8 +25,8 @@ dependencies:
     sdk: flutter
   http: ^0.12.2
   mdi: ^4.0.0
-  file_picker: ^1.13.3
   provider: ^4.3.2+1
+  file_picker: ^2.0.7
   client_cookie: ^2.2.1
   url_launcher: ^5.5.0
   supercharged: ^1.10.0

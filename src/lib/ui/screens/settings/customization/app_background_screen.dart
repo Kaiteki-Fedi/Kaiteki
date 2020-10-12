@@ -31,10 +31,14 @@ class _AppBackgroundScreenState extends State<AppBackgroundScreen> {
           ListTile(
             title: Text("Select background"),
             onTap: () async {
-              File file;
+              PlatformFile file;
 
               try {
-                file = await FilePicker.getFile(type: FileType.image);
+                var result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+                if (result == null) return;
+
+                file = result.files.single;
               } catch (e) {
                 print("Failed to open file picker for theme import:\n$e");
                 return;
@@ -43,7 +47,7 @@ class _AppBackgroundScreenState extends State<AppBackgroundScreen> {
               if (file == null)
                 return;
 
-              var image = Image.file(file).image;
+              var image = Image.memory(file.bytes).image;
               container.background = image;
             },
           ),

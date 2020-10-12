@@ -148,22 +148,24 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
   void importTheme() async {
     var container = Provider.of<ThemeContainer>(context, listen: false);
 
-    File file;
+    PlatformFile file;
 
     try {
-      file = await FilePicker.getFile(
+      var result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ["json"],
       );
+
+      if (result == null)
+        return;
+
+      file = result.files.single;
     } catch (e) {
       print("Failed to open file picker for theme import:\n$e");
       return;
     }
 
-    if (file == null)
-      return;
-
-    var text = await file.readAsString();
+    var text = utf8.decode(file.bytes);
     var json = jsonDecode(text);
 
     container.rawTheme = PleromaTheme.fromJson(json);
