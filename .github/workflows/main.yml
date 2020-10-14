@@ -33,10 +33,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux
-          path: |
-            './src/build/linux/release/kaiteki'
-            './src/build/linux/**/*.so'
-            '!./src/build/linux/**/*cmake*'
+          path: 'src/build/linux/release/*'
   
   build-android:
     name: Build for Android
