@@ -9,7 +9,8 @@ void main() async {
 
   // fetch async resources e.g. user data
   var accountRepository = await AccountSecretRepository.getInstance();
-  var notifications = await initializeNotifications();
+
+  var notifications = null; //await initializeNotifications();
 
   // construct app
   var app = KaitekiApp(
@@ -24,14 +25,15 @@ void main() async {
 
 Future<FlutterLocalNotificationsPlugin> initializeNotifications() async {
   var plugin =  FlutterLocalNotificationsPlugin();
-  var androidSettings = AndroidInitializationSettings("@mipmap/ic_launcher");
-  var iosSettings = IOSInitializationSettings(
-    requestSoundPermission: false,
-    requestBadgePermission: false,
-    requestAlertPermission: false,
+  var initSettings = InitializationSettings(
+      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+      iOS: IOSInitializationSettings(
+        requestSoundPermission: false,
+        requestBadgePermission: false,
+        requestAlertPermission: false,
+      ),
   );
 
-  var initSettings = InitializationSettings(androidSettings, iosSettings);
   await plugin.initialize(initSettings);
 
   return plugin;

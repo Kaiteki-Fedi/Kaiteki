@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/clients/pleroma_client.dart';
-import 'package:kaiteki/api/model/pleroma/chat.dart';
+import 'package:kaiteki/adapters/interfaces/chat_support.dart';
+import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/ui/screens/chat_screen.dart';
-import 'package:kaiteki/ui/widgets/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +18,7 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<AccountContainer>(context);
+    var chatAdapter = container.adapter as ChatSupport;
 
     if (!container.loggedIn)
       return Center(
@@ -28,35 +28,25 @@ class _ChatsPageState extends State<ChatsPage> {
         )
       );
 
-    if (!(container.client is PleromaClient))
-      return Center(
-        child: IconLandingWidget(
-          icon: Mdi.emoticonFrown,
-            text: "Unsupported client"
-        )
-      );
-
-    var pleroma = container.client as PleromaClient;
-
     return FutureBuilder(
-      future: pleroma.getChats(),
-      builder: (_, AsyncSnapshot<Iterable<PleromaChat>> snapshot) {
+      future: chatAdapter.getChats(),
+      builder: (_, AsyncSnapshot<Iterable<Chat>> snapshot) {
         if (snapshot.hasData)
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (_, i) {
               var chat = snapshot.data.elementAt(i);
               return ListTile(
-                  leading: AvatarWidget(chat.account, size: 48),
+                  // leading: AvatarWidget(chat.recipient, size: 48),
                   title: Row(
 
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(chat.account.displayName),
+                      // Text(chat.recipient.displayName),
                       // Text("69d")
                     ],
                   ),
-                  subtitle: chat.lastMessage == null ? null : Text(chat.lastMessage.content),
+                  subtitle: chat.lastMessage == null ? null : Text(chat.lastMessage.content.content),
                   onTap: () {
                     var chatScreen = ChatScreen(chat);
                     var route = MaterialPageRoute(builder: (_) => chatScreen);

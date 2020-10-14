@@ -1,9 +1,16 @@
-class MastodonAccountField {
-	String name;
-	String value;
+import 'package:json_annotation/json_annotation.dart';
+part 'account_field.g.dart';
 
-	MastodonAccountField.fromJson(Map<String, dynamic> json) {
-		name = json["name"];
-		value = json["value"];
-	}
+@JsonSerializable()
+class MastodonAccountField {
+	final String name;
+
+	final String value;
+
+	const MastodonAccountField(
+		this.name,
+		this.value,
+	);
+
+	factory MastodonAccountField.fromJson(Map<String, dynamic> json) => _$MastodonAccountFieldFromJson(json);
 }

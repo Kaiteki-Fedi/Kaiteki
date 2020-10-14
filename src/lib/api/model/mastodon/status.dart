@@ -1,93 +1,110 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/api/model/mastodon/application.dart';
 import 'package:kaiteki/api/model/mastodon/card.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
+import 'package:kaiteki/api/model/mastodon/mention.dart';
+import 'package:kaiteki/api/model/mastodon/tag.dart';
 import 'package:kaiteki/api/model/pleroma/status.dart';
+part 'status.g.dart';
 
+@JsonSerializable()
 class MastodonStatus {
-  MastodonAccount account;
-  MastodonApplication application;
-  bool bookmarked;
-  MastodonCard card;
-  String content;
-//	dynamic createdAt;
-  Iterable<MastodonEmoji> emojis;
-  bool favourited;
-  int favouritesCount;
-  String id;
-//	dynamic inReplyToAccountId;
-//	dynamic inReplyToId;
-//	dynamic language;
-  Iterable<MastodonMediaAttachment> mediaAttachments;
-//	List<dynamic> mentions;
-  bool muted;
-  bool pinned;
-  PleromaStatus pleroma;
-  // dynamic poll;
-  MastodonStatus reblog;
-  bool reblogged;
-  int reblogsCount;
-  int repliesCount;
-  bool sensitive;
-  String spoilerText;
-//	List<dynamic> tags;
-//	dynamic text;
-  String uri;
-  String url;
-  String visibility;
+  final MastodonAccount account;
 
-  MastodonStatus.fromJson(Map<String, dynamic> json) {
-    account = MastodonAccount.fromJson(json["account"]);
-    application = MastodonApplication.fromJson(json["application"]);
-    bookmarked = json["bookmarked"];
+  final MastodonApplication application;
 
-    if (json["card"] != null)
-  		card = MastodonCard.fromJson(json["card"]);
+  final bool bookmarked;
 
-    content = json["content"];
-//		createdAt = json["created_at"];
-//		emojis = json["emojis"];
-    favourited = json["favourited"];
-    favouritesCount = json["favourites_count"];
-    id = json["id"];
-//		inReplyToAccountId = json["in_reply_to_account_id"];
-//		inReplyToId = json["in_reply_to_id"];
-//		language = json["language"];
-//		mentions = json["mentions"];
-    muted = json["muted"];
-    pinned = json["pinned"];
+  final MastodonCard card;
 
-    if (json["pleroma"] != null)
-      pleroma = PleromaStatus.fromJson(json["pleroma"]);
-//		poll = json["poll"];
-    reblogged = json["reblogged"];
-    reblogsCount = json["reblogs_count"];
-    repliesCount = json["replies_count"];
-    sensitive = json["sensitive"];
-    spoilerText = json["spoiler_text"];
-//		tags = json["tags"];
-//		text = json["text"];
-    uri = json["uri"];
-    url = json["url"];
-    visibility = json["visibility"];
+  final String content;
 
-    if (json["media_attachments"] != null)
-      mediaAttachments = json["media_attachments"].map<MastodonMediaAttachment>((j) => MastodonMediaAttachment.fromJson(j));
+  @JsonKey(name: "created_at")
+  final DateTime createdAt;
 
-    if (json["emojis"] != null)
-      emojis = json["emojis"].map<MastodonEmoji>((j) => MastodonEmoji.fromJson(j));
+  final Iterable<MastodonEmoji> emojis;
 
-    if (json["reblog"] != null)
-      reblog = MastodonStatus.fromJson(json["reblog"]);
-  }
+  final bool favourited;
 
-  MastodonStatus.example() {
-    account = MastodonAccount.example();
-    content = "Hello everyone!";
-    application = MastodonApplication.example();
+  @JsonKey(name: "favourites_count")
+  final int favouritesCount;
 
-    favourited = true;
-    reblogged = true;
-  }
+  final String id;
+
+  @JsonKey(name: "in_reply_to_account_id")
+  final String inReplyToAccountId;
+
+  @JsonKey(name: "in_reply_to_id")
+  final String inReplyToId;
+
+  final String language;
+
+  @JsonKey(name: "media_attachments")
+  final Iterable<MastodonMediaAttachment> mediaAttachments;
+
+  final Iterable<MastodonMention> mentions;
+
+  final bool muted;
+
+  final bool pinned;
+
+  final PleromaStatus pleroma;
+
+  final MastodonStatus reblog;
+
+  final bool reblogged;
+
+  @JsonKey(name: "reblogs_count")
+  final int reblogsCount;
+
+  @JsonKey(name: "replies_count")
+  final int repliesCount;
+
+  final bool sensitive;
+
+  @JsonKey(name: "spoiler_text")
+  final String spoilerText;
+
+  final Iterable<MastodonTag> tags;
+
+  final String uri;
+
+  final String url;
+
+  final String visibility;
+
+  const MastodonStatus({
+    this.account,
+    this.application,
+    this.bookmarked,
+    this.card,
+    this.content,
+    this.createdAt,
+    this.emojis,
+    this.favourited,
+    this.favouritesCount,
+    this.id,
+    this.inReplyToAccountId,
+    this.inReplyToId,
+    this.language,
+    this.mediaAttachments,
+    this.mentions,
+    this.muted,
+    this.pinned,
+    this.pleroma,
+    this.reblog,
+    this.reblogged,
+    this.reblogsCount,
+    this.repliesCount,
+    this.sensitive,
+    this.spoilerText,
+    this.tags,
+    this.uri,
+    this.url,
+    this.visibility,
+  });
+
+  factory MastodonStatus.fromJson(Map<String, dynamic> json) => _$MastodonStatusFromJson(json);
 }

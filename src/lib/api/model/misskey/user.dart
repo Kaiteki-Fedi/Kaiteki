@@ -1,77 +1,93 @@
 import 'package:kaiteki/api/model/misskey/emoji.dart';
+import 'package:kaiteki/api/model/misskey/note.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'user.g.dart';
 
+@JsonSerializable()
 class MisskeyUser {
-  String id;
-  String name;
-  String username;
-  String host;
-  String avatarUrl;
-//	dynamic avatarBlurhash;
-//	dynamic avatarColor;
-  bool isAdmin;
-  bool isModerator;
-  bool isBot;
-  bool isCat;
-  Iterable<MisskeyEmoji> emojis;
-  String url;
-//	dynamic createdAt;
-//	dynamic updatedAt;
-  String bannerUrl;
-  String bannerBlurhash;
-//	dynamic bannerColor;
-  bool isLocked;
-  bool isSilenced;
-  bool isSuspended;
-  String description;
-//	dynamic location;
-//	dynamic birthday;
-  List<dynamic> fields;
-  int followersCount;
-  int followingCount;
-  int notesCount;
-  List<dynamic> pinnedNoteIds;
-  List<dynamic> pinnedNotes;
-//	dynamic pinnedPageId;
-//	dynamic pinnedPage;
-  bool twoFactorEnabled;
-  bool usePasswordLessLogin;
-  bool securityKeys;
+  final String id;
 
-  MisskeyUser.fromJson(Map<String, dynamic> json) {
-    id = json["id"];
-    name = json["name"];
-    username = json["username"];
-    host = json["host"];
-    avatarUrl = json["avatarUrl"];
-//		avatarBlurhash = json["avatarBlurhash"];
-//		avatarColor = json["avatarColor"];
-    isAdmin = json["isAdmin"];
-    isModerator = json["isModerator"];
-    isBot = json["isBot"];
-    isCat = json["isCat"];
-    emojis = json["emojis"].map<MisskeyEmoji>((j) => MisskeyEmoji.fromJson(j));
-    url = json["url"];
-//		createdAt = json["createdAt"];
-//		updatedAt = json["updatedAt"];
-    bannerUrl = json["bannerUrl"];
-    bannerBlurhash = json["bannerBlurhash"];
-//		bannerColor = json["bannerColor"];
-    isLocked = json["isLocked"];
-    isSilenced = json["isSilenced"];
-    isSuspended = json["isSuspended"];
-    description = json["description"];
-//		location = json["location"];
-//		birthday = json["birthday"];
-    //fields = json.map<Field>((j) => Field.fromJson(j));
-    followersCount = json["followersCount"];
-    followingCount = json["followingCount"];
-    notesCount = json["notesCount"];
-    //pinnedNoteIds = json.map<PinnedNoteId>((j) => PinnedNoteId.fromJson(j));
-    //pinnedNotes = json.map<PinnedNote>((j) => PinnedNote.fromJson(j));
-//		pinnedPageId = json["pinnedPageId"];
-//		pinnedPage = json["pinnedPage"];
-    twoFactorEnabled = json["twoFactorEnabled"];
-    usePasswordLessLogin = json["usePasswordLessLogin"];
-    securityKeys = json["securityKeys"];
-  }
+  final String username;
+
+  final String name;
+
+  final String url;
+
+  final String avatarUrl;
+
+  final String avatarBlurhash;
+
+  final String bannerUrl;
+
+  final String bannerBlurhash;
+
+  final Iterable<MisskeyEmoji> emojis;
+
+  final String host;
+
+  final String description;
+
+  final String birthday;
+
+  final DateTime createdAt;
+
+  final DateTime updatedAt;
+
+  final String location;
+
+  final int followersCount;
+
+  final int followingCount;
+
+  final int notesCount;
+
+  final bool isBot;
+
+  final Iterable<String> pinnedNoteIds;
+
+  final Iterable<MisskeyNote> pinnedNotes;
+
+  final bool isCat;
+
+  final bool isAdmin;
+
+  final bool isModerator;
+
+  final bool isLocked;
+
+  final bool hasUnreadSpecifiedNotes;
+
+  final bool hasUnreadMentions;
+
+  const MisskeyUser({
+    this.id,
+    this.username,
+    this.name,
+    this.url,
+    this.avatarUrl,
+    this.avatarBlurhash,
+    this.bannerUrl,
+    this.bannerBlurhash,
+    this.emojis,
+    this.host,
+    this.description,
+    this.birthday,
+    this.createdAt,
+    this.updatedAt,
+    this.location,
+    this.followersCount,
+    this.followingCount,
+    this.notesCount,
+    this.isBot,
+    this.pinnedNoteIds,
+    this.pinnedNotes,
+    this.isCat,
+    this.isAdmin,
+    this.isModerator,
+    this.isLocked,
+    this.hasUnreadSpecifiedNotes,
+    this.hasUnreadMentions,
+  });
+
+  factory MisskeyUser.fromJson(Map<String, dynamic> json) => _$MisskeyUserFromJson(json);
 }

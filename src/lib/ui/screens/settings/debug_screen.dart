@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DebugScreen extends StatefulWidget {
   DebugScreen({Key key}) : super(key: key);
@@ -23,6 +24,13 @@ class _DebugScreenState extends State<DebugScreen> {
               title: Text("Please proceed here with caution as some settings might have unintended behavior or delete your user settings."),
             ),
           ),
+          ListTile(
+            title: Text("Clear shared preferences"),
+            onTap: () async {
+              var instance = await SharedPreferences.getInstance();
+              assert(await instance.clear(), "clear failed");
+            },
+          )
         ],
       ),
     );

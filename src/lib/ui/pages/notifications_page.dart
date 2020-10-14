@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/clients/pleroma_client.dart';
+import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/notification_poster.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/interaction_bar.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
-import 'package:kaiteki/api/model/mastodon/notification.dart';
 
 
 class NotificationsPage extends StatefulWidget {
@@ -30,19 +29,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
         )
       );
 
-    if (!(container.client is PleromaClient))
-      return Center(
-        child: IconLandingWidget(
-          icon: Mdi.emoticonFrown,
-          text: "Unsupported client"
-        )
-      );
-
-    var pleroma = container.client as PleromaClient;
 
     return FutureBuilder(
-      future: pleroma.getNotifications(),
-      builder: (_, AsyncSnapshot<Iterable<MastodonNotification>> snapshot) {
+      future: container.adapter.getNotifications(),
+      builder: (_, AsyncSnapshot<Iterable<Notification>> snapshot) {
         if (!snapshot.hasData)
           return Center(child: CircularProgressIndicator());
 
@@ -54,8 +44,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
               Column(
                 children: [
                   getInteractionBar(notification),
-                  if (notification.status != null)
-                    StatusWidget(notification.status),
+                  if (notification.post != null)
+                    StatusWidget(notification.post),
                   Divider(),
                 ],
               )
@@ -65,14 +55,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  InteractionBar getInteractionBar(MastodonNotification notification) {
+  InteractionBar getInteractionBar(Notification notification) {
     switch (notification.type) {
       case "follow": {
         return InteractionBar(
             color: Colors.lightBlueAccent,
             icon: Mdi.accountPlus,
             text: "followed you",
-            account: notification.account
+            user: notification.user
         );
       }
       case "favourite": {
@@ -80,7 +70,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           color: Colors.yellowAccent,
           icon: Mdi.star,
           text: "favorited your status",
-          account: notification.account
+          user: notification.user
         );
       }
       case "reblog": {
@@ -88,7 +78,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           color: Colors.lightGreenAccent,
           icon: Mdi.repeat,
           text: "repeated your status",
-          account: notification.account
+          user: notification.user
         );
       }
       case "mention": {
@@ -96,7 +86,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           color: Colors.indigoAccent,
           icon: Mdi.reply,
           text: "replied to you",
-          account: notification.account
+          user: notification.user
         );
       }
 
@@ -105,7 +95,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             color: Colors.grey,
             icon: Mdi.help,
             text: "had an unknown interaction with you (${notification.type})",
-            account: notification.account
+            user: notification.user
         );
       }
     }

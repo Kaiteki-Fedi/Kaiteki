@@ -1,30 +1,40 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:kaiteki/api/model/mastodon/card.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
+part 'chat_message.g.dart';
 
+@JsonSerializable()
 class PleromaChatMessage {
-  String accountId;
-  String chatId;
-  MastodonMediaAttachment attachment;
-  dynamic card;
-  String content;
-//	dynamic createdAt;
-  Iterable<MastodonEmoji> emojis;
-  String id;
-  bool unread;
+  @JsonKey(name: "account_id")
+  final String accountId;
 
-  PleromaChatMessage.fromJson(Map<String, dynamic> json) {
-    accountId = json["account_id"];
-    chatId = json["chat_id"];
-    content = json["content"];
-//		createdAt = json["created_at"];
+  final MastodonMediaAttachment attachment;
 
-    if (json["emojis"] != null)
-      emojis = json["emojis"].map<MastodonEmoji>((j) => MastodonEmoji.fromJson(j));
+  final MastodonCard card;
 
-    if (json["attachment"] != null)
-      attachment = MastodonMediaAttachment.fromJson(json["attachment"]);
+  @JsonKey(name: "chat_id")
+  final String chatId;
 
-    id = json["id"];
-    unread = json["unread"];
-  }
+  final String content;
+
+  @JsonKey(name: "created_at")
+  final DateTime createdAt;
+
+  final Iterable<MastodonEmoji> emojis;
+
+  final String id;
+
+  const PleromaChatMessage({
+    this.accountId,
+    this.attachment,
+    this.card,
+    this.chatId,
+    this.content,
+    this.createdAt,
+    this.emojis,
+    this.id,
+  });
+
+  factory PleromaChatMessage.fromJson(Map<String, dynamic> json) => _$PleromaChatMessageFromJson(json);
 }

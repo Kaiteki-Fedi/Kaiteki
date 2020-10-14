@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/clients/mastodon_client.dart';
-import 'package:kaiteki/api/clients/pleroma_client.dart';
+import 'package:kaiteki/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/model/fediverse/formatting.dart';
+import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,6 @@ class _PostFormState extends State<PostForm> {
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<AccountContainer>(context);
-    var pleroma = container.client as PleromaClient;
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -96,7 +96,7 @@ class _PostFormState extends State<PostForm> {
               Spacer(),
               RaisedButton(
                 child: Text("Submit"),
-                onPressed: () => post(pleroma),
+                onPressed: () => post(container.adapter),
               )
             ],
           )
@@ -105,7 +105,12 @@ class _PostFormState extends State<PostForm> {
     );
   }
 
-  void post(MastodonClient client) async {
-    await client.postStatus(bodyController.value.text);
+  void post(FediverseAdapter adapter) async {
+    await adapter.postStatus(
+      Post(
+        content: bodyController.value.text,
+        formatting: Formatting.PlainText,
+      )
+    );
   }
 }

@@ -1,17 +1,17 @@
-import 'dart:convert';
-
+import 'package:http/http.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
+import 'package:kaiteki/api/model/misskey/note.dart';
 import 'package:kaiteki/api/model/misskey/pages/page.dart';
 import 'package:kaiteki/api/model/misskey/user.dart';
 import 'package:kaiteki/api/responses/misskey/create_app_response.dart';
 import 'package:kaiteki/api/responses/misskey/generate_session_response.dart';
 import 'package:kaiteki/api/responses/misskey/signin_response.dart';
 import 'package:kaiteki/api/responses/misskey/userkey_response.dart';
-import 'package:kaiteki/utils/utils.dart';
-import 'package:http/http.dart' as http;
+import 'package:kaiteki/model/auth/authentication_data.dart';
+import 'package:kaiteki/model/http_method.dart';
 
-class MisskeyClient extends FediverseClientBase {
+class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   @override
   ApiType get type => ApiType.Misskey;
 
@@ -21,86 +21,83 @@ class MisskeyClient extends FediverseClientBase {
     List<String> permissions,
     {String callbackUrl}
   ) async {
-    var body = {
-      "name": name,
-      "description": description,
-      "permission": permissions,
-      "callbackUrl": callbackUrl
-    };
-
-    var response = await http.post(
-      "$baseUrl/api/app/create",
-      body: jsonEncode(body),
-      headers: getHeaders()
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/app/create",
+      (json) => MisskeyCreateAppResponse.fromJson(json),
+      body: {
+        "name": name,
+        "description": description,
+        "permission": permissions,
+        "callbackUrl": callbackUrl
+      }
     );
-    Utils.checkResponse(response);
-
-    var json = jsonDecode(response.body);
-    return MisskeyCreateAppResponse.fromJson(json);
   }
 
   Future<MisskeyGenerateSessionResponse> generateSession(String appSecret) async {
-    var body = {"appSecret": appSecret};
-
-    var response = await http.post(
-      "$baseUrl/api/auth/session/generate",
-      body: jsonEncode(body),
-      headers: getHeaders()
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "/api/auth/session/generate",
+      (j) => MisskeyGenerateSessionResponse.fromJson(j),
+      body: { "appSecret": appSecret },
     );
-
-    Utils.checkResponse(response);
-
-    var json = jsonDecode(response.body);
-    return MisskeyGenerateSessionResponse.fromJson(json);
   }
 
   Future<MisskeyPage> getPage(String i, String username, String name) async {
-    var body = {
-      "i": i,
-      "username": username,
-      "name": name,
-    };
-
-    var response = await http.post(
-        "$baseUrl/api/pages/show",
-        body: jsonEncode(body),
-        headers: getHeaders()
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/pages/show",
+      (json) => MisskeyPage.fromJson(json),
+      body: {
+        "i": i,
+        "username": username,
+        "name": name,
+      },
     );
-
-    Utils.checkResponse(response);
-
-    var json = jsonDecode(response.body);
-    return MisskeyPage.fromJson(json);
   }
 
   Future<MisskeyUserkeyResponse> userkey(String appSecret, String token) async {
-    var body = {"appSecret": appSecret, "token": token};
-
-    var response = await http.post(
-      "$baseUrl/api/auth/session/userkey",
-      body: jsonEncode(body),
-      headers: getHeaders()
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/auth/session/userkey",
+      (json) => MisskeyUserkeyResponse.fromJson(json),
+      body: { "appSecret": appSecret, "token": token },
     );
-
-    Utils.checkResponse(response);
-
-    var json = jsonDecode(response.body);
-    return MisskeyUserkeyResponse.fromJson(json);
   }
 
   Future<MisskeyUser> showUser(String userId) async {
-    var body = {"userId": userId};
-
-    var response = await http.post(
-      "$baseUrl/api/users/show",
-      body: jsonEncode(body),
-      headers: getHeaders(),
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/users/show",
+      (json) => MisskeyUser.fromJson(json),
+      body: {"userId": userId}
     );
+  }
 
-    Utils.checkResponse(response);
+  Future<MisskeyUser> showUserByName(String username, [String instance]) async {
+    var body = {"username": username};
 
-    var json = jsonDecode(response.body);
-    return MisskeyUser.fromJson(json);
+    if (body.containsKey(instance))
+      body["instance"] = instance;
+
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/users/show",
+      (json) => MisskeyUser.fromJson(json)
+    );
+  }
+
+  Future<Iterable<MisskeyNote>> showUserNotes(String userId, bool excludeNsfw, Iterable<String> fileTypes) async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.POST,
+      "api/users/notes",
+      (json) => MisskeyNote.fromJson(json),
+      body: {
+        "userId": userId,
+        "fileType": fileTypes,
+        "excludeNsfw": excludeNsfw,
+      }
+    );
   }
 
   Future<MisskeySignInResponse> signIn(
@@ -116,15 +113,26 @@ class MisskeyClient extends FediverseClientBase {
     if (token != null)
       body["token"] = token;
 
-    var response = await http.post(
-      "$baseUrl/api/signin",
-      body: jsonEncode(body),
-      headers: getHeaders()
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/signin",
+      (json) => MisskeySignInResponse.fromJson(json),
+      body: body
     );
+  }
 
-    Utils.checkResponse(response);
+  Future<Iterable<MisskeyNote>> getTimeline() async {
+    // TODO: add missing optional parameter: (int) limit
+    return await sendJsonRequestMultiple(
+      HttpMethod.POST,
+      "api/notes/timeline",
+      (json) => MisskeyNote.fromJson(json),
+      body: {}
+    );
+  }
 
-    var json = jsonDecode(response.body);
-    return MisskeySignInResponse.fromJson(json);
+  @override
+  void checkResponse(StreamedResponse response) {
+    // TODO: implement checkResponse
   }
 }

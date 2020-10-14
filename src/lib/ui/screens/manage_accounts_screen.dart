@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/account_compound.dart';
+import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';

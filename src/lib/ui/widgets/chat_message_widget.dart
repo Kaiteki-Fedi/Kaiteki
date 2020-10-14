@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiteki/model/fediverse/attachment.dart';
+import 'package:kaiteki/model/fediverse/chat.dart';
+import 'package:kaiteki/model/fediverse/chat_message.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
-import 'package:kaiteki/api/model/mastodon/account.dart';
-import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
-import 'package:kaiteki/api/model/pleroma/chat.dart';
-import 'package:kaiteki/api/model/pleroma/chat_message.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
@@ -13,15 +12,17 @@ import 'package:provider/provider.dart';
 class ChatMessageWidget extends StatefulWidget {
   ChatMessageWidget(this.chat, this.chatMessage, {Key key}) : super(key: key);
 
-  final PleromaChat chat;
-  final PleromaChatMessage chatMessage;
+  final Chat chat;
 
+  final ChatMessage chatMessage;
   @override
   _ChatMessageWidgetState createState() => _ChatMessageWidgetState();
 }
 
 class _ChatMessageWidgetState extends State<ChatMessageWidget> {
-  get isOwnMessage => widget.chat.account.id != widget.chatMessage.accountId;
+  // TODO: fix
+  get isOwnMessage => true;
+  //get isOwnMessage => widget.chat.recipient.id != widget.chatMessage.accountId;
   get alignment => isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
 
   static const double avatarSize = 32;
@@ -48,7 +49,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
           Padding(
 
             padding: getAvatarPadding(isOwnMessage),
-            child: AvatarWidget(isOwnMessage ? MastodonAccount.example() : widget.chat.account, size: avatarSize),
+            child: AvatarWidget(widget.chatMessage.user, size: avatarSize),
           ),
           Container(
             constraints: BoxConstraints.tightFor(width: b.maxWidth * 0.8),
@@ -61,14 +62,18 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
                 width: 1
               )
             ),
-            child: widget.chatMessage.attachment == null
-              ? RichText(
-                text: TextRenderer(
-                  emojis: widget.chatMessage.emojis,
-                  textStyle: TextStyle(color: appTheme.textColor),
-                ).render(widget.chatMessage.content)
-              )
-              : getAttachmentWidget(widget.chatMessage.attachment),
+            child: Column(
+              children: [
+                RichText(
+                  text: TextRenderer(
+                    emojis: widget.chatMessage.content.emojis,
+                    textStyle: TextStyle(color: appTheme.textColor),
+                  ).render(widget.chatMessage.content.content)
+                ),
+                for (var attachment in widget.chatMessage.content.attachments)
+                  getAttachmentWidget(attachment),
+              ],
+            )
           ),
         ]),
       ),
@@ -89,7 +94,7 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
     return list;
   }
 
-  Widget getAttachmentWidget(MastodonMediaAttachment attachment) {
+  Widget getAttachmentWidget(Attachment attachment) {
     switch (attachment.type) {
       case "image": return ImageAttachmentWidget(attachment);
     //case "video": return VideoAttachmentWidget(attachment);

@@ -1,0 +1,6 @@
+abstract class Repository<T> {
+  void remove(T item);
+  void insert(T item);
+  void removeAll();
+  Iterable<T> getAll();
+}

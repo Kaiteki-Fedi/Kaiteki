@@ -1,7 +1,13 @@
-class PleromaCard {
-  Map<String, String> opengraph;
+import 'package:json_annotation/json_annotation.dart';
+part 'card.g.dart';
 
-  PleromaCard.fromJson(Map<String, dynamic> json) {
-    opengraph = json["opengraph"].cast<String, String>();
-  }
+@JsonSerializable()
+class PleromaCard {
+  final Map<String, String> opengraph;
+
+  const PleromaCard(
+    this.opengraph,
+  );
+
+  factory PleromaCard.fromJson(Map<String, dynamic> json) => _$PleromaCardFromJson(json);
 }

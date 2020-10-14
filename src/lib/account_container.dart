@@ -1,25 +1,23 @@
 import 'package:flutter/foundation.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
+import 'package:kaiteki/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/adapters/mastodon_adapter.dart';
+import 'package:kaiteki/adapters/misskey_adapter.dart';
+import 'package:kaiteki/adapters/pleroma_adapter.dart';
 import 'package:kaiteki/api/api_type.dart';
-import 'package:kaiteki/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
-import 'package:kaiteki/api/clients/misskey_client.dart';
-import 'package:kaiteki/api/clients/pleroma_client.dart';
+import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/utils/logger.dart';
 
 class AccountContainer extends ChangeNotifier {
   AccountCompound _currentAccount;
-
   AccountCompound get currentAccount => _currentAccount;
-  ClientSecret get clientSecret => currentAccount.clientSecret;
-  AccountSecret get accountSecret => currentAccount.accountSecret;
-  FediverseClientBase get client => currentAccount.client;
 
-  String get instance => clientSecret.instance;
+  String get instance => currentAccount.clientSecret.instance;
+  FediverseAdapter get adapter => currentAccount.adapter;
   bool get loggedIn => currentAccount != null;
 
   final AccountSecretRepository _accountSecrets;
@@ -80,38 +78,45 @@ class AccountContainer extends ChangeNotifier {
 
       // TODO: Add support for other client types
       // var type = ApiType.Pleroma;
-      var client = createClient(clientSecret.apiType);
+      var adapter = createAdapter(clientSecret.apiType);
 
-      dynamic account;
+      User user;
 
-      if (client is PleromaClient) {
-        client.instance = clientSecret.instance;
-        client.clientSecret = clientSecret.clientSecret;
-        client.clientId = clientSecret.clientId;
-        client.accessToken = accountSecret.accessToken;
+      if (adapter.client is MastodonClient) {
+        var mastodonClient = adapter.client as MastodonClient;
 
-        try {
-          account = await client.verifyCredentials();
-        } catch (ex) {
-          print("Failed to verify credentials: $ex");
-        }
+        mastodonClient.instance = clientSecret.instance;
+
+        mastodonClient.authenticationData.clientSecret =
+            clientSecret.clientSecret;
+
+        mastodonClient.authenticationData.clientId = clientSecret.clientId;
+
+        mastodonClient.authenticationData.accessToken =
+            accountSecret.accessToken;
       }
 
-      if (account == null) {
-        print("No account data was recovered, assuming account info is incorrect.");
+      try {
+        user = await adapter.getMyself();
+      } catch (ex) {
+        print("Failed to verify credentials: $ex");
+      }
+
+      if (user == null) {
+        print("No user data was recovered, assuming user info is incorrect.");
         return;
       }
 
-      var accountCompound = AccountCompound(this, client, account, clientSecret, accountSecret);
+      var accountCompound = AccountCompound(this, adapter, user, clientSecret, accountSecret);
       _accounts.add(accountCompound);
     });
   }
 
-  FediverseClientBase createClient(ApiType type){
+  FediverseAdapter createAdapter(ApiType type){
     switch (type) {
-      case ApiType.Mastodon: return MastodonClient();
-      case ApiType.Pleroma: return PleromaClient();
-      case ApiType.Misskey: return MisskeyClient();
+      case ApiType.Mastodon: return MastodonAdapter();
+      case ApiType.Pleroma: return PleromaAdapter();
+      case ApiType.Misskey: return MisskeyAdapter();
       default: throw "out of range";
     }
   }
@@ -123,18 +128,13 @@ class AccountContainer extends ChangeNotifier {
   Future<void> checkAccounts() async {
     for (var compound in _accounts) {
       try {
-        if (compound.client is MastodonClient) {
-          var mastodonClient = compound.client as MastodonClient;
-          var account = mastodonClient.verifyCredentials();
+        var account = await compound.adapter.getMyself();
 
-          if (account == null) {
-            throw "Account was null";
-          }
-
-          compound.account = account;
-        } else {
-          throw "Unsupported client";
+        if (account == null) {
+          throw "Account was null";
         }
+
+        compound.account = account;
       } catch (e) {
         remove(compound);
         Logger.error("Account retrieval failed, removing account... $e");

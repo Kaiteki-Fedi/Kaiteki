@@ -1,14 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:kaiteki/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/clients/mastodon_client.dart';
-import 'package:kaiteki/api/clients/pleroma_client.dart';
-import 'package:kaiteki/api/model/mastodon/account.dart';
-import 'package:kaiteki/api/model/mastodon/status.dart';
-import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -28,15 +25,13 @@ class _AccountScreenState extends State<AccountScreen>
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<AccountContainer>(context);
-    var pleroma = container.client as PleromaClient;
-
     var tabController = TabController(length: 2, vsync: this);
 
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder(
-        future: pleroma.getAccount(widget.id),
-        builder: (_, AsyncSnapshot<MastodonAccount> snapshot) {
+        future: container.adapter.getUserById(widget.id),
+        builder: (_, AsyncSnapshot<User> snapshot) {
           if (snapshot.hasError) {
             return Text("oops: " + snapshot.error.toString());
           }
@@ -48,76 +43,27 @@ class _AccountScreenState extends State<AccountScreen>
             ));
           }
 
-          return LayoutBuilder(
-            builder: (_, c) {
-              var desktopMode = Constants.desktopThreshold <= c.maxWidth;
-              if (desktopMode) {
-                return Column(
-                  children: [
-                    Image.network(
-                      snapshot.data.header,
-                      height: 350,
-                      fit: BoxFit.cover,
-                    ),
-                    Flexible(
-                      child: Row(
-                        children: [
-                          Column(
-                            children: [
-                              Text(snapshot.data.displayName)
-                            ]
-                          ),
-                          Column(
-                            children: [
-                              TabBar(
-                                controller: tabController,
-                                tabs: [
-                                  Tab(
-                                      text: "Posts"
-                                  ),
-                                  Tab(
-                                      text: "owo"
-                                  )
-                                ],
-                              ),
-                              Flexible(
-                                child: TabBarView(
-                                  controller: tabController,
-                                  children: [
-                                    getStatusBody(pleroma),
-                                    Container(),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                );
-              }
-
-              return ListView(
-                children: [
-                  Material(
-                    child: Container(), // getAccountHeader(pleroma),
-                    elevation: 4,
+          return ListView(
+              children: [
+                Material(
+                  child: AccountHeader(
+                    account: snapshot.data,
+                    linkColor: Theme.of(context).accentColor,
                   ),
-                  getStatusBody(pleroma),
-                ]
-              );
-            },
+                  elevation: 4,
+                ),
+                getStatusBody(container.adapter),
+              ]
           );
         },
       )
     );
   }
 
-  Widget getStatusBody(MastodonClient client) {
+  Widget getStatusBody(FediverseAdapter adapter) {
     return FutureBuilder(
-      future: client.getStatuses(widget.id),
-      builder: (BuildContext context, AsyncSnapshot<Iterable<MastodonStatus>> snapshot) {
+      future: adapter.getStatusesOfUserById(widget.id),
+      builder: (BuildContext context, AsyncSnapshot<Iterable<Post>> snapshot) {
         if (snapshot.hasData) {
           var statuses = snapshot.data;
 
@@ -144,7 +90,7 @@ class AccountHeader extends StatelessWidget {
     @required this.linkColor,
   }) : super(key: key);
 
-  final MastodonAccount account;
+  final User account;
   final Color linkColor;
 
   @override
@@ -152,17 +98,14 @@ class AccountHeader extends StatelessWidget {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 7),
         decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(account.header)
-          )
+          image: getDecorationBackground(account),
         ),
         child: Column(
           children: [
             Row(
               children: [
                 Image.network(
-                  account.avatar,
+                  account.avatarUrl,
                   width: 56,
                   height: 56
                 ),
@@ -187,7 +130,7 @@ class AccountHeader extends StatelessWidget {
                       color: linkColor
                     ),
                     textStyle: TextStyle(),
-                  ).render(account.note)
+                  ).render(account.description)
                 ],
                 style: TextStyle(
                   shadows: [
@@ -201,6 +144,15 @@ class AccountHeader extends StatelessWidget {
             )
           ],
         )
+    );
+  }
+
+  DecorationImage getDecorationBackground(User account) {
+    if (account.bannerUrl == null) return null;
+
+    return DecorationImage(
+      fit: BoxFit.cover,
+      image: NetworkImage(account.bannerUrl)
     );
   }
 }

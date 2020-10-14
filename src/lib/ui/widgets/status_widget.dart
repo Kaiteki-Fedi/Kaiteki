@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiteki/model/fediverse/attachment.dart';
+import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/ui/widgets/card_widget.dart';
+import 'package:kaiteki/ui/widgets/reaction_row.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
-import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
-import 'package:kaiteki/api/model/mastodon/status.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
@@ -12,9 +13,9 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class StatusWidget extends StatelessWidget {
-  final MastodonStatus _status;
+  final Post _post;
 
-  const StatusWidget(this._status);
+  const StatusWidget(this._post);
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +25,29 @@ class StatusWidget extends StatelessWidget {
     var container = Provider.of<ThemeContainer>(context);
     var theme = container.currentTheme;
 
-    if (_status.reblog != null) {
+    if (_post.repeatOf != null) {
       return Column(
         children: [
           InteractionBar(
             icon: Mdi.repeat,
             text: "repeated",
             color: theme.repeatColor,
-            account: _status.account,
+            user: _post.author,
           ),
-          StatusWidget(_status.reblog),
+          StatusWidget(_post.repeatOf),
         ],
       );
     }
+
+    var renderedAuthor = TextRenderer(
+      emojis: _post.author.emojis,
+      textStyle: textStyle.copyWith(fontWeight: FontWeight.bold),
+    ).render(_post.author.displayName);
+
+    var renderedContent = TextRenderer(
+      emojis: _post.emojis,
+      textStyle: textStyle,
+    ).render(_post.content);
 
     return Container(
       child: Row(
@@ -44,7 +55,7 @@ class StatusWidget extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(8),
-            child: AvatarWidget(_status.account, size: 48),
+            child: AvatarWidget(_post.author, size: 48),
           ),
           Expanded(
             child: Padding(
@@ -55,29 +66,22 @@ class StatusWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      RichText(
-                          text: TextRenderer(
-                            emojis: _status.account.emojis,
-                            textStyle: textStyle.copyWith(fontWeight: FontWeight.bold),
-                          ).render(_status.account.displayName)
-                      ),
-                      Text(_status.account.username),
-                      Spacer(),
-                      Text(_status.visibility),
+                      if (renderedAuthor != null)
+                        RichText(text: renderedAuthor),
+                      Text(_post.author.username),
+                      // TODO: fix
+                      //Spacer(),
+                      //Text(_post.visibility),
                     ],
                   ),
-                  RichText(
-                    text: TextRenderer(
-                      emojis: _status.emojis,
-                      textStyle: textStyle,
-                    ).render(_status.content)
-                  ),
-                  if (_status.mediaAttachments != null)
+                  if (renderedContent != null)
+                    RichText(text: renderedContent),
+                  if (_post.attachments != null)
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        for (var attachment in _status.mediaAttachments)
+                        for (var attachment in _post.attachments)
                           Flexible(
                             child: Container(
                               child: getAttachmentWidget(attachment),
@@ -87,11 +91,14 @@ class StatusWidget extends StatelessWidget {
                       ],
                     ),
 
-                  if (_status.card != null)
+                  if (_post.previewCard != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: CardWidget(card: _status.card),
+                      child: CardWidget(card: _post.previewCard),
                     ),
+
+                  if (_post.reactions != null)
+                    ReactionRow(_post, _post.reactions),
 
                   Row(
                     children: [
@@ -102,12 +109,12 @@ class StatusWidget extends StatelessWidget {
                       IconButton(
                         icon: Icon(Icons.repeat),
                         onPressed: (){},
-                        color: _status.reblogged ? theme.repeatColor : null
+                        color: _post.repeated ? theme.repeatColor : null
                       ),
                       IconButton(
-                        icon: Icon(_status.favourited ? Mdi.star : Mdi.starOutline),
+                        icon: Icon(_post.liked ? Mdi.star : Mdi.starOutline),
                         onPressed: (){},
-                        color: _status.favourited ? theme.favoriteColor : null
+                        color: _post.liked ? theme.favoriteColor : null
                       ),
                       IconButton(
                         icon: Icon(Icons.insert_emoticon),
@@ -119,7 +126,7 @@ class StatusWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // ApplicationWidget(_status.application),
+                  // ApplicationWidget(_post.application),
                 ],
               ),
             ),
@@ -129,7 +136,7 @@ class StatusWidget extends StatelessWidget {
     );
   }
 
-  Widget getAttachmentWidget(MastodonMediaAttachment attachment) {
+  Widget getAttachmentWidget(Attachment attachment) {
     switch (attachment.type) {
       case "image": return ImageAttachmentWidget(attachment);
       //case "video": return VideoAttachmentWidget(attachment);

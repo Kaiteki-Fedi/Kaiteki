@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/mastodon/account.dart';
+import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/ui/screens/account_screen.dart';
 import 'package:mdi/mdi.dart';
 
 /// A tap-able avatar.
 class AvatarWidget extends StatelessWidget {
-  final MastodonAccount _account;
+  final User _user;
   final double size;
   final bool openOnTap;
 
-  const AvatarWidget(this._account, {this.size, this.openOnTap = true});
+  const AvatarWidget(this._user, {this.size, this.openOnTap = true});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class AvatarWidget extends StatelessWidget {
     return GestureDetector(
       child: _getAvatarImageWidget(),
       onTap: () {
-        var screen = AccountScreen(_account.id);
+        var screen = AccountScreen(_user.id);
         var route = MaterialPageRoute(builder: (_) => screen);
         Navigator.push(context, route);
       },
@@ -27,7 +27,7 @@ class AvatarWidget extends StatelessWidget {
   }
 
   Widget _getAvatarImageWidget() {
-    if (_account == null)
+    if (_user == null)
       return Icon(
         Mdi.accountCircle,
         size: size,
@@ -36,7 +36,7 @@ class AvatarWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
       child: Image.network(
-        _account.avatar,
+        _user.avatarUrl,
         height: size,
         width: size,
         isAntiAlias: true,

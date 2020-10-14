@@ -1,14 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:kaiteki/api/model/mastodon/notification.dart';
+import 'package:kaiteki/model/fediverse/notification.dart' as fv;
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class NotificationPoster {
-  static Future<void> sendNotifications(BuildContext context, Iterable<MastodonNotification> notifications) async {
+  static Future<void> sendNotifications(BuildContext context, Iterable<fv.Notification> notifications) async {
     var plugin = Provider.of<FlutterLocalNotificationsPlugin>(context, listen: false);
 
     for (var notification in notifications.take(3)) {
@@ -35,11 +34,11 @@ class NotificationPoster {
     }
   }
 
-  static Future<void> sendNotification(FlutterLocalNotificationsPlugin plugin, MastodonNotification data) async {
+  static Future<void> sendNotification(FlutterLocalNotificationsPlugin plugin, fv.Notification data) async {
     const String notificationsKey = "craftplacer.kaiteki.NOTIFICATIONS";
 
-    var avatarResponse = await http.get(data.account.avatarStatic);
-    var iconPath = Directory.systemTemp.path + '/' + data.account.avatarStatic.hashCode.toString();
+    var avatarResponse = await http.get(data.user.avatarUrl);
+    var iconPath = Directory.systemTemp.path + '/' + data.user.avatarUrl.hashCode.toString();
     var iconFile = File(iconPath);
 
     if (!(await iconFile.exists())) {
@@ -55,29 +54,25 @@ class NotificationPoster {
       data.type,
       data.type,
       'Notifications with the type ${data.type}',
-      importance: Importance.Max,
-      priority: Priority.High,
+      importance: Importance.max,
+      priority: Priority.high,
       category: "Test",
       groupKey: notificationsKey,
       ticker: 'ticker',
       color: getColor(data.type),
       largeIcon: FilePathAndroidBitmap(iconPath),
     );
-    var details = NotificationDetails(
-      android,
-      IOSNotificationDetails(),
-    );
 
     await plugin.show(
       data.hashCode,
       getTitle(data),
-      data.status.content,
-      details
+      data.post.content,
+      NotificationDetails(android: android),
     );
   }
 
-  static String getTitle(MastodonNotification notification) {
-    var name = notification.account.displayName;
+  static String getTitle(fv.Notification notification) {
+    var name = notification.user.displayName;
 
     switch (notification.type) {
       case "follow":

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/clients/pleroma_client.dart';
-import 'package:kaiteki/api/model/mastodon/status.dart';
+import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:mdi/mdi.dart';
@@ -27,19 +27,11 @@ class _TimelinePageState extends State<TimelinePage> {
         )
       );
 
-    if (!(container.client is PleromaClient))
-      return Center(
-        child: IconLandingWidget(
-          icon: Mdi.emoticonSad,
-          text: "Unsupported client"
-        )
-      );
 
-    var pleroma = container.client as PleromaClient;
 
     return FutureBuilder(
-      future: pleroma.getTimeline(),
-      builder: (_, AsyncSnapshot<Iterable<MastodonStatus>> snapshot) {
+      future: container.adapter.getTimeline(TimelineType.Home),
+      builder: (_, AsyncSnapshot<Iterable<Post>> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
             itemCount: snapshot.data.length,

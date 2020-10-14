@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/mastodon/status.dart';
 import 'package:kaiteki/api/model/pleroma/theme.dart';
+import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
@@ -28,7 +28,7 @@ class ThemePreviewWidget extends StatelessWidget {
               automaticallyImplyLeading: false,
               title: Text(pleromaTheme?.name ?? defaultName),
             ),
-            body: StatusWidget(MastodonStatus.example()),
+            body: StatusWidget(Post.example()),
           ),
         ),
       ),

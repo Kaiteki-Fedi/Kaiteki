@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart';
-import 'package:kaiteki/api/model/mastodon/emoji.dart';
+import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/utils/text_buffer.dart';
-import 'package:kaiteki/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/parser.dart' show parseFragment;
 import 'package:html/dom.dart' as dom;
 
 class TextRenderer {
-  Iterable<MastodonEmoji> emojis;
+  Iterable<Emoji> emojis;
 
   TextStyle textStyle;
   TextStyle linkTextStyle;
@@ -23,7 +22,12 @@ class TextRenderer {
   
   TextRenderer({this.emojis, this.textStyle, this.linkTextStyle});
 
-  InlineSpan render(String text) => renderNode(parseFragment(text));
+  InlineSpan render(String text) {
+    if (text == null)
+      return null;
+
+    return renderNode(parseFragment(text));
+  }
 
   InlineSpan renderSpecial(String text, {List<InlineSpan> children}) {
     var spans = <InlineSpan>[];
@@ -40,30 +44,39 @@ class TextRenderer {
 
           if (readingEmoji) {
             var emojiName = buffer.text;
-            var emojiFound = emojis.any((e) => e.shortcode == emojiName);
+            var emojiFound = emojis.any((e) => e.name == emojiName);
 
-            if (emojiFound) {
-              var emoji = emojis.firstWhere((e) => e.shortcode == emojiName);
-
-              buffer.clear();
-
-              // FIXME: fix it or I will make you not-cute >:(
-              var emojiSpan = WidgetSpan(
-                child: Image.network(
-                  emoji.staticUrl,
-                  width: 32,
-                  height: 32,
-                ),
-              );
-
-              spans.add(emojiSpan);
-
-              readingEmoji = false;
-            } else {
+            void restoreEmoji() {
               // nothing found, so we restore the stolen colon and add a normal text span.
               buffer.prepend(emojiChar);
               spans.add(plain(buffer));
               readingEmoji = true;
+            }
+
+            if (emojiFound) {
+              var emoji = emojis.firstWhere((e) => e.name == emojiName);
+
+              // TODO: refactor
+              if (emoji is CustomEmoji) {
+                buffer.clear();
+
+                // FIXME: fix it or I will make you not-cute >:(
+                var emojiSpan = WidgetSpan(
+                  child: Image.network(
+                    emoji.url,
+                    width: 32,
+                    height: 32,
+                  ),
+                );
+
+                spans.add(emojiSpan);
+
+                readingEmoji = false;
+              } else {
+                restoreEmoji();
+              }
+            } else {
+              restoreEmoji();
             }
           } else {
             spans.add(plain(buffer));

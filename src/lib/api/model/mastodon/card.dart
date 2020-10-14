@@ -1,26 +1,37 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/pleroma/card.dart';
+part 'card.g.dart';
 
+@JsonSerializable()
 class MastodonCard {
-  String description;
-  String image;
-  PleromaCard pleroma;
-  String providerName;
-  String providerUrl;
-  String title;
-  String type;
-  String url;
+  final String description;
 
-  MastodonCard.fromJson(Map<String, dynamic> json) {
-    description = json["description"];
-    image = json["image"];
+  final String image;
 
-    if (json["pleroma"] != null)
-      pleroma = PleromaCard.fromJson(json["pleroma"]);
+  final PleromaCard pleroma;
 
-    providerName = json["providerName"];
-    providerUrl = json["providerUrl"];
-    title = json["title"];
-    type = json["type"];
-    url = json["url"];
-  }
+  @JsonKey(name: "provider_name")
+  final String providerName;
+
+  @JsonKey(name: "provider_url")
+  final String providerUrl;
+
+  final String title;
+
+  final String type;
+
+  final String url;
+
+  const MastodonCard(
+    this.description,
+    this.image,
+    this.pleroma,
+    this.providerName,
+    this.providerUrl,
+    this.title,
+    this.type,
+    this.url,
+  );
+
+  factory MastodonCard.fromJson(Map<String, dynamic> json) => _$MastodonCardFromJson(json);
 }

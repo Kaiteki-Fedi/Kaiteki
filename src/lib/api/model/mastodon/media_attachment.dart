@@ -1,21 +1,37 @@
-class MastodonMediaAttachment {
-  String description;
-  String id;
-  //dynamic pleroma;
-  String previewUrl;
-  String remoteUrl;
-  String textUrl;
-  String type;
-  String url;
+import 'package:json_annotation/json_annotation.dart';
+part 'media_attachment.g.dart';
 
-  MastodonMediaAttachment.fromJson(Map<String, dynamic> json) {
-    description = json["description"];
-    id = json["id"];
-    //pleroma = json["pleroma"];
-    previewUrl = json["previewUrl"];
-    remoteUrl = json["remoteUrl"];
-    textUrl = json["textUrl"];
-    type = json["type"];
-    url = json["url"];
-  }
+@JsonSerializable()
+class MastodonMediaAttachment {
+  final String description;
+
+  final String id;
+
+  //final dynamic pleroma;
+
+  @JsonKey(name: "preview_url")
+  final String previewUrl;
+
+  @JsonKey(name: "remote_url")
+  final String remoteUrl;
+
+  @JsonKey(name: "text_url")
+  final String textUrl;
+
+  final String type;
+
+  final String url;
+
+  const MastodonMediaAttachment({
+    this.description,
+    this.id,
+    //this.pleroma,
+    this.previewUrl,
+    this.remoteUrl,
+    this.textUrl,
+    this.type,
+    this.url,
+  });
+
+  factory MastodonMediaAttachment.fromJson(Map<String, dynamic> json) => _$MastodonMediaAttachmentFromJson(json);
 }

@@ -1,9 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/app_colors.dart';
-import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/ui/screens/auth/login_screen.dart';
 import 'package:mdi/mdi.dart';
+import 'package:provider/provider.dart';
 
 class AddAccountScreen extends StatefulWidget {
   AddAccountScreen({Key key}) : super(key: key);
@@ -16,6 +18,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
   @override
   Widget build(BuildContext context) {
     var boldTextStyle = TextStyle(fontWeight: FontWeight.bold);
+    var container = Provider.of<AccountContainer>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,6 +49,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   image: AssetImage("assets/icons/mastodon.png"),
                   color: AppColors.mastodonPrimary,
                   backgroundColor: AppColors.mastodonSecondary,
+                  onLogin: container.createAdapter(ApiType.Mastodon).login,
                 )
               )
             ),
@@ -63,7 +67,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   image: AssetImage("assets/icons/pleroma.png"),
                   color: AppColors.pleromaPrimary,
                   backgroundColor: AppColors.pleromaSecondary,
-                  onLogin: LoginFunctions.loginPleroma,
+                  onLogin: container.createAdapter(ApiType.Pleroma).login,
                 )
               )
             ),
@@ -81,7 +85,7 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
                   image: AssetImage("assets/icons/misskey.png"),
                   color: AppColors.misskeyPrimary,
                   backgroundColor: AppColors.misskeySecondary,
-                  onLogin: LoginFunctions.loginMisskey,
+                  onLogin: container.createAdapter(ApiType.Misskey).login,
                 )
               )
             ),

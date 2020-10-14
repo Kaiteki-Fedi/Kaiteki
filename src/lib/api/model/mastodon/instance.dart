@@ -1,35 +1,68 @@
-import 'package:kaiteki/api/model/mastodon/account.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'instance.g.dart';
 
+@JsonSerializable()
 class MastodonInstance {
-  String uri;
-  String title;
-  String shortDescription;
-  String description;
-  String email;
-  String version;
-//	dynamic urls;
-//	dynamic stats;
-  String thumbnail;
-//	List<String> languages;
-  bool registrations;
-  bool approvalRequired;
-  bool invitesEnabled;
-  MastodonAccount contactAccount;
+  @JsonKey(name: "avatar_upload_limit")
+  final int avatarUploadLimit;
 
-  MastodonInstance.fromJson(Map<String, dynamic> json) {
-    uri = json["uri"];
-    title = json["title"];
-    shortDescription = json["short_description"];
-    description = json["description"];
-    email = json["email"];
-    version = json["version"];
-//		urls = json["urls"];
-//		stats = json["stats"];
-    thumbnail = json["thumbnail"];
-//		languages = json["languages"];
-    registrations = json["registrations"];
-    approvalRequired = json["approval_required"];
-    invitesEnabled = json["invites_enabled"];
-    contactAccount = MastodonAccount.fromJson(json["contact_account"]);
-  }
+  @JsonKey(name: "background_image")
+  final String backgroundImage;
+
+  @JsonKey(name: "background_upload_limit")
+  final int backgroundUploadLimit;
+
+  @JsonKey(name: "banner_upload_limit")
+  final int bannerUploadLimit;
+
+  final String description;
+
+  final String email;
+
+  final Iterable<String> languages;
+
+  @JsonKey(name: "max_toot_chars")
+  final int maxTootChars;
+
+  @JsonKey(name: "poll_limits")
+  final dynamic pollLimits;
+
+  final bool registrations;
+
+  final dynamic stats;
+
+  final String thumbnail;
+
+  final String title;
+
+  @JsonKey(name: "upload_limit")
+  final int uploadLimit;
+
+  final String uri;
+
+  final dynamic urls;
+
+  final String version;
+
+  const MastodonInstance({
+    this.avatarUploadLimit,
+    this.backgroundImage,
+    this.backgroundUploadLimit,
+    this.bannerUploadLimit,
+    this.description,
+    this.email,
+    this.languages,
+    this.maxTootChars,
+    this.pollLimits,
+    this.registrations,
+    this.stats,
+    this.thumbnail,
+    this.title,
+    this.uploadLimit,
+    this.uri,
+    this.urls,
+    this.version,
+  });
+
+  factory MastodonInstance.fromJson(Map<String, dynamic> json) => _$MastodonInstanceFromJson(json);
 }

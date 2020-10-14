@@ -1,20 +1,29 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/api/model/pleroma/chat_message.dart';
+part 'chat.g.dart';
 
+@JsonSerializable()
 class PleromaChat {
-  MastodonAccount account;
-  String id;
-	PleromaChatMessage lastMessage;
-  int unread;
-//	dynamic updatedAt;
+  final MastodonAccount account;
 
-  PleromaChat.fromJson(Map<String, dynamic> json) {
-    account = MastodonAccount.fromJson(json["account"]);
-    id = json["id"];
+  final String id;
 
-    if (json["last_message"] != null)
-      lastMessage = PleromaChatMessage.fromJson(json["last_message"]);
-    unread = json["unread"];
-//		updatedAt = json["updated_at"];
-  }
+  @JsonKey(name: "last_message")
+  final PleromaChatMessage lastMessage;
+
+  final int unread;
+
+  @JsonKey(name: "updated_at")
+  final DateTime updatedAt;
+
+  const PleromaChat(
+    this.account,
+    this.id,
+    this.lastMessage,
+    this.unread,
+    this.updatedAt,
+  );
+
+  factory PleromaChat.fromJson(Map<String, dynamic> json) => _$PleromaChatFromJson(json);
 }

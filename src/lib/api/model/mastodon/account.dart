@@ -1,64 +1,80 @@
 import 'package:kaiteki/api/model/mastodon/account_field.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/api/model/pleroma/account.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'account.g.dart';
 
+@JsonSerializable()
 class MastodonAccount {
-	String acct;
-	String avatar;
-	String avatarStatic;
-	bool bot;
-//	dynamic createdAt;
-	String displayName;
-	Iterable<MastodonEmoji> emojis;
-	Iterable<MastodonAccountField> fields;
-	int followersCount;
-	int followingCount;
-	String header;
-	String headerStatic;
-	String id;
-	bool locked;
-	String note;
-	PleromaAccount pleroma;
-//	dynamic source;
-	int statusesCount;
-	String url;
-	String username;
+	final String acct;
 
-	MastodonAccount.fromJson(Map<String, dynamic> json) {
-		acct = json["acct"];
-		avatar = json["avatar"];
-		avatarStatic = json["avatar_static"];
-		bot = json["bot"];
-		displayName = json["display_name"];
-		followersCount = json["followers_count"];
-		followingCount = json["following_count"];
-		header = json["header"];
-		headerStatic = json["header_static"];
-		id = json["id"];
-		locked = json["locked"];
-		note = json["note"];
+	final String avatar;
 
-		if (json["pleroma"] != null)
-			pleroma = PleromaAccount.fromJson(json["pleroma"]);
+	@JsonKey(name: "avatar_static")
+	final String avatarStatic;
 
-		if (json["media_attachments"] != null)
-			fields = json["fields"].map<MastodonAccountField>((j) => MastodonAccountField.fromJson(j));
+	final bool bot;
 
-		if (json["emojis"] != null)
-			emojis = json["emojis"].map<MastodonEmoji>((j) => MastodonEmoji.fromJson(j));
+	@JsonKey(name: "created_at")
+	final DateTime createdAt;
 
-		statusesCount = json["statuses_count"];
-		url = json["url"];
-		username = json["username"];
+	@JsonKey(name: "display_name")
+	final String displayName;
 
-		// source = json["source"];
-		// emojis = json["emojis"];
-		// createdAt = json["created_at"];
-	}
+	final Iterable<MastodonEmoji> emojis;
 
-	MastodonAccount.example() {
-		username = "NyaNya";
-		displayName = "banned for being a cute neko";
-		avatar = "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F24.media.tumblr.com%2Ftumblr_me574zdKgg1rhcknwo1_1280.jpg&f=1&nofb=1";
-	}
+	final Iterable<MastodonAccountField> fields;
+
+	@JsonKey(name: "followers_count")
+	final int followersCount;
+
+	@JsonKey(name: "following_count")
+	final int followingCount;
+
+	final String header;
+
+	@JsonKey(name: "header_static")
+	final String headerStatic;
+
+	final String id;
+
+	final bool locked;
+
+	final String note;
+
+	final PleromaAccount pleroma;
+
+	//final dynamic source;
+
+	@JsonKey(name: "statuses_count")
+	final int statusesCount;
+
+	final String url;
+
+	final String username;
+
+	const MastodonAccount({
+		this.acct,
+		this.avatar,
+		this.avatarStatic,
+		this.bot,
+		this.createdAt,
+		this.displayName,
+		this.emojis,
+		this.fields,
+		this.followersCount,
+		this.followingCount,
+		this.header,
+		this.headerStatic,
+		this.id,
+		this.locked,
+		this.note,
+		this.pleroma,
+		//this.source,
+		this.statusesCount,
+		this.url,
+		this.username,
+	});
+
+	factory MastodonAccount.fromJson(Map<String, dynamic> json) => _$MastodonAccountFromJson(json);
 }

@@ -5,8 +5,11 @@ class Constants {
   static const String appWebsite = "https://github.com/Craftplacer/Kaiteki";
   static const String appDescription = appTagline;
   static const String appTagline = "the cute fediverse client";
+  static const String userAgent = "Kaiteki/1.0";
 
-  /// the amount of pixels until the application redefines the layout for
+  static const String exampleAvatar = "https://craftplacer.keybase.pub/cute.jpg";
+
+  /// the amount of dp/px until the application redefines the layout for
   /// desktop view.
   static const int desktopThreshold = 800;
 

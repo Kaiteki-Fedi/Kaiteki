@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
-import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
 
 /// A row that details an interaction for use in timelines
@@ -8,13 +8,13 @@ class InteractionBar extends StatelessWidget {
   final Color color;
   final String text;
   final IconData icon;
-  final MastodonAccount account;
+  final User user;
 
   const InteractionBar({
     @required this.color,
     @required this.icon,
     @required this.text,
-    @required this.account,
+    @required this.user,
   });
 
   @override
@@ -31,7 +31,7 @@ class InteractionBar extends StatelessWidget {
           Padding(
             padding: avatarMargin,
             child: AvatarWidget(
-              this.account,
+              this.user,
               size: 16
             ),
           ),
@@ -40,9 +40,9 @@ class InteractionBar extends StatelessWidget {
               //style: textStyle.copyWith(fontWeight: FontWeight.bold),
               children: [
                 TextRenderer(
-                  emojis: this.account.emojis,
+                  emojis: this.user.emojis,
                   //textStyle: textStyle.copyWith(fontWeight: FontWeight.bold),
-                ).render(this.account.displayName),
+                ).render(this.user.displayName),
                 WidgetSpan(
                   child: Icon(
                     this.icon,

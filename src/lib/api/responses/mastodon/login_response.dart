@@ -1,22 +1,39 @@
-class LoginResponse {
-  String accessToken;
-  int expiresIn;
-  String me;
-  String refreshToken;
-  String scope;
-  String tokenType;
-  String error;
-  String mfaToken;
-  List<String> supportedChallengeTypes;
+import 'package:json_annotation/json_annotation.dart';
+part 'login_response.g.dart';
 
-  LoginResponse.fromJson(Map<String, dynamic> json) {
-    accessToken = json["access_token"];
-    expiresIn = json["expires_in"];
-    me = json["me"];
-    refreshToken = json["refresh_token"];
-    scope = json["scope"];
-    tokenType = json["token_type"];
-    error = json["error"];
-    mfaToken = json["mfa_token"];
-  }
+@JsonSerializable()
+class LoginResponse {
+  @JsonKey(name: "access_token")
+  final String accessToken;
+
+  @JsonKey(name: "expires_in")
+  final int expiresIn;
+
+  final String me;
+
+  @JsonKey(name: "refresh_token")
+  final String refreshToken;
+
+  final String scope;
+
+  @JsonKey(name: "token_type")
+  final String tokenType;
+
+  final String error;
+
+  @JsonKey(name: "mfa_token")
+  final String mfaToken;
+
+  const LoginResponse(
+    this.accessToken,
+    this.expiresIn,
+    this.me,
+    this.refreshToken,
+    this.scope,
+    this.tokenType,
+    this.error,
+    this.mfaToken,
+  );
+
+  factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
 }

@@ -1,11 +1,23 @@
-class PleromaEmojiReaction {
-  int count;
-  bool me;
-  String name;
+import 'package:json_annotation/json_annotation.dart';
+import 'package:kaiteki/api/model/mastodon/account.dart';
+part 'emoji_reaction.g.dart';
 
-  PleromaEmojiReaction.fromJson(Map<String, dynamic> json) {
-    count = json["count"];
-    me = json["me"];
-    name = json["name"];
-  }
+@JsonSerializable()
+class PleromaEmojiReaction {
+  final Iterable<MastodonAccount> accounts;
+
+  final int count;
+
+  final bool me;
+
+  final String name;
+
+  const PleromaEmojiReaction({
+    this.accounts,
+    this.count,
+    this.me,
+    this.name,
+  });
+
+  factory PleromaEmojiReaction.fromJson(Map<String, dynamic> json) => _$PleromaEmojiReactionFromJson(json);
 }

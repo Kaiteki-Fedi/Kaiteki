@@ -142,7 +142,9 @@ class _LoginScreenState extends State<LoginScreen> {
         buttonTheme: ButtonThemeData(
           textTheme: ButtonTextTheme.primary,
         ),
-        cursorColor: widget.color,
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: widget.color,
+        ),
         appBarTheme: AppBarTheme(elevation: 0),
       );
   }

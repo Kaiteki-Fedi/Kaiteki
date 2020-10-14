@@ -1,12 +1,12 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
+import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class ImageAttachmentWidget extends StatelessWidget {
-  final MastodonMediaAttachment attachment;
+  final Attachment attachment;
 
   const ImageAttachmentWidget(this.attachment);
 

@@ -1,27 +1,31 @@
-import 'package:kaiteki/constants.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'application.g.dart';
 
+@JsonSerializable()
 class MastodonApplication {
-  String name;
-  String website;
+  @JsonKey(name: "client_id")
+  final String clientId;
 
-  String id;
-  String clientId;
-  String clientSecret;
-  String vapidKey;
-  String redirectUri;
+  @JsonKey(name: "client_secret")
+  final String clientSecret;
 
-  MastodonApplication.fromJson(Map<String, dynamic> json) {
-    name = json["name"];
-    website = json["website"];
-    id = json["id"];
-    clientId = json["client_id"];
-    clientSecret = json["client_secret"];
-    vapidKey = json["vapid_key"];
-    redirectUri = json["redirect_uri"];
-  }
+  final String id;
 
-  MastodonApplication.example() {
-    name = Constants.appName;
-    website = Constants.appWebsite;
-  }
+  final String name;
+
+  @JsonKey(name: "vapid_key")
+  final String vapidKey;
+
+  final String website;
+
+  const MastodonApplication({
+    this.clientId,
+    this.clientSecret,
+    this.id,
+    this.name,
+    this.vapidKey,
+    this.website,
+  });
+
+  factory MastodonApplication.fromJson(Map<String, dynamic> json) => _$MastodonApplicationFromJson(json);
 }

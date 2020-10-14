@@ -1,27 +1,49 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/pleroma/emoji_reaction.dart';
+part 'status.g.dart';
 
+@JsonSerializable()
 class PleromaStatus {
-  //dynamic content;
-  int conversationId;
-  //dynamic directConversationId;
-  List<PleromaEmojiReaction> emojiReactions;
-  //dynamic expiresAt;
-  //dynamic inReplyToAccountAcct;
-  bool local;
-  bool parentVisible;
-  //dynamic spoilerText;
-  bool threadMuted;
+  final Map<String, String> content;
 
-  PleromaStatus.fromJson(Map<String, dynamic> json) {
-    //content = json["content"];
-    conversationId = json["conversationId"];
-    //directConversationId = json["directConversationId"];
-    emojiReactions = json["emojiReactions"];
-    //expiresAt = json["expiresAt"];
-    //inReplyToAccountAcct = json["inReplyToAccountAcct"];
-    local = json["local"];
-    parentVisible = json["parentVisible"];
-    //spoilerText = json["spoilerText"];
-    threadMuted = json["threadMuted"];
-  }
+  @JsonKey(name: "conversation_id")
+  final int conversationId;
+
+  //@JsonKey(name: "direct_conversation_id")
+  //final dynamic directConversationId;
+
+  @JsonKey(name: "emoji_reactions")
+  final Iterable<PleromaEmojiReaction> emojiReactions;
+
+  @JsonKey(name: "expires_at")
+  final DateTime expiresAt;
+
+  @JsonKey(name: "in_reply_to_account_acct")
+  final String inReplyToAccountAcct;
+
+  final bool local;
+
+  @JsonKey(name: "parent_visible")
+  final bool parentVisible;
+
+  //@JsonKey(name: "spoiler_text")
+  //final dynamic spoilerText;
+
+  @JsonKey(name: "thread_muted")
+  final bool threadMuted;
+
+  const PleromaStatus(
+    this.content,
+    this.conversationId,
+    //this.directConversationId,
+    this.emojiReactions,
+    this.expiresAt,
+    this.inReplyToAccountAcct,
+    this.local,
+    this.parentVisible,
+    //this.spoilerText,
+    this.threadMuted,
+  );
+
+  factory PleromaStatus.fromJson(Map<String, dynamic> json) => _$PleromaStatusFromJson(json);
 }
