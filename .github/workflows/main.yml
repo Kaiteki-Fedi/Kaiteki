@@ -33,7 +33,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux
-          path: './src/build/linux/release/kaiteki'
+          path: |
+            './src/build/linux/release/kaiteki'
+            './src/build/linux/release/**/*.so'
   
   build-android:
     name: Build for Android
@@ -119,11 +121,19 @@ jobs:
           name: android
           path: ./release
 
-      - name: Download Linux binary
+      - name: Download Linux binaries
         uses: actions/download-artifact@v2
         with:
           name: linux
-          path: ./release
+          path: ./release-linux
+      
+      - name: Repackage Linux artifacts
+        uses: edgarrc/action-7z@v1.0.4
+        with:
+          args: 7z a ./linux.zip ./release-linux
+        
+      - name: Add repackaged artifacts to release directory
+        run: mv ./linux.zip ./release
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
