@@ -17,17 +17,14 @@ jobs:
           channel: dev
 
       - run: flutter config --enable-web
-
-      - run: 'cd src'
-
-      - name: Get packages
-        run: 'flutter pub get'
-
-      - name: Build
-        run: 'flutter build web'
         
-      - name: Zipping up
-        run: 'zip -r web ./build/web/*'
+      - name: Build
+        working-directory: 'src'
+        run: 'flutter pub get && flutter build web'
+          
+      - uses: edgarrc/action-7z@v1.0.4
+        with:
+          args: "7z a web.zip ./src/build/web/*"
 
       - name: Create release
         id: create_release
