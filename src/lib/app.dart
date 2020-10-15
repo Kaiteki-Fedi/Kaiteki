@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/app_preferences.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
+import 'package:kaiteki/theming/default_app_themes.dart';
 import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/screens/add_account_screen.dart';
@@ -37,13 +39,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
 
   @override
   void initState() {
-    var defaultTheme = ThemeData(
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-      primarySwatch: Colors.blue,
-      brightness: Brightness.dark,
-      accentColor: Colors.pinkAccent.shade100,
-      fontFamily: "Noto Sans CJK"
-    );
+    var defaultTheme = ThemeData.from(colorScheme: DefaultAppThemes.darkScheme);
     _themeContainer = ThemeContainer(MaterialAppTheme(defaultTheme));
 
     _accountContainer = AccountContainer(widget.accountSecrets, widget.clientSecrets);
@@ -94,6 +90,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
                   title: appPreferences,
                   theme: materialTheme,
                   home: MainScreen(),
+                  color: AppColors.background,
                   routes: {
                     "/accounts": (_) => ManageAccountsScreen(),
                     "/accounts/add": (_) => AddAccountScreen(),
