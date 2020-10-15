@@ -18,7 +18,7 @@ class IconLandingWidget extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: theme.primaryColor,
+          color: theme.dividerColor,
           size: 96,
         ),
         Text(
