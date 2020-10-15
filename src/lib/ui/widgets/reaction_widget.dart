@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 // TODO: maybe make this UI-only and remove interaction between adapters and
 //       models?
 class ReactionWidget extends StatefulWidget {
-  Post parentPost;
-  Reaction reaction;
+  final Post parentPost;
+  final Reaction reaction;
 
   ReactionWidget({Key key, @required this.parentPost, @required this.reaction}) : super(key: key);
 
@@ -55,7 +55,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
     var size = 24.0;
 
     if (emoji is CustomEmoji) {
-      var customEmoji = emoji as CustomEmoji;
+      var customEmoji = emoji;
 
       if (!customEmoji.url.endsWith(".svg")) {
         return Image.network(
@@ -73,7 +73,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
     }
 
     if (emoji is UnicodeEmoji) {
-      return Text(emoji.source as String, style: TextStyle(fontSize: size));
+      return Text(emoji.source, style: TextStyle(fontSize: size));
     }
 
     return Text(emoji.name, style: TextStyle(fontSize: size));

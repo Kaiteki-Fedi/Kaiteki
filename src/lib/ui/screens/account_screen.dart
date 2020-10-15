@@ -25,7 +25,6 @@ class _AccountScreenState extends State<AccountScreen>
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<AccountContainer>(context);
-    var tabController = TabController(length: 2, vsync: this);
 
     return Scaffold(
       appBar: AppBar(),

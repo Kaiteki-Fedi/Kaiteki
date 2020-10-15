@@ -18,15 +18,3 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) {
     json['mfa_token'] as String,
   );
 }
-
-Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
-    <String, dynamic>{
-      'access_token': instance.accessToken,
-      'expires_in': instance.expiresIn,
-      'me': instance.me,
-      'refresh_token': instance.refreshToken,
-      'scope': instance.scope,
-      'token_type': instance.tokenType,
-      'error': instance.error,
-      'mfa_token': instance.mfaToken,
-    };
