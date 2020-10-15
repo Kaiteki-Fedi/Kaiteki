@@ -3,7 +3,7 @@ import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/api/model/pleroma/chat_message.dart';
 part 'chat.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaChat {
   final MastodonAccount account;
 

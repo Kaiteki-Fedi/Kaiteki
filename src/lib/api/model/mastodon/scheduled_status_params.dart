@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/mastodon/poll.dart';
 part 'scheduled_status_params.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonScheduledStatusParams {
   final dynamic idempotency;
 

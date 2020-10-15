@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/pleroma/card.dart';
 part 'card.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonCard {
   final String description;
 

@@ -22,12 +22,3 @@ PleromaChat _$PleromaChatFromJson(Map<String, dynamic> json) {
         : DateTime.parse(json['updated_at'] as String),
   );
 }
-
-Map<String, dynamic> _$PleromaChatToJson(PleromaChat instance) =>
-    <String, dynamic>{
-      'account': instance.account,
-      'id': instance.id,
-      'last_message': instance.lastMessage,
-      'unread': instance.unread,
-      'updated_at': instance.updatedAt?.toIso8601String(),
-    };

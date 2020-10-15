@@ -18,11 +18,3 @@ MisskeyBlocking _$MisskeyBlockingFromJson(Map<String, dynamic> json) {
         : MisskeyUser.fromJson(json['blockee'] as Map<String, dynamic>),
   );
 }
-
-Map<String, dynamic> _$MisskeyBlockingToJson(MisskeyBlocking instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'blockeeId': instance.blockeeId,
-      'blockee': instance.blockee,
-    };

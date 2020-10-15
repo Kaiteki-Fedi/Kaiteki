@@ -18,12 +18,3 @@ MastodonPushSubscription _$MastodonPushSubscriptionFromJson(
     serverKey: json['server_key'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonPushSubscriptionToJson(
-        MastodonPushSubscription instance) =>
-    <String, dynamic>{
-      'alerts': instance.alerts,
-      'endpoint': instance.endpoint,
-      'id': instance.id,
-      'server_key': instance.serverKey,
-    };

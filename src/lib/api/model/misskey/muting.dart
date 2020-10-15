@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/misskey/user.dart';
 part 'muting.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MisskeyMuting {
   final String id;
 

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'tag.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonTag {
   final String name;
 

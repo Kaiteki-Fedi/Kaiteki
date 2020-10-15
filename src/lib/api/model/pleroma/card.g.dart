@@ -13,8 +13,3 @@ PleromaCard _$PleromaCardFromJson(Map<String, dynamic> json) {
     ),
   );
 }
-
-Map<String, dynamic> _$PleromaCardToJson(PleromaCard instance) =>
-    <String, dynamic>{
-      'opengraph': instance.opengraph,
-    };

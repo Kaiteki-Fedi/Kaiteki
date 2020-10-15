@@ -24,17 +24,3 @@ MastodonScheduledStatusParams _$MastodonScheduledStatusParamsFromJson(
     visibility: json['visibility'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonScheduledStatusParamsToJson(
-        MastodonScheduledStatusParams instance) =>
-    <String, dynamic>{
-      'idempotency': instance.idempotency,
-      'in_reply_to_id': instance.inReplyToId,
-      'media_ids': instance.mediaIds,
-      'poll': instance.poll,
-      'scheduled_at': instance.scheduledAt?.toIso8601String(),
-      'sensitive': instance.sensitive,
-      'spoiler_text': instance.spoilerText,
-      'text': instance.text,
-      'visibility': instance.visibility,
-    };

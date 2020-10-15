@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/mastodon/push_subscription_alerts.dart';
 part 'push_subscription.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonPushSubscription {
   final MastodonPushSubscriptionAlerts alerts;
 

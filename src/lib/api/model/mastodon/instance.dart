@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'instance.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonInstance {
   @JsonKey(name: "avatar_upload_limit")
   final int avatarUploadLimit;

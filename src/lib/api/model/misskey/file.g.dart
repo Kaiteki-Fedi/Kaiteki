@@ -21,16 +21,3 @@ MisskeyFile _$MisskeyFileFromJson(Map<String, dynamic> json) {
     isSensitive: json['isSensitive'] as bool,
   );
 }
-
-Map<String, dynamic> _$MisskeyFileToJson(MisskeyFile instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'name': instance.name,
-      'type': instance.type,
-      'md5': instance.md5,
-      'size': instance.size,
-      'url': instance.url,
-      'folderId': instance.folderId,
-      'isSensitive': instance.isSensitive,
-    };

@@ -3,7 +3,7 @@ import 'package:kaiteki/api/model/misskey/note.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'user.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MisskeyUser {
   final String id;
 

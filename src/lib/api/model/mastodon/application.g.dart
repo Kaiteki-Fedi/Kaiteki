@@ -16,14 +16,3 @@ MastodonApplication _$MastodonApplicationFromJson(Map<String, dynamic> json) {
     website: json['website'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonApplicationToJson(
-        MastodonApplication instance) =>
-    <String, dynamic>{
-      'client_id': instance.clientId,
-      'client_secret': instance.clientSecret,
-      'id': instance.id,
-      'name': instance.name,
-      'vapid_key': instance.vapidKey,
-      'website': instance.website,
-    };

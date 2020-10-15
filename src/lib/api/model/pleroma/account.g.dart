@@ -31,22 +31,3 @@ PleromaAccount _$PleromaAccountFromJson(Map<String, dynamic> json) {
     json['unread_conversation_count'] as int,
   );
 }
-
-Map<String, dynamic> _$PleromaAccountToJson(PleromaAccount instance) =>
-    <String, dynamic>{
-      'accepts_chat_messages': instance.acceptsChatMessages,
-      'allow_following_move': instance.allowFollowingMove,
-      'chat_token': instance.chatToken,
-      'confirmation_pending': instance.confirmationPending,
-      'hide_favorites': instance.hideFavorites,
-      'hide_followers': instance.hideFollowers,
-      'hide_followers_count': instance.hideFollowersCount,
-      'hide_follows': instance.hideFollows,
-      'hide_follows_count': instance.hideFollowsCount,
-      'is_admin': instance.isAdmin,
-      'is_moderator': instance.isModerator,
-      'notification_settings': instance.notificationSettings,
-      'relationship': instance.relationship,
-      'skip_thread_containment': instance.skipThreadContainment,
-      'unread_conversation_count': instance.unreadConversationCount,
-    };

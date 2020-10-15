@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'application.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonApplication {
   @JsonKey(name: "client_id")
   final String clientId;

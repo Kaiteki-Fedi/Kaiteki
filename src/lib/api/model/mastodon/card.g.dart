@@ -20,15 +20,3 @@ MastodonCard _$MastodonCardFromJson(Map<String, dynamic> json) {
     json['url'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonCardToJson(MastodonCard instance) =>
-    <String, dynamic>{
-      'description': instance.description,
-      'image': instance.image,
-      'pleroma': instance.pleroma,
-      'provider_name': instance.providerName,
-      'provider_url': instance.providerUrl,
-      'title': instance.title,
-      'type': instance.type,
-      'url': instance.url,
-    };

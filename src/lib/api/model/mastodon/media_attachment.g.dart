@@ -18,15 +18,3 @@ MastodonMediaAttachment _$MastodonMediaAttachmentFromJson(
     url: json['url'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonMediaAttachmentToJson(
-        MastodonMediaAttachment instance) =>
-    <String, dynamic>{
-      'description': instance.description,
-      'id': instance.id,
-      'preview_url': instance.previewUrl,
-      'remote_url': instance.remoteUrl,
-      'text_url': instance.textUrl,
-      'type': instance.type,
-      'url': instance.url,
-    };

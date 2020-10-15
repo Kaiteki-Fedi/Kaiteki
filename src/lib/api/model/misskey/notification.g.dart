@@ -19,13 +19,3 @@ MisskeyNotification _$MisskeyNotificationFromJson(Map<String, dynamic> json) {
     userId: json['userId'] as String,
   );
 }
-
-Map<String, dynamic> _$MisskeyNotificationToJson(
-        MisskeyNotification instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'type': instance.type,
-      'userId': instance.userId,
-      'user': instance.user,
-    };

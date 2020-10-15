@@ -12,10 +12,3 @@ MastodonAccountField _$MastodonAccountFieldFromJson(Map<String, dynamic> json) {
     json['value'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonAccountFieldToJson(
-        MastodonAccountField instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'value': instance.value,
-    };

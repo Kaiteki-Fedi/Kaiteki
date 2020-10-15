@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/pleroma/emoji_reaction.dart';
 part 'status.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaStatus {
   final Map<String, String> content;
 

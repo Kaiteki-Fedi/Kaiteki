@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'emoji.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MisskeyEmoji {
   final String id;
 

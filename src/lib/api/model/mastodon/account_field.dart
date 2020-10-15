@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'account_field.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonAccountField {
 	final String name;
 

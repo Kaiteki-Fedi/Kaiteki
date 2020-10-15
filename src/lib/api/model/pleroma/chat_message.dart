@@ -4,7 +4,7 @@ import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
 part 'chat_message.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaChatMessage {
   @JsonKey(name: "account_id")
   final String accountId;

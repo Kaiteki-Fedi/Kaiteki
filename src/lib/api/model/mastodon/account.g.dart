@@ -36,26 +36,3 @@ MastodonAccount _$MastodonAccountFromJson(Map<String, dynamic> json) {
     username: json['username'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonAccountToJson(MastodonAccount instance) =>
-    <String, dynamic>{
-      'acct': instance.acct,
-      'avatar': instance.avatar,
-      'avatar_static': instance.avatarStatic,
-      'bot': instance.bot,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'display_name': instance.displayName,
-      'emojis': instance.emojis?.toList(),
-      'fields': instance.fields?.toList(),
-      'followers_count': instance.followersCount,
-      'following_count': instance.followingCount,
-      'header': instance.header,
-      'header_static': instance.headerStatic,
-      'id': instance.id,
-      'locked': instance.locked,
-      'note': instance.note,
-      'pleroma': instance.pleroma,
-      'statuses_count': instance.statusesCount,
-      'url': instance.url,
-      'username': instance.username,
-    };

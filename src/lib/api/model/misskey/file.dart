@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'file.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MisskeyFile {
   final String id;
 

@@ -26,15 +26,3 @@ PleromaChatMessage _$PleromaChatMessageFromJson(Map<String, dynamic> json) {
     id: json['id'] as String,
   );
 }
-
-Map<String, dynamic> _$PleromaChatMessageToJson(PleromaChatMessage instance) =>
-    <String, dynamic>{
-      'account_id': instance.accountId,
-      'attachment': instance.attachment,
-      'card': instance.card,
-      'chat_id': instance.chatId,
-      'content': instance.content,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'emojis': instance.emojis?.toList(),
-      'id': instance.id,
-    };

@@ -3,7 +3,7 @@ import 'package:kaiteki/api/model/mastodon/media_attachment.dart';
 import 'package:kaiteki/api/model/mastodon/scheduled_status_params.dart';
 part 'scheduled_status.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonScheduledStatus {
   final String id;
 

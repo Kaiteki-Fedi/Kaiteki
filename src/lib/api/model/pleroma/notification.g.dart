@@ -12,10 +12,3 @@ PleromaNotification _$PleromaNotificationFromJson(Map<String, dynamic> json) {
     isSeen: json['is_seen'] as bool,
   );
 }
-
-Map<String, dynamic> _$PleromaNotificationToJson(
-        PleromaNotification instance) =>
-    <String, dynamic>{
-      'is_muted': instance.isMuted,
-      'is_seen': instance.isSeen,
-    };

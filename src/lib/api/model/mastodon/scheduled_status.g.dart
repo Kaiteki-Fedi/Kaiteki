@@ -22,12 +22,3 @@ MastodonScheduledStatus _$MastodonScheduledStatusFromJson(
         : DateTime.parse(json['scheduled_at'] as String),
   );
 }
-
-Map<String, dynamic> _$MastodonScheduledStatusToJson(
-        MastodonScheduledStatus instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'media_attachments': instance.mediaAttachments?.toList(),
-      'params': instance.params,
-      'scheduled_at': instance.scheduledAt?.toIso8601String(),
-    };

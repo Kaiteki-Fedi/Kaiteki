@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
 part 'emoji_reaction.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaEmojiReaction {
   final Iterable<MastodonAccount> accounts;
 

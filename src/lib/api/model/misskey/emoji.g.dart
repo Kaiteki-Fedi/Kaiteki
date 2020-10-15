@@ -16,13 +16,3 @@ MisskeyEmoji _$MisskeyEmojiFromJson(Map<String, dynamic> json) {
     url: json['url'] as String,
   );
 }
-
-Map<String, dynamic> _$MisskeyEmojiToJson(MisskeyEmoji instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'aliases': instance.aliases?.toList(),
-      'name': instance.name,
-      'category': instance.category,
-      'host': instance.host,
-      'url': instance.url,
-    };

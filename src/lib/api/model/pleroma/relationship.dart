@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'relationship.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaRelationship {
   @JsonKey(name: "blocked_by")
   final bool blockedBy;

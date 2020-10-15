@@ -24,17 +24,3 @@ MisskeyChannel _$MisskeyChannelFromJson(Map<String, dynamic> json) {
     userId: json['userId'] as String,
   );
 }
-
-Map<String, dynamic> _$MisskeyChannelToJson(MisskeyChannel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'lastNotedAt': instance.lastNotedAt?.toIso8601String(),
-      'name': instance.name,
-      'description': instance.description,
-      'bannerUrl': instance.bannerUrl,
-      'notesCount': instance.notesCount,
-      'usersCount': instance.usersCount,
-      'isFollowing': instance.isFollowing,
-      'userId': instance.userId,
-    };

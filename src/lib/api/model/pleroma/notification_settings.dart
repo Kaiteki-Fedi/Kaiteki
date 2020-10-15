@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'notification_settings.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaNotificationSettings {
   @JsonKey(name: "block_from_strangers")
   final bool blockFromStrangers;

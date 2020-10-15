@@ -12,9 +12,3 @@ MastodonTag _$MastodonTagFromJson(Map<String, dynamic> json) {
     url: json['url'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonTagToJson(MastodonTag instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'url': instance.url,
-    };

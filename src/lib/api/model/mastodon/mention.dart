@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'mention.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonMention {
   @JsonKey(name: "acct")
   final String account;

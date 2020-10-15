@@ -16,13 +16,3 @@ MastodonPushSubscriptionAlerts _$MastodonPushSubscriptionAlertsFromJson(
     reblog: json['reblog'] as bool,
   );
 }
-
-Map<String, dynamic> _$MastodonPushSubscriptionAlertsToJson(
-        MastodonPushSubscriptionAlerts instance) =>
-    <String, dynamic>{
-      'favourite': instance.favourite,
-      'follow': instance.follow,
-      'mention': instance.mention,
-      'poll': instance.poll,
-      'reblog': instance.reblog,
-    };

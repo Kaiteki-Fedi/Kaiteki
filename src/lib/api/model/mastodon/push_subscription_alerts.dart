@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'push_subscription_alerts.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonPushSubscriptionAlerts {
   final bool favourite;
 

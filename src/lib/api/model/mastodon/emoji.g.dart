@@ -16,13 +16,3 @@ MastodonEmoji _$MastodonEmojiFromJson(Map<String, dynamic> json) {
     visibleInPicker: json['visible_in_picker'] as bool,
   );
 }
-
-Map<String, dynamic> _$MastodonEmojiToJson(MastodonEmoji instance) =>
-    <String, dynamic>{
-      'category': instance.category,
-      'shortcode': instance.shortcode,
-      'static_url': instance.staticUrl,
-      'tags': instance.tags?.toList(),
-      'url': instance.url,
-      'visible_in_picker': instance.visibleInPicker,
-    };

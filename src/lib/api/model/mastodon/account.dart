@@ -4,7 +4,7 @@ import 'package:kaiteki/api/model/pleroma/account.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'account.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonAccount {
 	final String acct;
 

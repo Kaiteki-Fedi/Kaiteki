@@ -5,7 +5,7 @@ import 'package:kaiteki/api/model/misskey/file.dart';
 import 'package:kaiteki/api/model/misskey/user.dart';
 part 'note.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MisskeyNote {
   final String id;
 

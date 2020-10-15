@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/api/model/mastodon/emoji.dart';
 part 'poll.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonPoll {
   final Iterable<MastodonEmoji> emojis;
 

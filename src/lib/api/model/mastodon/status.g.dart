@@ -56,35 +56,3 @@ MastodonStatus _$MastodonStatusFromJson(Map<String, dynamic> json) {
     visibility: json['visibility'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonStatusToJson(MastodonStatus instance) =>
-    <String, dynamic>{
-      'account': instance.account,
-      'application': instance.application,
-      'bookmarked': instance.bookmarked,
-      'card': instance.card,
-      'content': instance.content,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'emojis': instance.emojis?.toList(),
-      'favourited': instance.favourited,
-      'favourites_count': instance.favouritesCount,
-      'id': instance.id,
-      'in_reply_to_account_id': instance.inReplyToAccountId,
-      'in_reply_to_id': instance.inReplyToId,
-      'language': instance.language,
-      'media_attachments': instance.mediaAttachments?.toList(),
-      'mentions': instance.mentions?.toList(),
-      'muted': instance.muted,
-      'pinned': instance.pinned,
-      'pleroma': instance.pleroma,
-      'reblog': instance.reblog,
-      'reblogged': instance.reblogged,
-      'reblogs_count': instance.reblogsCount,
-      'replies_count': instance.repliesCount,
-      'sensitive': instance.sensitive,
-      'spoiler_text': instance.spoilerText,
-      'tags': instance.tags?.toList(),
-      'uri': instance.uri,
-      'url': instance.url,
-      'visibility': instance.visibility,
-    };

@@ -23,17 +23,3 @@ MastodonPoll _$MastodonPollFromJson(Map<String, dynamic> json) {
     votesCount: json['votes_count'] as int,
   );
 }
-
-Map<String, dynamic> _$MastodonPollToJson(MastodonPoll instance) =>
-    <String, dynamic>{
-      'emojis': instance.emojis?.toList(),
-      'expired': instance.expired,
-      'expires_at': instance.expiresAt?.toIso8601String(),
-      'id': instance.id,
-      'multiple': instance.multiple,
-      'options': instance.options?.toList(),
-      'own_votes': instance.ownVotes?.toList(),
-      'voted': instance.voted,
-      'voters_count': instance.votersCount,
-      'votes_count': instance.votesCount,
-    };

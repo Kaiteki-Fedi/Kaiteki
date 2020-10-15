@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'channel.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MisskeyChannel {
   final String id;
 

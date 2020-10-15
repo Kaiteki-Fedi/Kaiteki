@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'notification.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaNotification {
   @JsonKey(name: "is_muted")
   final bool isMuted;

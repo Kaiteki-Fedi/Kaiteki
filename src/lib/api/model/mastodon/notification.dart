@@ -4,7 +4,7 @@ import 'package:kaiteki/api/model/mastodon/status.dart';
 import 'package:kaiteki/api/model/pleroma/notification.dart';
 part 'notification.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonNotification {
   final MastodonAccount account;
 

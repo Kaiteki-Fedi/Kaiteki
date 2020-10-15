@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'card.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaCard {
   final Map<String, String> opengraph;
 

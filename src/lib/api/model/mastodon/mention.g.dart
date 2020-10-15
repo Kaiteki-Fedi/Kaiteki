@@ -14,11 +14,3 @@ MastodonMention _$MastodonMentionFromJson(Map<String, dynamic> json) {
     username: json['username'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonMentionToJson(MastodonMention instance) =>
-    <String, dynamic>{
-      'acct': instance.account,
-      'id': instance.id,
-      'url': instance.url,
-      'username': instance.username,
-    };

@@ -22,20 +22,3 @@ PleromaRelationship _$PleromaRelationshipFromJson(Map<String, dynamic> json) {
     json['subscribing'] as bool,
   );
 }
-
-Map<String, dynamic> _$PleromaRelationshipToJson(
-        PleromaRelationship instance) =>
-    <String, dynamic>{
-      'blocked_by': instance.blockedBy,
-      'blocking': instance.blocking,
-      'domain_blocking': instance.domainBlocking,
-      'endorsed': instance.endorsed,
-      'followed_by': instance.followedBy,
-      'following': instance.following,
-      'id': instance.id,
-      'muting': instance.muting,
-      'muting_notifications': instance.mutingNotifications,
-      'requested': instance.requested,
-      'showing_reblogs': instance.showingReblogs,
-      'subscribing': instance.subscribing,
-    };

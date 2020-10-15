@@ -3,7 +3,7 @@ import 'package:kaiteki/api/model/pleroma/notification_settings.dart';
 import 'package:kaiteki/api/model/pleroma/relationship.dart';
 part 'account.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class PleromaAccount {
 	@JsonKey(name: "accepts_chat_messages")
 	final bool acceptsChatMessages;

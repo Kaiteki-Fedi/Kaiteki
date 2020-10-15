@@ -43,34 +43,3 @@ MisskeyUser _$MisskeyUserFromJson(Map<String, dynamic> json) {
     hasUnreadMentions: json['hasUnreadMentions'] as bool,
   );
 }
-
-Map<String, dynamic> _$MisskeyUserToJson(MisskeyUser instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'username': instance.username,
-      'name': instance.name,
-      'url': instance.url,
-      'avatarUrl': instance.avatarUrl,
-      'avatarBlurhash': instance.avatarBlurhash,
-      'bannerUrl': instance.bannerUrl,
-      'bannerBlurhash': instance.bannerBlurhash,
-      'emojis': instance.emojis?.toList(),
-      'host': instance.host,
-      'description': instance.description,
-      'birthday': instance.birthday,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
-      'location': instance.location,
-      'followersCount': instance.followersCount,
-      'followingCount': instance.followingCount,
-      'notesCount': instance.notesCount,
-      'isBot': instance.isBot,
-      'pinnedNoteIds': instance.pinnedNoteIds?.toList(),
-      'pinnedNotes': instance.pinnedNotes?.toList(),
-      'isCat': instance.isCat,
-      'isAdmin': instance.isAdmin,
-      'isModerator': instance.isModerator,
-      'isLocked': instance.isLocked,
-      'hasUnreadSpecifiedNotes': instance.hasUnreadSpecifiedNotes,
-      'hasUnreadMentions': instance.hasUnreadMentions,
-    };

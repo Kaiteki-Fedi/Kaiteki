@@ -24,14 +24,3 @@ MastodonNotification _$MastodonNotificationFromJson(Map<String, dynamic> json) {
     type: json['type'] as String,
   );
 }
-
-Map<String, dynamic> _$MastodonNotificationToJson(
-        MastodonNotification instance) =>
-    <String, dynamic>{
-      'account': instance.account,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'id': instance.id,
-      'pleroma': instance.pleroma,
-      'status': instance.status,
-      'type': instance.type,
-    };

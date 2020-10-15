@@ -9,7 +9,7 @@ import 'package:kaiteki/api/model/mastodon/tag.dart';
 import 'package:kaiteki/api/model/pleroma/status.dart';
 part 'status.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class MastodonStatus {
   final MastodonAccount account;
 

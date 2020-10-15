@@ -48,31 +48,3 @@ MisskeyNote _$MisskeyNoteFromJson(Map<String, dynamic> json) {
         e == null ? null : MisskeyEmoji.fromJson(e as Map<String, dynamic>)),
   );
 }
-
-Map<String, dynamic> _$MisskeyNoteToJson(MisskeyNote instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'text': instance.text,
-      'cw': instance.cw,
-      'userId': instance.userId,
-      'user': instance.user,
-      'replyId': instance.replyId,
-      'renoteId': instance.renoteId,
-      'reply': instance.reply,
-      'renote': instance.renote,
-      'viaMobile': instance.viaMobile,
-      'isHidden': instance.isHidden,
-      'visibility': instance.visibility,
-      'mentions': instance.mentions?.toList(),
-      'visibleUserIds': instance.visibleUserIds?.toList(),
-      'fileIds': instance.fileIds?.toList(),
-      'files': instance.files?.toList(),
-      'tags': instance.tags?.toList(),
-      'poll': instance.poll,
-      'channelId': instance.channelId,
-      'channel': instance.channel,
-      'myReaction': instance.myReaction,
-      'reactions': instance.reactions,
-      'emojis': instance.emojis?.toList(),
-    };
