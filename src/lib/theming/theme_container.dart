@@ -4,6 +4,10 @@ import 'package:kaiteki/theming/app_theme_convertible.dart';
 
 /// A class that contains and handles theming.
 class ThemeContainer extends ChangeNotifier {
+  ThemeContainer(AppThemeConvertible initialTheme) {
+    rawTheme = initialTheme;
+  }
+
   AppThemeConvertible _appTheme;
   AppThemeConvertible get rawTheme => _appTheme;
   set rawTheme(AppThemeConvertible theme) {
@@ -30,10 +34,6 @@ class ThemeContainer extends ChangeNotifier {
   set backgroundOpacity(double value) {
     _backgroundOpacity = value;
     notifyListeners();
-  }
-
-  ThemeContainer(AppThemeConvertible initialTheme) {
-    rawTheme = initialTheme;
   }
 
   bool get hasBackground => _background != null;
