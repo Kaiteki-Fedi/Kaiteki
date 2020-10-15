@@ -4,21 +4,25 @@ import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
-import 'package:kaiteki/utils/utils.dart';
 
 class AccountCompound {
-  AccountContainer container;
-  AccountSecret accountSecret;
+  final AccountContainer container;
+  final AccountSecret accountSecret;
+  final ClientSecret clientSecret;
+  final FediverseAdapter adapter;
+  final ApiType instanceType;
+
   User account;
+  String get instance => clientSecret.instance;
 
-  ClientSecret clientSecret;
-  FediverseAdapter adapter;
-
-  String instance;
-  ApiType instanceType;
-
-  AccountCompound(this.container, this.adapter, this.account, this.clientSecret, this.accountSecret) {
-    assert(Utils.compareInstance(accountSecret.instance, clientSecret.instance));
-    this.instance = clientSecret.instance;
-  }
+  AccountCompound({
+    this.container,
+    this.instanceType,
+    this.adapter,
+    this.account,
+    this.clientSecret,
+    this.accountSecret,
+  });
+  // TODO: assert check has been removed, due to compiler errors
+  //: assert(accountSecret.identity.instance.equalsIgnoreCase(clientSecret.instance));
 }

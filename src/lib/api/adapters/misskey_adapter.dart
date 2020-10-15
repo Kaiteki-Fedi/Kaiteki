@@ -104,7 +104,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
       password,
     );
 
-    var mkClientSecret = ClientSecret(instance, "", "", apiType: ApiType.Misskey);
+    var mkClientSecret = ClientSecret(instance, "", "", apiType: client.type);
 
     // Create and set account secret
     var identity = Identity(instance, username);

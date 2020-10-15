@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,8 +8,7 @@ class AccountSecretRepository extends ChangeNotifier {
   List<AccountSecret> _secrets;
   Iterable<AccountSecret> get secrets => List.unmodifiable(_secrets);
 
-  SharedPreferences _preferences;
-  static const String _accountListKey = "accounts";
+  final SharedPreferences _preferences;
 
   AccountSecretRepository(this._preferences);
 
@@ -20,78 +21,43 @@ class AccountSecretRepository extends ChangeNotifier {
   }
 
   Future<void> _initialize() async {
-    _secrets = (await getAll()).toList();
-  }
+    var json = _preferences.getString("accounts");
 
-  Future<Iterable<AccountSecret>> getAll() async {
-    var accounts = <String>[];
-    accounts = await _getAccountList() ?? <String>[];
+    if (json == null) {
+      _secrets = <AccountSecret>[];
+      return;
+    }
 
-    var futures = accounts.map((a) async {
-      var key = "a;$a";
-      var value = _preferences.getString(key);
-
-      if (value == null)
-        return null;
-
-      var keySplit = key.substring(2).split('@');
-
-      var username = keySplit[0];
-      var instance = keySplit[1];
-      var accessToken = value;
-
-      return AccountSecret(instance, username, accessToken);
-    });
-
-    var secrets = await Future.wait(futures);
-
-    return secrets;
-  }
-
-  /// Gets a list of every account
-  Future<Iterable<String>> _getAccountList() async {
-    var accounts = _preferences.getStringList(_accountListKey);
-    return accounts;
+    var accountsJson = jsonDecode(json);
+    var accounts = accountsJson.map<AccountSecret>((json) => AccountSecret.fromJson(json));
+    _secrets = accounts.toList();
   }
 
   /// Inserts an account secret into the repository.
   Future<void> insert(AccountSecret secret) async {
     assert(
       !_secrets.contains(secret),
-      "Account secret is already present in repository"
+      "Account secret is already present in repository",
     );
 
-    await _save(secret);
-
-    // add reference in account list
-    var key = _getKeyBySecret(secret);
-    var accounts = await _getAccountList() ?? <String>[];
-
-    assert(
-      !accounts.contains(key),
-      "Account secret is already present in repository's list"
-    );
-
-    var value = accounts.followedBy([key]).toList(growable: false);
-    await _preferences.setStringList(_accountListKey, value);
-
-    // add to public account list and notify listeners
+    // add to public account list
     _secrets.add(secret);
+
+    await _save();
 
     notifyListeners();
   }
 
-  // TODO: finish remove
   Future<void> remove(AccountSecret secret) async {
-    var key = _getKeyBySecret(secret);
-    _preferences.remove(key);
+    _secrets.remove(secret);
+    await _save();
+
+    notifyListeners();
   }
 
-  Future<void> _save(AccountSecret secret) async {
-    var key = _getKeyBySecret(secret);
-    await _preferences.setString(key, secret.accessToken);
+  Future<void> _save() async {
+    var jsonList = _secrets.map((s) => s.toJson()).toList();
+    var json = jsonEncode(jsonList);
+    await _preferences.setString("accounts", json);
   }
-
-  String _getKeyBySecret(AccountSecret secret) => _getKey(secret.username, secret.instance);
-  String _getKey(String username, String instance) => "a;$username@$instance";
 }

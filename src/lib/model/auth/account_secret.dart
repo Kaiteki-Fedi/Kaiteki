@@ -1,16 +1,19 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:kaiteki/model/auth/identity.dart';
+
+part 'account_secret.g.dart';
+
+@JsonSerializable()
 class AccountSecret {
-  String instance;
-  String username;
-  String accessToken;
+  final Identity identity;
 
-  AccountSecret(String instance, String username, String accessToken) {
-    assert(instance != null);
-    this.instance = instance;
+  @JsonKey(name: "token")
+  final String accessToken;
 
-    assert(username != null);
-    this.username = username;
+  const AccountSecret(this.identity, this.accessToken) :
+  assert(identity != null),
+  assert(accessToken != null);
 
-    assert(accessToken != null);
-    this.accessToken = accessToken;
-  }
+  factory AccountSecret.fromJson(Map<String, dynamic> json) => _$AccountSecretFromJson(json);
+  Map<String, dynamic> toJson() => _$AccountSecretToJson(this);
 }

@@ -22,13 +22,9 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
       appBar: AppBar(
         title: Text("Manage Accounts"),
       ),
-      body: FutureBuilder(
-        future: container.getAvailableAccounts(),
-        builder: (_, AsyncSnapshot<List<AccountCompound>> snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
-
-          var length = snapshot.data.length;
+      body: Builder(
+        builder: (_) {
+          var length = container.accounts.length;
 
           if (length == 0) {
             return Center(
@@ -65,14 +61,14 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
                   onTap: () => onTapAdd(context),
                 );
 
-              var compound = snapshot.data[i];
+              var compound = container.accounts.elementAt(i);
               return ListTile(
                 selected: container.currentAccount == compound,
                 leading: AvatarWidget(
                   compound.account,
                   openOnTap: false,
                 ),
-                title: Text(compound.accountSecret.username),
+                title: Text(compound.accountSecret.identity.username),
                 subtitle: Text(compound.instance),
                 onTap: () async => await container.changeAccount(compound),
                 trailing: IconButton(

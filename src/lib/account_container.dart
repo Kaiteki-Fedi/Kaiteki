@@ -6,7 +6,6 @@ import 'package:kaiteki/api/adapters/pleroma_adapter.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
@@ -22,13 +21,11 @@ class AccountContainer extends ChangeNotifier {
 
   final AccountSecretRepository _accountSecrets;
   final ClientSecretRepository _clientSecrets;
+
   List<AccountCompound> _accounts = List<AccountCompound>();
+  Iterable<AccountCompound> get accounts => List.unmodifiable(_accounts);
 
   AccountContainer(this._accountSecrets, this._clientSecrets);
-
-  Future<List<AccountCompound>> getAvailableAccounts() async {
-    return _accounts;
-  }
 
   Future<void> clear() async {
     remove(currentAccount);
@@ -39,10 +36,10 @@ class AccountContainer extends ChangeNotifier {
     Logger.debug("cleared accounts");
   }
 
-  void remove(AccountCompound compound) {
+  Future<void> remove(AccountCompound compound) async {
     _accounts.remove(compound);
-    _accountSecrets.remove(compound.accountSecret);
-    // _clientSecrets.remove(compound.accountSecret);
+    await _accountSecrets.remove(compound.accountSecret);
+    await _clientSecrets.remove(compound.clientSecret);
 
     notifyListeners();
 
@@ -53,6 +50,7 @@ class AccountContainer extends ChangeNotifier {
     // TODO: add duplicate check
     _accounts.add(compound);
     _accountSecrets.insert(compound.accountSecret);
+    _clientSecrets.insert(compound.clientSecret);
 
     await changeAccount(compound);
   }
@@ -68,20 +66,26 @@ class AccountContainer extends ChangeNotifier {
   Future<void> loadAllAccounts() async {
     _accounts.clear();
     _accountSecrets.secrets.forEach((accountSecret) async {
-      if (accountSecret == null)
+      if (accountSecret == null) {
+        Logger.warning("A saved account secret was null");
         return;
+      }
 
-      var instance = accountSecret.instance;
-      var clientSecret = await ClientSecret.getSecret(instance);
+      var instance = accountSecret.identity.instance;
+      var clientSecret = _clientSecrets.get(instance);
 
-      assert(clientSecret != null);
+      Logger.debug(clientSecret.apiType.toString());
 
-      // TODO: Add support for other client types
-      // var type = ApiType.Pleroma;
+      if (clientSecret == null || clientSecret.apiType == null) {
+        Logger.warning("Skipped loading account secret due to invalid client secret.");
+        return;
+      }
+
       var adapter = createAdapter(clientSecret.apiType);
 
       User user;
 
+      // TODO: Redesign class structure to make this not Mastodon-specific.
       if (adapter.client is MastodonClient) {
         var mastodonClient = adapter.client as MastodonClient;
 
@@ -96,21 +100,32 @@ class AccountContainer extends ChangeNotifier {
             accountSecret.accessToken;
       }
 
+      // restoring user object
       try {
         user = await adapter.getMyself();
       } catch (ex) {
-        print("Failed to verify credentials: $ex");
+        Logger.exception(message: "Failed to verify credentials", ex: ex);
       }
 
       if (user == null) {
-        print("No user data was recovered, assuming user info is incorrect.");
+        Logger.warning("No user data was recovered, assuming user info is incorrect.");
         return;
       }
 
-      var accountCompound = AccountCompound(this, adapter, user, clientSecret, accountSecret);
+      var accountCompound = AccountCompound(
+        container: this,
+        adapter: adapter,
+        account: user,
+        clientSecret: clientSecret,
+        accountSecret: accountSecret,
+        instanceType: clientSecret.apiType,
+      );
       _accounts.add(accountCompound);
     });
   }
+
+  //TODO: HACK, This should not exist, please refactor.
+  getClientRepo() => _clientSecrets;
 
   FediverseAdapter createAdapter(ApiType type){
     switch (type) {
@@ -130,9 +145,7 @@ class AccountContainer extends ChangeNotifier {
       try {
         var account = await compound.adapter.getMyself();
 
-        if (account == null) {
-          throw "Account was null";
-        }
+        if (account == null) throw "Account was null";
 
         compound.account = account;
       } catch (e) {
