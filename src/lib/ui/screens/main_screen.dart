@@ -23,7 +23,6 @@ class _MainScreenState extends State<MainScreen> {
     _MainScreenTab(Mdi.home, "Timeline"),
     _MainScreenTab(Mdi.bell, "Notifications"),
     _MainScreenTab(Mdi.forum, "Chats"),
-    _MainScreenTab(Mdi.viewColumn, "Deck"),
   ];
 
   PageController _pageController = PageController();
@@ -131,7 +130,6 @@ class _MainScreenState extends State<MainScreen> {
       TimelinePage(key: ValueKey(0)),
       NotificationsPage(key: ValueKey(1)),
       ChatsPage(key: ValueKey(2)),
-      DeckPage(key: ValueKey(3))
     ],
   );
 
