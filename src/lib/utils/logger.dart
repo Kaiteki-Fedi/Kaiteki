@@ -6,4 +6,5 @@ class Logger {
   static void warning(String message) => print("(warn) $message");
   static void info(String message) => print("(info) $message");
   static void error(String message) => print("(error) $message");
+  static void exception({String message, Exception ex}) => print("(error) $message: $ex");
 }
