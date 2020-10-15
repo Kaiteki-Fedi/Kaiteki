@@ -15,11 +15,13 @@ class Constants {
 
   static String getPreferredAppName(NameMode mode) {
     switch (mode) {
-      case NameMode.Romaji: return "Kaiteki";
       case NameMode.Hiragana: return "かいてき";
       case NameMode.Katakana: return "カイテキ";
       case NameMode.Kanji: return "快適";
-      default: throw "Out of range";
+
+      case NameMode.Romaji:
+      default:
+        return "Kaiteki";
     }
   }
 
