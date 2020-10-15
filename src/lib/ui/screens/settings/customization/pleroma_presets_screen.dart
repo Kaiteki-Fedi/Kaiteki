@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/api/model/pleroma/theme.dart';
 import 'package:http/http.dart' as http;
-import 'package:kaiteki/ui/widgets/theme_preview_widget.dart';
+import 'package:kaiteki/ui/widgets/theming/theme_preview_widget.dart';
 
 class PleromaPresetsScreen extends StatefulWidget {
   PleromaPresetsScreen({Key key}) : super(key: key);

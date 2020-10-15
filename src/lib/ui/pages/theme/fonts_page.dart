@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/widgets/font_button.dart';
+import 'package:kaiteki/ui/widgets/theming/font_button.dart';
 import 'package:kaiteki/ui/widgets/separator_text.dart';
 
 class FontsPage extends StatefulWidget {
