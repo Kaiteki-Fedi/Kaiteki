@@ -72,9 +72,6 @@ class _KaitekiAppState extends State<KaitekiApp> {
 
           backgroundColor = backgroundColor.withOpacity(themeContainer.backgroundOpacity);
 
-          // if (!themeContainer.hasBackground)
-          //   assert(themeContainer.backgroundOpacity != 1);
-
           return Stack(
             alignment: Alignment.topLeft,
             fit: StackFit.expand,
