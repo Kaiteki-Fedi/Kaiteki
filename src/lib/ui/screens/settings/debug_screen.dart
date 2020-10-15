@@ -26,6 +26,7 @@ class _DebugScreenState extends State<DebugScreen> {
           ),
           ListTile(
             title: Text("Clear shared preferences"),
+            subtitle: Text("The shared preferences contain your tokens alongside your user preferences. A restart of the app is recommended to make the changes take effect."),
             onTap: () async {
               var instance = await SharedPreferences.getInstance();
               assert(await instance.clear(), "clear failed");
