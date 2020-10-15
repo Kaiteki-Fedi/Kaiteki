@@ -1,4 +1,4 @@
-import 'package:kaiteki/api/clients/pleroma_client.dart';
+import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/utils/logger.dart';

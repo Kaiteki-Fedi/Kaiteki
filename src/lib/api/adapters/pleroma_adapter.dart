@@ -1,16 +1,19 @@
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/adapters/interfaces/chat_support.dart';
-import 'package:kaiteki/adapters/interfaces/reaction_support.dart';
+import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
+import 'package:kaiteki/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
+import 'package:kaiteki/api/model/mastodon/emoji.dart';
 import 'package:kaiteki/api/model/mastodon/status.dart';
 import 'package:kaiteki/api/model/pleroma/chat_message.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
+import 'package:kaiteki/model/auth/identity.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
+import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/reaction.dart';
@@ -36,7 +39,7 @@ class PleromaAdapter extends FediverseAdapter<PleromaClient> implements ChatSupp
     client.instance = instance;
 
     // Retrieve or create client secret
-    var clientSecret = await LoginFunctions.getClientSecret(client, instance);
+    var clientSecret = await LoginFunctions.getClientSecret(client, instance, accounts.getClientRepo());
     client.authenticationData = MastodonAuthenticationData();
     client.authenticationData.clientSecret = clientSecret.clientSecret;
     client.authenticationData.clientId = clientSecret.clientId;
@@ -72,7 +75,8 @@ class PleromaAdapter extends FediverseAdapter<PleromaClient> implements ChatSupp
     }
 
     // Create and set account secret
-    var accountSecret = new AccountSecret(instance, username, accessToken);
+    var identity = Identity(instance, username);
+    var accountSecret = new AccountSecret(identity, accessToken);
     client.authenticationData.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
@@ -81,7 +85,13 @@ class PleromaAdapter extends FediverseAdapter<PleromaClient> implements ChatSupp
       return LoginResult.failed("Failed to verify credentials");
     }
 
-    var compound = AccountCompound(accounts, this, toUser(account), clientSecret, accountSecret);
+    var compound = AccountCompound(
+      container: accounts,
+      adapter: this,
+      account: toUser(account),
+      clientSecret: clientSecret,
+      accountSecret: accountSecret,
+    );
     await accounts.addCurrentAccount(compound);
 
     return LoginResult.successful();

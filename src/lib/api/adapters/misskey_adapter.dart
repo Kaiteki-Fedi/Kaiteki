@@ -1,6 +1,6 @@
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/adapters/interfaces/chat_support.dart';
+import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/misskey_client.dart';
 import 'package:kaiteki/api/model/misskey/emoji.dart';
@@ -10,6 +10,7 @@ import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/identity.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
@@ -106,7 +107,8 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
     var mkClientSecret = ClientSecret(instance, "", "", apiType: ApiType.Misskey);
 
     // Create and set account secret
-    var accountSecret = new AccountSecret(instance, username, authResponse.i);
+    var identity = Identity(instance, username);
+    var accountSecret = AccountSecret(identity, authResponse.i);
     client.authenticationData = MisskeyAuthenticationData(accountSecret.accessToken);
 
     // Check whether secrets work, and if we can get an account back
@@ -115,7 +117,13 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
       return LoginResult.failed("Failed to retrieve user info");
     }
 
-    var compound = AccountCompound(accounts, this, toUser(account), mkClientSecret, accountSecret);
+    var compound = AccountCompound(
+      container: accounts,
+      adapter: this,
+      account: toUser(account),
+      clientSecret: mkClientSecret,
+      accountSecret: accountSecret,
+    );
     await accounts.addCurrentAccount(compound);
 
     return LoginResult.successful();

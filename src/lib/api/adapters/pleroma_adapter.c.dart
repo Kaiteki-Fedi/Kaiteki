@@ -13,6 +13,16 @@ Post toPost(MastodonStatus source) {
     repeatOf: toPost(source.reblog),
     repeated: source.reblogged,
     liked: source.favourited,
+    emojis: source.emojis.map(toEmoji),
+  );
+}
+
+CustomEmoji toEmoji(MastodonEmoji emoji) {
+  return CustomEmoji(
+    source: emoji,
+    url: emoji.staticUrl,
+    name: emoji.shortcode,
+    aliases: emoji.tags,
   );
 }
 

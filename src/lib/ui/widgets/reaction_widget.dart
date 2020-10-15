@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/adapters/interfaces/reaction_support.dart';
+import 'package:kaiteki/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/reaction.dart';

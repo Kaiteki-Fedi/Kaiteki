@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:kaiteki/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/adapters/mastodon_adapter.dart';
-import 'package:kaiteki/adapters/misskey_adapter.dart';
-import 'package:kaiteki/adapters/pleroma_adapter.dart';
+import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/api/adapters/mastodon_adapter.dart';
+import 'package:kaiteki/api/adapters/misskey_adapter.dart';
+import 'package:kaiteki/api/adapters/pleroma_adapter.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';

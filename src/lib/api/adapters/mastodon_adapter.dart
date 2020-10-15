@@ -1,11 +1,12 @@
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/api/model/mastodon/account.dart';
 import 'package:kaiteki/api/model/mastodon/status.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
+import 'package:kaiteki/model/auth/identity.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
@@ -55,7 +56,7 @@ class MastodonAdapter extends FediverseAdapter<MastodonClient> {
     client.instance = instance;
 
     // Retrieve or create client secret
-    var clientSecret = await LoginFunctions.getClientSecret(client, instance);
+    var clientSecret = await LoginFunctions.getClientSecret(client, instance, accounts.getClientRepo());
     client.authenticationData.clientSecret = clientSecret.clientSecret;
     client.authenticationData.clientId = clientSecret.clientId;
 
@@ -90,7 +91,8 @@ class MastodonAdapter extends FediverseAdapter<MastodonClient> {
     }
 
     // Create and set account secret
-    var accountSecret = new AccountSecret(instance, username, accessToken);
+    var identity = Identity(instance, username);
+    var accountSecret = new AccountSecret(identity, accessToken);
     client.authenticationData.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
@@ -99,7 +101,13 @@ class MastodonAdapter extends FediverseAdapter<MastodonClient> {
       return LoginResult.failed("Failed to verify credentials");
     }
 
-    var compound = AccountCompound(accounts, this, toUser(account), clientSecret, accountSecret);
+    var compound = AccountCompound(
+      container: accounts,
+      adapter: this,
+      account: toUser(account),
+      clientSecret: clientSecret,
+      accountSecret: accountSecret
+    );
     await accounts.addCurrentAccount(compound);
 
     return LoginResult.successful();

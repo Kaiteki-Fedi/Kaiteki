@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/adapters/interfaces/chat_support.dart';
+import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
 import 'package:kaiteki/account_container.dart';

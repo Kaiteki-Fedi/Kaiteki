@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:kaiteki/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/utils/text_renderer.dart';

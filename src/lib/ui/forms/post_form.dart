@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/model/fediverse/formatting.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:mdi/mdi.dart';
