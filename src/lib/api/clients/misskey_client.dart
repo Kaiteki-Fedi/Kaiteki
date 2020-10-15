@@ -43,13 +43,12 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
-  Future<MisskeyPage> getPage(String i, String username, String name) async {
+  Future<MisskeyPage> getPage(String username, String name) async {
     return await sendJsonRequest(
       HttpMethod.POST,
       "api/pages/show",
       (json) => MisskeyPage.fromJson(json),
       body: {
-        "i": i,
         "username": username,
         "name": name,
       },
