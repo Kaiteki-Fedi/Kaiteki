@@ -205,15 +205,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void debugAction(BuildContext context) async {
-    var client = MisskeyClient();
-    client.instance = "misskey.io";
-    var page = await client.getPage(
-      "sWwuYT3qpmh3g9EW",
-      "Craftplacer",
-      "1597983613670",
-    );
-
-    Navigator.push(context, MaterialPageRoute(builder: (_) => MisskeyPageScreen(page)));
   }
 
   void onComposeStatus(BuildContext context) async {
