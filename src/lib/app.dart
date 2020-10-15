@@ -8,6 +8,7 @@ import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/theming/default_app_themes.dart';
 import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/ui/screens/account_required_screen.dart';
 import 'package:kaiteki/ui/screens/add_account_screen.dart';
 import 'package:kaiteki/ui/screens/main_screen.dart';
 import 'package:kaiteki/ui/screens/manage_accounts_screen.dart';
@@ -86,9 +87,19 @@ class _KaitekiAppState extends State<KaitekiApp> {
                 child: MaterialApp(
                   title: appPreferences,
                   theme: materialTheme,
-                  home: MainScreen(),
                   color: AppColors.background,
+                  initialRoute: "/",
                   routes: {
+                    "/": (_) => Builder(
+                      builder: (context) {
+                        var container = Provider.of<AccountContainer>(context);
+
+                        if (!container.loggedIn)
+                          return new AccountRequiredScreen();
+
+                        return MainScreen();
+                      }
+                    ),
                     "/accounts": (_) => ManageAccountsScreen(),
                     "/accounts/add": (_) => AddAccountScreen(),
                     "/debug": (_) => DebugScreen(),
