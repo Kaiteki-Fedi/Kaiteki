@@ -28,7 +28,7 @@ void main() async {
 Future<FlutterLocalNotificationsPlugin> initializeNotifications() async {
   var plugin =  FlutterLocalNotificationsPlugin();
   var initSettings = InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+      android: AndroidInitializationSettings("@mipmap/ic_kaiteki"),
       iOS: IOSInitializationSettings(
         requestSoundPermission: false,
         requestBadgePermission: false,

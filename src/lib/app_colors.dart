@@ -1,14 +1,28 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class AppColors {
-  static Color background = Color(0xFF1E2133);
-  static Color surface = Color(0xFF404256);
+  static final Color darkBackground = const Color(0xFF1E2133);
+  static final Color darkSurface = const Color(0xFF404256);
 
-  static Color primary = Color(0xFFff3e31);
-  static Color primaryVariant = Color(0xffd82025);
+  static final Color lightBackground = const Color(0xFFebedff);
+  static final Color lightSurface = const Color(0xFFf7f9ff);
 
-  static Color accent = Color(0xFFFF9999);
-  static Color accentVariant = Color(0xFFf87172);
+  static MaterialColor kaitekiPink = MaterialColor(
+    0xFFfa4f62,
+    {
+      50: const Color(0xFFffe7ec),
+      100: const Color(0xFFffc3cf),
+      200: const Color(0xFFff9daf),
+      300: const Color(0xFFff7890),
+      400: const Color(0xFFfc5f78),
+      500: const Color(0xFFfa4f62),
+      600: const Color(0xFFe94960),
+      700: const Color(0xFFd3425c),
+      800: const Color(0xFFbe3b59),
+      900: const Color(0xFF9a3052),
+    }
+  );
 
   // picked from https://pleroma.social/
   static Color pleromaPrimary = Color(0xFFF6A358);
