@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 
 class ClientSecretRepository extends ChangeNotifier {
   List<ClientSecret> _secrets;

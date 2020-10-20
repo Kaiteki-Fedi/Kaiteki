@@ -4,7 +4,7 @@ import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/http_method.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:http/http.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;

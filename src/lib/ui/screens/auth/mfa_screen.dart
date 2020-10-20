@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 
 class MfaScreen extends StatefulWidget {
   MfaScreen({Key key}) : super(key: key);

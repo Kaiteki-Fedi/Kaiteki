@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/theming/app_theme.dart';
 import 'package:kaiteki/theming/app_theme_convertible.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:supercharged/supercharged.dart';
 

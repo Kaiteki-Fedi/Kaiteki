@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 
 abstract class AuthenticationData {
   /// Apply all necessary data to the outgoing HTTP request.

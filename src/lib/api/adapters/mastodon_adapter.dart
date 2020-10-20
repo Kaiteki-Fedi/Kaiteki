@@ -12,7 +12,7 @@ import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 
 class MastodonAdapter extends FediverseAdapter<MastodonClient> {
   MastodonAdapter() : super(MastodonClient());

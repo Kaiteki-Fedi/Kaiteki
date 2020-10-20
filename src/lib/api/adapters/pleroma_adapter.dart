@@ -21,7 +21,7 @@ import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/utils/string_extensions.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 
 part 'pleroma_adapter.c.dart'; // That file contains toEntity() methods
 
