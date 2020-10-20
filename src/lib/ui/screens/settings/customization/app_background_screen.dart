@@ -23,7 +23,7 @@ class _AppBackgroundScreenState extends State<AppBackgroundScreen> {
         padding: const EdgeInsets.only(top: 8),
         children: [
           ListTile(
-            title: Text("You can set an image to display behind transparent backgrounds.\nTransparent backgrounds might cause minor flickering when transitioning between screens."),
+            title: Text("You can set an image to display behind transparent backgrounds."),
           ),
           Divider(),
           ListTile(
