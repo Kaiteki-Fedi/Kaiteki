@@ -20,17 +20,19 @@ class AccountSecretRepository extends ChangeNotifier {
     return await repository._initialize();
   }
 
-  Future<void> _initialize() async {
     var json = _preferences.getString("accounts");
+  Future<AccountSecretRepository> _initialize() async {
 
     if (json == null) {
       _secrets = <AccountSecret>[];
-      return;
+      return this;
     }
 
     var accountsJson = jsonDecode(json);
     var accounts = accountsJson.map<AccountSecret>((json) => AccountSecret.fromJson(json));
     _secrets = accounts.toList();
+
+    return this;
   }
 
   /// Inserts an account secret into the repository.
