@@ -1,4 +1,4 @@
-***Currenlty work in progress! Contributions are accepted. Not ready for stable use.***
+**Not stable for everyday use, contributions are welcome.**
 
 ---
 
