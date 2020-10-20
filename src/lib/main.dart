@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   // we need to run this to be able to get access to SharedPreferences
@@ -12,13 +13,12 @@ void main() async {
   var accountRepository = await AccountSecretRepository.getInstance();
   var clientRepository = await ClientSecretRepository.getInstance();
 
-  FlutterLocalNotificationsPlugin notifications; //await initializeNotifications();
 
   // construct app
   var app = KaitekiApp(
     accountRepository,
     clientRepository,
-    notifications,
+    await initializeNotifications(),
   );
 
   // run.
@@ -26,7 +26,10 @@ void main() async {
 }
 
 Future<FlutterLocalNotificationsPlugin> initializeNotifications() async {
-  var plugin =  FlutterLocalNotificationsPlugin();
+  if (kIsWeb)
+    return null;
+
+  var plugin = FlutterLocalNotificationsPlugin();
   var initSettings = InitializationSettings(
       android: AndroidInitializationSettings("@mipmap/ic_kaiteki"),
       iOS: IOSInitializationSettings(
