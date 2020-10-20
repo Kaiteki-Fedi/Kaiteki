@@ -19,11 +19,11 @@ import 'package:kaiteki/ui/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 class KaitekiApp extends StatefulWidget {
-  const KaitekiApp(
+  const KaitekiApp({
     this.accountSecrets,
     this.clientSecrets,
     this.notifications,
-  );
+  });
 
   @override
   _KaitekiAppState createState() => _KaitekiAppState();

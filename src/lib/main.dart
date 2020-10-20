@@ -16,9 +16,9 @@ void main() async {
 
   // construct app
   var app = KaitekiApp(
-    accountRepository,
-    clientRepository,
-    await initializeNotifications(),
+    accountSecrets: accountRepository,
+    clientSecrets: clientRepository,
+    notifications: await initializeNotifications(),
   );
 
   // run.
