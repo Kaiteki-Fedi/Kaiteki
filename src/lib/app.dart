@@ -17,17 +17,20 @@ import 'package:kaiteki/ui/screens/settings/customization/customization_settings
 import 'package:kaiteki/ui/screens/settings/debug_screen.dart';
 import 'package:kaiteki/ui/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KaitekiApp extends StatefulWidget {
   const KaitekiApp({
     this.accountSecrets,
     this.clientSecrets,
     this.notifications,
+    this.preferences,
   });
 
   @override
   _KaitekiAppState createState() => _KaitekiAppState();
 
+  final SharedPreferences preferences;
   final AccountSecretRepository accountSecrets;
   final ClientSecretRepository clientSecrets;
   final FlutterLocalNotificationsPlugin notifications;

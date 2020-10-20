@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
+import 'package:kaiteki/repositories/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AccountSecretRepository extends ChangeNotifier {
+class AccountSecretRepository extends ChangeNotifier implements Repository<AccountSecret> {
+  static const String _preferencesKey = "accounts";
+
   List<AccountSecret> _secrets;
   Iterable<AccountSecret> get secrets => List.unmodifiable(_secrets);
 
@@ -20,8 +23,8 @@ class AccountSecretRepository extends ChangeNotifier {
     return await repository._initialize();
   }
 
-    var json = _preferences.getString("accounts");
   Future<AccountSecretRepository> _initialize() async {
+    String json = _preferences.getString(_preferencesKey);
 
     if (json == null) {
       _secrets = <AccountSecret>[];
@@ -60,6 +63,14 @@ class AccountSecretRepository extends ChangeNotifier {
   Future<void> _save() async {
     var jsonList = _secrets.map((s) => s.toJson()).toList();
     var json = jsonEncode(jsonList);
-    await _preferences.setString("accounts", json);
+    await _preferences.setString(_preferencesKey, json);
+  }
+
+  @override
+  Iterable<AccountSecret> getAll() => List.unmodifiable(_secrets);
+
+  @override
+  void removeAll() {
+    // TODO: implement removeAll
   }
 }
