@@ -7,7 +7,7 @@ class FormWidget extends StatelessWidget {
   final double contentWidth;
   final double contentHeight;
   final EdgeInsets padding;
-
+  final EdgeInsets outsidePadding;
 
   // TODO: mobile/portrait padding
   const FormWidget({
@@ -19,14 +19,15 @@ class FormWidget extends StatelessWidget {
       horizontal: 24.0,
       vertical: 64.0,
     ),
+    this.outsidePadding = const EdgeInsets.all(24),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        if (contentWidth <= constraints.maxWidth &&
-            contentHeight <= constraints.maxHeight) {
+        if (contentWidth + outsidePadding.horizontal <= constraints.maxWidth &&
+            contentHeight + outsidePadding.vertical <= constraints.maxHeight) {
           return Center(
             child: Card(
               child: Container(
