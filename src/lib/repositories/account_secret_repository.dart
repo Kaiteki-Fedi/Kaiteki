@@ -12,12 +12,12 @@ class AccountSecretRepository extends ChangeNotifier {
 
   AccountSecretRepository(this._preferences);
 
-  static Future<AccountSecretRepository> getInstance() async {
-    var preferences = await SharedPreferences.getInstance();
-    var repository = AccountSecretRepository(preferences);
-    await repository._initialize();
+  static Future<AccountSecretRepository> getInstance([SharedPreferences preferences]) async {
+    if (preferences == null)
+      preferences = await SharedPreferences.getInstance();
 
-    return repository;
+    var repository = AccountSecretRepository(preferences);
+    return await repository._initialize();
   }
 
   Future<void> _initialize() async {
