@@ -23,17 +23,17 @@ dependencies:
     sdk: flutter
   http: ^0.12.2
   mdi: ^4.0.0
-  file_picker: ^2.0.7
+  file_picker: ^2.0.9+1
   provider: ^4.3.2+2
   client_cookie: ^2.2.1
-  url_launcher: ^5.7.2
+  url_launcher: ^5.7.5
   supercharged: ^1.10.0
   animations: ^1.1.2
-  flutter_local_notifications: ^2.0.0+1
-  shared_preferences: ^0.5.12
-  google_fonts: ^1.1.0
+  flutter_local_notifications: ^2.0.2
+  shared_preferences: ^0.5.12+2
+  google_fonts: ^1.1.1
   badges: ^1.1.3
-  extended_image: ^1.2.0
+  extended_image: ^1.3.0
   html: ^0.14.0+4
   json_annotation: ^3.1.0
 
