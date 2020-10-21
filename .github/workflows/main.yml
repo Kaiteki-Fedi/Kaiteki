@@ -142,43 +142,43 @@ jobs:
     steps:
       - name: Download Android APKs
         uses: actions/download-artifact@v2
-        if: ${{ jobs.build-android.success() }}
+        if: ${{ needs.build-android.result == "success" }}
         with:
           name: android
           path: ./release
 
       - name: Download Windows binaries
         uses: actions/download-artifact@v2
-        if: ${{ jobs.build-windows.success() }}
+        if: ${{ needs.build-windows.result == "success" }}
         with:
           name: windows
           path: ./release-windows
           
       - name: Repackage Windows artifacts
         uses: edgarrc/action-7z@v1.0.4
-        if: ${{ jobs.build-windows.success() }}
+        if: ${{ needs.build-windows.result == "success" }}
         with:
           args: 7z a ./windows.zip ./release-windows
         
       - name: Add repackaged artifacts to release directory
-        if: ${{ jobs.build-windows.success() }}
+        if: ${{ needs.build-windows.result == "success" }}
         run: mv ./windows.zip ./release
           
       - name: Download Linux binaries
         uses: actions/download-artifact@v2
-        if: ${{ jobs.build-linux.success() }}
+        if: ${{ needs.build-linux.result == "success" }}
         with:
           name: linux
           path: ./release-linux
       
       - name: Repackage Linux artifacts
         uses: edgarrc/action-7z@v1.0.4
-        if: ${{ jobs.build-linux.success() }}
+        if: ${{ needs.build-linux.result == "success" }}
         with:
           args: 7z a ./linux.zip ./release-linux
         
       - name: Add repackaged artifacts to release directory
-        if: ${{ jobs.build-linux.success() }}
+        if: ${{ needs.build-linux.result == "success" }}
         run: mv ./linux.zip ./release
 
       - uses: marvinpinto/action-automatic-releases@latest
