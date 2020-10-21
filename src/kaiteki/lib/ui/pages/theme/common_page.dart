@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/pleroma/theme.dart';
+import 'package:fediverse_objects/pleroma/theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:provider/provider.dart';
+import 'package:supercharged/supercharged.dart';
 
 class CommonPage extends StatefulWidget {
   CommonPage({Key key}) : super(key: key);
@@ -14,7 +15,7 @@ class _CommonPageState extends State<CommonPage> {
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<ThemeContainer>(context);
-    var theme = container.rawTheme as PleromaTheme;
+    var theme = container.source as PleromaTheme;
     var keys = theme.colors.keys;
 
     return ListView.builder(
@@ -25,7 +26,7 @@ class _CommonPageState extends State<CommonPage> {
         return ListTile(
           title: Text(key),
           leading: CircleAvatar(
-            backgroundColor: value,
+            backgroundColor: value.toColor(),
           ),
         );
       },

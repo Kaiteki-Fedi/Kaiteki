@@ -1,53 +1,36 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  Color linkColor;
-  Color repeatColor;
-  Color favoriteColor;
+  final Color linkColor;
+  final Color repeatColor;
+  final Color favoriteColor;
 
-  Color incomingChatMessageBackgroundColor;
-  Color incomingChatMessageBorderColor;
-  Color outgoingChatMessageBackgroundColor;
-  Color outgoingChatMessageBorderColor;
+  final ChatMessageTheme incomingChatMessage;
+  final ChatMessageTheme outgoingChatMessage;
 
-  Color borderColor;
-  Color textColor;
+  final Color borderColor;
+  final Color textColor;
 
-  double chatMessageRounding;
+  final double chatMessageRounding;
 
-  ThemeData materialTheme;
+  final ThemeData materialTheme;
 
-  AppTheme({
+  const AppTheme({
     this.materialTheme,
     this.linkColor,
     this.repeatColor,
     this.favoriteColor,
     this.borderColor,
     this.textColor,
-    this.incomingChatMessageBackgroundColor,
-    this.incomingChatMessageBorderColor,
-    this.outgoingChatMessageBackgroundColor,
-    this.outgoingChatMessageBorderColor,
+    this.incomingChatMessage,
+    this.outgoingChatMessage,
     this.chatMessageRounding,
   });
+}
 
-  AppTheme.fromMaterialTheme(ThemeData materialTheme) {
-    this.materialTheme = materialTheme;
+class ChatMessageTheme {
+  final Color background;
+  final Color border;
 
-    this.linkColor = materialTheme.accentColor;
-    this.borderColor = materialTheme.dividerColor;
-    this.textColor = materialTheme.textTheme.bodyText1.color;
-
-    this.repeatColor = Colors.greenAccent.shade200;
-    this.favoriteColor = Colors.orangeAccent.shade200;
-
-    // Chat colors
-    this.incomingChatMessageBackgroundColor = materialTheme.cardColor;
-    this.outgoingChatMessageBackgroundColor = materialTheme.cardColor;
-
-    this.incomingChatMessageBorderColor = materialTheme.dividerColor;
-    this.outgoingChatMessageBorderColor = materialTheme.dividerColor;
-
-    this.chatMessageRounding = 8;
-  }
+  const ChatMessageTheme({this.background, this.border});
 }

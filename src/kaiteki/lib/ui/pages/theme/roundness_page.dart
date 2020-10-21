@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/pleroma/theme.dart';
+import 'package:fediverse_objects/pleroma/theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +14,7 @@ class _RoundnessPageState extends State<RoundnessPage> {
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<ThemeContainer>(context);
-    var theme = container.rawTheme as PleromaTheme;
+    var theme = container.source as PleromaTheme;
     var keys = theme.radii.keys;
 
     return ListView.builder(

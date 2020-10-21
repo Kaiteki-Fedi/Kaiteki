@@ -23,7 +23,7 @@ class StatusWidget extends StatelessWidget {
     var textStyle = TextStyle();
 
     var container = Provider.of<ThemeContainer>(context);
-    var theme = container.currentTheme;
+    var theme = container.current;
 
     if (_post.repeatOf != null) {
       return Column(

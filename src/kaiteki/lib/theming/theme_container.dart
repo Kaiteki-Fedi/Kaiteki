@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/theming/app_theme.dart';
-import 'package:kaiteki/theming/app_theme_convertible.dart';
+import 'package:kaiteki/theming/app_theme_source.dart';
 
 /// A class that contains and handles theming.
 class ThemeContainer extends ChangeNotifier {
-  ThemeContainer(AppThemeConvertible initialTheme) {
-    rawTheme = initialTheme;
+  ThemeContainer(AppThemeSource initialTheme) {
+    source = initialTheme;
   }
 
-  AppThemeConvertible _appTheme;
-  AppThemeConvertible get rawTheme => _appTheme;
-  set rawTheme(AppThemeConvertible theme) {
-    _appTheme = theme;
+  AppThemeSource _source;
+  AppThemeSource get source => _source;
+  set source(AppThemeSource source) {
+    assert(source != null);
+
+    _source = source;
     notifyListeners();
   }
 
-  AppTheme get currentTheme => _appTheme.toTheme();
-  ThemeData get materialTheme {
-    var theme = currentTheme.materialTheme;
+  AppTheme get current => _source.toTheme();
+
+  ThemeData getMaterialTheme() {
+    var theme = current.materialTheme;
 
     // adjust theme for user preference of transparent backgrounds
     if (backgroundOpacity < 1.0)

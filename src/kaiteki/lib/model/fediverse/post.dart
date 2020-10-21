@@ -61,6 +61,8 @@ class Post<T> {
     return Post(
       author: User.example(),
       content: "Hello everyone!",
+      source: null,
+      postedAt: DateTime.now(),
     );
   }
 }

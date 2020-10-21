@@ -1,4 +1,4 @@
-import 'package:kaiteki/api/model/misskey/user.dart';
+import 'package:fediverse_objects/misskey/user.dart';
 
 class MisskeyUserkeyResponse {
   String accessToken;

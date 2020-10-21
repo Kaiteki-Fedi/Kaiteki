@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/mastodon/application.dart';
+import 'package:fediverse_objects/mastodon/application.dart';
 import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:url_launcher/url_launcher.dart';

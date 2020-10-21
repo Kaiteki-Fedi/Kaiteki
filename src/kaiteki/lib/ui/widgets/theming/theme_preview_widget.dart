@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/pleroma/theme.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/theming/app_theme_source.dart';
 import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:provider/provider.dart';
 
 class ThemePreviewWidget extends StatelessWidget {
-  final PleromaTheme pleromaTheme;
+  final AppThemeSource theme;
   final String defaultName;
 
-  ThemePreviewWidget(this.pleromaTheme, {this.defaultName = "Unnamed"});
+  ThemePreviewWidget(this.theme, {this.defaultName = "Unnamed"});
 
   @override
   Widget build(BuildContext context) {
     var fakeContainer = ThemeContainer(MaterialAppTheme(ThemeData.dark()));
-    fakeContainer.rawTheme = pleromaTheme;
+    fakeContainer.source = theme;
 
     return ChangeNotifierProvider.value(
       value: fakeContainer,
       child: AbsorbPointer(
         absorbing: true,
         child: Theme(
-          data: fakeContainer.materialTheme,
+          data: fakeContainer.getMaterialTheme(),
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: Text(pleromaTheme?.name ?? defaultName),
+              title: Text("Preview"),
             ),
             body: StatusWidget(Post.example()),
           ),

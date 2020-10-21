@@ -1,9 +1,9 @@
 import 'package:http/http.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
-import 'package:kaiteki/api/model/misskey/note.dart';
-import 'package:kaiteki/api/model/misskey/pages/page.dart';
-import 'package:kaiteki/api/model/misskey/user.dart';
+import 'package:fediverse_objects/misskey/note.dart';
+import 'package:fediverse_objects/misskey/pages/page.dart';
+import 'package:fediverse_objects/misskey/user.dart';
 import 'package:kaiteki/api/responses/misskey/create_app_response.dart';
 import 'package:kaiteki/api/responses/misskey/generate_session_response.dart';
 import 'package:kaiteki/api/responses/misskey/signin_response.dart';

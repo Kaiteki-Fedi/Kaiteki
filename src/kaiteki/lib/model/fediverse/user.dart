@@ -50,6 +50,7 @@ class User<T> {
       username: "NyaNya",
       displayName: "banned for being a cute neko",
       avatarUrl: Constants.exampleAvatar,
+      joinDate: DateTime.now(),
     );
   }
 }

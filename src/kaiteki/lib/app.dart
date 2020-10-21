@@ -71,7 +71,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
 
           var themeContainer = Provider.of<ThemeContainer>(context);
           var appBackground = themeContainer.background;
-          var materialTheme = themeContainer.materialTheme;
+          var materialTheme = themeContainer.getMaterialTheme();
           var backgroundColor = materialTheme.canvasColor;
 
           backgroundColor = backgroundColor.withOpacity(themeContainer.backgroundOpacity);

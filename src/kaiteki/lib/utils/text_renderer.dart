@@ -2,12 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:html/dom.dart';
+import 'package:html/parser.dart' show parseFragment;
 import 'package:kaiteki/model/fediverse/emoji.dart';
+import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/text_buffer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:html/parser.dart' show parseFragment;
-import 'package:html/dom.dart' as dom;
 
 class TextRenderer {
   Iterable<Emoji> emojis;
@@ -125,7 +126,7 @@ class TextRenderer {
           )
         );
       } else {
-        print(node.localName);
+        Logger.warning("Unhandled HTML tag: ${node.localName}");
       }
     } else if (node is dom.Text) {
       dom.Text textElement = node;

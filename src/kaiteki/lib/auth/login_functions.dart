@@ -36,7 +36,7 @@ class LoginFunctions {
     try {
       await repository.insert(clientSecret);
     } catch (e) {
-      Logger.exception(message: "Failed to insert client secret:", ex: e);
+      Logger.exception(message: "Failed to insert client secret:", error: e);
     }
 
     return clientSecret;

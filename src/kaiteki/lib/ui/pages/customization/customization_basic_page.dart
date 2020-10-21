@@ -1,14 +1,16 @@
 import 'dart:convert';
 
+import 'package:fediverse_objects/pleroma/theme.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/pleroma/theme.dart';
-import 'package:kaiteki/theming/app_theme_convertible.dart';
+import 'package:kaiteki/theming/app_theme_source.dart';
+import 'package:kaiteki/theming/material_app_theme.dart';
+import 'package:kaiteki/theming/pleroma_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/theming/theme_type.dart';
+import 'package:kaiteki/ui/screens/settings/customization/app_background_screen.dart';
 import 'package:kaiteki/ui/screens/settings/customization/pleroma_presets_screen.dart';
 import 'package:kaiteki/ui/screens/settings/customization/pleroma_theme_screen.dart';
-import 'package:kaiteki/ui/screens/settings/customization/app_background_screen.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +26,7 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
   @override
   Widget build(BuildContext context) {
     var themeContainer = Provider.of<ThemeContainer>(context);
-    var type = getThemeType(themeContainer.rawTheme);
+    var type = getThemeType(themeContainer.source);
 
     return ListView(
       children: [
@@ -48,11 +50,10 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
     );
   }
 
-  ThemeType getThemeType(AppThemeConvertible convertible) {
-    if (convertible is PleromaTheme)
-      return ThemeType.Pleroma;
-
-    return ThemeType.Material;
+  ThemeType getThemeType(AppThemeSource source) {
+    if (source is PleromaAppTheme) return ThemeType.Pleroma;
+    if (source is MaterialAppTheme) return ThemeType.Material;
+    return null;
   }
 
   Widget getPart(BuildContext context, ThemeType type, ThemeContainer container) {
@@ -65,6 +66,7 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
             SwitchListTile(
               title: Text("Dark theme"),
               value: theme.brightness == Brightness.dark,
+              onChanged: null,
             ),
             ListTile(
               trailing: Container(
@@ -97,13 +99,13 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
         );
       }
       case ThemeType.Pleroma: {
-        var pleromaTheme = container.rawTheme as PleromaTheme;
+        var pleromaTheme = container.source as PleromaTheme;
         return Column(
           children: [
-            ListTile(
-              title: Text(pleromaTheme?.name ?? "Unnamed"),
-              subtitle: Text("Current Theme"),
-            ),
+            // ListTile(
+            //   title: Text(pleromaTheme?.name ?? "Unnamed"),
+            //   subtitle: Text("Current Theme"),
+            // ),
             ListTile(
               title: Text("Edit"),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PleromaThemeScreen())),
@@ -123,7 +125,7 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
 
                 if (theme == null) return;
 
-                container.rawTheme = theme;
+                container.source = PleromaAppTheme(theme);
               },
             ),
           ],
@@ -167,7 +169,7 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
     var text = utf8.decode(file.bytes);
     var json = jsonDecode(text);
 
-    container.rawTheme = PleromaTheme.fromJson(json);
+    container.source = PleromaAppTheme(PleromaTheme.fromJson(json));
 
     //Scaffold.of(context).showSnackBar(SnackBar(
     //  content: Text("Theme imported."),

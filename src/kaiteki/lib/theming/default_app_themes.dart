@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/app_colors.dart';
 
+import 'package:kaiteki/theming/app_theme.dart';
+
+import 'package:kaiteki/theming/material_app_theme.dart';
+
 class DefaultAppThemes {
-  static ColorScheme lightScheme = ColorScheme(
+  static MaterialAppTheme lightAppTheme = MaterialAppTheme(ThemeData.from(colorScheme: lightScheme));
+  static MaterialAppTheme darkAppTheme = MaterialAppTheme(ThemeData.from(colorScheme: darkScheme));
+
+  static ColorScheme lightScheme = ColorScheme.light(
     background: AppColors.lightBackground,
     surface: AppColors.lightSurface,
 
@@ -24,7 +31,7 @@ class DefaultAppThemes {
     brightness: Brightness.light,
   );
 
-  static ColorScheme darkScheme = ColorScheme(
+  static ColorScheme darkScheme = ColorScheme.dark(
     background: AppColors.darkBackground,
     surface: AppColors.darkBackground,
 

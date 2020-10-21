@@ -13,7 +13,7 @@ class ImageAttachmentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var themeContainer = Provider.of<ThemeContainer>(context);
-    var border = themeContainer.currentTheme.borderColor;
+    var border = themeContainer.current.borderColor;
 
     var borderRadius = BorderRadius.circular(8);
 

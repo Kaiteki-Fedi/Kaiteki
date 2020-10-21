@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/model/pleroma/theme.dart';
+import 'package:fediverse_objects/pleroma/theme.dart';
 import 'package:http/http.dart' as http;
+import 'package:kaiteki/theming/pleroma_app_theme.dart';
 import 'package:kaiteki/ui/widgets/theming/theme_preview_widget.dart';
 
 class PleromaPresetsScreen extends StatefulWidget {
@@ -66,7 +67,7 @@ class _PleromaPresetsScreenState extends State<PleromaPresetsScreen> {
 
   Widget getWidget(AsyncSnapshot<PleromaTheme> snapshot) {
     if (snapshot.hasData) {
-      return ThemePreviewWidget(snapshot.data);
+      return ThemePreviewWidget(PleromaAppTheme(snapshot.data));
     } else {
       return ThemePreviewWidget(null, defaultName: "Loading");
     }

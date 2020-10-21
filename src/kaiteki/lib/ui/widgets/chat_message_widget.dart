@@ -30,15 +30,9 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<ThemeContainer>(context);
-    var appTheme = container.currentTheme;
+    var appTheme = container.current;
 
-    var background = isOwnMessage
-        ? appTheme.outgoingChatMessageBackgroundColor
-        : appTheme.incomingChatMessageBackgroundColor;
-
-    var border = isOwnMessage
-        ? appTheme.outgoingChatMessageBorderColor
-        : appTheme.incomingChatMessageBorderColor;
+    var msgTheme = isOwnMessage ? appTheme.outgoingChatMessage : appTheme.incomingChatMessage;
 
     return LayoutBuilder(
       builder: (_, b) => Row(
@@ -55,10 +49,10 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
             constraints: BoxConstraints.tightFor(width: b.maxWidth * 0.8),
             padding: const EdgeInsets.all(10.5),
             decoration: BoxDecoration(
-              color: background,
+              color: msgTheme.background,
               borderRadius: BorderRadius.circular(appTheme.chatMessageRounding),
               border: Border.all(
-                color: border,
+                color: msgTheme.border,
                 width: 1
               )
             ),

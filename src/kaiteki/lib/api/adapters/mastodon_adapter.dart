@@ -1,8 +1,8 @@
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
-import 'package:kaiteki/api/model/mastodon/account.dart';
-import 'package:kaiteki/api/model/mastodon/status.dart';
+import 'package:fediverse_objects/mastodon/account.dart';
+import 'package:fediverse_objects/mastodon/status.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';

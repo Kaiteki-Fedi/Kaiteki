@@ -104,7 +104,7 @@ class AccountContainer extends ChangeNotifier {
       try {
         user = await adapter.getMyself();
       } catch (ex) {
-        Logger.exception(message: "Failed to verify credentials", ex: ex);
+        Logger.exception(message: "Failed to verify credentials", error: ex);
       }
 
       if (user == null) {
