@@ -1,3 +1,4 @@
+import 'package:fediverse_objects/misskey/poll.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:fediverse_objects/misskey/channel.dart';
 import 'package:fediverse_objects/misskey/emoji.dart';
@@ -43,7 +44,7 @@ class MisskeyNote {
 
   final Iterable<String> tags;
 
-  final dynamic poll;
+  final MisskeyPoll poll;
 
   final String channelId;
 

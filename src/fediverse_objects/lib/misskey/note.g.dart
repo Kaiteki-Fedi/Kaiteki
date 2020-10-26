@@ -35,7 +35,9 @@ MisskeyNote _$MisskeyNoteFromJson(Map<String, dynamic> json) {
     files: (json['files'] as List)?.map((e) =>
         e == null ? null : MisskeyFile.fromJson(e as Map<String, dynamic>)),
     tags: (json['tags'] as List)?.map((e) => e as String),
-    poll: json['poll'],
+    poll: json['poll'] == null
+        ? null
+        : MisskeyPoll.fromJson(json['poll'] as Map<String, dynamic>),
     channelId: json['channelId'] as String,
     channel: json['channel'] == null
         ? null
