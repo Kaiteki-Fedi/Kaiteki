@@ -71,7 +71,7 @@ class AccountContainer extends ChangeNotifier {
         return;
       }
 
-      var instance = accountSecret.identity.instance;
+      var instance = accountSecret.instance;
       var clientSecret = _clientSecrets.get(instance);
 
       Logger.debug(clientSecret.apiType.toString());

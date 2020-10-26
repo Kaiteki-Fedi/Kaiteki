@@ -6,7 +6,6 @@ import 'package:fediverse_objects/mastodon/status.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/identity.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
@@ -95,8 +94,7 @@ class MastodonAdapter extends FediverseAdapter<MastodonClient> {
     }
 
     // Create and set account secret
-    var identity = Identity(instance, username);
-    var accountSecret = new AccountSecret(identity, accessToken);
+    var accountSecret = new AccountSecret(instance, username, accessToken);
     client.authenticationData.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back

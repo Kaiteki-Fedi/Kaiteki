@@ -11,7 +11,6 @@ import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
-import 'package:kaiteki/model/auth/identity.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
@@ -112,8 +111,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
     var mkClientSecret = ClientSecret(instance, "", "", apiType: client.type);
 
     // Create and set account secret
-    var identity = Identity(instance, username);
-    var accountSecret = AccountSecret(identity, authResponse.i);
+    var accountSecret = AccountSecret(instance, username, authResponse.i);
     client.authenticationData = MisskeyAuthenticationData(accountSecret.accessToken);
 
     // Check whether secrets work, and if we can get an account back

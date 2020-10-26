@@ -8,15 +8,15 @@ part of 'account_secret.dart';
 
 AccountSecret _$AccountSecretFromJson(Map<String, dynamic> json) {
   return AccountSecret(
-    json['identity'] == null
-        ? null
-        : Identity.fromJson(json['identity'] as Map<String, dynamic>),
+    json['instance'] as String,
+    json['user'] as String,
     json['token'] as String,
   );
 }
 
 Map<String, dynamic> _$AccountSecretToJson(AccountSecret instance) =>
     <String, dynamic>{
-      'identity': instance.identity,
+      'instance': instance.instance,
+      'user': instance.username,
       'token': instance.accessToken,
     };

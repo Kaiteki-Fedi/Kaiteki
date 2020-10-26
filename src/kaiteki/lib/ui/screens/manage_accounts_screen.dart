@@ -68,7 +68,7 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
                   compound.account,
                   openOnTap: false,
                 ),
-                title: Text(compound.accountSecret.identity.username),
+                title: Text(compound.accountSecret.username),
                 subtitle: Text(compound.instance),
                 onTap: () async => await container.changeAccount(compound),
                 trailing: IconButton(

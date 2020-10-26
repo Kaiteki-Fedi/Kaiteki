@@ -9,7 +9,6 @@ import 'package:fediverse_objects/mastodon/status.dart';
 import 'package:fediverse_objects/pleroma/chat_message.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
-import 'package:kaiteki/model/auth/identity.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
@@ -78,8 +77,7 @@ class PleromaAdapter extends FediverseAdapter<PleromaClient> implements ChatSupp
     }
 
     // Create and set account secret
-    var identity = Identity(instance, username);
-    var accountSecret = new AccountSecret(identity, accessToken);
+    var accountSecret = new AccountSecret(instance, username, accessToken);
     client.authenticationData.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
