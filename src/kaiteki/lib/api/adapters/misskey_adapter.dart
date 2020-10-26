@@ -1,7 +1,6 @@
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
-import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/api/clients/misskey_client.dart';
 import 'package:fediverse_objects/misskey/emoji.dart';
