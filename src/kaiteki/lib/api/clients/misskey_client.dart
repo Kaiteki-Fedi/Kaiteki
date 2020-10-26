@@ -4,6 +4,7 @@ import 'package:kaiteki/api/clients/fediverse_client_base.dart';
 import 'package:fediverse_objects/misskey/note.dart';
 import 'package:fediverse_objects/misskey/pages/page.dart';
 import 'package:fediverse_objects/misskey/user.dart';
+import 'package:kaiteki/api/requests/misskey/sign_in.dart';
 import 'package:kaiteki/api/responses/misskey/create_app_response.dart';
 import 'package:kaiteki/api/responses/misskey/generate_session_response.dart';
 import 'package:kaiteki/api/responses/misskey/signin_response.dart';
@@ -99,24 +100,12 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
-  Future<MisskeySignInResponse> signIn(
-    String username,
-    String password,
-    {String token,}
-  ) async {
-    var body = {
-      "username": username,
-      "password": password
-    };
-
-    if (token != null)
-      body["token"] = token;
-
+  Future<MisskeySignInResponse> signIn(MisskeySignInRequest request) async {
     return await sendJsonRequest(
       HttpMethod.POST,
       "api/signin",
       (json) => MisskeySignInResponse.fromJson(json),
-      body: body
+      body: request
     );
   }
 

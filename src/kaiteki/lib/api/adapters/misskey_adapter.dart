@@ -6,6 +6,7 @@ import 'package:kaiteki/api/clients/misskey_client.dart';
 import 'package:fediverse_objects/misskey/emoji.dart';
 import 'package:fediverse_objects/misskey/note.dart';
 import 'package:fediverse_objects/misskey/user.dart';
+import 'package:kaiteki/api/requests/misskey/sign_in.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -103,10 +104,10 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
   Future<LoginResult> login(String instance, String username, String password, mfaCallback, AccountContainer accounts) async {
     client.instance = instance;
 
-    var authResponse = await client.signIn(
-      username,
-      password,
-    );
+    var authResponse = await client.signIn(MisskeySignInRequest(
+      username: username,
+      password: password,
+    ));
 
     var mkClientSecret = ClientSecret(instance, "", "", apiType: client.type);
 
