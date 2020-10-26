@@ -12,6 +12,8 @@ class Constants {
   /// the amount of dp/px until the application redefines the layout for
   /// desktop view.
   static const int desktopThreshold = 800;
+  static const double defaultFormWidth = 448;
+  static const double defaultFormHeight = 592;
 
   static String getPreferredAppName(NameMode mode) {
     switch (mode) {

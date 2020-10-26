@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:kaiteki/constants.dart';
 
 /// A widget that automatically adjusts itself for certain resolutions
 class FormWidget extends StatelessWidget {
@@ -13,8 +13,8 @@ class FormWidget extends StatelessWidget {
   const FormWidget({
     Key key,
     @required this.child,
-    this.contentWidth = 448,
-    this.contentHeight = 592,
+    this.contentWidth = Constants.defaultFormWidth,
+    this.contentHeight = Constants.defaultFormHeight,
     this.padding = const EdgeInsets.symmetric(
       horizontal: 24.0,
       vertical: 64.0,
