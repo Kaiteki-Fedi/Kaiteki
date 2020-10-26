@@ -116,7 +116,7 @@ class MastodonAdapter extends FediverseAdapter<MastodonClient> {
   }
 
   @override
-  Future<Post> postStatus(Post post) async {
+  Future<Post> postStatus(Post post, {Post parentPost}) async {
     var mastodonStatus = await client.postStatus(
       post.content,
       spoilerText: post.subject

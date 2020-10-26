@@ -133,7 +133,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
   }
 
   @override
-  Future<Post> postStatus(Post post) {
+  Future<Post> postStatus(Post post, {Post parentPost}) {
     // TODO: implement postStatus
     throw UnimplementedError();
   }

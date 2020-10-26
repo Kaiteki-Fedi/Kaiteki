@@ -28,7 +28,8 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// Retrieves an user using an instance specific ID.
   Future<User> getUserById(String id);
 
-  Future<Post> postStatus(Post post);
+  /// Posts a status, optionally in reply to another post.
+  Future<Post> postStatus(Post post, {Post parentPost});
 
   Future<Iterable<Post>> getTimeline(TimelineType type);
 

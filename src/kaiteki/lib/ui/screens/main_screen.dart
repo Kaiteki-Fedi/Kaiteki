@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/app_preferences.dart';
 import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
 import 'package:kaiteki/ui/pages/chats_page.dart';
 import 'package:kaiteki/ui/pages/notifications_page.dart';
@@ -34,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
         fabTooltip: "Compose a new status",
         fabText: "Compose",
         fabIcon: Mdi.pencil,
-        fabOnTap: () => onComposeStatus(context),
+        fabOnTap: () => onComposeStatus(context, null),
       ),
       _MainScreenTab(
         icon: Mdi.bell,
@@ -208,12 +209,12 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  void onComposeStatus(BuildContext context) async {
+  void onComposeStatus(BuildContext context, Post replyTo) async {
     await showDialog(
       context: context,
       child: Dialog(
         child: Container(
-          child: PostForm(),
+          child: PostForm(replyTo: replyTo),
           width: 800,
           height: 500,
         ),

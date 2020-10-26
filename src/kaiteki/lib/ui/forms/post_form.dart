@@ -7,9 +7,9 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class PostForm extends StatefulWidget {
-  const PostForm({
-    Key key,
-  }) : super(key: key);
+  final Post replyTo;
+
+  const PostForm({Key key, this.replyTo}) : super(key: key);
 
   @override
   _PostFormState createState() => _PostFormState();
@@ -110,7 +110,8 @@ class _PostFormState extends State<PostForm> {
       Post(
         content: bodyController.value.text,
         formatting: Formatting.PlainText,
-      )
+      ),
+      parentPost: widget.replyTo,
     );
   }
 }
