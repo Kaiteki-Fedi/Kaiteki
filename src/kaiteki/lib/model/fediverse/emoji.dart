@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class Emoji<T> {
+abstract class Emoji<T> {
   final T source;
 
   /// The name of the emoji, usually the text between the two colons.
