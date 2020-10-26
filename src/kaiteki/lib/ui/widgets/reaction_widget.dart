@@ -29,7 +29,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
         onTap: () async {
           var container = Provider.of<AccountContainer>(context);
           var reactiveAdapter = container.adapter as ReactionSupport;
-          await reactiveAdapter.react(widget.parentPost, widget.reaction);
+          await reactiveAdapter.react(widget.parentPost, widget.reaction.emoji);
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,

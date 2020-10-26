@@ -1,8 +1,12 @@
+import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/reaction.dart';
 
 abstract class ReactionSupport {
-  Future<void> react(Post post, Reaction reaction);
+  bool supportsUnicodeEmoji;
+  bool supportsCustomEmoji;
 
-  Future<Iterable<Reaction>> getReactions();
+  Future<void> react(Post post, Emoji emoji);
+
+  Future<Iterable<Reaction>> getReactions(Post post);
 }

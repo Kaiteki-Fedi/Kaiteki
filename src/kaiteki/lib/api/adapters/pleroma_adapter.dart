@@ -155,14 +155,19 @@ class PleromaAdapter extends FediverseAdapter<PleromaClient> implements ChatSupp
   }
 
   @override
-  Future<Iterable<Reaction>> getReactions() {
+  Future<Iterable<Reaction>> getReactions(Post post) {
     // TODO: implement getReactions
     throw UnimplementedError();
   }
 
   @override
-  Future<void> react(Post post, Reaction reaction) {
-    // TODO: implement react
-    throw UnimplementedError();
+  Future<void> react(Post post, Emoji emoji) {
+
   }
+
+  @override
+  bool supportsCustomEmoji = false;
+
+  @override
+  bool supportsUnicodeEmoji = true;
 }
