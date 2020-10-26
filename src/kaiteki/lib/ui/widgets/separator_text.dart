@@ -13,7 +13,7 @@ class SeparatorText extends StatelessWidget {
         this.text.toUpperCase(),
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Theme.of(context).textTheme.bodyText1.color.withOpacity(.75),
+          color: Theme.of(context).disabledColor,
         ),
       ),
     );
