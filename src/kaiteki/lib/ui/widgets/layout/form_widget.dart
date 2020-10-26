@@ -13,8 +13,8 @@ class FormWidget extends StatelessWidget {
   const FormWidget({
     Key key,
     @required this.child,
-    this.contentWidth = 450,
-    this.contentHeight = 600,
+    this.contentWidth = 448,
+    this.contentHeight = 592,
     this.padding = const EdgeInsets.symmetric(
       horizontal: 24.0,
       vertical: 64.0,
@@ -30,6 +30,7 @@ class FormWidget extends StatelessWidget {
             contentHeight + outsidePadding.vertical <= constraints.maxHeight) {
           return Center(
             child: Card(
+              clipBehavior: Clip.antiAlias,
               child: Container(
                 width: contentWidth,
                 height: contentHeight,
