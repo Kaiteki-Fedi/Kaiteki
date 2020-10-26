@@ -9,7 +9,6 @@ class AccountSecretRepository extends ChangeNotifier implements Repository<Accou
   static const String _preferencesKey = "accounts";
 
   List<AccountSecret> _secrets;
-  Iterable<AccountSecret> get secrets => List.unmodifiable(_secrets);
 
   final SharedPreferences _preferences;
 

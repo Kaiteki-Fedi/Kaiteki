@@ -65,7 +65,7 @@ class AccountContainer extends ChangeNotifier {
 
   Future<void> loadAllAccounts() async {
     _accounts.clear();
-    _accountSecrets.secrets.forEach((accountSecret) async {
+    _accountSecrets.getAll().forEach((accountSecret) async {
       if (accountSecret == null) {
         Logger.warning("A saved account secret was null");
         return;
