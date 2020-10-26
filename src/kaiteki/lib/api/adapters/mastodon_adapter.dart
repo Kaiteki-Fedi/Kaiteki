@@ -15,7 +15,11 @@ import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
 class MastodonAdapter extends FediverseAdapter<MastodonClient> {
-  MastodonAdapter() : super(MastodonClient());
+  MastodonAdapter._(MastodonClient client) : super(client);
+
+  factory MastodonAdapter({MastodonClient client}) {
+    return MastodonAdapter._(client ?? MastodonClient());
+  }
 
   Post toPost(MastodonStatus source) {
     return Post(

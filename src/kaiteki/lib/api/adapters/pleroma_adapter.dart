@@ -26,8 +26,11 @@ import 'package:kaiteki/utils/extensions/string.dart';
 part 'pleroma_adapter.c.dart'; // That file contains toEntity() methods
 
 class PleromaAdapter extends FediverseAdapter<PleromaClient> implements ChatSupport, ReactionSupport {
-  PleromaAdapter() : super(PleromaClient());
+  PleromaAdapter._(PleromaClient client) : super(client);
 
+  factory PleromaAdapter({PleromaClient client}) {
+    return PleromaAdapter._(client ?? PleromaClient());
+  }
 
   @override
   Future<User> getUserById(String id) async {

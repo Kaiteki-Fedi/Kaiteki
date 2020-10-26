@@ -22,7 +22,11 @@ import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupport {
-  MisskeyAdapter() : super(MisskeyClient());
+  MisskeyAdapter._(MisskeyClient client) : super(client);
+
+  factory MisskeyAdapter({MisskeyClient client}) {
+    return MisskeyAdapter._(client ?? MisskeyClient());
+  }
 
   @override
   Future<User> getUser(String username, [String instance]) async {
