@@ -2,6 +2,7 @@ import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/api/api_type.dart';
+import 'package:kaiteki/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/api/clients/misskey_client.dart';
 import 'package:fediverse_objects/misskey/emoji.dart';
 import 'package:fediverse_objects/misskey/note.dart';
@@ -21,7 +22,7 @@ import 'package:kaiteki/model/fediverse/reaction.dart';
 import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 
-class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupport {
+class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupport, ReactionSupport {
   MisskeyAdapter._(MisskeyClient client) : super(client);
 
   factory MisskeyAdapter({MisskeyClient client}) {
@@ -176,6 +177,24 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) {
     // TODO: implement postChatMessage
+    throw UnimplementedError();
+  }
+
+  @override
+  bool supportsCustomEmoji = true;
+
+  @override
+  bool supportsUnicodeEmoji = true;
+
+  @override
+  Future<Iterable<Reaction>> getReactions(Post post) {
+    // TODO: implement getReactions
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> react(Post post, Emoji emoji) {
+    // TODO: implement react
     throw UnimplementedError();
   }
 }
