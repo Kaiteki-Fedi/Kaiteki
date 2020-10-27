@@ -9,12 +9,16 @@ class InteractionBar extends StatelessWidget {
   final String text;
   final IconData icon;
   final User user;
+  final TextStyle userTextStyle;
+  final TextStyle textStyle;
 
   const InteractionBar({
     @required this.color,
     @required this.icon,
     @required this.text,
     @required this.user,
+    @required this.userTextStyle,
+    @required this.textStyle,
   });
 
   @override
@@ -37,11 +41,11 @@ class InteractionBar extends StatelessWidget {
           ),
           RichText(
             text: TextSpan(
-              //style: textStyle.copyWith(fontWeight: FontWeight.bold),
+              style: textStyle,
               children: [
                 TextRenderer(
                   emojis: this.user.emojis,
-                  //textStyle: textStyle.copyWith(fontWeight: FontWeight.bold),
+                  textStyle: userTextStyle,
                 ).render(this.user.displayName),
                 WidgetSpan(
                   child: Icon(

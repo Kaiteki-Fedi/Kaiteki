@@ -25,6 +25,9 @@ class StatusWidget extends StatelessWidget {
     var container = Provider.of<ThemeContainer>(context);
     var theme = container.current;
 
+    var textStyle = DefaultTextStyle.of(context).style;
+    var authorTextStyle = textStyle.copyWith(fontWeight: FontWeight.bold);
+
     if (_post.repeatOf != null) {
       return Column(
         children: [
@@ -33,6 +36,8 @@ class StatusWidget extends StatelessWidget {
             text: "repeated",
             color: theme.repeatColor,
             user: _post.author,
+            userTextStyle: authorTextStyle,
+            textStyle: textStyle,
           ),
           StatusWidget(_post.repeatOf),
         ],
@@ -41,7 +46,7 @@ class StatusWidget extends StatelessWidget {
 
     var renderedAuthor = TextRenderer(
       emojis: _post.author.emojis,
-      textStyle: textStyle.copyWith(fontWeight: FontWeight.bold),
+      textStyle: authorTextStyle,
     ).render(_post.author.displayName);
 
     var renderedContent = TextRenderer(
@@ -74,8 +79,7 @@ class StatusWidget extends StatelessWidget {
                       //Text(_post.visibility),
                     ],
                   ),
-                  if (renderedContent != null)
-                    RichText(text: renderedContent),
+                  if (renderedContent != null) RichText(text: renderedContent),
                   if (_post.attachments != null)
                     Row(
                       mainAxisSize: MainAxisSize.max,
