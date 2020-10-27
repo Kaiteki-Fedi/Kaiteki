@@ -104,25 +104,25 @@ class StatusWidget extends StatelessWidget {
                     children: [
                       IconButton(
                         icon: Icon(Icons.reply),
-                        onPressed: (){},
+                        onPressed: null,
                       ),
                       IconButton(
                         icon: Icon(Icons.repeat),
-                        onPressed: (){},
-                        color: _post.repeated ? theme.repeatColor : null
+                        onPressed: _post.repeated ? () {} : null,
+                        color: _post.repeated ? theme.repeatColor : null,
                       ),
                       IconButton(
                         icon: Icon(_post.liked ? Mdi.star : Mdi.starOutline),
-                        onPressed: (){},
-                        color: _post.liked ? theme.favoriteColor : null
+                        onPressed: _post.liked ? () {} : null,
+                        color: _post.liked ? theme.favoriteColor : null,
                       ),
                       IconButton(
                         icon: Icon(Icons.insert_emoticon),
-                        onPressed: (){},
+                        onPressed: null,
                       ),
                       IconButton(
                         icon: Icon(Icons.more_horiz),
-                        onPressed: (){},
+                        onPressed: null,
                       ),
                     ],
                   ),
