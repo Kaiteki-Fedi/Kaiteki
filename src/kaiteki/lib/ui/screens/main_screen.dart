@@ -158,19 +158,20 @@ class _MainScreenState extends State<MainScreen> {
     ],
   );
 
-  getNavigationBar() => BottomNavigationBar(
-    elevation: 8,
-    type: BottomNavigationBarType.fixed,
-    onTap: changePage,
-    currentIndex: _currentPage,
-    items: [
-      for (var tab in _tabs)
-        BottomNavigationBarItem(
-          icon: Icon(tab.icon),
-          label: tab.text,
-        ),
-    ],
-  );
+  getNavigationBar() {
+    return BottomNavigationBar(
+      elevation: 8,
+      onTap: changePage,
+      currentIndex: _currentPage,
+      items: [
+        for (var tab in _tabs)
+          BottomNavigationBarItem(
+            icon: Icon(tab.icon),
+            label: tab.text,
+          ),
+      ],
+    );
+  }
 
   void changePage(int index) {
     setState(() {
