@@ -8,8 +8,24 @@ class AppColors {
   static final Color lightBackground = const Color(0xFFebedff);
   static final Color lightSurface = const Color(0xFFf7f9ff);
 
+  static MaterialColor kaitekiGray = MaterialColor(
+    0xFF9c9eb5,
+    {
+      50: const Color(0xFFf7f9ff),
+      100: const Color(0xFFf2f4ff),
+      200: const Color(0xFFebedff),
+      300: const Color(0xFFdee0f8),
+      400: const Color(0xFFbbbdd5),
+      500: const Color(0xFF9c9eb5),
+      600: const Color(0xFF73758b),
+      700: const Color(0xFF5f6176),
+      800: const Color(0xFF404256),
+      900: const Color(0xFF1e2133),
+    },
+  );
+
   static MaterialColor kaitekiPink = MaterialColor(
-    0xFFfa4f62,
+    0xFFFF7890,
     {
       50: const Color(0xFFffe7ec),
       100: const Color(0xFFffc3cf),
@@ -21,7 +37,23 @@ class AppColors {
       700: const Color(0xFFd3425c),
       800: const Color(0xFFbe3b59),
       900: const Color(0xFF9a3052),
-    }
+    },
+  );
+
+  static MaterialColor kaitekiOrange = MaterialColor(
+    0xFFFFB16C,
+    {
+      50: const Color(0xFFfff2e4),
+      100: const Color(0xFFffddbc),
+      200: const Color(0xFFffc792),
+      300: const Color(0xFFfea054),
+      400: const Color(0xFFfea054),
+      500: const Color(0xFFfd9044),
+      600: const Color(0xFFf78642),
+      700: const Color(0xFFef773f),
+      800: const Color(0xFFe8683c),
+      900: const Color(0xFFdc5036),
+    },
   );
 
   // picked from https://pleroma.social/
