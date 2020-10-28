@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/app_preferences.dart';
@@ -128,20 +127,17 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Iterable<Widget> getTabListItems() {
-    var i = -1;
+    var i = 0;
 
     return _tabs.map((tab) {
-      var x = i++;
+      var x = i;
+
+      i++;
 
       return ListTile(
         leading: Icon(tab.icon),
         title: Text(tab.text),
         selected: _currentPage == x,
-        trailing: _currentPage != 0 ? Badge(
-          badgeContent: Text("1"),
-          padding: const EdgeInsets.all(8),
-          elevation: 0,
-        ) : null,
         onTap: () => changePage(x),
       );
     });
