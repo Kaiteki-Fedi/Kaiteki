@@ -140,12 +140,15 @@ class StatusWidget extends StatelessWidget {
 
   Widget getAttachmentWidget(Attachment attachment) {
     switch (attachment.type) {
-      case "image": return ImageAttachmentWidget(attachment);
+      case "image":
+        return ImageAttachmentWidget(attachment);
       //case "video": return VideoAttachmentWidget(attachment);
-      default: {
-        print("Tried to present an unsupported attachment type: ${attachment.type}");
-        return Container();
-      }
+      default:
+        {
+          print(
+              "Tried to present an unsupported attachment type: ${attachment.type}");
+          return Container();
+        }
     }
   }
 }

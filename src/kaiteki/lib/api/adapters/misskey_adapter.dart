@@ -45,7 +45,8 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<LoginResult> login(String instance, String username, String password, mfaCallback, AccountContainer accounts) async {
+  Future<LoginResult> login(String instance, String username, String password,
+      mfaCallback, AccountContainer accounts) async {
     client.instance = instance;
 
     var authResponse = await client.signIn(MisskeySignInRequest(
@@ -57,7 +58,8 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
     // Create and set account secret
     var accountSecret = AccountSecret(instance, username, authResponse.i);
-    client.authenticationData = MisskeyAuthenticationData(accountSecret.accessToken);
+    client.authenticationData =
+        MisskeyAuthenticationData(accountSecret.accessToken);
 
     // Check whether secrets work, and if we can get an account back
     var account = await client.showUser(authResponse.id);
@@ -114,7 +116,13 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<Post>> getStatusesOfUserById(String id) async {
-    var notes = await client.showUserNotes(id, true, ["image/jpeg", "image/png","image/gif", "image/apng", "image/vnd.mozilla.apng"]);
+    var notes = await client.showUserNotes(id, true, [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/apng",
+      "image/vnd.mozilla.apng"
+    ]);
     return notes.map(toPost);
   }
 

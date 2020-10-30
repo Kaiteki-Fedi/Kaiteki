@@ -34,10 +34,7 @@ class InteractionBar extends StatelessWidget {
         children: [
           Padding(
             padding: avatarMargin,
-            child: AvatarWidget(
-              this.user,
-              size: 16
-            ),
+            child: AvatarWidget(this.user, size: 16),
           ),
           RichText(
             text: TextSpan(

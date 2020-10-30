@@ -13,7 +13,8 @@ class ReactionWidget extends StatefulWidget {
   final Post parentPost;
   final Reaction reaction;
 
-  ReactionWidget({Key key, @required this.parentPost, @required this.reaction}) : super(key: key);
+  ReactionWidget({Key key, @required this.parentPost, @required this.reaction})
+      : super(key: key);
 
   @override
   _ReactionWidgetState createState() => _ReactionWidgetState();
@@ -22,7 +23,8 @@ class ReactionWidget extends StatefulWidget {
 class _ReactionWidgetState extends State<ReactionWidget> {
   @override
   Widget build(BuildContext context) {
-    var textPadding = const EdgeInsets.only(top: 4, bottom: 4, left: 6, right: 2);
+    var textPadding =
+        const EdgeInsets.only(top: 4, bottom: 4, left: 6, right: 2);
 
     return Card(
       child: InkWell(
@@ -41,9 +43,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
             Padding(
               padding: textPadding.flipped,
               child: Opacity(
-                opacity: 0.75,
-                child: Text(widget.reaction.count.toString())
-              ),
+                  opacity: 0.75, child: Text(widget.reaction.count.toString())),
             ),
           ],
         ),
@@ -63,8 +63,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
           width: size,
           height: size,
           loadingBuilder: (c, w, e) {
-            if (e == null)
-              return w;
+            if (e == null) return w;
 
             return Icon(Mdi.emoticonOutline, size: size);
           },

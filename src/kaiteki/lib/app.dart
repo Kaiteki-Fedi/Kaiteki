@@ -46,7 +46,8 @@ class _KaitekiAppState extends State<KaitekiApp> {
     var defaultTheme = ThemeData.from(colorScheme: DefaultAppThemes.darkScheme);
     _themeContainer = ThemeContainer(MaterialAppTheme(defaultTheme));
 
-    _accountContainer = AccountContainer(widget.accountSecrets, widget.clientSecrets);
+    _accountContainer =
+        AccountContainer(widget.accountSecrets, widget.clientSecrets);
     _accountContainer.loadAllAccounts();
 
     _preferences = AppPreferences();
