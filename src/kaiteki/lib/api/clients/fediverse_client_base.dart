@@ -23,7 +23,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   String instance;
   ApiType get type;
 
-  // TODO: add missing
+  // TODO add missing
   Future<T> sendJsonRequest<T>(
       HttpMethod method, String endpoint, DeserializeFromJson<T> toObject,
       {Object body}) async {

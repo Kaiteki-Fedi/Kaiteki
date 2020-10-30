@@ -20,7 +20,7 @@ class ChatMessageWidget extends StatefulWidget {
 }
 
 class _ChatMessageWidgetState extends State<ChatMessageWidget> {
-  // TODO: resolve temporary workaround
+  // TODO resolve temporary workaround
   get isOwnMessage => true;
   //get isOwnMessage => widget.chat.recipient.id != widget.chatMessage.accountId;
   get alignment =>

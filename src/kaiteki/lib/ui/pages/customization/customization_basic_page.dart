@@ -35,7 +35,7 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
           subtitle: Text(type == ThemeType.Material ? "Material" : "Pleroma"),
           trailing: Icon(Mdi.chevronRight),
           enabled: false,
-          // TODO: Add functionality
+          // TODO Add functionality
         ),
         ListTile(
           title: Text("App Background"),

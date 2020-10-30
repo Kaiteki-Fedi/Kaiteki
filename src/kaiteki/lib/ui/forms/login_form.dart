@@ -56,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
                   hintText: "Instance",
                   prefixIcon: Icon(Mdi.earth),
                   prefixIconConstraints: iconConstraint,
-                  // TODO: verify instance
+                  // TODO verify instance
                   // suffixIcon: Icon(Mdi.check),//CircularProgressIndicator(),
                   // suffixIconConstraints: iconConstraint
                   border: OutlineInputBorder(),

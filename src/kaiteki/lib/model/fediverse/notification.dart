@@ -7,6 +7,6 @@ class Notification {
 
   const Notification({this.user, this.post});
 
-  // TODO: improve this
+  // TODO improve this
   String get type => null;
 }

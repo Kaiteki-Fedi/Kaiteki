@@ -25,7 +25,7 @@ import 'package:kaiteki/model/fediverse/user.dart';
 
 part 'misskey_adapter.c.dart';
 
-// TODO: add missing implementations
+// TODO add missing implementations
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     implements ChatSupport, ReactionSupport {
   MisskeyAdapter._(MisskeyClient client) : super(client);

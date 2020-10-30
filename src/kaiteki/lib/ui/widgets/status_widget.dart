@@ -75,7 +75,7 @@ class StatusWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 6),
                         child: Text(_post.author.username),
                       ),
-                      // TODO: fix
+                      // TODO fix
                       //Spacer(),
                       //Text(_post.visibility),
                     ],

@@ -11,7 +11,7 @@ class ApplicationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: make use of pleroma's link color property
+    // TODO make use of pleroma's link color property
     var theme = Theme.of(context);
     var hasWebsite = application.website.isNotNullOrEmpty;
 
