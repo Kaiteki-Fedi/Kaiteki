@@ -19,9 +19,6 @@ class StatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    var textStyle = TextStyle();
-
     var container = Provider.of<ThemeContainer>(context);
     var theme = container.current;
 
@@ -52,6 +49,7 @@ class StatusWidget extends StatelessWidget {
     var renderedContent = TextRenderer(
       emojis: _post.emojis,
       textStyle: textStyle,
+      linkTextStyle: textStyle.copyWith(color: theme.linkColor),
     ).render(_post.content);
 
     return Container(
