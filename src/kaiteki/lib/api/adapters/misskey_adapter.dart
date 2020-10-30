@@ -125,7 +125,6 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) {
-    // TODO: implement postChatMessage
     throw UnimplementedError();
   }
 

@@ -1,7 +1,6 @@
 part of 'pleroma_adapter.dart';
 
-// TODO
+// TODO: implement toChatMessage
 ChatMessage toChatMessage(PleromaChatMessage message) {
-  // TODO: implement toChatMessage
   throw UnimplementedError();
 }
