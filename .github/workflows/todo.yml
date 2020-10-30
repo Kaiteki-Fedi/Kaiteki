@@ -19,5 +19,5 @@ jobs:
           LABELS_REPLACE_PATTERN: "\\[(.+?)\\]"
           IGNORED_LINES_LENGTH: 255
           INCLUDED_PATHS: "/src/kaiteki/lib/|/src/fediverse_objects/lib/"
-          FILE_PATTERN: "*.dart"
+          FILE_PATTERN: ".*dart"
         id: "todo"
