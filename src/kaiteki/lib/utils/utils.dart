@@ -53,4 +53,8 @@ class Utils {
         ? Color(0xFF000000)
         : Color(0xFFFFFFFF);
   }
+
+  static double getLocalFontSize(BuildContext context) {
+    return DefaultTextStyle.of(context).style.fontSize;
+  }
 }
