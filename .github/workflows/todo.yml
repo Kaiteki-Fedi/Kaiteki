@@ -5,13 +5,19 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@master"
-      - name: "TODO to Issue"
-        uses: "alstr/todo-to-issue-action@v2.0"
+      - name: "TODO-2-GH-Issue"
+        uses: "jamminroot/todo-2-gh-issue@master"
         with:
-          REPO: ${{ github.repository }}
-          BEFORE: ${{ github.event.before }}
-          SHA: ${{ github.sha }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABEL: "todo"
-          COMMENT_MARKER: "//"
+          TODO_PATTERN: "(?<=\\/\\/ ?TODO[ :]).+"
+          GH_LABEL: "todo"
+          TRIM: ",: \""
+          TIMEOUT: 1000
+          LINES_BEFORE: 2
+          LINES_AFTER: 5
+          LABELS_PATTERN: "(?<=\\[).+?(?=\\])"
+          LABELS_REPLACE_PATTERN: "\\[(.+?)\\]"
+          IGNORED_LINES_LENGTH: 255
+          INCLUDED_PATHS: "/src/kaiteki/lib/|/src/fediverse_objects/lib/"
+          FILE_PATTERN: "*.dart"
         id: "todo"
