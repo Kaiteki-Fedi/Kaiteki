@@ -13,8 +13,7 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!openOnTap)
-      return _getAvatarImageWidget();
+    if (!openOnTap) return _getAvatarImageWidget();
 
     return GestureDetector(
       child: _getAvatarImageWidget(),
@@ -27,21 +26,26 @@ class AvatarWidget extends StatelessWidget {
   }
 
   Widget _getAvatarImageWidget() {
-    if (_user == null)
+    if (_user == null) {
       return Icon(
         Mdi.accountCircle,
-        size: size,
+        size: _getFixedSize(),
       );
+    }
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Image.network(
-        _user.avatarUrl,
-        height: size,
-        width: size,
-        isAntiAlias: true,
-        filterQuality: FilterQuality.medium,
-      ),
+    return CircleAvatar(
+      backgroundImage: NetworkImage(_user.avatarUrl),
+      radius: _getFixedSize(half: true),
     );
+  }
+
+  double _getFixedSize({bool half}) {
+    if (size == null || size == 0) return null;
+
+    // this dumb bool condition is intentional for null safety.
+    if (half == true)
+      return size / 2;
+    else
+      return size;
   }
 }
