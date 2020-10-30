@@ -1,3 +1,4 @@
+import 'package:fediverse_objects/misskey/file.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
@@ -12,6 +13,7 @@ import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
@@ -21,7 +23,10 @@ import 'package:kaiteki/model/fediverse/reaction.dart';
 import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 
-class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupport, ReactionSupport {
+part 'misskey_adapter.c.dart';
+
+class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
+    implements ChatSupport, ReactionSupport {
   MisskeyAdapter._(MisskeyClient client) : super(client);
 
   factory MisskeyAdapter({MisskeyClient client}) {
@@ -37,66 +42,6 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
   @override
   Future<User> getUserById(String id) async {
     return toUser(await client.showUser(id));
-  }
-
-  // CONVERSIONS
-  Post toPost(MisskeyNote source) {
-    assert(source != null);
-
-    var mappedEmoji = source.emojis.map(toEmoji);
-
-    return Post(
-      source: source,
-      postedAt: source.createdAt,
-      author: toUser(source.user),
-      liked: false,
-      repeated: false,
-      content: source.text,
-      emojis: mappedEmoji,
-      reactions: source.reactions.entries.map((mkr) {
-        return Reaction(
-          count: mkr.value,
-          includesMe: false,
-          users: [],
-          emoji: getEmojiFromString(mkr.key, mappedEmoji)
-        );
-      }),
-    );
-  }
-
-  Emoji getEmojiFromString(String emojiString, Iterable<Emoji> inheritingEmoji) {
-    if (emojiString.startsWith(":") && emojiString.endsWith(":")) {
-      var matchingEmoji = inheritingEmoji.firstWhere((e) => e.name == emojiString.substring(1, emojiString.length-1));
-
-      return matchingEmoji;
-    }
-
-    return UnicodeEmoji(emojiString, null, aliases: null);
-  }
-
-  CustomEmoji toEmoji(MisskeyEmoji emoji) {
-    return CustomEmoji(
-      source: emoji,
-      name: emoji.name,
-      url: emoji.url,
-      aliases: emoji.aliases,
-    );
-  }
-
-  User toUser(MisskeyUser source) {
-    assert(source != null);
-
-    return User(
-      source: source,
-      username: source.username,
-      displayName: source.name ?? source.username,
-      joinDate: source.createdAt,
-      emojis: source.emojis.map(toEmoji),
-      avatarUrl: source.avatarUrl,
-      bannerUrl: source.bannerUrl,
-      id: source.id,
-      description: source.description,
-    );
   }
 
   @override
@@ -197,5 +142,3 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient> implements ChatSupp
     throw UnimplementedError();
   }
 }
-
-

@@ -1,5 +1,6 @@
 import 'package:fediverse_objects/mastodon/account.dart';
 import 'package:fediverse_objects/mastodon/emoji.dart';
+import 'package:fediverse_objects/mastodon/media_attachment.dart';
 import 'package:fediverse_objects/mastodon/status.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
@@ -9,6 +10,7 @@ import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';

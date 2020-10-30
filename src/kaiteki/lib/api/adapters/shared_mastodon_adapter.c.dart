@@ -14,6 +14,17 @@ Post toPost(MastodonStatus source) {
     repeated: source.reblogged,
     liked: source.favourited,
     emojis: source.emojis.map(toEmoji),
+    attachments: source.mediaAttachments.map(toAttachment),
+  );
+}
+
+Attachment toAttachment(MastodonMediaAttachment attachment) {
+  return Attachment(
+    source: attachment,
+    description: attachment.description,
+    url: attachment.url,
+    previewUrl: attachment.previewUrl,
+    type: attachment.type,
   );
 }
 
