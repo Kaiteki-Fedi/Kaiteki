@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
+import 'package:kaiteki/utils/utils.dart';
 
 /// A row that details an interaction for use in timelines
 class InteractionBar extends StatelessWidget {
@@ -44,17 +45,19 @@ class InteractionBar extends StatelessWidget {
                   emojis: this.user.emojis,
                   textStyle: userTextStyle,
                 ).render(this.user.displayName),
+                TextSpan(text: " "),
                 WidgetSpan(
                   child: Icon(
                     this.icon,
-                    size: 18,
+                    size: Utils.getLocalFontSize(context) * 1.25,
                     color: this.color,
                   ),
                 ),
-                TextSpan(text: this.text)
-              ]
-            )
-          )
+                TextSpan(text: " "),
+                TextSpan(text: this.text),
+              ],
+            ),
+          ),
         ],
       ),
     );
