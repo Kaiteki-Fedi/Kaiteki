@@ -7,10 +7,17 @@ import 'package:kaiteki/ui/screens/auth/mfa_screen.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:provider/provider.dart';
 
-// TODO: Try to make this screen standalone and not rely on any specific client
+// TODO:  Try to make this screen standalone and not rely on any specific client
 //       implementations.
 class LoginScreen extends StatefulWidget {
-  LoginScreen({this.image, this.color, this.backgroundColor, this.onLogin, this.type, Key key}) : super(key: key);
+  LoginScreen(
+      {this.image,
+      this.color,
+      this.backgroundColor,
+      this.onLogin,
+      this.type,
+      Key key})
+      : super(key: key);
 
   final ImageProvider image;
   final Color color;
@@ -36,11 +43,10 @@ class _LoginScreenState extends State<LoginScreen> {
     return Theme(
       data: _getTheme(),
       child: Scaffold(
-        appBar: AppBar(title: Text("Log into an instance")),
-        body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            if (_loading)
-              Center(child: CircularProgressIndicator());
+          appBar: AppBar(title: Text("Log into an instance")),
+          body: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            if (_loading) Center(child: CircularProgressIndicator());
 
             return FormWidget(
               child: SingleChildScrollView(
@@ -59,9 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             );
-          }
-        )
-      ),
+          })),
     );
   }
 
@@ -84,38 +88,31 @@ class _LoginScreenState extends State<LoginScreen> {
       primaryVariant: widget.color,
       secondary: widget.color,
       secondaryVariant: widget.color,
-
       background: widget.backgroundColor,
       surface: widget.backgroundColor,
-
       onBackground: Colors.white,
       onSurface: Colors.white,
       onPrimary: widget.backgroundColor,
       onSecondary: widget.backgroundColor,
-
       error: Colors.red,
       onError: Colors.black,
-
       brightness: Brightness.dark,
     );
 
-    return ThemeData
-      .from(colorScheme: colorScheme)
-      .copyWith(
-        buttonColor: widget.color,
-        buttonTheme: ButtonThemeData(
-          textTheme: ButtonTextTheme.primary,
-        ),
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: widget.color,
-        ),
-        appBarTheme: AppBarTheme(elevation: 0),
-      );
+    return ThemeData.from(colorScheme: colorScheme).copyWith(
+      buttonColor: widget.color,
+      buttonTheme: ButtonThemeData(
+        textTheme: ButtonTextTheme.primary,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: widget.color,
+      ),
+      appBarTheme: AppBarTheme(elevation: 0),
+    );
   }
 
   String validateInstance(String instance) {
-    if (instance.isEmpty)
-      return "Please enter an instance";
+    if (instance.isEmpty) return "Please enter an instance";
 
     var lowerCase = instance.toLowerCase();
     if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://"))
@@ -123,15 +120,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return null;
   }
+
   String validatePassword(String password) {
-    if (password.isEmpty)
-      return "Please enter a password";
+    if (password.isEmpty) return "Please enter a password";
 
     return null;
   }
+
   String validateUsername(String username) {
-    if (username.isEmpty)
-      return "Please enter an username";
+    if (username.isEmpty) return "Please enter an username";
 
     return null;
   }
@@ -146,7 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       setState(() => _loading = true);
 
-      var accountContainer = Provider.of<AccountContainer>(context, listen: false);
+      var accountContainer =
+          Provider.of<AccountContainer>(context, listen: false);
 
       var result = await widget.onLogin.call(
         _instanceController.value.text,
@@ -156,8 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
         accountContainer,
       );
 
-      if (!result.successful)
-        setState(() => _error = result.reason);
+      if (!result.successful) setState(() => _error = result.reason);
     } catch (e) {
       setState(() => _error = e.toString());
     } finally {

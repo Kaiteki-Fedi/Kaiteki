@@ -3,13 +3,18 @@ import 'package:kaiteki/utils/lower_case_text_formatter.dart';
 import 'package:mdi/mdi.dart';
 
 class LoginForm extends StatefulWidget {
-  LoginForm({
-    Key key,
-    this.instanceController, this.usernameController, this.passwordController,
-    this.onValidateInstance, this.onValidateUsername, this.onValidatePassword,
-    this.onLogin, this.onRegister,
-    this.currentError
-  }) : super(key: key);
+  LoginForm(
+      {Key key,
+      this.instanceController,
+      this.usernameController,
+      this.passwordController,
+      this.onValidateInstance,
+      this.onValidateUsername,
+      this.onValidatePassword,
+      this.onLogin,
+      this.onRegister,
+      this.currentError})
+      : super(key: key);
 
   final TextEditingController instanceController;
   final TextEditingController usernameController;
@@ -51,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
                   hintText: "Instance",
                   prefixIcon: Icon(Mdi.earth),
                   prefixIconConstraints: iconConstraint,
-                  // TODO: verify instance
+                  // TODO:  verify instance
                   // suffixIcon: Icon(Mdi.check),//CircularProgressIndicator(),
                   // suffixIconConstraints: iconConstraint
                   border: OutlineInputBorder(),
@@ -103,10 +108,8 @@ class _LoginFormState extends State<LoginForm> {
             if (widget.currentError != null)
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.currentError,
-                  style: TextStyle(color: theme.errorColor)
-                ),
+                child: Text(widget.currentError,
+                    style: TextStyle(color: theme.errorColor)),
               ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

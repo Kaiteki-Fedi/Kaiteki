@@ -47,7 +47,7 @@ class AccountContainer extends ChangeNotifier {
   }
 
   Future<void> addCurrentAccount(AccountCompound compound) async {
-    // TODO: add duplicate check
+    // TODO:  add duplicate check
     _accounts.add(compound);
     _accountSecrets.insert(compound.accountSecret);
     _clientSecrets.insert(compound.clientSecret);
@@ -77,7 +77,8 @@ class AccountContainer extends ChangeNotifier {
       Logger.debug(clientSecret.apiType.toString());
 
       if (clientSecret == null || clientSecret.apiType == null) {
-        Logger.warning("Skipped loading account secret due to invalid client secret.");
+        Logger.warning(
+            "Skipped loading account secret due to invalid client secret.");
         return;
       }
 
@@ -85,7 +86,7 @@ class AccountContainer extends ChangeNotifier {
 
       User user;
 
-      // TODO: Redesign class structure to make this not Mastodon-specific.
+      // TODO:  Redesign class structure to make this not Mastodon-specific.
       if (adapter.client is MastodonClient) {
         var mastodonClient = adapter.client as MastodonClient;
 
@@ -108,7 +109,8 @@ class AccountContainer extends ChangeNotifier {
       }
 
       if (user == null) {
-        Logger.warning("No user data was recovered, assuming user info is incorrect.");
+        Logger.warning(
+            "No user data was recovered, assuming user info is incorrect.");
         return;
       }
 
@@ -127,12 +129,16 @@ class AccountContainer extends ChangeNotifier {
   //TODO: HACK, This should not exist, please refactor.
   getClientRepo() => _clientSecrets;
 
-  FediverseAdapter createAdapter(ApiType type){
+  FediverseAdapter createAdapter(ApiType type) {
     switch (type) {
-      case ApiType.Mastodon: return MastodonAdapter();
-      case ApiType.Pleroma: return PleromaAdapter();
-      case ApiType.Misskey: return MisskeyAdapter();
-      default: throw "out of range";
+      case ApiType.Mastodon:
+        return MastodonAdapter();
+      case ApiType.Pleroma:
+        return PleromaAdapter();
+      case ApiType.Misskey:
+        return MisskeyAdapter();
+      default:
+        throw "out of range";
     }
   }
 

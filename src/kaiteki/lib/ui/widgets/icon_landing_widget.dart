@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-// TODO: Provide defaults of widgets being used (Icon, Text) and give the user
+// TODO:  Provide defaults of widgets being used (Icon, Text) and give the user
 //       flexibility of using other widgets.
 class IconLandingWidget extends StatelessWidget {
   final IconData icon;
@@ -24,9 +24,8 @@ class IconLandingWidget extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-            color: theme.textTheme.bodyText1.color.withOpacity(.75),
-            fontWeight: FontWeight.bold
-          ),
+              color: theme.textTheme.bodyText1.color.withOpacity(.75),
+              fontWeight: FontWeight.bold),
         ),
       ],
     );

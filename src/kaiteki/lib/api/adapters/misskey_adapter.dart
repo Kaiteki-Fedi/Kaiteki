@@ -25,6 +25,7 @@ import 'package:kaiteki/model/fediverse/user.dart';
 
 part 'misskey_adapter.c.dart';
 
+// TODO:  add missing implementations
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     implements ChatSupport, ReactionSupport {
   MisskeyAdapter._(MisskeyClient client) : super(client);
@@ -81,19 +82,16 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Post> postStatus(Post post, {Post parentPost}) {
-    // TODO: implement postStatus
     throw UnimplementedError();
   }
 
   @override
-  Future<User> getMyself() {
-    // TODO: implement verifyCredentials
+  Future<User> getMyself() {´
     throw UnimplementedError();
   }
 
   @override
   Future<Iterable<Chat>> getChats() {
-    // TODO: implement getChats
     throw UnimplementedError();
   }
 
@@ -110,7 +108,6 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<Notification>> getNotifications() {
-    // TODO: implement getNotifications
     throw UnimplementedError();
   }
 
@@ -128,7 +125,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) {
-    // TODO: implement postChatMessage
+    // TODO:  implement postChatMessage
     throw UnimplementedError();
   }
 
@@ -140,13 +137,11 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<Reaction>> getReactions(Post post) {
-    // TODO: implement getReactions
     throw UnimplementedError();
   }
 
   @override
   Future<void> react(Post post, Emoji emoji) {
-    // TODO: implement react
     throw UnimplementedError();
   }
 }

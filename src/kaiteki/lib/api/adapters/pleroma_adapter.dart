@@ -12,7 +12,9 @@ import 'package:kaiteki/model/fediverse/user.dart';
 
 part 'pleroma_adapter.c.dart';
 
-class PleromaAdapter extends SharedMastodonAdapter<PleromaClient> implements ChatSupport, ReactionSupport {
+// TODO:  add missing implementations
+class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
+    implements ChatSupport, ReactionSupport {
   PleromaAdapter._(PleromaClient client) : super(client);
 
   factory PleromaAdapter({PleromaClient client}) {
@@ -21,26 +23,24 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient> implements Cha
 
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {
-    // TODO: implement missing data, pleroma chat.
-    var sentMessage = await client.postChatMessage(chat.id, message.content.content);
+    // TODO:  implement missing data, pleroma chat.
+    var sentMessage =
+        await client.postChatMessage(chat.id, message.content.content);
     return toChatMessage(sentMessage);
   }
 
   @override
   Future<User> getUser(String username, [String instance]) {
-    // TODO: implement getUser
     throw UnimplementedError();
   }
 
   @override
   Future<Iterable<Reaction>> getReactions(Post post) {
-    // TODO: implement getReactions
     throw UnimplementedError();
   }
 
   @override
   Future<void> react(Post post, Emoji emoji) {
-    // TODO: implement react
     throw UnimplementedError();
   }
 
@@ -52,13 +52,11 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient> implements Cha
 
   @override
   Future<Iterable<ChatMessage>> getChatMessages(Chat chat) {
-    // TODO: implement getChatMessages
     throw UnimplementedError();
   }
 
   @override
   Future<Iterable<Chat>> getChats() {
-    // TODO: implement getChats
     throw UnimplementedError();
   }
 }

@@ -35,13 +35,14 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
           subtitle: Text(type == ThemeType.Material ? "Material" : "Pleroma"),
           trailing: Icon(Mdi.chevronRight),
           enabled: false,
-          // TODO: Add functionality
+          // TODO:  Add functionality
         ),
         ListTile(
           title: Text("App Background"),
           trailing: Icon(Mdi.chevronRight),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => AppBackgroundScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => AppBackgroundScreen()));
           },
         ),
         Divider(),
@@ -56,82 +57,86 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
     return null;
   }
 
-  Widget getPart(BuildContext context, ThemeType type, ThemeContainer container) {
-
+  Widget getPart(
+      BuildContext context, ThemeType type, ThemeContainer container) {
     switch (type) {
-      case ThemeType.Material: {
-        var theme = Theme.of(context);
-        return Column(
-          children: [
-            SwitchListTile(
-              title: Text("Dark theme"),
-              value: theme.brightness == Brightness.dark,
-              onChanged: null,
-            ),
-            ListTile(
-              trailing: Container(
-                decoration: getBorderDecoration(theme.canvasColor),
-                child: CircleAvatar(
-                  backgroundColor: theme.canvasColor,
-                ),
+      case ThemeType.Material:
+        {
+          var theme = Theme.of(context);
+          return Column(
+            children: [
+              SwitchListTile(
+                title: Text("Dark theme"),
+                value: theme.brightness == Brightness.dark,
+                onChanged: null,
               ),
-              title: Text("Background color")
-            ),
-            ListTile(
-              trailing: Container(
-                decoration: getBorderDecoration(theme.primaryColor),
-                child: CircleAvatar(
-                  backgroundColor: theme.primaryColor,
-                ),
+              ListTile(
+                  trailing: Container(
+                    decoration: getBorderDecoration(theme.canvasColor),
+                    child: CircleAvatar(
+                      backgroundColor: theme.canvasColor,
+                    ),
+                  ),
+                  title: Text("Background color")),
+              ListTile(
+                  trailing: Container(
+                    decoration: getBorderDecoration(theme.primaryColor),
+                    child: CircleAvatar(
+                      backgroundColor: theme.primaryColor,
+                    ),
+                  ),
+                  title: Text("Primary color")),
+              ListTile(
+                  trailing: Container(
+                    decoration: getBorderDecoration(theme.accentColor),
+                    child: CircleAvatar(
+                      backgroundColor: theme.accentColor,
+                    ),
+                  ),
+                  title: Text("Accent color")),
+            ],
+          );
+        }
+      case ThemeType.Pleroma:
+        {
+          var pleromaTheme = container.source as PleromaTheme;
+          return Column(
+            children: [
+              // ListTile(
+              //   title: Text(pleromaTheme?.name ?? "Unnamed"),
+              //   subtitle: Text("Current Theme"),
+              // ),
+              ListTile(
+                title: Text("Edit"),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => PleromaThemeScreen())),
+                trailing: Icon(Mdi.chevronRight),
+                enabled: pleromaTheme != null,
               ),
-              title: Text("Primary color")
-            ),
-            ListTile(
-              trailing: Container(
-                decoration: getBorderDecoration(theme.accentColor),
-                child: CircleAvatar(
-                  backgroundColor: theme.accentColor,
-                ),
+              ListTile(
+                title: Text("Import"),
+                trailing: Icon(Mdi.chevronRight),
+                onTap: importTheme,
               ),
-              title: Text("Accent color")
-            ),
-          ],
-        );
-      }
-      case ThemeType.Pleroma: {
-        var pleromaTheme = container.source as PleromaTheme;
-        return Column(
-          children: [
-            // ListTile(
-            //   title: Text(pleromaTheme?.name ?? "Unnamed"),
-            //   subtitle: Text("Current Theme"),
-            // ),
-            ListTile(
-              title: Text("Edit"),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PleromaThemeScreen())),
-              trailing: Icon(Mdi.chevronRight),
-              enabled: pleromaTheme != null,
-            ),
-            ListTile(
-              title: Text("Import"),
-              trailing: Icon(Mdi.chevronRight),
-              onTap: importTheme,
-            ),
-            ListTile(
-              title: Text("Choose Preset"),
-              trailing: Icon(Mdi.chevronRight),
-              onTap: () async {
-                var theme = await Navigator.push<PleromaTheme>(context, MaterialPageRoute(builder: (_) => PleromaPresetsScreen()));
+              ListTile(
+                title: Text("Choose Preset"),
+                trailing: Icon(Mdi.chevronRight),
+                onTap: () async {
+                  var theme = await Navigator.push<PleromaTheme>(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => PleromaPresetsScreen()));
 
-                if (theme == null) return;
+                  if (theme == null) return;
 
-                container.source = PleromaAppTheme(theme);
-              },
-            ),
-          ],
-        );
-      }
-      default: throw "Out of range";
+                  container.source = PleromaAppTheme(theme);
+                },
+              ),
+            ],
+          );
+        }
+      default:
+        throw "Out of range";
     }
   }
 
@@ -157,8 +162,7 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
         allowedExtensions: ["json"],
       );
 
-      if (result == null)
-        return;
+      if (result == null) return;
 
       file = result.files.single;
     } catch (e) {

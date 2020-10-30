@@ -68,7 +68,7 @@ class TextRenderer {
               if (emojiFound) {
                 var emoji = emojis.firstWhere((e) => e.name == emojiName);
 
-                // TODO: refactor
+                // TODO:  refactor
                 if (emoji is CustomEmoji) {
                   buffer.clear();
 
@@ -121,7 +121,7 @@ class TextRenderer {
       if (node.localName == linkTag) {
         var recognizer = new TapGestureRecognizer();
         recognizer.onTap = () {
-          // TODO: add user mention link support
+          // TODO:  add user mention link support
           // node.classes.contains("mention")
 
           var linkTarget = node.attributes["href"];

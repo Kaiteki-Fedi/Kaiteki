@@ -26,29 +26,26 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (!container.loggedIn)
       return Center(
-        child: IconLandingWidget(
-          icon: Mdi.key,
-          text: "You need to be signed in to use chats"
-        )
-      );
+          child: IconLandingWidget(
+              icon: Mdi.key, text: "You need to be signed in to use chats"));
 
     return Scaffold(
       appBar: AppBar(
-        // TODO: Fix title for chat recipients
-        title: Text("Chat")
-        //Row(
-        //  children: [
-        //    Padding(
-        //      padding: const EdgeInsets.only(right: 8),
-        //      child: AvatarWidget(widget.chat.recipient, size: 32),
-        //    ),
-        //    RichText(
-        //      text: TextRenderer(emojis: null) // widget.chat.recipient.emojis
-        //          .render(widget.chat.account.displayName),
-        //    ),
-        //  ],
-        //)
-      ),
+          // TODO:  Fix title for chat recipients
+          title: Text("Chat")
+          //Row(
+          //  children: [
+          //    Padding(
+          //      padding: const EdgeInsets.only(right: 8),
+          //      child: AvatarWidget(widget.chat.recipient, size: 32),
+          //    ),
+          //    RichText(
+          //      text: TextRenderer(emojis: null) // widget.chat.recipient.emojis
+          //          .render(widget.chat.account.displayName),
+          //    ),
+          //  ],
+          //)
+          ),
       body: Column(
         children: [
           Expanded(
@@ -57,17 +54,13 @@ class _ChatScreenState extends State<ChatScreen> {
               builder: (_, AsyncSnapshot<Iterable<ChatMessage>> snapshot) {
                 if (snapshot.hasError)
                   return Center(
-                    child: IconLandingWidget(
-                      icon: Mdi.close,
-                      text: snapshot.error.toString()
-                    )
-                  );
+                      child: IconLandingWidget(
+                          icon: Mdi.close, text: snapshot.error.toString()));
 
                 if (snapshot.hasData)
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     padding: EdgeInsets.all(8),
-
                     itemBuilder: (_, i) {
                       var message = snapshot.data.elementAt(i);
                       return Padding(
@@ -81,9 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
-          Divider(
-            height: 2
-          ),
+          Divider(height: 2),
           Container(
             padding: const EdgeInsets.all(8),
             child: Row(
@@ -95,7 +86,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     //),
                     keyboardType: TextInputType.text,
                     onSubmitted: (message) async {
-                      await chatAdapter.postChatMessage(widget.chat, ChatMessage(content: Post(content: message)));
+                      await chatAdapter.postChatMessage(widget.chat,
+                          ChatMessage(content: Post(content: message)));
                     },
                   ),
                 ),

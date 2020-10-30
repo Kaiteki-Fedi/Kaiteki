@@ -17,30 +17,25 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   ApiType get type => ApiType.Misskey;
 
   Future<MisskeyCreateAppResponse> createApp(
-    String name,
-    String description,
-    List<String> permissions,
-    {String callbackUrl}
-  ) async {
-    return await sendJsonRequest(
-      HttpMethod.POST,
-      "api/app/create",
-      (json) => MisskeyCreateAppResponse.fromJson(json),
-      body: {
-        "name": name,
-        "description": description,
-        "permission": permissions,
-        "callbackUrl": callbackUrl
-      }
-    );
+      String name, String description, List<String> permissions,
+      {String callbackUrl}) async {
+    return await sendJsonRequest(HttpMethod.POST, "api/app/create",
+        (json) => MisskeyCreateAppResponse.fromJson(json),
+        body: {
+          "name": name,
+          "description": description,
+          "permission": permissions,
+          "callbackUrl": callbackUrl
+        });
   }
 
-  Future<MisskeyGenerateSessionResponse> generateSession(String appSecret) async {
+  Future<MisskeyGenerateSessionResponse> generateSession(
+      String appSecret) async {
     return await sendJsonRequest(
       HttpMethod.POST,
       "/api/auth/session/generate",
       (j) => MisskeyGenerateSessionResponse.fromJson(j),
-      body: { "appSecret": appSecret },
+      body: {"appSecret": appSecret},
     );
   }
 
@@ -61,66 +56,51 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       HttpMethod.POST,
       "api/auth/session/userkey",
       (json) => MisskeyUserkeyResponse.fromJson(json),
-      body: { "appSecret": appSecret, "token": token },
+      body: {"appSecret": appSecret, "token": token},
     );
   }
 
   Future<MisskeyUser> showUser(String userId) async {
     return await sendJsonRequest(
-      HttpMethod.POST,
-      "api/users/show",
-      (json) => MisskeyUser.fromJson(json),
-      body: {"userId": userId}
-    );
+        HttpMethod.POST, "api/users/show", (json) => MisskeyUser.fromJson(json),
+        body: {"userId": userId});
   }
 
   Future<MisskeyUser> showUserByName(String username, [String instance]) async {
     var body = {"username": username};
 
-    if (body.containsKey(instance))
-      body["instance"] = instance;
+    if (body.containsKey(instance)) body["instance"] = instance;
 
-    return await sendJsonRequest(
-      HttpMethod.POST,
-      "api/users/show",
-      (json) => MisskeyUser.fromJson(json)
-    );
+    return await sendJsonRequest(HttpMethod.POST, "api/users/show",
+        (json) => MisskeyUser.fromJson(json));
   }
 
-  Future<Iterable<MisskeyNote>> showUserNotes(String userId, bool excludeNsfw, Iterable<String> fileTypes) async {
-    return await sendJsonRequestMultiple(
-      HttpMethod.POST,
-      "api/users/notes",
-      (json) => MisskeyNote.fromJson(json),
-      body: {
-        "userId": userId,
-        "fileType": fileTypes,
-        "excludeNsfw": excludeNsfw,
-      }
-    );
+  Future<Iterable<MisskeyNote>> showUserNotes(
+      String userId, bool excludeNsfw, Iterable<String> fileTypes) async {
+    return await sendJsonRequestMultiple(HttpMethod.POST, "api/users/notes",
+        (json) => MisskeyNote.fromJson(json),
+        body: {
+          "userId": userId,
+          "fileType": fileTypes,
+          "excludeNsfw": excludeNsfw,
+        });
   }
 
   Future<MisskeySignInResponse> signIn(MisskeySignInRequest request) async {
-    return await sendJsonRequest(
-      HttpMethod.POST,
-      "api/signin",
-      (json) => MisskeySignInResponse.fromJson(json),
-      body: request
-    );
+    return await sendJsonRequest(HttpMethod.POST, "api/signin",
+        (json) => MisskeySignInResponse.fromJson(json),
+        body: request);
   }
 
   Future<Iterable<MisskeyNote>> getTimeline() async {
-    // TODO: add missing optional parameter: (int) limit
-    return await sendJsonRequestMultiple(
-      HttpMethod.POST,
-      "api/notes/timeline",
-      (json) => MisskeyNote.fromJson(json),
-      body: {}
-    );
+    // TODO:  add missing optional parameter: (int) limit
+    return await sendJsonRequestMultiple(HttpMethod.POST, "api/notes/timeline",
+        (json) => MisskeyNote.fromJson(json),
+        body: {});
   }
 
   @override
   void checkResponse(StreamedResponse response) {
-    // TODO: implement checkResponse
+    // TODO:  implement checkResponse
   }
 }

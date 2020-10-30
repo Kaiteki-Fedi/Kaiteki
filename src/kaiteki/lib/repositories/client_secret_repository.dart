@@ -17,7 +17,8 @@ class ClientSecretRepository extends ChangeNotifier
 
   ClientSecretRepository(this._preferences);
 
-  static Future<ClientSecretRepository> getInstance([SharedPreferences preferences]) async {
+  static Future<ClientSecretRepository> getInstance(
+      [SharedPreferences preferences]) async {
     if (preferences == null)
       preferences = await SharedPreferences.getInstance();
 
@@ -78,6 +79,6 @@ class ClientSecretRepository extends ChangeNotifier
 
   @override
   void removeAll() {
-    // TODO: implement removeAll
+    // TODO:  implement removeAll
   }
 }

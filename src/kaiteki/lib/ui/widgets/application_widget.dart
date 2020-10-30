@@ -11,7 +11,7 @@ class ApplicationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: make use of pleroma's link color property
+    // TODO:  make use of pleroma's link color property
     var theme = Theme.of(context);
     var hasWebsite = application.website.isNotNullOrEmpty;
 
@@ -25,15 +25,12 @@ class ApplicationWidget extends StatelessWidget {
           return;
         }
 
-        if (!await canLaunch(url))
-          throw 'Could not launch $url';
+        if (!await canLaunch(url)) throw 'Could not launch $url';
 
         await launch(url);
       },
-      child: Text(
-        application.name,
-        style: TextStyle(color: hasWebsite ? theme.primaryColor : null)
-      ),
+      child: Text(application.name,
+          style: TextStyle(color: hasWebsite ? theme.primaryColor : null)),
     );
   }
 }

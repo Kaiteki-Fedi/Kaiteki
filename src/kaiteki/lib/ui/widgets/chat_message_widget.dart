@@ -20,10 +20,11 @@ class ChatMessageWidget extends StatefulWidget {
 }
 
 class _ChatMessageWidgetState extends State<ChatMessageWidget> {
-  // TODO: fix
+  // TODO:  fix
   get isOwnMessage => true;
   //get isOwnMessage => widget.chat.recipient.id != widget.chatMessage.accountId;
-  get alignment => isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
+  get alignment =>
+      isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
 
   static const double avatarSize = 32;
 
@@ -32,7 +33,9 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
     var container = Provider.of<ThemeContainer>(context);
     var appTheme = container.current;
 
-    var msgTheme = isOwnMessage ? appTheme.outgoingChatMessage : appTheme.incomingChatMessage;
+    var msgTheme = isOwnMessage
+        ? appTheme.outgoingChatMessage
+        : appTheme.incomingChatMessage;
 
     return LayoutBuilder(
       builder: (_, b) => Row(
@@ -40,35 +43,29 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: conditionalReverse(isOwnMessage, [
           if (!isOwnMessage)
-          Padding(
-
-            padding: getAvatarPadding(isOwnMessage),
-            child: AvatarWidget(widget.chatMessage.user, size: avatarSize),
-          ),
-          Container(
-            constraints: BoxConstraints.tightFor(width: b.maxWidth * 0.8),
-            padding: const EdgeInsets.all(10.5),
-            decoration: BoxDecoration(
-              color: msgTheme.background,
-              borderRadius: BorderRadius.circular(appTheme.chatMessageRounding),
-              border: Border.all(
-                color: msgTheme.border,
-                width: 1
-              )
+            Padding(
+              padding: getAvatarPadding(isOwnMessage),
+              child: AvatarWidget(widget.chatMessage.user, size: avatarSize),
             ),
-            child: Column(
-              children: [
-                RichText(
-                  text: TextRenderer(
+          Container(
+              constraints: BoxConstraints.tightFor(width: b.maxWidth * 0.8),
+              padding: const EdgeInsets.all(10.5),
+              decoration: BoxDecoration(
+                  color: msgTheme.background,
+                  borderRadius:
+                      BorderRadius.circular(appTheme.chatMessageRounding),
+                  border: Border.all(color: msgTheme.border, width: 1)),
+              child: Column(
+                children: [
+                  RichText(
+                      text: TextRenderer(
                     emojis: widget.chatMessage.content.emojis,
                     textStyle: TextStyle(color: appTheme.textColor),
-                  ).render(widget.chatMessage.content.content)
-                ),
-                for (var attachment in widget.chatMessage.content.attachments)
-                  getAttachmentWidget(attachment),
-              ],
-            )
-          ),
+                  ).render(widget.chatMessage.content.content)),
+                  for (var attachment in widget.chatMessage.content.attachments)
+                    getAttachmentWidget(attachment),
+                ],
+              )),
         ]),
       ),
     );
@@ -82,20 +79,22 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
   }
 
   List<T> conditionalReverse<T>(bool cond, List<T> list) {
-    if (cond)
-      return list.reversed.toList(growable: false);
+    if (cond) return list.reversed.toList(growable: false);
 
     return list;
   }
 
   Widget getAttachmentWidget(Attachment attachment) {
     switch (attachment.type) {
-      case "image": return ImageAttachmentWidget(attachment);
-    //case "video": return VideoAttachmentWidget(attachment);
-      default: {
-        print("Tried to present an unsupported attachment type: ${attachment.type}");
-        return Container();
-      }
+      case "image":
+        return ImageAttachmentWidget(attachment);
+      //case "video": return VideoAttachmentWidget(attachment);
+      default:
+        {
+          print(
+              "Tried to present an unsupported attachment type: ${attachment.type}");
+          return Container();
+        }
     }
   }
 }

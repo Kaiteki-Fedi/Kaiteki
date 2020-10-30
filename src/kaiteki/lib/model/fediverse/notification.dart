@@ -5,11 +5,8 @@ class Notification {
   final User user;
   final Post post;
 
-  const Notification({
-    this.user,
-    this.post
-  });
+  const Notification({this.user, this.post});
 
-  // TODO: improve this
+  // TODO:  improve this
   String get type => null;
 }

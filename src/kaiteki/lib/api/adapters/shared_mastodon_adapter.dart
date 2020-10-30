@@ -58,8 +58,8 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
       if (code == null) return LoginResult.aborted();
 
-      // TODO: add error-able TOTP screens
-      // TODO: make use of a while loop to make this more efficient
+      // TODO:  add error-able TOTP screens
+      // TODO:  make use of a while loop to make this more efficient
       var mfaResponse = await client.respondMfa(
         loginResponse.mfaToken,
         int.parse(code),
@@ -96,7 +96,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<Post> postStatus(Post post, {Post parentPost}) {
-    // TODO: implement postStatus
+    // TODO:  implement postStatus
     throw UnimplementedError();
   }
 
@@ -108,7 +108,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<Iterable<Notification>> getNotifications() {
-    // TODO: implement getNotifications
+    // TODO:  implement getNotifications
     throw UnimplementedError();
   }
 
@@ -125,7 +125,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<User> getUser(String username, [String instance]) {
-    // TODO: implement getUser
+    // TODO:  implement getUser
     throw UnimplementedError();
   }
 }

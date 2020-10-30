@@ -5,7 +5,8 @@ import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/repositories/repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AccountSecretRepository extends ChangeNotifier implements Repository<AccountSecret> {
+class AccountSecretRepository extends ChangeNotifier
+    implements Repository<AccountSecret> {
   static const String _preferencesKey = "accounts";
 
   List<AccountSecret> _secrets;
@@ -14,7 +15,8 @@ class AccountSecretRepository extends ChangeNotifier implements Repository<Accou
 
   AccountSecretRepository(this._preferences);
 
-  static Future<AccountSecretRepository> getInstance([SharedPreferences preferences]) async {
+  static Future<AccountSecretRepository> getInstance(
+      [SharedPreferences preferences]) async {
     if (preferences == null)
       preferences = await SharedPreferences.getInstance();
 
@@ -31,7 +33,8 @@ class AccountSecretRepository extends ChangeNotifier implements Repository<Accou
     }
 
     var accountsJson = jsonDecode(json);
-    var accounts = accountsJson.map<AccountSecret>((json) => AccountSecret.fromJson(json));
+    var accounts =
+        accountsJson.map<AccountSecret>((json) => AccountSecret.fromJson(json));
     _secrets = accounts.toList();
 
     return this;
@@ -70,6 +73,6 @@ class AccountSecretRepository extends ChangeNotifier implements Repository<Accou
 
   @override
   void removeAll() {
-    // TODO: implement removeAll
+    // TODO:  implement removeAll
   }
 }

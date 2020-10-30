@@ -7,7 +7,7 @@ import 'package:kaiteki/model/fediverse/reaction.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
-// TODO: maybe make this UI-only and remove interaction between adapters and
+// TODO:  maybe make this UI-only and remove interaction between adapters and
 //       models?
 class ReactionWidget extends StatefulWidget {
   final Post parentPost;

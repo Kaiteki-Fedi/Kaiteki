@@ -34,7 +34,7 @@ class Post<T> {
   final Post replyTo;
   final PreviewCard previewCard;
 
-  // TODO: maybe remove @required, when constructing for local only?
+  // TODO:  maybe remove @required, when constructing for local only?
   const Post({
     @required this.source,
     @required this.postedAt,
@@ -54,8 +54,7 @@ class Post<T> {
     this.repeatCount,
     this.replyCount,
     this.reactions,
-});
-
+  });
 
   factory Post.example() {
     return Post(
