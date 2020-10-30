@@ -6,7 +6,8 @@ class AccountRequiredScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FormWidget(
+        body: SafeArea(
+      child: FormWidget(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,10 +21,12 @@ class AccountRequiredScreen extends StatelessWidget {
                   label: Text("Add account"),
                   style: ButtonStyle(
                     visualDensity: VisualDensity.comfortable,
-                    padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 14, horizontal: 28)),
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 28)),
                   ),
-
-                  onPressed: () => Navigator.of(context).pushNamed("/accounts/add"),
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed("/accounts/add"),
                 ),
               ),
             ),
@@ -38,7 +41,7 @@ class AccountRequiredScreen extends StatelessWidget {
             )
           ],
         ),
-      )
-    );
+      ),
+    ));
   }
 }
