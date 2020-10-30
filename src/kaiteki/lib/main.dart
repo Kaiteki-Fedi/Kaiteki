@@ -4,6 +4,7 @@ import 'package:kaiteki/app.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:kaiteki/utils/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -23,11 +24,19 @@ void main() async {
     print("Failed to create instances of save data repositories. $ex");
   }
 
+  FlutterLocalNotificationsPlugin notificationsPlugin;
+
+  try {
+    notificationsPlugin = await initializeNotifications();
+  } catch (e) {
+    Logger.exception(message: "Failed to initialize notifications");
+  }
+
   // construct app
   var app = KaitekiApp(
     accountSecrets: accountRepository,
     clientSecrets: clientRepository,
-    notifications: await initializeNotifications(),
+    notifications: notificationsPlugin,
     preferences: preferences,
   );
 
@@ -36,17 +45,16 @@ void main() async {
 }
 
 Future<FlutterLocalNotificationsPlugin> initializeNotifications() async {
-  if (kIsWeb)
-    return null;
+  if (kIsWeb) return null;
 
   var plugin = FlutterLocalNotificationsPlugin();
   var initSettings = InitializationSettings(
-      android: AndroidInitializationSettings("@mipmap/ic_kaiteki"),
-      iOS: IOSInitializationSettings(
-        requestSoundPermission: false,
-        requestBadgePermission: false,
-        requestAlertPermission: false,
-      ),
+    android: AndroidInitializationSettings("@mipmap/ic_kaiteki"),
+    iOS: IOSInitializationSettings(
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+    ),
   );
 
   await plugin.initialize(initSettings);
