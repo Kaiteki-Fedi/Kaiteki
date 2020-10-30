@@ -51,6 +51,8 @@ class User<T> {
       displayName: "banned for being a cute neko",
       avatarUrl: Constants.exampleAvatar,
       joinDate: DateTime.now(),
+      id: null,
+      source: null,
     );
   }
 }

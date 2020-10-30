@@ -71,7 +71,10 @@ class StatusWidget extends StatelessWidget {
                     children: [
                       if (renderedAuthor != null)
                         RichText(text: renderedAuthor),
-                      Text(_post.author.username),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: Text(_post.author.username),
+                      ),
                       // TODO: fix
                       //Spacer(),
                       //Text(_post.visibility),
