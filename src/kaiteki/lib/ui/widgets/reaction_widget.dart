@@ -29,7 +29,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
     return Card(
       child: InkWell(
         onTap: () async {
-          var container = Provider.of<AccountContainer>(context);
+          var container = Provider.of<AccountContainer>(context, listen: false);
           var reactiveAdapter = container.adapter as ReactionSupport;
           await reactiveAdapter.react(widget.parentPost, widget.reaction.emoji);
         },
