@@ -16,9 +16,9 @@ If you want to try out Kaiteki, there are automatic releases available for use.
 Please still note, that **Kaiteki is still in development**.
 Unpolished code, bugs and missing features might be present in these builds, so think twice when creating issues.
 
-[![Visit web version][1]](https://img.shields.io/static/v1?message=Download%20for%20Windows%20version&color=blue)
-[![Download latest Linux build][2]](https://img.shields.io/static/v1?message=Download%20for%20Linux&color=orange)
-[![View other builds][3]](https://img.shields.io/static/v1?label=View%20other%20builds&color=lightgray)
+[![Visit web version][1]](https://raster.shields.io/static/v1?message=Download%20for%20Windows%20version&color=blue)
+[![Download latest Linux build][2]](https://raster.shields.io/static/v1?message=Download%20for%20Linux&color=orange)
+[![View other builds][3]](https://raster.shields.io/static/v1?label=View%20other%20builds&color=lightgray)
 
 [1]: https://craftplacer.github.io/kaiteki/
 [2]: https://github.com/Craftplacer/kaiteki/releases/latest/download/linux.zip
