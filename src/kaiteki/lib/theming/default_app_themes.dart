@@ -24,15 +24,15 @@ class DefaultAppThemes {
   static MaterialAppTheme darkAppTheme =
       MaterialAppTheme(ThemeData.from(colorScheme: darkScheme));
   static ColorScheme darkScheme = ColorScheme.dark(
-    background: AppColors.kaitekiGray.shade900,
-    surface: AppColors.kaitekiGray.shade800,
+    background: AppColors.darkBackground,
+    surface: AppColors.darkBackground,
     // primary
     primary: AppColors.kaitekiPink.shade200,
     primaryVariant: AppColors.kaitekiPink.shade500,
     onPrimary: Colors.black,
     // secondary
-    secondary: AppColors.kaitekiOrange.shade200,
-    secondaryVariant: AppColors.kaitekiOrange.shade500,
+    secondary: AppColors.kaitekiPink.shade200,
+    secondaryVariant: AppColors.kaitekiPink.shade500,
     onSecondary: Colors.black,
     // error
     error: Colors.red,
