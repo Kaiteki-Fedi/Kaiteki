@@ -22,7 +22,7 @@ If you want to try out Kaiteki, there are automatic releases available for use.
 Please still note, that **Kaiteki is still in development**.
 Unpolished code, bugs and missing features might be present in these builds, so think twice when creating issues.
 
-[![Visit web version](https://img.shields.io/badge/-Download%20for%20Windows%20-blue)][1]
+[![Visit web version](https://img.shields.io/badge/-Open%20web%20app%20-blue)][1]
 [![Download latest Linux build](https://img.shields.io/badge/-Download%20for%20Linux%20-red)][2]
 [![View other builds](https://img.shields.io/badge/-Other%20builds%20-gray)][3]
 
