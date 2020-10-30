@@ -132,8 +132,18 @@ class AboutScreen extends StatelessWidget {
                             Text("Made with "),
                             SizedBox(
                               width: 85,
-                              child: FlutterLogo(
-                                style: FlutterLogoStyle.horizontal,
+                              child: InkWell(
+                                onTap: () => launchUrl(
+                                  _scaffoldKey.currentState,
+                                  "https://flutter.dev",
+                                ),
+                                child: FlutterLogo(
+                                  style: FlutterLogoStyle.horizontal,
+                                  textColor: Theme.of(context).brightness ==
+                                          Brightness.light
+                                      ? null
+                                      : Colors.white,
+                                ),
                               ),
                             ),
                             Text(" and love"),
