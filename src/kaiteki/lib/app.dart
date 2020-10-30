@@ -57,6 +57,15 @@ class _KaitekiAppState extends State<KaitekiApp> {
 
   @override
   Widget build(BuildContext _) {
+    var appPreferences = _preferences.getPreferredAppName();
+
+    var appBackground = _themeContainer.background;
+    var materialTheme = _themeContainer.getMaterialTheme();
+    var backgroundColor = materialTheme.canvasColor;
+
+    backgroundColor =
+        backgroundColor.withOpacity(_themeContainer.backgroundOpacity);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: _themeContainer),
@@ -66,36 +75,29 @@ class _KaitekiAppState extends State<KaitekiApp> {
         ChangeNotifierProvider.value(value: widget.clientSecrets),
         Provider.value(value: widget.notifications),
       ],
-      child: Builder(
-        builder: (context) {
-          var appPreferences = _preferences.getPreferredAppName();
-
-          var themeContainer = Provider.of<ThemeContainer>(context);
-          var appBackground = themeContainer.background;
-          var materialTheme = themeContainer.getMaterialTheme();
-          var backgroundColor = materialTheme.canvasColor;
-
-          backgroundColor = backgroundColor.withOpacity(themeContainer.backgroundOpacity);
-
-          return Stack(
-            alignment: Alignment.topLeft,
-            fit: StackFit.expand,
-            children: [
-              if (themeContainer.hasBackground)
-                Image(
-                  image: appBackground,
-                  fit: BoxFit.cover,
-                ),
-              Container(
-                color: backgroundColor,
-                child: MaterialApp(
-                  title: appPreferences,
-                  theme: ThemeData.from(colorScheme: DefaultAppThemes.lightScheme),
-                  darkTheme: ThemeData.from(colorScheme: DefaultAppThemes.darkScheme),
-                  color: AppColors.darkBackground,
-                  initialRoute: "/",
-                  routes: {
-                    "/": (_) => Builder(
+      child: Stack(
+        alignment: Alignment.topLeft,
+        fit: StackFit.expand,
+        children: [
+          if (_themeContainer.hasBackground)
+            Image(
+              image: appBackground,
+              fit: BoxFit.cover,
+            ),
+          Container(
+            color: backgroundColor,
+            child: MaterialApp(
+              title: appPreferences,
+              theme: ThemeData.from(
+                colorScheme: DefaultAppThemes.lightScheme,
+              ),
+              darkTheme: ThemeData.from(
+                colorScheme: DefaultAppThemes.darkScheme,
+              ),
+              color: AppColors.darkBackground,
+              initialRoute: "/",
+              routes: {
+                "/": (_) => Builder(
                       builder: (context) {
                         var container = Provider.of<AccountContainer>(context);
 
@@ -103,22 +105,19 @@ class _KaitekiAppState extends State<KaitekiApp> {
                           return new AccountRequiredScreen();
 
                         return MainScreen();
-                      }
+                      },
                     ),
-                    "/accounts": (_) => ManageAccountsScreen(),
-                    "/accounts/add": (_) => AddAccountScreen(),
-                    "/debug": (_) => DebugScreen(),
-                    "/about": (_) => AboutScreen(),
-                    "/settings": (_) => SettingsScreen(),
-                    "/settings/customization": (_) => CustomizationSettingsScreen(),
-                  },
-                ),
-              ),
-            ],
-          );
-        },
+                "/accounts": (_) => ManageAccountsScreen(),
+                "/accounts/add": (_) => AddAccountScreen(),
+                "/debug": (_) => DebugScreen(),
+                "/about": (_) => AboutScreen(),
+                "/settings": (_) => SettingsScreen(),
+                "/settings/customization": (_) => CustomizationSettingsScreen(),
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
