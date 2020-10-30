@@ -31,7 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          // TODO:  Fix title for chat recipients
+          // TODO: Fix title for chat recipients
           title: Text("Chat")
           //Row(
           //  children: [

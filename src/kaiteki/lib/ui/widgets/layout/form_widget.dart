@@ -9,7 +9,7 @@ class FormWidget extends StatelessWidget {
   final EdgeInsets padding;
   final EdgeInsets outsidePadding;
 
-  // TODO:  mobile/portrait padding
+  // TODO: mobile/portrait padding
   const FormWidget({
     Key key,
     @required this.child,

@@ -7,7 +7,7 @@ import 'package:kaiteki/ui/screens/auth/mfa_screen.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:provider/provider.dart';
 
-// TODO:  Try to make this screen standalone and not rely on any specific client
+// TODO: Try to make this screen standalone and not rely on any specific client
 //       implementations.
 class LoginScreen extends StatefulWidget {
   LoginScreen(

@@ -47,7 +47,7 @@ class AccountContainer extends ChangeNotifier {
   }
 
   Future<void> addCurrentAccount(AccountCompound compound) async {
-    // TODO:  add duplicate check
+    // TODO: add duplicate check
     _accounts.add(compound);
     _accountSecrets.insert(compound.accountSecret);
     _clientSecrets.insert(compound.clientSecret);
@@ -86,7 +86,7 @@ class AccountContainer extends ChangeNotifier {
 
       User user;
 
-      // TODO:  Redesign class structure to make this not Mastodon-specific.
+      // TODO: Redesign class structure to make this not Mastodon-specific.
       if (adapter.client is MastodonClient) {
         var mastodonClient = adapter.client as MastodonClient;
 

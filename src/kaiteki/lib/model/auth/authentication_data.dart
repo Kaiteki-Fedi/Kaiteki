@@ -31,7 +31,7 @@ class MisskeyAuthenticationData implements AuthenticationData {
   Request applyTo(Request request) {
     if (token.isNullOrEmpty) return request;
 
-    // TODO:  we should avoid duplicate (de-)serialization.
+    // TODO: we should avoid duplicate (de-)serialization.
     var decoded = jsonDecode(request.body);
     decoded["i"] = token;
 

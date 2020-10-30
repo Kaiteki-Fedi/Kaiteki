@@ -137,6 +137,6 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   @override
   void checkResponse(http.StreamedResponse response) {
-    // TODO:  implement checkResponse
+    // TODO: implement checkResponse
   }
 }

@@ -93,7 +93,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   Future<Iterable<MisskeyNote>> getTimeline() async {
-    // TODO:  add missing optional parameter: (int) limit
+    // TODO: add missing optional parameter: (int) limit
     return await sendJsonRequestMultiple(HttpMethod.POST, "api/notes/timeline",
         (json) => MisskeyNote.fromJson(json),
         body: {});
@@ -101,6 +101,6 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
 
   @override
   void checkResponse(StreamedResponse response) {
-    // TODO:  implement checkResponse
+    // TODO: implement checkResponse
   }
 }

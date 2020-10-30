@@ -23,6 +23,6 @@ class AccountCompound {
     this.clientSecret,
     this.accountSecret,
   });
-  // TODO:  assert check has been removed, due to compiler errors
+  // TODO: assert check has been removed, due to compiler errors
   //: assert(accountSecret.identity.instance.equalsIgnoreCase(clientSecret.instance));
 }

@@ -12,7 +12,7 @@ import 'package:kaiteki/model/fediverse/user.dart';
 
 part 'pleroma_adapter.c.dart';
 
-// TODO:  add missing implementations
+// TODO: add missing implementations
 class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
     implements ChatSupport, ReactionSupport {
   PleromaAdapter._(PleromaClient client) : super(client);
@@ -23,7 +23,7 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
 
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {
-    // TODO:  implement missing data, pleroma chat.
+    // TODO: implement missing data, pleroma chat.
     var sentMessage =
         await client.postChatMessage(chat.id, message.content.content);
     return toChatMessage(sentMessage);
