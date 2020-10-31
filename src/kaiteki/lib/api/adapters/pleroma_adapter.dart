@@ -24,8 +24,10 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {
     // TODO implement missing data, pleroma chat.
-    var sentMessage =
-        await client.postChatMessage(chat.id, message.content.content);
+    var sentMessage = await client.postChatMessage(
+      chat.id,
+      message.content.content,
+    );
     return toChatMessage(sentMessage);
   }
 

@@ -62,8 +62,11 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
 
   Future<MisskeyUser> showUser(String userId) async {
     return await sendJsonRequest(
-        HttpMethod.POST, "api/users/show", (json) => MisskeyUser.fromJson(json),
-        body: {"userId": userId});
+      HttpMethod.POST,
+      "api/users/show",
+      (json) => MisskeyUser.fromJson(json),
+      body: {"userId": userId},
+    );
   }
 
   Future<MisskeyUser> showUserByName(String username, [String instance]) async {
@@ -76,20 +79,29 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   Future<Iterable<MisskeyNote>> showUserNotes(
-      String userId, bool excludeNsfw, Iterable<String> fileTypes) async {
-    return await sendJsonRequestMultiple(HttpMethod.POST, "api/users/notes",
-        (json) => MisskeyNote.fromJson(json),
-        body: {
-          "userId": userId,
-          "fileType": fileTypes,
-          "excludeNsfw": excludeNsfw,
-        });
+    String userId,
+    bool excludeNsfw,
+    Iterable<String> fileTypes,
+  ) async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.POST,
+      "api/users/notes",
+      (json) => MisskeyNote.fromJson(json),
+      body: {
+        "userId": userId,
+        "fileType": fileTypes,
+        "excludeNsfw": excludeNsfw,
+      },
+    );
   }
 
   Future<MisskeySignInResponse> signIn(MisskeySignInRequest request) async {
-    return await sendJsonRequest(HttpMethod.POST, "api/signin",
-        (json) => MisskeySignInResponse.fromJson(json),
-        body: request);
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/signin",
+      (json) => MisskeySignInResponse.fromJson(json),
+      body: request,
+    );
   }
 
   Future<Iterable<MisskeyNote>> getTimeline() async {
