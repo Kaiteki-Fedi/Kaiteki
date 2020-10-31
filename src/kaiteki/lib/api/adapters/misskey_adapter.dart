@@ -86,8 +86,8 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<User> getMyself() {´
-    throw UnimplementedError();
+  Future<User> getMyself() async {
+    return toUser(await client.i());
   }
 
   @override

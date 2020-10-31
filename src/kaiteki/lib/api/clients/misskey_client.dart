@@ -103,4 +103,14 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   void checkResponse(StreamedResponse response) {
     // TODO implement checkResponse
   }
+
+  /// Gets your account information.
+  Future<MisskeyUser> i() async {
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/i",
+      (json) => MisskeyUser.fromJson(json),
+      body: {},
+    );
+  }
 }
