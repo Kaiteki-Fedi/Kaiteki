@@ -8,6 +8,7 @@ import 'package:fediverse_objects/misskey/emoji.dart';
 import 'package:fediverse_objects/misskey/note.dart';
 import 'package:fediverse_objects/misskey/user.dart';
 import 'package:kaiteki/api/requests/misskey/sign_in.dart';
+import 'package:kaiteki/api/requests/misskey/timeline.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -97,7 +98,17 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<Post>> getTimeline(TimelineType type) async {
-    var notes = await client.getTimeline();
+    Iterable<MisskeyNote> notes;
+
+    var request = MisskeyTimelineRequest();
+    switch (type) {
+      case TimelineType.Home:
+        notes = await client.getTimeline(request);
+        break;
+      default:
+        return null;
+    }
+
     return notes.map(toPost);
   }
 

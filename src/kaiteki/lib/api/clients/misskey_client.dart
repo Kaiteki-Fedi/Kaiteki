@@ -5,6 +5,7 @@ import 'package:fediverse_objects/misskey/note.dart';
 import 'package:fediverse_objects/misskey/pages/page.dart';
 import 'package:fediverse_objects/misskey/user.dart';
 import 'package:kaiteki/api/requests/misskey/sign_in.dart';
+import 'package:kaiteki/api/requests/misskey/timeline.dart';
 import 'package:kaiteki/api/responses/misskey/create_app_response.dart';
 import 'package:kaiteki/api/responses/misskey/generate_session_response.dart';
 import 'package:kaiteki/api/responses/misskey/signin_response.dart';
@@ -104,11 +105,48 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
-  Future<Iterable<MisskeyNote>> getTimeline() async {
-    // TODO add missing optional parameter: (int) limit
-    return await sendJsonRequestMultiple(HttpMethod.POST, "api/notes/timeline",
-        (json) => MisskeyNote.fromJson(json),
-        body: {});
+  Future<Iterable<MisskeyNote>> getTimeline(
+    MisskeyTimelineRequest request,
+  ) async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.POST,
+      "api/notes/timeline",
+      (json) => MisskeyNote.fromJson(json),
+      body: request,
+    );
+  }
+
+  Future<Iterable<MisskeyNote>> getLocalTimeline(
+    MisskeyTimelineRequest request,
+  ) async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.POST,
+      "api/notes/local-timeline",
+      (json) => MisskeyNote.fromJson(json),
+      body: request,
+    );
+  }
+
+  Future<Iterable<MisskeyNote>> getHybridTimeline(
+    MisskeyTimelineRequest request,
+  ) async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.POST,
+      "api/notes/hybrid-timeline",
+      (json) => MisskeyNote.fromJson(json),
+      body: request,
+    );
+  }
+
+  Future<Iterable<MisskeyNote>> getGlobalTimeline(
+    MisskeyTimelineRequest request,
+  ) async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.POST,
+      "api/notes/global-timeline",
+      (json) => MisskeyNote.fromJson(json),
+      body: request,
+    );
   }
 
   @override
