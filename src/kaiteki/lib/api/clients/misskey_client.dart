@@ -163,4 +163,27 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       body: {},
     );
   }
+
+  /// Reacts to the specified note.
+  Future<MisskeyUser> createReaction(String noteId, String reaction) async {
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/notes/reactions/create",
+      (json) => MisskeyUser.fromJson(json),
+      body: {
+        "noteId": noteId,
+        "reaction": reaction,
+      },
+    );
+  }
+
+  /// Removes the reaction from the specified note.
+  Future<MisskeyUser> deleteReaction(String noteId) async {
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/notes/reactions/delete",
+      (json) => MisskeyUser.fromJson(json),
+      body: {"noteId": noteId},
+    );
+  }
 }

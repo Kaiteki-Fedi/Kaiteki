@@ -146,12 +146,27 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   bool supportsUnicodeEmoji = true;
 
   @override
-  Future<void> addReaction(Post post, Emoji emoji) {
-    throw UnimplementedError();
+  Future<void> addReaction(Post post, Emoji emoji) async {
+    var note = post.source as MisskeyNote;
+
+    String emojiName;
+
+    if (emoji is CustomEmoji)
+      emojiName = ':' + emoji.name + ':';
+    else if (emoji is UnicodeEmoji)
+      emojiName = emoji.source;
+    else
+      return;
+
+    await client.createReaction(note.id, emojiName);
   }
 
   @override
-  Future<void> removeReaction(Post post, Emoji emoji) {
-    throw UnimplementedError();
+  Future<void> removeReaction(Post post, Emoji emoji) async {
+    var note = post.source as MisskeyNote;
+
+    // The "emoji" parameter is ignored,
+    // because in Misskey you can only react once.
+    await client.deleteReaction(note.id);
   }
 }
