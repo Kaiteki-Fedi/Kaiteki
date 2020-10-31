@@ -35,16 +35,6 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   }
 
   @override
-  Future<Iterable<Reaction>> getReactions(Post post) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> react(Post post, Emoji emoji) {
-    throw UnimplementedError();
-  }
-
-  @override
   bool supportsCustomEmoji = false;
 
   @override
@@ -57,6 +47,16 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
 
   @override
   Future<Iterable<Chat>> getChats() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> addReaction(Post post, Emoji emoji) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> removeReaction(Post post, Emoji emoji) {
     throw UnimplementedError();
   }
 }

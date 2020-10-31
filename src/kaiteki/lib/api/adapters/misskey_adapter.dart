@@ -135,12 +135,12 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   bool supportsUnicodeEmoji = true;
 
   @override
-  Future<Iterable<Reaction>> getReactions(Post post) {
+  Future<void> addReaction(Post post, Emoji emoji) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> react(Post post, Emoji emoji) {
+  Future<void> removeReaction(Post post, Emoji emoji) {
     throw UnimplementedError();
   }
 }
