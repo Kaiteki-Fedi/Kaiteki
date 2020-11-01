@@ -1,9 +1,13 @@
+import 'dart:convert';
+
+import 'package:fediverse_objects/misskey/error.dart';
 import 'package:http/http.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
 import 'package:fediverse_objects/misskey/note.dart';
 import 'package:fediverse_objects/misskey/pages/page.dart';
 import 'package:fediverse_objects/misskey/user.dart';
+import 'package:kaiteki/api/exceptions/misskey_exception.dart';
 import 'package:kaiteki/api/requests/misskey/sign_in.dart';
 import 'package:kaiteki/api/requests/misskey/timeline.dart';
 import 'package:kaiteki/api/responses/misskey/create_app_response.dart';
@@ -12,6 +16,8 @@ import 'package:kaiteki/api/responses/misskey/signin_response.dart';
 import 'package:kaiteki/api/responses/misskey/userkey_response.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/http_method.dart';
+import 'package:kaiteki/utils/logger.dart';
+import 'package:kaiteki/utils/utils.dart';
 
 class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   @override
@@ -150,8 +156,29 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   @override
-  void checkResponse(StreamedResponse response) {
-    // TODO implement checkResponse
+  void checkResponse(StreamedResponse response) async {
+    if (Utils.isUnsuccessfulStatusCode(response.statusCode)) {
+      MisskeyError mkErr;
+
+      try {
+        var body = await response.stream.bytesToString();
+        var json = jsonDecode(body);
+        mkErr = MisskeyError.fromJson(json["error"]);
+      } catch (_) {
+        Logger.warning(
+          "Failed to gather Misskey error object from erroneous response.",
+        );
+      }
+
+      if (mkErr != null) {
+        throw MisskeyException(
+          response.statusCode,
+          mkErr,
+        );
+      }
+    }
+
+    super.checkResponse(response);
   }
 
   /// Gets your account information.

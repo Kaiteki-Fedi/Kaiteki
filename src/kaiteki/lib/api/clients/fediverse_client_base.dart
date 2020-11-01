@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:kaiteki/api/api_type.dart';
+import 'package:kaiteki/api/exceptions/api_exception.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/http_method.dart';
@@ -8,6 +9,8 @@ import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:http/http.dart';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:kaiteki/utils/logger.dart';
+import 'package:kaiteki/utils/utils.dart';
 
 typedef T DeserializeFromJson<T>(Map<String, dynamic> json);
 
@@ -69,11 +72,21 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     if (authenticationData != null) authenticationData.applyTo(request);
 
     var response = await request.send();
-    checkResponse(response);
-    return response;
+
+    try {
+      checkResponse(response);
+      return response;
+    } catch (ex) {
+      Logger.error(ex);
+      return null;
+    }
   }
 
-  void checkResponse(StreamedResponse response);
+  void checkResponse(StreamedResponse response) {
+    if (Utils.isUnsuccessfulStatusCode(response.statusCode)) {
+      throw ApiException(response.statusCode);
+    }
+  }
 
   @deprecated
   Map<String, String> getHeaders({String contentType}) => Map<String, String>();

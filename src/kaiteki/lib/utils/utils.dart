@@ -52,4 +52,8 @@ class Utils {
   static double getLocalFontSize(BuildContext context) {
     return DefaultTextStyle.of(context).style.fontSize;
   }
+
+  static bool isUnsuccessfulStatusCode(int code) {
+    return 400 <= code && code < 600;
+  }
 }
