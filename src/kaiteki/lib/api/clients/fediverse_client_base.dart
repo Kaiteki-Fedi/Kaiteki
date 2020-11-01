@@ -32,8 +32,14 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
       {Object body}) async {
     var requestBodyJson = body == null ? null : jsonEncode(body);
     var requestContentType = body == null ? null : "application/json";
-    var response = await sendRequest(method, endpoint,
-        body: requestBodyJson, contentType: requestContentType);
+
+    var response = await sendRequest(
+      method,
+      endpoint,
+      body: requestBodyJson,
+      contentType: requestContentType,
+    );
+
     var bodyText = await response.stream.bytesToString();
     var bodyJson = jsonDecode(bodyText);
 
@@ -45,31 +51,46 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
       {Object body}) async {
     var requestBodyJson = body == null ? null : jsonEncode(body);
     var requestContentType = body == null ? null : "application/json";
-    var response = await sendRequest(method, endpoint,
-        body: requestBodyJson, contentType: requestContentType);
+
+    var response = await sendRequest(
+      method,
+      endpoint,
+      body: requestBodyJson,
+      contentType: requestContentType,
+    );
+
     var bodyText = await response.stream.bytesToString();
     var bodyJson = jsonDecode(bodyText);
 
     return bodyJson.map<T>((json) => toObject.call(json));
   }
 
-  Future<StreamedResponse> sendRequest(HttpMethod method, String endpoint,
-      {String body, String contentType}) async {
+  Future<StreamedResponse> sendRequest(
+    HttpMethod method,
+    String endpoint, {
+    String body,
+    String contentType,
+  }) async {
     var methodString = method.toMethodString();
     var url = Uri.parse("$baseUrl/$endpoint");
     var request = Request(methodString, url);
 
     if (body != null) request.body = body;
 
-    // We don't tamper with the User-Agent on "web binaries", because that
-    // triggers CORS killing our request.
-    if (!kIsWeb) request.headers["User-Agent"] = Constants.userAgent;
+    // We don't tamper with the "User-Agent" header on "web binaries", because
+    // that triggers CORS killing our request.
+    if (!kIsWeb) {
+      request.headers["User-Agent"] = Constants.userAgent;
+    }
 
-    if (contentType.isNotNullOrEmpty)
+    if (contentType.isNotNullOrEmpty) {
       request.headers["Content-Type"] = contentType;
+    }
 
     // apply required authentication data if available
-    if (authenticationData != null) authenticationData.applyTo(request);
+    if (authenticationData != null) {
+      authenticationData.applyTo(request);
+    }
 
     var response = await request.send();
 

@@ -7,7 +7,6 @@ import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
-import 'package:kaiteki/model/fediverse/reaction.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 
 part 'pleroma_adapter.c.dart';
