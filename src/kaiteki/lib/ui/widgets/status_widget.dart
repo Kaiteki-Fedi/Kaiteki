@@ -116,11 +116,15 @@ class StatusWidget extends StatelessWidget {
                         onPressed: _post.repeated ? () {} : null,
                         color: _post.repeated ? theme.repeatColor : null,
                       ),
+                      if (_post.repeatCount > 0)
+                        Text(_post.repeatCount.toString()),
                       IconButton(
                         icon: Icon(_post.liked ? Mdi.star : Mdi.starOutline),
                         onPressed: _post.liked ? () {} : null,
                         color: _post.liked ? theme.favoriteColor : null,
                       ),
+                      if (_post.likeCount > 0)
+                        Text(_post.likeCount.toString()),
                       IconButton(
                         icon: Icon(Icons.insert_emoticon),
                         onPressed: null,

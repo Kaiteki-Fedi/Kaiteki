@@ -15,6 +15,8 @@ Post toPost(MastodonStatus source) {
     liked: source.favourited,
     emojis: source.emojis.map(toEmoji),
     attachments: source.mediaAttachments.map(toAttachment),
+    likeCount: source.favouritesCount,
+    repeatCount: source.reblogsCount,
   );
 }
 
