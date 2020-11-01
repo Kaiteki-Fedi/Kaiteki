@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'timeline.g.dart';
 
-@JsonSerializable(createFactory: false)
+@JsonSerializable(createFactory: false, includeIfNull: false)
 class MisskeyTimelineRequest {
   final int limit;
   final String sinceId;
