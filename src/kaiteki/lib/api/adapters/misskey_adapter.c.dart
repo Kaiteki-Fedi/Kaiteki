@@ -17,7 +17,7 @@ Post toPost(MisskeyNote source) {
       (mkr) {
         return Reaction(
           count: mkr.value,
-          includesMe: false,
+          includesMe: mkr.key == source.myReaction,
           users: [],
           emoji: getEmojiFromString(mkr.key, mappedEmoji),
         );
