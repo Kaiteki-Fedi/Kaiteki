@@ -13,10 +13,10 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!openOnTap) return _getAvatarImageWidget();
+    if (!openOnTap) return _getAvatarImageWidget(context);
 
     return GestureDetector(
-      child: _getAvatarImageWidget(),
+      child: _getAvatarImageWidget(context),
       onTap: () {
         var screen = AccountScreen(_user.id);
         var route = MaterialPageRoute(builder: (_) => screen);
@@ -25,7 +25,7 @@ class AvatarWidget extends StatelessWidget {
     );
   }
 
-  Widget _getAvatarImageWidget() {
+  Widget _getAvatarImageWidget(BuildContext context) {
     if (_user == null) {
       return Icon(
         Mdi.accountCircle,
@@ -35,6 +35,7 @@ class AvatarWidget extends StatelessWidget {
 
     return CircleAvatar(
       backgroundImage: NetworkImage(_user.avatarUrl),
+      backgroundColor: Theme.of(context).cardColor,
       radius: _getFixedSize(half: true),
     );
   }
