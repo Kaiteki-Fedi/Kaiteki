@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/theming/theme_container.dart';
+import 'package:provider/provider.dart';
 
 class AppTheme {
   final Color linkColor;
@@ -7,6 +9,12 @@ class AppTheme {
 
   final ChatMessageTheme incomingChatMessage;
   final ChatMessageTheme outgoingChatMessage;
+
+  final Color reactionInactiveBackground;
+  final TextStyle reactionInactiveTextStyle;
+
+  final Color reactionActiveBackground;
+  final TextStyle reactionActiveTextStyle;
 
   final Color borderColor;
   final Color textColor;
@@ -25,7 +33,16 @@ class AppTheme {
     this.incomingChatMessage,
     this.outgoingChatMessage,
     this.chatMessageRounding,
+    this.reactionInactiveBackground,
+    this.reactionInactiveTextStyle,
+    this.reactionActiveBackground,
+    this.reactionActiveTextStyle,
   });
+
+  static AppTheme of(BuildContext context, {bool listen = false}) {
+    var container = Provider.of<ThemeContainer>(context, listen: listen);
+    return container.current;
+  }
 }
 
 class ChatMessageTheme {

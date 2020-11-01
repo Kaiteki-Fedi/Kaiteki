@@ -24,6 +24,10 @@ class MaterialAppTheme implements AppThemeSource {
       linkColor: materialTheme.accentColor,
       borderColor: materialTheme.dividerColor,
       textColor: materialTheme.textTheme.bodyText1.color,
+      reactionInactiveBackground: materialTheme.cardColor,
+      reactionActiveBackground: materialTheme.accentColor,
+      reactionInactiveTextStyle: materialTheme.textTheme.bodyText1,
+      reactionActiveTextStyle: materialTheme.accentTextTheme.bodyText1,
     );
   }
 }
