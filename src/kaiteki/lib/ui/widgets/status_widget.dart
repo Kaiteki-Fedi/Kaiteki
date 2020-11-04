@@ -4,11 +4,12 @@ import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/ui/widgets/card_widget.dart';
 import 'package:kaiteki/ui/widgets/reaction_row.dart';
-import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/interaction_bar.dart';
+import 'package:kaiteki/utils/text_renderer.dart';
+import 'package:kaiteki/utils/text_renderer_theme.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
@@ -43,14 +44,13 @@ class StatusWidget extends StatelessWidget {
 
     var renderedAuthor = TextRenderer(
       emojis: _post.author.emojis,
-      textStyle: authorTextStyle,
-    ).render(_post.author.displayName);
+      theme: TextRendererTheme.fromContext(context),
+    ).renderFromHtml(_post.author.displayName);
 
     var renderedContent = TextRenderer(
       emojis: _post.emojis,
-      textStyle: textStyle,
-      linkTextStyle: textStyle.copyWith(color: theme.linkColor),
-    ).render(_post.content);
+      theme: TextRendererTheme.fromContext(context),
+    ).renderFromHtml(_post.content);
 
     return Container(
       child: Row(

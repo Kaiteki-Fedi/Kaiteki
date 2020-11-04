@@ -3,45 +3,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parseFragment;
 import 'package:kaiteki/model/fediverse/emoji.dart';
+import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/text_buffer.dart';
+import 'package:kaiteki/utils/text_renderer_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+typedef HtmlConstructor = InlineSpan Function(dom.Element element);
+
 class TextRenderer {
-  final Iterable<Emoji> emojis;
-
-  final TextStyle textStyle;
-  final TextStyle linkTextStyle;
-
   static const String emojiChar = ":";
-  static const String linkTag = "a";
 
-  bool get _supportEmoji => emojis != null && emojis.length != 0;
+  final Iterable<Emoji> emojis;
+  final TextRendererTheme theme;
 
-  const TextRenderer._({this.emojis, this.textStyle, this.linkTextStyle});
+  Map<String, HtmlConstructor> htmlConstructors;
+  bool hasEmoji;
 
-  factory TextRenderer(
-      {TextStyle textStyle, TextStyle linkTextStyle, Iterable<Emoji> emojis}) {
-    return TextRenderer._(
-      emojis: emojis,
-      textStyle: textStyle,
-      linkTextStyle: linkTextStyle ??
-          textStyle.copyWith(
-              // decoration: TextDecoration.underline,
-              color: Colors.blue),
-    );
+  TextRenderer({this.emojis, this.theme}) {
+    hasEmoji = emojis != null && emojis.length != 0;
+
+    htmlConstructors = {
+      "a": renderLink,
+    };
   }
 
-  InlineSpan render(String text) {
-    if (text == null) return null;
-
-    return renderNode(parseFragment(text));
+  InlineSpan renderFromHtml(String text) {
+    if (text == null) {
+      return null;
+    } else {
+      var fragment = parseFragment(text);
+      return renderNode(fragment);
+    }
   }
 
-  InlineSpan renderSpecial(String text, {List<InlineSpan> children}) {
+  /// This method takes care of parsing emojis and other formatting.
+  InlineSpan renderText(String text, {List<InlineSpan> children}) {
     var spans = <InlineSpan>[];
     var buffer = TextBuffer();
 
@@ -49,68 +48,49 @@ class TextRenderer {
     for (var i = 0; i < text.length; i++) {
       var char = text[i];
 
-      switch (char) {
-        case emojiChar:
-          {
-            if (!_supportEmoji) continue;
+      if (char == emojiChar && hasEmoji) {
+        // If the condition below is true, we should've finished reading the
+        // name of an emoji.
+        if (!readingEmoji) {
+          var emoji = emojis.firstOrDefault((e) => e.name == buffer.text);
 
-            if (readingEmoji) {
-              var emojiName = buffer.text;
-              var emojiFound = emojis.any((e) => e.name == emojiName);
+          if (emoji == null || !(emoji is CustomEmoji)) {
+            // nothing found, so we restore the stolen colon and
+            // add a normal text span.
+            buffer.prepend(emojiChar);
+            spans.add(_plain(buffer));
+          } else {
+            buffer.clear();
 
-              void restoreEmoji() {
-                // nothing found, so we restore the stolen colon and add a normal text span.
-                buffer.prepend(emojiChar);
-                spans.add(plain(buffer));
-                readingEmoji = true;
-              }
-
-              if (emojiFound) {
-                var emoji = emojis.firstWhere((e) => e.name == emojiName);
-
-                // TODO refactor
-                if (emoji is CustomEmoji) {
-                  buffer.clear();
-
-                  // FIXME: fix it or I will make you not-cute >:(
-                  var emojiSpan = WidgetSpan(
-                    child: Image.network(
-                      emoji.url,
-                      width: 32,
-                      height: 32,
-                    ),
-                  );
-
-                  spans.add(emojiSpan);
-
-                  readingEmoji = false;
-                } else {
-                  restoreEmoji();
-                }
-              } else {
-                restoreEmoji();
-              }
-            } else {
-              spans.add(plain(buffer));
-              readingEmoji = true;
-            }
-
-            break;
+            spans.add(
+              WidgetSpan(
+                child: Image.network(
+                  (emoji as CustomEmoji).url,
+                  width: theme.emojiSize,
+                  height: theme.emojiSize,
+                ),
+              ),
+            );
           }
-        default:
-          {
-            buffer.append(char);
-            break;
-          }
+
+          readingEmoji = false;
+        } else {
+          spans.add(_plain(buffer));
+          readingEmoji = true;
+        }
+      } else {
+        buffer.append(char);
       }
     }
 
-    if (buffer.text.isNotEmpty) spans.add(plain(buffer));
+    if (buffer.text.isNotEmpty) {
+      spans.add(_plain(buffer));
+    }
 
     return TextSpan(children: spans..addAll(children));
   }
 
-  InlineSpan renderNode(Node node) {
+  InlineSpan renderNode(dom.Node node) {
     InlineSpan resultingSpan;
 
     var renderedSubNodes = node.nodes
@@ -118,27 +98,17 @@ class TextRenderer {
         .toList(growable: false);
 
     if (node is dom.Element) {
-      if (node.localName == linkTag) {
-        var recognizer = new TapGestureRecognizer();
-        recognizer.onTap = () {
-          // TODO add user mention link support
-          // node.classes.contains("mention")
+      var tag = node.localName.toLowerCase();
 
-          var linkTarget = node.attributes["href"];
-          launch(linkTarget);
-        };
-
-        resultingSpan = TextSpan(
-          text: node.text,
-          recognizer: recognizer,
-          style: linkTextStyle,
-        );
+      if (htmlConstructors.containsKey(tag)) {
+        resultingSpan = htmlConstructors[tag].call(node);
       } else {
-        Logger.warning("Unhandled HTML tag: ${node.localName}");
+        Logger.warning("Unhandled HTML tag ($tag)");
       }
     } else if (node is dom.Text) {
       dom.Text textElement = node;
-      resultingSpan = renderSpecial(
+
+      resultingSpan = renderText(
         textElement.text,
         children: renderedSubNodes,
       );
@@ -151,6 +121,28 @@ class TextRenderer {
     return resultingSpan;
   }
 
-  TextSpan plain(TextBuffer buffer) =>
-      TextSpan(style: textStyle, text: buffer.cut());
+  InlineSpan renderLink(dom.Element element) {
+    var recognizer = new TapGestureRecognizer();
+
+    recognizer.onTap = () {
+      // TODO add user mention link support
+      // node.classes.contains("mention")
+
+      var linkTarget = element.attributes["href"];
+      launch(linkTarget);
+    };
+
+    return TextSpan(
+      text: element.text,
+      recognizer: recognizer,
+      style: theme.linkTextStyle,
+    );
+  }
+
+  TextSpan _plain(TextBuffer buffer) {
+    return TextSpan(
+      style: theme.textStyle,
+      text: buffer.cut(),
+    );
+  }
 }

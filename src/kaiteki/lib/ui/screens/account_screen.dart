@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
-import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
+import 'package:kaiteki/utils/text_renderer.dart';
+import 'package:kaiteki/utils/text_renderer_theme.dart';
 import 'package:provider/provider.dart';
 
 
@@ -43,19 +44,16 @@ class _AccountScreenState extends State<AccountScreen>
           }
 
           return ListView(
-              children: [
-                Material(
-                  child: AccountHeader(
-                    account: snapshot.data,
-                    linkColor: Theme.of(context).accentColor,
-                  ),
-                  elevation: 4,
-                ),
-                getStatusBody(container.adapter),
-              ]
+            children: [
+              Material(
+                child: AccountHeader(account: snapshot.data),
+                elevation: 4,
+              ),
+              getStatusBody(container.adapter),
+            ],
           );
         },
-      )
+      ),
     );
   }
 
@@ -86,11 +84,9 @@ class AccountHeader extends StatelessWidget {
   const AccountHeader({
     Key key,
     @required this.account,
-    @required this.linkColor,
   }) : super(key: key);
 
   final User account;
-  final Color linkColor;
 
   @override
   Widget build(BuildContext context) {
@@ -118,31 +114,21 @@ class AccountHeader extends StatelessWidget {
                     ],
                   ),
                 )
+          RichText(
+            text: TextSpan(
+              children: [
+                TextRenderer(
+                  emojis: account.emojis,
+                  theme: TextRendererTheme.fromContext(context),
+                ).renderFromHtml(account.description)
               ],
+              style: TextStyle(
+                shadows: [Shadow(blurRadius: 2, offset: Offset(0, 1))],
+              ),
             ),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextRenderer(
-                    emojis: account.emojis,
-                    linkTextStyle: TextStyle(
-                      color: linkColor
-                    ),
-                    textStyle: TextStyle(),
-                  ).render(account.description)
-                ],
-                style: TextStyle(
-                  shadows: [
-                    Shadow(
-                      blurRadius: 2,
-                      offset: Offset(0, 1)
-                    )
-                  ]
-                )
-              )
-            )
-          ],
-        )
+          ),
+        ],
+      ),
     );
   }
 

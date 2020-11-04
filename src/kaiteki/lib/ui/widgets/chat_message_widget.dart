@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
-import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
+import 'package:kaiteki/utils/text_renderer.dart';
+import 'package:kaiteki/utils/text_renderer_theme.dart';
 import 'package:provider/provider.dart';
 
 class ChatMessageWidget extends StatefulWidget {
@@ -48,24 +49,25 @@ class _ChatMessageWidgetState extends State<ChatMessageWidget> {
               child: AvatarWidget(widget.chatMessage.user, size: avatarSize),
             ),
           Container(
-              constraints: BoxConstraints.tightFor(width: b.maxWidth * 0.8),
-              padding: const EdgeInsets.all(10.5),
-              decoration: BoxDecoration(
-                  color: msgTheme.background,
-                  borderRadius:
-                      BorderRadius.circular(appTheme.chatMessageRounding),
-                  border: Border.all(color: msgTheme.border, width: 1)),
-              child: Column(
-                children: [
-                  RichText(
-                      text: TextRenderer(
-                    emojis: widget.chatMessage.content.emojis,
-                    textStyle: TextStyle(color: appTheme.textColor),
-                  ).render(widget.chatMessage.content.content)),
-                  for (var attachment in widget.chatMessage.content.attachments)
-                    getAttachmentWidget(attachment),
-                ],
-              )),
+            constraints: BoxConstraints.tightFor(width: b.maxWidth * 0.8),
+            padding: const EdgeInsets.all(10.5),
+            decoration: BoxDecoration(
+              color: msgTheme.background,
+              borderRadius: BorderRadius.circular(appTheme.chatMessageRounding),
+              border: Border.all(color: msgTheme.border, width: 1),
+            ),
+            child: Column(
+              children: [
+                RichText(
+                    text: TextRenderer(
+                  emojis: widget.chatMessage.content.emojis,
+                  theme: TextRendererTheme.fromContext(context),
+                ).renderFromHtml(widget.chatMessage.content.content)),
+                for (var attachment in widget.chatMessage.content.attachments)
+                  getAttachmentWidget(attachment),
+              ],
+            ),
+          ),
         ]),
       ),
     );
