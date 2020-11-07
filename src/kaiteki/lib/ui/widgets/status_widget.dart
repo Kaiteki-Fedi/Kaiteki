@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
-import 'package:kaiteki/ui/widgets/card_widget.dart';
-import 'package:kaiteki/ui/widgets/reaction_row.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
+import 'package:kaiteki/ui/widgets/card_widget.dart';
 import 'package:kaiteki/ui/widgets/interaction_bar.dart';
+import 'package:kaiteki/ui/widgets/reaction_row.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/utils/text_renderer_theme.dart';
 import 'package:mdi/mdi.dart';
@@ -123,8 +123,7 @@ class StatusWidget extends StatelessWidget {
                         onPressed: _post.liked ? () {} : null,
                         color: _post.liked ? theme.favoriteColor : null,
                       ),
-                      if (_post.likeCount > 0)
-                        Text(_post.likeCount.toString()),
+                      if (_post.likeCount > 0) Text(_post.likeCount.toString()),
                       IconButton(
                         icon: Icon(Icons.insert_emoticon),
                         onPressed: null,

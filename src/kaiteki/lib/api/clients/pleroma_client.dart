@@ -1,25 +1,26 @@
-import 'package:kaiteki/api/api_type.dart';
-import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:fediverse_objects/pleroma/chat.dart';
 import 'package:fediverse_objects/pleroma/chat_message.dart';
+import 'package:kaiteki/api/api_type.dart';
+import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/model/http_method.dart';
 
 class PleromaClient extends MastodonClient {
   @override
   ApiType get type => ApiType.Pleroma;
 
-  Future<Iterable<PleromaChat>> getChats() async =>
-    await sendJsonRequestMultiple(
+  Future<Iterable<PleromaChat>> getChats() async {
+    return await sendJsonRequestMultiple(
       HttpMethod.GET,
       "api/v1/pleroma/chats",
-      (json) => PleromaChat.fromJson(json)
+      (json) => PleromaChat.fromJson(json),
     );
+  }
 
   Future<Iterable<PleromaChatMessage>> getChatMessages(String id) async {
     return await sendJsonRequestMultiple(
       HttpMethod.GET,
       "api/v1/pleroma/chats/$id/messages",
-      (j) => PleromaChatMessage.fromJson(j)
+      (j) => PleromaChatMessage.fromJson(j),
     );
   }
 
@@ -28,7 +29,7 @@ class PleromaClient extends MastodonClient {
       HttpMethod.POST,
       "api/v1/pleroma/chats/$id/messages",
       (j) => PleromaChatMessage.fromJson(j),
-      body: { "content": message },
+      body: {"content": message},
     );
   }
 }

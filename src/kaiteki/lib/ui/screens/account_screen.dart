@@ -1,18 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
-import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/utils/text_renderer_theme.dart';
 import 'package:provider/provider.dart';
 
-
 class AccountScreen extends StatefulWidget {
-
   final String id;
 
   AccountScreen(this.id);
@@ -37,10 +35,12 @@ class _AccountScreenState extends State<AccountScreen>
           }
 
           if (!snapshot.hasData) {
-            return Center(child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: CircularProgressIndicator(),
-            ));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
 
           return ListView(
@@ -66,13 +66,12 @@ class _AccountScreenState extends State<AccountScreen>
 
           return Column(
             children: [
-              for (var status in statuses)
-                StatusWidget(status),
+              for (var status in statuses) StatusWidget(status),
             ],
           );
         } else if (snapshot.hasError) {
           return Text("oof: " + snapshot.error.toString());
-        } else{
+        } else {
           return Center(child: CircularProgressIndicator());
         }
       },
@@ -91,29 +90,25 @@ class AccountHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-        decoration: BoxDecoration(
-          image: getDecorationBackground(account),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Image.network(
-                  account.avatarUrl,
-                  width: 56,
-                  height: 56
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+      decoration: BoxDecoration(image: getDecorationBackground(account)),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Image.network(account.avatarUrl, width: 56, height: 56),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(account.displayName),
+                    Text('@' + account.username),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(account.displayName),
-                      Text('@' + account.username),
-                    ],
-                  ),
-                )
+              )
+            ],
+          ),
           RichText(
             text: TextSpan(
               children: [
@@ -137,7 +132,7 @@ class AccountHeader extends StatelessWidget {
 
     return DecorationImage(
       fit: BoxFit.cover,
-      image: NetworkImage(account.bannerUrl)
+      image: NetworkImage(account.bannerUrl),
     );
   }
 }

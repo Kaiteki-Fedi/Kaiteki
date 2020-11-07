@@ -7,8 +7,6 @@ import 'package:kaiteki/ui/screens/auth/mfa_screen.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:provider/provider.dart';
 
-// TODO Try to make this screen standalone and not rely on any specific client
-//       implementations.
 class LoginScreen extends StatefulWidget {
   LoginScreen(
       {this.image,
@@ -112,7 +110,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String validateInstance(String instance) {
-    if (instance.isEmpty) return "Please enter an instance";
+    if (instance.isEmpty) {
+      return "Please enter an instance";
+    }
 
     var lowerCase = instance.toLowerCase();
     if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://"))
@@ -122,13 +122,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String validatePassword(String password) {
-    if (password.isEmpty) return "Please enter a password";
+    if (password.isEmpty) {
+      return "Please enter a password";
+    }
 
     return null;
   }
 
   String validateUsername(String username) {
-    if (username.isEmpty) return "Please enter an username";
+    if (username.isEmpty) {
+      return "Please enter an username";
+    }
 
     return null;
   }

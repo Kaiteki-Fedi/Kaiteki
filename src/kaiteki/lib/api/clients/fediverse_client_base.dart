@@ -1,14 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:http/http.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/exceptions/api_exception.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
-import 'package:http/http.dart';
-
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/utils.dart';
 
@@ -26,10 +25,12 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   String instance;
   ApiType get type;
 
-  // TODO add missing
   Future<T> sendJsonRequest<T>(
-      HttpMethod method, String endpoint, DeserializeFromJson<T> toObject,
-      {Object body}) async {
+    HttpMethod method,
+    String endpoint,
+    DeserializeFromJson<T> toObject, {
+    Object body,
+  }) async {
     var requestBodyJson = body == null ? null : jsonEncode(body);
     var requestContentType = body == null ? null : "application/json";
 
@@ -47,8 +48,11 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   }
 
   Future<Iterable<T>> sendJsonRequestMultiple<T>(
-      HttpMethod method, String endpoint, DeserializeFromJson<T> toObject,
-      {Object body}) async {
+    HttpMethod method,
+    String endpoint,
+    DeserializeFromJson<T> toObject, {
+    Object body,
+  }) async {
     var requestBodyJson = body == null ? null : jsonEncode(body);
     var requestContentType = body == null ? null : "application/json";
 
