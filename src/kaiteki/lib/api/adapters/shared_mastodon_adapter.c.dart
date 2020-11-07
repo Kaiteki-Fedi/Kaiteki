@@ -17,6 +17,7 @@ Post toPost(MastodonStatus source) {
     attachments: source.mediaAttachments.map(toAttachment),
     likeCount: source.favouritesCount,
     repeatCount: source.reblogsCount,
+    replyCount: source.repliesCount,
   );
 }
 

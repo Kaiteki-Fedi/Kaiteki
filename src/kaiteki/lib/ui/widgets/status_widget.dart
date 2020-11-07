@@ -111,6 +111,8 @@ class StatusWidget extends StatelessWidget {
                         icon: Icon(Icons.reply),
                         onPressed: null,
                       ),
+                      if (_post.replyCount > 0)
+                        Text(_post.replyCount.toString()),
                       IconButton(
                         icon: Icon(Icons.repeat),
                         onPressed: _post.repeated ? () {} : null,
