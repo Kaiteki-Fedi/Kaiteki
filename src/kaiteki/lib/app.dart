@@ -94,7 +94,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
               darkTheme: ThemeData.from(
                 colorScheme: DefaultAppThemes.darkScheme,
               ),
-              color: AppColors.darkBackground,
+              color: AppColors.kaitekiGray.shade900,
               initialRoute: "/",
               routes: {
                 "/": (_) => Builder(

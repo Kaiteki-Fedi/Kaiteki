@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class AppColors {
-  static final Color darkBackground = const Color(0xFF1E2133);
-  static final Color darkSurface = const Color(0xFF404256);
-
-  static final Color lightBackground = const Color(0xFFebedff);
-  static final Color lightSurface = const Color(0xFFf7f9ff);
-
   static MaterialColor kaitekiGray = MaterialColor(
     0xFF9c9eb5,
     {
