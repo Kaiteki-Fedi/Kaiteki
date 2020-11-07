@@ -32,4 +32,20 @@ class PleromaClient extends MastodonClient {
       body: {"content": message},
     );
   }
+
+  Future<void> react(String postId, String emoji) async {
+    return await sendJsonRequest(
+      HttpMethod.PUT,
+      "/api/v1/pleroma/statuses/$postId/reactions/$emoji",
+      null,
+    );
+  }
+
+  Future<void> removeReaction(String postId, String emoji) async {
+    return await sendJsonRequest(
+      HttpMethod.DELETE,
+      "/api/v1/pleroma/statuses/$postId/reactions/$emoji",
+      null,
+    );
+  }
 }
