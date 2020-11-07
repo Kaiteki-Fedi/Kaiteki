@@ -8,19 +8,17 @@ import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen(
-      {this.image,
-      this.color,
-      this.backgroundColor,
-      this.onLogin,
-      this.type,
-      Key key})
-      : super(key: key);
+  LoginScreen({
+    this.image,
+    this.onLogin,
+    this.theme,
+    this.type,
+    Key key,
+  }) : super(key: key);
 
   final ImageProvider image;
-  final Color color;
-  final Color backgroundColor;
   final ApiType type;
+  final ThemeData theme;
 
   final LoginCallback onLogin;
 
@@ -39,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: _getTheme(),
+      data: widget.theme,
       child: Scaffold(
           appBar: AppBar(title: Text("Log into an instance")),
           body: LayoutBuilder(
@@ -77,35 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
       instanceController: _instanceController,
       usernameController: _usernameController,
       passwordController: _passwordController,
-    );
-  }
-
-  ThemeData _getTheme() {
-    var colorScheme = ColorScheme(
-      primary: widget.color,
-      primaryVariant: widget.color,
-      secondary: widget.color,
-      secondaryVariant: widget.color,
-      background: widget.backgroundColor,
-      surface: widget.backgroundColor,
-      onBackground: Colors.white,
-      onSurface: Colors.white,
-      onPrimary: widget.backgroundColor,
-      onSecondary: widget.backgroundColor,
-      error: Colors.red,
-      onError: Colors.black,
-      brightness: Brightness.dark,
-    );
-
-    return ThemeData.from(colorScheme: colorScheme).copyWith(
-      buttonColor: widget.color,
-      buttonTheme: ButtonThemeData(
-        textTheme: ButtonTextTheme.primary,
-      ),
-      textSelectionTheme: TextSelectionThemeData(
-        cursorColor: widget.color,
-      ),
-      appBarTheme: AppBarTheme(elevation: 0),
     );
   }
 

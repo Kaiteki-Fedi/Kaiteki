@@ -39,11 +39,13 @@ class InstanceListWidget extends StatelessWidget {
             getRoute(
               LoginScreen(
                 image: AssetImage("assets/icons/mastodon.png"),
-                color: AppColors.mastodonPrimary,
-                backgroundColor: AppColors.mastodonSecondary,
+                theme: _makeTheme(
+                  AppColors.mastodonSecondary,
+                  AppColors.mastodonPrimary,
+                ),
                 onLogin: container.createAdapter(ApiType.Mastodon).login,
-              )
-            )
+              ),
+            ),
           ),
         ),
         ListTile(
@@ -57,11 +59,13 @@ class InstanceListWidget extends StatelessWidget {
             getRoute(
               LoginScreen(
                 image: AssetImage("assets/icons/pleroma.png"),
-                color: AppColors.pleromaPrimary,
-                backgroundColor: AppColors.pleromaSecondary,
+                theme: _makeTheme(
+                  AppColors.pleromaSecondary,
+                  AppColors.pleromaPrimary,
+                ),
                 onLogin: container.createAdapter(ApiType.Pleroma).login,
-              )
-            )
+              ),
+            ),
           ),
         ),
         ListTile(
@@ -71,15 +75,17 @@ class InstanceListWidget extends StatelessWidget {
           ),
           title: Text("Misskey"),
           onTap: () => Navigator.push(
-              context,
-              getRoute(
-                  LoginScreen(
-                    image: AssetImage("assets/icons/misskey.png"),
-                    color: AppColors.misskeyPrimary,
-                    backgroundColor: AppColors.misskeySecondary,
-                    onLogin: container.createAdapter(ApiType.Misskey).login,
-                  )
-              )
+            context,
+            getRoute(
+              LoginScreen(
+                image: AssetImage("assets/icons/misskey.png"),
+                theme: _makeTheme(
+                  AppColors.misskeySecondary,
+                  AppColors.misskeyPrimary,
+                ),
+                onLogin: container.createAdapter(ApiType.Misskey).login,
+              ),
+            ),
           ),
         ),
         Divider(),
@@ -107,13 +113,32 @@ class InstanceListWidget extends StatelessWidget {
     );
   }
 
-  PageRoute getRoute(LoginScreen screen) => PageRouteBuilder(
-    pageBuilder: (_, __, ___) => screen,
-    transitionsBuilder: (_, anime, anime2, child) => SharedAxisTransition(
-      child: child,
-      animation: anime,
-      secondaryAnimation: anime2,
-      transitionType: SharedAxisTransitionType.scaled,
-    ),
-  );
+  ThemeData _makeTheme(Color background, Color foreground) {
+    return ThemeData.from(
+      colorScheme: ColorScheme.dark(
+        background: background,
+        surface: background,
+        primary: foreground,
+        secondary: foreground,
+        primaryVariant: foreground,
+        secondaryVariant: foreground,
+      ),
+    ).copyWith(
+      buttonTheme: ButtonThemeData(
+        buttonColor: foreground,
+      ),
+    );
+  }
+
+  PageRoute getRoute(LoginScreen screen) {
+    return PageRouteBuilder(
+      pageBuilder: (_, __, ___) => screen,
+      transitionsBuilder: (_, anime, anime2, child) => SharedAxisTransition(
+        child: child,
+        animation: anime,
+        secondaryAnimation: anime2,
+        transitionType: SharedAxisTransitionType.scaled,
+      ),
+    );
+  }
 }
