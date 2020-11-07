@@ -44,6 +44,8 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     var bodyText = await response.stream.bytesToString();
     var bodyJson = jsonDecode(bodyText);
 
+    if (toObject == null) return null;
+
     return toObject.call(bodyJson);
   }
 
