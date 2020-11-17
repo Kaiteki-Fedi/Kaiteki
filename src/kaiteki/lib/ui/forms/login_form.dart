@@ -45,6 +45,7 @@ class _LoginFormState extends State<LoginForm> {
 
     return Form(
       key: _formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: AutofillGroup(
         child: Column(
           children: [

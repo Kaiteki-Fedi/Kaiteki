@@ -113,10 +113,7 @@ class StatusWidget extends StatelessWidget {
 
                   Row(
                     children: [
-                      IconButton(
-                        icon: Icon(Icons.reply),
-                        onPressed: null,
-                      ),
+                      IconButton(icon: Icon(Icons.reply)),
                       if (_post.replyCount > 0)
                         Text(_post.replyCount.toString()),
                       IconButton(

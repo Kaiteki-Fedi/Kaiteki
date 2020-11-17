@@ -49,6 +49,7 @@ class _MainScreenState extends State<MainScreen> {
         text: "Chats",
         fabTooltip: 'New chat',
         fabIcon: Mdi.plus,
+        fabText: "New",
       ),
     ];
   }
@@ -209,8 +210,8 @@ class _MainScreenState extends State<MainScreen> {
     await showDialog(
       context: context,
       child: Dialog(
-        child: Container(
-          child: PostForm(replyTo: replyTo),
+        child: SizedBox(
+          child: Scaffold(body: PostForm(replyTo: replyTo)),
           width: 800,
           height: 500,
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class TextRendererTheme {
@@ -13,14 +14,16 @@ class TextRendererTheme {
   factory TextRendererTheme.fromContext(BuildContext context) {
     var themeContainer = Provider.of<ThemeContainer>(context);
     var theme = themeContainer.current;
-    var textStyle = theme.materialTheme.textTheme.bodyText1;
+
+    var textTheme = theme.materialTheme.textTheme;
+    var textStyle = textTheme.bodyText1;
 
     return TextRendererTheme(
       textStyle,
       textStyle.copyWith(
         color: theme.materialTheme.accentColor,
       ),
-      textStyle.fontSize,
+      Utils.getLocalFontSize(context),
     );
   }
 }
