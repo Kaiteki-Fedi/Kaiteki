@@ -33,7 +33,6 @@ dependencies:
   shared_preferences: ^0.5.12+2
   google_fonts: ^1.1.1
   badges: ^1.1.4
-  extended_image: ^1.3.0
   html: ^0.14.0+4
   json_annotation: ^3.1.0
 

@@ -1,4 +1,3 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/theming/theme_container.dart';
@@ -62,32 +61,18 @@ class ImageAttachmentWidget extends StatelessWidget {
       child: Scaffold(
         backgroundColor: background,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
+          backgroundColor: Colors.black.withOpacity(0.5),
           title: attachment.description == null
               ? null
               : Text(attachment.description ?? ""),
         ),
-        body: Center(
-          child: ExtendedImage.network(
-            attachment.url,
-            fit: BoxFit.fill,
-
-            //enableLoadState: false,
-            mode: ExtendedImageMode.gesture,
-            initGestureConfigHandler: (state) {
-              return GestureConfig(
-                minScale: 1,
-                animationMinScale: 0.7,
-                maxScale: 5.0,
-                animationMaxScale: 5.0,
-                speed: 1.0,
-                inertialSpeed: 100.0,
-                initialScale: 1.0,
-                inPageView: false,
-                initialAlignment: InitialAlignment.center,
-              );
-            },
+        body: InteractiveViewer(
+          alignPanAxis: true,
+          child: Center(
+            child: Image.network(
+              attachment.url,
+              fit: BoxFit.fill,
+            ),
           ),
         ),
       ),
