@@ -33,7 +33,7 @@ class _PostFormState extends State<PostForm> {
               IconButton(
                 icon: Icon(Mdi.chevronRight),
                 onPressed: null,
-              )
+              ),
             ],
           ),
           TextField(
@@ -94,12 +94,13 @@ class _PostFormState extends State<PostForm> {
               ),
 
               Spacer(),
+
               RaisedButton(
                 child: Text("Submit"),
                 onPressed: () => post(container.adapter),
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

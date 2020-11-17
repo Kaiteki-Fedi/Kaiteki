@@ -19,10 +19,9 @@ class ImageAttachmentWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        // TODO (theming): Implement pleroma attachment rounding
-        borderRadius: borderRadius,
-        border: Border.all(color: border, width: 1)
-      ),
+          // TODO (theming): Implement pleroma attachment rounding
+          borderRadius: borderRadius,
+          border: Border.all(color: border, width: 1)),
       child: GestureDetector(
         onTap: () => enlargeImage(context),
         child: ClipRRect(
@@ -32,17 +31,18 @@ class ImageAttachmentWidget extends StatelessWidget {
             loadingBuilder: (_, w, c) {
               if (c == null ||
                   c.cumulativeBytesLoaded == null ||
-                  c.expectedTotalBytes == null)
+                  c.expectedTotalBytes == null) {
                 return w;
+              }
 
               return Center(
-                child: CircularProgressIndicator(value: c.cumulativeBytesLoaded / c.expectedTotalBytes)
+                child: CircularProgressIndicator(
+                  value: c.cumulativeBytesLoaded / c.expectedTotalBytes,
+                ),
               );
             },
             errorBuilder: (_, w, c) {
-              return Center(
-                child: Icon(Mdi.alert)
-              );
+              return Center(child: Icon(Mdi.alert));
             },
             //width: 100,
             fit: BoxFit.contain,
@@ -65,8 +65,8 @@ class ImageAttachmentWidget extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: attachment.description == null
-            ? null
-            : Text(attachment.description ?? ""),
+              ? null
+              : Text(attachment.description ?? ""),
         ),
         body: Center(
           child: ExtendedImage.network(
@@ -89,9 +89,8 @@ class ImageAttachmentWidget extends StatelessWidget {
               );
             },
           ),
-        )
-
-      )
+        ),
+      ),
     );
   }
 }

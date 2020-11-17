@@ -1,18 +1,18 @@
 import 'dart:convert';
-import 'package:kaiteki/api/api_type.dart';
 
-import 'package:kaiteki/api/responses/mastodon/login_response.dart';
-import 'package:kaiteki/api/clients/fediverse_client_base.dart';
-import 'package:kaiteki/constants.dart';
 import 'package:fediverse_objects/mastodon/account.dart';
 import 'package:fediverse_objects/mastodon/application.dart';
 import 'package:fediverse_objects/mastodon/instance.dart';
 import 'package:fediverse_objects/mastodon/notification.dart';
 import 'package:fediverse_objects/mastodon/status.dart';
+import 'package:http/http.dart' as http;
+import 'package:kaiteki/api/api_type.dart';
+import 'package:kaiteki/api/clients/fediverse_client_base.dart';
+import 'package:kaiteki/api/responses/mastodon/login_response.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/utils.dart';
-import 'package:http/http.dart' as http;
 
 class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   @override
@@ -56,22 +56,26 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   }
 
   Future<LoginResponse> respondMfa(String mfaToken, int code) async {
-    return await sendJsonRequest(HttpMethod.POST, "/oauth/mfa/challenge",
-        (j) => LoginResponse.fromJson(j),
-        body: {
-          "mfa_token": mfaToken,
-          "code": code.toString(),
-          "challenge_type": "totp",
-          "client_id": authenticationData.clientId,
-          "client_secret": authenticationData.clientSecret
-        });
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "/oauth/mfa/challenge",
+      (j) => LoginResponse.fromJson(j),
+      body: {
+        "mfa_token": mfaToken,
+        "code": code.toString(),
+        "challenge_type": "totp",
+        "client_id": authenticationData.clientId,
+        "client_secret": authenticationData.clientSecret,
+      },
+    );
   }
 
   Future<MastodonAccount> verifyCredentials() async {
     return await sendJsonRequest(
-        HttpMethod.GET,
-        "api/v1/accounts/verify_credentials",
-        (json) => MastodonAccount.fromJson(json));
+      HttpMethod.GET,
+      "api/v1/accounts/verify_credentials",
+      (json) => MastodonAccount.fromJson(json),
+    );
   }
 
   Future<MastodonApplication> createApplication(
@@ -88,7 +92,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
         "client_name": clientName,
         "website": website,
         "redirect_uris": redirect,
-        "scopes": scopes.join(" ")
+        "scopes": scopes.join(" "),
       },
     );
   }

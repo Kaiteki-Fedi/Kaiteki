@@ -9,13 +9,16 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 // TODO maybe make this UI-only and remove interaction between adapters and
-//       models?
+//      models?
 class ReactionWidget extends StatefulWidget {
   final Post parentPost;
   final Reaction reaction;
 
-  ReactionWidget({Key key, @required this.parentPost, @required this.reaction})
-      : super(key: key);
+  ReactionWidget({
+    Key key,
+    @required this.parentPost,
+    @required this.reaction,
+  }) : super(key: key);
 
   @override
   _ReactionWidgetState createState() => _ReactionWidgetState();

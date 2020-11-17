@@ -16,22 +16,34 @@ abstract class Emoji<T> {
     @required this.source,
     @required this.name,
     this.aliases,
-    this.visibleInPicker = false
+    this.visibleInPicker = false,
   });
 }
 
 class UnicodeEmoji extends Emoji<String> {
   const UnicodeEmoji(
     String emoji,
-    String name,
-    {Iterable<String> aliases}
-  ) : super(source: emoji, name: name, aliases: aliases, visibleInPicker: true);
+    String name, {
+    Iterable<String> aliases,
+  }) : super(
+          source: emoji,
+          name: name,
+          aliases: aliases,
+          visibleInPicker: true
+        );
 }
 
 class CustomEmoji<T> extends Emoji<T> {
   /// The URL of the image that represents this emoji.
   final String url;
 
-  const CustomEmoji({T source, String name, Iterable<String> aliases, this.url})
-    : super(source: source, name: name, aliases: aliases);
+  const CustomEmoji({
+    T source,
+    String name,
+    Iterable<String> aliases,
+    this.url,
+  }) : super(source: source, name: name, aliases: aliases);
+
+  @override
+  String toString() => ":$name:";
 }

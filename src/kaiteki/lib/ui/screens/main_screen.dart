@@ -22,11 +22,11 @@ class _MainScreenState extends State<MainScreen> {
   var _pageController = PageController();
   var _currentPage = 0;
   var pageViewKey = UniqueKey();
-  
+
   @override
   void initState() {
     super.initState();
-    
+
     _tabs = [
       _MainScreenTab(
         icon: Mdi.home,
@@ -45,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
         fabOnTap: () {},
       ),
       _MainScreenTab(
-        icon: Mdi.forum, 
+        icon: Mdi.forum,
         text: "Chats",
         fabTooltip: 'New chat',
         fabIcon: Mdi.plus,
@@ -104,26 +104,25 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
-        floatingActionButton: getFabDesktop(context, _currentPage)
-    );
+        floatingActionButton: getFabDesktop(context, _currentPage));
   }
 
   Widget buildMobileView(String appName) {
     return Scaffold(
-      appBar: AppBar(
-        leading: AccountSwitcherWidget(),
-        title: Text(appName, style: TextStyle(fontWeight: FontWeight.bold)),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
-          ),
-        ],
-      ),
-      body: getPageView(),
-      bottomNavigationBar: getNavigationBar(),
-      floatingActionButton: getFab(context, _currentPage)
-    );
+        appBar: AppBar(
+          leading: AccountSwitcherWidget(),
+          title: Text(appName, style: TextStyle(fontWeight: FontWeight.bold)),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => SettingsScreen())),
+            ),
+          ],
+        ),
+        body: getPageView(),
+        bottomNavigationBar: getNavigationBar(),
+        floatingActionButton: getFab(context, _currentPage));
   }
 
   Iterable<Widget> getTabListItems() {
@@ -143,16 +142,18 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  getPageView() => PageView(
-    controller: _pageController,
-    physics: NeverScrollableScrollPhysics(),
-    key: pageViewKey,
-    children: [
-      TimelinePage(key: ValueKey(0)),
-      NotificationsPage(key: ValueKey(1)),
-      ChatsPage(key: ValueKey(2)),
-    ],
-  );
+  getPageView() {
+    return PageView(
+      controller: _pageController,
+      physics: NeverScrollableScrollPhysics(),
+      key: pageViewKey,
+      children: [
+        TimelinePage(key: ValueKey(0)),
+        NotificationsPage(key: ValueKey(1)),
+        ChatsPage(key: ValueKey(2)),
+      ],
+    );
+  }
 
   getNavigationBar() {
     return BottomNavigationBar(
@@ -175,7 +176,7 @@ class _MainScreenState extends State<MainScreen> {
       _pageController.animateToPage(
         _currentPage,
         duration: Duration(milliseconds: 150),
-        curve: Curves.easeInOut
+        curve: Curves.easeInOut,
       );
     });
   }
@@ -183,8 +184,7 @@ class _MainScreenState extends State<MainScreen> {
   FloatingActionButton getFab(BuildContext context, int index) {
     var tab = _tabs[_currentPage];
 
-    if (tab.fabIcon == null)
-      return null;
+    if (tab.fabIcon == null) return null;
 
     return FloatingActionButton(
       tooltip: tab.fabTooltip,
@@ -192,12 +192,11 @@ class _MainScreenState extends State<MainScreen> {
       onPressed: tab.fabOnTap,
     );
   }
-  
+
   FloatingActionButton getFabDesktop(BuildContext context, int index) {
     var tab = _tabs[_currentPage];
 
-    if (tab.fabIcon == null)
-      return null;
+    if (tab.fabIcon == null) return null;
 
     return FloatingActionButton.extended(
       label: Text(tab.fabText),
@@ -231,5 +230,12 @@ class _MainScreenTab {
   final String fabText;
   final IconData fabIcon;
 
-  const _MainScreenTab({this.icon, this.text, this.fabOnTap, this.fabTooltip, this.fabText, this.fabIcon});
+  const _MainScreenTab({
+    this.icon,
+    this.text,
+    this.fabOnTap,
+    this.fabTooltip,
+    this.fabText,
+    this.fabIcon,
+  });
 }

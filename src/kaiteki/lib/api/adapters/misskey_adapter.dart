@@ -1,12 +1,12 @@
+import 'package:fediverse_objects/misskey/emoji.dart';
 import 'package:fediverse_objects/misskey/file.dart';
+import 'package:fediverse_objects/misskey/note.dart';
+import 'package:fediverse_objects/misskey/user.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/api/clients/misskey_client.dart';
-import 'package:fediverse_objects/misskey/emoji.dart';
-import 'package:fediverse_objects/misskey/note.dart';
-import 'package:fediverse_objects/misskey/user.dart';
 import 'package:kaiteki/api/requests/misskey/sign_in.dart';
 import 'package:kaiteki/api/requests/misskey/timeline.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';

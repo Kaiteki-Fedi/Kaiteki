@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:fediverse_objects/misskey/error.dart';
-import 'package:http/http.dart';
-import 'package:kaiteki/api/api_type.dart';
-import 'package:kaiteki/api/clients/fediverse_client_base.dart';
 import 'package:fediverse_objects/misskey/note.dart';
 import 'package:fediverse_objects/misskey/pages/page.dart';
 import 'package:fediverse_objects/misskey/user.dart';
+import 'package:http/http.dart';
+import 'package:kaiteki/api/api_type.dart';
+import 'package:kaiteki/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/api/exceptions/misskey_exception.dart';
 import 'package:kaiteki/api/requests/misskey/sign_in.dart';
 import 'package:kaiteki/api/requests/misskey/timeline.dart';

@@ -3,18 +3,18 @@ import 'package:kaiteki/utils/lower_case_text_formatter.dart';
 import 'package:mdi/mdi.dart';
 
 class LoginForm extends StatefulWidget {
-  LoginForm(
-      {Key key,
-      this.instanceController,
-      this.usernameController,
-      this.passwordController,
-      this.onValidateInstance,
-      this.onValidateUsername,
-      this.onValidatePassword,
-      this.onLogin,
-      this.onRegister,
-      this.currentError})
-      : super(key: key);
+  LoginForm({
+    Key key,
+    this.instanceController,
+    this.usernameController,
+    this.passwordController,
+    this.onValidateInstance,
+    this.onValidateUsername,
+    this.onValidatePassword,
+    this.onLogin,
+    this.onRegister,
+    this.currentError,
+  }) : super(key: key);
 
   final TextEditingController instanceController;
   final TextEditingController usernameController;

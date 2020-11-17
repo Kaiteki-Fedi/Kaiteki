@@ -6,8 +6,8 @@ import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
-import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/model/fediverse/timeline_type.dart';
+import 'package:kaiteki/model/fediverse/user.dart';
 
 /// An adapter containing a backing Fediverse client that.
 abstract class FediverseAdapter<Client extends FediverseClientBase> {
@@ -20,7 +20,15 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// provided we may assume there was an error.
   Future<User> getMyself();
 
-  Future<LoginResult> login(String instance, String username, String password, MfaCallback mfaCallback, AccountContainer accounts);
+  /// Attempts to sign into an instance. Additionally, mfaCallback can be used
+  /// to request more data from the user, if required.
+  Future<LoginResult> login(
+    String instance,
+    String username,
+    String password,
+    MfaCallback mfaCallback,
+    AccountContainer accounts,
+  );
 
   /// Retrieves an user of another instance
   Future<User> getUser(String username, [String instance]);

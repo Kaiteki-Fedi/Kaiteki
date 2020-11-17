@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'emoji.g.dart';
 
 @JsonSerializable(createToJson: false)
@@ -10,6 +11,7 @@ class MastodonEmoji {
   @JsonKey(name: "static_url")
   final String staticUrl;
 
+  // This is part of Pleroma.
   final Iterable<String> tags;
 
   final String url;
@@ -26,5 +28,6 @@ class MastodonEmoji {
     this.visibleInPicker,
   });
 
-  factory MastodonEmoji.fromJson(Map<String, dynamic> json) => _$MastodonEmojiFromJson(json);
+  factory MastodonEmoji.fromJson(Map<String, dynamic> json) =>
+      _$MastodonEmojiFromJson(json);
 }
