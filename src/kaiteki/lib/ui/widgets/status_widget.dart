@@ -98,17 +98,8 @@ class StatusWidget extends StatelessWidget {
                   ),
                   if (renderedContent != null) RichText(text: renderedContent),
                   if (_post.attachments != null)
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        for (var attachment in _post.attachments)
-                          Flexible(
-                            child: Container(
-                              child: getAttachmentWidget(attachment),
-                              height: 280,
-                            ),
-                          )
-                      ],
+                    AttachmentRow(
+                      attachments: _post.attachments.toList(growable: false),
                     ),
 
                   if (_post.previewCard != null)
@@ -158,6 +149,32 @@ class StatusWidget extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+class AttachmentRow extends StatelessWidget {
+  final List<Attachment> attachments;
+
+  const AttachmentRow({
+    Key key,
+    @required this.attachments,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        for (var attachment in attachments)
+          Flexible(
+            child: Container(
+              child: getAttachmentWidget(attachment),
+              height: 280,
+            ),
+          )
+      ],
     );
   }
 
