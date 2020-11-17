@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fediverse_objects/misskey/error.dart';
+import 'package:fediverse_objects/misskey/meta.dart';
 import 'package:fediverse_objects/misskey/note.dart';
 import 'package:fediverse_objects/misskey/pages/page.dart';
 import 'package:fediverse_objects/misskey/user.dart';
@@ -211,6 +212,15 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       "api/notes/reactions/delete",
       (json) => MisskeyUser.fromJson(json),
       body: {"noteId": noteId},
+    );
+  }
+
+  Future<MisskeyMeta> getInstanceMeta({bool detail = false}) async {
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/meta",
+      (json) => MisskeyMeta.fromJson(json),
+      body: {"detail": detail},
     );
   }
 }
