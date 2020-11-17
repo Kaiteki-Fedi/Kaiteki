@@ -39,14 +39,13 @@ class _PostFormState extends State<PostForm> {
           ),
           TextField(
             decoration: InputDecoration(
-                hintText: "Subject (optional)"
+              hintText: "Subject (optional)",
             ),
           ),
           Expanded(
             child: TextField(
               decoration: InputDecoration(
                 hintText: "Just landed in L.A.",
-
               ),
               textAlignVertical: TextAlignVertical.top,
               enableSuggestions: true,
@@ -59,40 +58,40 @@ class _PostFormState extends State<PostForm> {
           ),
           Row(
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Mdi.earth),
-                splashRadius: 20,
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Mdi.languageMarkdownOutline),
-                splashRadius: 20,
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Mdi.upload),
-                splashRadius: 20,
-                tooltip: "Attach files",
-              ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(Mdi.earth),
+              //   splashRadius: 20,
+              // ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(Mdi.languageMarkdownOutline),
+              //   splashRadius: 20,
+              // ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(Mdi.upload),
+              //   splashRadius: 20,
+              //   tooltip: "Attach files",
+              // ),
               IconButton(
                 onPressed: () => openEmojiPicker(context, container),
                 icon: Icon(Mdi.emoticon),
                 splashRadius: 20,
                 tooltip: "Insert emoji",
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Mdi.sticker),
-                splashRadius: 20,
-                tooltip: "Add sticker",
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Mdi.pollBox),
-                splashRadius: 20,
-                tooltip: "Add poll",
-              ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(Mdi.sticker),
+              //   splashRadius: 20,
+              //   tooltip: "Add sticker",
+              // ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(Mdi.pollBox),
+              //   splashRadius: 20,
+              //   tooltip: "Add poll",
+              // ),
 
               Spacer(),
 
