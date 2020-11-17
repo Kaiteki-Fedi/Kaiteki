@@ -74,7 +74,12 @@ class StatusWidget extends StatelessWidget {
                         RichText(text: renderedAuthor),
                       Padding(
                         padding: const EdgeInsets.only(left: 6),
-                        child: Text(_post.author.username),
+                        child: Text(
+                          _post.author.username,
+                          style: TextStyle(
+                            color: theme.materialTheme.disabledColor,
+                          ),
+                        ),
                       ),
                       Spacer(),
                       Text(
@@ -93,7 +98,6 @@ class StatusWidget extends StatelessWidget {
                   ),
                   if (renderedContent != null) RichText(text: renderedContent),
                   if (_post.attachments != null)
-                    Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
