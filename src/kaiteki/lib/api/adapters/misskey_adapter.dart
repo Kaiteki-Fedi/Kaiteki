@@ -20,12 +20,14 @@ import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
+import 'package:kaiteki/model/fediverse/emoji_category.dart';
 import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/reaction.dart';
 import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/model/fediverse/visibility.dart';
+import 'package:kaiteki/utils/extensions/iterable.dart';
 
 part 'misskey_adapter.c.dart';
 
@@ -171,5 +173,14 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     // The "emoji" parameter is ignored,
     // because in Misskey you can only react once.
     await client.deleteReaction(note.id);
+  }
+
+  @override
+  Future<Iterable<EmojiCategory>> getEmojis() async {
+    var instanceMeta = await client.getInstanceMeta();
+    var emojiCategories = instanceMeta.emojis.groupBy((e) => e.category);
+    return emojiCategories.entries.map(
+      (kv) => EmojiCategory(kv.key, kv.value.map(toEmoji)),
+    );
   }
 }

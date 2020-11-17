@@ -14,11 +14,13 @@ import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
+import 'package:kaiteki/model/fediverse/emoji_category.dart';
 import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/model/fediverse/visibility.dart';
+import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
 part 'shared_mastodon_adapter.c.dart'; // That file contains toEntity() methods
@@ -130,5 +132,15 @@ class SharedMastodonAdapter<T extends MastodonClient>
   Future<User> getUser(String username, [String instance]) {
     // TODO implement getUser
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Iterable<EmojiCategory>> getEmojis() async {
+    var emojis = await client.getCustomEmojis();
+    var categories = emojis.groupBy((emoji) => emoji.category);
+
+    return categories.entries.map((kv) {
+      return EmojiCategory(kv.key, kv.value.map(toEmoji));
+    });
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parseFragment;
 import 'package:kaiteki/model/fediverse/emoji.dart';
+import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/text_buffer.dart';
@@ -64,10 +65,9 @@ class TextRenderer {
 
             spans.add(
               WidgetSpan(
-                child: Image.network(
-                  (emoji as CustomEmoji).url,
-                  width: theme.emojiSize,
-                  height: theme.emojiSize,
+                child: EmojiWidget(
+                  emoji: emoji,
+                  size: theme.emojiSize,
                 ),
               ),
             );

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fediverse_objects/mastodon/account.dart';
 import 'package:fediverse_objects/mastodon/application.dart';
+import 'package:fediverse_objects/mastodon/emoji.dart';
 import 'package:fediverse_objects/mastodon/instance.dart';
 import 'package:fediverse_objects/mastodon/notification.dart';
 import 'package:fediverse_objects/mastodon/status.dart';
@@ -67,6 +68,14 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
         "client_id": authenticationData.clientId,
         "client_secret": authenticationData.clientSecret,
       },
+    );
+  }
+
+  Future<Iterable<MastodonEmoji>> getCustomEmojis() async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.GET,
+      "api/v1/custom_emojis",
+      (json) => MastodonEmoji.fromJson(json),
     );
   }
 

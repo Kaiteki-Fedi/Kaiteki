@@ -3,6 +3,7 @@ import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/model/fediverse/formatting.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
@@ -75,7 +76,7 @@ class _PostFormState extends State<PostForm> {
                 tooltip: "Attach files",
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => openEmojiPicker(context, container),
                 icon: Icon(Mdi.emoticon),
                 splashRadius: 20,
                 tooltip: "Insert emoji",
@@ -113,6 +114,42 @@ class _PostFormState extends State<PostForm> {
         formatting: Formatting.PlainText,
       ),
       parentPost: widget.replyTo,
+    );
+  }
+
+  void openEmojiPicker(BuildContext context, AccountContainer container) {
+    Scaffold.of(context).showBottomSheet(
+      (context) {
+        return Material(
+          type: MaterialType.card,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(6.0),
+          ),
+          child: SizedBox(
+            height: 250,
+            child: FutureBuilder(
+              future: container.adapter.getEmojis(),
+              builder: (c, s) {
+                if (s.hasError) {
+                  print(s.error);
+                  return Center(child: Text("Failed to fetch emojis."));
+                }
+
+                if (!s.hasData)
+                  return Center(child: CircularProgressIndicator());
+
+                return EmojiSelector(
+                  categories: s.data,
+                  onEmojiSelected: (emoji) {
+                    bodyController.text =
+                        bodyController.text += emoji.toString();
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

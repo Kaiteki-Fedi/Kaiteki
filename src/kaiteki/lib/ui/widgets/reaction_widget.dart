@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/interfaces/reaction_support.dart';
-import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/reaction.dart';
 import 'package:kaiteki/theming/app_theme.dart';
-import 'package:mdi/mdi.dart';
+import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:provider/provider.dart';
 
 // TODO maybe make this UI-only and remove interaction between adapters and
@@ -63,10 +62,9 @@ class _ReactionWidgetState extends State<ReactionWidget> {
                 child: SizedBox(
                   width: emojiSize,
                   height: emojiSize,
-                  child: getEmojiWidget(
-                    context,
-                    widget.reaction.emoji,
-                    emojiSize,
+                  child: EmojiWidget(
+                    emoji: widget.reaction.emoji,
+                    size: emojiSize,
                   ),
                 ),
               ),
@@ -82,30 +80,5 @@ class _ReactionWidgetState extends State<ReactionWidget> {
         ),
       ),
     );
-  }
-
-  Widget getEmojiWidget(BuildContext context, Emoji emoji, double size) {
-    if (emoji is CustomEmoji) {
-      var customEmoji = emoji;
-
-      if (!customEmoji.url.endsWith(".svg")) {
-        return Image.network(
-          customEmoji.url,
-          width: size,
-          height: size,
-          loadingBuilder: (c, w, e) {
-            if (e == null) return w;
-
-            return Icon(Mdi.emoticonOutline, size: size);
-          },
-        );
-      }
-    }
-
-    if (emoji is UnicodeEmoji) {
-      return Text(emoji.source, style: TextStyle(fontSize: size));
-    }
-
-    return Text(emoji.name, style: TextStyle(fontSize: size / 2));
   }
 }
