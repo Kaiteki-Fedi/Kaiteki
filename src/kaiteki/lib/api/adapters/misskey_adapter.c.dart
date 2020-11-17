@@ -13,6 +13,9 @@ Post toPost(MisskeyNote source) {
     repeated: false,
     content: source.text,
     emojis: mappedEmoji,
+    replyCount: 0,
+    likeCount: 0,
+    repeatCount: 0,
     reactions: source.reactions.entries.map(
       (mkr) {
         return Reaction(
