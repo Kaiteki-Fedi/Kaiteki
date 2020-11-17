@@ -5,6 +5,7 @@ import 'package:kaiteki/model/fediverse/formatting.dart';
 import 'package:kaiteki/model/fediverse/previewCard.dart';
 import 'package:kaiteki/model/fediverse/reaction.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
+import 'package:kaiteki/model/fediverse/visibility.dart';
 
 /// A class representing a post.
 class Post<T> {
@@ -15,6 +16,7 @@ class Post<T> {
   final DateTime postedAt;
   final User author;
   final bool nsfw;
+  final Visibility visibility;
 
   // ENGAGEMENT
   final bool liked;
@@ -54,6 +56,7 @@ class Post<T> {
     this.repeatCount,
     this.replyCount,
     this.reactions,
+    this.visibility,
   });
 
   factory Post.example() {

@@ -18,7 +18,27 @@ Post toPost(MastodonStatus source) {
     likeCount: source.favouritesCount,
     repeatCount: source.reblogsCount,
     replyCount: source.repliesCount,
+    visibility: toVisibility(source.visibility),
   );
+}
+
+Visibility toVisibility(String visibility) {
+  switch (visibility) {
+    case "public":
+      return Visibility.Public;
+    case "private":
+      return Visibility.FollowersOnly;
+    case "direct":
+      return Visibility.Direct;
+    case "unlisted":
+      return Visibility.Unlisted;
+
+    default:
+      {
+        debugger(message: "Missing case for $visibility");
+        return null;
+      }
+  }
 }
 
 Attachment toAttachment(MastodonMediaAttachment attachment) {

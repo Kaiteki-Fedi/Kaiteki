@@ -23,8 +23,28 @@ Post toPost(MisskeyNote source) {
         );
       },
     ),
+    visibility: toVisibility(source.visibility),
     attachments: source.files.map(toAttachment),
   );
+}
+
+Visibility toVisibility(String visibility) {
+  switch (visibility) {
+    case "public":
+      return Visibility.Public;
+    case "home":
+      return Visibility.Unlisted;
+    case "followers":
+      return Visibility.FollowersOnly;
+    case "specified":
+      return Visibility.Direct;
+
+    default:
+      {
+        debugger(message: "Missing case for $visibility");
+        return null;
+      }
+  }
 }
 
 Attachment toAttachment(MisskeyFile file) {

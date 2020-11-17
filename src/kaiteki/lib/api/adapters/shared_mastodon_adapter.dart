@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fediverse_objects/mastodon/account.dart';
 import 'package:fediverse_objects/mastodon/emoji.dart';
 import 'package:fediverse_objects/mastodon/media_attachment.dart';
@@ -16,6 +18,7 @@ import 'package:kaiteki/model/fediverse/notification.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
+import 'package:kaiteki/model/fediverse/visibility.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
 part 'shared_mastodon_adapter.c.dart'; // That file contains toEntity() methods

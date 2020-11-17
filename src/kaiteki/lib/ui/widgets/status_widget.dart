@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/model/fediverse/visibility.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
@@ -75,9 +76,13 @@ class StatusWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 6),
                         child: Text(_post.author.username),
                       ),
-                      // TODO fix
-                      //Spacer(),
-                      //Text(_post.visibility),
+                      Spacer(),
+                      if (_post.visibility != null)
+                        Icon(
+                          _post.visibility.toIconData(),
+                          size: 20,
+                          color: theme.materialTheme.disabledColor,
+                        ),
                     ],
                   ),
                   if (renderedContent != null) RichText(text: renderedContent),

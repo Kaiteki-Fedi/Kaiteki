@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fediverse_objects/misskey/emoji.dart';
 import 'package:fediverse_objects/misskey/file.dart';
 import 'package:fediverse_objects/misskey/note.dart';
@@ -23,6 +25,7 @@ import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/reaction.dart';
 import 'package:kaiteki/model/fediverse/timeline_type.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
+import 'package:kaiteki/model/fediverse/visibility.dart';
 
 part 'misskey_adapter.c.dart';
 
