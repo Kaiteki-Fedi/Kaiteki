@@ -11,6 +11,7 @@ import 'package:kaiteki/ui/widgets/interaction_bar.dart';
 import 'package:kaiteki/ui/widgets/reaction_row.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
 import 'package:kaiteki/utils/text_renderer_theme.dart';
+import 'package:kaiteki/utils/extensions/duration.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
@@ -77,6 +78,12 @@ class StatusWidget extends StatelessWidget {
                         child: Text(_post.author.username),
                       ),
                       Spacer(),
+                      Text(
+                        DateTime.now().difference(_post.postedAt).toStringHuman(),
+                        style: TextStyle(
+                          color: theme.materialTheme.disabledColor,
+                        ),
+                      ),
                       if (_post.visibility != null)
                         Icon(
                           _post.visibility.toIconData(),
