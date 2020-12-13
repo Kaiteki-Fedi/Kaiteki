@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/app_preferences.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/theming/default_app_themes.dart';
@@ -10,12 +11,14 @@ import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/screens/account_required_screen.dart';
 import 'package:kaiteki/ui/screens/add_account_screen.dart';
+import 'package:kaiteki/ui/screens/auth/login_screen.dart';
 import 'package:kaiteki/ui/screens/main_screen.dart';
 import 'package:kaiteki/ui/screens/manage_accounts_screen.dart';
 import 'package:kaiteki/ui/screens/settings/about_screen.dart';
 import 'package:kaiteki/ui/screens/settings/customization/customization_settings_screen.dart';
 import 'package:kaiteki/ui/screens/settings/debug_screen.dart';
 import 'package:kaiteki/ui/screens/settings_screen.dart';
+import 'package:kaiteki/api/api_type.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,6 +98,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
                 colorScheme: DefaultAppThemes.darkScheme,
               ),
               color: AppColors.kaitekiGray.shade900,
+              themeMode: ThemeMode.dark,
               initialRoute: "/",
               routes: {
                 "/": (_) => Builder(
@@ -114,9 +118,50 @@ class _KaitekiAppState extends State<KaitekiApp> {
                 "/settings": (_) => SettingsScreen(),
                 "/settings/customization": (_) => CustomizationSettingsScreen(),
               },
+              onGenerateRoute: (RouteSettings settings) {
+                var loginPrefix = "/login/";
+
+                if (settings.name.startsWith(loginPrefix)) {
+                  var id = settings.name.substring(loginPrefix.length);
+                  var loginOption = Constants.loginOptions
+                      .firstWhere((o) => o.apiType.toId() == id);
+
+                  final screen = LoginScreen(
+                    image: AssetImage(loginOption.iconAssetPath),
+                    theme: _makeTheme(
+                      loginOption.background,
+                      loginOption.foreground,
+                    ),
+                    onLogin: _accountContainer
+                        .createAdapter(loginOption.apiType)
+                        .login,
+                  );
+
+                  return MaterialPageRoute(builder: (_) => screen);
+                }
+
+                return null;
+              },
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  ThemeData _makeTheme(Color background, Color foreground) {
+    return ThemeData.from(
+      colorScheme: ColorScheme.dark(
+        background: background,
+        surface: background,
+        primary: foreground,
+        secondary: foreground,
+        primaryVariant: foreground,
+        secondaryVariant: foreground,
+      ),
+    ).copyWith(
+      buttonTheme: ButtonThemeData(
+        buttonColor: foreground,
       ),
     );
   }

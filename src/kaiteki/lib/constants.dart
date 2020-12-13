@@ -1,3 +1,6 @@
+import 'package:flutter/painting.dart';
+import 'package:kaiteki/api/api_type.dart';
+import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/app_preferences.dart';
 
 class Constants {
@@ -44,4 +47,45 @@ class Constants {
     "read:favorites",
     "write:favorites",
   ];
+
+  // TODO: (quality) make a better data structure to represent different backends.
+  static List<LoginOption> loginOptions = [
+    LoginOption(
+      "assets/icons/mastodon.png",
+      AppColors.mastodonSecondary,
+      AppColors.mastodonPrimary,
+      ApiType.Mastodon,
+      "Mastodon",
+    ),
+    LoginOption(
+      "assets/icons/pleroma.png",
+      AppColors.pleromaSecondary,
+      AppColors.pleromaPrimary,
+      ApiType.Pleroma,
+      "Pleroma",
+    ),
+    LoginOption(
+      "assets/icons/misskey.png",
+      AppColors.misskeySecondary,
+      AppColors.misskeyPrimary,
+      ApiType.Misskey,
+      "Misskey",
+    ),
+  ];
+}
+
+class LoginOption {
+  final String iconAssetPath;
+  final Color background;
+  final Color foreground;
+  final ApiType apiType;
+  final String label;
+
+  LoginOption(
+    this.iconAssetPath,
+    this.background,
+    this.foreground,
+    this.apiType,
+    this.label,
+  );
 }

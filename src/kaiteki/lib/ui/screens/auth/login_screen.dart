@@ -127,7 +127,10 @@ class _LoginScreenState extends State<LoginScreen> {
         accountContainer,
       );
 
-      if (!result.successful) setState(() => _error = result.reason);
+      if (result.successful)
+        Navigator.of(context).pop();
+      else
+        setState(() => _error = result.reason);
     } catch (e) {
       setState(() => _error = e.toString());
     } finally {
