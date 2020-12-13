@@ -3,7 +3,6 @@ env:
   SOURCE_PATH: './src/kaiteki'
 
 on:
-  workflow_dispatch
   push:
     branches:
       - master
