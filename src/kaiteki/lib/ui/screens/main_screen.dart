@@ -209,7 +209,7 @@ class _MainScreenState extends State<MainScreen> {
   void onComposeStatus(BuildContext context, Post replyTo) async {
     await showDialog(
       context: context,
-      child: Dialog(
+      builder: (_) => Dialog(
         child: SizedBox(
           child: Scaffold(body: PostForm(replyTo: replyTo)),
           width: 800,

@@ -9,12 +9,11 @@ import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends StatelessWidget {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
+    var messenger = ScaffoldMessenger.of(context);
+
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(title: Text("About")),
       body: Center(
         child: Container(
@@ -56,7 +55,7 @@ class AboutScreen extends StatelessWidget {
                         title: Text("Github Repository"),
                         trailing: Icon(Mdi.openInNew),
                         onTap: () => launchUrl(
-                          _scaffoldKey.currentState,
+                          ScaffoldMessenger.of(context),
                           "https://github.com/Craftplacer/kaiteki",
                         ),
                       ),
@@ -94,7 +93,7 @@ class AboutScreen extends StatelessWidget {
                         subtitle: Text("Main developer"),
                         trailing: Icon(Mdi.openInNew),
                         onTap: () => launchUrl(
-                          _scaffoldKey.currentState,
+                          messenger,
                           "https://github.com/Craftplacer",
                         ),
                       ),
@@ -103,7 +102,7 @@ class AboutScreen extends StatelessWidget {
                         subtitle: Text("Icon design"),
                         trailing: Icon(Mdi.openInNew),
                         onTap: () => launchUrl(
-                          _scaffoldKey.currentState,
+                          messenger,
                           "https://mstdn.social/@odyssey98",
                         ),
                       )
@@ -134,7 +133,7 @@ class AboutScreen extends StatelessWidget {
                               width: 85,
                               child: InkWell(
                                 onTap: () => launchUrl(
-                                  _scaffoldKey.currentState,
+                                  messenger,
                                   "https://flutter.dev",
                                 ),
                                 child: FlutterLogo(
@@ -161,10 +160,10 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Future<void> launchUrl(ScaffoldState scaffold, String url) async {
-    if (await canLaunch(url))
+  Future<void> launchUrl(ScaffoldMessengerState scaffold, String url) async {
+    if (await canLaunch(url)) {
       await launch(url);
-    else {
+    } else {
       scaffold.showSnackBar(
         SnackBar(content: Text("URL couldn't be opened.")),
       );

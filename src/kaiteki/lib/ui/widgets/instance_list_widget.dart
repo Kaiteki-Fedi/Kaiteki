@@ -103,7 +103,7 @@ class InstanceListWidget extends StatelessWidget {
             if (await canLaunch(url))
               await launch(url);
             else {
-              Scaffold.of(context).showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("URL couldn't be opened.")),
               );
             }
