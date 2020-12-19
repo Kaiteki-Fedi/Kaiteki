@@ -24,15 +24,6 @@ class AccountContainer extends ChangeNotifier {
 
   AccountContainer(this._accountSecrets, this._clientSecrets);
 
-  Future<void> clear() async {
-    remove(currentAccount);
-    _accounts.clear();
-
-    notifyListeners();
-
-    Logger.debug("cleared accounts");
-  }
-
   Future<void> remove(AccountCompound compound) async {
     _accounts.remove(compound);
     await _accountSecrets.remove(compound.accountSecret);
