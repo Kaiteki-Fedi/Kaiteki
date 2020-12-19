@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/api_type.dart';
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/api/definitions/definitions.dart';
 import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,13 +20,16 @@ class InstanceListWidget extends StatelessWidget {
         ),
         Divider(),
         SeparatorText("Select Manually"),
-        for (var option in Constants.loginOptions)
+        for (var definition in ApiDefinitions.definitions)
           ListTile(
-            leading: Image.asset(option.iconAssetPath, height: 24),
-            title: Text(option.label),
+            leading: Image.asset(
+              definition.theme.iconAssetLocation,
+              height: 24,
+            ),
+            title: Text(definition.name),
             onTap: () => Navigator.popAndPushNamed(
               context,
-              '/login/${option.apiType.toId()}',
+              '/login/${definition.id}',
             ),
           ),
         Divider(),

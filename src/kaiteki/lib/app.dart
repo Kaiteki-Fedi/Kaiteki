@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/api/definitions/definitions.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/app_preferences.dart';
-import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/theming/default_app_themes.dart';
@@ -18,7 +18,6 @@ import 'package:kaiteki/ui/screens/settings/about_screen.dart';
 import 'package:kaiteki/ui/screens/settings/customization/customization_settings_screen.dart';
 import 'package:kaiteki/ui/screens/settings/debug_screen.dart';
 import 'package:kaiteki/ui/screens/settings_screen.dart';
-import 'package:kaiteki/api/api_type.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,8 +48,10 @@ class _KaitekiAppState extends State<KaitekiApp> {
     var defaultTheme = ThemeData.from(colorScheme: DefaultAppThemes.darkScheme);
     _themeContainer = ThemeContainer(MaterialAppTheme(defaultTheme));
 
-    _accountContainer =
-        AccountContainer(widget.accountSecrets, widget.clientSecrets);
+    _accountContainer = AccountContainer(
+      widget.accountSecrets,
+      widget.clientSecrets,
+    );
     _accountContainer.loadAllAccounts();
 
     _preferences = AppPreferences();
@@ -123,18 +124,16 @@ class _KaitekiAppState extends State<KaitekiApp> {
 
                 if (settings.name.startsWith(loginPrefix)) {
                   var id = settings.name.substring(loginPrefix.length);
-                  var loginOption = Constants.loginOptions
-                      .firstWhere((o) => o.apiType.toId() == id);
+                  var definition =
+                      ApiDefinitions.definitions.firstWhere((o) => o.id == id);
 
                   final screen = LoginScreen(
-                    image: AssetImage(loginOption.iconAssetPath),
+                    image: AssetImage(definition.theme.iconAssetLocation),
                     theme: _makeTheme(
-                      loginOption.background,
-                      loginOption.foreground,
+                      definition.theme.backgroundColor,
+                      definition.theme.primaryColor,
                     ),
-                    onLogin: _accountContainer
-                        .createAdapter(loginOption.apiType)
-                        .login,
+                    onLogin: definition.createAdapter().login,
                   );
 
                   return MaterialPageRoute(builder: (_) => screen);

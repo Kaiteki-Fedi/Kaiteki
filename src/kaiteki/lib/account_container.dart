@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/api/adapters/mastodon_adapter.dart';
-import 'package:kaiteki/api/adapters/misskey_adapter.dart';
-import 'package:kaiteki/api/adapters/pleroma_adapter.dart';
-import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
+import 'package:kaiteki/api/definitions/definitions.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
@@ -82,7 +79,7 @@ class AccountContainer extends ChangeNotifier {
         return;
       }
 
-      var adapter = createAdapter(clientSecret.apiType);
+      var adapter = ApiDefinitions.byType(clientSecret.apiType).createAdapter();
 
       User user;
 
@@ -128,19 +125,6 @@ class AccountContainer extends ChangeNotifier {
 
   //TODO: HACK, This should not exist, please refactor.
   getClientRepo() => _clientSecrets;
-
-  FediverseAdapter createAdapter(ApiType type) {
-    switch (type) {
-      case ApiType.Mastodon:
-        return MastodonAdapter();
-      case ApiType.Pleroma:
-        return PleromaAdapter();
-      case ApiType.Misskey:
-        return MisskeyAdapter();
-      default:
-        throw "out of range";
-    }
-  }
 
   /// Restores the account objects on each compound.
   ///
