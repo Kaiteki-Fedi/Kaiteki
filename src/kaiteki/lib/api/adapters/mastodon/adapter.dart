@@ -1,4 +1,4 @@
-import 'package:kaiteki/api/adapters/shared_mastodon_adapter.dart';
+import 'package:kaiteki/api/adapters/mastodon/shared_adapter.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
 
 class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {

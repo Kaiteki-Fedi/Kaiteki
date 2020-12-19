@@ -1,7 +1,7 @@
 import 'package:fediverse_objects/pleroma/chat_message.dart';
 import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/api/adapters/interfaces/reaction_support.dart';
-import 'package:kaiteki/api/adapters/shared_mastodon_adapter.dart';
+import 'package:kaiteki/api/adapters/mastodon/shared_adapter.dart';
 import 'package:kaiteki/api/clients/pleroma_client.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
@@ -9,7 +9,7 @@ import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 
-part 'pleroma_adapter.c.dart';
+part 'adapter.c.dart';
 
 // TODO add missing implementations
 class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>

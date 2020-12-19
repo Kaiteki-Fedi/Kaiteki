@@ -1,4 +1,4 @@
-part of 'shared_mastodon_adapter.dart';
+part of 'shared_adapter.dart';
 
 Post toPost(MastodonStatus source) {
   if (source == null) return null;

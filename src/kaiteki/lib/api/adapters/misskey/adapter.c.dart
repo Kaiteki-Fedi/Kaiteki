@@ -1,4 +1,4 @@
-part of 'misskey_adapter.dart';
+part of 'adapter.dart';
 
 Post toPost(MisskeyNote source) {
   assert(source != null);

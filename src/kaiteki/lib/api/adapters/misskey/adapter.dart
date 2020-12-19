@@ -29,7 +29,7 @@ import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/model/fediverse/visibility.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 
-part 'misskey_adapter.c.dart';
+part 'adapter.c.dart';
 
 // TODO add missing implementations
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>

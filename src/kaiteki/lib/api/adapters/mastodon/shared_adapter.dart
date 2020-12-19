@@ -23,7 +23,7 @@ import 'package:kaiteki/model/fediverse/visibility.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
-part 'shared_mastodon_adapter.c.dart'; // That file contains toEntity() methods
+part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
