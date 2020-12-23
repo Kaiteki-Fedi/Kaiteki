@@ -4,11 +4,9 @@ import 'package:kaiteki/theming/app_theme.dart';
 import 'package:kaiteki/theming/pleroma/pleroma_theme_parser.dart';
 import 'package:kaiteki/utils/utils.dart';
 
-import 'app_theme_source.dart';
+import '../../lib/theming/app_theme_source.dart';
 
 class PleromaAppTheme implements AppThemeSource {
-
-
   final PleromaTheme _pleromaTheme;
 
   const PleromaAppTheme(this._pleromaTheme);
@@ -23,9 +21,8 @@ class PleromaAppTheme implements AppThemeSource {
   @override
   AppTheme toTheme() {
     var colors = PleromaThemeParser.resolveColors(
-      PleromaThemeParser.parseColors(_pleromaTheme.colors),
-      _pleromaTheme.opacity
-    );
+        PleromaThemeParser.parseColors(_pleromaTheme.colors),
+        _pleromaTheme.opacity);
 
     var themeData =
         ThemeData.from(colorScheme: _getColorScheme(colors)).copyWith(
@@ -92,4 +89,3 @@ class PleromaAppTheme implements AppThemeSource {
     );
   }
 }
-

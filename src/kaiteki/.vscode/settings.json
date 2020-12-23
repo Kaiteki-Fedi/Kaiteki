@@ -1,0 +1,8 @@
+{
+	"dart.analysisExcludedFolders": [
+		"removed/**"
+	],
+	"files.watcherExclude": {
+		"removed/**": true
+	}
+}

@@ -27,6 +27,8 @@ class _MisskeyPagePostWidgetState extends State<MisskeyPagePostWidget> {
         ),
         RaisedButton(
           child: Icon(Mdi.send),
+          // TODO: (misskey) make status post component functional
+          onPressed: null,
         )
       ],
     );

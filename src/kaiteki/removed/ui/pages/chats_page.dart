@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/model/fediverse/chat.dart';
-import 'package:kaiteki/ui/screens/chat_screen.dart';
+import 'file:///home/craftplacer/Projects/flutter/kaiteki/src/kaiteki/removed/ui/screens/chat_screen.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +22,8 @@ class _ChatsPageState extends State<ChatsPage> {
 
     if (!container.loggedIn)
       return Center(
-        child: IconLandingWidget(
-          icon: Mdi.key,
-            text: "You need to be signed in to use chats"
-        )
-      );
+          child: IconLandingWidget(
+              icon: Mdi.key, text: "You need to be signed in to use chats"));
 
     return FutureBuilder(
       future: chatAdapter.getChats(),
@@ -39,25 +36,27 @@ class _ChatsPageState extends State<ChatsPage> {
               return ListTile(
                   // leading: AvatarWidget(chat.recipient, size: 48),
                   title: Row(
-
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Text(chat.recipient.displayName),
                       // Text("69d")
                     ],
                   ),
-                  subtitle: chat.lastMessage == null ? null : Text(chat.lastMessage.content.content),
+                  subtitle: chat.lastMessage == null
+                      ? null
+                      : Text(chat.lastMessage.content.content),
                   onTap: () {
                     var chatScreen = ChatScreen(chat);
                     var route = MaterialPageRoute(builder: (_) => chatScreen);
                     Navigator.push(context, route);
-                  }
-              );
+                  });
             },
           );
 
         if (snapshot.hasError)
-          return Center(child: IconLandingWidget(icon: Mdi.close, text: snapshot.error.toString()));
+          return Center(
+              child: IconLandingWidget(
+                  icon: Mdi.close, text: snapshot.error.toString()));
 
         return Center(child: CircularProgressIndicator());
       },

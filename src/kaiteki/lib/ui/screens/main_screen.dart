@@ -1,16 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/app_preferences.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
-import 'package:kaiteki/ui/pages/chats_page.dart';
-import 'package:kaiteki/ui/pages/notifications_page.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
 import 'package:kaiteki/ui/screens/settings_screen.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -36,28 +32,27 @@ class _MainScreenState extends State<MainScreen> {
         fabIcon: Mdi.pencil,
         fabOnTap: () => onComposeStatus(context, null),
       ),
-      _MainScreenTab(
-        icon: Mdi.bell,
-        text: "Notifications",
-        fabTooltip: "Mark all as read",
-        fabText: "Read",
-        fabIcon: Mdi.checkAll,
-        fabOnTap: () {},
-      ),
-      _MainScreenTab(
-        icon: Mdi.forum,
-        text: "Chats",
-        fabTooltip: 'New chat',
-        fabIcon: Mdi.plus,
-        fabText: "New",
-      ),
+      // _MainScreenTab(
+      //   icon: Mdi.bell,
+      //   text: "Notifications",
+      //   fabTooltip: "Mark all as read",
+      //   fabText: "Read",
+      //   fabIcon: Mdi.checkAll,
+      //   fabOnTap: () {},
+      // ),
+      // _MainScreenTab(
+      //   icon: Mdi.forum,
+      //   text: "Chats",
+      //   fabTooltip: 'New chat',
+      //   fabIcon: Mdi.plus,
+      //   fabText: "New",
+      // ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    var preferences = Provider.of<AppPreferences>(context);
-    var appName = preferences.getPreferredAppName();
+    var appName = "Kaiteki";
 
     return LayoutBuilder(
       builder: (_, constraints) {
@@ -148,11 +143,7 @@ class _MainScreenState extends State<MainScreen> {
       controller: _pageController,
       physics: NeverScrollableScrollPhysics(),
       key: pageViewKey,
-      children: [
-        TimelinePage(key: ValueKey(0)),
-        NotificationsPage(key: ValueKey(1)),
-        ChatsPage(key: ValueKey(2)),
-      ],
+      children: [TimelinePage(key: ValueKey(0))],
     );
   }
 

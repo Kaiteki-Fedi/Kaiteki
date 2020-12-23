@@ -59,17 +59,9 @@ class _KaitekiAppState extends State<KaitekiApp> {
     super.initState();
   }
 
+  // TODO: (code quality) Move MultiProvider and Builder to "main.dart" instead of "app.dart".
   @override
   Widget build(BuildContext _) {
-    var appPreferences = _preferences.getPreferredAppName();
-
-    var appBackground = _themeContainer.background;
-    var materialTheme = _themeContainer.getMaterialTheme();
-    var backgroundColor = materialTheme.canvasColor;
-
-    backgroundColor =
-        backgroundColor.withOpacity(_themeContainer.backgroundOpacity);
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: _themeContainer),
@@ -77,75 +69,66 @@ class _KaitekiAppState extends State<KaitekiApp> {
         ChangeNotifierProvider.value(value: _preferences),
         ChangeNotifierProvider.value(value: widget.accountSecrets),
         ChangeNotifierProvider.value(value: widget.clientSecrets),
-        Provider.value(value: widget.notifications),
       ],
-      child: Stack(
-        alignment: Alignment.topLeft,
-        fit: StackFit.expand,
-        children: [
-          if (_themeContainer.hasBackground)
-            Image(
-              image: appBackground,
-              fit: BoxFit.cover,
+      child: Builder(
+        builder: (context) {
+          // TODO: (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
+          var preferences = Provider.of<AppPreferences>(context);
+          return MaterialApp(
+            title: "Kaiteki",
+            theme: ThemeData.from(
+              colorScheme: DefaultAppThemes.lightScheme,
             ),
-          Container(
-            color: backgroundColor,
-            child: MaterialApp(
-              title: appPreferences,
-              theme: ThemeData.from(
-                colorScheme: DefaultAppThemes.lightScheme,
-              ),
-              darkTheme: ThemeData.from(
-                colorScheme: DefaultAppThemes.darkScheme,
-              ),
-              color: AppColors.kaitekiGray.shade900,
-              themeMode: ThemeMode.dark,
-              initialRoute: "/",
-              routes: {
-                "/": (_) => Builder(
-                      builder: (context) {
-                        var container = Provider.of<AccountContainer>(context);
-
-                        if (!container.loggedIn)
-                          return new AccountRequiredScreen();
-
+            darkTheme: ThemeData.from(
+              colorScheme: DefaultAppThemes.darkScheme,
+            ),
+            color: AppColors.kaitekiGray.shade900,
+            themeMode: preferences.theme,
+            initialRoute: "/",
+            routes: {
+              "/": (_) => Builder(
+                    builder: (context) {
+                      if (Provider.of<AccountContainer>(context).loggedIn) {
                         return MainScreen();
-                      },
-                    ),
-                "/accounts": (_) => ManageAccountsScreen(),
-                "/accounts/add": (_) => AddAccountScreen(),
-                "/debug": (_) => DebugScreen(),
-                "/about": (_) => AboutScreen(),
-                "/settings": (_) => SettingsScreen(),
-                "/settings/customization": (_) => CustomizationSettingsScreen(),
-              },
-              onGenerateRoute: (RouteSettings settings) {
-                var loginPrefix = "/login/";
-
-                if (settings.name.startsWith(loginPrefix)) {
-                  var id = settings.name.substring(loginPrefix.length);
-                  var definition =
-                      ApiDefinitions.definitions.firstWhere((o) => o.id == id);
-
-                  final screen = LoginScreen(
-                    image: AssetImage(definition.theme.iconAssetLocation),
-                    theme: _makeTheme(
-                      definition.theme.backgroundColor,
-                      definition.theme.primaryColor,
-                    ),
-                    onLogin: definition.createAdapter().login,
-                  );
-
-                  return MaterialPageRoute(builder: (_) => screen);
-                }
-
-                return null;
-              },
-            ),
-          ),
-        ],
+                      } else {
+                        return new AccountRequiredScreen();
+                      }
+                    },
+                  ),
+              "/accounts": (_) => ManageAccountsScreen(),
+              "/accounts/add": (_) => AddAccountScreen(),
+              "/debug": (_) => DebugScreen(),
+              "/about": (_) => AboutScreen(),
+              "/settings": (_) => SettingsScreen(),
+              "/settings/customization": (_) => CustomizationSettingsScreen(),
+            },
+            onGenerateRoute: _generateRoute,
+          );
+        },
       ),
     );
+  }
+
+  Route<dynamic> _generateRoute(RouteSettings settings) {
+    var loginPrefix = "/login/";
+
+    if (settings.name.startsWith(loginPrefix)) {
+      var id = settings.name.substring(loginPrefix.length);
+      var definition = ApiDefinitions.definitions.firstWhere((o) => o.id == id);
+
+      final screen = LoginScreen(
+        image: AssetImage(definition.theme.iconAssetLocation),
+        theme: _makeTheme(
+          definition.theme.backgroundColor,
+          definition.theme.primaryColor,
+        ),
+        onLogin: definition.createAdapter().login,
+      );
+
+      return MaterialPageRoute(builder: (_) => screen);
+    }
+
+    return null;
   }
 
   ThemeData _makeTheme(Color background, Color foreground) {

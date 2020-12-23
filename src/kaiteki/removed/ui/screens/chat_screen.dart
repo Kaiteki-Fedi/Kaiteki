@@ -4,7 +4,7 @@ import 'package:kaiteki/model/fediverse/chat.dart';
 import 'package:kaiteki/model/fediverse/chat_message.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
-import 'package:kaiteki/ui/widgets/chat_message_widget.dart';
+import 'file:///home/craftplacer/Projects/flutter/kaiteki/src/kaiteki/removed/ui/widgets/chat_message_widget.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';

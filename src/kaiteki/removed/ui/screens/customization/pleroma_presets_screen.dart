@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fediverse_objects/pleroma/theme.dart';
 import 'package:http/http.dart' as http;
-import 'package:kaiteki/theming/pleroma_app_theme.dart';
+import 'file:///home/craftplacer/Projects/flutter/kaiteki/src/kaiteki/removed/theming/pleroma_app_theme.dart';
 import 'package:kaiteki/ui/widgets/theming/theme_preview_widget.dart';
 
 class PleromaPresetsScreen extends StatefulWidget {
@@ -28,38 +28,34 @@ class _PleromaPresetsScreenState extends State<PleromaPresetsScreen> {
             return Center(child: CircularProgressIndicator());
 
           return ListView.separated(
-            separatorBuilder: (_, i) => Divider(),
-            itemCount: snapshot.data.length,
-            itemBuilder: (_, i) {
-              if (snapshot.data == null)
-                return Text("null...");
+              separatorBuilder: (_, i) => Divider(),
+              itemCount: snapshot.data.length,
+              itemBuilder: (_, i) {
+                if (snapshot.data == null) return Text("null...");
 
-              var themeUrl = snapshot.data.elementAt(i);
-              return FutureBuilder(
-                future: getTheme(themeUrl),
-                builder: (_, AsyncSnapshot<PleromaTheme> snapshot) {
-                  return InkWell(
-                    onTap: () => Navigator.of(context).pop(snapshot.data),
-                    child: Ink(
-                      height: 200,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 12,
-                      ),
-                      child: Material(
-                        borderRadius: BorderRadius.circular(4),
-                        elevation: 4,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: getWidget(snapshot)
-                        ),
-                      ),
-                    )
-                  );
-                },
-              );
-            }
-          );
+                var themeUrl = snapshot.data.elementAt(i);
+                return FutureBuilder(
+                  future: getTheme(themeUrl),
+                  builder: (_, AsyncSnapshot<PleromaTheme> snapshot) {
+                    return InkWell(
+                        onTap: () => Navigator.of(context).pop(snapshot.data),
+                        child: Ink(
+                          height: 200,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 12,
+                          ),
+                          child: Material(
+                            borderRadius: BorderRadius.circular(4),
+                            elevation: 4,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: getWidget(snapshot)),
+                          ),
+                        ));
+                  },
+                );
+              });
         },
       ),
     );
@@ -74,12 +70,10 @@ class _PleromaPresetsScreenState extends State<PleromaPresetsScreen> {
   }
 
   Future<Iterable<String>> getPresets() async {
-    var response = await http.get("https://fedi.absturztau.be/static/styles.json");
+    var response =
+        await http.get("https://fedi.absturztau.be/static/styles.json");
     var json = jsonDecode(response.body);
-    var object = json
-        .values
-        .where((v) => v is String)
-        .cast<String>();
+    var object = json.values.where((v) => v is String).cast<String>();
 
     return object;
   }
