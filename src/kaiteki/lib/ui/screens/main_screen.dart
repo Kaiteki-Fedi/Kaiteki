@@ -105,20 +105,23 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget buildMobileView(String appName) {
     return Scaffold(
-        appBar: AppBar(
-          leading: AccountSwitcherWidget(),
-          title: Text(appName, style: TextStyle(fontWeight: FontWeight.bold)),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () => Navigator.push(
-                  context, MaterialPageRoute(builder: (_) => SettingsScreen())),
+      appBar: AppBar(
+        leading: AccountSwitcherWidget(),
+        title: Text(appName, style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => SettingsScreen()),
             ),
-          ],
-        ),
-        body: getPageView(),
-        bottomNavigationBar: getNavigationBar(),
-        floatingActionButton: getFab(context, _currentPage));
+          ),
+        ],
+      ),
+      body: getPageView(),
+      bottomNavigationBar: getNavigationBar(),
+      floatingActionButton: getFab(context, _currentPage),
+    );
   }
 
   Iterable<Widget> getTabListItems() {
