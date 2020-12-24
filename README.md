@@ -1,5 +1,6 @@
 # ![Kaiteki](assets/readme-logo.png)
 
+![Build and deploy to Web](https://github.com/Craftplacer/kaiteki/workflows/Build%20and%20deploy%20to%20Web/badge.svg)
 ![Build and deploy](https://github.com/Craftplacer/kaiteki/workflows/Build%20and%20deploy/badge.svg)
 ![Total downloads](https://img.shields.io/github/downloads/Craftplacer/kaiteki/total)
 
