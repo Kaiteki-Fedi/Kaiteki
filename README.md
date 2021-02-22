@@ -15,6 +15,10 @@ I'm happy about any feedback or contribution you have.
 | - | - | - | - | - |
 | ![](assets/screenshots/welcome.jpg) | ![](assets/screenshots/login.jpg) | ![](assets/screenshots/pleroma-feed.jpg) | ![](assets/screenshots/misskey-feed.jpg) | ![](assets/screenshots/about.jpg) |
 
+# What's working, what's missing?
+
+Currently Kaiteki only allows viewing timelines. Estimated, most important API calls for Misskey, Pleroma/Mastodon are already implemented, but lack proper internal adapter design, alongside their user interface.
+
 ## Download and use Kaiteki
 
 If you want to try out Kaiteki, there are automatic releases available for use.
