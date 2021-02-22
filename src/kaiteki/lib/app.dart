@@ -17,7 +17,7 @@ import 'package:kaiteki/ui/screens/manage_accounts_screen.dart';
 import 'package:kaiteki/ui/screens/settings/about_screen.dart';
 import 'package:kaiteki/ui/screens/settings/customization/customization_settings_screen.dart';
 import 'package:kaiteki/ui/screens/settings/debug_screen.dart';
-import 'package:kaiteki/ui/screens/settings_screen.dart';
+import 'package:kaiteki/ui/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

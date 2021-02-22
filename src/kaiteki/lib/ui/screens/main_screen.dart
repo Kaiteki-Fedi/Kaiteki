@@ -4,7 +4,7 @@ import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
-import 'package:kaiteki/ui/screens/settings_screen.dart';
+import 'package:kaiteki/ui/screens/settings/settings_screen.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
 import 'package:mdi/mdi.dart';
 
