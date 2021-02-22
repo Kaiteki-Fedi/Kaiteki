@@ -58,24 +58,26 @@ class ImageAttachmentWidget extends StatelessWidget {
 
     showDialog(
       context: context,
-      child: Scaffold(
-        backgroundColor: background,
-        appBar: AppBar(
-          backgroundColor: Colors.black.withOpacity(0.5),
-          title: attachment.description == null
-              ? null
-              : Text(attachment.description ?? ""),
-        ),
-        body: InteractiveViewer(
-          alignPanAxis: true,
-          child: Center(
-            child: Image.network(
-              attachment.url,
-              fit: BoxFit.fill,
+      builder: (_) {
+        return Scaffold(
+          backgroundColor: background,
+          appBar: AppBar(
+            backgroundColor: Colors.black.withOpacity(0.5),
+            title: attachment.description == null
+                ? null
+                : Text(attachment.description ?? ""),
+          ),
+          body: InteractiveViewer(
+            alignPanAxis: true,
+            child: Center(
+              child: Image.network(
+                attachment.url,
+                fit: BoxFit.fill,
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }
