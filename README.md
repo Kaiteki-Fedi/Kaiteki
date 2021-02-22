@@ -5,9 +5,7 @@
 
 A Fediverse client for micro-blogging instances written in Flutter/Dart.
 
-Currently Kaiteki has simple Mastodon/Pleroma and Misskey support, future backends could follow.
-
-I'm happy about any feedback or contribution you have.
+Currently Kaiteki has simple Mastodon/Pleroma and Misskey support, future backends could follow. See "What's working, what's missing?".
 
 ## Screenshots
 
@@ -15,9 +13,15 @@ I'm happy about any feedback or contribution you have.
 | - | - | - | - | - |
 | ![](assets/screenshots/welcome.jpg) | ![](assets/screenshots/login.jpg) | ![](assets/screenshots/pleroma-feed.jpg) | ![](assets/screenshots/misskey-feed.jpg) | ![](assets/screenshots/about.jpg) |
 
-# What's working, what's missing?
+## What's working, what's missing?
 
 Currently Kaiteki only allows viewing timelines. Estimated, most important API calls for Misskey, Pleroma/Mastodon are already implemented, but lack proper internal adapter design, alongside their user interface.
+
+## Contributing
+
+I'm happy about any feedback or contribution you have.
+
+Since I am inexperienced with large scale projects I have nothings against contributors. If you have questions you can reach me anywhere on [my contact page](https://craftplacer.github.io/about), you can also comment under issues that you want to get assigned to and want to work on.
 
 ## Download and use Kaiteki
 
