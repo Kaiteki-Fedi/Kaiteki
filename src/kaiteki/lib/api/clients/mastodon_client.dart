@@ -9,6 +9,7 @@ import 'package:fediverse_objects/mastodon/status.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/clients/fediverse_client_base.dart';
+import 'package:kaiteki/api/responses/mastodon/context_response.dart';
 import 'package:kaiteki/api/responses/mastodon/login_response.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -146,6 +147,14 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     var json = jsonDecode(response.body);
     return json
         .map<MastodonNotification>((j) => MastodonNotification.fromJson(j));
+  }
+
+  Future<ContextResponse> getContext(String id) async {
+    return await sendJsonRequest(
+      HttpMethod.GET,
+      "api/v1/statuses/$id/context",
+      (j) => ContextResponse.fromJson(j),
+    );
   }
 
   @override

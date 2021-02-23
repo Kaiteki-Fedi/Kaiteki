@@ -143,4 +143,17 @@ class SharedMastodonAdapter<T extends MastodonClient>
       return EmojiCategory(kv.key, kv.value.map(toEmoji));
     });
   }
+
+  @override
+  Future<Iterable<Post>> getThread(Post reply) async {
+    var status = reply.source as MastodonStatus;
+    var context = await client.getContext(status.id);
+    var posts = List<Post>();
+
+    posts.addAll(context.ancestors.map(toPost));
+    posts.add(reply);
+    posts.addAll(context.descendants.map(toPost));
+
+    return posts;
+  }
 }

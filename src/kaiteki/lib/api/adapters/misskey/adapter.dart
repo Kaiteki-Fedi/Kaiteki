@@ -183,4 +183,10 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       (kv) => EmojiCategory(kv.key, kv.value.map(toEmoji)),
     );
   }
+
+  @override
+  Future<Iterable<Post>> getThread(Post reply) {
+    // TODO: implement getThread
+    throw UnimplementedError();
+  }
 }

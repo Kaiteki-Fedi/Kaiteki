@@ -40,6 +40,9 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// Posts a status, optionally in reply to another post.
   Future<Post> postStatus(Post post, {Post parentPost});
 
+  /// Retrieves a thread from a reply
+  Future<Iterable<Post>> getThread(Post reply);
+
   Future<Iterable<Post>> getTimeline(TimelineType type);
 
   Future<Iterable<Notification>> getNotifications();
