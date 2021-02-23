@@ -151,6 +151,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   getNavigationBar() {
+    if(_tabs.length < 2) return null;
+    
     return BottomNavigationBar(
       elevation: 8,
       onTap: changePage,
