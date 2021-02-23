@@ -1,20 +1,27 @@
 # ![Kaiteki](assets/readme-logo.png)
 
 ![Build and deploy to Web](https://github.com/Craftplacer/kaiteki/workflows/Build%20and%20deploy%20to%20Web/badge.svg)
-![Build and deploy](https://github.com/Craftplacer/kaiteki/workflows/Build%20and%20deploy/badge.svg)
 ![Total downloads](https://img.shields.io/github/downloads/Craftplacer/kaiteki/total)
 
 A Fediverse client for micro-blogging instances written in Flutter/Dart.
 
-Currently Kaiteki has simple Mastodon/Pleroma and Misskey support, future backends could follow.
-
-I'm happy about any feedback or contribution you have.
+Currently Kaiteki has simple Mastodon/Pleroma and Misskey support, future backends could follow. See "What's working, what's missing?".
 
 ## Screenshots
 
 | Welcome page | Login page | Feed of a Pleroma instance | Feed of a Misskey instance | About page |
 | - | - | - | - | - |
 | ![](assets/screenshots/welcome.jpg) | ![](assets/screenshots/login.jpg) | ![](assets/screenshots/pleroma-feed.jpg) | ![](assets/screenshots/misskey-feed.jpg) | ![](assets/screenshots/about.jpg) |
+
+## What's working, what's missing?
+
+Currently Kaiteki only allows viewing timelines. Estimated, most important API calls for Misskey, Pleroma/Mastodon are already implemented, but lack proper internal adapter design, alongside their user interface.
+
+## Contributing
+
+I'm happy about any feedback or contribution you have.
+
+Since I am inexperienced with large scale projects I have nothings against contributors. If you have questions you can reach me anywhere on [my contact page](https://craftplacer.github.io/about), you can also comment under issues that you want to get assigned to and want to work on.
 
 ## Download and use Kaiteki
 
@@ -24,20 +31,15 @@ Please still note, that **Kaiteki is still in development**.
 Unpolished code, bugs and missing features might be present in these builds, so think twice when creating issues.
 
 [![Visit web version](https://img.shields.io/badge/-Open%20web%20app%20-blue)][1]
-[![Download latest Linux build](https://img.shields.io/badge/-Download%20for%20Linux%20-red)][2]
-[![View other builds](https://img.shields.io/badge/-Other%20builds%20-gray)][3]
 
 [1]: https://craftplacer.github.io/kaiteki/
-[2]: https://github.com/Craftplacer/kaiteki/releases/latest/download/linux.zip
-[3]: https://github.com/Craftplacer/kaiteki/releases "Releases page"
 
 
-### Why isn't my platform available
+### Why isn't my platform available?
 
-Packaged Linux releases and Windows builds are yet to be integrated into the GitHub build and deploy workflow.
+Android APKs, Packaged Linux releases and Windows builds are yet to be integrated into the GitHub build and deploy workflow.
 
 Apple based platforms won't get any support, until one user will offer building and maintaining those builds.
-
 
 ## Compiling Kaiteki
 
