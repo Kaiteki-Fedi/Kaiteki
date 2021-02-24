@@ -125,7 +125,7 @@ class StatusWidget extends StatelessWidget {
                         ),
                         CountButton(
                           icon: Icon(Icons.repeat),
-                          count: _post.replyCount,
+                          count: _post.repeatCount,
                           active: _post.repeated,
                           activeColor:  theme.repeatColor
                         ),
