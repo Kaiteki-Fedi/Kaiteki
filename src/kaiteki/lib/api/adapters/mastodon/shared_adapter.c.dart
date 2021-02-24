@@ -19,6 +19,9 @@ Post toPost(MastodonStatus source) {
     repeatCount: source.reblogsCount,
     replyCount: source.repliesCount,
     visibility: toVisibility(source.visibility),
+    replyToAccountId: source.inReplyToAccountId,
+    replyToPostId: source.inReplyToId,
+    id: source.id,
   );
 }
 

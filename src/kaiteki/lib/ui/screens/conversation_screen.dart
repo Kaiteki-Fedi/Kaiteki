@@ -22,16 +22,8 @@ class ConversationScreen extends StatelessWidget {
         future: container.adapter.getThread(post),
         builder: (_, AsyncSnapshot<Iterable<Post>> snapshot) {
           if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (_, i) {
-                  var status = snapshot.data.elementAt(i);
-
-                  return StatusWidget(status, onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => ConversationScreen(status)));
-                  });
-                }
-            );
+            var cookedThread = Threader.toThread(snapshot.data);
+            return SingleChildScrollView(child: ThreadPostContainer(cookedThread));
           } else if (snapshot.hasError) {
             return Center(child: IconLandingWidget(icon: Mdi.close, text: snapshot.error.toString()));
           } else {
@@ -42,4 +34,64 @@ class ConversationScreen extends StatelessWidget {
     );
   }
 
+}
+
+class Threader {
+  static ThreadPost toThread(Iterable<Post> posts) {
+    var threadPosts = posts.map((post) => new ThreadPost(post)).toList();
+
+    for (var post in threadPosts) {
+      var id = post.post.replyToPostId;
+
+      if (id != null) {
+        threadPosts.firstWhere((p) => p.post.id == id).replies.add(post);
+      }
+    }
+
+    return threadPosts.firstWhere((p) => p.post.replyToPostId == null);
+  }
+}
+
+class ThreadPost {
+  Post post;
+  List<ThreadPost> replies;
+
+  ThreadPost(this.post, {replies}) {
+    if (replies == null)
+      this.replies = List<ThreadPost>();
+    else
+      this.replies = replies;
+  }
+}
+
+class ThreadPostContainer extends StatelessWidget {
+  final ThreadPost post;
+
+  const ThreadPostContainer(this.post);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        new StatusWidget(post.post),
+        if (post.replies.isNotEmpty)
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                VerticalDivider(thickness: 2, width: 8, color: Color(this.post.post.id.hashCode * 10000)),
+                Expanded(
+                  child: Column(
+                    children: [
+                      for (var reply in post.replies)
+                        ThreadPostContainer(reply),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
 }

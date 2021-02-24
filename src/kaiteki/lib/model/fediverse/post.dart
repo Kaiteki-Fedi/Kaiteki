@@ -11,6 +11,7 @@ import 'package:kaiteki/model/fediverse/visibility.dart';
 class Post<T> {
   /// The original object.
   final T source;
+  final String id;
 
   // METADATA
   final DateTime postedAt;
@@ -32,16 +33,19 @@ class Post<T> {
   final Formatting formatting;
   final Iterable<Attachment> attachments;
   final Iterable<Emoji> emojis;
+
+  final String replyToPostId;
+  final String replyToAccountId;
   final Post repeatOf;
   final Post replyTo;
   final PreviewCard previewCard;
 
-  // TODO maybe remove @required, when constructing for local only?
   const Post({
-    @required this.source,
-    @required this.postedAt,
-    @required this.author,
-    @required this.content,
+    this.source,
+    this.postedAt,
+    this.author,
+    this.content,
+    this.id,
     this.subject,
     this.nsfw = false,
     this.formatting = Formatting.PlainText,
@@ -57,6 +61,8 @@ class Post<T> {
     this.replyCount,
     this.reactions,
     this.visibility,
+    this.replyToAccountId,
+    this.replyToPostId,
   });
 
   factory Post.example() {

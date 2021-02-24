@@ -39,7 +39,9 @@ class StatusWidget extends StatelessWidget {
             userTextStyle: authorTextStyle,
             textStyle: textStyle,
           ),
-          StatusWidget(_post.repeatOf),
+          // Passing over onTap in this case sort of reveals a bad design
+          // *maybe* require letting the parent handle taps?
+          StatusWidget(_post.repeatOf, onTap: onTap),
         ],
       );
     }
