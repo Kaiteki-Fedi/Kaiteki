@@ -6,6 +6,7 @@ import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/card_widget.dart';
+import 'package:kaiteki/ui/widgets/count_button.dart';
 import 'package:kaiteki/ui/widgets/interaction_bar.dart';
 import 'package:kaiteki/ui/widgets/reaction_row.dart';
 import 'package:kaiteki/utils/text_renderer.dart';
@@ -118,22 +119,23 @@ class StatusWidget extends StatelessWidget {
 
                     Row(
                       children: [
-                        IconButton(icon: Icon(Icons.reply)),
-                        if (_post.replyCount > 0)
-                          Text(_post.replyCount.toString()),
-                        IconButton(
+                        CountButton(
+                          icon: Icon(Icons.reply),
+                          count: _post.replyCount,
+                        ),
+                        CountButton(
                           icon: Icon(Icons.repeat),
-                          onPressed: _post.repeated ? () {} : null,
-                          color: _post.repeated ? theme.repeatColor : null,
+                          count: _post.replyCount,
+                          active: _post.repeated,
+                          activeColor:  theme.repeatColor
                         ),
-                        if (_post.repeatCount > 0)
-                          Text(_post.repeatCount.toString()),
-                        IconButton(
-                          icon: Icon(_post.liked ? Mdi.star : Mdi.starOutline),
-                          onPressed: _post.liked ? () {} : null,
-                          color: _post.liked ? theme.favoriteColor : null,
+                        CountButton(
+                          icon: Icon(Mdi.starOutline),
+                          count: _post.likeCount,
+                          active: _post.liked,
+                          activeColor:  theme.favoriteColor,
+                          activeIcon: Icon(Icons.star),
                         ),
-                        if (_post.likeCount > 0) Text(_post.likeCount.toString()),
                         IconButton(
                           icon: Icon(Icons.insert_emoticon),
                           onPressed: null,
