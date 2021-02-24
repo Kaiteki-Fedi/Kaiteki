@@ -5,10 +5,10 @@ part 'app_preferences.g.dart';
 
 @JsonSerializable()
 class AppPreferences extends ChangeNotifier {
-  ThemeMode theme = ThemeMode.dark;
+  ThemeMode theme;
 
   AppPreferences({
-    this.theme,
+    this.theme = ThemeMode.system,
   });
 
   void setTheme(ThemeMode value) {
