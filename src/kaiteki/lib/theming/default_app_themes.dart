@@ -5,6 +5,7 @@ import 'package:kaiteki/theming/material_app_theme.dart';
 class DefaultAppThemes {
   static MaterialAppTheme lightAppTheme =
       MaterialAppTheme(ThemeData.from(colorScheme: lightScheme));
+
   static ColorScheme lightScheme = ColorScheme.light(
     background: AppColors.kaitekiGray.shade100,
     surface: AppColors.kaitekiGray.shade50,
@@ -19,10 +20,12 @@ class DefaultAppThemes {
     // error
     error: Colors.red,
     onError: Colors.black,
+    brightness: Brightness.light,
   );
 
   static MaterialAppTheme darkAppTheme =
       MaterialAppTheme(ThemeData.from(colorScheme: darkScheme));
+
   static ColorScheme darkScheme = ColorScheme.dark(
     background: AppColors.kaitekiGray.shade900,
     surface: AppColors.kaitekiGray.shade800,
@@ -37,5 +40,6 @@ class DefaultAppThemes {
     // error
     error: Colors.red,
     onError: Colors.black,
+    brightness: Brightness.dark,
   );
 }
