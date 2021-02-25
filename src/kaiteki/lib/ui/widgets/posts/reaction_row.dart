@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/reaction.dart';
-import 'package:kaiteki/ui/widgets/reaction_widget.dart';
+import 'package:kaiteki/ui/widgets/posts/reaction_widget.dart';
 
 class ReactionRow extends StatelessWidget {
   final Iterable<Reaction> _reactions;

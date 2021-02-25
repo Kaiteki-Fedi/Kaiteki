@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/ui/widgets/avatar_widget.dart';
+import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
