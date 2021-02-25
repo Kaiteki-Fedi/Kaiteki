@@ -3,17 +3,17 @@ import 'package:flutter/painting.dart';
 
 class AppColors {
   static MaterialColor kaitekiGray = MaterialColor(
-    0xFF9c9eb5,
+    0xFF1e2133,
     {
-      50: const Color(0xFFf7f9ff),
-      100: const Color(0xFFf2f4ff),
-      200: const Color(0xFFebedff),
-      300: const Color(0xFFdee0f8),
-      400: const Color(0xFFbbbdd5),
-      500: const Color(0xFF9c9eb5),
-      600: const Color(0xFF73758b),
-      700: const Color(0xFF5f6176),
-      800: const Color(0xFF404256),
+      50: const Color(0xFF424453),
+      100: const Color(0xFF3F4251),
+      200: const Color(0xFF3D404F),
+      300: const Color(0xFF393B4B),
+      400: const Color(0xFF363949),
+      500: const Color(0xFF323545),
+      600: const Color(0xFF2F3243),
+      700: const Color(0xFF2D3041),
+      800: const Color(0xFF292C3D),
       900: const Color(0xFF1e2133),
     },
   );
