@@ -48,7 +48,8 @@ class Threader {
       }
     }
 
-    return threadPosts.firstWhere((p) => p.post.replyToPostId == null);
+    var op = threadPosts.firstWhere((p) => p.post.replyToPostId == null);
+    return op;
   }
 }
 

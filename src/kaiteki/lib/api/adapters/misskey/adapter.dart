@@ -185,8 +185,8 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Iterable<Post>> getThread(Post reply) {
-    // TODO: implement getThread
-    throw UnimplementedError();
+  Future<Iterable<Post>> getThread(Post reply) async {
+    var notes = await client.getConversation(reply.id);
+    return notes.map(toPost).followedBy([reply]);
   }
 }

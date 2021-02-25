@@ -26,6 +26,8 @@ Post toPost(MisskeyNote source) {
         );
       },
     ),
+    replyToPostId: source.replyId,
+    id: source.id,
     visibility: toVisibility(source.visibility),
     attachments: source.files.map(toAttachment),
   );
