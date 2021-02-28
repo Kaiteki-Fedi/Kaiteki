@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:logger_flutter/logger_flutter.dart';
+import 'package:mdi/mdi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DebugScreen extends StatefulWidget {
@@ -25,6 +27,17 @@ class _DebugScreenState extends State<DebugScreen> {
             ),
           ),
           ListTile(
+            leading: Icon(Mdi.textBox),
+            title: Text("Open log console"),
+            onTap: () {
+              return Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+                var dark = Theme.of(context).brightness == Brightness.dark;
+                return LogConsole(dark: dark, showCloseButton: true);
+              }));
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.delete),
             title: Text("Clear shared preferences"),
             subtitle: Text("The shared preferences contain your tokens alongside your user preferences. A restart of the app is recommended to make the changes take effect."),
             onTap: () async {

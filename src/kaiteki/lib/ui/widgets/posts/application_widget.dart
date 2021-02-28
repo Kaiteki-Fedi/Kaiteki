@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fediverse_objects/mastodon/application.dart';
-import 'package:kaiteki/utils/logger.dart';
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 class ApplicationWidget extends StatelessWidget {
   final MastodonApplication application;
+
+  static var _logger = getLogger("ApplicationWidget");
 
   const ApplicationWidget(this.application, {Key key}) : super(key: key);
 
@@ -21,7 +24,7 @@ class ApplicationWidget extends StatelessWidget {
         var url = application.website;
 
         if (url == null) {
-          Logger.warning("Tried to open a null application website URL");
+          _logger.w("Tried to open a null application website URL");
           return;
         }
 

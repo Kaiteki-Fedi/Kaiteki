@@ -15,14 +15,16 @@ import 'package:kaiteki/api/responses/misskey/create_app_response.dart';
 import 'package:kaiteki/api/responses/misskey/generate_session_response.dart';
 import 'package:kaiteki/api/responses/misskey/signin_response.dart';
 import 'package:kaiteki/api/responses/misskey/userkey_response.dart';
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/http_method.dart';
-import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   @override
   ApiType get type => ApiType.Misskey;
+
+  static var _logger = getLogger("MisskeyClient");
 
   Future<MisskeyCreateAppResponse> createApp(
       String name, String description, List<String> permissions,
@@ -165,9 +167,9 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
         var body = await response.stream.bytesToString();
         var json = jsonDecode(body);
         mkErr = MisskeyError.fromJson(json["error"]);
-      } catch (_) {
-        Logger.warning(
-          "Failed to gather Misskey error object from erroneous response.",
+      } catch (ex) {
+        _logger.e(
+          "Failed to gather Misskey error object from erroneous response.", ex
         );
       }
 

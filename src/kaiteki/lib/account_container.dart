@@ -2,13 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/api/clients/mastodon_client.dart';
 import 'package:kaiteki/api/definitions/definitions.dart';
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
-import 'package:kaiteki/utils/logger.dart';
 
 class AccountContainer extends ChangeNotifier {
+  static var _logger = getLogger("AccountContainer");
+
   AccountCompound _currentAccount;
   AccountCompound get currentAccount => _currentAccount;
 
@@ -31,7 +33,7 @@ class AccountContainer extends ChangeNotifier {
 
     notifyListeners();
 
-    Logger.debug("removed account ${compound.instance}");
+    _logger.d("removed account ${compound.instance}");
   }
 
   Future<void> addCurrentAccount(AccountCompound compound) async {
@@ -55,18 +57,17 @@ class AccountContainer extends ChangeNotifier {
     _accounts.clear();
     _accountSecrets.getAll().forEach((accountSecret) async {
       if (accountSecret == null) {
-        Logger.warning("A saved account secret was null");
+        _logger.w("A saved account secret was null");
         return;
       }
 
       var instance = accountSecret.instance;
       var clientSecret = _clientSecrets.get(instance);
 
-      Logger.debug(clientSecret.apiType.toString());
+      _logger.d(clientSecret.apiType.toString());
 
       if (clientSecret == null || clientSecret.apiType == null) {
-        Logger.warning(
-            "Skipped loading account secret due to invalid client secret.");
+        _logger.w("Skipped loading account secret due to invalid client secret.");
         return;
       }
 
@@ -93,12 +94,11 @@ class AccountContainer extends ChangeNotifier {
       try {
         user = await adapter.getMyself();
       } catch (ex) {
-        Logger.exception(message: "Failed to verify credentials", error: ex);
+        _logger.e("Failed to verify credentials", ex);
       }
 
       if (user == null) {
-        Logger.warning(
-            "No user data was recovered, assuming user info is incorrect.");
+        _logger.w("No user data was recovered, assuming user info is incorrect.");
         return;
       }
 
@@ -130,8 +130,8 @@ class AccountContainer extends ChangeNotifier {
 
         compound.account = account;
       } catch (e) {
+        _logger.e("Account retrieval failed, removing account...", e);
         remove(compound);
-        Logger.error("Account retrieval failed, removing account... $e");
       }
     }
   }

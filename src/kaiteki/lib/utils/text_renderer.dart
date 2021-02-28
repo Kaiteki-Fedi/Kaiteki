@@ -4,10 +4,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parseFragment;
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
-import 'package:kaiteki/utils/logger.dart';
 import 'package:kaiteki/utils/text_buffer.dart';
 import 'package:kaiteki/utils/text_renderer_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,6 +16,7 @@ typedef HtmlConstructor = InlineSpan Function(dom.Element element);
 
 class TextRenderer {
   static const String emojiChar = ":";
+  static var _logger = getLogger("TextRenderer");
 
   final Iterable<Emoji> emojis;
   final TextRendererTheme theme;
@@ -103,7 +104,7 @@ class TextRenderer {
       if (htmlConstructors.containsKey(tag)) {
         resultingSpan = htmlConstructors[tag].call(node);
       } else {
-        Logger.warning("Unhandled HTML tag ($tag)");
+        _logger.w("Unhandled HTML tag ($tag)");
       }
     } else if (node is dom.Text) {
       dom.Text textElement = node;

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/app.dart';
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:kaiteki/utils/logger.dart';
+import 'package:logger_flutter/logger_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  LogConsole.init(bufferSize: 30);
+  var logger = getLogger('Kaiteki');
+
   // we need to run this to be able to get access to SharedPreferences
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -20,8 +24,8 @@ void main() async {
   try {
     accountRepository = await AccountSecretRepository.getInstance(preferences);
     clientRepository = await ClientSecretRepository.getInstance(preferences);
-  } catch (ex) {
-    print("Failed to create instances of save data repositories. $ex");
+  } catch (e) {
+    logger.e("Failed to create instances of save data repositories", e);
   }
 
   FlutterLocalNotificationsPlugin notificationsPlugin;
@@ -29,7 +33,7 @@ void main() async {
   try {
     notificationsPlugin = await initializeNotifications();
   } catch (e) {
-    Logger.exception(message: "Failed to initialize notifications");
+    logger.e("Failed to initialize notifications", e);
   }
 
   // construct app

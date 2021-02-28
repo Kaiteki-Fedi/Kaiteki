@@ -5,16 +5,19 @@ import 'package:http/http.dart';
 import 'package:kaiteki/api/api_type.dart';
 import 'package:kaiteki/api/exceptions/api_exception.dart';
 import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/http_method.dart';
-import 'package:kaiteki/utils/extensions/string.dart';
-import 'package:kaiteki/utils/logger.dart';
+import 'package:kaiteki/utils/extensions/string.dart'; 
 import 'package:kaiteki/utils/utils.dart';
 
 typedef T DeserializeFromJson<T>(Map<String, dynamic> json);
 
 /// Class that contains basic properties and methods for building a Fediverse client.
 abstract class FediverseClientBase<AuthData extends AuthenticationData> {
+  static var _logger = getLogger("FediverseClientBase");
+
+
   String get baseUrl {
     if (instance == null) throw "Tried to return a null instance as base URL.";
 
@@ -104,7 +107,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
       checkResponse(response);
       return response;
     } catch (ex) {
-      Logger.error(ex);
+      _logger.e("Request failed", ex);
       return null;
     }
   }
