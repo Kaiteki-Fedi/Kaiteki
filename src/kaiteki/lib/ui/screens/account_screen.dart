@@ -109,6 +109,7 @@ class AccountHeader extends StatelessWidget {
               )
             ],
           ),
+          if ( account.description != null)
           RichText(
             text: TextSpan(
               children: [
