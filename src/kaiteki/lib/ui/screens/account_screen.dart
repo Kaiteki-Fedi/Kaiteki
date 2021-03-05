@@ -109,20 +109,20 @@ class AccountHeader extends StatelessWidget {
               )
             ],
           ),
-          if ( account.description != null)
-          RichText(
-            text: TextSpan(
-              children: [
-                TextRenderer(
-                  emojis: account.emojis,
-                  theme: TextRendererTheme.fromContext(context),
-                ).renderFromHtml(account.description)
-              ],
-              style: TextStyle(
-                shadows: [Shadow(blurRadius: 2, offset: Offset(0, 1))],
+          if (account.description != null)
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextRenderer(
+                    emojis: account.emojis,
+                    theme: TextRendererTheme.fromContext(context),
+                  ).renderFromHtml(account.description)
+                ],
+                style: TextStyle(
+                  shadows: [Shadow(blurRadius: 2, offset: Offset(0, 1))],
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

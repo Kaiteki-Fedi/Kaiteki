@@ -89,7 +89,9 @@ class StatusWidget extends StatelessWidget {
                         ),
                         Spacer(),
                         Text(
-                          DateTime.now().difference(_post.postedAt).toStringHuman(),
+                          DateTime.now()
+                              .difference(_post.postedAt)
+                              .toStringHuman(),
                           style: TextStyle(
                             color: theme.materialTheme.disabledColor,
                           ),
@@ -127,13 +129,13 @@ class StatusWidget extends StatelessWidget {
                           icon: Icon(Icons.repeat),
                           count: _post.repeatCount,
                           active: _post.repeated,
-                          activeColor:  theme.repeatColor
+                          activeColor: theme.repeatColor,
                         ),
                         CountButton(
                           icon: Icon(Mdi.starOutline),
                           count: _post.likeCount,
                           active: _post.liked,
-                          activeColor:  theme.favoriteColor,
+                          activeColor: theme.favoriteColor,
                           activeIcon: Icon(Icons.star),
                         ),
                         IconButton(

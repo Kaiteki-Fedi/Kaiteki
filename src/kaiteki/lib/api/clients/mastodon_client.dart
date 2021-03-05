@@ -136,7 +136,9 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   Future<MastodonStatus> postStatus(String status,
       {String spoilerText, String contentType, bool pleromaPreview}) async {
     return await sendJsonRequest(
-        HttpMethod.POST, "api/v1/statuses", (j) => MastodonStatus.fromJson(j),
+        HttpMethod.POST,
+        "api/v1/statuses",
+        (j) => MastodonStatus.fromJson(j),
         body: {
           "status": status,
           "source": Constants.appName,
