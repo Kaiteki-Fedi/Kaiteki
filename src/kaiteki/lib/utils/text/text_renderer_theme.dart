@@ -19,7 +19,9 @@ class TextRendererTheme {
     var textStyle = textTheme.bodyText1;
 
     return TextRendererTheme(
-      textStyle,
+      textStyle.copyWith(
+        color: theme.materialTheme.colorScheme.onBackground,
+      ),
       textStyle.copyWith(
         color: theme.materialTheme.accentColor,
       ),

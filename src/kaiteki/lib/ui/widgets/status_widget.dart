@@ -9,9 +9,9 @@ import 'package:kaiteki/ui/widgets/posts/card_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/count_button.dart';
 import 'package:kaiteki/ui/widgets/posts/interaction_bar.dart';
 import 'package:kaiteki/ui/widgets/posts/reaction_row.dart';
-import 'package:kaiteki/utils/text_renderer.dart';
-import 'package:kaiteki/utils/text_renderer_theme.dart';
 import 'package:kaiteki/utils/extensions/duration.dart';
+import 'package:kaiteki/utils/text/text_renderer.dart';
+import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
-import 'package:kaiteki/utils/text_renderer.dart';
-import 'package:kaiteki/utils/text_renderer_theme.dart';
+import 'package:kaiteki/utils/text/text_renderer.dart';
+import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 /// A row that details an interaction for use in timelines

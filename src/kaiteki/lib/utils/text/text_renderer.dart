@@ -8,8 +8,8 @@ import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
-import 'package:kaiteki/utils/text_buffer.dart';
-import 'package:kaiteki/utils/text_renderer_theme.dart';
+import 'package:kaiteki/utils/text/text_buffer.dart';
+import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 typedef HtmlConstructor = InlineSpan Function(dom.Element element);

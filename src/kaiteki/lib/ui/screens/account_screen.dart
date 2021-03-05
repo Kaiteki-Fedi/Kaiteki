@@ -6,8 +6,8 @@ import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/model/fediverse/post.dart';
 import 'package:kaiteki/model/fediverse/user.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
-import 'package:kaiteki/utils/text_renderer.dart';
-import 'package:kaiteki/utils/text_renderer_theme.dart';
+import 'package:kaiteki/utils/text/text_renderer.dart';
+import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
