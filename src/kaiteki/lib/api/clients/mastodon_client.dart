@@ -115,10 +115,20 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<MastodonStatus>> getTimeline() async {
+  Future<Iterable<MastodonStatus>> getTimeline({bool local, bool remote, bool onlyMedia, String maxId, String sinceId, String minId, int limit}) async {
+    var queryParams = {
+      'local': local,
+      'remote': remote,
+      'only_media': onlyMedia,
+      'max_id': maxId,
+      'since_id': sinceId,
+      'min_id': minId,
+      'limit': limit,
+    };
+
     return await sendJsonRequestMultiple(
       HttpMethod.GET,
-      "api/v1/timelines/home",
+      Utils.withQueries("api/v1/timelines/home", queryParams),
       (j) => MastodonStatus.fromJson(j),
     );
   }

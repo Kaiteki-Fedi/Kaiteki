@@ -16,6 +16,16 @@ class Utils {
     return instance;
   }
 
+  static String withQueries(String baseUrl, Map<String, dynamic> queryParameters) {
+    queryParameters.removeWhere((_, v) => v == null);
+
+    if (queryParameters.length == 0) {
+      return baseUrl;
+    } else {
+      return baseUrl + '?' + Uri(queryParameters: queryParameters).query;
+    }
+  }
+
   static void checkResponse(Response response) {
     var isSuccessful = 200 <= response.statusCode && response.statusCode < 400;
     assert(isSuccessful,
