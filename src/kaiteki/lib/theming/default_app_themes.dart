@@ -7,8 +7,8 @@ class DefaultAppThemes {
       MaterialAppTheme(ThemeData.from(colorScheme: lightScheme));
 
   static ColorScheme lightScheme = ColorScheme.light(
-    background: AppColors.kaitekiGray.shade100,
-    surface: AppColors.kaitekiGray.shade50,
+    background: AppColors.kaitekiLightBackground.shade100,
+    surface: AppColors.kaitekiLightBackground.shade50,
     // primary
     primary: AppColors.kaitekiPink.shade500,
     primaryVariant: AppColors.kaitekiPink.shade700,
@@ -27,8 +27,8 @@ class DefaultAppThemes {
       MaterialAppTheme(ThemeData.from(colorScheme: darkScheme));
 
   static ColorScheme darkScheme = ColorScheme.dark(
-    background: AppColors.kaitekiGray.shade900,
-    surface: AppColors.kaitekiGray.shade800,
+    background: AppColors.kaitekiDarkBackground.shade900,
+    surface: AppColors.kaitekiDarkBackground.shade800,
     // primary
     primary: AppColors.kaitekiPink.shade200,
     primaryVariant: AppColors.kaitekiPink.shade500,
