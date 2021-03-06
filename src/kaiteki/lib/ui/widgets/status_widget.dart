@@ -7,7 +7,7 @@ import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/card_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/count_button.dart';
-import 'package:kaiteki/ui/widgets/posts/interaction_bar.dart';
+import 'package:kaiteki/ui/widgets/posts/interaction_event_bar.dart';
 import 'package:kaiteki/ui/widgets/posts/reaction_row.dart';
 import 'package:kaiteki/utils/extensions/duration.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
@@ -32,7 +32,7 @@ class StatusWidget extends StatelessWidget {
     if (_post.repeatOf != null) {
       return Column(
         children: [
-          InteractionBar(
+          InteractionEventBar(
             icon: Mdi.repeat,
             text: "repeated",
             color: theme.repeatColor,

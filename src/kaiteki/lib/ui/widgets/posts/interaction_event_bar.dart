@@ -6,7 +6,7 @@ import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 /// A row that details an interaction for use in timelines
-class InteractionBar extends StatelessWidget {
+class InteractionEventBar extends StatelessWidget {
   final Color color;
   final String text;
   final IconData icon;
@@ -14,7 +14,7 @@ class InteractionBar extends StatelessWidget {
   final TextStyle userTextStyle;
   final TextStyle textStyle;
 
-  const InteractionBar({
+  const InteractionEventBar({
     @required this.color,
     @required this.icon,
     @required this.text,
