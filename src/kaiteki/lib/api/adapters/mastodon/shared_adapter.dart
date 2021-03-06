@@ -123,8 +123,9 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(TimelineType type) async {
-    var posts = await client.getTimeline();
+  Future<Iterable<Post>> getTimeline(TimelineType type,
+      {String sinceId, String untilId}) async {
+    var posts = await client.getTimeline(minId: sinceId, maxId: untilId);
     return posts.map((m) => toPost(m));
   }
 

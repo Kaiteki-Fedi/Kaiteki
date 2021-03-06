@@ -102,16 +102,20 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(TimelineType type) async {
+  Future<Iterable<Post>> getTimeline(TimelineType type,
+      {String sinceId, String untilId}) async {
     Iterable<MisskeyNote> notes;
 
-    var request = MisskeyTimelineRequest();
+    var request = MisskeyTimelineRequest(sinceId: sinceId, untilId: untilId);
     switch (type) {
       case TimelineType.Home:
         notes = await client.getTimeline(request);
         break;
+
       default:
-        return null;
+        throw UnimplementedError(
+          "Fetching of timeline type $type is not implemented yet.",
+        );
     }
 
     return notes.map(toPost);

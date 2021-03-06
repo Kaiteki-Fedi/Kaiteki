@@ -43,7 +43,8 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// Retrieves a thread from a reply
   Future<Iterable<Post>> getThread(Post reply);
 
-  Future<Iterable<Post>> getTimeline(TimelineType type);
+  Future<Iterable<Post>> getTimeline(TimelineType type,
+      {String sinceId, String untilId});
 
   Future<Iterable<Notification>> getNotifications();
 
