@@ -21,7 +21,7 @@ class AccountContainer extends ChangeNotifier {
   final AccountSecretRepository _accountSecrets;
   final ClientSecretRepository _clientSecrets;
 
-  List<AccountCompound> _accounts = List<AccountCompound>();
+  List<AccountCompound> _accounts = <AccountCompound>[];
   Iterable<AccountCompound> get accounts => List.unmodifiable(_accounts);
 
   AccountContainer(this._accountSecrets, this._clientSecrets);

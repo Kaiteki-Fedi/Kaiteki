@@ -59,7 +59,7 @@ class ThreadPost {
 
   ThreadPost(this.post, {replies}) {
     if (replies == null)
-      this.replies = List<ThreadPost>();
+      this.replies = <ThreadPost>[];
     else
       this.replies = replies;
   }

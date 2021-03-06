@@ -2,7 +2,7 @@ import 'dart:async';
 
 abstract class PagedNetworkStream<T, I> {
   final _controller = StreamController<List<T>>.broadcast();
-  final _objects = new List<T>();
+  final _objects = <T>[];
 
   I _lastId;
   Stream<Iterable<T>> stream;
