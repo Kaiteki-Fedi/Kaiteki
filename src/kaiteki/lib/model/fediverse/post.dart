@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:kaiteki/model/fediverse/attachment.dart';
 import 'package:kaiteki/model/fediverse/emoji.dart';
 import 'package:kaiteki/model/fediverse/formatting.dart';

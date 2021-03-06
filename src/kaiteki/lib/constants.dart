@@ -1,5 +1,3 @@
-import 'package:kaiteki/app_preferences.dart';
-
 class Constants {
   static const String appName = "Kaiteki";
   static const String appWebsite = "https://github.com/Craftplacer/Kaiteki";
