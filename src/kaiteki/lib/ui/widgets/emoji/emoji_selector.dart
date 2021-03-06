@@ -75,16 +75,18 @@ class _EmojiSelectorState extends State<EmojiSelector>
                 ),
               ),
               VerticalDivider(),
-              FlatButton(
+              TextButton(
                 child: Icon(Mdi.dotsVertical),
-                minWidth: 52,
-                height: 52,
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all(Size.square(52)),
+                ),
               ),
-              FlatButton(
+              TextButton(
                 child: Icon(Mdi.close),
-                minWidth: 52,
-                height: 52,
                 onPressed: () => Navigator.of(context).pop(),
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all(Size.square(52)),
+                ),
               ),
             ],
           ),

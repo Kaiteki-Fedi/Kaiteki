@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
+import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
+import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
@@ -35,10 +35,10 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: IconLandingWidget(
                       icon: Mdi.accountOutline,
-                      text: "No accounts"
+                      text: "No accounts",
                     ),
                   ),
-                  OutlineButton.icon(
+                  OutlinedButton.icon(
                     icon: Icon(Mdi.plus),
                     label: Text("Add Account"),
                     onPressed: () => onTapAdd(context),
@@ -51,8 +51,7 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
           return ListView.builder(
             itemCount: length + 2,
             itemBuilder: (_, i) {
-              if (i == length)
-                return Divider();
+              if (i == length) return Divider();
 
               if (i == length + 1)
                 return ListTile(
@@ -87,20 +86,21 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
     Navigator.of(context).pushNamed("/accounts/add");
   }
 
-  void onTapRemove(BuildContext context, AccountContainer container, AccountCompound account) {
+  void onTapRemove(BuildContext context, AccountContainer container,
+      AccountCompound account) {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text("Are you sure you want to remove this account?"),
         content: const Text("You will have to add this account again later."),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('CANCEL'),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text("REMOVE"),
             onPressed: () {
               container.remove(account);

@@ -54,7 +54,7 @@ class _MfaScreenState extends State<MfaScreen> {
               ),
               if (_error.isNotNullOrEmpty)
                 Text(_error, style: TextStyle(color: Colors.redAccent)),
-              RaisedButton(
+              ElevatedButton(
                 child: Text("Verify"),
                 onPressed: () {
                   Navigator.of(context).pop(_textController.value.text);

@@ -7,7 +7,7 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class ConversationScreen extends StatelessWidget {
-  Post post;
+  final Post post;
 
   ConversationScreen(this.post);
 

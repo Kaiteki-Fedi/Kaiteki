@@ -115,11 +115,11 @@ class _LoginFormState extends State<LoginForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                OutlineButton(
+                OutlinedButton(
                   child: Text("Need an account?"),
                   onPressed: widget.onRegister,
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text("Login"),
                   onPressed: widget.onLogin,
                 ),

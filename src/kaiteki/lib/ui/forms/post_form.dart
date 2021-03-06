@@ -95,7 +95,7 @@ class _PostFormState extends State<PostForm> {
 
               Spacer(),
 
-              RaisedButton(
+              ElevatedButton(
                 child: Text("Submit"),
                 onPressed: () => post(container.adapter),
               ),
