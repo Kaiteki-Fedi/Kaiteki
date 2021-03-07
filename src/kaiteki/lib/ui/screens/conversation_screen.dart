@@ -23,17 +23,23 @@ class ConversationScreen extends StatelessWidget {
         builder: (_, AsyncSnapshot<Iterable<Post>> snapshot) {
           if (snapshot.hasData) {
             var cookedThread = Threader.toThread(snapshot.data);
-            return SingleChildScrollView(child: ThreadPostContainer(cookedThread));
+            return SingleChildScrollView(
+              child: ThreadPostContainer(cookedThread),
+            );
           } else if (snapshot.hasError) {
-            return Center(child: IconLandingWidget(icon: Mdi.close, text: snapshot.error.toString()));
+            return Center(
+              child: IconLandingWidget(
+                icon: Mdi.close,
+                text: snapshot.error.toString(),
+              ),
+            );
           } else {
             return Center(child: CircularProgressIndicator());
           }
         },
-      )
+      ),
     );
   }
-
 }
 
 class Threader {
@@ -80,7 +86,10 @@ class ThreadPostContainer extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                VerticalDivider(thickness: 2, width: 8, color: Color(this.post.post.id.hashCode * 10000)),
+                VerticalDivider(
+                    thickness: 2,
+                    width: 8,
+                    color: Color(this.post.post.id.hashCode * 10000)),
                 Expanded(
                   child: Column(
                     children: [
