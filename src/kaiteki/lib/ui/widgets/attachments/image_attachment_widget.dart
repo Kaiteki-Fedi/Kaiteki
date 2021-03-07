@@ -18,9 +18,10 @@ class ImageAttachmentWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          // TODO (theming): Implement pleroma attachment rounding
-          borderRadius: borderRadius,
-          border: Border.all(color: border, width: 1)),
+        // TODO (theming): Implement pleroma attachment rounding
+        borderRadius: borderRadius,
+        border: Border.all(color: border, width: 1),
+      ),
       child: GestureDetector(
         onTap: () => enlargeImage(context),
         child: ClipRRect(
@@ -63,16 +64,13 @@ class ImageAttachmentWidget extends StatelessWidget {
           backgroundColor: background,
           appBar: AppBar(
             backgroundColor: Colors.black.withOpacity(0.5),
-            title: attachment.description == null
-                ? null
-                : Text(attachment.description ?? ""),
           ),
           body: InteractiveViewer(
-            alignPanAxis: true,
             child: Center(
               child: Image.network(
                 attachment.url,
                 fit: BoxFit.fill,
+                semanticLabel: attachment.description,
               ),
             ),
           ),
