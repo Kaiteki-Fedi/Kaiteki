@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/model/fediverse/formatting.dart';
-import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/fediverse/model/formatting.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';

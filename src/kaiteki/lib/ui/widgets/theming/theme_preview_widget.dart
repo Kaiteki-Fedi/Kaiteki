@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/app_theme_source.dart';
 import 'package:kaiteki/theming/material_app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';

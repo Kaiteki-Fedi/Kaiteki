@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/fediverse/emoji.dart';
-import 'package:kaiteki/model/fediverse/emoji_category.dart';
+import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 
 typedef EmojiSelected = void Function(Emoji emoji);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/fediverse/post.dart';
-import 'package:kaiteki/model/fediverse/reaction.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/ui/widgets/posts/reaction_widget.dart';
 
 class ReactionRow extends StatelessWidget {
@@ -13,7 +13,6 @@ class ReactionRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       direction: Axis.horizontal,
-
       children: [
         for (var reaction in _reactions)
           ReactionWidget(parentPost: _parentPost, reaction: reaction),

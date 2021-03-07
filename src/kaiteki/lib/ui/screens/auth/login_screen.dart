@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/api_type.dart';
+import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/ui/forms/login_form.dart';
 import 'package:kaiteki/ui/screens/auth/mfa_screen.dart';

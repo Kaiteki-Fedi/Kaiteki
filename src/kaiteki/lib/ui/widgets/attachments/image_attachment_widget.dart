@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/fediverse/attachment.dart';
+import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -77,7 +77,7 @@ class ImageAttachmentWidget extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }

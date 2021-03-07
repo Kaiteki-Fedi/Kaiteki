@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/definitions/definitions.dart';
+import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher.dart';

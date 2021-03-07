@@ -2,13 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:kaiteki/model/fediverse/notification.dart' as fv;
+import 'package:kaiteki/fediverse/model/notification.dart' as fv;
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class NotificationPoster {
-  static Future<void> sendNotifications(BuildContext context, Iterable<fv.Notification> notifications) async {
-    var plugin = Provider.of<FlutterLocalNotificationsPlugin>(context, listen: false);
+  static Future<void> sendNotifications(
+      BuildContext context, Iterable<fv.Notification> notifications) async {
+    var plugin =
+        Provider.of<FlutterLocalNotificationsPlugin>(context, listen: false);
 
     for (var notification in notifications.take(3)) {
       await sendNotification(plugin, notification);
@@ -34,21 +36,20 @@ class NotificationPoster {
     }
   }
 
-  static Future<void> sendNotification(FlutterLocalNotificationsPlugin plugin, fv.Notification data) async {
+  static Future<void> sendNotification(
+      FlutterLocalNotificationsPlugin plugin, fv.Notification data) async {
     const String notificationsKey = "craftplacer.kaiteki.NOTIFICATIONS";
 
     var avatarResponse = await http.get(data.user.avatarUrl);
-    var iconPath = Directory.systemTemp.path + '/' + data.user.avatarUrl.hashCode.toString();
+    var iconPath = Directory.systemTemp.path +
+        '/' +
+        data.user.avatarUrl.hashCode.toString();
     var iconFile = File(iconPath);
 
     if (!(await iconFile.exists())) {
       print("downloading to $iconPath");
-      await iconFile.writeAsBytes(
-        avatarResponse.bodyBytes,
-        flush: true
-      );
+      await iconFile.writeAsBytes(avatarResponse.bodyBytes, flush: true);
     }
-
 
     var android = AndroidNotificationDetails(
       data.type,

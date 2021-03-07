@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/fediverse/previewCard.dart';
+import 'package:kaiteki/fediverse/model/previewCard.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CardWidget extends StatelessWidget {
@@ -25,7 +25,6 @@ class CardWidget extends StatelessWidget {
                 card.imageUrl,
                 width: 120,
               ),
-
             Flexible(
               fit: FlexFit.loose,
               child: Padding(

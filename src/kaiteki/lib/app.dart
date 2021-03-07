@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/api/definitions/definitions.dart';
+import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/app_preferences.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';

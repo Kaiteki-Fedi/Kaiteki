@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/api/clients/mastodon_client.dart';
-import 'package:kaiteki/api/definitions/definitions.dart';
+import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
+import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/fediverse/user.dart';
+import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/fediverse/user.dart';
+import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/screens/account_screen.dart';
 import 'package:mdi/mdi.dart';
 

@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parseFragment;
 import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/fediverse/emoji.dart';
+import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/text/text_buffer.dart';

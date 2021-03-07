@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
 import 'package:kaiteki/ui/screens/settings/settings_screen.dart';
@@ -151,8 +151,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   getNavigationBar() {
-    if(_tabs.length < 2) return null;
-    
+    if (_tabs.length < 2) return null;
+
     return BottomNavigationBar(
       elevation: 8,
       onTap: changePage,

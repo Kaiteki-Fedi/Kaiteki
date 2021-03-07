@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/model/fediverse/attachment.dart';
-import 'package:kaiteki/model/fediverse/post.dart';
-import 'package:kaiteki/model/fediverse/visibility.dart';
+import 'package:kaiteki/fediverse/model/attachment.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';

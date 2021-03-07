@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/model/fediverse/post.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:mdi/mdi.dart';

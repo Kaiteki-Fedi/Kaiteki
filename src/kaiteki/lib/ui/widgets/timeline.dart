@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kaiteki/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/model/fediverse/post.dart';
-import 'package:kaiteki/model/fediverse/timeline_type.dart';
+import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/utils/paged_network_stream.dart';
