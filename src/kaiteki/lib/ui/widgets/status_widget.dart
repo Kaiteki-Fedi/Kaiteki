@@ -25,7 +25,7 @@ class StatusWidget extends StatelessWidget {
   const StatusWidget(this._post, {this.onTap, this.showParentPost = true});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     var container = Provider.of<ThemeContainer>(context);
     var theme = container.current;
 
