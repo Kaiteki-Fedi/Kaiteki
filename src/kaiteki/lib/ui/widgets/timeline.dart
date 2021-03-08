@@ -40,24 +40,32 @@ class _TimelineState extends State<Timeline> {
     return StreamBuilder(
       stream: timelineModel.stream,
       builder: (context, AsyncSnapshot<Iterable<Post>> snapshot) {
+        var length = snapshot.data?.length ?? 0;
+
         return RefreshIndicator(
           onRefresh: timelineModel.refresh,
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
             controller: scrollController,
-            itemCount: (snapshot.data?.length ?? 0) + 1,
+            itemCount: length + 1,
             itemBuilder: (context, i) {
-              if (i < snapshot.data.length) {
+              if (i < length) {
                 var status = snapshot.data.elementAt(i);
                 return StatusWidget(status, onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => ConversationScreen(status)));
                 });
               } else {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 32.0),
-                  child: Center(child: CircularProgressIndicator()),
-                );
+                var spinner = Center(child: CircularProgressIndicator());
+
+                if (length == 0) {
+                  return spinner;
+                } else {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    child: spinner,
+                  );
+                }
               }
             },
           ),
