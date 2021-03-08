@@ -37,6 +37,7 @@ dependencies:
   json_annotation: ^3.1.0
   logger: ^0.7.0
   logger_flutter: ^0.7.1
+  tuple: ^1.0.3
 
   fediverse_objects:
     path: ../fediverse_objects

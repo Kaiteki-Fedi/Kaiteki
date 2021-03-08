@@ -43,10 +43,15 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
     // Retrieve or create client secret
     var clientSecret = await LoginFunctions.getClientSecret(
-        client, instance, accounts.getClientRepo());
-    client.authenticationData = MastodonAuthenticationData();
-    client.authenticationData.clientSecret = clientSecret.clientSecret;
-    client.authenticationData.clientId = clientSecret.clientId;
+      client,
+      instance,
+      accounts.getClientRepo(),
+    );
+
+    client.authenticationData = MastodonAuthenticationData(
+      clientSecret.clientId,
+      clientSecret.clientSecret,
+    );
 
     String accessToken;
 

@@ -3,4 +3,5 @@ abstract class Repository<T> {
   void insert(T item);
   void removeAll();
   Iterable<T> getAll();
+  Future<void> initialize();
 }

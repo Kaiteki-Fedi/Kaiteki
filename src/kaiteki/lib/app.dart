@@ -23,8 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class KaitekiApp extends StatefulWidget {
   const KaitekiApp({
-    this.accountSecrets,
-    this.clientSecrets,
+    this.accountContainer,
     this.notifications,
     this.preferences,
   });
@@ -33,27 +32,18 @@ class KaitekiApp extends StatefulWidget {
   _KaitekiAppState createState() => _KaitekiAppState();
 
   final SharedPreferences preferences;
-  final AccountSecretRepository accountSecrets;
-  final ClientSecretRepository clientSecrets;
+  final AccountContainer accountContainer;
   final FlutterLocalNotificationsPlugin notifications;
 }
 
 class _KaitekiAppState extends State<KaitekiApp> {
   ThemeContainer _themeContainer;
-  AccountContainer _accountContainer;
   AppPreferences _preferences;
 
   @override
   void initState() {
     var defaultTheme = ThemeData.from(colorScheme: DefaultAppThemes.darkScheme);
     _themeContainer = ThemeContainer(MaterialAppTheme(defaultTheme));
-
-    _accountContainer = AccountContainer(
-      widget.accountSecrets,
-      widget.clientSecrets,
-    );
-    _accountContainer.loadAllAccounts();
-
     _preferences = AppPreferences();
 
     super.initState();
@@ -65,10 +55,8 @@ class _KaitekiAppState extends State<KaitekiApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: _themeContainer),
-        ChangeNotifierProvider.value(value: _accountContainer),
+        ChangeNotifierProvider.value(value: widget.accountContainer),
         ChangeNotifierProvider.value(value: _preferences),
-        ChangeNotifierProvider.value(value: widget.accountSecrets),
-        ChangeNotifierProvider.value(value: widget.clientSecrets),
       ],
       child: Builder(
         builder: (context) {

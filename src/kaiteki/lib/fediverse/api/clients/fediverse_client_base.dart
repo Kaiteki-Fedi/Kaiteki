@@ -6,7 +6,9 @@ import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/exceptions/api_exception.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/logger.dart';
+import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
+import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:kaiteki/utils/utils.dart';
@@ -26,6 +28,12 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   AuthData authenticationData;
   String instance;
   ApiType get type;
+
+  /// Sets the data used for requests to a server.
+  Future<void> setClientAuthentication(ClientSecret secret);
+
+  /// Sets the data used for requests to a server.
+  Future<void> setAccountAuthentication(AccountSecret secret);
 
   Future<T> sendJsonRequest<T>(
     HttpMethod method,

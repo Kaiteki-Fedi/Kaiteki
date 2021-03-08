@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 
@@ -55,84 +55,57 @@ class AccountContainer extends ChangeNotifier {
 
   Future<void> loadAllAccounts() async {
     _accounts.clear();
-    _accountSecrets.getAll().forEach((accountSecret) async {
-      if (accountSecret == null) {
-        _logger.w("A saved account secret was null");
-        return;
-      }
 
-      var instance = accountSecret.instance;
-      var clientSecret = _clientSecrets.get(instance);
+    var secrets = _accountSecrets.getAll();
+    await Future.forEach(secrets, _restoreSession);
 
-      _logger.d(clientSecret.apiType.toString());
+    // TODO: Store which account the user last used
+    await changeAccount(_accounts.first);
+  }
 
-      if (clientSecret == null || clientSecret.apiType == null) {
-        _logger.w("Skipped loading account secret due to invalid client secret.");
-        return;
-      }
+  Future<void> _restoreSession(AccountSecret accountSecret) async {
+    assert(accountSecret != null);
 
-      var adapter = ApiDefinitions.byType(clientSecret.apiType).createAdapter();
+    var instance = accountSecret.instance;
+    var clientSecret = _clientSecrets.get(instance);
 
-      User user;
+    _logger.d("Trying to recover a ${clientSecret.apiType} account");
 
-      // TODO Redesign class structure to make this not Mastodon-specific.
-      if (adapter.client is MastodonClient) {
-        var mastodonClient = adapter.client as MastodonClient;
+    assert(clientSecret != null && clientSecret.apiType != null);
 
-        mastodonClient.instance = clientSecret.instance;
+    var adapter = ApiDefinitions.byType(clientSecret.apiType).createAdapter();
+    await adapter.client.setClientAuthentication(clientSecret);
+    await adapter.client.setAccountAuthentication(accountSecret);
 
-        mastodonClient.authenticationData.clientSecret =
-            clientSecret.clientSecret;
+    // restoring user object
+    User user;
+    try {
+      user = await adapter.getMyself();
+    } catch (ex) {
+      _logger.e("Failed to verify credentials", ex);
+    }
 
-        mastodonClient.authenticationData.clientId = clientSecret.clientId;
+    if (user == null) {
+      _logger.w("No user data was recovered, assuming user info is incorrect.");
+      return;
+    }
 
-        mastodonClient.authenticationData.accessToken =
-            accountSecret.accessToken;
-      }
+    var compound = AccountCompound(
+      container: this,
+      adapter: adapter,
+      account: user,
+      clientSecret: clientSecret,
+      accountSecret: accountSecret,
+      instanceType: clientSecret.apiType,
+    );
 
-      // restoring user object
-      try {
-        user = await adapter.getMyself();
-      } catch (ex) {
-        _logger.e("Failed to verify credentials", ex);
-      }
+    _accounts.add(compound);
 
-      if (user == null) {
-        _logger.w("No user data was recovered, assuming user info is incorrect.");
-        return;
-      }
-
-      var accountCompound = AccountCompound(
-        container: this,
-        adapter: adapter,
-        account: user,
-        clientSecret: clientSecret,
-        accountSecret: accountSecret,
-        instanceType: clientSecret.apiType,
-      );
-      _accounts.add(accountCompound);
-    });
+    _logger.d(
+      "Recovered ${compound.account.displayName} @ ${compound.clientSecret.instance}",
+    );
   }
 
   //TODO: HACK, This should not exist, please refactor.
   getClientRepo() => _clientSecrets;
-
-  /// Restores the account objects on each compound.
-  ///
-  /// In the case if the server refuses to return something, the compound will
-  /// be removed from the account list.
-  Future<void> checkAccounts() async {
-    for (var compound in _accounts) {
-      try {
-        var account = await compound.adapter.getMyself();
-
-        if (account == null) throw "Account was null";
-
-        compound.account = account;
-      } catch (e) {
-        _logger.e("Account retrieval failed, removing account...", e);
-        remove(compound);
-      }
-    }
-  }
 }

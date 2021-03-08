@@ -1,10 +1,12 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:kaiteki/repositories/secret_storages/shared_preferences_secret_storage.dart';
 import 'package:logger_flutter/logger_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,17 +18,25 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   var preferences = await SharedPreferences.getInstance();
+  var storage = SharedPreferencesSecureStorage(preferences);
 
   // fetch async resources e.g. user data
-  AccountSecretRepository accountRepository;
-  ClientSecretRepository clientRepository;
+  var accountRepository = AccountSecretRepository(storage);
+  var clientRepository = ClientSecretRepository(storage);
 
   try {
-    accountRepository = await AccountSecretRepository.getInstance(preferences);
-    clientRepository = await ClientSecretRepository.getInstance(preferences);
+    await accountRepository.initialize();
+    await clientRepository.initialize();
   } catch (e) {
-    logger.e("Failed to create instances of save data repositories", e);
+    logger.e("Failed to initialize account and client secret repositories", e);
   }
+
+  var accountContainer = AccountContainer(
+    accountRepository,
+    clientRepository,
+  );
+
+  await accountContainer.loadAllAccounts();
 
   FlutterLocalNotificationsPlugin notificationsPlugin;
 
@@ -38,8 +48,7 @@ void main() async {
 
   // construct app
   var app = KaitekiApp(
-    accountSecrets: accountRepository,
-    clientSecrets: clientRepository,
+    accountContainer: accountContainer,
     notifications: notificationsPlugin,
     preferences: preferences,
   );

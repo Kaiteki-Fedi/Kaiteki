@@ -8,10 +8,17 @@ abstract class AuthenticationData {
   Request applyTo(Request request);
 }
 
+/// TODO: Make MastodonAuthenticationData final, with copyWith method.
 class MastodonAuthenticationData implements AuthenticationData {
   String clientId;
   String clientSecret;
   String accessToken;
+
+  MastodonAuthenticationData(
+    this.clientId,
+    this.clientSecret, {
+    this.accessToken,
+  });
 
   @override
   Request applyTo(Request request) {

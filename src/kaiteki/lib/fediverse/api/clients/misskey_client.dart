@@ -16,7 +16,9 @@ import 'package:kaiteki/fediverse/api/responses/misskey/generate_session_respons
 import 'package:kaiteki/fediverse/api/responses/misskey/signin_response.dart';
 import 'package:kaiteki/fediverse/api/responses/misskey/userkey_response.dart';
 import 'package:kaiteki/logger.dart';
+import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
+import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/utils.dart';
 
@@ -234,5 +236,18 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       (json) => MisskeyNote.fromJson(json),
       body: {"noteId": id, "limit": limit, "offset": offset},
     );
+  }
+
+  @override
+  Future<void> setClientAuthentication(ClientSecret secret) {
+    instance = secret.instance;
+    return Future.value();
+  }
+
+  @override
+  Future<void> setAccountAuthentication(AccountSecret secret) {
+    instance = secret.instance;
+    authenticationData = MisskeyAuthenticationData(secret.accessToken);
+    return Future.value();
   }
 }
