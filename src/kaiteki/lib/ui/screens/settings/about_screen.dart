@@ -138,10 +138,9 @@ class AboutScreen extends StatelessWidget {
                                 ),
                                 child: FlutterLogo(
                                   style: FlutterLogoStyle.horizontal,
-                                  textColor: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? null
-                                      : Colors.white,
+                                  textColor: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
                                 ),
                               ),
                             ),
