@@ -1,7 +1,6 @@
 # ![Kaiteki](assets/readme-logo.png)
 
 ![Build and deploy to Web](https://github.com/Craftplacer/kaiteki/workflows/Build%20and%20deploy%20to%20Web/badge.svg)
-![Total downloads](https://img.shields.io/github/downloads/Craftplacer/kaiteki/total)
 
 A Fediverse client for micro-blogging instances written in Flutter/Dart.
 
