@@ -59,8 +59,10 @@ class AccountContainer extends ChangeNotifier {
     var secrets = _accountSecrets.getAll();
     await Future.forEach(secrets, _restoreSession);
 
-    // TODO: Store which account the user last used
-    await changeAccount(_accounts.first);
+    if (_accounts.isNotEmpty) {
+      // TODO: Store which account the user last used
+      await changeAccount(_accounts.first);
+    }
   }
 
   Future<void> _restoreSession(AccountSecret accountSecret) async {
