@@ -3,7 +3,7 @@ import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
-import 'package:kaiteki/theming/app_theme.dart';
+import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/app_theme.dart';
+import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/theming/app_theme_source.dart';
 
 class MaterialAppTheme implements AppThemeSource {

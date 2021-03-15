@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/app_colors.dart';
-import 'package:kaiteki/theming/material_app_theme.dart';
+import 'package:kaiteki/theming/app_themes/material_app_theme.dart';
 
 class DefaultAppThemes {
   static MaterialAppTheme lightAppTheme =

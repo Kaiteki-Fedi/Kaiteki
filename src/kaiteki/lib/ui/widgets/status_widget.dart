@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
-import 'package:kaiteki/theming/app_theme.dart';
+import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
@@ -25,7 +25,7 @@ class StatusWidget extends StatelessWidget {
   const StatusWidget(this._post, {this.onTap, this.showParentPost = true});
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     var container = Provider.of<ThemeContainer>(context);
     var theme = container.current;
 
