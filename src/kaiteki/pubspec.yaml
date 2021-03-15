@@ -45,6 +45,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^1.10.4
   json_serializable: ^3.5.0
+  msix: ^0.1.15
   flutter_test:
     sdk: flutter
 
@@ -73,3 +74,18 @@ flutter:
           weight: 600
         - asset: assets/fonts/Quicksand-Bold.ttf
           weight: 700
+
+msix_config:
+  display_name: Kaiteki
+  publisher_display_name: Craftplacer
+  identity_name: Craftplacer.Kaiteki
+  msix_version: 1.0.0.0
+  # certificate_path: C:\<PathToCertificate>\<MyCertificate.pfx>
+  # publisher: CN=My Company, O=My Company, L=Berlin, S=Berlin, C=DE
+  logo_path: ..\..\assets\icons\windows\kaiteki.png
+  start_menu_icon_path: ..\..\assets\icons\windows\kaiteki.png
+  tile_icon_path: ..\..\assets\icons\windows\kaiteki.png
+  # vs_generated_images_folder_path: C:\<PathToFolder>\Images
+  icons_background_color: '#1e2133'
+  architecture: x64
+  capabilities: 'internetClient'
