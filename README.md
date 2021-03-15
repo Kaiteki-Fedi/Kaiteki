@@ -2,7 +2,7 @@
 
 <img align="right" src="assets/icons/windows/kaiteki.png" width=100>
 
-A [快適 (kaiteki)](http://takoboto.jp/?w=1200120) Fediverse client for social networks and microblogging instances, made with [Flutter](https://flutter.dev/) + [Dart](https://dart.dev/).
+A [快適 (kaiteki)](http://takoboto.jp/?w=1200120) Fediverse client for microblogging instances, made with [Flutter](https://flutter.dev/) + [Dart](https://dart.dev/).
 
 Currently Kaiteki is still in a proof-of-concept/alpha stage, with simple Mastodon/Pleroma and Misskey support, future backends could follow. See "What's working, what's missing?".
 
@@ -33,8 +33,8 @@ Please still note, that **Kaiteki is still in development**. I don't take gurant
 | Platform | Build status | Link |
 | - | - | - |
 | Web | ![Build and deploy to Web](https://github.com/Craftplacer/kaiteki/workflows/Build%20and%20deploy%20to%20Web/badge.svg) | [Visit web version](https://craftplacer.github.io/kaiteki/) |
-| Windows | [![Build and package for Windows](https://github.com/Craftplacer/kaiteki/actions/workflows/windows.yml/badge.svg?branch=master)]() | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/windows.yml) |
-| Linux | [![Build for Linux](https://github.com/Craftplacer/kaiteki/actions/workflows/linux.yml/badge.svg)]() | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/linux.yml) |
+| Windows | ![Build and package for Windows](https://github.com/Craftplacer/kaiteki/actions/workflows/windows.yml/badge.svg) | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/windows.yml) |
+| Linux | ![Build for Linux](https://github.com/Craftplacer/kaiteki/actions/workflows/linux.yml/badge.svg) | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/linux.yml) |
 | Android | No CI/CD available yet ([See issue #2](https://github.com/Craftplacer/kaiteki/issues/2)) |
 | iOS | Not supported | |
 | macOS | Not supported | |

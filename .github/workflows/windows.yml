@@ -43,7 +43,7 @@ jobs:
     needs: build
     steps:
       - name: Download artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/download-artifact@v2
         with:
           name: windows
           path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/'
