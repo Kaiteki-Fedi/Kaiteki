@@ -4,14 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
+import 'package:kaiteki/model/post_filters/post_filter.dart';
 import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/utils/paged_network_stream.dart';
 
 class Timeline extends StatefulWidget {
   final FediverseAdapter adapter;
+  final List<PostFilter> filters;
 
-  const Timeline({Key key, this.adapter}) : super(key: key);
+  const Timeline({
+    Key key,
+    @required this.adapter,
+    this.filters,
+  }) : super(key: key);
 
   @override
   _TimelineState createState() => _TimelineState();
@@ -40,25 +46,38 @@ class _TimelineState extends State<Timeline> {
     return StreamBuilder(
       stream: timelineModel.stream,
       builder: (context, AsyncSnapshot<Iterable<Post>> snapshot) {
-        var length = snapshot.data?.length ?? 0;
+        var filtered = <Post, PostFilterResult>{};
+        var filters = widget.filters ?? [];
+
+        if (snapshot.hasData) {
+          filtered = Map.fromEntries(snapshot.data.map((p) {
+            return MapEntry(
+              p,
+              PostFilter.runMultipleFilters(context, p, filters),
+            );
+          }).where((p) => p.value != PostFilterResult.Hide));
+        }
 
         return RefreshIndicator(
           onRefresh: timelineModel.refresh,
           child: ListView.builder(
             physics: const AlwaysScrollableScrollPhysics(),
             controller: scrollController,
-            itemCount: length + 1,
+            itemCount: filtered.length + 1,
             itemBuilder: (context, i) {
-              if (i < length) {
-                var status = snapshot.data.elementAt(i);
+              if (i < filtered.length) {
+                var status = filtered.keys.elementAt(i);
+                var filterResult = filtered[status];
+
                 return StatusWidget(status, onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => ConversationScreen(status)));
+                    builder: (_) => ConversationScreen(status),
+                  ));
                 });
               } else {
                 var spinner = Center(child: CircularProgressIndicator());
 
-                if (length == 0) {
+                if (filtered.length == 0) {
                   return spinner;
                 } else {
                   return Padding(

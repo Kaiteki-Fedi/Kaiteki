@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/app_preferences.dart';
+import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:provider/provider.dart';
 
 class CustomizationBasicPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class CustomizationBasicPage extends StatefulWidget {
 class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
   @override
   Widget build(BuildContext context) {
-    var preferences = Provider.of<AppPreferences>(context);
+    var preferences = Provider.of<PreferenceContainer>(context);
 
     return ListView(
       children: [
@@ -35,9 +35,11 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
               },
             );
 
-            preferences.setTheme(selection);
+            if (selection == null) return;
+
+            preferences.update((p) => p..theme = selection);
           },
-          subtitle: Text(_themeToString(preferences.theme)),
+          subtitle: Text(_themeToString(preferences.get().theme)),
         ),
       ],
     );

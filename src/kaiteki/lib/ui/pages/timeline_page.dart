@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/model/post_filters/sensitive_post_filter.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/timeline.dart';
 import 'package:mdi/mdi.dart';
@@ -18,7 +19,11 @@ class _TimelinePageState extends State<TimelinePage> {
     var container = Provider.of<AccountContainer>(context);
 
     if (container.loggedIn) {
-      return Timeline(adapter: container.adapter);
+      return Timeline(
+        key: ValueKey(container.currentAccount.hashCode),
+        adapter: container.adapter,
+        filters: [SensitivePostFilter()],
+      );
     } else {
       return Center(
         child: IconLandingWidget(

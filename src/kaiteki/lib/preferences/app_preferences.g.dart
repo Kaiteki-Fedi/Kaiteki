@@ -9,13 +9,23 @@ part of 'app_preferences.dart';
 AppPreferences _$AppPreferencesFromJson(Map<String, dynamic> json) {
   return AppPreferences(
     theme: _$enumDecodeNullable(_$ThemeModeEnumMap, json['theme']),
+    sensitivePostFilter: json['sensitivePostFilter'],
   );
 }
 
-Map<String, dynamic> _$AppPreferencesToJson(AppPreferences instance) =>
-    <String, dynamic>{
-      'theme': _$ThemeModeEnumMap[instance.theme],
-    };
+Map<String, dynamic> _$AppPreferencesToJson(AppPreferences instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('theme', _$ThemeModeEnumMap[instance.theme]);
+  writeNotNull('sensitivePostFilter', instance.sensitivePostFilter);
+  return val;
+}
 
 T _$enumDecode<T>(
   Map<T, dynamic> enumValues,

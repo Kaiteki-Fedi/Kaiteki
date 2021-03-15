@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/logger.dart';
+import 'package:kaiteki/preferences/app_preferences.dart';
+import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/repositories/secret_storages/shared_preferences_secret_storage.dart';
@@ -18,6 +22,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   var preferences = await SharedPreferences.getInstance();
+  AppPreferences appPreferences;
+  if (preferences.containsKey('preferences')) {
+    var json = jsonDecode(preferences.getString('preferences'));
+    appPreferences = AppPreferences.fromJson(json);
+  } else {
+    appPreferences = AppPreferences();
+  }
+
+  var prefContainer = PreferenceContainer(appPreferences);
+
   var storage = SharedPreferencesSecureStorage(preferences);
 
   // fetch async resources e.g. user data
@@ -50,7 +64,7 @@ void main() async {
   var app = KaitekiApp(
     accountContainer: accountContainer,
     notifications: notificationsPlugin,
-    preferences: preferences,
+    preferences: prefContainer,
   );
 
   // run.
