@@ -38,4 +38,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: linux
-          path: '${{ env.SOURCE_PATH }}/build/linux/release/*'
+          path: '${{ env.SOURCE_PATH }}/build/linux/runner/release/'
