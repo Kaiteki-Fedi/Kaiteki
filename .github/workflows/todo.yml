@@ -1,5 +1,7 @@
 name: "Check for TODOs"
-on: [workflow_dispatch, push]
+
+on: [ workflow_dispatch, push ]
+
 jobs:
   build:
     runs-on: "ubuntu-latest"

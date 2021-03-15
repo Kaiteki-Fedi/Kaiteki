@@ -1,0 +1,61 @@
+name: Build and package for Windows
+
+env:
+  SOURCE_PATH: './src/kaiteki'
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: dev
+        
+      - name: Enable Windows Desktop
+        run: 'flutter config --enable-windows-desktop'
+
+      - name: Get packages
+        working-directory: ${{ env.SOURCE_PATH }}
+        run: 'flutter pub get'
+
+      - name: Build
+        working-directory: ${{ env.SOURCE_PATH }}
+        run: 'flutter build windows'
+        
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows
+          path: '${{ env.SOURCE_PATH }}/build/windows/Release/*'
+
+  package:
+    name: Package
+    runs-on: windows-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows
+          path: '${{ env.SOURCE_PATH }}/build/windows/Release'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+
+      - name: Package
+        working-directory: ${{ env.SOURCE_PATH }}
+        run: 'flutter pub run msix:create'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-msix
+          path: '${{ env.SOURCE_PATH }}/build/windows/Release/kaiteki.msix'
