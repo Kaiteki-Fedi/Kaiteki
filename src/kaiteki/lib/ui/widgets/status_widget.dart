@@ -28,6 +28,12 @@ class StatusWidget extends StatelessWidget {
     var container = Provider.of<ThemeContainer>(context);
     var theme = container.current;
 
+    var postTextTheme = TextRendererTheme.fromContext(context);
+    var authorTextTheme = TextRendererTheme.fromContext(
+      context,
+      fontWeight: FontWeight.bold,
+    );
+
     var textStyle = DefaultTextStyle.of(context).style;
     var authorTextStyle = textStyle.copyWith(fontWeight: FontWeight.bold);
 
@@ -49,12 +55,12 @@ class StatusWidget extends StatelessWidget {
 
     var renderedAuthor = TextRenderer(
       emojis: _post.author.emojis,
-      theme: TextRendererTheme.fromContext(context),
+      theme: authorTextTheme,
     ).renderFromHtml(_post.author.displayName);
 
     var renderedContent = TextRenderer(
       emojis: _post.emojis,
-      theme: TextRendererTheme.fromContext(context),
+      theme: postTextTheme,
     ).renderFromHtml(_post.content);
 
     return Row(

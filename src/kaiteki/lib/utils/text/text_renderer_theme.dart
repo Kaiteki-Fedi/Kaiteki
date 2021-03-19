@@ -11,17 +11,21 @@ class TextRendererTheme {
 
   const TextRendererTheme(this.textStyle, this.linkTextStyle, this.emojiSize);
 
-  factory TextRendererTheme.fromContext(BuildContext context) {
+  factory TextRendererTheme.fromContext(
+    BuildContext context, {
+    FontStyle fontStyle,
+    FontWeight fontWeight,
+  }) {
     var themeContainer = Provider.of<ThemeContainer>(context);
     var theme = themeContainer.current;
-
-    var textTheme = theme.materialTheme.textTheme;
-    var textStyle = textTheme.bodyText1;
+    var defaultTextStyle = DefaultTextStyle.of(context).style;
+    var textStyle = defaultTextStyle.copyWith(
+      fontStyle: fontStyle,
+      fontWeight: fontWeight,
+    );
 
     return TextRendererTheme(
-      textStyle.copyWith(
-        color: theme.materialTheme.colorScheme.onBackground,
-      ),
+      textStyle,
       textStyle.copyWith(
         color: theme.materialTheme.accentColor,
       ),
