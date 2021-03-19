@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/ui/widgets/attachments/fallback_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
+import 'package:kaiteki/ui/widgets/attachments/video_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/card_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/count_button.dart';
@@ -16,6 +20,8 @@ import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class StatusWidget extends StatelessWidget {
   final Post _post;
@@ -210,6 +216,9 @@ class InteractionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var openInBrowserAvailable = _post.externalUrl != null;
+
+    // Added Material for fixing bork with Hero *shrug*
     return Row(
       children: [
         CountButton(
@@ -233,9 +242,25 @@ class InteractionBar extends StatelessWidget {
           icon: Icon(Icons.insert_emoticon),
           onPressed: null,
         ),
-        IconButton(
+        PopupMenuButton<VoidCallback>(
           icon: Icon(Icons.more_horiz),
-          onPressed: null,
+          onSelected: (callback) => callback.call(),
+          itemBuilder: (BuildContext context) {
+            return [
+              new PopupMenuItem(
+                enabled: openInBrowserAvailable,
+                child: ListTile(
+                  title: const Text('Open in browser'),
+                  leading: const Icon(Mdi.openInNew),
+                  contentPadding: const EdgeInsets.all(0.0),
+                  enabled: openInBrowserAvailable,
+                ),
+                value: () async {
+                  await launch(_post.externalUrl);
+                },
+              ),
+            ];
+          },
         ),
       ],
     );
@@ -252,32 +277,39 @@ class AttachmentRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        for (var attachment in attachments)
-          Flexible(
-            child: Container(
-              child: getAttachmentWidget(attachment),
-              height: 280,
+    var border = Theme.of(context).dividerColor;
+    var borderRadius = BorderRadius.circular(8);
+
+    return LimitedBox(
+      maxHeight: 280,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          for (var attachment in attachments)
+            Flexible(
+              fit: FlexFit.loose,
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  // TODO (theming): Implement pleroma attachment rounding
+                  borderRadius: borderRadius,
+                  border: Border.all(color: border, width: 1),
+                ),
+                child: getAttachmentWidget(attachment),
+              ),
             ),
-          )
-      ],
+        ],
+      ),
     );
   }
 
   Widget getAttachmentWidget(Attachment attachment) {
-    switch (attachment.type) {
-      case "image":
-        return ImageAttachmentWidget(attachment);
-      //case "video": return VideoAttachmentWidget(attachment);
-      default:
-        {
-          print(
-              "Tried to present an unsupported attachment type: ${attachment.type}");
-          return Container();
-        }
-    }
+    var supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
+
+    if (attachment.type == 'image') return ImageAttachmentWidget(attachment);
+    if (attachment.type == 'video' && supportsVideoPlayer)
+      return VideoAttachmentWidget(attachment: attachment);
+    else
+      return FallbackAttachmentWidget(attachment: attachment);
   }
 }

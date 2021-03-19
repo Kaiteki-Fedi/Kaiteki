@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/theming/theme_container.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
 class ImageAttachmentWidget extends StatelessWidget {
   final Attachment attachment;
@@ -11,44 +9,34 @@ class ImageAttachmentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var themeContainer = Provider.of<ThemeContainer>(context);
-    var border = themeContainer.current.borderColor;
-
     var borderRadius = BorderRadius.circular(8);
 
-    return Container(
-      decoration: BoxDecoration(
-        // TODO (theming): Implement pleroma attachment rounding
+    return GestureDetector(
+      onTap: () => enlargeImage(context),
+      child: ClipRRect(
         borderRadius: borderRadius,
-        border: Border.all(color: border, width: 1),
-      ),
-      child: GestureDetector(
-        onTap: () => enlargeImage(context),
-        child: ClipRRect(
-          borderRadius: borderRadius,
-          child: Image.network(
-            attachment.previewUrl ?? attachment.url,
-            loadingBuilder: (_, w, c) {
-              if (c == null ||
-                  c.cumulativeBytesLoaded == null ||
-                  c.expectedTotalBytes == null) {
-                return w;
-              }
+        child: Image.network(
+          attachment.previewUrl ?? attachment.url,
+          loadingBuilder: (_, w, c) {
+            if (c == null ||
+                c.cumulativeBytesLoaded == null ||
+                c.expectedTotalBytes == null) {
+              return w;
+            }
 
-              return Center(
-                child: CircularProgressIndicator(
-                  value: c.cumulativeBytesLoaded / c.expectedTotalBytes,
-                ),
-              );
-            },
-            errorBuilder: (_, w, c) {
-              return Center(child: Icon(Mdi.alert));
-            },
-            //width: 100,
-            fit: BoxFit.contain,
-            filterQuality: FilterQuality.medium,
-            isAntiAlias: true,
-          ),
+            return Center(
+              child: CircularProgressIndicator(
+                value: c.cumulativeBytesLoaded / c.expectedTotalBytes,
+              ),
+            );
+          },
+          errorBuilder: (_, w, c) {
+            return Center(child: Icon(Mdi.alert));
+          },
+          //width: 100,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.medium,
+          isAntiAlias: true,
         ),
       ),
     );

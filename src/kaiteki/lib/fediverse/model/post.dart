@@ -39,6 +39,8 @@ class Post<T> {
   final Post replyTo;
   final PreviewCard previewCard;
 
+  final String externalUrl;
+
   const Post({
     this.source,
     this.postedAt,
@@ -62,6 +64,7 @@ class Post<T> {
     this.visibility,
     this.replyToAccountId,
     this.replyToPostId,
+    this.externalUrl,
   });
 
   factory Post.example() {

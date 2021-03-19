@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger_flutter/logger_flutter.dart';
 import 'package:mdi/mdi.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DebugScreen extends StatefulWidget {
   DebugScreen({Key key}) : super(key: key);

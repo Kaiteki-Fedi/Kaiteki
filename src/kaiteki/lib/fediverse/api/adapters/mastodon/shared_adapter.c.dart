@@ -22,6 +22,7 @@ Post toPost(MastodonStatus source) {
     replyToAccountId: source.inReplyToAccountId,
     replyToPostId: source.inReplyToId,
     id: source.id,
+    externalUrl: source.url,
   );
 }
 
