@@ -23,28 +23,34 @@ class _DebugScreenState extends State<DebugScreen> {
             elevation: 6,
             color: Colors.red,
             child: ListTile(
-              title: Text("Please proceed here with caution as some settings might have unintended behavior or delete your user settings."),
+              leading: Icon(Mdi.alert),
+              title: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  'Please proceed here with caution as some settings might have unintended behavior or delete your user settings.',
+                ),
+              ),
+              dense: true,
             ),
           ),
           ListTile(
             leading: Icon(Mdi.textBox),
             title: Text("Open log console"),
             onTap: () {
-              return Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
+              return Navigator.of(context)
+                  .push(new MaterialPageRoute(builder: (_) {
                 var dark = Theme.of(context).brightness == Brightness.dark;
                 return LogConsole(dark: dark, showCloseButton: true);
               }));
             },
           ),
           ListTile(
-            leading: Icon(Icons.delete),
-            title: Text("Clear shared preferences"),
-            subtitle: Text("The shared preferences contain your tokens alongside your user preferences. A restart of the app is recommended to make the changes take effect."),
+            leading: Icon(Mdi.wrench),
+            title: Text("Manage shared preferences"),
             onTap: () async {
-              var instance = await SharedPreferences.getInstance();
-              assert(await instance.clear(), "clear failed");
+              Navigator.of(context).pushNamed('/settings/debug/preferences');
             },
-          )
+          ),
         ],
       ),
     );
