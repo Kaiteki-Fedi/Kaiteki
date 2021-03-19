@@ -53,7 +53,7 @@ class TextRenderer {
       if (char == emojiChar && hasEmoji) {
         // If the condition below is true, we should've finished reading the
         // name of an emoji.
-        if (!readingEmoji) {
+        if (readingEmoji) {
           var emoji = emojis.firstOrDefault((e) => e.name == buffer.text);
 
           if (emoji == null || !(emoji is CustomEmoji)) {
