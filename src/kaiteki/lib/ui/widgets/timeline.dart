@@ -67,13 +67,16 @@ class _TimelineState extends State<Timeline> {
             itemBuilder: (context, i) {
               if (i < filtered.length) {
                 var status = filtered.keys.elementAt(i);
-                var filterResult = filtered[status];
+                // var filterResult = filtered[status];
 
-                return StatusWidget(status, onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => ConversationScreen(status),
-                  ));
-                });
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => ConversationScreen(status),
+                    ));
+                  },
+                  child: StatusWidget(status),
+                );
               } else {
                 var spinner = Center(child: CircularProgressIndicator());
 

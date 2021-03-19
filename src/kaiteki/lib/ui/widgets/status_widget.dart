@@ -19,10 +19,9 @@ import 'package:provider/provider.dart';
 
 class StatusWidget extends StatelessWidget {
   final Post _post;
-  final VoidCallback onTap;
   final bool showParentPost;
 
-  const StatusWidget(this._post, {this.onTap, this.showParentPost = true});
+  const StatusWidget(this._post, {this.showParentPost = true});
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +42,7 @@ class StatusWidget extends StatelessWidget {
             userTextStyle: authorTextStyle,
             textStyle: textStyle,
           ),
-          // Passing over onTap in this case sort of reveals a bad design
-          // *maybe* require letting the parent handle taps?
-          StatusWidget(_post.repeatOf, onTap: onTap),
+          StatusWidget(_post.repeatOf),
         ],
       );
     }
@@ -60,58 +57,52 @@ class StatusWidget extends StatelessWidget {
       theme: TextRendererTheme.fromContext(context),
     ).renderFromHtml(_post.content);
 
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: AvatarWidget(_post.author, size: 48),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MetaBar(
-                      renderedAuthor: renderedAuthor,
-                      post: _post,
-                      theme: theme,
-                    ),
-
-                    if (showParentPost && _post.replyToPostId != null)
-                      ReplyBar(textStyle: textStyle, post: _post),
-
-                    if (renderedContent != null)
-                      RichText(text: renderedContent),
-
-                    if (_post.attachments != null)
-                      AttachmentRow(
-                        attachments: _post.attachments.toList(growable: false),
-                      ),
-
-                    if (_post.previewCard != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: CardWidget(card: _post.previewCard),
-                      ),
-
-                    if (_post.reactions != null)
-                      ReactionRow(_post, _post.reactions),
-
-                    InteractionBar(post: _post, theme: theme),
-                    // ApplicationWidget(_post.application),
-                  ],
-                ),
-              ),
-            )
-          ],
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: AvatarWidget(_post.author, size: 48),
         ),
-      ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MetaBar(
+                  renderedAuthor: renderedAuthor,
+                  post: _post,
+                  theme: theme,
+                ),
+
+                if (showParentPost && _post.replyToPostId != null)
+                  ReplyBar(textStyle: textStyle, post: _post),
+
+                if (renderedContent != null) RichText(text: renderedContent),
+
+                if (_post.attachments != null)
+                  AttachmentRow(
+                    attachments: _post.attachments.toList(growable: false),
+                  ),
+
+                if (_post.previewCard != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: CardWidget(card: _post.previewCard),
+                  ),
+
+                if (_post.reactions != null)
+                  ReactionRow(_post, _post.reactions),
+
+                InteractionBar(post: _post, theme: theme),
+                // ApplicationWidget(_post.application),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }
