@@ -74,5 +74,6 @@ User toUser(MastodonAccount source) {
     avatarUrl: source.avatar,
     joinDate: source.createdAt,
     id: source.id,
+    emojis: source.emojis.map(toEmoji),
   );
 }
