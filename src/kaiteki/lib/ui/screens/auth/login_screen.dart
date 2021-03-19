@@ -38,30 +38,38 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Theme(
       data: widget.theme,
-      child: Scaffold(
-          appBar: AppBar(title: Text("Log into an instance")),
+      child: WillPopScope(
+        onWillPop: () async => !_loading,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Log into an instance"),
+            automaticallyImplyLeading: !_loading,
+          ),
           body: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            if (_loading) Center(child: CircularProgressIndicator());
+            builder: (BuildContext context, BoxConstraints constraints) {
+              if (_loading) Center(child: CircularProgressIndicator());
 
-            return FormWidget(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 24.0),
-                      child: Image(
-                        image: widget.image,
-                        width: 64,
-                        height: 64,
+              return FormWidget(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24.0),
+                        child: Image(
+                          image: widget.image,
+                          width: 64,
+                          height: 64,
+                        ),
                       ),
-                    ),
-                    _getLoginForm(),
-                  ],
+                      _getLoginForm(),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          })),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 
