@@ -1,5 +1,4 @@
-import 'package:fediverse_objects/pleroma/chat.dart';
-import 'package:fediverse_objects/pleroma/chat_message.dart';
+import 'package:fediverse_objects/pleroma.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
 import 'package:kaiteki/fediverse/api/responses/pleroma/emoji_packs_response.dart';

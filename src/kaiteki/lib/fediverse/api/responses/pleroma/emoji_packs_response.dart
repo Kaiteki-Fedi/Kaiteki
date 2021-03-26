@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/pleroma/emoji_pack.dart';
+import 'package:fediverse_objects/pleroma.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'emoji_packs_response.g.dart';

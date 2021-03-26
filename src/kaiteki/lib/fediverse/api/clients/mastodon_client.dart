@@ -1,11 +1,6 @@
 import 'dart:convert';
 
-import 'package:fediverse_objects/mastodon/account.dart';
-import 'package:fediverse_objects/mastodon/application.dart';
-import 'package:fediverse_objects/mastodon/emoji.dart';
-import 'package:fediverse_objects/mastodon/instance.dart';
-import 'package:fediverse_objects/mastodon/notification.dart';
-import 'package:fediverse_objects/mastodon/status.dart';
+import 'package:fediverse_objects/mastodon.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/clients/fediverse_client_base.dart';

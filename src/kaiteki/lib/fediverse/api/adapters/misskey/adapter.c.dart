@@ -52,7 +52,7 @@ Visibility toVisibility(String visibility) {
   }
 }
 
-Attachment toAttachment(MisskeyFile file) {
+Attachment toAttachment(MisskeyDriveFile file) {
   print(file.url);
   return Attachment(
     source: file,

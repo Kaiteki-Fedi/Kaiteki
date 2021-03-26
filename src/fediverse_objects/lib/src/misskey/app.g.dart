@@ -12,7 +12,7 @@ MisskeyApp _$MisskeyAppFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     createdAt: json['createdAt'] as String,
     lastUsedAt: json['lastUsedAt'] as String,
-    permission: (json['permission'] as List<dynamic>).map((e) => e as String),
+    permission: (json['permission'] as List)?.map((e) => e as String),
     secret: json['secret'] as String,
     isAuthorized: json['isAuthorized'] as bool,
   );
@@ -24,7 +24,7 @@ Map<String, dynamic> _$MisskeyAppToJson(MisskeyApp instance) =>
       'name': instance.name,
       'createdAt': instance.createdAt,
       'lastUsedAt': instance.lastUsedAt,
-      'permission': instance.permission.toList(),
+      'permission': instance.permission?.toList(),
       'secret': instance.secret,
       'isAuthorized': instance.isAuthorized,
     };

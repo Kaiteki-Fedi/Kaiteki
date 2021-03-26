@@ -1,9 +1,6 @@
 import 'dart:developer';
 
-import 'package:fediverse_objects/mastodon/account.dart';
-import 'package:fediverse_objects/mastodon/emoji.dart';
-import 'package:fediverse_objects/mastodon/media_attachment.dart';
-import 'package:fediverse_objects/mastodon/status.dart';
+import 'package:fediverse_objects/mastodon.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';

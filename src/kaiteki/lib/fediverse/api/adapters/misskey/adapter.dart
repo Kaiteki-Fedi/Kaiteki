@@ -1,9 +1,6 @@
 import 'dart:developer';
 
-import 'package:fediverse_objects/misskey/emoji.dart';
-import 'package:fediverse_objects/misskey/file.dart';
-import 'package:fediverse_objects/misskey/note.dart';
-import 'package:fediverse_objects/misskey/user.dart';
+import 'package:fediverse_objects/misskey.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';

@@ -45,7 +45,7 @@ Visibility toVisibility(String visibility) {
   }
 }
 
-Attachment toAttachment(MastodonMediaAttachment attachment) {
+Attachment toAttachment(MastodonAttachment attachment) {
   return Attachment(
     source: attachment,
     description: attachment.description,
