@@ -1,10 +1,6 @@
 import 'dart:convert';
 
-import 'package:fediverse_objects/misskey/error.dart';
-import 'package:fediverse_objects/misskey/meta.dart';
-import 'package:fediverse_objects/misskey/note.dart';
-import 'package:fediverse_objects/misskey/pages/page.dart';
-import 'package:fediverse_objects/misskey/user.dart';
+import 'package:fediverse_objects/misskey.dart';
 import 'package:http/http.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/clients/fediverse_client_base.dart';
@@ -30,7 +26,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
 
   Future<MisskeyCreateAppResponse> createApp(
       String name, String description, List<String> permissions,
-      {String callbackUrl}) async {
+      {String callbackUrl,}) async {
     return await sendJsonRequest(HttpMethod.POST, "api/app/create",
         (json) => MisskeyCreateAppResponse.fromJson(json),
         body: {
@@ -38,11 +34,11 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
           "description": description,
           "permission": permissions,
           "callbackUrl": callbackUrl
-        });
+        },);
   }
 
   Future<MisskeyGenerateSessionResponse> generateSession(
-      String appSecret) async {
+      String appSecret,) async {
     return await sendJsonRequest(
       HttpMethod.POST,
       "/api/auth/session/generate",
