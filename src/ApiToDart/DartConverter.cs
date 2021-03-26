@@ -146,7 +146,7 @@ namespace ApiToDart
             AppendDartDocComment(sb, property.Description);
 
             // add json attribute
-            sb.AppendLine("@JsonKey(name: \"" + jsonKey + "\")");
+            sb.AppendLine("@JsonKey(name: '" + jsonKey + "')");
 
             // add final keyword
             if (asFinal)
