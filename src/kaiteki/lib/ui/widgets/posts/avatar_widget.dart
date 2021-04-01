@@ -6,7 +6,7 @@ import 'package:mdi/mdi.dart';
 /// A tap-able avatar.
 class AvatarWidget extends StatelessWidget {
   final User _user;
-  final double size;
+  final double? size;
   final bool openOnTap;
 
   const AvatarWidget(this._user, {this.size, this.openOnTap = true});
@@ -26,7 +26,7 @@ class AvatarWidget extends StatelessWidget {
   }
 
   Widget _getAvatarImageWidget(BuildContext context) {
-    if (_user == null) {
+    if (_user.avatarUrl == null) {
       return Icon(
         Mdi.accountCircle,
         size: _getFixedSize(),
@@ -34,18 +34,18 @@ class AvatarWidget extends StatelessWidget {
     }
 
     return CircleAvatar(
-      backgroundImage: NetworkImage(_user.avatarUrl),
+      backgroundImage: NetworkImage(_user.avatarUrl!),
       backgroundColor: Theme.of(context).cardColor,
       radius: _getFixedSize(half: true),
     );
   }
 
-  double _getFixedSize({bool half}) {
+  double? _getFixedSize({bool? half}) {
     if (size == null || size == 0) return null;
 
     // this dumb bool condition is intentional for null safety.
     if (half == true)
-      return size / 2;
+      return size! / 2;
     else
       return size;
   }

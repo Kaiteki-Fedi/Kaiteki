@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mdi/mdi.dart';
 
 class MisskeyPagePostWidget extends StatefulWidget {
-  const MisskeyPagePostWidget(this.content, {Key key}) : super(key: key);
+  const MisskeyPagePostWidget(this.content, {Key? key}) : super(key: key);
 
   final String content;
 

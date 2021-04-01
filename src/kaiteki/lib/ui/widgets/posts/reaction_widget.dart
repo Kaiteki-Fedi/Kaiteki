@@ -14,9 +14,9 @@ class ReactionWidget extends StatefulWidget {
   final Reaction reaction;
 
   ReactionWidget({
-    Key key,
-    @required this.parentPost,
-    @required this.reaction,
+    Key? key,
+    required this.parentPost,
+    required this.reaction,
   }) : super(key: key);
 
   @override

@@ -19,15 +19,11 @@ MisskeyUser _$MisskeyUserFromJson(Map<String, dynamic> json) {
     isModerator: json['isModerator'] as bool,
     isBot: json['isBot'] as bool,
     isCat: json['isCat'] as bool,
-    emojis: (json['emojis'] as List)?.map((e) =>
-        e == null ? null : MisskeyEmoji.fromJson(e as Map<String, dynamic>)),
+    emojis: (json['emojis'] as List<dynamic>)
+        .map((e) => MisskeyEmoji.fromJson(e as Map<String, dynamic>)),
     url: json['url'] as String,
-    createdAt: json['createdAt'] == null
-        ? null
-        : DateTime.parse(json['createdAt'] as String),
-    updatedAt: json['updatedAt'] == null
-        ? null
-        : DateTime.parse(json['updatedAt'] as String),
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    updatedAt: DateTime.parse(json['updatedAt'] as String),
     bannerUrl: json['bannerUrl'] as String,
     bannerBlurhash: json['bannerBlurhash'],
     bannerColor: json['bannerColor'],
@@ -36,18 +32,18 @@ MisskeyUser _$MisskeyUserFromJson(Map<String, dynamic> json) {
     description: json['description'] as String,
     location: json['location'] as String,
     birthday: json['birthday'] as String,
-    fields: (json['fields'] as List)?.map((e) => e as Map<String, dynamic>),
+    fields:
+        (json['fields'] as List<dynamic>).map((e) => e as Map<String, dynamic>),
     followersCount: json['followersCount'] as int,
     followingCount: json['followingCount'] as int,
     notesCount: json['notesCount'] as int,
-    pinnedNoteIds: (json['pinnedNoteIds'] as List)?.map((e) => e as String),
-    pinnedNotes: json['pinnedNotes'] == null
-        ? null
-        : MisskeyNote.fromJson(json['pinnedNotes'] as Map<String, dynamic>),
+    pinnedNoteIds:
+        (json['pinnedNoteIds'] as List<dynamic>).map((e) => e as String),
+    pinnedNotes:
+        MisskeyNote.fromJson(json['pinnedNotes'] as Map<String, dynamic>),
     pinnedPageId: json['pinnedPageId'] as String,
-    pinnedPage: json['pinnedPage'] == null
-        ? null
-        : MisskeyPage.fromJson(json['pinnedPage'] as Map<String, dynamic>),
+    pinnedPage:
+        MisskeyPage.fromJson(json['pinnedPage'] as Map<String, dynamic>),
     twoFactorEnabled: json['twoFactorEnabled'] as bool,
     usePasswordLessLogin: json['usePasswordLessLogin'] as bool,
     securityKeys: json['securityKeys'] as bool,
@@ -68,8 +64,8 @@ MisskeyUser _$MisskeyUserFromJson(Map<String, dynamic> json) {
     hasPendingReceivedFollowRequest:
         json['hasPendingReceivedFollowRequest'] as bool,
     integrations: json['integrations'] as Map<String, dynamic>,
-    mutedWords: json['mutedWords'] as List,
-    mutingNotificationTypes: json['mutingNotificationTypes'] as List,
+    mutedWords: json['mutedWords'] as List<dynamic>,
+    mutingNotificationTypes: json['mutingNotificationTypes'] as List<dynamic>,
     isFollowing: json['isFollowing'] as bool,
     hasPendingFollowRequestFromYou:
         json['hasPendingFollowRequestFromYou'] as bool,
@@ -94,10 +90,10 @@ Map<String, dynamic> _$MisskeyUserToJson(MisskeyUser instance) =>
       'isModerator': instance.isModerator,
       'isBot': instance.isBot,
       'isCat': instance.isCat,
-      'emojis': instance.emojis?.toList(),
+      'emojis': instance.emojis.toList(),
       'url': instance.url,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
       'bannerUrl': instance.bannerUrl,
       'bannerBlurhash': instance.bannerBlurhash,
       'bannerColor': instance.bannerColor,
@@ -106,11 +102,11 @@ Map<String, dynamic> _$MisskeyUserToJson(MisskeyUser instance) =>
       'description': instance.description,
       'location': instance.location,
       'birthday': instance.birthday,
-      'fields': instance.fields?.toList(),
+      'fields': instance.fields.toList(),
       'followersCount': instance.followersCount,
       'followingCount': instance.followingCount,
       'notesCount': instance.notesCount,
-      'pinnedNoteIds': instance.pinnedNoteIds?.toList(),
+      'pinnedNoteIds': instance.pinnedNoteIds.toList(),
       'pinnedNotes': instance.pinnedNotes,
       'pinnedPageId': instance.pinnedPageId,
       'pinnedPage': instance.pinnedPage,
@@ -134,8 +130,8 @@ Map<String, dynamic> _$MisskeyUserToJson(MisskeyUser instance) =>
       'hasPendingReceivedFollowRequest':
           instance.hasPendingReceivedFollowRequest,
       'integrations': instance.integrations,
-      'mutedWords': instance.mutedWords?.toList(),
-      'mutingNotificationTypes': instance.mutingNotificationTypes?.toList(),
+      'mutedWords': instance.mutedWords.toList(),
+      'mutingNotificationTypes': instance.mutingNotificationTypes.toList(),
       'isFollowing': instance.isFollowing,
       'hasPendingFollowRequestFromYou': instance.hasPendingFollowRequestFromYou,
       'hasPendingFollowRequestToYou': instance.hasPendingFollowRequestToYou,

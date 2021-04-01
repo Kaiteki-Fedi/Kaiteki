@@ -16,7 +16,8 @@ class Utils {
     return instance;
   }
 
-  static String withQueries(String baseUrl, Map<String, dynamic> queryParameters) {
+  static String withQueries(
+      String baseUrl, Map<String, dynamic> queryParameters) {
     queryParameters.removeWhere((_, v) => v == null);
 
     if (queryParameters.length == 0) {
@@ -60,7 +61,7 @@ class Utils {
   }
 
   static double getLocalFontSize(BuildContext context) {
-    return DefaultTextStyle.of(context).style.fontSize;
+    return DefaultTextStyle.of(context).style.fontSize!;
   }
 
   static bool isUnsuccessfulStatusCode(int code) {

@@ -1,14 +1,8 @@
-import 'dart:developer';
-
 import 'package:fediverse_objects/mastodon.dart';
 import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
-import 'package:kaiteki/auth/login_functions.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/authentication_data.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
@@ -17,6 +11,10 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:kaiteki/model/auth/account_secret.dart';
+import 'package:kaiteki/model/auth/authentication_data.dart';
+import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
@@ -34,8 +32,13 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<LoginResult> login(String instance, String username, String password,
-      mfaCallback, AccountContainer accounts) async {
+  Future<LoginResult> login(
+    String instance,
+    String username,
+    String password,
+    mfaCallback,
+    AccountContainer accounts,
+  ) async {
     client.instance = instance;
 
     // Retrieve or create client secret
@@ -81,7 +84,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
     // Create and set account secret
     var accountSecret = new AccountSecret(instance, username, accessToken);
-    client.authenticationData.accessToken = accountSecret.accessToken;
+    client.authenticationData!.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
     var account = await client.verifyCredentials();
@@ -102,7 +105,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Post> postStatus(Post post, {Post parentPost}) {
+  Future<Post> postStatus(Post post, {Post? parentPost}) {
     // TODO implement postStatus
     throw UnimplementedError();
   }
@@ -126,13 +129,13 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<Iterable<Post>> getTimeline(TimelineType type,
-      {String sinceId, String untilId}) async {
+      {String? sinceId, String? untilId}) async {
     var posts = await client.getTimeline(minId: sinceId, maxId: untilId);
     return posts.map((m) => toPost(m));
   }
 
   @override
-  Future<User> getUser(String username, [String instance]) {
+  Future<User> getUser(String username, [String? instance]) {
     // TODO implement getUser
     throw UnimplementedError();
   }
@@ -143,7 +146,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     var categories = emojis.groupBy((emoji) => emoji.category);
 
     return categories.entries.map((kv) {
-      return EmojiCategory(kv.key, kv.value.map(toEmoji));
+      return EmojiCategory(kv.key!, kv.value.map(toEmoji));
     });
   }
 

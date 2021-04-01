@@ -8,7 +8,7 @@ class MisskeyException extends ApiException {
 
   @override
   String toString() {
-    if (error?.error["message"] != null) return error?.error["message"];
+    if (error.error["message"] != null) return error.error["message"];
 
     return super.toString();
   }

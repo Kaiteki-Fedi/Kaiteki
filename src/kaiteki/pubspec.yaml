@@ -16,53 +16,46 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.12.2
-  mdi: ^4.0.0
-  file_picker: ^2.0.11
-  provider: ^4.3.2+2
-  client_cookie: ^2.2.1
-  url_launcher: ^6.0.1
-  supercharged: ^1.10.0
   animations: ^2.0.0
-  flutter_local_notifications: ^4.0.1+1
-  shared_preferences: ^2.0.1
-  google_fonts: ^1.1.1
   badges: ^1.1.4
-  html: ^0.15.0
-  json_annotation: ^3.1.0
-  logger: ^0.7.0
-  logger_flutter: ^0.7.1
-  tuple: ^1.0.3
   chewie: ^1.0.0
-  video_player: ^2.0.2
+  file_picker: ^3.0.0
+  flutter_local_notifications: ^5.0.0
+  google_fonts: ^2.0.0
+  html: ^0.15.0
+  http: ^0.13.1
+  json_annotation: any
+  logger_flutter: ^0.7.1
+  logger: ^0.7.0+2
+  mdi: ^4.0.0
+  provider: ^5.0.0
+  shared_preferences: ^2.0.5
+  supercharged: ^2.0.0
+  tuple: ^2.0.0
+  url_launcher: ^6.0.3
+  video_player: ^2.1.0
 
   fediverse_objects:
     path: ../fediverse_objects
 
 dev_dependencies:
-  build_runner: ^1.10.4
-  json_serializable: ^3.5.0
-  msix: ^0.1.15
+  build_runner: ^1.11.5
+  json_serializable: ^4.1.0
+  msix: ^1.0.3
   flutter_test:
     sdk: flutter
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/icons/mastodon.png
     - assets/icons/pleroma.png
     - assets/icons/misskey.png
-
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
   fonts:
     - family: Quicksand
       fonts:

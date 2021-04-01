@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/previewCard.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CardWidget extends StatelessWidget {
   final PreviewCard card;
 
-  const CardWidget({Key key, @required this.card}) : super(key: key);
+  const CardWidget({Key? key, required this.card}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +21,9 @@ class CardWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (card.imageUrl.isNotEmpty)
+            if (card.imageUrl.isNotNullOrEmpty)
               Image.network(
-                card.imageUrl,
+                card.imageUrl!,
                 width: 120,
               ),
             Flexible(
@@ -34,7 +35,7 @@ class CardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(card.title, style: theme.textTheme.headline6),
-                    Text(card.description),
+                    if (card.description != null) Text(card.description!),
                     // Spacer(),
                     // Row(
                     //   children: [

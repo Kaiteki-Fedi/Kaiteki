@@ -9,10 +9,10 @@ part of 'emoji.dart';
 MisskeyEmoji _$MisskeyEmojiFromJson(Map<String, dynamic> json) {
   return MisskeyEmoji(
     id: json['id'] as String,
-    aliases: (json['aliases'] as List)?.map((e) => e as String),
+    aliases: (json['aliases'] as List<dynamic>).map((e) => e as String),
     name: json['name'] as String,
-    category: json['category'] as String,
-    host: json['host'] as String,
+    category: json['category'] as String?,
+    host: json['host'] as String?,
     url: json['url'] as String,
   );
 }
@@ -20,7 +20,7 @@ MisskeyEmoji _$MisskeyEmojiFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$MisskeyEmojiToJson(MisskeyEmoji instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'aliases': instance.aliases?.toList(),
+      'aliases': instance.aliases.toList(),
       'name': instance.name,
       'category': instance.category,
       'host': instance.host,

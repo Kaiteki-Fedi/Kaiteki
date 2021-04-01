@@ -1,8 +1,6 @@
 part of 'adapter.dart';
 
 Post toPost(MisskeyNote source) {
-  assert(source != null);
-
   var mappedEmoji = source.emojis.map(toEmoji);
 
   return Post(
@@ -16,16 +14,14 @@ Post toPost(MisskeyNote source) {
     replyCount: 0,
     likeCount: 0,
     repeatCount: 0,
-    reactions: source.reactions.entries.map(
-      (mkr) {
-        return Reaction(
-          count: mkr.value,
-          includesMe: mkr.key == source.myReaction,
-          users: [],
-          emoji: getEmojiFromString(mkr.key, mappedEmoji),
-        );
-      },
-    ),
+    reactions: source.reactions.entries.map((mkr) {
+      return Reaction(
+        count: mkr.value,
+        includesMe: mkr.key == source.myReaction,
+        users: [],
+        emoji: getEmojiFromString(mkr.key, mappedEmoji),
+      );
+    }),
     replyToPostId: source.replyId,
     id: source.id,
     visibility: toVisibility(source.visibility),
@@ -45,18 +41,13 @@ Visibility toVisibility(String visibility) {
       return Visibility.Direct;
 
     default:
-      {
-        debugger(message: "Missing case for $visibility");
-        return null;
-      }
+      throw Exception("Missing case for $visibility");
   }
 }
 
 Attachment toAttachment(MisskeyDriveFile file) {
-  print(file.url);
   return Attachment(
     source: file,
-    type: "image",
     description: file.name,
     previewUrl: file.url,
     url: file.url,
@@ -71,7 +62,7 @@ Emoji getEmojiFromString(String emojiString, Iterable<Emoji> inheritingEmoji) {
     return matchingEmoji;
   }
 
-  return UnicodeEmoji(emojiString, null, aliases: null);
+  return UnicodeEmoji(emojiString, "", aliases: null);
 }
 
 CustomEmoji toEmoji(MisskeyEmoji emoji) {
@@ -84,8 +75,6 @@ CustomEmoji toEmoji(MisskeyEmoji emoji) {
 }
 
 User toUser(MisskeyUser source) {
-  assert(source != null);
-
   return User(
     source: source,
     username: source.username,

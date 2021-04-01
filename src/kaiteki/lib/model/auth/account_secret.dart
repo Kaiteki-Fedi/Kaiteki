@@ -13,10 +13,7 @@ class AccountSecret {
   @JsonKey(name: "token")
   final String accessToken;
 
-  const AccountSecret(this.instance, this.username, this.accessToken)
-      : assert(instance != null),
-        assert(username != null),
-        assert(accessToken != null);
+  const AccountSecret(this.instance, this.username, this.accessToken);
 
   bool equalId(AccountSecret other) {
     return other.instance.equalsIgnoreCase(instance) &&
@@ -25,5 +22,6 @@ class AccountSecret {
 
   factory AccountSecret.fromJson(Map<String, dynamic> json) =>
       _$AccountSecretFromJson(json);
+
   Map<String, dynamic> toJson() => _$AccountSecretToJson(this);
 }

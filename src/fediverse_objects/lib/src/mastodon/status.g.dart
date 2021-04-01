@@ -8,53 +8,46 @@ part of 'status.dart';
 
 MastodonStatus _$MastodonStatusFromJson(Map<String, dynamic> json) {
   return MastodonStatus(
-    account: json['account'] == null
-        ? null
-        : MastodonAccount.fromJson(json['account'] as Map<String, dynamic>),
-    application: json['application'] == null
-        ? null
-        : MastodonApplication.fromJson(
-            json['application'] as Map<String, dynamic>),
+    account: MastodonAccount.fromJson(json['account'] as Map<String, dynamic>),
+    application: MastodonApplication.fromJson(
+        json['application'] as Map<String, dynamic>),
     content: json['content'] as String,
-    createdAt: json['created_at'] == null
-        ? null
-        : DateTime.parse(json['created_at'] as String),
-    emojis: (json['emojis'] as List)?.map((e) =>
-        e == null ? null : MastodonEmoji.fromJson(e as Map<String, dynamic>)),
+    createdAt: DateTime.parse(json['created_at'] as String),
+    emojis: (json['emojis'] as List<dynamic>)
+        .map((e) => MastodonEmoji.fromJson(e as Map<String, dynamic>)),
     favouritesCount: json['favourites_count'] as int,
     id: json['id'] as String,
-    mediaAttachments: (json['media_attachments'] as List)?.map((e) => e == null
-        ? null
-        : MastodonAttachment.fromJson(e as Map<String, dynamic>)),
-    mentions: (json['mentions'] as List)?.map((e) =>
-        e == null ? null : MastodonMention.fromJson(e as Map<String, dynamic>)),
+    mediaAttachments: (json['media_attachments'] as List<dynamic>)
+        .map((e) => MastodonAttachment.fromJson(e as Map<String, dynamic>)),
+    mentions: (json['mentions'] as List<dynamic>)
+        .map((e) => MastodonMention.fromJson(e as Map<String, dynamic>)),
     reblogsCount: json['reblogs_count'] as int,
     repliesCount: json['replies_count'] as int,
     sensitive: json['sensitive'] as bool,
     spoilerText: json['spoiler_text'] as String,
-    tags: (json['tags'] as List)?.map((e) =>
-        e == null ? null : MastodonTag.fromJson(e as Map<String, dynamic>)),
+    tags: (json['tags'] as List<dynamic>)
+        .map((e) => MastodonTag.fromJson(e as Map<String, dynamic>)),
     uri: json['uri'] as String,
     visibility: json['visibility'] as String,
-    bookmarked: json['bookmarked'] as bool,
+    bookmarked: json['bookmarked'] as bool?,
     card: json['card'] == null
         ? null
         : MastodonCard.fromJson(json['card'] as Map<String, dynamic>),
-    favourited: json['favourited'] as bool,
-    inReplyToAccountId: json['in_reply_to_account_id'] as String,
-    inReplyToId: json['in_reply_to_id'] as String,
-    language: json['language'] as String,
-    muted: json['muted'] as bool,
-    pinned: json['pinned'] as bool,
+    favourited: json['favourited'] as bool?,
+    inReplyToAccountId: json['in_reply_to_account_id'] as String?,
+    inReplyToId: json['in_reply_to_id'] as String?,
+    language: json['language'] as String?,
+    muted: json['muted'] as bool?,
+    pinned: json['pinned'] as bool?,
     pleroma: json['pleroma'] == null
         ? null
         : PleromaStatus.fromJson(json['pleroma'] as Map<String, dynamic>),
     reblog: json['reblog'] == null
         ? null
         : MastodonStatus.fromJson(json['reblog'] as Map<String, dynamic>),
-    reblogged: json['reblogged'] as bool,
-    url: json['url'] as String,
-    text: json['text'] as String,
+    reblogged: json['reblogged'] as bool?,
+    url: json['url'] as String?,
+    text: json['text'] as String?,
     poll: json['poll'] == null
         ? null
         : MastodonPoll.fromJson(json['poll'] as Map<String, dynamic>),
@@ -68,16 +61,16 @@ Map<String, dynamic> _$MastodonStatusToJson(MastodonStatus instance) =>
       'bookmarked': instance.bookmarked,
       'card': instance.card,
       'content': instance.content,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'emojis': instance.emojis?.toList(),
+      'created_at': instance.createdAt.toIso8601String(),
+      'emojis': instance.emojis.toList(),
       'favourited': instance.favourited,
       'favourites_count': instance.favouritesCount,
       'id': instance.id,
       'in_reply_to_account_id': instance.inReplyToAccountId,
       'in_reply_to_id': instance.inReplyToId,
       'language': instance.language,
-      'media_attachments': instance.mediaAttachments?.toList(),
-      'mentions': instance.mentions?.toList(),
+      'media_attachments': instance.mediaAttachments.toList(),
+      'mentions': instance.mentions.toList(),
       'muted': instance.muted,
       'pinned': instance.pinned,
       'pleroma': instance.pleroma,
@@ -88,7 +81,7 @@ Map<String, dynamic> _$MastodonStatusToJson(MastodonStatus instance) =>
       'poll': instance.poll,
       'sensitive': instance.sensitive,
       'spoiler_text': instance.spoilerText,
-      'tags': instance.tags?.toList(),
+      'tags': instance.tags.toList(),
       'uri': instance.uri,
       'url': instance.url,
       'visibility': instance.visibility,

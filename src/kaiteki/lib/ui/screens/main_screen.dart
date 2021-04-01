@@ -14,7 +14,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List<_MainScreenTab> _tabs;
+  late final List<_MainScreenTab> _tabs;
   var _pageController = PageController();
   var _currentPage = 0;
   var pageViewKey = UniqueKey();
@@ -26,11 +26,13 @@ class _MainScreenState extends State<MainScreen> {
     _tabs = [
       _MainScreenTab(
         icon: Mdi.home,
-        text: "Timeline",
-        fabTooltip: "Compose a new status",
-        fabText: "Compose",
-        fabIcon: Mdi.pencil,
-        fabOnTap: () => onComposeStatus(context, null),
+        text: 'Timeline',
+        fab: _FloatingActionButtonData(
+          icon: Mdi.pencil,
+          tooltip: 'Compose a new status',
+          text: 'Compose',
+          onTap: () => onComposeStatus(context, null),
+        ),
       ),
       // _MainScreenTab(
       //   icon: Mdi.bell,
@@ -178,31 +180,31 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  FloatingActionButton getFab(BuildContext context, int index) {
+  FloatingActionButton? getFab(BuildContext context, int index) {
     var tab = _tabs[_currentPage];
 
-    if (tab.fabIcon == null) return null;
+    if (tab.fab == null) return null;
 
     return FloatingActionButton(
-      tooltip: tab.fabTooltip,
-      child: Icon(tab.fabIcon),
-      onPressed: tab.fabOnTap,
+      tooltip: tab.fab!.tooltip,
+      child: Icon(tab.fab!.icon),
+      onPressed: tab.fab!.onTap,
     );
   }
 
-  FloatingActionButton getFabDesktop(BuildContext context, int index) {
+  FloatingActionButton? getFabDesktop(BuildContext context, int index) {
     var tab = _tabs[_currentPage];
 
-    if (tab.fabIcon == null) return null;
+    if (tab.fab == null) return null;
 
     return FloatingActionButton.extended(
-      label: Text(tab.fabText),
-      icon: Icon(tab.fabIcon),
-      onPressed: tab.fabOnTap,
+      label: Text(tab.fab!.text),
+      icon: Icon(tab.fab!.icon),
+      onPressed: tab.fab!.onTap,
     );
   }
 
-  void onComposeStatus(BuildContext context, Post replyTo) async {
+  void onComposeStatus(BuildContext context, Post? replyTo) async {
     await showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -221,18 +223,25 @@ class _MainScreenState extends State<MainScreen> {
 class _MainScreenTab {
   final String text;
   final IconData icon;
-
-  final void Function() fabOnTap;
-  final String fabTooltip;
-  final String fabText;
-  final IconData fabIcon;
+  final _FloatingActionButtonData? fab;
 
   const _MainScreenTab({
-    this.icon,
-    this.text,
-    this.fabOnTap,
-    this.fabTooltip,
-    this.fabText,
-    this.fabIcon,
+    required this.icon,
+    required this.text,
+    this.fab,
+  });
+}
+
+class _FloatingActionButtonData {
+  final void Function() onTap;
+  final String tooltip;
+  final String text;
+  final IconData icon;
+
+  _FloatingActionButtonData({
+    required this.onTap,
+    required this.tooltip,
+    required this.text,
+    required this.icon,
   });
 }

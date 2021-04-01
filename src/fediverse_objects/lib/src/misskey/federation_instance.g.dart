@@ -10,9 +10,7 @@ MisskeyFederationInstance _$MisskeyFederationInstanceFromJson(
     Map<String, dynamic> json) {
   return MisskeyFederationInstance(
     id: json['id'] as String,
-    caughtAt: json['caughtAt'] == null
-        ? null
-        : DateTime.parse(json['caughtAt'] as String),
+    caughtAt: DateTime.parse(json['caughtAt'] as String),
     host: json['host'] as String,
     usersCount: json['usersCount'] as int,
     notesCount: json['notesCount'] as int,
@@ -20,12 +18,8 @@ MisskeyFederationInstance _$MisskeyFederationInstanceFromJson(
     followersCount: json['followersCount'] as int,
     driveUsage: json['driveUsage'] as int,
     driveFiles: json['driveFiles'] as int,
-    latestRequestSentAt: json['latestRequestSentAt'] == null
-        ? null
-        : DateTime.parse(json['latestRequestSentAt'] as String),
-    lastCommunicatedAt: json['lastCommunicatedAt'] == null
-        ? null
-        : DateTime.parse(json['lastCommunicatedAt'] as String),
+    latestRequestSentAt: DateTime.parse(json['latestRequestSentAt'] as String),
+    lastCommunicatedAt: DateTime.parse(json['lastCommunicatedAt'] as String),
     isNotResponding: json['isNotResponding'] as bool,
     isSuspended: json['isSuspended'] as bool,
     softwareName: json['softwareName'] as String,
@@ -36,9 +30,7 @@ MisskeyFederationInstance _$MisskeyFederationInstanceFromJson(
     maintainerName: json['maintainerName'] as String,
     maintainerEmail: json['maintainerEmail'] as String,
     iconUrl: json['iconUrl'] as String,
-    infoUpdatedAt: json['infoUpdatedAt'] == null
-        ? null
-        : DateTime.parse(json['infoUpdatedAt'] as String),
+    infoUpdatedAt: DateTime.parse(json['infoUpdatedAt'] as String),
   );
 }
 
@@ -46,7 +38,7 @@ Map<String, dynamic> _$MisskeyFederationInstanceToJson(
         MisskeyFederationInstance instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'caughtAt': instance.caughtAt?.toIso8601String(),
+      'caughtAt': instance.caughtAt.toIso8601String(),
       'host': instance.host,
       'usersCount': instance.usersCount,
       'notesCount': instance.notesCount,
@@ -54,8 +46,8 @@ Map<String, dynamic> _$MisskeyFederationInstanceToJson(
       'followersCount': instance.followersCount,
       'driveUsage': instance.driveUsage,
       'driveFiles': instance.driveFiles,
-      'latestRequestSentAt': instance.latestRequestSentAt?.toIso8601String(),
-      'lastCommunicatedAt': instance.lastCommunicatedAt?.toIso8601String(),
+      'latestRequestSentAt': instance.latestRequestSentAt.toIso8601String(),
+      'lastCommunicatedAt': instance.lastCommunicatedAt.toIso8601String(),
       'isNotResponding': instance.isNotResponding,
       'isSuspended': instance.isSuspended,
       'softwareName': instance.softwareName,
@@ -66,5 +58,5 @@ Map<String, dynamic> _$MisskeyFederationInstanceToJson(
       'maintainerName': instance.maintainerName,
       'maintainerEmail': instance.maintainerEmail,
       'iconUrl': instance.iconUrl,
-      'infoUpdatedAt': instance.infoUpdatedAt?.toIso8601String(),
+      'infoUpdatedAt': instance.infoUpdatedAt.toIso8601String(),
     };

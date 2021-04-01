@@ -1,6 +1,6 @@
 /// A class for storing and working with text
 class TextBuffer {
-  String text;
+  late String text;
 
   TextBuffer() {
     clear();
@@ -15,7 +15,7 @@ class TextBuffer {
   }
 
   void clear() {
-    text = "";
+    text = '';
   }
 
   String cut() {

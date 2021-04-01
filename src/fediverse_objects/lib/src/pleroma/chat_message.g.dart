@@ -10,11 +10,9 @@ PleromaChatMessage _$PleromaChatMessageFromJson(Map<String, dynamic> json) {
   return PleromaChatMessage(
     accountId: json['account_id'] as String,
     chatId: json['chat_id'] as String,
-    createdAt: json['created_at'] == null
-        ? null
-        : DateTime.parse(json['created_at'] as String),
-    emojis: (json['emojis'] as List)?.map((e) =>
-        e == null ? null : MastodonEmoji.fromJson(e as Map<String, dynamic>)),
+    createdAt: DateTime.parse(json['created_at'] as String),
+    emojis: (json['emojis'] as List<dynamic>)
+        .map((e) => MastodonEmoji.fromJson(e as Map<String, dynamic>)),
     id: json['id'] as String,
     unread: json['unread'] as bool,
     attachment: json['attachment'] == null
@@ -24,7 +22,7 @@ PleromaChatMessage _$PleromaChatMessageFromJson(Map<String, dynamic> json) {
     card: json['card'] == null
         ? null
         : MastodonCard.fromJson(json['card'] as Map<String, dynamic>),
-    content: json['content'] as String,
+    content: json['content'] as String?,
   );
 }
 
@@ -35,8 +33,8 @@ Map<String, dynamic> _$PleromaChatMessageToJson(PleromaChatMessage instance) =>
       'card': instance.card,
       'chat_id': instance.chatId,
       'content': instance.content,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'emojis': instance.emojis?.toList(),
+      'created_at': instance.createdAt.toIso8601String(),
+      'emojis': instance.emojis.toList(),
       'id': instance.id,
       'unread': instance.unread,
     };

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:fediverse_objects/mastodon.dart';
+import 'package:flutter/material.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,7 +9,7 @@ class ApplicationWidget extends StatelessWidget {
 
   static var _logger = getLogger("ApplicationWidget");
 
-  const ApplicationWidget(this.application, {Key key}) : super(key: key);
+  const ApplicationWidget(this.application, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

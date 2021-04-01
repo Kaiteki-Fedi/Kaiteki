@@ -11,8 +11,8 @@ class FormWidget extends StatelessWidget {
 
   // TODO mobile/portrait padding
   const FormWidget({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.contentWidth = Constants.defaultFormWidth,
     this.contentHeight = Constants.defaultFormHeight,
     this.padding = const EdgeInsets.symmetric(

@@ -3,7 +3,7 @@ import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:provider/provider.dart';
 
 class SensitivePostFilteringScreen extends StatefulWidget {
-  SensitivePostFilteringScreen({Key key}) : super(key: key);
+  SensitivePostFilteringScreen({Key? key}) : super(key: key);
 
   @override
   _SensitivePostFilteringScreenState createState() =>
@@ -40,9 +40,9 @@ class _SensitivePostFilteringScreenState
           ),
           CheckboxListTile(
             title: Text("Include posts marked as sensitive"),
-            onChanged: (bool value) => preferences.update((p) {
+            onChanged: (bool? value) => preferences.update((p) {
               return p
-                ..sensitivePostFilter.filterPostsMarkedAsSensitive = value;
+                ..sensitivePostFilter.filterPostsMarkedAsSensitive = value!;
             }),
             value: preferences
                 .get()
@@ -51,8 +51,8 @@ class _SensitivePostFilteringScreenState
           ),
           CheckboxListTile(
             title: Text("Include posts with subject"),
-            onChanged: (bool value) => preferences.update((p) {
-              return p..sensitivePostFilter.filterPostsWithSubject = value;
+            onChanged: (bool? value) => preferences.update((p) {
+              return p..sensitivePostFilter.filterPostsWithSubject = value!;
             }),
             value: preferences.get().sensitivePostFilter.filterPostsWithSubject,
           ),

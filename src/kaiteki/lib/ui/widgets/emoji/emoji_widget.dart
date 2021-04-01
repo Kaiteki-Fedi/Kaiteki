@@ -10,16 +10,16 @@ class EmojiWidget extends StatelessWidget {
   final double size;
 
   const EmojiWidget({
-    Key key,
-    this.emoji,
-    this.size,
+    Key? key,
+    required this.emoji,
+    required this.size,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (emoji is CustomEmoji) return buildCustomEmoji(emoji);
+    if (emoji is CustomEmoji) return buildCustomEmoji(emoji as CustomEmoji);
 
-    if (emoji is UnicodeEmoji) return buildUnicodeEmoji(emoji);
+    if (emoji is UnicodeEmoji) return buildUnicodeEmoji(emoji as UnicodeEmoji);
 
     throw "There's no implementation for $emoji in EmojiWidget. Can't build.";
   }
@@ -33,20 +33,16 @@ class EmojiWidget extends StatelessWidget {
       filterQuality: FilterQuality.high,
       semanticLabel: "Emoji ${emoji.name}",
       loadingBuilder: (context, widget, event) {
-        if (event == null ||
-            event.cumulativeBytesLoaded == null ||
-            event.expectedTotalBytes == null) {
+        if (event == null || event.expectedTotalBytes == null) {
           return widget;
         }
 
-        var progress = event.cumulativeBytesLoaded / event.expectedTotalBytes;
+        var progress = event.cumulativeBytesLoaded / event.expectedTotalBytes!;
         var baseColor = context == null
             ? Colors.white.withOpacity(0.5)
             : Theme.of(context).disabledColor;
         var opacityDifference = 1.0 - baseColor.opacity;
         var finalOpacity = baseColor.opacity + (progress * opacityDifference);
-
-        print(finalOpacity);
 
         return Icon(
           Mdi.emoticonOutline,
@@ -64,7 +60,7 @@ class EmojiWidget extends StatelessWidget {
 
   Widget buildUnicodeEmoji(UnicodeEmoji unicodeEmoji) {
     return Text(
-      unicodeEmoji.source,
+      unicodeEmoji.source!,
       style: TextStyle(fontSize: size, height: size),
     );
   }

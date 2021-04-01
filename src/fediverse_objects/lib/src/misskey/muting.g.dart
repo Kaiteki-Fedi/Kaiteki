@@ -9,20 +9,16 @@ part of 'muting.dart';
 MisskeyMuting _$MisskeyMutingFromJson(Map<String, dynamic> json) {
   return MisskeyMuting(
     id: json['id'] as String,
-    createdAt: json['createdAt'] == null
-        ? null
-        : DateTime.parse(json['createdAt'] as String),
+    createdAt: DateTime.parse(json['createdAt'] as String),
     muteeId: json['muteeId'] as String,
-    mutee: json['mutee'] == null
-        ? null
-        : MisskeyUser.fromJson(json['mutee'] as Map<String, dynamic>),
+    mutee: MisskeyUser.fromJson(json['mutee'] as Map<String, dynamic>),
   );
 }
 
 Map<String, dynamic> _$MisskeyMutingToJson(MisskeyMuting instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
+      'createdAt': instance.createdAt.toIso8601String(),
       'muteeId': instance.muteeId,
       'mutee': instance.mutee,
     };

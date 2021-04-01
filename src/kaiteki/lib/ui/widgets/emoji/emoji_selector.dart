@@ -6,15 +6,14 @@ import 'package:mdi/mdi.dart';
 
 class EmojiSelector extends StatefulWidget {
   final EmojiSelected onEmojiSelected;
+  final Iterable<EmojiCategory> categories;
 
   static const double emojiSize = 32;
 
-  final Iterable<EmojiCategory> categories;
-
   const EmojiSelector({
-    Key key,
-    this.categories,
-    this.onEmojiSelected,
+    Key? key,
+    required this.categories,
+    required this.onEmojiSelected,
   }) : super(key: key);
 
   @override
@@ -23,8 +22,8 @@ class EmojiSelector extends StatefulWidget {
 
 class _EmojiSelectorState extends State<EmojiSelector>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  ScrollController _scrollController;
+  late final TabController _tabController;
+  late final ScrollController _scrollController;
   Map<int, GlobalKey> _itemKeys = <int, GlobalKey>{};
 
   @override
@@ -39,7 +38,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
 
     _tabController.addListener(() {
       var key = _itemKeys[_tabController.index];
-      RenderBox box = key.currentContext.findRenderObject();
+      var box = key!.currentContext!.findRenderObject()! as RenderBox;
       var offset = box.localToGlobal(Offset.zero);
 
       var animationHeight = _scrollController.offset + offset.dy - 56.0;
@@ -80,6 +79,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
                 style: ButtonStyle(
                   minimumSize: MaterialStateProperty.all(Size.square(52)),
                 ),
+                onPressed: null,
               ),
               TextButton(
                 child: Icon(Mdi.close),

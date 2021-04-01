@@ -4,7 +4,7 @@ import 'package:mdi/mdi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesScreen extends StatefulWidget {
-  const SharedPreferencesScreen({Key key}) : super(key: key);
+  const SharedPreferencesScreen({Key? key}) : super(key: key);
 
   @override
   _SharedPreferencesScreenState createState() =>
@@ -30,12 +30,12 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
 
-          var items = snapshot.data.getKeys();
+          var items = snapshot.data!.getKeys();
           return ListView.builder(
             itemCount: items.length,
             itemBuilder: (_, i) {
               var key = items.elementAt(i);
-              var value = snapshot.data.get(key);
+              var value = snapshot.data!.get(key);
               var icon = getIconForValue(value);
 
               return ListTile(
@@ -43,7 +43,7 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
                 title: Text(key, style: GoogleFonts.robotoMono()),
                 trailing: IconButton(
                   icon: Icon(Mdi.delete),
-                  onPressed: () => setState(() => snapshot.data.remove(key)),
+                  onPressed: () => setState(() => snapshot.data!.remove(key)),
                 ),
               );
             },
@@ -79,8 +79,8 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
             padding: const EdgeInsets.only(right: 8.0),
             child: Icon(
               icon,
-              color: Theme.of(context).snackBarTheme?.contentTextStyle?.color ??
-                  Colors.white,
+              color: Theme.of(context).snackBarTheme.contentTextStyle?.color
+                  ?? Colors.white,
             ),
           ),
           Text(message),

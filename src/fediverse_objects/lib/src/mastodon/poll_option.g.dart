@@ -9,7 +9,7 @@ part of 'poll_option.dart';
 MastodonPollOption _$MastodonPollOptionFromJson(Map<String, dynamic> json) {
   return MastodonPollOption(
     title: json['title'] as String,
-    votesCount: json['votes_count'] as int,
+    votesCount: json['votes_count'] as int?,
   );
 }
 

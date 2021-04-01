@@ -11,11 +11,11 @@ import 'package:kaiteki/utils/paged_network_stream.dart';
 
 class Timeline extends StatefulWidget {
   final FediverseAdapter adapter;
-  final List<PostFilter> filters;
+  final List<PostFilter>? filters;
 
   const Timeline({
-    Key key,
-    @required this.adapter,
+    Key? key,
+    required this.adapter,
     this.filters,
   }) : super(key: key);
 
@@ -25,7 +25,7 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   final scrollController = ScrollController();
-  TimelineModel timelineModel;
+  late final TimelineModel timelineModel;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _TimelineState extends State<Timeline> {
         var filters = widget.filters ?? [];
 
         if (snapshot.hasData) {
-          filtered = Map.fromEntries(snapshot.data.map((p) {
+          filtered = Map.fromEntries(snapshot.data!.map((p) {
             return MapEntry(
               p,
               PostFilter.runMultipleFilters(context, p, filters),
@@ -104,7 +104,7 @@ class TimelineModel extends PagedNetworkStream<Post, String> {
   TimelineModel(this._adapter, {this.timelineType = TimelineType.Home});
 
   @override
-  Future<Iterable<Post>> fetchObjects(String firstId, String lastId) async {
+  Future<Iterable<Post>> fetchObjects(String? firstId, String? lastId) async {
     return await _adapter.getTimeline(timelineType, untilId: lastId);
   }
 

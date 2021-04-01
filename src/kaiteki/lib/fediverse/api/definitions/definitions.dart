@@ -24,9 +24,9 @@ class ApiTheme {
   final String iconAssetLocation;
 
   const ApiTheme({
-    this.backgroundColor,
-    this.primaryColor,
-    this.iconAssetLocation,
+    required this.backgroundColor,
+    required this.primaryColor,
+    required this.iconAssetLocation,
   });
 }
 

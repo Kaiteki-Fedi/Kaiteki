@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/ui/pages/customization/customization_basic_page.dart';
 
 class CustomizationSettingsScreen extends StatefulWidget {
-  CustomizationSettingsScreen({Key key}) : super(key: key);
+  CustomizationSettingsScreen({Key? key}) : super(key: key);
 
   @override
   _CustomizationSettingsScreenState createState() =>

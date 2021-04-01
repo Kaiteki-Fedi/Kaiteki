@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -16,21 +18,21 @@ class ConversationScreen extends StatelessWidget {
     var container = Provider.of<AccountContainer>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Conversation"),
+        title: Text('Conversation'),
       ),
       body: FutureBuilder(
         future: container.adapter.getThread(post),
         builder: (_, AsyncSnapshot<Iterable<Post>> snapshot) {
           if (snapshot.hasData) {
-            var cookedThread = Threader.toThread(snapshot.data);
+            var cookedThread = Threader.toThread(snapshot.data!);
             return SingleChildScrollView(
               child: ThreadPostContainer(cookedThread),
             );
           } else if (snapshot.hasError) {
             return Center(
               child: IconLandingWidget(
-                icon: Mdi.close,
-                text: snapshot.error.toString(),
+                Mdi.close,
+                snapshot.error.toString(),
               ),
             );
           } else {
@@ -61,7 +63,7 @@ class Threader {
 
 class ThreadPost {
   Post post;
-  List<ThreadPost> replies;
+  late List<ThreadPost> replies;
 
   ThreadPost(this.post, {replies}) {
     if (replies == null)
@@ -73,8 +75,9 @@ class ThreadPost {
 
 class ThreadPostContainer extends StatelessWidget {
   final ThreadPost post;
+  final int threadLayer;
 
-  const ThreadPostContainer(this.post);
+  const ThreadPostContainer(this.post, {this.threadLayer = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -87,14 +90,20 @@ class ThreadPostContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 VerticalDivider(
-                    thickness: 2,
-                    width: 8,
-                    color: Color(this.post.post.id.hashCode * 10000)),
+                  thickness: 2,
+                  width: 8,
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(
+                        getLineOpacity(threadLayer),
+                      ),
+                ),
                 Expanded(
                   child: Column(
                     children: [
                       for (var reply in post.replies)
-                        ThreadPostContainer(reply),
+                        ThreadPostContainer(
+                          reply,
+                          threadLayer: threadLayer + 1,
+                        ),
                     ],
                   ),
                 ),
@@ -103,5 +112,11 @@ class ThreadPostContainer extends StatelessWidget {
           ),
       ],
     );
+  }
+
+  static double getLineOpacity(int layer, {int maxLayer = 5}) {
+    layer = min(layer, maxLayer); // make sure maxLayer or less is taken
+    var opposite = maxLayer - layer; // flip values
+    return 0.25 + ((opposite / maxLayer) * 0.5); // return 0.0 - 0.5
   }
 }

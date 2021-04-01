@@ -17,7 +17,7 @@ class KaitekiLogPrinter extends LogPrinter {
       println('=====');
     }
 
-    println(color('[$category] ${event.message}'));
+    println(color!('[$category] ${event.message}'));
 
     if (event.error != null) {
       println(event.error.toString());

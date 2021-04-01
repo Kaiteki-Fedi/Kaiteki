@@ -4,15 +4,26 @@ class CountButton extends StatelessWidget {
   final bool active;
   final bool disabled;
 
-  final int count;
-  final Color activeColor;
-  final Color color;
+  final int? count;
+  final Color? activeColor;
+  final Color? color;
 
   final Widget icon;
-  final Widget activeIcon;
+  final Widget? activeIcon;
 
-  final VoidCallback onTap;
-  const CountButton({Key key, this.active = false, this.count = 0, this.color, this.activeColor, this.icon, this.activeIcon, this.onTap, this.disabled = false}) : super(key: key);
+  final VoidCallback? onTap;
+
+  const CountButton({
+    Key? key,
+    this.active = false,
+    this.count = 0,
+    this.color,
+    this.activeColor,
+    required this.icon,
+    this.activeIcon,
+    this.onTap,
+    this.disabled = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +35,9 @@ class CountButton extends StatelessWidget {
 
     var callback = active ? () {} : (disabled ? null : onTap);
     var iconColor = active ? (activeColor ?? inactiveColor) : inactiveColor;
-    var currentIcon = active ? (activeIcon ?? icon): icon;
+    var currentIcon = active ? (activeIcon ?? icon) : icon;
 
-    if (count == null || count < 1) {
+    if (count == null || count! < 1) {
       return IconButton(
         icon: currentIcon,
         color: iconColor,

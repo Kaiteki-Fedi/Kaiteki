@@ -9,9 +9,7 @@ part of 'drive_file.dart';
 MisskeyDriveFile _$MisskeyDriveFileFromJson(Map<String, dynamic> json) {
   return MisskeyDriveFile(
     id: json['id'] as String,
-    createdAt: json['createdAt'] == null
-        ? null
-        : DateTime.parse(json['createdAt'] as String),
+    createdAt: DateTime.parse(json['createdAt'] as String),
     name: json['name'] as String,
     type: json['type'] as String,
     md5: json['md5'] as String,
@@ -23,20 +21,16 @@ MisskeyDriveFile _$MisskeyDriveFileFromJson(Map<String, dynamic> json) {
     thumbnailUrl: json['thumbnailUrl'] as String,
     comment: json['comment'] as String,
     folderId: json['folderId'] as String,
-    folder: json['folder'] == null
-        ? null
-        : MisskeyDriveFolder.fromJson(json['folder'] as Map<String, dynamic>),
+    folder: MisskeyDriveFolder.fromJson(json['folder'] as Map<String, dynamic>),
     userId: json['userId'] as String,
-    user: json['user'] == null
-        ? null
-        : MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
+    user: MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
   );
 }
 
 Map<String, dynamic> _$MisskeyDriveFileToJson(MisskeyDriveFile instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
+      'createdAt': instance.createdAt.toIso8601String(),
       'name': instance.name,
       'type': instance.type,
       'md5': instance.md5,

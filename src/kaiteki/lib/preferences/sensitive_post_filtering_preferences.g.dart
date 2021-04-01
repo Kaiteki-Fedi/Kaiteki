@@ -16,18 +16,9 @@ SensitivePostFilteringPreferences _$SensitivePostFilteringPreferencesFromJson(
 }
 
 Map<String, dynamic> _$SensitivePostFilteringPreferencesToJson(
-    SensitivePostFilteringPreferences instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('enabled', instance.enabled);
-  writeNotNull(
-      'filterPostsMarkedAsSensitive', instance.filterPostsMarkedAsSensitive);
-  writeNotNull('filterPostsWithSubject', instance.filterPostsWithSubject);
-  return val;
-}
+        SensitivePostFilteringPreferences instance) =>
+    <String, dynamic>{
+      'enabled': instance.enabled,
+      'filterPostsMarkedAsSensitive': instance.filterPostsMarkedAsSensitive,
+      'filterPostsWithSubject': instance.filterPostsWithSubject,
+    };

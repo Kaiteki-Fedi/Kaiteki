@@ -8,9 +8,7 @@ part of 'card.dart';
 
 PleromaCard _$PleromaCardFromJson(Map<String, dynamic> json) {
   return PleromaCard(
-    (json['opengraph'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(k, e as String),
-    ),
+    Map<String, String>.from(json['opengraph'] as Map),
   );
 }
 

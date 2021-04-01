@@ -1,13 +1,13 @@
 class PreviewCard {
   final String title;
-  final String description;
-  final String imageUrl;
+  final String? description;
+  final String? imageUrl;
   final String link;
 
   const PreviewCard({
-    this.title,
+    required this.title,
+    required this.link,
     this.description,
     this.imageUrl,
-    this.link,
   });
 }

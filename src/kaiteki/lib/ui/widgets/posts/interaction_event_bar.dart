@@ -15,12 +15,12 @@ class InteractionEventBar extends StatelessWidget {
   final TextStyle textStyle;
 
   const InteractionEventBar({
-    @required this.color,
-    @required this.icon,
-    @required this.text,
-    @required this.user,
-    @required this.userTextStyle,
-    @required this.textStyle,
+    required this.color,
+    required this.icon,
+    required this.text,
+    required this.user,
+    required this.userTextStyle,
+    required this.textStyle,
   });
 
   @override

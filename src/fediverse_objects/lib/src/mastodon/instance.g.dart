@@ -14,29 +14,25 @@ MastodonInstance _$MastodonInstanceFromJson(Map<String, dynamic> json) {
     shortDescription: json['shortDescription'] as String,
     email: json['email'] as String,
     version: json['version'] as String,
-    languages: (json['languages'] as List)?.map((e) => e as String),
+    languages: (json['languages'] as List<dynamic>).map((e) => e as String),
     registrations: json['registrations'] as bool,
     approvalRequired: json['approval_required'] as bool,
     invitesEnabled: json['invites_enabled'] as bool,
-    urls: json['urls'] == null
-        ? null
-        : MastodonInstanceUrls.fromJson(json['urls'] as Map<String, dynamic>),
-    stats: json['stats'] == null
-        ? null
-        : MastodonInstanceStatistics.fromJson(
-            json['stats'] as Map<String, dynamic>),
-    thumbnail: json['thumbnail'] as String,
+    urls: MastodonInstanceUrls.fromJson(json['urls'] as Map<String, dynamic>),
+    stats: MastodonInstanceStatistics.fromJson(
+        json['stats'] as Map<String, dynamic>),
+    thumbnail: json['thumbnail'] as String?,
     contactAccount: json['contact_account'] == null
         ? null
         : MastodonAccount.fromJson(
             json['contact_account'] as Map<String, dynamic>),
-    avatarUploadLimit: json['avatar_upload_limit'] as int,
-    backgroundImage: json['background_image'] as String,
-    backgroundUploadLimit: json['background_upload_limit'] as int,
-    bannerUploadLimit: json['banner_upload_limit'] as int,
-    maxTootChars: json['max_toot_chars'] as int,
+    avatarUploadLimit: json['avatar_upload_limit'] as int?,
+    backgroundImage: json['background_image'] as String?,
+    backgroundUploadLimit: json['background_upload_limit'] as int?,
+    bannerUploadLimit: json['banner_upload_limit'] as int?,
+    maxTootChars: json['max_toot_chars'] as int?,
     pollLimits: json['poll_limits'],
-    uploadLimit: json['upload_limit'] as int,
+    uploadLimit: json['upload_limit'] as int?,
   );
 }
 
@@ -49,7 +45,7 @@ Map<String, dynamic> _$MastodonInstanceToJson(MastodonInstance instance) =>
       'description': instance.description,
       'shortDescription': instance.shortDescription,
       'email': instance.email,
-      'languages': instance.languages?.toList(),
+      'languages': instance.languages.toList(),
       'max_toot_chars': instance.maxTootChars,
       'poll_limits': instance.pollLimits,
       'registrations': instance.registrations,

@@ -12,9 +12,9 @@ class EmojiCategoryWidget extends StatelessWidget {
   final double emojiSize;
 
   const EmojiCategoryWidget({
-    Key key,
-    this.category,
-    this.onEmojiSelected,
+    Key? key,
+    required this.category,
+    required this.onEmojiSelected,
     this.emojiSize = 48,
   }) : super(key: key);
 
@@ -45,16 +45,22 @@ class EmojiCategoryWidget extends StatelessWidget {
               itemCount: category.emojis.length,
               itemBuilder: (context, i) {
                 var emoji = category.emojis.elementAt(i);
-
-                return Tooltip(
-                  message: getTooltip(emoji),
-                  child: IconButton(
-                    icon: EmojiWidget(emoji: emoji, size: emojiSize),
-                    onPressed: () => onEmojiSelected.call(emoji),
-                    splashRadius: emojiSize * 0.75,
-                    iconSize: emojiSize,
-                  ),
+                var tooltip = getTooltip(emoji);
+                var child = IconButton(
+                  icon: EmojiWidget(emoji: emoji, size: emojiSize),
+                  onPressed: () => onEmojiSelected.call(emoji),
+                  splashRadius: emojiSize * 0.75,
+                  iconSize: emojiSize,
                 );
+
+                if (tooltip != null) {
+                  return Tooltip(
+                    message: tooltip,
+                    child: child,
+                  );
+                }
+
+                return child;
               },
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: emojiSize + 24,
@@ -69,7 +75,7 @@ class EmojiCategoryWidget extends StatelessWidget {
   // This method exists because how inconsistent Tooltips can be. One fill the
   // entire tap-able area, some don't. Besides that, it makes no sense to show
   // tooltips on Unicode emoji.
-  String getTooltip(Emoji emoji) {
+  String? getTooltip(Emoji emoji) {
     if (emoji is CustomEmoji) return emoji.toString();
 
     return null;

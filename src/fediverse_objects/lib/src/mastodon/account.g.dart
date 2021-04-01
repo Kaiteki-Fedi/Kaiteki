@@ -19,29 +19,25 @@ MastodonAccount _$MastodonAccountFromJson(Map<String, dynamic> json) {
     header: json['header'] as String,
     headerStatic: json['header_static'] as String,
     locked: json['locked'] as bool,
-    emojis: (json['emojis'] as List)?.map((e) =>
-        e == null ? null : MastodonEmoji.fromJson(e as Map<String, dynamic>)),
+    emojis: (json['emojis'] as List<dynamic>)
+        .map((e) => MastodonEmoji.fromJson(e as Map<String, dynamic>)),
     discoverable: json['discoverable'] as bool,
-    createdAt: json['created_at'] == null
-        ? null
-        : DateTime.parse(json['created_at'] as String),
-    lastStatusAt: json['last_status_at'] == null
-        ? null
-        : DateTime.parse(json['last_status_at'] as String),
+    createdAt: DateTime.parse(json['created_at'] as String),
+    lastStatusAt: DateTime.parse(json['last_status_at'] as String),
     statusesCount: json['statuses_count'] as int,
     followersCount: json['followers_count'] as int,
     followingCount: json['following_count'] as int,
-    moved: json['moved'] as bool,
-    fields: (json['fields'] as List)?.map((e) =>
-        e == null ? null : MastodonField.fromJson(e as Map<String, dynamic>)),
-    bot: json['bot'] as bool,
+    moved: json['moved'] as bool?,
+    fields: (json['fields'] as List<dynamic>?)
+        ?.map((e) => MastodonField.fromJson(e as Map<String, dynamic>)),
+    bot: json['bot'] as bool?,
     source: json['source'] == null
         ? null
         : MastodonSource.fromJson(json['source'] as Map<String, dynamic>),
     pleroma: json['pleroma'] == null
         ? null
         : PleromaAccount.fromJson(json['pleroma'] as Map<String, dynamic>),
-    suspended: json['suspended'] as bool,
+    suspended: json['suspended'] as bool?,
     muteExpiredAt: json['muteExpiredAt'] == null
         ? null
         : DateTime.parse(json['muteExpiredAt'] as String),
@@ -54,9 +50,9 @@ Map<String, dynamic> _$MastodonAccountToJson(MastodonAccount instance) =>
       'avatar': instance.avatar,
       'avatar_static': instance.avatarStatic,
       'bot': instance.bot,
-      'created_at': instance.createdAt?.toIso8601String(),
+      'created_at': instance.createdAt.toIso8601String(),
       'display_name': instance.displayName,
-      'emojis': instance.emojis?.toList(),
+      'emojis': instance.emojis.toList(),
       'fields': instance.fields?.toList(),
       'followers_count': instance.followersCount,
       'following_count': instance.followingCount,
@@ -71,7 +67,7 @@ Map<String, dynamic> _$MastodonAccountToJson(MastodonAccount instance) =>
       'url': instance.url,
       'username': instance.username,
       'discoverable': instance.discoverable,
-      'last_status_at': instance.lastStatusAt?.toIso8601String(),
+      'last_status_at': instance.lastStatusAt.toIso8601String(),
       'moved': instance.moved,
       'suspended': instance.suspended,
       'muteExpiredAt': instance.muteExpiredAt?.toIso8601String(),

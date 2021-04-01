@@ -1,8 +1,6 @@
 part of 'shared_adapter.dart';
 
 Post toPost(MastodonStatus source) {
-  if (source == null) return null;
-
   return Post(
     source: source,
     content: source.content,
@@ -10,9 +8,10 @@ Post toPost(MastodonStatus source) {
     nsfw: source.sensitive,
     subject: source.spoilerText,
     author: toUser(source.account),
-    repeatOf: toPost(source.reblog),
-    repeated: source.reblogged,
-    liked: source.favourited,
+    repeatOf: source.reblog != null ? toPost(source.reblog!) : null,
+    // shouldn't be null because we currently expect the user to be signed in
+    repeated: source.reblogged!,
+    liked: source.favourited!,
     emojis: source.emojis.map(toEmoji),
     attachments: source.mediaAttachments.map(toAttachment),
     likeCount: source.favouritesCount,
@@ -23,25 +22,22 @@ Post toPost(MastodonStatus source) {
     replyToPostId: source.inReplyToId,
     id: source.id,
     externalUrl: source.url,
+    reactions: [], // TODO: add pleroma reactions?
   );
 }
 
 Visibility toVisibility(String visibility) {
   switch (visibility) {
-    case "public":
+    case 'public':
       return Visibility.Public;
-    case "private":
+    case 'private':
       return Visibility.FollowersOnly;
-    case "direct":
+    case 'direct':
       return Visibility.Direct;
-    case "unlisted":
+    case 'unlisted':
       return Visibility.Unlisted;
-
     default:
-      {
-        debugger(message: "Missing case for $visibility");
-        return null;
-      }
+      throw 'Unknown visibility $visibility.';
   }
 }
 
@@ -51,8 +47,22 @@ Attachment toAttachment(MastodonAttachment attachment) {
     description: attachment.description,
     url: attachment.url,
     previewUrl: attachment.previewUrl,
-    type: attachment.type,
+    type: toAttachmentType(attachment.type),
   );
+}
+
+AttachmentType toAttachmentType(String type) {
+  switch (type) {
+    case 'image':
+      return AttachmentType.image;
+    // case 'gifv': return AttachmentType.animated;
+    case 'video':
+      return AttachmentType.video;
+    case 'audio':
+      return AttachmentType.audio;
+    default:
+      return AttachmentType.file;
+  }
 }
 
 CustomEmoji toEmoji(MastodonEmoji emoji) {
@@ -60,13 +70,11 @@ CustomEmoji toEmoji(MastodonEmoji emoji) {
     source: emoji,
     url: emoji.staticUrl,
     name: emoji.shortcode,
-    aliases: emoji.tags,
+    aliases: emoji.tags ?? [],
   );
 }
 
 User toUser(MastodonAccount source) {
-  if (source == null) return null;
-
   return User(
     source: source,
     displayName: source.displayName,
@@ -75,6 +83,11 @@ User toUser(MastodonAccount source) {
     avatarUrl: source.avatar,
     joinDate: source.createdAt,
     id: source.id,
+    description: source.note,
     emojis: source.emojis.map(toEmoji),
+    birthday: null, // Mastodon doesn't support this
+    followerCount: source.followersCount,
+    followingCount: source.followingCount,
+    postCount: source.statusesCount,
   );
 }

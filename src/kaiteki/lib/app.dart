@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/app_colors.dart';
+import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
 import 'package:kaiteki/theming/app_themes/material_app_theme.dart';
@@ -23,9 +23,9 @@ import 'package:provider/provider.dart';
 
 class KaitekiApp extends StatefulWidget {
   const KaitekiApp({
-    this.accountContainer,
-    this.notifications,
-    this.preferences,
+    required this.accountContainer,
+    required this.notifications,
+    required this.preferences,
   });
 
   @override
@@ -33,11 +33,11 @@ class KaitekiApp extends StatefulWidget {
 
   final PreferenceContainer preferences;
   final AccountContainer accountContainer;
-  final FlutterLocalNotificationsPlugin notifications;
+  final FlutterLocalNotificationsPlugin? notifications;
 }
 
 class _KaitekiAppState extends State<KaitekiApp> {
-  ThemeContainer _themeContainer;
+  late ThemeContainer _themeContainer;
 
   @override
   void initState() {
@@ -101,11 +101,11 @@ class _KaitekiAppState extends State<KaitekiApp> {
     );
   }
 
-  Route<dynamic> _generateRoute(RouteSettings settings) {
+  Route<dynamic>? _generateRoute(RouteSettings settings) {
     var loginPrefix = "/login/";
 
-    if (settings.name.startsWith(loginPrefix)) {
-      var id = settings.name.substring(loginPrefix.length);
+    if (settings.name!.startsWith(loginPrefix)) {
+      var id = settings.name!.substring(loginPrefix.length);
       var definition = ApiDefinitions.definitions.firstWhere((o) => o.id == id);
 
       final screen = LoginScreen(
@@ -115,6 +115,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
           definition.theme.primaryColor,
         ),
         onLogin: definition.createAdapter().login,
+        type: definition.type,
       );
 
       return MaterialPageRoute(builder: (_) => screen);

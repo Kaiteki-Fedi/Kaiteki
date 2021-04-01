@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:fediverse_objects/mastodon.dart';
 import 'package:http/http.dart' as http;
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/fediverse/api/responses/mastodon/context_response.dart';
 import 'package:kaiteki/fediverse/api/responses/mastodon/login_response.dart';
-import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
@@ -51,8 +49,8 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
         "username": username,
         "password": password,
         "grant_type": "password",
-        "client_id": authenticationData.clientId,
-        "client_secret": authenticationData.clientSecret,
+        "client_id": authenticationData!.clientId,
+        "client_secret": authenticationData!.clientSecret,
       },
     );
   }
@@ -66,8 +64,8 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
         "mfa_token": mfaToken,
         "code": code.toString(),
         "challenge_type": "totp",
-        "client_id": authenticationData.clientId,
-        "client_secret": authenticationData.clientSecret,
+        "client_id": authenticationData!.clientId,
+        "client_secret": authenticationData!.clientSecret,
       },
     );
   }
@@ -116,13 +114,13 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   }
 
   Future<Iterable<MastodonStatus>> getTimeline({
-    bool local,
-    bool remote,
-    bool onlyMedia,
-    String maxId,
-    String sinceId,
-    String minId,
-    int limit,
+    bool? local,
+    bool? remote,
+    bool? onlyMedia,
+    String? maxId,
+    String? sinceId,
+    String? minId,
+    int? limit,
   }) async {
     var queryParams = {
       'local': local,
@@ -143,9 +141,9 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<MastodonStatus> postStatus(
     String status, {
-    String spoilerText,
-    String contentType,
-    bool pleromaPreview,
+    String? spoilerText,
+    String? contentType,
+    bool? pleromaPreview,
   }) async {
     return await sendJsonRequest(
       HttpMethod.POST,
@@ -163,15 +161,11 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   }
 
   Future<Iterable<MastodonNotification>> getNotifications() async {
-    var response = await http.get(
-      "$baseUrl/api/v1/notifications",
+    return await sendJsonRequestMultiple(
+      HttpMethod.GET,
+      "api/v1/notifications",
+      (j) => MastodonNotification.fromJson(j),
     );
-
-    Utils.checkResponse(response);
-
-    var json = jsonDecode(response.body);
-    return json
-        .map<MastodonNotification>((j) => MastodonNotification.fromJson(j));
   }
 
   Future<ContextResponse> getContext(String id) async {
@@ -198,8 +192,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   @override
   Future<void> setAccountAuthentication(AccountSecret secret) {
     instance = secret.instance;
-    assert(authenticationData != null);
-    authenticationData.accessToken = secret.accessToken;
+    authenticationData!.accessToken = secret.accessToken;
     return Future.value();
   }
 }

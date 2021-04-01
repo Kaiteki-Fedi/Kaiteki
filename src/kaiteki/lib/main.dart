@@ -24,7 +24,7 @@ void main() async {
   var preferences = await SharedPreferences.getInstance();
   AppPreferences appPreferences;
   if (preferences.containsKey('preferences')) {
-    var json = jsonDecode(preferences.getString('preferences'));
+    var json = jsonDecode(preferences.getString('preferences')!);
     appPreferences = AppPreferences.fromJson(json);
   } else {
     appPreferences = AppPreferences();
@@ -52,7 +52,7 @@ void main() async {
 
   await accountContainer.loadAllAccounts();
 
-  FlutterLocalNotificationsPlugin notificationsPlugin;
+  FlutterLocalNotificationsPlugin? notificationsPlugin;
 
   try {
     notificationsPlugin = await initializeNotifications();
@@ -71,7 +71,7 @@ void main() async {
   runApp(app);
 }
 
-Future<FlutterLocalNotificationsPlugin> initializeNotifications() async {
+Future<FlutterLocalNotificationsPlugin?> initializeNotifications() async {
   if (kIsWeb) return null;
 
   var plugin = FlutterLocalNotificationsPlugin();

@@ -8,12 +8,8 @@ part of 'notification.dart';
 
 MastodonNotification _$MastodonNotificationFromJson(Map<String, dynamic> json) {
   return MastodonNotification(
-    account: json['account'] == null
-        ? null
-        : MastodonAccount.fromJson(json['account'] as Map<String, dynamic>),
-    createdAt: json['created_at'] == null
-        ? null
-        : DateTime.parse(json['created_at'] as String),
+    account: MastodonAccount.fromJson(json['account'] as Map<String, dynamic>),
+    createdAt: DateTime.parse(json['created_at'] as String),
     id: json['id'] as String,
     type: json['type'] as String,
     pleroma: json['pleroma'] == null
@@ -29,7 +25,7 @@ Map<String, dynamic> _$MastodonNotificationToJson(
         MastodonNotification instance) =>
     <String, dynamic>{
       'account': instance.account,
-      'created_at': instance.createdAt?.toIso8601String(),
+      'created_at': instance.createdAt.toIso8601String(),
       'id': instance.id,
       'pleroma': instance.pleroma,
       'status': instance.status,

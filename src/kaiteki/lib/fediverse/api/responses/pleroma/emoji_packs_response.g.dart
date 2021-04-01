@@ -10,12 +10,9 @@ PleromaEmojiPacksResponse _$PleromaEmojiPacksResponseFromJson(
     Map<String, dynamic> json) {
   return PleromaEmojiPacksResponse(
     count: json['count'] as int,
-    packs: (json['packs'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(
-          k,
-          e == null
-              ? null
-              : PleromaEmojiPack.fromJson(e as Map<String, dynamic>)),
+    packs: (json['packs'] as Map<String, dynamic>).map(
+      (k, e) =>
+          MapEntry(k, PleromaEmojiPack.fromJson(e as Map<String, dynamic>)),
     ),
   );
 }

@@ -19,14 +19,9 @@ PleromaAccount _$PleromaAccountFromJson(Map<String, dynamic> json) {
     json['hide_follows_count'] as bool,
     json['is_admin'] as bool,
     json['is_moderator'] as bool,
-    json['notification_settings'] == null
-        ? null
-        : PleromaNotificationSettings.fromJson(
-            json['notification_settings'] as Map<String, dynamic>),
-    json['relationship'] == null
-        ? null
-        : PleromaRelationship.fromJson(
-            json['relationship'] as Map<String, dynamic>),
+    PleromaNotificationSettings.fromJson(
+        json['notification_settings'] as Map<String, dynamic>),
+    PleromaRelationship.fromJson(json['relationship'] as Map<String, dynamic>),
     json['skip_thread_containment'] as bool,
     json['unread_conversation_count'] as int,
   );

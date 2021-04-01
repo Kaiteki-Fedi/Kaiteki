@@ -4,10 +4,10 @@ abstract class PagedNetworkStream<T, I> {
   final _controller = StreamController<List<T>>.broadcast();
   final _objects = <T>[];
 
-  I _lastId;
-  Stream<Iterable<T>> stream;
+  I? _lastId;
+  late final Stream<Iterable<T>> stream;
 
-  Future<Iterable<T>> fetchObjects(I firstId, I lastId);
+  Future<Iterable<T>> fetchObjects(I? firstId, I? lastId);
   I takeId(T object);
 
   PagedNetworkStream() {

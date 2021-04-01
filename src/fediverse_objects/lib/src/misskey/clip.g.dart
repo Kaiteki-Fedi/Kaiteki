@@ -9,13 +9,9 @@ part of 'clip.dart';
 MisskeyClip _$MisskeyClipFromJson(Map<String, dynamic> json) {
   return MisskeyClip(
     id: json['id'] as String,
-    createdAt: json['createdAt'] == null
-        ? null
-        : DateTime.parse(json['createdAt'] as String),
+    createdAt: DateTime.parse(json['createdAt'] as String),
     userId: json['userId'] as String,
-    user: json['user'] == null
-        ? null
-        : MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
+    user: MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
     name: json['name'] as String,
     description: json['description'] as String,
     isPublic: json['isPublic'] as bool,
@@ -25,7 +21,7 @@ MisskeyClip _$MisskeyClipFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$MisskeyClipToJson(MisskeyClip instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'createdAt': instance.createdAt?.toIso8601String(),
+      'createdAt': instance.createdAt.toIso8601String(),
       'userId': instance.userId,
       'user': instance.user,
       'name': instance.name,

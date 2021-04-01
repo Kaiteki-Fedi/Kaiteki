@@ -9,7 +9,10 @@ class PleromaEmojiPacksResponse {
 
   final Map<String, PleromaEmojiPack> packs;
 
-  PleromaEmojiPacksResponse({this.count, this.packs});
+  PleromaEmojiPacksResponse({
+    required this.count,
+    required this.packs,
+  });
 
   factory PleromaEmojiPacksResponse.fromJson(Map<String, dynamic> json) =>
       _$PleromaEmojiPacksResponseFromJson(json);

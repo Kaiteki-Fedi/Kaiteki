@@ -18,15 +18,17 @@ class ImageAttachmentWidget extends StatelessWidget {
         child: Image.network(
           attachment.previewUrl ?? attachment.url,
           loadingBuilder: (_, w, c) {
-            if (c == null ||
-                c.cumulativeBytesLoaded == null ||
-                c.expectedTotalBytes == null) {
+            if (c == null) {
               return w;
             }
 
+            var hasValue = c.expectedTotalBytes != null;
+
             return Center(
               child: CircularProgressIndicator(
-                value: c.cumulativeBytesLoaded / c.expectedTotalBytes,
+                value: hasValue
+                    ? (c.cumulativeBytesLoaded / c.expectedTotalBytes!)
+                    : null,
               ),
             );
           },

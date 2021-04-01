@@ -12,8 +12,8 @@ MastodonEmoji _$MastodonEmojiFromJson(Map<String, dynamic> json) {
     url: json['url'] as String,
     staticUrl: json['static_url'] as String,
     visibleInPicker: json['visible_in_picker'] as bool,
-    category: json['category'] as String,
-    tags: (json['tags'] as List)?.map((e) => e as String),
+    category: json['category'] as String?,
+    tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String),
   );
 }
 

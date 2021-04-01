@@ -13,8 +13,8 @@ class TextRendererTheme {
 
   factory TextRendererTheme.fromContext(
     BuildContext context, {
-    FontStyle fontStyle,
-    FontWeight fontWeight,
+    FontStyle? fontStyle,
+    FontWeight? fontWeight,
   }) {
     var themeContainer = Provider.of<ThemeContainer>(context);
     var theme = themeContainer.current;

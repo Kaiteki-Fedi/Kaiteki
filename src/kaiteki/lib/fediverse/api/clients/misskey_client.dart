@@ -25,20 +25,27 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   static var _logger = getLogger("MisskeyClient");
 
   Future<MisskeyCreateAppResponse> createApp(
-      String name, String description, List<String> permissions,
-      {String callbackUrl,}) async {
-    return await sendJsonRequest(HttpMethod.POST, "api/app/create",
-        (json) => MisskeyCreateAppResponse.fromJson(json),
-        body: {
-          "name": name,
-          "description": description,
-          "permission": permissions,
-          "callbackUrl": callbackUrl
-        },);
+    String name,
+    String description,
+    List<String> permissions, {
+    String? callbackUrl,
+  }) async {
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/app/create",
+      (json) => MisskeyCreateAppResponse.fromJson(json),
+      body: {
+        "name": name,
+        "description": description,
+        "permission": permissions,
+        "callbackUrl": callbackUrl
+      },
+    );
   }
 
   Future<MisskeyGenerateSessionResponse> generateSession(
-      String appSecret,) async {
+    String appSecret,
+  ) async {
     return await sendJsonRequest(
       HttpMethod.POST,
       "/api/auth/session/generate",
@@ -68,7 +75,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
-  Future<MisskeyUser> showUser(String userId) async {
+  Future<MisskeyUser?> showUser(String userId) async {
     return await sendJsonRequest(
       HttpMethod.POST,
       "api/users/show",
@@ -77,13 +84,19 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
-  Future<MisskeyUser> showUserByName(String username, [String instance]) async {
+  Future<MisskeyUser> showUserByName(
+    String username, [
+    String? instance,
+  ]) async {
     var body = {"username": username};
 
-    if (body.containsKey(instance)) body["instance"] = instance;
+    if (instance != null) body["instance"] = instance;
 
-    return await sendJsonRequest(HttpMethod.POST, "api/users/show",
-        (json) => MisskeyUser.fromJson(json));
+    return await sendJsonRequest(
+      HttpMethod.POST,
+      "api/users/show",
+      (json) => MisskeyUser.fromJson(json),
+    );
   }
 
   Future<Iterable<MisskeyNote>> showUserNotes(
@@ -159,7 +172,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   @override
   void checkResponse(StreamedResponse response) async {
     if (Utils.isUnsuccessfulStatusCode(response.statusCode)) {
-      MisskeyError mkErr;
+      MisskeyError? mkErr;
 
       try {
         var body = await response.stream.bytesToString();
@@ -167,8 +180,9 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
         mkErr = MisskeyError.fromJson(json["error"]);
       } catch (ex) {
         _logger.e(
-            "Failed to gather Misskey error object from erroneous response.",
-            ex);
+          "Failed to gather Misskey error object from erroneous response.",
+          ex,
+        );
       }
 
       if (mkErr != null) {
