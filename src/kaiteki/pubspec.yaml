@@ -30,8 +30,8 @@ dependencies:
   html: ^0.15.0
   http: ^0.13.1
   json_annotation: any
-  mdi: ^4.0.0
   logger: ^1.0.0
+  mdi: ^5.0.0-nullsafety.0
   provider: ^5.0.0
   shared_preferences: ^2.0.5
   supercharged: ^2.0.0
