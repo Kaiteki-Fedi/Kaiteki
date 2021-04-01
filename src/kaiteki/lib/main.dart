@@ -11,11 +11,9 @@ import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/repositories/secret_storages/shared_preferences_secret_storage.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  LogConsole.init(bufferSize: 30);
   var logger = getLogger('Kaiteki');
 
   // we need to run this to be able to get access to SharedPreferences

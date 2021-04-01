@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 import 'package:mdi/mdi.dart';
 
 class DebugScreen extends StatefulWidget {
@@ -31,16 +30,6 @@ class _DebugScreenState extends State<DebugScreen> {
               ),
               dense: true,
             ),
-          ),
-          ListTile(
-            leading: Icon(Mdi.textBox),
-            title: Text("Open log console"),
-            onTap: () {
-              Navigator.of(context).push(new MaterialPageRoute(builder: (_) {
-                var dark = Theme.of(context).brightness == Brightness.dark;
-                return LogConsole(dark: dark, showCloseButton: true);
-              }));
-            },
           ),
           ListTile(
             leading: Icon(Mdi.wrench),
