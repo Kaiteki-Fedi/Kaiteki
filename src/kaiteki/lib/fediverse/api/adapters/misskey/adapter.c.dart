@@ -78,7 +78,7 @@ User toUser(MisskeyUser source) {
   return User(
     source: source,
     username: source.username,
-    displayName: source.name ?? source.username,
+    displayName: source.name, // ?? source.username
     joinDate: source.createdAt,
     emojis: source.emojis.map(toEmoji),
     avatarUrl: source.avatarUrl,

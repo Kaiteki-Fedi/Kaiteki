@@ -16,7 +16,7 @@ class ImageAttachmentWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: borderRadius,
         child: Image.network(
-          attachment.previewUrl ?? attachment.url,
+          attachment.previewUrl, // ?? attachment.url
           loadingBuilder: (_, w, c) {
             if (c == null) {
               return w;
