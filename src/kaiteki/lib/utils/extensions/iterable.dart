@@ -1,5 +1,5 @@
 extension IterableExtensions<T> on Iterable<T> {
-  T firstOrDefault(bool test(T element)) {
+  T? firstOrDefault(bool test(T element)) {
     for (T element in this) {
       if (test(element)) return element;
     }
@@ -16,7 +16,7 @@ extension IterableExtensions<T> on Iterable<T> {
         map[key] = <T>[];
       }
 
-      map[key].add(element);
+      map[key]!.add(element);
     }
 
     return map;

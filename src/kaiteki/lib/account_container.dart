@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
+import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
@@ -11,12 +11,12 @@ import 'package:kaiteki/repositories/client_secret_repository.dart';
 class AccountContainer extends ChangeNotifier {
   static var _logger = getLogger("AccountContainer");
 
-  AccountCompound _currentAccount;
-  AccountCompound get currentAccount => _currentAccount;
+  AccountCompound? _currentAccount;
+  AccountCompound get currentAccount => _currentAccount!;
 
   String get instance => currentAccount.clientSecret.instance;
   FediverseAdapter get adapter => currentAccount.adapter;
-  bool get loggedIn => currentAccount != null;
+  bool get loggedIn => _currentAccount != null;
 
   final AccountSecretRepository _accountSecrets;
   final ClientSecretRepository _clientSecrets;
@@ -66,21 +66,17 @@ class AccountContainer extends ChangeNotifier {
   }
 
   Future<void> _restoreSession(AccountSecret accountSecret) async {
-    assert(accountSecret != null);
-
     var instance = accountSecret.instance;
-    var clientSecret = _clientSecrets.get(instance);
+    var clientSecret = _clientSecrets.get(instance)!;
 
     _logger.d("Trying to recover a ${clientSecret.apiType} account");
 
-    assert(clientSecret != null && clientSecret.apiType != null);
-
-    var adapter = ApiDefinitions.byType(clientSecret.apiType).createAdapter();
+    var adapter = ApiDefinitions.byType(clientSecret.apiType!).createAdapter();
     await adapter.client.setClientAuthentication(clientSecret);
     await adapter.client.setAccountAuthentication(accountSecret);
 
     // restoring user object
-    User user;
+    User? user;
     try {
       user = await adapter.getMyself();
     } catch (ex) {
@@ -98,7 +94,6 @@ class AccountContainer extends ChangeNotifier {
       account: user,
       clientSecret: clientSecret,
       accountSecret: accountSecret,
-      instanceType: clientSecret.apiType,
     );
 
     _accounts.add(compound);

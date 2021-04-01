@@ -194,10 +194,10 @@ class AppNameBadge extends StatelessWidget {
   final Color textColor;
 
   const AppNameBadge({
-    this.text,
-    this.color,
-    this.textColor,
-    Key key,
+    required this.text,
+    required this.color,
+    required this.textColor,
+    Key? key,
   }) : super(key: key);
 
   @override

@@ -4,15 +4,15 @@ import 'package:mdi/mdi.dart';
 
 class LoginForm extends StatefulWidget {
   LoginForm({
-    Key key,
-    this.instanceController,
-    this.usernameController,
-    this.passwordController,
-    this.onValidateInstance,
-    this.onValidateUsername,
-    this.onValidatePassword,
-    this.onLogin,
-    this.onRegister,
+    Key? key,
+    required this.instanceController,
+    required this.usernameController,
+    required this.passwordController,
+    required this.onValidateInstance,
+    required this.onValidateUsername,
+    required this.onValidatePassword,
+    required this.onLogin,
+    required this.onRegister,
     this.currentError,
   }) : super(key: key);
 
@@ -20,14 +20,14 @@ class LoginForm extends StatefulWidget {
   final TextEditingController usernameController;
   final TextEditingController passwordController;
 
-  final FormFieldValidator<String> onValidateInstance;
-  final FormFieldValidator<String> onValidateUsername;
-  final FormFieldValidator<String> onValidatePassword;
+  final FormFieldValidator<String?> onValidateInstance;
+  final FormFieldValidator<String?> onValidateUsername;
+  final FormFieldValidator<String?> onValidatePassword;
 
   final VoidCallback onLogin;
   final VoidCallback onRegister;
 
-  final String currentError;
+  final String? currentError;
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -109,8 +109,10 @@ class _LoginFormState extends State<LoginForm> {
             if (widget.currentError != null)
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(widget.currentError,
-                    style: TextStyle(color: theme.errorColor)),
+                child: Text(
+                  widget.currentError!,
+                  style: TextStyle(color: theme.errorColor),
+                ),
               ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

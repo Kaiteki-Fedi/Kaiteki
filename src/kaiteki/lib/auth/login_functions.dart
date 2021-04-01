@@ -32,8 +32,8 @@ class LoginFunctions {
 
     var clientSecret = ClientSecret(
       instance,
-      application.clientId,
-      application.clientSecret,
+      application.clientId!,
+      application.clientSecret!,
       apiType: client.type,
     );
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -15,13 +16,13 @@ import 'package:kaiteki/ui/widgets/posts/count_button.dart';
 import 'package:kaiteki/ui/widgets/posts/interaction_event_bar.dart';
 import 'package:kaiteki/ui/widgets/posts/reaction_row.dart';
 import 'package:kaiteki/utils/extensions/duration.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class StatusWidget extends StatelessWidget {
   final Post _post;
@@ -54,20 +55,23 @@ class StatusWidget extends StatelessWidget {
             userTextStyle: authorTextStyle,
             textStyle: textStyle,
           ),
-          StatusWidget(_post.repeatOf),
+          StatusWidget(_post.repeatOf!),
         ],
       );
     }
 
-    var renderedAuthor = TextRenderer(
+    InlineSpan renderedAuthor = TextRenderer(
       emojis: _post.author.emojis,
       theme: authorTextTheme,
     ).renderFromHtml(_post.author.displayName);
+    InlineSpan? renderedContent;
 
-    var renderedContent = TextRenderer(
-      emojis: _post.emojis,
-      theme: postTextTheme,
-    ).renderFromHtml(_post.content);
+    if (_post.content.isNotNullOrEmpty) {
+      renderedContent = TextRenderer(
+        emojis: _post.emojis,
+        theme: postTextTheme,
+      ).renderFromHtml(_post.content!);
+    }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,16 +100,16 @@ class StatusWidget extends StatelessWidget {
 
                 if (_post.attachments != null)
                   AttachmentRow(
-                    attachments: _post.attachments.toList(growable: false),
+                    attachments: _post.attachments!.toList(growable: false),
                   ),
 
                 if (_post.previewCard != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: CardWidget(card: _post.previewCard),
+                    child: CardWidget(card: _post.previewCard!),
                   ),
 
-                if (_post.reactions != null)
+                if (_post.reactions != null && _post.reactions.isNotEmpty)
                   ReactionRow(_post, _post.reactions),
 
                 InteractionBar(post: _post, theme: theme),
@@ -121,11 +125,11 @@ class StatusWidget extends StatelessWidget {
 
 class MetaBar extends StatelessWidget {
   const MetaBar({
-    Key key,
-    @required this.renderedAuthor,
-    @required Post post,
-    @required this.theme,
-  })  : _post = post,
+    Key? key,
+    required this.renderedAuthor,
+    required Post post,
+    required this.theme,
+  })   : _post = post,
         super(key: key);
 
   final InlineSpan renderedAuthor;
@@ -136,29 +140,36 @@ class MetaBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (renderedAuthor != null) RichText(text: renderedAuthor),
-        Padding(
-          padding: const EdgeInsets.only(left: 6),
-          child: Text(
-            _post.author.username,
-            style: TextStyle(
-              color: theme.materialTheme.disabledColor,
-            ),
+        Expanded(
+          child: Row(
+            children: [
+              // if (renderedAuthor != null)
+              RichText(text: renderedAuthor),
+              Padding(
+                padding: const EdgeInsets.only(left: 6),
+                child: Text(
+                  _post.author.username,
+                  style: TextStyle(
+                    color: theme.materialTheme.disabledColor,
+                  ),
+                  overflow: TextOverflow.fade,
+                ),
+              ),
+            ],
           ),
         ),
-        Spacer(),
         Text(
           DateTime.now().difference(_post.postedAt).toStringHuman(),
           style: TextStyle(
             color: theme.materialTheme.disabledColor,
           ),
         ),
-        if (_post.visibility != null)
-          Icon(
-            _post.visibility.toIconData(),
-            size: 20,
-            color: theme.materialTheme.disabledColor,
-          ),
+        // if (_post.visibility != null)
+        Icon(
+          _post.visibility.toIconData(),
+          size: 20,
+          color: theme.materialTheme.disabledColor,
+        ),
       ],
     );
   }
@@ -166,10 +177,10 @@ class MetaBar extends StatelessWidget {
 
 class ReplyBar extends StatelessWidget {
   const ReplyBar({
-    Key key,
-    @required this.textStyle,
-    @required Post post,
-  })  : _post = post,
+    Key? key,
+    required this.textStyle,
+    required Post post,
+  })   : _post = post,
         super(key: key);
 
   final TextStyle textStyle;
@@ -205,10 +216,10 @@ class ReplyBar extends StatelessWidget {
 
 class InteractionBar extends StatelessWidget {
   const InteractionBar({
-    Key key,
-    @required Post post,
-    @required this.theme,
-  })  : _post = post,
+    Key? key,
+    required Post post,
+    required this.theme,
+  })   : _post = post,
         super(key: key);
 
   final Post _post;
@@ -256,7 +267,7 @@ class InteractionBar extends StatelessWidget {
                   enabled: openInBrowserAvailable,
                 ),
                 value: () async {
-                  await launch(_post.externalUrl);
+                  await launch(_post.externalUrl!);
                 },
               ),
             ];
@@ -271,8 +282,8 @@ class AttachmentRow extends StatelessWidget {
   final List<Attachment> attachments;
 
   const AttachmentRow({
-    Key key,
-    @required this.attachments,
+    Key? key,
+    required this.attachments,
   }) : super(key: key);
 
   @override
@@ -306,10 +317,12 @@ class AttachmentRow extends StatelessWidget {
   Widget getAttachmentWidget(Attachment attachment) {
     var supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
 
-    if (attachment.type == 'image') return ImageAttachmentWidget(attachment);
-    if (attachment.type == 'video' && supportsVideoPlayer)
+    if (attachment.type == AttachmentType.image) {
+      return ImageAttachmentWidget(attachment);
+    } else if (attachment.type == AttachmentType.video && supportsVideoPlayer) {
       return VideoAttachmentWidget(attachment: attachment);
-    else
+    } else {
       return FallbackAttachmentWidget(attachment: attachment);
+    }
   }
 }

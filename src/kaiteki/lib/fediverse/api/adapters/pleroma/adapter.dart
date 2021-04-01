@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/pleroma/chat_message.dart';
+import 'package:fediverse_objects/pleroma.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/mastodon/shared_adapter.dart';
@@ -16,7 +16,7 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
     implements ChatSupport, ReactionSupport {
   PleromaAdapter._(PleromaClient client) : super(client);
 
-  factory PleromaAdapter({PleromaClient client}) {
+  factory PleromaAdapter({PleromaClient? client}) {
     return PleromaAdapter._(client ?? PleromaClient());
   }
 
@@ -25,13 +25,13 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
     // TODO implement missing data, pleroma chat.
     var sentMessage = await client.postChatMessage(
       chat.id,
-      message.content.content,
+      message.content.content!,
     );
     return toChatMessage(sentMessage);
   }
 
   @override
-  Future<User> getUser(String username, [String instance]) {
+  Future<User> getUser(String username, [String? instance]) {
     throw UnimplementedError();
   }
 

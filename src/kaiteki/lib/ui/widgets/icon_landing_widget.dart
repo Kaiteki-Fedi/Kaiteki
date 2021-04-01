@@ -7,7 +7,7 @@ class IconLandingWidget extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const IconLandingWidget({this.icon, this.text, Key key}) : super(key: key);
+  const IconLandingWidget(this.icon, this.text, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,9 @@ class IconLandingWidget extends StatelessWidget {
         Text(
           text,
           style: TextStyle(
-              color: theme.textTheme.bodyText1.color.withOpacity(.75),
-              fontWeight: FontWeight.bold),
+            color: theme.textTheme.bodyText1?.color?.withOpacity(.75),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );

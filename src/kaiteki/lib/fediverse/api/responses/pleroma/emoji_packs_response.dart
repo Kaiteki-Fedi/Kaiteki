@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/pleroma/emoji_pack.dart';
+import 'package:fediverse_objects/pleroma.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'emoji_packs_response.g.dart';
@@ -9,7 +9,10 @@ class PleromaEmojiPacksResponse {
 
   final Map<String, PleromaEmojiPack> packs;
 
-  PleromaEmojiPacksResponse({this.count, this.packs});
+  PleromaEmojiPacksResponse({
+    required this.count,
+    required this.packs,
+  });
 
   factory PleromaEmojiPacksResponse.fromJson(Map<String, dynamic> json) =>
       _$PleromaEmojiPacksResponseFromJson(json);

@@ -12,7 +12,7 @@ abstract class AuthenticationData {
 class MastodonAuthenticationData implements AuthenticationData {
   String clientId;
   String clientSecret;
-  String accessToken;
+  String? accessToken;
 
   MastodonAuthenticationData(
     this.clientId,

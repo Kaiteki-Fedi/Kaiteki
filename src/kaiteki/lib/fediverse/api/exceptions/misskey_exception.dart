@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/misskey/error.dart';
+import 'package:fediverse_objects/misskey.dart';
 import 'package:kaiteki/fediverse/api/exceptions/api_exception.dart';
 
 class MisskeyException extends ApiException {
@@ -8,7 +8,7 @@ class MisskeyException extends ApiException {
 
   @override
   String toString() {
-    if (error?.message != null) return error.message;
+    if (error.error["message"] != null) return error.error["message"];
 
     return super.toString();
   }

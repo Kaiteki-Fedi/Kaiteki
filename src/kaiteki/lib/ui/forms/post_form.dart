@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/fediverse/model/formatting.dart';
+import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class PostForm extends StatefulWidget {
-  final Post replyTo;
+  final Post? replyTo;
 
-  const PostForm({Key key, this.replyTo}) : super(key: key);
+  const PostForm({Key? key, this.replyTo}) : super(key: key);
 
   @override
   _PostFormState createState() => _PostFormState();
@@ -107,13 +107,19 @@ class _PostFormState extends State<PostForm> {
   }
 
   void post(FediverseAdapter adapter) async {
-    await adapter.postStatus(
-      Post(
-        content: bodyController.value.text,
-        formatting: Formatting.PlainText,
-      ),
-      parentPost: widget.replyTo,
-    );
+    // await adapter.postStatus(
+    //   Post(
+    //     content: bodyController.value.text,
+    //     formatting: Formatting.PlainText,
+    //     author: null,
+    //     visibility: null,
+    //     id: '',
+    //     reactions: null,
+    //     postedAt: null,
+    //     source: null,
+    //   ),
+    //   parentPost: widget.replyTo,
+    // );
   }
 
   void openEmojiPicker(BuildContext context, AccountContainer container) {
@@ -128,7 +134,7 @@ class _PostFormState extends State<PostForm> {
             height: 250,
             child: FutureBuilder(
               future: container.adapter.getEmojis(),
-              builder: (c, s) {
+              builder: (c, AsyncSnapshot<Iterable<EmojiCategory>> s) {
                 if (s.hasError) {
                   print(s.error);
                   return Center(child: Text("Failed to fetch emojis."));
@@ -138,7 +144,7 @@ class _PostFormState extends State<PostForm> {
                   return Center(child: CircularProgressIndicator());
 
                 return EmojiSelector(
-                  categories: s.data,
+                  categories: s.data!,
                   onEmojiSelected: (emoji) {
                     bodyController.text =
                         bodyController.text += emoji.toString();

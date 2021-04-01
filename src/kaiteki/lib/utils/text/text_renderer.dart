@@ -4,8 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parseFragment;
-import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/text/text_buffer.dart';
@@ -18,14 +18,14 @@ class TextRenderer {
   static const String emojiChar = ":";
   static var _logger = getLogger("TextRenderer");
 
-  final Iterable<Emoji> emojis;
+  final Iterable<Emoji>? emojis;
   final TextRendererTheme theme;
 
-  Map<String, HtmlConstructor> htmlConstructors;
-  bool hasEmoji;
+  late final Map<String, HtmlConstructor> htmlConstructors;
+  late final bool hasEmoji;
 
-  TextRenderer({this.emojis, this.theme}) {
-    hasEmoji = emojis != null && emojis.length != 0;
+  TextRenderer({this.emojis, required this.theme}) {
+    hasEmoji = emojis != null || emojis!.length != 0;
 
     htmlConstructors = {
       "a": renderLink,
@@ -33,16 +33,12 @@ class TextRenderer {
   }
 
   InlineSpan renderFromHtml(String text) {
-    if (text == null) {
-      return null;
-    } else {
-      var fragment = parseFragment(text);
-      return renderNode(fragment);
-    }
+    var fragment = parseFragment(text);
+    return renderNode(fragment);
   }
 
   /// This method takes care of parsing emojis and other formatting.
-  InlineSpan renderText(String text, {List<InlineSpan> children}) {
+  InlineSpan renderText(String text, {List<InlineSpan>? children}) {
     var spans = <InlineSpan>[];
     var buffer = TextBuffer();
 
@@ -54,7 +50,7 @@ class TextRenderer {
         // If the condition below is true, we should've finished reading the
         // name of an emoji.
         if (readingEmoji) {
-          var emoji = emojis.firstOrDefault((e) => e.name == buffer.text);
+          var emoji = emojis!.firstOrDefault((e) => e.name == buffer.text);
 
           if (emoji == null || !(emoji is CustomEmoji)) {
             // nothing found, so we restore the stolen colon and
@@ -88,21 +84,21 @@ class TextRenderer {
       spans.add(_plain(buffer));
     }
 
-    return TextSpan(children: spans..addAll(children));
+    return TextSpan(children: spans..addAll(children ?? []));
   }
 
   InlineSpan renderNode(dom.Node node) {
-    InlineSpan resultingSpan;
+    InlineSpan? resultingSpan;
 
     var renderedSubNodes = node.nodes
         .map<InlineSpan>((n) => renderNode(n))
         .toList(growable: false);
 
     if (node is dom.Element) {
-      var tag = node.localName.toLowerCase();
+      var tag = node.localName!.toLowerCase();
 
       if (htmlConstructors.containsKey(tag)) {
-        resultingSpan = htmlConstructors[tag].call(node);
+        resultingSpan = htmlConstructors[tag]!.call(node);
       } else {
         _logger.w("Unhandled HTML tag ($tag)");
       }
@@ -130,7 +126,7 @@ class TextRenderer {
       // node.classes.contains("mention")
 
       var linkTarget = element.attributes["href"];
-      launch(linkTarget);
+      launch(linkTarget!);
     };
 
     return TextSpan(

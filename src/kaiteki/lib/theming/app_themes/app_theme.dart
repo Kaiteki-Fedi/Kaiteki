@@ -24,19 +24,19 @@ class AppTheme {
   final ThemeData materialTheme;
 
   const AppTheme({
-    this.materialTheme,
-    this.linkColor,
-    this.repeatColor,
-    this.favoriteColor,
-    this.borderColor,
-    this.textColor,
-    this.incomingChatMessage,
-    this.outgoingChatMessage,
-    this.chatMessageRounding,
-    this.reactionInactiveBackground,
-    this.reactionInactiveTextStyle,
-    this.reactionActiveBackground,
-    this.reactionActiveTextStyle,
+    required this.materialTheme,
+    required this.linkColor,
+    required this.repeatColor,
+    required this.favoriteColor,
+    required this.borderColor,
+    required this.textColor,
+    required this.incomingChatMessage,
+    required this.outgoingChatMessage,
+    required this.chatMessageRounding,
+    required this.reactionInactiveBackground,
+    required this.reactionInactiveTextStyle,
+    required this.reactionActiveBackground,
+    required this.reactionActiveTextStyle,
   });
 
   static AppTheme of(BuildContext context, {bool listen = false}) {
@@ -49,5 +49,8 @@ class ChatMessageTheme {
   final Color background;
   final Color border;
 
-  const ChatMessageTheme({this.background, this.border});
+  const ChatMessageTheme({
+    required this.background,
+    required this.border,
+  });
 }

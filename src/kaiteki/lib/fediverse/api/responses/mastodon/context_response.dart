@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/mastodon/status.dart';
+import 'package:fediverse_objects/mastodon.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'context_response.g.dart';
 
@@ -10,5 +10,6 @@ class ContextResponse {
 
   const ContextResponse(this.ancestors, this.descendants);
 
-  factory ContextResponse.fromJson(Map<String, dynamic> json) => _$ContextResponseFromJson(json);
+  factory ContextResponse.fromJson(Map<String, dynamic> json) =>
+      _$ContextResponseFromJson(json);
 }

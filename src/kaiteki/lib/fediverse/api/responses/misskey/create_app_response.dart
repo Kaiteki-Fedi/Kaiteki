@@ -1,15 +1,25 @@
-class MisskeyCreateAppResponse {
-  String id;
-  String name;
-  String callbackUrl;
-  List<String> permission;
-  String secret;
+import 'package:json_annotation/json_annotation.dart';
 
-  MisskeyCreateAppResponse.fromJson(Map<String, dynamic> json) {
-    id = json["id"];
-    name = json["name"];
-    callbackUrl = json["callbackUrl"];
-    permission = json["permission"].cast<String>();
-    secret = json["secret"];
-  }
+part 'create_app_response.g.dart';
+
+@JsonSerializable()
+class MisskeyCreateAppResponse {
+  final String id;
+  final String name;
+  final String callbackUrl;
+  final List<String> permission;
+  final String secret;
+
+  MisskeyCreateAppResponse({
+    required this.id,
+    required this.name,
+    required this.callbackUrl,
+    required this.permission,
+    required this.secret,
+  });
+
+  factory MisskeyCreateAppResponse.fromJson(Map<String, dynamic> json) =>
+      _$MisskeyCreateAppResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MisskeyCreateAppResponseToJson(this);
 }

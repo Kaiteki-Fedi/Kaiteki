@@ -1,9 +1,4 @@
-import 'dart:developer';
-
-import 'package:fediverse_objects/misskey/emoji.dart';
-import 'package:fediverse_objects/misskey/file.dart';
-import 'package:fediverse_objects/misskey/note.dart';
-import 'package:fediverse_objects/misskey/user.dart';
+import 'package:fediverse_objects/misskey.dart';
 import 'package:kaiteki/account_container.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
@@ -11,11 +6,6 @@ import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart'
 import 'package:kaiteki/fediverse/api/clients/misskey_client.dart';
 import 'package:kaiteki/fediverse/api/requests/misskey/sign_in.dart';
 import 'package:kaiteki/fediverse/api/requests/misskey/timeline.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/authentication_data.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/chat.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
@@ -27,6 +17,11 @@ import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:kaiteki/model/auth/account_secret.dart';
+import 'package:kaiteki/model/auth/authentication_data.dart';
+import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 
 part 'adapter.c.dart';
@@ -36,19 +31,19 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     implements ChatSupport, ReactionSupport {
   MisskeyAdapter._(MisskeyClient client) : super(client);
 
-  factory MisskeyAdapter({MisskeyClient client}) {
+  factory MisskeyAdapter({MisskeyClient? client}) {
     return MisskeyAdapter._(client ?? MisskeyClient());
   }
 
   @override
-  Future<User> getUser(String username, [String instance]) async {
+  Future<User> getUser(String username, [String? instance]) async {
     var mkUser = await client.showUserByName(username, instance);
     return toUser(mkUser);
   }
 
   @override
   Future<User> getUserById(String id) async {
-    return toUser(await client.showUser(id));
+    return toUser((await client.showUser(id))!);
   }
 
   @override
@@ -56,10 +51,12 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       mfaCallback, AccountContainer accounts) async {
     client.instance = instance;
 
-    var authResponse = await client.signIn(MisskeySignInRequest(
-      username: username,
-      password: password,
-    ));
+    var authResponse = await client.signIn(
+      MisskeySignInRequest(
+        username: username,
+        password: password,
+      ),
+    );
 
     var mkClientSecret = ClientSecret(instance, "", "", apiType: client.type);
 
@@ -87,7 +84,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Post> postStatus(Post post, {Post parentPost}) {
+  Future<Post> postStatus(Post post, {Post? parentPost}) {
     throw UnimplementedError();
   }
 
@@ -103,7 +100,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<Post>> getTimeline(TimelineType type,
-      {String sinceId, String untilId}) async {
+      {String? sinceId, String? untilId}) async {
     Iterable<MisskeyNote> notes;
 
     var request = MisskeyTimelineRequest(sinceId: sinceId, untilId: untilId);
@@ -163,7 +160,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     if (emoji is CustomEmoji)
       emojiName = ':' + emoji.name + ':';
     else if (emoji is UnicodeEmoji)
-      emojiName = emoji.source;
+      emojiName = emoji.source!;
     else
       return;
 
@@ -184,7 +181,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     var instanceMeta = await client.getInstanceMeta();
     var emojiCategories = instanceMeta.emojis.groupBy((e) => e.category);
     return emojiCategories.entries.map(
-      (kv) => EmojiCategory(kv.key, kv.value.map(toEmoji)),
+      (kv) => EmojiCategory(kv.key!, kv.value.map(toEmoji)),
     );
   }
 

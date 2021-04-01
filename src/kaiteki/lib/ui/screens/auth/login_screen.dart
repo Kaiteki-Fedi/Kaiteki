@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
+import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/ui/forms/login_form.dart';
 import 'package:kaiteki/ui/screens/auth/mfa_screen.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
+import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({
-    this.image,
-    this.onLogin,
-    this.theme,
-    this.type,
-    Key key,
+    required this.image,
+    required this.onLogin,
+    required this.theme,
+    required this.type,
+    Key? key,
   }) : super(key: key);
 
   final ImageProvider image;
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   bool _loading = false;
-  String _error;
+  String? _error;
 
   @override
   Widget build(BuildContext context) {
@@ -80,34 +81,35 @@ class _LoginScreenState extends State<LoginScreen> {
       onValidatePassword: validatePassword,
       currentError: _error,
       onLogin: loginButtonPress,
+      onRegister: () {/* we don't have registering yet lol */},
       instanceController: _instanceController,
       usernameController: _usernameController,
       passwordController: _passwordController,
     );
   }
 
-  String validateInstance(String instance) {
-    if (instance.isEmpty) {
+  String? validateInstance(String? instance) {
+    if (instance.isNullOrEmpty) {
       return "Please enter an instance";
     }
 
-    var lowerCase = instance.toLowerCase();
+    var lowerCase = instance!.toLowerCase();
     if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://"))
       return "Please only provide the domain name";
 
     return null;
   }
 
-  String validatePassword(String password) {
-    if (password.isEmpty) {
+  String? validatePassword(String? password) {
+    if (password.isNullOrEmpty) {
       return "Please enter a password";
     }
 
     return null;
   }
 
-  String validateUsername(String username) {
-    if (username.isEmpty) {
+  String? validateUsername(String? username) {
+    if (username.isNullOrEmpty) {
       return "Please enter an username";
     }
 

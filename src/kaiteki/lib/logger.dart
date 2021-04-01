@@ -10,23 +10,26 @@ class KaitekiLogPrinter extends LogPrinter {
   KaitekiLogPrinter(this.category);
 
   @override
-  void log(LogEvent event) {
+  List<String> log(LogEvent event) {
+    var lines = <String>[];
     var color = PrettyPrinter.levelColors[event.level];
 
     if (event.error != null) {
-      println('=====');
+      lines.add('=====');
     }
 
-    println(color('[$category] ${event.message}'));
+    lines.add(color!('[$category] ${event.message}'));
 
     if (event.error != null) {
-      println(event.error.toString());
+      lines.add(event.error.toString());
 
       if (event.stackTrace != null) {
-        println(event.stackTrace.toString());
+        lines.add(event.stackTrace.toString());
       }
 
-      println('=====');
+      lines.add('=====');
     }
+
+    return lines;
   }
 }

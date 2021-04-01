@@ -8,9 +8,9 @@ class ChatMessage {
   final Iterable<User> recipients;
 
   const ChatMessage({
-    this.user,
-    this.content,
-    this.recipients,
-    this.sentAt,
+    required this.user,
+    required this.content,
+    required this.recipients,
+    required this.sentAt,
   });
 }

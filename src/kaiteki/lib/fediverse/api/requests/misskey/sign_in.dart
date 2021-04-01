@@ -1,19 +1,25 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'sign_in.g.dart';
 
-@JsonSerializable(createFactory: false)
+/// Defines the body as object for the "signin" endpoint on Misskey.
+/// Reference: https://github.com/syuilo/misskey/blob/develop/src/server/api/private/signin.ts
+@JsonSerializable()
 class MisskeySignInRequest {
   final String username;
 
   final String password;
 
-  final String token;
+  final String? token;
 
   const MisskeySignInRequest({
-    this.username,
-    this.password,
+    required this.username,
+    required this.password,
     this.token,
   });
+
+  factory MisskeySignInRequest.fromJson(Map<String, dynamic> json) =>
+      _$MisskeySignInRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$MisskeySignInRequestToJson(this);
 }

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/theming/app_theme_source.dart';
+import 'package:kaiteki/theming/app_themes/app_theme.dart';
 
 /// A class that contains and handles theming.
 class ThemeContainer extends ChangeNotifier {
   ThemeContainer(AppThemeSource initialTheme) {
-    source = initialTheme;
+    _source = initialTheme;
   }
 
-  AppThemeSource _source;
+  late AppThemeSource _source;
   AppThemeSource get source => _source;
   set source(AppThemeSource source) {
-    assert(source != null);
-
     _source = source;
     notifyListeners();
   }
@@ -40,8 +38,8 @@ class ThemeContainer extends ChangeNotifier {
   }
 
   bool get hasBackground => _background != null;
-  ImageProvider _background;
-  ImageProvider get background => _background;
+  ImageProvider? _background;
+  ImageProvider get background => _background!;
   set background(ImageProvider image) {
     _background = image;
     notifyListeners();

@@ -5,8 +5,8 @@ import 'package:video_player/video_player.dart';
 
 class VideoAttachmentWidget extends StatefulWidget {
   const VideoAttachmentWidget({
-    @required this.attachment,
-    Key key,
+    required this.attachment,
+    Key? key,
   }) : super(key: key);
 
   final Attachment attachment;
@@ -16,8 +16,8 @@ class VideoAttachmentWidget extends StatefulWidget {
 }
 
 class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {
-  VideoPlayerController _videoController;
-  ChewieController _chewieController;
+  late VideoPlayerController _videoController;
+  ChewieController? _chewieController;
 
   @override
   void initState() {
@@ -40,13 +40,13 @@ class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {
         if (snapshot.connectionState == ConnectionState.active)
           return Center(child: CircularProgressIndicator());
         else
-          return Chewie(controller: snapshot.data);
+          return Chewie(controller: snapshot.data!);
       },
     );
   }
 
   Future<ChewieController> _prepareChewie() async {
-    if (_chewieController != null) return _chewieController;
+    if (_chewieController != null) return _chewieController!;
 
     await _videoController.initialize();
 

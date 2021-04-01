@@ -3,7 +3,7 @@ import 'package:kaiteki/ui/widgets/instance_list_widget.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 
 class AddAccountScreen extends StatefulWidget {
-  AddAccountScreen({Key key}) : super(key: key);
+  AddAccountScreen({Key? key}) : super(key: key);
 
   @override
   _AddAccountScreenState createState() => _AddAccountScreenState();

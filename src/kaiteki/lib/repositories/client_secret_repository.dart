@@ -7,7 +7,7 @@ import 'package:kaiteki/utils/extensions/string.dart';
 
 class ClientSecretRepository extends ChangeNotifier
     implements Repository<ClientSecret> {
-  List<ClientSecret> _secrets;
+  late final List<ClientSecret> _secrets;
   final SecretStorage _storage;
 
   ClientSecretRepository(this._storage);
@@ -32,7 +32,7 @@ class ClientSecretRepository extends ChangeNotifier
     notifyListeners();
   }
 
-  ClientSecret get(String instance) {
+  ClientSecret? get(String instance) {
     return _secrets.firstOrDefault((secret) {
       return secret.instance.equalsIgnoreCase(instance);
     });

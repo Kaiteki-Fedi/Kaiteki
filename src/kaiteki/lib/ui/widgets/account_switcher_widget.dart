@@ -5,7 +5,7 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class AccountSwitcherWidget extends StatefulWidget {
-  const AccountSwitcherWidget({Key key}) : super(key: key);
+  const AccountSwitcherWidget({Key? key}) : super(key: key);
 
   @override
   _AccountSwitcherWidgetState createState() => _AccountSwitcherWidgetState();
@@ -24,7 +24,6 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
         assert(choice == "!");
         Navigator.of(context).pushNamed("/accounts");
       },
-
       itemBuilder: (_) => [
         PopupMenuItem(
           child: Row(

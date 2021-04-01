@@ -1,5 +1,5 @@
 class LoginResult {
-  String reason;
+  String? reason;
   bool successful = true;
   bool aborted = false;
 

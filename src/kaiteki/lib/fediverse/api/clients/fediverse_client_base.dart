@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/exceptions/api_exception.dart';
-import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -25,8 +25,8 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     return "https://$instance";
   }
 
-  AuthData authenticationData;
-  String instance;
+  AuthData? authenticationData;
+  late String instance;
   ApiType get type;
 
   /// Sets the data used for requests to a server.
@@ -35,11 +35,27 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   /// Sets the data used for requests to a server.
   Future<void> setAccountAuthentication(AccountSecret secret);
 
+  Future<void> sendJsonRequestWithoutResponse<T>(
+    HttpMethod method,
+    String endpoint, {
+    Object? body,
+  }) async {
+    var requestBodyJson = body == null ? null : jsonEncode(body);
+    var requestContentType = body == null ? null : "application/json";
+
+    await sendRequest(
+      method,
+      endpoint,
+      body: requestBodyJson,
+      contentType: requestContentType,
+    );
+  }
+
   Future<T> sendJsonRequest<T>(
     HttpMethod method,
     String endpoint,
     DeserializeFromJson<T> toObject, {
-    Object body,
+    Object? body,
   }) async {
     var requestBodyJson = body == null ? null : jsonEncode(body);
     var requestContentType = body == null ? null : "application/json";
@@ -54,8 +70,6 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     var bodyText = await response.stream.bytesToString();
     var bodyJson = jsonDecode(bodyText);
 
-    if (toObject == null) return null;
-
     return toObject.call(bodyJson);
   }
 
@@ -63,7 +77,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     HttpMethod method,
     String endpoint,
     DeserializeFromJson<T> toObject, {
-    Object body,
+    Object? body,
   }) async {
     var requestBodyJson = body == null ? null : jsonEncode(body);
     var requestContentType = body == null ? null : "application/json";
@@ -84,8 +98,8 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   Future<StreamedResponse> sendRequest(
     HttpMethod method,
     String endpoint, {
-    String body,
-    String contentType,
+    String? body,
+    String? contentType,
   }) async {
     var methodString = method.toMethodString();
     var url = Uri.parse("$baseUrl/$endpoint");
@@ -100,23 +114,19 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     }
 
     if (contentType.isNotNullOrEmpty) {
-      request.headers["Content-Type"] = contentType;
+      request.headers["Content-Type"] = contentType!;
     }
 
     // apply required authentication data if available
     if (authenticationData != null) {
-      authenticationData.applyTo(request);
+      authenticationData!.applyTo(request);
     }
 
     var response = await request.send();
 
-    try {
-      checkResponse(response);
-      return response;
-    } catch (ex) {
-      _logger.e("Request failed", ex);
-      return null;
-    }
+    checkResponse(response);
+
+    return response;
   }
 
   void checkResponse(StreamedResponse response) {
@@ -126,5 +136,6 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   }
 
   @deprecated
-  Map<String, String> getHeaders({String contentType}) => Map<String, String>();
+  Map<String, String> getHeaders({String? contentType}) =>
+      Map<String, String>();
 }

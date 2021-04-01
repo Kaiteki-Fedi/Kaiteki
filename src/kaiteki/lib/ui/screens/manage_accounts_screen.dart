@@ -7,7 +7,7 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class ManageAccountsScreen extends StatefulWidget {
-  ManageAccountsScreen({Key key}) : super(key: key);
+  ManageAccountsScreen({Key? key}) : super(key: key);
 
   @override
   _ManageAccountsScreenState createState() => _ManageAccountsScreenState();
@@ -34,8 +34,8 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: IconLandingWidget(
-                      icon: Mdi.accountOutline,
-                      text: "No accounts",
+                      Mdi.accountOutline,
+                      'No accounts',
                     ),
                   ),
                   OutlinedButton.icon(

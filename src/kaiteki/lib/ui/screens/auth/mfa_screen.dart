@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
 class MfaScreen extends StatefulWidget {
-  MfaScreen({Key key}) : super(key: key);
+  MfaScreen({Key? key}) : super(key: key);
 
   @override
   _MfaScreenState createState() => _MfaScreenState();
@@ -13,7 +13,7 @@ class MfaScreen extends StatefulWidget {
 
 class _MfaScreenState extends State<MfaScreen> {
   TextEditingController _textController = TextEditingController();
-  String _error;
+  String? _error;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _MfaScreenState extends State<MfaScreen> {
                 ),
               ),
               if (_error.isNotNullOrEmpty)
-                Text(_error, style: TextStyle(color: Colors.redAccent)),
+                Text(_error!, style: TextStyle(color: Colors.redAccent)),
               ElevatedButton(
                 child: Text("Verify"),
                 onPressed: () {

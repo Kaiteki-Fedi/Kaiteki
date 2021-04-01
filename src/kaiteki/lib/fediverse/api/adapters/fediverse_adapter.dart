@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:kaiteki/account_container.dart';
-import 'package:kaiteki/fediverse/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/fediverse/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/model/auth/login_result.dart';
 
 /// An adapter containing a backing Fediverse client that.
 abstract class FediverseAdapter<Client extends FediverseClientBase> {
@@ -43,8 +43,11 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// Retrieves a thread from a reply
   Future<Iterable<Post>> getThread(Post reply);
 
-  Future<Iterable<Post>> getTimeline(TimelineType type,
-      {String sinceId, String untilId});
+  Future<Iterable<Post>> getTimeline(
+    TimelineType type, {
+    String? sinceId,
+    String? untilId,
+  });
 
   Future<Iterable<Notification>> getNotifications();
 

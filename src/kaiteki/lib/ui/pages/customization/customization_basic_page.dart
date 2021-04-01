@@ -3,7 +3,7 @@ import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:provider/provider.dart';
 
 class CustomizationBasicPage extends StatefulWidget {
-  CustomizationBasicPage({Key key}) : super(key: key);
+  CustomizationBasicPage({Key? key}) : super(key: key);
 
   @override
   _CustomizationBasicPageState createState() => _CustomizationBasicPageState();
@@ -49,16 +49,15 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
     switch (mode) {
       case ThemeMode.light:
         return "Light";
-        break;
+
       case ThemeMode.dark:
         return "Dark";
-        break;
+
       case ThemeMode.system:
         return "System default";
-        break;
+
       default:
         return mode.toString();
-        break;
     }
   }
 }

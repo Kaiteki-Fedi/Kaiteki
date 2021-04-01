@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
+import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/repositories/secret_storages/secret_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,7 +57,7 @@ class SharedPreferencesSecureStorage extends SecretStorage {
 
   @override
   Future<Iterable<AccountSecret>> fetchAccountSecrets() async {
-    Iterable<String> strings;
+    Iterable<String>? strings;
 
     try {
       strings = _preferences.getStringList(_accountKey);
@@ -77,7 +77,7 @@ class SharedPreferencesSecureStorage extends SecretStorage {
 
   @override
   Future<Iterable<ClientSecret>> fetchClientSecrets() async {
-    Iterable<String> strings;
+    Iterable<String>? strings;
 
     try {
       strings = _preferences.getStringList(_clientKey);
