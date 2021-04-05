@@ -71,11 +71,13 @@ class _MainScreenState extends State<MainScreen> {
   Widget buildDesktopView(String appName) {
     return Scaffold(
         appBar: AppBar(
-          leading: AccountSwitcherWidget(),
           title: Text(
             appName,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
+          actions: [
+            AccountSwitcherWidget(size: 40),
+          ],
         ),
         body: Row(
           children: [
@@ -108,7 +110,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget buildMobileView(String appName) {
     return Scaffold(
       appBar: AppBar(
-        leading: AccountSwitcherWidget(),
         title: Text(appName, style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
@@ -118,6 +119,7 @@ class _MainScreenState extends State<MainScreen> {
               MaterialPageRoute(builder: (_) => SettingsScreen()),
             ),
           ),
+          AccountSwitcherWidget(size: 40),
         ],
       ),
       body: getPageView(),

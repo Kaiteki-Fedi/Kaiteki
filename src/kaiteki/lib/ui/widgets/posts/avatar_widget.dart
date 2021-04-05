@@ -7,9 +7,11 @@ import 'package:mdi/mdi.dart';
 class AvatarWidget extends StatelessWidget {
   final User _user;
   final double? size;
+  final double? radius;
   final bool openOnTap;
 
-  const AvatarWidget(this._user, {this.size, this.openOnTap = true});
+  const AvatarWidget(this._user,
+      {this.size = 48, this.radius, this.openOnTap = true});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class AvatarWidget extends StatelessWidget {
     return GestureDetector(
       child: _getAvatarImageWidget(context),
       onTap: () {
-        var screen = AccountScreen(_user.id);
+        var screen = AccountScreen.fromUser(_user);
         var route = MaterialPageRoute(builder: (_) => screen);
         Navigator.push(context, route);
       },
@@ -29,24 +31,22 @@ class AvatarWidget extends StatelessWidget {
     if (_user.avatarUrl == null) {
       return Icon(
         Mdi.accountCircle,
-        size: _getFixedSize(),
+        size: size,
       );
     }
 
-    return CircleAvatar(
-      backgroundImage: NetworkImage(_user.avatarUrl!),
-      backgroundColor: Theme.of(context).cardColor,
-      radius: _getFixedSize(half: true),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(size! / 2),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+        ),
+        child: Image.network(
+          _user.avatarUrl!,
+          width: size,
+          height: size,
+        ),
+      ),
     );
-  }
-
-  double? _getFixedSize({bool? half}) {
-    if (size == null || size == 0) return null;
-
-    // this dumb bool condition is intentional for null safety.
-    if (half == true)
-      return size! / 2;
-    else
-      return size;
   }
 }

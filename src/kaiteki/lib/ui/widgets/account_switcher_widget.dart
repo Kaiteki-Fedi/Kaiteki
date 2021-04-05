@@ -5,7 +5,9 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class AccountSwitcherWidget extends StatefulWidget {
-  const AccountSwitcherWidget({Key? key}) : super(key: key);
+  final double? size;
+
+  const AccountSwitcherWidget({Key? key, this.size}) : super(key: key);
 
   @override
   _AccountSwitcherWidgetState createState() => _AccountSwitcherWidgetState();
@@ -14,12 +16,9 @@ class AccountSwitcherWidget extends StatefulWidget {
 class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountContainer>(context);
-
     return PopupMenuButton<String>(
-      icon: container.loggedIn
-          ? AvatarWidget(container.currentAccount.account, openOnTap: false)
-          : Icon(Mdi.accountCircle),
+      iconSize: widget.size,
+      icon: buildIcon(context),
       onSelected: (choice) {
         assert(choice == "!");
         Navigator.of(context).pushNamed("/accounts");
@@ -38,6 +37,20 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
           value: "!",
         ),
       ],
+    );
+  }
+
+  Widget buildIcon(BuildContext context) {
+    var container = Provider.of<AccountContainer>(context);
+
+    if (!container.loggedIn) {
+      return Icon(Mdi.accountCircle);
+    }
+
+    return AvatarWidget(
+      container.currentAccount.account,
+      openOnTap: false,
+      size: widget.size,
     );
   }
 }
