@@ -9,8 +9,10 @@ part of 'status.dart';
 MastodonStatus _$MastodonStatusFromJson(Map<String, dynamic> json) {
   return MastodonStatus(
     account: MastodonAccount.fromJson(json['account'] as Map<String, dynamic>),
-    application: MastodonApplication.fromJson(
-        json['application'] as Map<String, dynamic>),
+    application: json['application'] == null
+        ? null
+        : MastodonApplication.fromJson(
+            json['application'] as Map<String, dynamic>),
     content: json['content'] as String,
     createdAt: DateTime.parse(json['created_at'] as String),
     emojis: (json['emojis'] as List<dynamic>)

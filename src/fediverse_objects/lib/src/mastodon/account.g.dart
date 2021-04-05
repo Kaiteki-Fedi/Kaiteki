@@ -21,9 +21,11 @@ MastodonAccount _$MastodonAccountFromJson(Map<String, dynamic> json) {
     locked: json['locked'] as bool,
     emojis: (json['emojis'] as List<dynamic>)
         .map((e) => MastodonEmoji.fromJson(e as Map<String, dynamic>)),
-    discoverable: json['discoverable'] as bool,
+    discoverable: json['discoverable'] as bool?,
     createdAt: DateTime.parse(json['created_at'] as String),
-    lastStatusAt: DateTime.parse(json['last_status_at'] as String),
+    lastStatusAt: json['last_status_at'] == null
+        ? null
+        : DateTime.parse(json['last_status_at'] as String),
     statusesCount: json['statuses_count'] as int,
     followersCount: json['followers_count'] as int,
     followingCount: json['following_count'] as int,
@@ -67,7 +69,7 @@ Map<String, dynamic> _$MastodonAccountToJson(MastodonAccount instance) =>
       'url': instance.url,
       'username': instance.username,
       'discoverable': instance.discoverable,
-      'last_status_at': instance.lastStatusAt.toIso8601String(),
+      'last_status_at': instance.lastStatusAt?.toIso8601String(),
       'moved': instance.moved,
       'suspended': instance.suspended,
       'muteExpiredAt': instance.muteExpiredAt?.toIso8601String(),

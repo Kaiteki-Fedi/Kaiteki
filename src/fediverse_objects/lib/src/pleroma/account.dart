@@ -1,24 +1,28 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:fediverse_objects/src/pleroma/notification_settings.dart';
 import 'package:fediverse_objects/src/pleroma/relationship.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'account.g.dart';
 
 @JsonSerializable()
 class PleromaAccount {
   @JsonKey(name: 'accepts_chat_messages')
-  final bool acceptsChatMessages;
+  final bool? acceptsChatMessages;
 
   @JsonKey(name: 'allow_following_move')
-  final bool allowFollowingMove;
+  final bool? allowFollowingMove;
 
   //@JsonKey(name: "background_image")
   //final dynamic backgroundImage;
 
+  @JsonKey(name: 'favicon')
+  final String? favicon;
+
   @JsonKey(name: 'chat_token')
-  final String chatToken;
+  final String? chatToken;
 
   @JsonKey(name: 'confirmation_pending')
-  final bool confirmationPending;
+  final bool? confirmationPending;
 
   @JsonKey(name: 'hide_favorites')
   final bool hideFavorites;
@@ -41,13 +45,16 @@ class PleromaAccount {
   @JsonKey(name: 'is_moderator')
   final bool isModerator;
 
+  @JsonKey(name: 'is_confirmed')
+  final bool? isConfirmed;
+
   @JsonKey(name: 'notification_settings')
-  final PleromaNotificationSettings notificationSettings;
+  final PleromaNotificationSettings? notificationSettings;
 
-  final PleromaRelationship relationship;
+  final PleromaRelationship? relationship;
 
-  //@JsonKey(name: "settings_store")
-  //final Map<String, dynamic> settingsStore;
+  @JsonKey(name: "settings_store")
+  final Map<String, dynamic>? settingsStore;
 
   @JsonKey(name: 'skip_thread_containment')
   final bool skipThreadContainment;
@@ -55,7 +62,7 @@ class PleromaAccount {
   //final Iterable<Tag> tags;
 
   @JsonKey(name: 'unread_conversation_count')
-  final int unreadConversationCount;
+  final int? unreadConversationCount;
 
   const PleromaAccount(
     this.acceptsChatMessages,
@@ -70,12 +77,15 @@ class PleromaAccount {
     this.hideFollowsCount,
     this.isAdmin,
     this.isModerator,
+    this.isConfirmed,
     this.notificationSettings,
     this.relationship,
     //this.settingsStore,
     this.skipThreadContainment,
     //this.tags,
     this.unreadConversationCount,
+    this.favicon,
+    this.settingsStore,
   );
 
   factory PleromaAccount.fromJson(Map<String, dynamic> json) =>

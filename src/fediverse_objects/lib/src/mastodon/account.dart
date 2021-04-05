@@ -1,8 +1,9 @@
-import 'package:fediverse_objects/src/mastodon/source.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:fediverse_objects/src/pleroma/account.dart';
-import 'package:fediverse_objects/src/mastodon/field.dart';
 import 'package:fediverse_objects/src/mastodon/emoji.dart';
+import 'package:fediverse_objects/src/mastodon/field.dart';
+import 'package:fediverse_objects/src/mastodon/source.dart';
+import 'package:fediverse_objects/src/pleroma/account.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'account.g.dart';
 
 /// Represents a user of Mastodon and their associated profile.
@@ -85,12 +86,12 @@ class MastodonAccount {
   /// The username of the account, not including domain.
   final String username;
 
-  /// Whether the account has opted into discovery features such as the profile directory.
-  final bool discoverable;
+  /// Whether the account has opted into discovery features such as the profile directory. (Nullable because of Pleroma support)
+  final bool? discoverable;
 
-  /// When the most recent status was posted.
+  /// When the most recent status was posted. (Nullable because of Pleroma)
   @JsonKey(name: 'last_status_at')
-  final DateTime lastStatusAt;
+  final DateTime? lastStatusAt;
 
   /// Indicates that the profile is currently inactive and that its user has moved to a new account.
   final bool? moved;
@@ -116,11 +117,11 @@ class MastodonAccount {
     required this.headerStatic,
     required this.locked,
     required this.emojis,
-    required this.discoverable,
+    this.discoverable,
 
     // statistical attributes
     required this.createdAt,
-    required this.lastStatusAt,
+    this.lastStatusAt,
     required this.statusesCount,
     required this.followersCount,
     required this.followingCount,

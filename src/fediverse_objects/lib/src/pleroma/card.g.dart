@@ -8,7 +8,7 @@ part of 'card.dart';
 
 PleromaCard _$PleromaCardFromJson(Map<String, dynamic> json) {
   return PleromaCard(
-    Map<String, String>.from(json['opengraph'] as Map),
+    json['opengraph'] as Map<String, dynamic>,
   );
 }
 

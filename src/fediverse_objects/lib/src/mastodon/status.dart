@@ -1,13 +1,14 @@
-import 'package:fediverse_objects/src/mastodon/poll.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:fediverse_objects/src/pleroma/status.dart';
 import 'package:fediverse_objects/src/mastodon/account.dart';
 import 'package:fediverse_objects/src/mastodon/application.dart';
+import 'package:fediverse_objects/src/mastodon/attachment.dart';
 import 'package:fediverse_objects/src/mastodon/card.dart';
 import 'package:fediverse_objects/src/mastodon/emoji.dart';
-import 'package:fediverse_objects/src/mastodon/attachment.dart';
 import 'package:fediverse_objects/src/mastodon/mention.dart';
+import 'package:fediverse_objects/src/mastodon/poll.dart';
 import 'package:fediverse_objects/src/mastodon/tag.dart';
+import 'package:fediverse_objects/src/pleroma/status.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'status.g.dart';
 
 @JsonSerializable()
@@ -15,7 +16,7 @@ class MastodonStatus {
   final MastodonAccount account;
 
   /// The application used to post this status.
-  final MastodonApplication application;
+  final MastodonApplication? application;
 
   /// Have you bookmarked this status?
   final bool? bookmarked;
@@ -115,7 +116,7 @@ class MastodonStatus {
 
   MastodonStatus({
     required this.account,
-    required this.application,
+    this.application,
     required this.content,
     required this.createdAt,
     required this.emojis,

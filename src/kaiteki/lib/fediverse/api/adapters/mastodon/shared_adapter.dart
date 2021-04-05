@@ -57,7 +57,6 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
     // Try to login and handle error
     var loginResponse = await client.login(username, password);
-    accessToken = loginResponse.accessToken;
 
     if (loginResponse.error.isNotNullOrEmpty) {
       if (loginResponse.error != "mfa_required") {
@@ -71,15 +70,17 @@ class SharedMastodonAdapter<T extends MastodonClient>
       // TODO add error-able TOTP screens
       // TODO make use of a while loop to make this more efficient
       var mfaResponse = await client.respondMfa(
-        loginResponse.mfaToken,
+        loginResponse.mfaToken!,
         int.parse(code),
       );
 
       if (mfaResponse.error.isNotNullOrEmpty) {
         return LoginResult.failed(mfaResponse.error);
       } else {
-        accessToken = mfaResponse.accessToken;
+        accessToken = mfaResponse.accessToken!;
       }
+    } else {
+      accessToken = loginResponse.accessToken!;
     }
 
     // Create and set account secret
