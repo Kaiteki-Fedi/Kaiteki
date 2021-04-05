@@ -90,9 +90,9 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "Craftplacer" "\0"
-            VALUE "FileDescription", "Kaiteki" "\0"
+            VALUE "FileDescription", "A cross-platform Fediverse client for micro-blogging services written in Flutter/Dart." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "kaiteki" "\0"
+            VALUE "InternalName", "Kaiteki" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2021 Craftplacer. All rights reserved." "\0"
             VALUE "OriginalFilename", "kaiteki.exe" "\0"
             VALUE "ProductName", "Kaiteki" "\0"
