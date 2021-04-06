@@ -24,20 +24,20 @@ Kaiteki tries to be community-driven with polls and opinions fetched from its cr
 | - | - | - | - | - |
 | ![](assets/screenshots/welcome.jpg) | ![](assets/screenshots/login.jpg) | ![](assets/screenshots/pleroma-feed.jpg) | ![](assets/screenshots/misskey-feed.jpg) | ![](assets/screenshots/about.jpg) |
 
-## Platforms & Releases<>
+## Platforms & Releases
 
 If you want to try out Kaiteki, there are automatic builds available for use.
 
 Please still note, that **Kaiteki is still in development**. I don't take gurantee that everything works.
 
 | Platform | Build status | Link |
-| - | - | - |
-| Web | ![](https://github.com/Craftplacer/kaiteki/workflows/Build%20and%20deploy%20to%20Web/badge.svg) | [Visit web version](https://craftplacer.github.io/kaiteki/) |
-| Windows | ![](https://github.com/Craftplacer/kaiteki/actions/workflows/windows.yml/badge.svg) | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/windows.yml) |
-| Linux | ![](https://github.com/Craftplacer/kaiteki/actions/workflows/linux.yml/badge.svg) | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/linux.yml) |
-| Android | No CI/CD available yet ([See issue #2](https://github.com/Craftplacer/kaiteki/issues/2)) |
-| iOS | Not supported | |
-| macOS | Not supported | |
+| -------- | ------------ | ---- |
+| Web      | ![](https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Web) | [Visit web version](https://craftplacer.github.io/kaiteki/) |
+| Windows  | ![](https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Windows) | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/windows.yml) |
+| Linux    | ![](https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Linux) | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/linux.yml) |
+| Android  | No CI/CD available yet ([See issue #2](https://github.com/Craftplacer/kaiteki/issues/2)) |
+| iOS      | Not supported | |
+| macOS    | Not supported | |
 
 ### I'm thinking about packaging Kaiteki for my Linux, GNU/Linux, *nix distrobution
 

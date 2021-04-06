@@ -1,4 +1,5 @@
-name: Build and deploy to Web
+name: Web
+
 env:
   SOURCE_PATH: './src/kaiteki'
 

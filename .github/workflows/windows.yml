@@ -1,4 +1,4 @@
-name: Build and package for Windows
+name: Windows
 
 env:
   SOURCE_PATH: '.\src\kaiteki'
