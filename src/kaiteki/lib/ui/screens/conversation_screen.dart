@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
@@ -15,7 +15,7 @@ class ConversationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountContainer>(context);
+    var container = Provider.of<AccountManager>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Conversation'),

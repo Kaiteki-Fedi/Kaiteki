@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +41,7 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
   }
 
   Widget buildIcon(BuildContext context) {
-    var container = Provider.of<AccountContainer>(context);
+    var container = Provider.of<AccountManager>(context);
 
     if (!container.loggedIn) {
       return Icon(Mdi.accountCircle);

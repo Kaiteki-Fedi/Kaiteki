@@ -1,5 +1,5 @@
 import 'package:fediverse_objects/mastodon.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
@@ -37,7 +37,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     String username,
     String password,
     mfaCallback,
-    AccountContainer accounts,
+    AccountManager accounts,
   ) async {
     client.instance = instance;
 

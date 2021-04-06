@@ -1,5 +1,5 @@
 import 'package:fediverse_objects/misskey.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
@@ -47,8 +47,13 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<LoginResult> login(String instance, String username, String password,
-      mfaCallback, AccountContainer accounts) async {
+  Future<LoginResult> login(
+    String instance,
+    String username,
+    String password,
+    mfaCallback,
+    AccountManager accounts,
+  ) async {
     client.instance = instance;
 
     var authResponse = await client.signIn(

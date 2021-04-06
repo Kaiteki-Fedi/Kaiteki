@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
@@ -16,7 +16,7 @@ class ManageAccountsScreen extends StatefulWidget {
 class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountContainer>(context);
+    var container = Provider.of<AccountManager>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -86,8 +86,11 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
     Navigator.of(context).pushNamed("/accounts/add");
   }
 
-  void onTapRemove(BuildContext context, AccountContainer container,
-      AccountCompound account) {
+  void onTapRemove(
+    BuildContext context,
+    AccountManager container,
+    AccountCompound account,
+  ) {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(

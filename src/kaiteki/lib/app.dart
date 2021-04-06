@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/preferences/preference_container.dart';
@@ -32,7 +32,7 @@ class KaitekiApp extends StatefulWidget {
   _KaitekiAppState createState() => _KaitekiAppState();
 
   final PreferenceContainer preferences;
-  final AccountContainer accountContainer;
+  final AccountManager accountContainer;
   final FlutterLocalNotificationsPlugin? notifications;
 }
 
@@ -75,7 +75,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
               "/": (_) {
                 return Builder(
                   builder: (context) {
-                    if (Provider.of<AccountContainer>(context).loggedIn) {
+                    if (Provider.of<AccountManager>(context).loggedIn) {
                       return MainScreen();
                     } else {
                       return new AccountRequiredScreen();

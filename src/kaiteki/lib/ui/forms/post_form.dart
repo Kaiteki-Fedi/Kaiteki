@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -21,7 +21,7 @@ class _PostFormState extends State<PostForm> {
 
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountContainer>(context);
+    var container = Provider.of<AccountManager>(context);
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -122,7 +122,7 @@ class _PostFormState extends State<PostForm> {
     // );
   }
 
-  void openEmojiPicker(BuildContext context, AccountContainer container) {
+  void openEmojiPicker(BuildContext context, AccountManager container) {
     Scaffold.of(context).showBottomSheet(
       (context) {
         return Material(

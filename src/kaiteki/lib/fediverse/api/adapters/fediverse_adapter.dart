@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/api/clients/fediverse_client_base.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
@@ -28,7 +28,7 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
     String username,
     String password,
     MfaCallback mfaCallback,
-    AccountContainer accounts,
+    AccountManager accounts,
   );
 
   /// Retrieves an user of another instance

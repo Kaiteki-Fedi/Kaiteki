@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/model/post_filters/sensitive_post_filter.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/timeline.dart';
@@ -16,7 +16,7 @@ class TimelinePage extends StatefulWidget {
 class _TimelinePageState extends State<TimelinePage> {
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountContainer>(context);
+    var container = Provider.of<AccountManager>(context);
     var timelineKey = ValueKey(container.currentAccount.hashCode);
 
     if (!container.loggedIn) {

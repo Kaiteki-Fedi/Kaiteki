@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/preferences/app_preferences.dart';
@@ -43,7 +43,7 @@ void main() async {
     logger.e("Failed to initialize account and client secret repositories", e);
   }
 
-  var accountContainer = AccountContainer(
+  var accountContainer = AccountManager(
     accountRepository,
     clientRepository,
   );

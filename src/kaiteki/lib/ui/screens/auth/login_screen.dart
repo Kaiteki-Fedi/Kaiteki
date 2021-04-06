@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/ui/forms/login_form.dart';
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _loading = true);
 
       var accountContainer =
-          Provider.of<AccountContainer>(context, listen: false);
+          Provider.of<AccountManager>(context, listen: false);
 
       var result = await widget.onLogin.call(
         _instanceController.value.text,

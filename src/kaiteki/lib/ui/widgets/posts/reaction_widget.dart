@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
@@ -46,8 +46,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
         style: textStyle,
         child: InkWell(
           onTap: () async {
-            var container =
-                Provider.of<AccountContainer>(context, listen: false);
+            var container = Provider.of<AccountManager>(context, listen: false);
             var reactiveAdapter = container.adapter as ReactionSupport;
             await reactiveAdapter.addReaction(
               widget.parentPost,

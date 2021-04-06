@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kaiteki/account_container.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
@@ -31,7 +31,7 @@ class _AccountScreenState extends State<AccountScreen>
 
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountContainer>(context);
+    var container = Provider.of<AccountManager>(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -205,7 +205,7 @@ class PostsPage extends StatelessWidget {
   }) : super(key: key);
 
   final bool isLoading;
-  final AccountContainer container;
+  final AccountManager container;
   final AccountScreen widget;
 
   @override
