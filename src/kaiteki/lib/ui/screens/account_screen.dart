@@ -12,8 +12,10 @@ import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
   final String id;
+  final User? initialUser;
 
-  AccountScreen(this.id);
+  AccountScreen.fromId(this.id) : initialUser = null;
+  AccountScreen.fromUser(User this.initialUser) : id = initialUser.id;
 
   @override
   _AccountScreenState createState() => _AccountScreenState();
@@ -36,6 +38,7 @@ class _AccountScreenState extends State<AccountScreen>
     return LayoutBuilder(
       builder: (context, constraints) {
         return FutureBuilder(
+          initialData: widget.initialUser,
           future: Future<User<dynamic>>.delayed(
             Duration(seconds: 5),
             () async => container.adapter.getUserById(widget.id),
