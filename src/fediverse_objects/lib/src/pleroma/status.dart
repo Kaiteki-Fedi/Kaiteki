@@ -28,7 +28,7 @@ class PleromaStatus {
   final bool? parentVisible;
 
   // TODO: Introduce mimetype/text dictionary for rich content in Pleroma
-  @JsonKey(name: "spoiler_text")
+  @JsonKey(name: 'spoiler_text')
   final Map<String, String>? spoilerText;
 
   @JsonKey(name: 'thread_muted')

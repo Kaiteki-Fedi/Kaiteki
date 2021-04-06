@@ -53,7 +53,7 @@ class PleromaAccount {
 
   final PleromaRelationship? relationship;
 
-  @JsonKey(name: "settings_store")
+  @JsonKey(name: 'settings_store')
   final Map<String, dynamic>? settingsStore;
 
   @JsonKey(name: 'skip_thread_containment')
