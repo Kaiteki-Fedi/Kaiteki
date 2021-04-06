@@ -88,8 +88,11 @@ class SharedMastodonAdapter<T extends MastodonClient>
     client.authenticationData!.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
-    var account = await client.verifyCredentials();
-    if (account == null) {
+    MastodonAccount account;
+
+    try {
+      account = await client.verifyCredentials();
+    } catch (e) {
       return LoginResult.failed("Failed to verify credentials");
     }
 
