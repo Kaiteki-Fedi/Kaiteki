@@ -1,12 +1,13 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:fediverse_objects/src/pleroma/card.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'card.g.dart';
 
 @JsonSerializable()
 class MastodonCard {
   final String description;
 
-  final String image;
+  final String? image;
 
   final PleromaCard pleroma;
 

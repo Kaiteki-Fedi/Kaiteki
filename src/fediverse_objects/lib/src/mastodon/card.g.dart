@@ -9,7 +9,7 @@ part of 'card.dart';
 MastodonCard _$MastodonCardFromJson(Map<String, dynamic> json) {
   return MastodonCard(
     json['description'] as String,
-    json['image'] as String,
+    json['image'] as String?,
     PleromaCard.fromJson(json['pleroma'] as Map<String, dynamic>),
     json['provider_name'] as String,
     json['provider_url'] as String,
