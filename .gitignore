@@ -19,3 +19,7 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+src/kaiteki/ios/Flutter/flutter_export_environment.sh
+src/kaiteki/ios/Flutter/Generated.xcconfig
+src/kaiteki/ios/Runner/GeneratedPluginRegistrant.h
+src/kaiteki/ios/Runner/GeneratedPluginRegistrant.m
