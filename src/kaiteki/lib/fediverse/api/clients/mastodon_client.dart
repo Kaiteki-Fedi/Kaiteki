@@ -168,7 +168,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<ContextResponse> getContext(String id) async {
+  Future<ContextResponse> getStatusContext(String id) async {
     return await sendJsonRequest(
       HttpMethod.GET,
       "api/v1/statuses/$id/context",

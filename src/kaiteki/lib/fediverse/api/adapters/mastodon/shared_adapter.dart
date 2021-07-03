@@ -157,8 +157,8 @@ class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<Iterable<Post>> getThread(Post reply) async {
     var status = reply.source as MastodonStatus;
-    var context = await client.getContext(status.id);
     var posts = <Post>[];
+    var context = await client.getStatusContext(status.id);
 
     posts.addAll(context.ancestors.map(toPost));
     posts.add(reply);
