@@ -15,13 +15,17 @@ class AccountSecret {
 
   const AccountSecret(this.instance, this.username, this.accessToken);
 
-  bool equalId(AccountSecret other) {
-    return other.instance.equalsIgnoreCase(instance) &&
-        other.username.equalsIgnoreCase(username);
-  }
-
   factory AccountSecret.fromJson(Map<String, dynamic> json) =>
       _$AccountSecretFromJson(json);
 
   Map<String, dynamic> toJson() => _$AccountSecretToJson(this);
+
+  @override
+  bool operator ==(other) {
+    if (other is AccountSecret)
+      return other.instance.equalsIgnoreCase(instance) &&
+          other.username.equalsIgnoreCase(username);
+    else
+      return false;
+  }
 }

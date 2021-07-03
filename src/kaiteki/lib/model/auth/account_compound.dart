@@ -24,4 +24,13 @@ class AccountCompound {
   });
   // TODO assert check has been removed, due to compiler errors
   //: assert(accountSecret.identity.instance.equalsIgnoreCase(clientSecret.instance));
+
+  /// Checks whether the other [AccountCompound] has the same identifying data.
+  @override
+  bool operator ==(other) {
+    if (other is AccountCompound)
+      return other.instance == instance && accountSecret == other.accountSecret;
+    else
+      return false;
+  }
 }

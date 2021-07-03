@@ -5,7 +5,7 @@ import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/ui/forms/login_form.dart';
 import 'package:kaiteki/ui/screens/auth/mfa_screen.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
-import 'package:kaiteki/utils/extensions/string.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -97,6 +97,12 @@ class _LoginScreenState extends State<LoginScreen> {
     if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://"))
       return "Please only provide the domain name";
 
+    var accounts = Provider.of<AccountManager>(context, listen: false);
+    if (accounts.accounts.any((compound) =>
+        compound.instance == instance &&
+        compound.accountSecret.username == _usernameController.text))
+      return "There's already an account with the same instance and username";
+
     return null;
   }
 
@@ -112,6 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
     if (username.isNullOrEmpty) {
       return "Please enter an username";
     }
+
+    var accounts = Provider.of<AccountManager>(context, listen: false);
+    if (accounts.accounts.any((compound) =>
+        compound.instance == _instanceController.text &&
+        compound.accountSecret.username == username))
+      return "There's already an account with the same instance and username";
 
     return null;
   }

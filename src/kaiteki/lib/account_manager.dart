@@ -37,12 +37,24 @@ class AccountManager extends ChangeNotifier {
   }
 
   Future<void> addCurrentAccount(AccountCompound compound) async {
-    // TODO add duplicate check
+    if (contains(compound))
+      throw Exception(
+        'Cannot add an account with the same instance and username',
+      );
+
     _accounts.add(compound);
     _accountSecrets.insert(compound.accountSecret);
     _clientSecrets.insert(compound.clientSecret);
 
     await changeAccount(compound);
+  }
+
+  bool contains(AccountCompound account) {
+    for (var otherAccount in _accounts) {
+      if (otherAccount == account) return true;
+    }
+
+    return false;
   }
 
   Future<void> changeAccount(AccountCompound account) async {
