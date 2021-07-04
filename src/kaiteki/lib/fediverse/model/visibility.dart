@@ -31,4 +31,23 @@ extension VisibilityExtensions on Visibility {
         throw new Exception("The provided visibility is out of range.");
     }
   }
+
+  String toHumanString() {
+    switch (this) {
+      case Visibility.Direct:
+        return 'Direct';
+
+      case Visibility.FollowersOnly:
+        return 'Followers only';
+
+      case Visibility.Unlisted:
+        return 'Unlisted';
+
+      case Visibility.Public:
+        return 'Public';
+
+      default:
+        throw new Exception("The provided visibility is out of range.");
+    }
+  }
 }
