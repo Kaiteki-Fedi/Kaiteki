@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/ui/forms/post_form.dart';
 import 'package:kaiteki/ui/widgets/attachments/fallback_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/attachments/video_attachment_widget.dart';
@@ -237,6 +238,20 @@ class InteractionBar extends StatelessWidget {
         CountButton(
           icon: Icon(Icons.reply),
           count: _post.replyCount,
+          buttonOnly: true,
+          onTap: () async {
+            await showDialog(
+              context: context,
+              builder: (_) => Dialog(
+                child: SizedBox(
+                  child: Scaffold(body: PostForm(replyTo: _post)),
+                  width: 800,
+                  height: 500,
+                ),
+              ),
+              barrierDismissible: true,
+            );
+          },
         ),
         CountButton(
           icon: Icon(Icons.repeat),
