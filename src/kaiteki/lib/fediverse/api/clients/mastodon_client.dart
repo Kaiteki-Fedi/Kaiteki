@@ -142,9 +142,10 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   Future<MastodonStatus> postStatus(
     String status, {
     String? spoilerText,
-    String? contentType,
     bool? pleromaPreview,
     String? visibility,
+    String? inReplyToId,
+    String? contentType = "text/plain",
   }) async {
     return await sendJsonRequest(
       HttpMethod.POST,
@@ -153,10 +154,11 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       body: {
         "status": status,
         "source": Constants.appName,
-        //"spoiler_text": spoilerText,
+        "spoiler_text": spoilerText ?? "",
         "content_type": contentType,
         "preview": pleromaPreview.toString(),
         "visibility": visibility,
+        "in_reply_to_id": inReplyToId,
       },
     );
   }
