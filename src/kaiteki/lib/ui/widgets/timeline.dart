@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/post_filters/post_filter.dart';
 import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
@@ -24,19 +25,31 @@ class Timeline extends StatefulWidget {
 }
 
 class _TimelineState extends State<Timeline> {
-  final scrollController = ScrollController();
-  late final TimelineModel timelineModel;
+  final _scrollContainer = ScrollController();
+  late final TimelineModel _model;
+  static final _logger = getLogger('Timeline');
+
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
 
-    timelineModel = TimelineModel(widget.adapter);
+    _model = TimelineModel(widget.adapter);
 
-    scrollController.addListener(() {
-      var threshold = (scrollController.position.maxScrollExtent * .95);
-      if (threshold < scrollController.offset) {
-        timelineModel.loadMore();
+    _scrollContainer.addListener(() {
+      if (_isLoading) {
+        _logger.d('Already loading more posts');
+        return;
+      }
+
+      var threshold = (_scrollContainer.position.maxScrollExtent * .95);
+      if (threshold < _scrollContainer.offset) {
+        _isLoading = true;
+        _model.loadMore().then((_) => _isLoading = false).catchError((e) {
+          _logger.e('Failed to load more posts', e);
+          _isLoading = false;
+        });
       }
     });
   }
@@ -44,7 +57,7 @@ class _TimelineState extends State<Timeline> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: timelineModel.stream,
+      stream: _model.stream,
       builder: (context, AsyncSnapshot<Iterable<Post>> snapshot) {
         var filtered = <Post, PostFilterResult>{};
         var filters = widget.filters ?? [];
@@ -59,37 +72,41 @@ class _TimelineState extends State<Timeline> {
         }
 
         return RefreshIndicator(
-          onRefresh: timelineModel.refresh,
-          child: ListView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            controller: scrollController,
-            itemCount: filtered.length + 1,
-            itemBuilder: (context, i) {
-              if (i < filtered.length) {
-                var status = filtered.keys.elementAt(i);
-                // var filterResult = filtered[status];
+          onRefresh: _model.refresh,
+          child: Scrollbar(
+            controller: _scrollContainer,
+            child: ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _scrollContainer,
+              itemCount: filtered.length + 1,
+              separatorBuilder: (_, __) => Divider(thickness: 1,height: 1,),
+              itemBuilder: (context, i) {
+                if (i < filtered.length) {
+                  var status = filtered.keys.elementAt(i);
+                  // var filterResult = filtered[status];
 
-                return InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => ConversationScreen(status),
-                    ));
-                  },
-                  child: StatusWidget(status),
-                );
-              } else {
-                var spinner = Center(child: CircularProgressIndicator());
-
-                if (filtered.length == 0) {
-                  return spinner;
-                } else {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 32.0),
-                    child: spinner,
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => ConversationScreen(status),
+                      ));
+                    },
+                    child: StatusWidget(status),
                   );
+                } else {
+                  var spinner = Center(child: CircularProgressIndicator());
+
+                  if (filtered.length == 0) {
+                    return spinner;
+                  } else {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32.0),
+                      child: spinner,
+                    );
+                  }
                 }
-              }
-            },
+              },
+            ),
           ),
         );
       },
