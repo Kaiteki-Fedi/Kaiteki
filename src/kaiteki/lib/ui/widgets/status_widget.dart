@@ -27,8 +27,9 @@ import 'package:url_launcher/url_launcher.dart';
 class StatusWidget extends StatelessWidget {
   final Post _post;
   final bool showParentPost;
+  final bool showActions;
 
-  const StatusWidget(this._post, {this.showParentPost = true});
+  const StatusWidget(this._post, {this.showParentPost = true, this.showActions = true});
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +113,8 @@ class StatusWidget extends StatelessWidget {
                 if (_post.reactions != null && _post.reactions.isNotEmpty)
                   ReactionRow(_post, _post.reactions),
 
-                InteractionBar(post: _post, theme: theme),
+                if (showActions)
+                  InteractionBar(post: _post, theme: theme),
                 // ApplicationWidget(_post.application),
               ],
             ),
