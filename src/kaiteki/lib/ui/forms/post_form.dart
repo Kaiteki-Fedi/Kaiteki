@@ -3,11 +3,13 @@ import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
+import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart' as v;
 import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
+import 'package:kaiteki/ui/widgets/formatting_button.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/ui/widgets/visibility_button.dart';
@@ -30,6 +32,7 @@ class _PostFormState extends State<PostForm> {
   late TextEditingController _subjectController;
   bool _isPreviewExpanded = false;
   v.Visibility _visibility = v.Visibility.Public;
+  Formatting _formatting = Formatting.PlainText;
   late RestartableTimer _typingTimer;
 
   _PostFormState() {
@@ -126,11 +129,10 @@ class _PostFormState extends State<PostForm> {
                 visibility: _visibility,
                 callback: (value) => setState(() => _visibility = value),
               ),
-              // IconButton(
-              //   onPressed: () {},
-              //   icon: Icon(Mdi.languageMarkdownOutline),
-              //   splashRadius: 20,
-              // ),
+              FormattingButton(
+                formatting: _formatting,
+                callback: (value) => setState(() => _formatting = value),
+              ),
               // IconButton(
               //   onPressed: () {},
               //   icon: Icon(Mdi.upload),
@@ -181,6 +183,7 @@ class _PostFormState extends State<PostForm> {
       subject: _subjectController.value.text,
       content: _bodyController.value.text,
       visibility: _visibility,
+      formatting: _formatting,
       replyTo: widget.replyTo,
     );
   }

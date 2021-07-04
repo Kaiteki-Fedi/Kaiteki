@@ -67,7 +67,7 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   Future<Post> getPreview(PostDraft draft) async {
     var status = await client.postStatus(
       draft.content,
-      contentType: "text/plain",
+      contentType: getContentType(draft.formatting),
       pleromaPreview: true,
     );
     return toPost(status);

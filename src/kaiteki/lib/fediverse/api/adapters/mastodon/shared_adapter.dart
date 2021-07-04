@@ -6,6 +6,7 @@ import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
+import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
@@ -129,15 +130,26 @@ class SharedMastodonAdapter<T extends MastodonClient>
         break;
     }
 
+    var contentType = getContentType(post.formatting);
+
     var newPost = await client.postStatus(
       post.content,
       pleromaPreview: false,
-      contentType: "text/plain",
       visibility: visibility,
       spoilerText: post.subject,
       inReplyToId: post.replyTo?.id,
+      contentType: contentType,
     );
     return toPost(newPost);
+  }
+
+  String getContentType(Formatting formatting) {
+    switch (formatting) {
+      case Formatting.PlainText: return "text/plain";
+      case Formatting.Markdown: return "text/markdown";
+      case Formatting.HTML: return "text/html";
+      case Formatting.BBCode: return "text/bbcode";
+    }
   }
 
   @override
