@@ -181,6 +181,7 @@ class _PostFormState extends State<PostForm> {
       subject: _subjectController.value.text,
       content: _bodyController.value.text,
       visibility: _visibility,
+      replyTo: widget.replyTo,
     );
   }
 

@@ -135,6 +135,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
       contentType: "text/plain",
       visibility: visibility,
       spoilerText: post.subject,
+      inReplyToId: post.replyTo?.id,
     );
     return toPost(newPost);
   }

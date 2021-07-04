@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/utils/utils.dart';
 
 class CountButton extends StatelessWidget {
   final bool active;
   final bool disabled;
+  final bool buttonOnly;
 
   final int? count;
   final Color? activeColor;
@@ -23,18 +25,13 @@ class CountButton extends StatelessWidget {
     this.activeIcon,
     this.onTap,
     this.disabled = false,
+    this.buttonOnly = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var inactiveColor = color;
-
-    if (inactiveColor == null) {
-      inactiveColor = Theme.of(context).disabledColor;
-    }
-
     var callback = active ? () {} : (disabled ? null : onTap);
-    var iconColor = active ? (activeColor ?? inactiveColor) : inactiveColor;
+    var iconColor = _getIconColor(context);
     var currentIcon = active ? (activeIcon ?? icon) : icon;
 
     if (count == null || count! < 1) {
@@ -48,8 +45,29 @@ class CountButton extends StatelessWidget {
       return TextButton.icon(
         icon: currentIcon,
         onPressed: callback,
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(iconColor),
+        ),
         label: Text(count.toString()),
       );
     }
+  }
+
+  Color _getIconColor(BuildContext context)  {
+
+    var inactiveColor = color;
+    var theme = Theme.of(context);
+
+    if (inactiveColor == null) {
+      inactiveColor = theme.disabledColor;
+    }
+
+    if (buttonOnly)
+      return Utils.getLocalTextColor(context);
+
+    if (active)
+      return activeColor ?? inactiveColor;
+
+    return inactiveColor;
   }
 }

@@ -64,6 +64,10 @@ class Utils {
     return DefaultTextStyle.of(context).style.fontSize!;
   }
 
+  static Color getLocalTextColor(BuildContext context) {
+    return DefaultTextStyle.of(context).style.color!;
+  }
+
   static bool isUnsuccessfulStatusCode(int code) {
     return 400 <= code && code < 600;
   }
