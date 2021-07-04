@@ -67,4 +67,33 @@ class Utils {
   static bool isUnsuccessfulStatusCode(int code) {
     return 400 <= code && code < 600;
   }
+
+  static SnackBar generateAsyncSnackBar({
+    required bool done,
+    required Text text,
+    required Icon icon,
+    SnackBarAction? action,
+  }) {
+    return SnackBar(
+      content: Row(
+        children: [
+          Stack(
+            children: [
+              CircularProgressIndicator(
+                value: done ? 1 : null
+              ),
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: icon,
+                ),
+              ),
+            ],
+          ),
+          text,
+        ],
+      ),
+      action: action,
+    );
+  }
 }
