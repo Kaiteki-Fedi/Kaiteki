@@ -19,35 +19,19 @@ enum Visibility {
 extension VisibilityExtensions on Visibility {
   IconData toIconData() {
     switch (this) {
-      case Visibility.Direct:
-        return Mdi.email;
-      case Visibility.FollowersOnly:
-        return Mdi.lock;
-      case Visibility.Unlisted:
-        return Mdi.lockOpen;
-      case Visibility.Public:
-        return Mdi.earth;
-      default:
-        throw new Exception("The provided visibility is out of range.");
+      case Visibility.Direct: return Mdi.email;
+      case Visibility.FollowersOnly: return Mdi.lock;
+      case Visibility.Unlisted: return Mdi.lockOpen;
+      case Visibility.Public: return Mdi.earth;
     }
   }
 
   String toHumanString() {
     switch (this) {
-      case Visibility.Direct:
-        return 'Direct';
-
-      case Visibility.FollowersOnly:
-        return 'Followers only';
-
-      case Visibility.Unlisted:
-        return 'Unlisted';
-
-      case Visibility.Public:
-        return 'Public';
-
-      default:
-        throw new Exception("The provided visibility is out of range.");
+      case Visibility.Direct: return 'Direct';
+      case Visibility.FollowersOnly: return 'Followers only';
+      case Visibility.Unlisted: return 'Unlisted';
+      case Visibility.Public: return 'Public';
     }
   }
 }
