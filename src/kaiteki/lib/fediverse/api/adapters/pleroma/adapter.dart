@@ -1,5 +1,6 @@
 import 'package:fediverse_objects/pleroma.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
+import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/mastodon/shared_adapter.dart';
 import 'package:kaiteki/fediverse/api/clients/pleroma_client.dart';
@@ -7,13 +8,14 @@ import 'package:kaiteki/fediverse/model/chat.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 
 part 'adapter.c.dart';
 
 // TODO add missing implementations
 class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
-    implements ChatSupport, ReactionSupport {
+    implements ChatSupport, ReactionSupport, PreviewSupport {
   PleromaAdapter._(PleromaClient client) : super(client);
 
   factory PleromaAdapter({PleromaClient? client}) {
@@ -59,5 +61,15 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   @override
   Future<void> removeReaction(Post post, Emoji emoji) {
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Post> getPreview(PostDraft draft) async {
+    var status = await client.postStatus(
+      draft.content,
+      contentType: "text/plain",
+      pleromaPreview: true,
+    );
+    return toPost(status);
   }
 }

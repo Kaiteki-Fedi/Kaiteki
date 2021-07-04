@@ -8,6 +8,7 @@ import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
@@ -109,9 +110,33 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Post> postStatus(Post post, {Post? parentPost}) {
-    // TODO implement postStatus
-    throw UnimplementedError();
+  Future<Post> postStatus(PostDraft post, {Post? parentPost}) async {
+    String visibility;
+
+    switch (post.visibility) {
+
+      case Visibility.Public:
+        visibility = "public";
+        break;
+      case Visibility.Unlisted:
+        visibility = "unlisted";
+        break;
+      case Visibility.FollowersOnly:
+        visibility = "private";
+        break;
+      case Visibility.Direct:
+        visibility = "direct";
+        break;
+    }
+
+    var newPost = await client.postStatus(
+      post.content,
+      pleromaPreview: false,
+      contentType: "text/plain",
+      visibility: visibility,
+      spoilerText: post.subject,
+    );
+    return toPost(newPost);
   }
 
   @override

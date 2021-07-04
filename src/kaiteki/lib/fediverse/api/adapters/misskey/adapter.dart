@@ -13,6 +13,7 @@ import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
@@ -89,7 +90,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Post> postStatus(Post post, {Post? parentPost}) {
+  Future<Post> postStatus(PostDraft post, {Post? parentPost}) {
     throw UnimplementedError();
   }
 
