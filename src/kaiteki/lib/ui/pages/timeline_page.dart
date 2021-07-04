@@ -28,10 +28,15 @@ class _TimelinePageState extends State<TimelinePage> {
       );
     }
 
-    return Timeline(
-      key: timelineKey,
-      adapter: container.adapter,
-      filters: [SensitivePostFilter()],
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 800),
+        child: Timeline(
+          key: timelineKey,
+          adapter: container.adapter,
+          filters: [SensitivePostFilter()],
+        ),
+      ),
     );
   }
 }

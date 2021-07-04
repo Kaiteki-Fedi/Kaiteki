@@ -6,6 +6,7 @@ import 'package:kaiteki/ui/forms/post_form.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
 import 'package:kaiteki/ui/screens/settings/settings_screen.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
+import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
 
 class MainScreen extends StatefulWidget {
@@ -34,21 +35,21 @@ class _MainScreenState extends State<MainScreen> {
           onTap: () => onComposeStatus(context, null),
         ),
       ),
-      // _MainScreenTab(
-      //   icon: Mdi.bell,
-      //   text: "Notifications",
-      //   fabTooltip: "Mark all as read",
-      //   fabText: "Read",
-      //   fabIcon: Mdi.checkAll,
-      //   fabOnTap: () {},
-      // ),
-      // _MainScreenTab(
-      //   icon: Mdi.forum,
-      //   text: "Chats",
-      //   fabTooltip: 'New chat',
-      //   fabIcon: Mdi.plus,
-      //   fabText: "New",
-      // ),
+      _MainScreenTab(
+        icon: Mdi.bell,
+        text: "Notifications",
+        //fabTooltip: "Mark all as read",
+        //fabText: "Read",
+        //fabIcon: Mdi.checkAll,
+        //fabOnTap: () {},
+      ),
+      _MainScreenTab(
+        icon: Mdi.forum,
+        text: "Chats",
+        //fabTooltip: 'New chat',
+        //fabIcon: Mdi.plus,
+        //fabText: "New",
+      ),
     ];
   }
 
@@ -81,27 +82,24 @@ class _MainScreenState extends State<MainScreen> {
         ),
         body: Row(
           children: [
-            Drawer(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: getTabListItems().toList(),
-                      ),
-                    ),
+            NavigationRail(
+              selectedIndex: _currentPage,
+              onDestinationSelected: (x) => changePage(x),
+              destinations: [
+                for (var tab in _tabs)
+                  NavigationRailDestination(
+                    icon: Icon(tab.icon),
+                    label: Text(tab.text),
                   ),
-                  ListTile(
-                    onTap: () => Navigator.pushNamed(context, "/settings"),
-                    leading: Icon(Mdi.cog),
-                    title: Text("Settings"),
-                  ),
-                ],
-              ),
+
+                NavigationRailDestination(
+                  icon: Icon(Mdi.cog),
+                  label: Text("Settings"),
+                ),
+              ],
             ),
-            Expanded(
-              child: getPageView(),
-            ),
+            const VerticalDivider(thickness: 1, width: 1),
+            Expanded(child: getPageView()),
           ],
         ),
         floatingActionButton: getFabDesktop(context, _currentPage));
@@ -150,7 +148,21 @@ class _MainScreenState extends State<MainScreen> {
       controller: _pageController,
       physics: NeverScrollableScrollPhysics(),
       key: pageViewKey,
-      children: [TimelinePage(key: ValueKey(0))],
+      children: [
+        TimelinePage(key: ValueKey(0)),
+        Center(
+          child: IconLandingWidget(
+            Mdi.dotsHorizontal,
+            "Not implemented yet...",
+          ),
+        ),
+        Center(
+          child: IconLandingWidget(
+            Mdi.dotsHorizontal,
+            "Not implemented yet...",
+          ),
+        ),
+      ],
     );
   }
 
@@ -172,6 +184,16 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void changePage(int index) {
+    var isOutsideOfTabs = _tabs.length <= index;
+    if (isOutsideOfTabs) {
+      var diff = _tabs.length - index;
+      switch (diff) {
+        case 0:
+          Navigator.of(context).pushNamed('/settings');
+          return;
+      }
+    }
+
     setState(() {
       _currentPage = index;
       _pageController.animateToPage(
