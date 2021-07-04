@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post_draft.dart';
+import 'package:kaiteki/fediverse/model/visibility.dart' as v;
+import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
+import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
+import 'package:kaiteki/ui/widgets/status_widget.dart';
+import 'package:kaiteki/ui/widgets/visibility_button.dart';
+import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
+import 'package:async/async.dart';
 
 class PostForm extends StatefulWidget {
   final Post? replyTo;
@@ -17,23 +26,77 @@ class PostForm extends StatefulWidget {
 }
 
 class _PostFormState extends State<PostForm> {
-  TextEditingController bodyController = TextEditingController();
+  late TextEditingController _bodyController;
+  late TextEditingController _subjectController;
+  bool _isPreviewExpanded = false;
+  v.Visibility _visibility = v.Visibility.Public;
+  late RestartableTimer _typingTimer;
+
+  _PostFormState() {
+    _typingTimer = RestartableTimer(Duration(seconds: 1), () {
+      _typingTimer.cancel();
+      setState((){});
+    });
+
+    _bodyController = TextEditingController()
+      ..addListener(_typingTimer.reset);
+
+    _subjectController = TextEditingController()
+      ..addListener(_typingTimer.reset);
+  }
 
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountManager>(context);
+    var manager = Provider.of<AccountManager>(context);
 
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
+          ExpansionPanelList(
+            expansionCallback: (_, v) => setState(() => _isPreviewExpanded = !v),
             children: [
-              Text("Preview"),
-              IconButton(
-                icon: Icon(Mdi.chevronRight),
-                onPressed: null,
+              ExpansionPanel(
+                canTapOnHeader: true,
+                isExpanded: _isPreviewExpanded,
+                headerBuilder: (_, x) {
+                  return ListTile(title: Text("Preview"));
+                },
+                body: FutureBuilder(
+                  future: getPreviewFuture(manager),
+                  builder: (BuildContext context, AsyncSnapshot<Post<dynamic>> snapshot) {
+                    if (snapshot.hasError) {
+
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: IconLandingWidget(
+                            Mdi.close,
+                            snapshot.error.toString(),
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (_bodyController.value.text.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(child: const Text('Start writing a post to see a preview!')),
+                      );
+
+                    }
+
+                    if (!snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
+
+                    return StatusWidget(snapshot.data!, showActions: false);
+                  },
+                )
               ),
             ],
           ),
@@ -41,6 +104,7 @@ class _PostFormState extends State<PostForm> {
             decoration: InputDecoration(
               hintText: "Subject (optional)",
             ),
+            controller: _subjectController,
           ),
           Expanded(
             child: TextField(
@@ -53,16 +117,15 @@ class _PostFormState extends State<PostForm> {
               minLines: null,
               maxLines: null,
               maxLength: 60000,
-              controller: bodyController,
+              controller: _bodyController,
             ),
           ),
           Row(
             children: [
-              // IconButton(
-              //   onPressed: () {},
-              //   icon: Icon(Mdi.earth),
-              //   splashRadius: 20,
-              // ),
+              VisibilityButton(
+                visibility: _visibility,
+                callback: (value) => setState(() => _visibility = value),
+              ),
               // IconButton(
               //   onPressed: () {},
               //   icon: Icon(Mdi.languageMarkdownOutline),
@@ -75,7 +138,7 @@ class _PostFormState extends State<PostForm> {
               //   tooltip: "Attach files",
               // ),
               IconButton(
-                onPressed: () => openEmojiPicker(context, container),
+                onPressed: () => openEmojiPicker(context, manager),
                 icon: Icon(Mdi.emoticon),
                 splashRadius: 20,
                 tooltip: "Insert emoji",
@@ -97,7 +160,7 @@ class _PostFormState extends State<PostForm> {
 
               ElevatedButton(
                 child: Text("Submit"),
-                onPressed: () => post(container.adapter),
+                onPressed: () => post(context, manager.adapter),
               ),
             ],
           ),
@@ -106,20 +169,57 @@ class _PostFormState extends State<PostForm> {
     );
   }
 
-  void post(FediverseAdapter adapter) async {
-    // await adapter.postStatus(
-    //   Post(
-    //     content: bodyController.value.text,
-    //     formatting: Formatting.PlainText,
-    //     author: null,
-    //     visibility: null,
-    //     id: '',
-    //     reactions: null,
-    //     postedAt: null,
-    //     source: null,
-    //   ),
-    //   parentPost: widget.replyTo,
-    // );
+  Future<Post>? getPreviewFuture(AccountManager manager) {
+    if (_bodyController.value.text.isEmpty) return null;
+
+    var previewAdapter = manager.adapter as PreviewSupport;
+    return previewAdapter.getPreview(_getPostDraft());
+  }
+
+  PostDraft _getPostDraft() {
+    return PostDraft(
+      subject: _subjectController.value.text,
+      content: _bodyController.value.text,
+      visibility: _visibility,
+    );
+  }
+
+  void post(BuildContext context, FediverseAdapter adapter) async {
+    Navigator.of(context).pop();
+
+    var messenger = ScaffoldMessenger.of(context);
+
+    var snackBar = Utils.generateAsyncSnackBar(
+      done: false,
+      text: Text("Sending post..."),
+      icon: Icon(Mdi.textBox),
+    );
+
+    messenger.showSnackBar(snackBar);
+
+    //await Future.delayed(Duration(seconds: 3), () {
+    //  print("This code executes after 5 seconds");
+    //});
+
+    var post = await adapter.postStatus(_getPostDraft());
+
+    messenger.removeCurrentSnackBar();
+
+    snackBar = Utils.generateAsyncSnackBar(
+      done: true,
+      text: Text("Post sent"),
+      icon: Icon(Mdi.check),
+      action: SnackBarAction(
+        label: 'View post'.toUpperCase(),
+        onPressed: () {
+         //Navigator.of(context).push(MaterialPageRoute(
+         //  builder: (_) => ConversationScreen(post),
+         //));
+        },
+      ),
+    );
+
+    messenger.showSnackBar(snackBar);
   }
 
   void openEmojiPicker(BuildContext context, AccountManager container) {
@@ -146,8 +246,8 @@ class _PostFormState extends State<PostForm> {
                 return EmojiSelector(
                   categories: s.data!,
                   onEmojiSelected: (emoji) {
-                    bodyController.text =
-                        bodyController.text += emoji.toString();
+                    _bodyController.text =
+                        _bodyController.text += emoji.toString();
                   },
                 );
               },
