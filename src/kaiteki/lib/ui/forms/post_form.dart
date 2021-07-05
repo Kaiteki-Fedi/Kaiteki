@@ -1,13 +1,13 @@
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart' as v;
-import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/widgets/formatting_button.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
@@ -16,7 +16,6 @@ import 'package:kaiteki/ui/widgets/visibility_button.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
-import 'package:async/async.dart';
 
 class PostForm extends StatefulWidget {
   final Post? replyTo;
@@ -30,19 +29,18 @@ class PostForm extends StatefulWidget {
 class _PostFormState extends State<PostForm> {
   late TextEditingController _bodyController;
   late TextEditingController _subjectController;
-  bool _isPreviewExpanded = false;
-  v.Visibility _visibility = v.Visibility.Public;
-  Formatting _formatting = Formatting.PlainText;
   late RestartableTimer _typingTimer;
+  var _isPreviewExpanded = false;
+  var _visibility = v.Visibility.Public;
+  var _formatting = Formatting.PlainText;
 
   _PostFormState() {
     _typingTimer = RestartableTimer(Duration(seconds: 1), () {
       _typingTimer.cancel();
-      setState((){});
+      setState(() {});
     });
 
-    _bodyController = TextEditingController()
-      ..addListener(_typingTimer.reset);
+    _bodyController = TextEditingController()..addListener(_typingTimer.reset);
 
     _subjectController = TextEditingController()
       ..addListener(_typingTimer.reset);
@@ -58,68 +56,36 @@ class _PostFormState extends State<PostForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           ExpansionPanelList(
-            expansionCallback: (_, v) => setState(() => _isPreviewExpanded = !v),
+            expansionCallback: (_, v) {
+              setState(() => _isPreviewExpanded = !v);
+            },
             children: [
               ExpansionPanel(
                 canTapOnHeader: true,
                 isExpanded: _isPreviewExpanded,
                 headerBuilder: (_, x) {
-                  return ListTile(title: Text("Preview"));
+                  return const ListTile(title: const Text("Preview"));
                 },
                 body: FutureBuilder(
                   future: getPreviewFuture(manager),
-                  builder: (BuildContext context, AsyncSnapshot<Post<dynamic>> snapshot) {
-                    if (snapshot.hasError) {
-
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: IconLandingWidget(
-                            Mdi.close,
-                            snapshot.error.toString(),
-                          ),
-                        ),
-                      );
-                    }
-
-                    if (_bodyController.value.text.isEmpty) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(child: const Text('Start writing a post to see a preview!')),
-                      );
-
-                    }
-
-                    if (!snapshot.hasData) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    }
-
-                    return StatusWidget(snapshot.data!, showActions: false);
-                  },
-                )
+                  builder: buildPreview,
+                ),
               ),
             ],
           ),
           TextField(
-            decoration: InputDecoration(
-              hintText: "Subject (optional)",
-            ),
+            decoration: const InputDecoration(hintText: "Subject (optional)"),
             controller: _subjectController,
           ),
           Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: "Just landed in L.A.",
               ),
               textAlignVertical: TextAlignVertical.top,
-              enableSuggestions: true,
               expands: true,
               minLines: null,
               maxLines: null,
-              maxLength: 60000,
               controller: _bodyController,
             ),
           ),
@@ -161,7 +127,7 @@ class _PostFormState extends State<PostForm> {
               Spacer(),
 
               ElevatedButton(
-                child: Text("Submit"),
+                child: const Text("Submit"),
                 onPressed: () => post(context, manager.adapter),
               ),
             ],
@@ -169,6 +135,38 @@ class _PostFormState extends State<PostForm> {
         ],
       ),
     );
+  }
+
+  Widget buildPreview(
+    BuildContext context,
+    AsyncSnapshot<Post<dynamic>> snapshot,
+  ) {
+    switch (snapshot.connectionState) {
+      case ConnectionState.none:
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: const Text('Start writing a post to see a preview!'),
+          ),
+        );
+
+      case ConnectionState.done:
+        if (snapshot.hasError)
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: IconLandingWidget(Mdi.close, snapshot.error.toString()),
+            ),
+          );
+        else
+          return StatusWidget(snapshot.data!, showActions: false);
+
+      default:
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(child: CircularProgressIndicator()),
+        );
+    }
   }
 
   Future<Post>? getPreviewFuture(AccountManager manager) {
@@ -216,9 +214,9 @@ class _PostFormState extends State<PostForm> {
       action: SnackBarAction(
         label: 'View post'.toUpperCase(),
         onPressed: () {
-         //Navigator.of(context).push(MaterialPageRoute(
-         //  builder: (_) => ConversationScreen(post),
-         //));
+          //Navigator.of(context).push(MaterialPageRoute(
+          //  builder: (_) => ConversationScreen(post),
+          //));
         },
       ),
     );
@@ -231,33 +229,30 @@ class _PostFormState extends State<PostForm> {
       (context) {
         return Material(
           type: MaterialType.card,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(6.0),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(6.0)),
           child: SizedBox(
             height: 250,
             child: FutureBuilder(
               future: container.adapter.getEmojis(),
-              builder: (c, AsyncSnapshot<Iterable<EmojiCategory>> s) {
-                if (s.hasError) {
-                  print(s.error);
-                  return Center(child: Text("Failed to fetch emojis."));
-                }
-
-                if (!s.hasData)
-                  return Center(child: CircularProgressIndicator());
-
-                return EmojiSelector(
-                  categories: s.data!,
-                  onEmojiSelected: (emoji) {
-                    _bodyController.text =
-                        _bodyController.text += emoji.toString();
-                  },
-                );
-              },
+              builder: buildEmojiSelector,
             ),
           ),
         );
+      },
+    );
+  }
+
+  Widget buildEmojiSelector(c, AsyncSnapshot<Iterable<EmojiCategory>> s) {
+    if (s.hasError) {
+      return Center(child: Text("Failed to fetch emojis."));
+    }
+
+    if (!s.hasData) return Center(child: CircularProgressIndicator());
+
+    return EmojiSelector(
+      categories: s.data!,
+      onEmojiSelected: (emoji) {
+        _bodyController.text = _bodyController.text += emoji.toString();
       },
     );
   }
