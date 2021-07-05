@@ -1,7 +1,7 @@
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/previewCard.dart';
+import 'package:kaiteki/fediverse/model/preview_card.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
@@ -64,7 +64,7 @@ class Post<T> {
     this.content,
     this.subject,
     this.nsfw = false,
-    this.formatting = Formatting.PlainText,
+    this.formatting = Formatting.plainText,
     this.liked = false,
     this.repeated = false,
     this.attachments,
@@ -88,7 +88,7 @@ class Post<T> {
       postedAt: DateTime.now(),
       reactions: [],
       id: 'cool-post',
-      visibility: Visibility.Public,
+      visibility: Visibility.public,
     );
   }
 }

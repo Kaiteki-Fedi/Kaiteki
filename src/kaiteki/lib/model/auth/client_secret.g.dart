@@ -61,7 +61,7 @@ K? _$enumDecodeNullable<K, V>(
 }
 
 const _$ApiTypeEnumMap = {
-  ApiType.Mastodon: 'Mastodon',
-  ApiType.Pleroma: 'Pleroma',
-  ApiType.Misskey: 'Misskey',
+  ApiType.mastodon: 'Mastodon',
+  ApiType.pleroma: 'Pleroma',
+  ApiType.misskey: 'Misskey',
 };

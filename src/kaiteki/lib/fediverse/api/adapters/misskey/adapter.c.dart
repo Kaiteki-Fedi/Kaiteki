@@ -32,13 +32,13 @@ Post toPost(MisskeyNote source) {
 Visibility toVisibility(String visibility) {
   switch (visibility) {
     case "public":
-      return Visibility.Public;
+      return Visibility.public;
     case "home":
-      return Visibility.Unlisted;
+      return Visibility.unlisted;
     case "followers":
-      return Visibility.FollowersOnly;
+      return Visibility.followersOnly;
     case "specified":
-      return Visibility.Direct;
+      return Visibility.direct;
 
     default:
       throw Exception("Missing case for $visibility");

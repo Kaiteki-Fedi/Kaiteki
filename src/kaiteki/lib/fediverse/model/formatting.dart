@@ -2,28 +2,36 @@ import 'package:flutter/widgets.dart';
 import 'package:mdi/mdi.dart';
 
 enum Formatting {
-  PlainText,
-  Markdown,
-  HTML,
-  BBCode,
+  plainText,
+  markdown,
+  html,
+  bbCode,
 }
 
 extension FormattingExtensions on Formatting {
   IconData toIconData() {
     switch (this) {
-      case Formatting.PlainText: return Mdi.formatTextVariant;
-      case Formatting.Markdown: return Mdi.languageMarkdown;
-      case Formatting.HTML: return Mdi.xml;
-      case Formatting.BBCode: return Mdi.codeBrackets;
+      case Formatting.plainText:
+        return Mdi.formatTextVariant;
+      case Formatting.markdown:
+        return Mdi.languageMarkdown;
+      case Formatting.html:
+        return Mdi.xml;
+      case Formatting.bbCode:
+        return Mdi.codeBrackets;
     }
   }
 
   String toHumanString() {
     switch (this) {
-      case Formatting.PlainText: return "Plain text";
-      case Formatting.Markdown: return "Markdown";
-      case Formatting.HTML: return "HTML";
-      case Formatting.BBCode: return "BBCode";
+      case Formatting.plainText:
+        return "Plain text";
+      case Formatting.markdown:
+        return "Markdown";
+      case Formatting.html:
+        return "HTML";
+      case Formatting.bbCode:
+        return "BBCode";
     }
   }
 }

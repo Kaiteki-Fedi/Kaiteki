@@ -36,26 +36,26 @@ class InteractionEventBar extends StatelessWidget {
         children: [
           Padding(
             padding: avatarMargin,
-            child: AvatarWidget(this.user, size: 16),
+            child: AvatarWidget(user, size: 16),
           ),
           RichText(
             text: TextSpan(
               style: textStyle,
               children: [
                 TextRenderer(
-                  emojis: this.user.emojis,
+                  emojis: user.emojis,
                   theme: TextRendererTheme.fromContext(context),
-                ).renderFromHtml(this.user.displayName),
-                TextSpan(text: " "),
+                ).renderFromHtml(user.displayName),
+                const TextSpan(text: " "),
                 WidgetSpan(
                   child: Icon(
-                    this.icon,
+                    icon,
                     size: Utils.getLocalFontSize(context) * 1.25,
-                    color: this.color,
+                    color: color,
                   ),
                 ),
-                TextSpan(text: " "),
-                TextSpan(text: this.text),
+                const TextSpan(text: " "),
+                TextSpan(text: text),
               ],
             ),
           ),

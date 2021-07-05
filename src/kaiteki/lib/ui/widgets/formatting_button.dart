@@ -8,7 +8,10 @@ class FormattingButton extends StatelessWidget {
   final Formatting formatting;
   final FormattingButtonCallback? callback;
 
-  FormattingButton({required this.formatting, this.callback});
+  const FormattingButton({
+    required this.formatting,
+    this.callback,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,7 @@ class FormattingButton extends StatelessWidget {
       itemBuilder: (_) {
         return [
           for (var value in Formatting.values)
-            new PopupMenuItem(
+            PopupMenuItem(
               child: ListTile(
                 title: Text(value.toHumanString()),
                 leading: Icon(value.toIconData()),

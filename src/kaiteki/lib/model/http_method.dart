@@ -1,20 +1,20 @@
 enum HttpMethod {
-  GET,
-  POST,
-  PUT,
-  DELETE,
+  get,
+  post,
+  put,
+  delete,
 }
 
 extension HttpMethodExtensions on HttpMethod {
   String toMethodString() {
     switch (this) {
-      case HttpMethod.GET:
+      case HttpMethod.get:
         return "GET";
-      case HttpMethod.POST:
+      case HttpMethod.post:
         return "POST";
-      case HttpMethod.PUT:
+      case HttpMethod.put:
         return "PUT";
-      case HttpMethod.DELETE:
+      case HttpMethod.delete:
         return "DELETE";
       default:
         throw "Given HttpMethod is out of bounds.";

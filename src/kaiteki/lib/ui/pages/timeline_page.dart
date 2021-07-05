@@ -7,7 +7,7 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class TimelinePage extends StatefulWidget {
-  TimelinePage({Key? key}) : super(key: key);
+  const TimelinePage({Key? key}) : super(key: key);
 
   @override
   _TimelinePageState createState() => _TimelinePageState();
@@ -20,7 +20,7 @@ class _TimelinePageState extends State<TimelinePage> {
     var timelineKey = ValueKey(container.currentAccount.hashCode);
 
     if (!container.loggedIn) {
-      return Center(
+      return const Center(
         child: IconLandingWidget(
           Mdi.key,
           'You need to be signed in to view your timeline',
@@ -30,7 +30,7 @@ class _TimelinePageState extends State<TimelinePage> {
 
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 800),
+        constraints: const BoxConstraints(maxWidth: 800),
         child: Timeline(
           key: timelineKey,
           adapter: container.adapter,

@@ -7,7 +7,7 @@ import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
 class ManageAccountsScreen extends StatefulWidget {
-  ManageAccountsScreen({Key? key}) : super(key: key);
+  const ManageAccountsScreen({Key? key}) : super(key: key);
 
   @override
   _ManageAccountsScreenState createState() => _ManageAccountsScreenState();
@@ -19,9 +19,7 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
     var container = Provider.of<AccountManager>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Manage Accounts"),
-      ),
+      appBar: AppBar(title: const Text("Manage Accounts")),
       body: Builder(
         builder: (_) {
           var length = container.accounts.length;
@@ -31,16 +29,16 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 16.0),
                     child: IconLandingWidget(
                       Mdi.accountOutline,
                       'No accounts',
                     ),
                   ),
                   OutlinedButton.icon(
-                    icon: Icon(Mdi.plus),
-                    label: Text("Add Account"),
+                    icon: const Icon(Mdi.plus),
+                    label: const Text("Add Account"),
                     onPressed: () => onTapAdd(context),
                   )
                 ],
@@ -51,14 +49,15 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
           return ListView.builder(
             itemCount: length + 2,
             itemBuilder: (_, i) {
-              if (i == length) return Divider();
+              if (i == length) return const Divider();
 
-              if (i == length + 1)
+              if (i == length + 1) {
                 return ListTile(
-                  leading: Icon(Mdi.plus),
-                  title: Text("Add Account"),
+                  leading: const Icon(Mdi.plus),
+                  title: const Text("Add Account"),
                   onTap: () => onTapAdd(context),
                 );
+              }
 
               var compound = container.accounts.elementAt(i);
               return ListTile(
@@ -71,7 +70,7 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
                 subtitle: Text(compound.instance),
                 onTap: () async => await container.changeAccount(compound),
                 trailing: IconButton(
-                  icon: Icon(Mdi.close),
+                  icon: const Icon(Mdi.close),
                   onPressed: () => onTapRemove(context, container, compound),
                 ),
               );
@@ -94,17 +93,17 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Are you sure you want to remove this account?"),
+        title: const Text("Are you sure you want to remove this account?"),
         content: const Text("You will have to add this account again later."),
         actions: <Widget>[
           TextButton(
-            child: Text('CANCEL'),
+            child: const Text('CANCEL'),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
           TextButton(
-            child: Text("REMOVE"),
+            child: const Text("REMOVE"),
             onPressed: () {
               container.remove(account);
               Navigator.of(context).pop();

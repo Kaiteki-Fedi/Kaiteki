@@ -14,9 +14,9 @@ class AboutScreen extends StatelessWidget {
     var messenger = ScaffoldMessenger.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text("About")),
+      appBar: AppBar(title: const Text("About")),
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: Constants.defaultFormWidth,
           child: SingleChildScrollView(
             child: Column(
@@ -29,7 +29,7 @@ class AboutScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(Constants.appName, textScaleFactor: 2),
+                    const Text(Constants.appName, textScaleFactor: 2),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: AppNameBadge(
@@ -40,7 +40,7 @@ class AboutScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(Constants.appTagline),
+                const Text(Constants.appTagline),
                 Card(
                   margin: const EdgeInsets.only(
                     left: 4.0,
@@ -51,18 +51,18 @@ class AboutScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Icon(Mdi.github),
-                        title: Text("Github Repository"),
-                        trailing: Icon(Mdi.openInNew),
+                        leading: const Icon(Mdi.github),
+                        title: const Text("Github Repository"),
+                        trailing: const Icon(Mdi.openInNew),
                         onTap: () => launchUrl(
                           ScaffoldMessenger.of(context),
                           "https://github.com/Craftplacer/kaiteki",
                         ),
                       ),
                       ListTile(
-                        leading: Icon(Mdi.license),
-                        title: Text("Open Source Licenses"),
-                        trailing: Icon(Mdi.arrowRight),
+                        leading: const Icon(Mdi.license),
+                        title: const Text("Open Source Licenses"),
+                        trailing: const Icon(Mdi.arrowRight),
                         onTap: () {
                           showLicensePage(
                             context: context,
@@ -84,23 +84,23 @@ class AboutScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 12.0),
                         child: SeparatorText("CREDITS"),
                       ),
                       ListTile(
-                        title: Text("Craftplacer"),
-                        subtitle: Text("Main developer"),
-                        trailing: Icon(Mdi.openInNew),
+                        title: const Text("Craftplacer"),
+                        subtitle: const Text("Main developer"),
+                        trailing: const Icon(Mdi.openInNew),
                         onTap: () => launchUrl(
                           messenger,
                           "https://github.com/Craftplacer",
                         ),
                       ),
                       ListTile(
-                        title: Text("Odyssey98"),
-                        subtitle: Text("Icon design"),
-                        trailing: Icon(Mdi.openInNew),
+                        title: const Text("Odyssey98"),
+                        subtitle: const Text("Icon design"),
+                        trailing: const Icon(Mdi.openInNew),
                         onTap: () => launchUrl(
                           messenger,
                           "https://mstdn.social/@odyssey98",
@@ -119,8 +119,8 @@ class AboutScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 12.0),
                         child: SeparatorText("<3"),
                       ),
                       Padding(
@@ -128,7 +128,7 @@ class AboutScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Made with "),
+                            const Text("Made with "),
                             SizedBox(
                               width: 85,
                               child: InkWell(
@@ -144,7 +144,7 @@ class AboutScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Text(" and love"),
+                            const Text(" and love"),
                           ],
                         ),
                       ),
@@ -164,7 +164,7 @@ class AboutScreen extends StatelessWidget {
       await launch(url);
     } else {
       scaffold.showSnackBar(
-        SnackBar(content: Text("URL couldn't be opened.")),
+        const SnackBar(content: Text("URL couldn't be opened.")),
       );
     }
   }
@@ -205,13 +205,13 @@ class AppNameBadge extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.all(Radius.circular(24)),
+        borderRadius: const BorderRadius.all(Radius.circular(24)),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
         text,
         style: GoogleFonts.robotoMono(
-          color: this.textColor,
+          color: textColor,
           fontWeight: FontWeight.bold,
         ),
         textScaleFactor: 1.5,

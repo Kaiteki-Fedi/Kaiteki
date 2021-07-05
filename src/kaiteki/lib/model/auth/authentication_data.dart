@@ -22,8 +22,9 @@ class MastodonAuthenticationData implements AuthenticationData {
 
   @override
   Request applyTo(Request request) {
-    if (accessToken.isNotNullOrEmpty)
+    if (accessToken.isNotNullOrEmpty) {
       request.headers["Authorization"] = "Bearer $accessToken";
+    }
 
     return request;
   }

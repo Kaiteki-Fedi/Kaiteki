@@ -78,21 +78,23 @@ class _KaitekiAppState extends State<KaitekiApp> {
                     if (Provider.of<AccountManager>(context).loggedIn) {
                       return MainScreen();
                     } else {
-                      return new AccountRequiredScreen();
+                      return AccountRequiredScreen();
                     }
                   },
                 );
               },
-              "/accounts": (_) => ManageAccountsScreen(),
-              "/accounts/add": (_) => AddAccountScreen(),
+              "/accounts": (_) => const ManageAccountsScreen(),
+              "/accounts/add": (_) => const AddAccountScreen(),
               "/about": (_) => AboutScreen(),
               "/settings": (_) => SettingsScreen(),
-              "/settings/customization": (_) => CustomizationSettingsScreen(),
+              "/settings/customization": (_) =>
+                  const CustomizationSettingsScreen(),
               "/settings/filtering": (_) => FilteringScreen(),
               "/settings/filtering/sensitivePosts": (_) =>
-                  SensitivePostFilteringScreen(),
-              "/settings/debug": (_) => DebugScreen(),
-              "/settings/debug/preferences": (_) => SharedPreferencesScreen(),
+                  const SensitivePostFilteringScreen(),
+              "/settings/debug": (_) => const DebugScreen(),
+              "/settings/debug/preferences": (_) =>
+                  const SharedPreferencesScreen(),
             },
             onGenerateRoute: _generateRoute,
           );

@@ -12,13 +12,18 @@ class AccountRequiredScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Welcome to Kaiteki!", textScaleFactor: 3),
-              Text("To continue, you need to log into at least one instance."),
+              const Text(
+                "Welcome to Kaiteki!",
+                textScaleFactor: 3,
+              ),
+              const Text(
+                "To continue, you need to log into at least one instance.",
+              ),
               Expanded(
                 child: Center(
                   child: ElevatedButton.icon(
-                    icon: Icon(Mdi.accountPlus),
-                    label: Text("Add account"),
+                    icon: const Icon(Mdi.accountPlus),
+                    label: const Text("Add account"),
                     style: ButtonStyle(
                       visualDensity: VisualDensity.comfortable,
                       padding: MaterialStateProperty.all(
@@ -40,8 +45,8 @@ class AccountRequiredScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pushNamed("/settings");
                     },
-                    child: Text("Settings"),
-                    style: ButtonStyle(
+                    child: const Text("Settings"),
+                    style: const ButtonStyle(
                       visualDensity: VisualDensity.comfortable,
                     ),
                   ),

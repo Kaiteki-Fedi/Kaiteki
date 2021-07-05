@@ -1,7 +1,7 @@
 enum TimelineType {
-  Home,
-  DirectMessages,
-  Public,
-  Fediverse,
-  Bookmarks,
+  home,
+  directMessages,
+  public,
+  fediverse,
+  bookmarks,
 }

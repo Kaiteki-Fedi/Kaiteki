@@ -8,7 +8,7 @@ class PleromaApiDefinition extends ApiDefinition<PleromaAdapter> {
   String get name => 'Pleroma';
 
   @override
-  ApiType get type => ApiType.Pleroma;
+  ApiType get type => ApiType.pleroma;
 
   @override
   PleromaAdapter createAdapter() => PleromaAdapter();

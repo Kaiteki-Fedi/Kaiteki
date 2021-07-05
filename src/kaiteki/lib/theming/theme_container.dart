@@ -21,11 +21,12 @@ class ThemeContainer extends ChangeNotifier {
     var theme = current.materialTheme;
 
     // adjust theme for user preference of transparent backgrounds
-    if (backgroundOpacity < 1.0)
+    if (backgroundOpacity < 1.0) {
       theme = theme.copyWith(
         scaffoldBackgroundColor: Colors.transparent,
         backgroundColor: Colors.transparent,
       );
+    }
 
     return theme;
   }

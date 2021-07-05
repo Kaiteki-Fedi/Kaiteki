@@ -10,7 +10,7 @@ class InstanceListWidget extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.only(top: 8.0),
       children: [
-        ListTile(
+        const ListTile(
           leading: Icon(Mdi.autoFix),
           title: Text("Automatic"),
           subtitle: Text(
@@ -18,8 +18,8 @@ class InstanceListWidget extends StatelessWidget {
           ),
           isThreeLine: true,
         ),
-        Divider(),
-        SeparatorText("Select Manually"),
+        const Divider(),
+        const SeparatorText("Select Manually"),
         for (var definition in ApiDefinitions.definitions)
           ListTile(
             leading: Image.asset(
@@ -32,23 +32,23 @@ class InstanceListWidget extends StatelessWidget {
               '/login/${definition.id}',
             ),
           ),
-        Divider(),
-        SeparatorText("More"),
+        const Divider(),
+        const SeparatorText("More"),
         ListTile(
-          leading: Icon(Mdi.dotsHorizontal),
-          title: Text("Not in this list"),
-          subtitle: Text(
+          leading: const Icon(Mdi.dotsHorizontal),
+          title: const Text("Not in this list"),
+          subtitle: const Text(
             "Tap here to request support for a different backend.",
           ),
           onTap: () async {
             const String url =
                 "https://github.com/Craftplacer/kaiteki/issues/new";
 
-            if (await canLaunch(url))
+            if (await canLaunch(url)) {
               await launch(url);
-            else {
+            } else {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("URL couldn't be opened.")),
+                const SnackBar(content: Text("URL couldn't be opened.")),
               );
             }
           },

@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart' as PostVisibility;
+import 'package:kaiteki/fediverse/model/visibility.dart' as k;
 
-typedef VisibilityButtonCallback = void Function(PostVisibility.Visibility visibility);
+typedef VisibilityButtonCallback = void Function(k.Visibility visibility);
 
 /// A button that lets the user choose between post visibilities.
 class VisibilityButton extends StatelessWidget {
-  final PostVisibility.Visibility visibility;
+  final k.Visibility visibility;
   final VisibilityButtonCallback? callback;
 
-  VisibilityButton({required this.visibility, this.callback});
+  const VisibilityButton({
+    required this.visibility,
+    this.callback,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<PostVisibility.Visibility>(
+    return PopupMenuButton<k.Visibility>(
       icon: Icon(visibility.toIconData()),
       onSelected: (choice) => callback?.call(choice),
       enabled: callback != null,
       tooltip: 'Change post scope',
       itemBuilder: (_) {
         return [
-          for (var value in PostVisibility.Visibility.values)
-            new PopupMenuItem(
+          for (var value in k.Visibility.values)
+            PopupMenuItem(
               child: ListTile(
                 title: Text(value.toHumanString()),
                 leading: Icon(value.toIconData()),

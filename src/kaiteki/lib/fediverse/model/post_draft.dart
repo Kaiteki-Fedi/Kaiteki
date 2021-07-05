@@ -13,7 +13,7 @@ class PostDraft {
     required this.subject,
     required this.content,
     required this.visibility,
-    this.formatting = Formatting.PlainText,
+    this.formatting = Formatting.plainText,
     this.replyTo,
   });
 }

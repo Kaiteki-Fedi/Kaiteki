@@ -9,7 +9,7 @@ import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 
 class AccountManager extends ChangeNotifier {
-  static var _logger = getLogger('AccountContainer');
+  static final _logger = getLogger('AccountContainer');
 
   AccountCompound? _currentAccount;
   AccountCompound get currentAccount => _currentAccount!;
@@ -21,7 +21,7 @@ class AccountManager extends ChangeNotifier {
   final AccountSecretRepository _accountSecrets;
   final ClientSecretRepository _clientSecrets;
 
-  List<AccountCompound> _accounts = <AccountCompound>[];
+  final List<AccountCompound> _accounts = <AccountCompound>[];
   Iterable<AccountCompound> get accounts => List.unmodifiable(_accounts);
 
   AccountManager(this._accountSecrets, this._clientSecrets);
@@ -37,10 +37,11 @@ class AccountManager extends ChangeNotifier {
   }
 
   Future<void> addCurrentAccount(AccountCompound compound) async {
-    if (contains(compound))
+    if (contains(compound)) {
       throw Exception(
         'Cannot add an account with the same instance and username',
       );
+    }
 
     _accounts.add(compound);
     _accountSecrets.insert(compound.accountSecret);

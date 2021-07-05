@@ -24,7 +24,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   late final ScrollController _scrollController;
-  Map<int, GlobalKey> _itemKeys = <int, GlobalKey>{};
+  final Map<int, GlobalKey> _itemKeys = <int, GlobalKey>{};
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
       var animationHeight = _scrollController.offset + offset.dy - 56.0;
       _scrollController.animateTo(
         animationHeight,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.decelerate,
       );
     });
@@ -73,19 +73,19 @@ class _EmojiSelectorState extends State<EmojiSelector>
                   controller: _tabController,
                 ),
               ),
-              VerticalDivider(),
+              const VerticalDivider(),
               TextButton(
-                child: Icon(Mdi.dotsVertical),
+                child: const Icon(Mdi.dotsVertical),
                 style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size.square(52)),
+                  minimumSize: MaterialStateProperty.all(const Size.square(52)),
                 ),
                 onPressed: null,
               ),
               TextButton(
-                child: Icon(Mdi.close),
+                child: const Icon(Mdi.close),
                 onPressed: () => Navigator.of(context).pop(),
                 style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size.square(52)),
+                  minimumSize: MaterialStateProperty.all(const Size.square(52)),
                 ),
               ),
             ],
@@ -94,7 +94,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               for (var category in widget.categories)
                 EmojiCategoryWidget(

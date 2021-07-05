@@ -31,11 +31,11 @@ class _PostFormState extends State<PostForm> {
   late TextEditingController _subjectController;
   late RestartableTimer _typingTimer;
   var _isPreviewExpanded = false;
-  var _visibility = v.Visibility.Public;
-  var _formatting = Formatting.PlainText;
+  var _visibility = v.Visibility.public;
+  var _formatting = Formatting.plainText;
 
   _PostFormState() {
-    _typingTimer = RestartableTimer(Duration(seconds: 1), () {
+    _typingTimer = RestartableTimer(const Duration(seconds: 1), () {
       _typingTimer.cancel();
       setState(() {});
     });
@@ -107,7 +107,7 @@ class _PostFormState extends State<PostForm> {
               // ),
               IconButton(
                 onPressed: () => openEmojiPicker(context, manager),
-                icon: Icon(Mdi.emoticon),
+                icon: const Icon(Mdi.emoticon),
                 splashRadius: 20,
                 tooltip: "Insert emoji",
               ),
@@ -124,7 +124,7 @@ class _PostFormState extends State<PostForm> {
               //   tooltip: "Add poll",
               // ),
 
-              Spacer(),
+              const Spacer(),
 
               ElevatedButton(
                 child: const Text("Submit"),
@@ -143,27 +143,28 @@ class _PostFormState extends State<PostForm> {
   ) {
     switch (snapshot.connectionState) {
       case ConnectionState.none:
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
+        return const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Center(
-            child: const Text('Start writing a post to see a preview!'),
+            child: Text('Start writing a post to see a preview!'),
           ),
         );
 
       case ConnectionState.done:
-        if (snapshot.hasError)
+        if (snapshot.hasError) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
               child: IconLandingWidget(Mdi.close, snapshot.error.toString()),
             ),
           );
-        else
+        } else {
           return StatusWidget(snapshot.data!, showActions: false);
+        }
 
       default:
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
+        return const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Center(child: CircularProgressIndicator()),
         );
     }
@@ -203,14 +204,14 @@ class _PostFormState extends State<PostForm> {
     var snackBar = Utils.generateAsyncSnackBar(
       context: context,
       done: false,
-      text: Text("Sending post..."),
-      icon: Icon(Mdi.textBox),
+      text: const Text("Sending post..."),
+      icon: const Icon(Mdi.textBox),
       foreColor: snackBarTextStyle?.color,
     );
 
     messenger.showSnackBar(snackBar);
 
-    await Future.delayed(Duration(seconds: 10), () {});
+    await Future.delayed(const Duration(seconds: 10), () {});
 
     //var post = await adapter.postStatus(_getPostDraft());
 
@@ -219,8 +220,8 @@ class _PostFormState extends State<PostForm> {
     snackBar = Utils.generateAsyncSnackBar(
       context: context,
       done: true,
-      text: Text("Post sent"),
-      icon: Icon(Mdi.check),
+      text: const Text("Post sent"),
+      icon: const Icon(Mdi.check),
       foreColor: snackBarTextStyle?.color,
       action: SnackBarAction(
         label: 'View post'.toUpperCase(),
@@ -240,7 +241,7 @@ class _PostFormState extends State<PostForm> {
       (context) {
         return Material(
           type: MaterialType.card,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(6.0)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(6.0)),
           child: SizedBox(
             height: 250,
             child: FutureBuilder(
@@ -255,10 +256,10 @@ class _PostFormState extends State<PostForm> {
 
   Widget buildEmojiSelector(c, AsyncSnapshot<Iterable<EmojiCategory>> s) {
     if (s.hasError) {
-      return Center(child: Text("Failed to fetch emojis."));
+      return const Center(child: Text("Failed to fetch emojis."));
     }
 
-    if (!s.hasData) return Center(child: CircularProgressIndicator());
+    if (!s.hasData) return const Center(child: CircularProgressIndicator());
 
     return EmojiSelector(
       categories: s.data!,

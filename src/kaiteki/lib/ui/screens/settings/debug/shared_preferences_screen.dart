@@ -16,10 +16,10 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shared Preferences Manager"),
+        title: const Text("Shared Preferences Manager"),
         actions: [
           IconButton(
-            icon: Icon(Mdi.delete),
+            icon: const Icon(Mdi.delete),
             onPressed: () => setState(() => _clearPreferences(context)),
           ),
         ],
@@ -27,8 +27,9 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
       body: FutureBuilder(
         future: SharedPreferences.getInstance(),
         builder: (context, AsyncSnapshot<SharedPreferences> snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
           var items = snapshot.data!.getKeys();
           return ListView.builder(
@@ -42,7 +43,7 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
                 leading: Icon(icon),
                 title: Text(key, style: GoogleFonts.robotoMono()),
                 trailing: IconButton(
-                  icon: Icon(Mdi.delete),
+                  icon: const Icon(Mdi.delete),
                   onPressed: () => setState(() => snapshot.data!.remove(key)),
                 ),
               );
@@ -79,8 +80,8 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
             padding: const EdgeInsets.only(right: 8.0),
             child: Icon(
               icon,
-              color: Theme.of(context).snackBarTheme.contentTextStyle?.color
-                  ?? Colors.white,
+              color: Theme.of(context).snackBarTheme.contentTextStyle?.color ??
+                  Colors.white,
             ),
           ),
           Text(message),

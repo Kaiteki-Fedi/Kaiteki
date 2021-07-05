@@ -28,9 +28,10 @@ class AccountCompound {
   /// Checks whether the other [AccountCompound] has the same identifying data.
   @override
   bool operator ==(other) {
-    if (other is AccountCompound)
+    if (other is AccountCompound) {
       return other.instance == instance && accountSecret == other.accountSecret;
-    else
+    } else {
       return false;
+    }
   }
 }

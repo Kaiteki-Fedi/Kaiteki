@@ -53,21 +53,18 @@ class CountButton extends StatelessWidget {
     }
   }
 
-  Color _getIconColor(BuildContext context)  {
-
+  Color _getIconColor(BuildContext context) {
     var inactiveColor = color;
     var theme = Theme.of(context);
 
-    if (inactiveColor == null) {
-      inactiveColor = theme.disabledColor;
-    }
+    inactiveColor ??= theme.disabledColor;
 
-    if (buttonOnly)
+    if (buttonOnly) {
       return Utils.getLocalTextColor(context);
-
-    if (active)
+    } else if (active) {
       return activeColor ?? inactiveColor;
-
-    return inactiveColor;
+    } else {
+      return inactiveColor;
+    }
   }
 }

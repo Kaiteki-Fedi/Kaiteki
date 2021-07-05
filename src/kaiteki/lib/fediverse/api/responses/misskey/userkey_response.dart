@@ -7,9 +7,10 @@ class MisskeyUserkeyResponse {
   MisskeyUserkeyResponse.fromJson(Map<String, dynamic> json) {
     accessToken = json["accessToken"];
 
-    if (json["user"] == null)
+    if (json["user"] == null) {
       user = null;
-    else
+    } else {
       user = MisskeyUser.fromJson(json["user"]);
+    }
   }
 }

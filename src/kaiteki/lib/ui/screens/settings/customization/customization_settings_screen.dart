@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/ui/pages/customization/customization_basic_page.dart';
 
 class CustomizationSettingsScreen extends StatefulWidget {
-  CustomizationSettingsScreen({Key? key}) : super(key: key);
+  const CustomizationSettingsScreen({Key? key}) : super(key: key);
 
   @override
   _CustomizationSettingsScreenState createState() =>
@@ -14,8 +14,8 @@ class _CustomizationSettingsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Customization")),
-      body: CustomizationBasicPage(),
+      appBar: AppBar(title: const Text("Customization")),
+      body: const CustomizationBasicPage(),
     );
   }
 }

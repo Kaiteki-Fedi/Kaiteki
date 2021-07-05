@@ -3,7 +3,7 @@ import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:provider/provider.dart';
 
 class CustomizationBasicPage extends StatefulWidget {
-  CustomizationBasicPage({Key? key}) : super(key: key);
+  const CustomizationBasicPage({Key? key}) : super(key: key);
 
   @override
   _CustomizationBasicPageState createState() => _CustomizationBasicPageState();
@@ -17,7 +17,7 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
     return ListView(
       children: [
         ListTile(
-          title: Text("Theme"),
+          title: const Text("Theme"),
           onTap: () async {
             var selection = await showDialog<ThemeMode>(
               context: context,

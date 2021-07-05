@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ApplicationWidget extends StatelessWidget {
   final MastodonApplication application;
 
-  static var _logger = getLogger("ApplicationWidget");
+  static final _logger = getLogger("ApplicationWidget");
 
   const ApplicationWidget(this.application, {Key? key}) : super(key: key);
 

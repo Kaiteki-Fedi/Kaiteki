@@ -3,7 +3,7 @@ import 'package:kaiteki/preferences/app_preferences.dart';
 
 /// A class that wraps around app settings and provides tracking of updates.
 class PreferenceContainer extends ChangeNotifier {
-  AppPreferences _preferences;
+  final AppPreferences _preferences;
 
   PreferenceContainer(this._preferences);
 

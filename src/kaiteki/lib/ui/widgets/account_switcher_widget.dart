@@ -26,9 +26,9 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
       itemBuilder: (_) => [
         PopupMenuItem(
           child: Row(
-            children: [
+            children: const [
               Padding(
-                padding: const EdgeInsets.only(right: 12),
+                padding: EdgeInsets.only(right: 12),
                 child: Icon(Mdi.dotsHorizontal),
               ),
               Text("Manage Accounts"),
@@ -44,7 +44,7 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
     var container = Provider.of<AccountManager>(context);
 
     if (!container.loggedIn) {
-      return Icon(Mdi.accountCircle);
+      return const Icon(Mdi.accountCircle);
     }
 
     return AvatarWidget(

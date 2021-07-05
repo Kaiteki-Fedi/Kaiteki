@@ -10,7 +10,7 @@ class ThemePreviewWidget extends StatelessWidget {
   final AppThemeSource theme;
   final String defaultName;
 
-  ThemePreviewWidget(this.theme, {this.defaultName = "Unnamed"});
+  const ThemePreviewWidget(this.theme, {this.defaultName = "Unnamed"});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ThemePreviewWidget extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: Text("Preview"),
+              title: const Text("Preview"),
             ),
             body: StatusWidget(Post.example()),
           ),

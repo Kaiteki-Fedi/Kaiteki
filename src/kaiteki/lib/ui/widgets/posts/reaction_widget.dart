@@ -13,7 +13,7 @@ class ReactionWidget extends StatefulWidget {
   final Post parentPost;
   final Reaction reaction;
 
-  ReactionWidget({
+  const ReactionWidget({
     Key? key,
     required this.parentPost,
     required this.reaction,

@@ -73,7 +73,7 @@ Future<FlutterLocalNotificationsPlugin?> initializeNotifications() async {
   if (kIsWeb) return null;
 
   var plugin = FlutterLocalNotificationsPlugin();
-  var initSettings = InitializationSettings(
+  var initSettings = const InitializationSettings(
     android: AndroidInitializationSettings("@mipmap/ic_kaiteki"),
     iOS: IOSInitializationSettings(
       requestSoundPermission: false,

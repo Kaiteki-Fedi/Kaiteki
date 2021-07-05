@@ -29,13 +29,13 @@ Post toPost(MastodonStatus source) {
 Visibility toVisibility(String visibility) {
   switch (visibility) {
     case 'public':
-      return Visibility.Public;
+      return Visibility.public;
     case 'private':
-      return Visibility.FollowersOnly;
+      return Visibility.followersOnly;
     case 'direct':
-      return Visibility.Direct;
+      return Visibility.direct;
     case 'unlisted':
-      return Visibility.Unlisted;
+      return Visibility.unlisted;
     default:
       throw 'Unknown visibility $visibility.';
   }

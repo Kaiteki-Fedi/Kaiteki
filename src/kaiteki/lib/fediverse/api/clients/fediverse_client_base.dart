@@ -5,7 +5,6 @@ import 'package:http/http.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/exceptions/api_exception.dart';
-import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
@@ -13,17 +12,11 @@ import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:kaiteki/utils/utils.dart';
 
-typedef T DeserializeFromJson<T>(Map<String, dynamic> json);
+typedef DeserializeFromJson<T> = T Function(Map<String, dynamic> json);
 
 /// Class that contains basic properties and methods for building a Fediverse client.
 abstract class FediverseClientBase<AuthData extends AuthenticationData> {
-  static var _logger = getLogger("FediverseClientBase");
-
-  String get baseUrl {
-    if (instance == null) throw "Tried to return a null instance as base URL.";
-
-    return "https://$instance";
-  }
+  String get baseUrl => "https://$instance";
 
   AuthData? authenticationData;
   late String instance;
@@ -134,8 +127,4 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
       throw ApiException(response.statusCode);
     }
   }
-
-  @deprecated
-  Map<String, String> getHeaders({String? contentType}) =>
-      Map<String, String>();
 }

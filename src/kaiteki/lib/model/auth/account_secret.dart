@@ -22,10 +22,11 @@ class AccountSecret {
 
   @override
   bool operator ==(other) {
-    if (other is AccountSecret)
+    if (other is AccountSecret) {
       return other.instance.equalsIgnoreCase(instance) &&
           other.username.equalsIgnoreCase(username);
-    else
+    } else {
       return false;
+    }
   }
 }

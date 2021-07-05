@@ -38,9 +38,7 @@ class EmojiWidget extends StatelessWidget {
         }
 
         var progress = event.cumulativeBytesLoaded / event.expectedTotalBytes!;
-        var baseColor = context == null
-            ? Colors.white.withOpacity(0.5)
-            : Theme.of(context).disabledColor;
+        var baseColor = Theme.of(context).disabledColor;
         var opacityDifference = 1.0 - baseColor.opacity;
         var finalOpacity = baseColor.opacity + (progress * opacityDifference);
 

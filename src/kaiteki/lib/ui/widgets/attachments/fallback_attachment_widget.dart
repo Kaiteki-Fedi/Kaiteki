@@ -21,10 +21,10 @@ class FallbackAttachmentWidget extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: 6,
         children: [
-          Icon(Mdi.fileAlertOutline),
-          Text('Unsupported attachment'),
+          const Icon(Mdi.fileAlertOutline),
+          const Text('Unsupported attachment'),
           OutlinedButton(
-            child: Text('View online'),
+            child: const Text('View online'),
             onPressed: () async {
               await launch(attachment.url);
             },

@@ -5,21 +5,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
 class MfaScreen extends StatefulWidget {
-  MfaScreen({Key? key}) : super(key: key);
+  const MfaScreen({Key? key}) : super(key: key);
 
   @override
   _MfaScreenState createState() => _MfaScreenState();
 }
 
 class _MfaScreenState extends State<MfaScreen> {
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   String? _error;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Multi-Factor-Authentication"),
+        title: const Text("Multi-Factor-Authentication"),
       ),
       body: Center(
         child: Form(
@@ -32,9 +32,9 @@ class _MfaScreenState extends State<MfaScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: TextField(
-                    autofillHints: [AutofillHints.oneTimeCode],
+                    autofillHints: const [AutofillHints.oneTimeCode],
                     controller: _textController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       counterStyle: TextStyle(
                         height: double.minPositive,
@@ -53,9 +53,9 @@ class _MfaScreenState extends State<MfaScreen> {
                 ),
               ),
               if (_error.isNotNullOrEmpty)
-                Text(_error!, style: TextStyle(color: Colors.redAccent)),
+                Text(_error!, style: const TextStyle(color: Colors.redAccent)),
               ElevatedButton(
-                child: Text("Verify"),
+                child: const Text("Verify"),
                 onPressed: () {
                   Navigator.of(context).pop(_textController.value.text);
                 },

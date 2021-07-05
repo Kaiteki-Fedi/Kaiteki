@@ -33,7 +33,7 @@ class ImageAttachmentWidget extends StatelessWidget {
             );
           },
           errorBuilder: (_, w, c) {
-            return Center(child: Icon(Mdi.alert));
+            return const Center(child: Icon(Mdi.alert));
           },
           //width: 100,
           fit: BoxFit.contain,

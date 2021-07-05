@@ -6,14 +6,13 @@ import 'package:kaiteki/repositories/client_secret_repository.dart';
 
 /// A class that holds login routines for each instance type, for the time being.
 class LoginFunctions {
-  static var _logger = getLogger("LoginFunctions");
+  static final _logger = getLogger("LoginFunctions");
 
   static Future<ClientSecret> getClientSecret(MastodonClient client,
       String instance, ClientSecretRepository repository) async {
     var clientSecret = repository.get(instance);
 
-    if (clientSecret == null)
-      clientSecret = await createClientSecret(client, instance, repository);
+    clientSecret ??= await createClientSecret(client, instance, repository);
 
     return clientSecret;
   }

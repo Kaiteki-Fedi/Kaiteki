@@ -3,7 +3,7 @@ import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
 
 class SettingsScreen extends StatelessWidget {
-  static var _sections = <_Section>[
+  static final _sections = <_Section>[
     _Section(
       items: [
         const _SettingsItem(icon: Mdi.wrench, title: "General"),
@@ -67,7 +67,7 @@ class SettingsScreen extends StatelessWidget {
     var widgets = <Widget>[];
 
     for (int i = 0; i < sections.length; i++) {
-      if (i > 0) widgets.add(Divider());
+      if (i > 0) widgets.add(const Divider());
 
       var section = sections[i];
 
@@ -92,7 +92,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: const Text("Settings"),
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {

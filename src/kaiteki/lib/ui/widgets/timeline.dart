@@ -68,7 +68,7 @@ class _TimelineState extends State<Timeline> {
               p,
               PostFilter.runMultipleFilters(context, p, filters),
             );
-          }).where((p) => p.value != PostFilterResult.Hide));
+          }).where((p) => p.value != PostFilterResult.hide));
         }
 
         return RefreshIndicator(
@@ -79,7 +79,9 @@ class _TimelineState extends State<Timeline> {
               physics: const AlwaysScrollableScrollPhysics(),
               controller: _scrollContainer,
               itemCount: filtered.length + 1,
-              separatorBuilder: (_, __) => Divider(thickness: 1,height: 1,),
+              separatorBuilder: (_, __) {
+                return const Divider(thickness: 1, height: 1);
+              },
               itemBuilder: (context, i) {
                 if (i < filtered.length) {
                   var status = filtered.keys.elementAt(i);
@@ -94,13 +96,15 @@ class _TimelineState extends State<Timeline> {
                     child: StatusWidget(status),
                   );
                 } else {
-                  var spinner = Center(child: CircularProgressIndicator());
+                  var spinner = const Center(
+                    child: CircularProgressIndicator(),
+                  );
 
-                  if (filtered.length == 0) {
+                  if (filtered.isEmpty) {
                     return spinner;
                   } else {
                     return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
+                      padding: const EdgeInsets.symmetric(vertical: 32.0),
                       child: spinner,
                     );
                   }
@@ -118,7 +122,7 @@ class TimelineModel extends PagedNetworkStream<Post, String> {
   final FediverseAdapter _adapter;
   final TimelineType timelineType;
 
-  TimelineModel(this._adapter, {this.timelineType = TimelineType.Home});
+  TimelineModel(this._adapter, {this.timelineType = TimelineType.home});
 
   @override
   Future<Iterable<Post>> fetchObjects(String? firstId, String? lastId) async {

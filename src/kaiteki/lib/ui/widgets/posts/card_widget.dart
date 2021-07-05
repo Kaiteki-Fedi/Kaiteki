@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/previewCard.dart';
+import 'package:kaiteki/fediverse/model/preview_card.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -6,11 +6,11 @@ import 'package:kaiteki/model/http_method.dart';
 
 class PleromaClient extends MastodonClient {
   @override
-  ApiType get type => ApiType.Pleroma;
+  ApiType get type => ApiType.pleroma;
 
   Future<Iterable<PleromaChat>> getChats() async {
     return await sendJsonRequestMultiple(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/pleroma/chats",
       (json) => PleromaChat.fromJson(json),
     );
@@ -18,7 +18,7 @@ class PleromaClient extends MastodonClient {
 
   Future<Iterable<PleromaChatMessage>> getChatMessages(String id) async {
     return await sendJsonRequestMultiple(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/pleroma/chats/$id/messages",
       (j) => PleromaChatMessage.fromJson(j),
     );
@@ -26,7 +26,7 @@ class PleromaClient extends MastodonClient {
 
   Future<PleromaChatMessage> postChatMessage(String id, String message) async {
     return await sendJsonRequest(
-      HttpMethod.POST,
+      HttpMethod.post,
       "api/v1/pleroma/chats/$id/messages",
       (j) => PleromaChatMessage.fromJson(j),
       body: {"content": message},
@@ -35,21 +35,21 @@ class PleromaClient extends MastodonClient {
 
   Future<void> react(String postId, String emoji) async {
     await sendJsonRequestWithoutResponse(
-      HttpMethod.PUT,
+      HttpMethod.put,
       "/api/v1/pleroma/statuses/$postId/reactions/$emoji",
     );
   }
 
   Future<void> removeReaction(String postId, String emoji) async {
     await sendJsonRequestWithoutResponse(
-      HttpMethod.DELETE,
+      HttpMethod.delete,
       "/api/v1/pleroma/statuses/$postId/reactions/$emoji",
     );
   }
 
   Future<PleromaEmojiPacksResponse> getEmojiPacks() async {
     return await sendJsonRequest(
-      HttpMethod.GET,
+      HttpMethod.get,
       "/api/pleroma/emoji/packs",
       (json) => PleromaEmojiPacksResponse.fromJson(json),
     );

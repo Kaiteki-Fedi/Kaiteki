@@ -67,7 +67,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
       var code = await mfaCallback.call();
 
-      if (code == null) return LoginResult.aborted();
+      // if (code == null) return LoginResult.aborted();
 
       // TODO add error-able TOTP screens
       // TODO make use of a while loop to make this more efficient
@@ -86,7 +86,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     }
 
     // Create and set account secret
-    var accountSecret = new AccountSecret(instance, username, accessToken);
+    var accountSecret = AccountSecret(instance, username, accessToken);
     client.authenticationData!.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
@@ -111,33 +111,32 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Post> postStatus(PostDraft post, {Post? parentPost}) async {
+  Future<Post> postStatus(PostDraft draft, {Post? parentPost}) async {
     String visibility;
 
-    switch (post.visibility) {
-
-      case Visibility.Public:
+    switch (draft.visibility) {
+      case Visibility.public:
         visibility = "public";
         break;
-      case Visibility.Unlisted:
+      case Visibility.unlisted:
         visibility = "unlisted";
         break;
-      case Visibility.FollowersOnly:
+      case Visibility.followersOnly:
         visibility = "private";
         break;
-      case Visibility.Direct:
+      case Visibility.direct:
         visibility = "direct";
         break;
     }
 
-    var contentType = getContentType(post.formatting);
+    var contentType = getContentType(draft.formatting);
 
     var newPost = await client.postStatus(
-      post.content,
+      draft.content,
       pleromaPreview: false,
       visibility: visibility,
-      spoilerText: post.subject,
-      inReplyToId: post.replyTo?.id,
+      spoilerText: draft.subject,
+      inReplyToId: draft.replyTo?.id,
       contentType: contentType,
     );
     return toPost(newPost);
@@ -145,10 +144,14 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   String getContentType(Formatting formatting) {
     switch (formatting) {
-      case Formatting.PlainText: return "text/plain";
-      case Formatting.Markdown: return "text/markdown";
-      case Formatting.HTML: return "text/html";
-      case Formatting.BBCode: return "text/bbcode";
+      case Formatting.plainText:
+        return "text/plain";
+      case Formatting.markdown:
+        return "text/markdown";
+      case Formatting.html:
+        return "text/html";
+      case Formatting.bbCode:
+        return "text/bbcode";
     }
   }
 

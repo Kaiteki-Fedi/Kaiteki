@@ -11,7 +11,7 @@ class MisskeyApiDefinition extends ApiDefinition<MisskeyAdapter> {
   String get name => 'Misskey';
 
   @override
-  ApiType get type => ApiType.Misskey;
+  ApiType get type => ApiType.misskey;
 
   @override
   ApiTheme get theme {

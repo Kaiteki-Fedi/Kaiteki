@@ -16,7 +16,7 @@ typedef HtmlConstructor = InlineSpan Function(dom.Element element);
 
 class TextRenderer {
   static const String emojiChar = ":";
-  static var _logger = getLogger("TextRenderer");
+  static final _logger = getLogger("TextRenderer");
 
   final Iterable<Emoji>? emojis;
   final TextRendererTheme theme;
@@ -25,7 +25,7 @@ class TextRenderer {
   late final bool hasEmoji;
 
   TextRenderer({this.emojis, required this.theme}) {
-    hasEmoji = emojis != null || emojis!.length != 0;
+    hasEmoji = emojis != null || emojis!.isNotEmpty;
 
     htmlConstructors = {
       "a": renderLink,
@@ -52,7 +52,7 @@ class TextRenderer {
         if (readingEmoji) {
           var emoji = emojis!.firstOrDefault((e) => e.name == buffer.text);
 
-          if (emoji == null || !(emoji is CustomEmoji)) {
+          if (emoji == null || emoji is! CustomEmoji) {
             // nothing found, so we restore the stolen colon and
             // add a normal text span.
             buffer.prepend(emojiChar);
@@ -111,23 +111,20 @@ class TextRenderer {
       );
     }
 
-    if (resultingSpan == null) {
-      resultingSpan = TextSpan(children: renderedSubNodes);
-    }
+    resultingSpan ??= TextSpan(children: renderedSubNodes);
 
     return resultingSpan;
   }
 
   InlineSpan renderLink(dom.Element element) {
-    var recognizer = new TapGestureRecognizer();
+    var recognizer = TapGestureRecognizer()
+      ..onTap = () {
+        // TODO add user mention link support
+        // node.classes.contains("mention")
 
-    recognizer.onTap = () {
-      // TODO add user mention link support
-      // node.classes.contains("mention")
-
-      var linkTarget = element.attributes["href"];
-      launch(linkTarget!);
-    };
+        var linkTarget = element.attributes["href"];
+        launch(linkTarget!);
+      };
 
     return TextSpan(
       text: element.text,

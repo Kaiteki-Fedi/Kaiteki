@@ -13,11 +13,11 @@ import 'package:kaiteki/utils/utils.dart';
 
 class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   @override
-  ApiType get type => ApiType.Mastodon;
+  ApiType get type => ApiType.mastodon;
 
   Future<MastodonInstance> getInstance() async {
     return await sendJsonRequest(
-      HttpMethod.POST,
+      HttpMethod.post,
       "api/v1/instance",
       (j) => MastodonInstance.fromJson(j),
     );
@@ -25,7 +25,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<MastodonAccount> getAccount(String id) async {
     return await sendJsonRequest(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/accounts/$id",
       (j) => MastodonAccount.fromJson(j),
     );
@@ -33,7 +33,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<Iterable<MastodonStatus>> getStatuses(String id) async {
     return await sendJsonRequestMultiple(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/accounts/$id/statuses",
       (j) => MastodonStatus.fromJson(j),
     );
@@ -42,7 +42,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   /// This method does not error-check on its own!
   Future<LoginResponse> login(String username, String password) async {
     return await sendJsonRequest(
-      HttpMethod.POST,
+      HttpMethod.post,
       "oauth/token",
       (j) => LoginResponse.fromJson(j),
       body: {
@@ -57,7 +57,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<LoginResponse> respondMfa(String mfaToken, int code) async {
     return await sendJsonRequest(
-      HttpMethod.POST,
+      HttpMethod.post,
       "/oauth/mfa/challenge",
       (j) => LoginResponse.fromJson(j),
       body: {
@@ -72,7 +72,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<Iterable<MastodonEmoji>> getCustomEmojis() async {
     return await sendJsonRequestMultiple(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/custom_emojis",
       (json) => MastodonEmoji.fromJson(json),
     );
@@ -80,7 +80,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<MastodonAccount> verifyCredentials() async {
     return await sendJsonRequest(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/accounts/verify_credentials",
       (json) => MastodonAccount.fromJson(json),
     );
@@ -93,7 +93,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       String redirect,
       List<String> scopes) async {
     return await sendJsonRequest(
-      HttpMethod.POST,
+      HttpMethod.post,
       "api/v1/apps",
       (json) => MastodonApplication.fromJson(json),
       body: {
@@ -107,7 +107,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<Iterable<MastodonStatus>> getPublicTimeline() async {
     return await sendJsonRequestMultiple(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/timelines/public",
       (j) => MastodonStatus.fromJson(j),
     );
@@ -133,7 +133,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     };
 
     return await sendJsonRequestMultiple(
-      HttpMethod.GET,
+      HttpMethod.get,
       Utils.withQueries("api/v1/timelines/home", queryParams),
       (j) => MastodonStatus.fromJson(j),
     );
@@ -148,7 +148,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     String? contentType = "text/plain",
   }) async {
     return await sendJsonRequest(
-      HttpMethod.POST,
+      HttpMethod.post,
       "api/v1/statuses",
       (j) => MastodonStatus.fromJson(j),
       body: {
@@ -165,7 +165,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<Iterable<MastodonNotification>> getNotifications() async {
     return await sendJsonRequestMultiple(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/notifications",
       (j) => MastodonNotification.fromJson(j),
     );
@@ -173,7 +173,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<ContextResponse> getStatusContext(String id) async {
     return await sendJsonRequest(
-      HttpMethod.GET,
+      HttpMethod.get,
       "api/v1/statuses/$id/context",
       (j) => ContextResponse.fromJson(j),
     );

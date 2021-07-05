@@ -9,7 +9,7 @@ import 'package:kaiteki/utils/extensions.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({
+  const LoginScreen({
     required this.image,
     required this.onLogin,
     required this.theme,
@@ -43,12 +43,12 @@ class _LoginScreenState extends State<LoginScreen> {
         onWillPop: () async => !_loading,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Log into an instance"),
+            title: const Text("Log into an instance"),
             automaticallyImplyLeading: !_loading,
           ),
           body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              if (_loading) Center(child: CircularProgressIndicator());
+              if (_loading) const Center(child: CircularProgressIndicator());
 
               return FormWidget(
                 child: SingleChildScrollView(
@@ -94,14 +94,16 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     var lowerCase = instance!.toLowerCase();
-    if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://"))
+    if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://")) {
       return "Please only provide the domain name";
+    }
 
     var accounts = Provider.of<AccountManager>(context, listen: false);
     if (accounts.accounts.any((compound) =>
         compound.instance == instance &&
-        compound.accountSecret.username == _usernameController.text))
+        compound.accountSecret.username == _usernameController.text)) {
       return "There's already an account with the same instance and username";
+    }
 
     return null;
   }
@@ -122,14 +124,15 @@ class _LoginScreenState extends State<LoginScreen> {
     var accounts = Provider.of<AccountManager>(context, listen: false);
     if (accounts.accounts.any((compound) =>
         compound.instance == _instanceController.text &&
-        compound.accountSecret.username == username))
+        compound.accountSecret.username == username)) {
       return "There's already an account with the same instance and username";
+    }
 
     return null;
   }
 
   Future<String> requestMfa() async {
-    var route = MaterialPageRoute(builder: (_) => MfaScreen());
+    var route = MaterialPageRoute(builder: (_) => const MfaScreen());
     var code = await Navigator.of(context).push(route);
     return code;
   }
@@ -149,10 +152,11 @@ class _LoginScreenState extends State<LoginScreen> {
         accountContainer,
       );
 
-      if (result.successful)
+      if (result.successful) {
         Navigator.of(context).pop();
-      else
+      } else {
         setState(() => _error = result.reason);
+      }
     } catch (e) {
       setState(() => _error = e.toString());
     } finally {

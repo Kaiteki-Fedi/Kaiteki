@@ -11,7 +11,7 @@ class MastodonApiDefinition extends ApiDefinition<MastodonAdapter> {
   String get name => 'Mastodon';
 
   @override
-  ApiType get type => ApiType.Mastodon;
+  ApiType get type => ApiType.mastodon;
 
   @override
   ApiTheme get theme {

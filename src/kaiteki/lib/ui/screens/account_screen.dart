@@ -14,7 +14,7 @@ class AccountScreen extends StatefulWidget {
   final String id;
   final User? initialUser;
 
-  AccountScreen.fromId(this.id) : initialUser = null;
+  const AccountScreen.fromId(this.id) : initialUser = null;
   AccountScreen.fromUser(User this.initialUser) : id = initialUser.id;
 
   @override
@@ -23,7 +23,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen>
     with TickerProviderStateMixin {
-  var _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _AccountScreenState extends State<AccountScreen>
         return FutureBuilder(
           initialData: widget.initialUser,
           future: Future<User<dynamic>>.delayed(
-            Duration(seconds: 5),
+            const Duration(seconds: 5),
             () async => container.adapter.getUserById(widget.id),
           ),
           builder: (_, AsyncSnapshot<User> snapshot) {
@@ -89,7 +89,7 @@ class _AccountScreenState extends State<AccountScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("POSTS"),
+                const Text("POSTS"),
                 if (showCountBadges)
                   buildBadge(
                     context,
@@ -102,7 +102,7 @@ class _AccountScreenState extends State<AccountScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("FOLLOWERS"),
+                const Text("FOLLOWERS"),
                 if (showCountBadges)
                   buildBadge(
                     context,
@@ -115,7 +115,7 @@ class _AccountScreenState extends State<AccountScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("FOLLOWING"),
+                const Text("FOLLOWING"),
                 if (showCountBadges)
                   buildBadge(
                     context,
@@ -152,7 +152,7 @@ class _AccountScreenState extends State<AccountScreen>
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             onPressed: () {},
-            child: Text("FOLLOW"),
+            child: const Text("FOLLOW"),
           ),
         ),
       ],
@@ -168,7 +168,7 @@ class _AccountScreenState extends State<AccountScreen>
                     alignment: Alignment.center,
                   ),
           ),
-          if (isLoading) LinearProgressIndicator(),
+          if (isLoading) const LinearProgressIndicator(),
         ],
       ),
       expandedHeight: 250,
@@ -188,8 +188,8 @@ class _AccountScreenState extends State<AccountScreen>
         borderRadius: BorderRadius.circular(4.0),
         color: Colors.white,
       ),
-      margin: EdgeInsets.only(left: 8.0),
-      padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
+      margin: const EdgeInsets.only(left: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
       child: Text(
         text,
         style: GoogleFonts.robotoMono(color: Colors.black),
@@ -216,12 +216,12 @@ class PostsPage extends StatelessWidget {
     return FutureBuilder(
       future:
           isLoading ? null : container.adapter.getStatusesOfUserById(widget.id),
-      initialData: <Post>[],
+      initialData: const <Post>[],
       builder: (BuildContext context, AsyncSnapshot<Iterable<Post>> snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: CircularProgressIndicator(),
             ),
           );
@@ -247,7 +247,7 @@ class AccountHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
       decoration: BoxDecoration(image: getDecorationBackground(account)),
       child: Column(
         children: [
@@ -275,7 +275,7 @@ class AccountHeader extends StatelessWidget {
                     theme: TextRendererTheme.fromContext(context),
                   ).renderFromHtml(account.description!)
                 ],
-                style: TextStyle(
+                style: const TextStyle(
                   shadows: [Shadow(blurRadius: 2, offset: Offset(0, 1))],
                 ),
               ),

@@ -17,10 +17,10 @@ class SensitivePostFilter extends PostFilter {
 
       if ((matchMarked && post.nsfw) ||
           (matchSubject && post.subject?.isNotEmpty == true)) {
-        return PostFilterResult.Hide;
+        return PostFilterResult.hide;
       }
     }
 
-    return PostFilterResult.Show;
+    return PostFilterResult.show;
   }
 }

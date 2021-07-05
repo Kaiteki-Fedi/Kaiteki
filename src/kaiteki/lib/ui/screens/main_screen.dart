@@ -16,7 +16,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late final List<_MainScreenTab> _tabs;
-  var _pageController = PageController();
+  final _pageController = PageController();
   var _currentPage = 0;
   var pageViewKey = UniqueKey();
 
@@ -35,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
           onTap: () => onComposeStatus(context, null),
         ),
       ),
-      _MainScreenTab(
+      const _MainScreenTab(
         icon: Mdi.bell,
         text: "Notifications",
         //fabTooltip: "Mark all as read",
@@ -43,7 +43,7 @@ class _MainScreenState extends State<MainScreen> {
         //fabIcon: Mdi.checkAll,
         //fabOnTap: () {},
       ),
-      _MainScreenTab(
+      const _MainScreenTab(
         icon: Mdi.forum,
         text: "Chats",
         //fabTooltip: 'New chat',
@@ -74,11 +74,9 @@ class _MainScreenState extends State<MainScreen> {
         appBar: AppBar(
           title: Text(
             appName,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          actions: [
-            AccountSwitcherWidget(size: 40),
-          ],
+          actions: const [AccountSwitcherWidget(size: 40)],
         ),
         body: Row(
           children: [
@@ -91,8 +89,7 @@ class _MainScreenState extends State<MainScreen> {
                     icon: Icon(tab.icon),
                     label: Text(tab.text),
                   ),
-
-                NavigationRailDestination(
+                const NavigationRailDestination(
                   icon: Icon(Mdi.cog),
                   label: Text("Settings"),
                 ),
@@ -108,16 +105,19 @@ class _MainScreenState extends State<MainScreen> {
   Widget buildMobileView(String appName) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appName, style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          appName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => SettingsScreen()),
             ),
           ),
-          AccountSwitcherWidget(size: 40),
+          const AccountSwitcherWidget(size: 40),
         ],
       ),
       body: getPageView(),
@@ -146,9 +146,9 @@ class _MainScreenState extends State<MainScreen> {
   getPageView() {
     return PageView(
       controller: _pageController,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       key: pageViewKey,
-      children: [
+      children: const [
         TimelinePage(key: ValueKey(0)),
         Center(
           child: IconLandingWidget(
@@ -198,7 +198,7 @@ class _MainScreenState extends State<MainScreen> {
       _currentPage = index;
       _pageController.animateToPage(
         _currentPage,
-        duration: Duration(milliseconds: 150),
+        duration: const Duration(milliseconds: 150),
         curve: Curves.easeInOut,
       );
     });

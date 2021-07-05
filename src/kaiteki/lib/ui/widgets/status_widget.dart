@@ -30,7 +30,8 @@ class StatusWidget extends StatelessWidget {
   final bool showParentPost;
   final bool showActions;
 
-  const StatusWidget(this._post, {this.showParentPost = true, this.showActions = true});
+  const StatusWidget(this._post,
+      {this.showParentPost = true, this.showActions = true});
 
   @override
   Widget build(BuildContext context) {
@@ -111,11 +112,10 @@ class StatusWidget extends StatelessWidget {
                     child: CardWidget(card: _post.previewCard!),
                   ),
 
-                if (_post.reactions != null && _post.reactions.isNotEmpty)
+                if (_post.reactions.isNotEmpty)
                   ReactionRow(_post, _post.reactions),
 
-                if (showActions)
-                  InteractionBar(post: _post, theme: theme),
+                if (showActions) InteractionBar(post: _post, theme: theme),
                 // ApplicationWidget(_post.application),
               ],
             ),
@@ -236,7 +236,7 @@ class InteractionBar extends StatelessWidget {
     return Row(
       children: [
         CountButton(
-          icon: Icon(Icons.reply),
+          icon: const Icon(Icons.reply),
           count: _post.replyCount,
           buttonOnly: true,
           onTap: () async {
@@ -254,28 +254,28 @@ class InteractionBar extends StatelessWidget {
           },
         ),
         CountButton(
-          icon: Icon(Icons.repeat),
+          icon: const Icon(Icons.repeat),
           count: _post.repeatCount,
           active: _post.repeated,
           activeColor: theme.repeatColor,
         ),
         CountButton(
-          icon: Icon(Mdi.starOutline),
+          icon: const Icon(Mdi.starOutline),
           count: _post.likeCount,
           active: _post.liked,
           activeColor: theme.favoriteColor,
-          activeIcon: Icon(Icons.star),
+          activeIcon: const Icon(Icons.star),
         ),
-        IconButton(
+        const IconButton(
           icon: Icon(Icons.insert_emoticon),
           onPressed: null,
         ),
         PopupMenuButton<VoidCallback>(
-          icon: Icon(Icons.more_horiz),
+          icon: const Icon(Icons.more_horiz),
           onSelected: (callback) => callback.call(),
           itemBuilder: (BuildContext context) {
             return [
-              new PopupMenuItem(
+              PopupMenuItem(
                 enabled: openInBrowserAvailable,
                 child: ListTile(
                   title: const Text('Open in browser'),

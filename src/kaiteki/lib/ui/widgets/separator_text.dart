@@ -10,7 +10,7 @@ class SeparatorText extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 16),
       child: Text(
-        this.text.toUpperCase(),
+        text.toUpperCase(),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Theme.of(context).disabledColor,

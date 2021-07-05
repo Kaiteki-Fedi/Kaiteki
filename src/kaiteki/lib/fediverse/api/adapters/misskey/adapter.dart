@@ -90,7 +90,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Post> postStatus(PostDraft post, {Post? parentPost}) {
+  Future<Post> postStatus(PostDraft draft, {Post? parentPost}) {
     throw UnimplementedError();
   }
 
@@ -111,7 +111,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
     var request = MisskeyTimelineRequest(sinceId: sinceId, untilId: untilId);
     switch (type) {
-      case TimelineType.Home:
+      case TimelineType.home:
         notes = await client.getTimeline(request);
         break;
 
@@ -163,12 +163,13 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
     String emojiName;
 
-    if (emoji is CustomEmoji)
+    if (emoji is CustomEmoji) {
       emojiName = ':' + emoji.name + ':';
-    else if (emoji is UnicodeEmoji)
+    } else if (emoji is UnicodeEmoji) {
       emojiName = emoji.source!;
-    else
+    } else {
       return;
+    }
 
     await client.createReaction(note.id, emojiName);
   }

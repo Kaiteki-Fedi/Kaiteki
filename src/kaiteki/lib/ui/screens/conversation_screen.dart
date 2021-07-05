@@ -11,15 +11,13 @@ import 'package:provider/provider.dart';
 class ConversationScreen extends StatelessWidget {
   final Post post;
 
-  ConversationScreen(this.post);
+  const ConversationScreen(this.post);
 
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<AccountManager>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Conversation'),
-      ),
+      appBar: AppBar(title: const Text('Conversation')),
       body: FutureBuilder(
         future: container.adapter.getThread(post),
         builder: (_, AsyncSnapshot<Iterable<Post>> snapshot) {
@@ -36,7 +34,7 @@ class ConversationScreen extends StatelessWidget {
               ),
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
@@ -46,7 +44,7 @@ class ConversationScreen extends StatelessWidget {
 
 class Threader {
   static ThreadPost toThread(Iterable<Post> posts) {
-    var threadPosts = posts.map((post) => new ThreadPost(post)).toList();
+    var threadPosts = posts.map((post) => ThreadPost(post)).toList();
 
     for (var post in threadPosts) {
       var id = post.post.replyToPostId;
@@ -66,10 +64,11 @@ class ThreadPost {
   late List<ThreadPost> replies;
 
   ThreadPost(this.post, {replies}) {
-    if (replies == null)
+    if (replies == null) {
       this.replies = <ThreadPost>[];
-    else
+    } else {
       this.replies = replies;
+    }
   }
 }
 
@@ -83,7 +82,7 @@ class ThreadPostContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        new StatusWidget(post.post),
+        StatusWidget(post.post),
         if (post.replies.isNotEmpty)
           IntrinsicHeight(
             child: Row(

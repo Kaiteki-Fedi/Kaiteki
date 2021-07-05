@@ -1,5 +1,1 @@
-enum ThemeType {
-  Material,
-  Pleroma,
-  Misskey
-}
+enum ThemeType { material, pleroma, misskey }

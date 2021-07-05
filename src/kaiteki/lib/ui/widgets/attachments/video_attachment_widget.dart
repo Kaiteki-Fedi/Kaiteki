@@ -37,10 +37,11 @@ class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {
     return FutureBuilder(
       future: _prepareChewie(),
       builder: (_, AsyncSnapshot<ChewieController> snapshot) {
-        if (snapshot.connectionState == ConnectionState.active)
-          return Center(child: CircularProgressIndicator());
-        else
+        if (snapshot.connectionState == ConnectionState.active) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
           return Chewie(controller: snapshot.data!);
+        }
       },
     );
   }

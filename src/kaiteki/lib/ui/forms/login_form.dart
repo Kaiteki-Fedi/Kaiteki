@@ -3,7 +3,7 @@ import 'package:kaiteki/utils/lower_case_text_formatter.dart';
 import 'package:mdi/mdi.dart';
 
 class LoginForm extends StatefulWidget {
-  LoginForm({
+  const LoginForm({
     Key? key,
     required this.instanceController,
     required this.usernameController,
@@ -38,7 +38,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    var iconConstraint = BoxConstraints.tightFor(width: 48, height: 24);
+    var iconConstraint = const BoxConstraints.tightFor(width: 48, height: 24);
     var theme = Theme.of(context);
     var fieldMargin = const EdgeInsets.symmetric(vertical: 8.0);
     var fieldPadding = const EdgeInsets.all(8.0);
@@ -55,36 +55,36 @@ class _LoginFormState extends State<LoginForm> {
                 controller: widget.instanceController,
                 decoration: InputDecoration(
                   hintText: "Instance",
-                  prefixIcon: Icon(Mdi.earth),
+                  prefixIcon: const Icon(Mdi.earth),
                   prefixIconConstraints: iconConstraint,
                   // TODO verify instance
                   // suffixIcon: Icon(Mdi.check),//CircularProgressIndicator(),
                   // suffixIconConstraints: iconConstraint
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   contentPadding: fieldPadding,
                 ),
                 validator: widget.onValidateInstance,
                 // ---
                 keyboardType: TextInputType.url,
-                autofillHints: [AutofillHints.url],
+                autofillHints: const [AutofillHints.url],
                 inputFormatters: [LowerCaseTextFormatter()],
               ),
             ),
-            Divider(),
+            const Divider(),
             Padding(
               padding: fieldMargin,
               child: TextFormField(
                 controller: widget.usernameController,
                 decoration: InputDecoration(
                   hintText: "Username",
-                  prefixIcon: Icon(Mdi.account),
+                  prefixIcon: const Icon(Mdi.account),
                   prefixIconConstraints: iconConstraint,
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   contentPadding: fieldPadding,
                 ),
                 validator: widget.onValidateUsername,
                 // ---
-                autofillHints: [AutofillHints.username],
+                autofillHints: const [AutofillHints.username],
                 keyboardType: TextInputType.text,
               ),
             ),
@@ -94,15 +94,15 @@ class _LoginFormState extends State<LoginForm> {
                 controller: widget.passwordController,
                 decoration: InputDecoration(
                   hintText: "Password",
-                  prefixIcon: Icon(Mdi.key),
+                  prefixIcon: const Icon(Mdi.key),
                   prefixIconConstraints: iconConstraint,
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   contentPadding: fieldPadding,
                 ),
                 validator: widget.onValidatePassword,
                 // ---
                 keyboardType: TextInputType.text,
-                autofillHints: [AutofillHints.password],
+                autofillHints: const [AutofillHints.password],
                 obscureText: true,
               ),
             ),
@@ -118,11 +118,11 @@ class _LoginFormState extends State<LoginForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 OutlinedButton(
-                  child: Text("Need an account?"),
+                  child: const Text("Need an account?"),
                   onPressed: widget.onRegister,
                 ),
                 ElevatedButton(
-                  child: Text("Login"),
+                  child: const Text("Login"),
                   onPressed: widget.onLogin,
                 ),
               ],

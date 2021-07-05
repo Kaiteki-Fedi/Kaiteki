@@ -17,14 +17,14 @@ class Utils {
   }
 
   static String withQueries(
-      String baseUrl, Map<String, dynamic> queryParameters) {
+    String baseUrl,
+    Map<String, dynamic> queryParameters,
+  ) {
     queryParameters.removeWhere((_, v) => v == null);
 
-    if (queryParameters.length == 0) {
-      return baseUrl;
-    } else {
-      return baseUrl + '?' + Uri(queryParameters: queryParameters).query;
-    }
+    if (queryParameters.isEmpty) return baseUrl;
+
+    return baseUrl + '?' + Uri(queryParameters: queryParameters).query;
   }
 
   static void checkResponse(Response response) {
@@ -56,8 +56,8 @@ class Utils {
 
   static Color getReadableForeground(Color background) {
     return isLightBackground(background)
-        ? Color(0xFF000000)
-        : Color(0xFFFFFFFF);
+        ? const Color(0xFF000000)
+        : const Color(0xFFFFFFFF);
   }
 
   static double getLocalFontSize(BuildContext context) {

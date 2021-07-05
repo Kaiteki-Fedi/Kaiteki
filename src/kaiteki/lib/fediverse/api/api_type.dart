@@ -1,16 +1,16 @@
-enum ApiType { Mastodon, Pleroma, Misskey }
+enum ApiType { mastodon, pleroma, misskey }
 
 extension ApiTypeExtension on ApiType {
   String toId() {
     switch (this) {
-      case ApiType.Mastodon:
+      case ApiType.mastodon:
         return "mastodon";
-      case ApiType.Pleroma:
+      case ApiType.pleroma:
         return "pleroma";
-      case ApiType.Misskey:
+      case ApiType.misskey:
         return "misskey";
       default:
-        return this.toString();
+        return toString();
     }
   }
 }

@@ -10,12 +10,12 @@ class FilteringScreen extends StatelessWidget {
     var prefs = container.get();
 
     return Scaffold(
-      appBar: AppBar(title: Text("Filtering")),
+      appBar: AppBar(title: const Text("Filtering")),
       body: SingleChildScrollView(
         child: Column(
           children: [
             ListTile(
-              title: Text("Hide sensitive posts"),
+              title: const Text("Hide sensitive posts"),
               subtitle: Text(
                 getSensitiveMediaSubtitle(prefs.sensitivePostFilter),
               ),
@@ -26,7 +26,7 @@ class FilteringScreen extends StatelessWidget {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  VerticalDivider(),
+                  const VerticalDivider(),
                   Switch(
                     value: prefs.sensitivePostFilter.enabled,
                     onChanged: (bool value) => container.update((p) {
