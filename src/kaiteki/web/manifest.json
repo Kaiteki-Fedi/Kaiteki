@@ -1,13 +1,15 @@
 {
     "name": "Kaiteki",
     "short_name": "Kaiteki",
+    "description": "A Flutter-based Pleroma client",
+    "categories": [ "social" ],
+
     "start_url": ".",
     "display": "standalone",
     "background_color": "#1e2133",
     "theme_color": "#1e2133",
-    "description": "A Flutter-based Pleroma client",
     "orientation": "portrait-primary",
-    "prefer_related_applications": false,
+    "prefer_related_applications": true,
     "icons": [
         {
             "src": "icons/Icon-192.png",
@@ -20,12 +22,11 @@
             "sizes": "512x512",
             "type": "image/png",
 			"purpose": "any"
-        },
-		{
-            "src": "icons/Icon-192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-			"purpose": "maskable"
-		}
+        }
+    ],
+    "related_applications": [
+        {
+            "id": "craftplacer.kaiteki"
+        }
     ]
 }
