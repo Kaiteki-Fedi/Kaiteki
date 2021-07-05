@@ -73,26 +73,32 @@ class Utils {
   }
 
   static SnackBar generateAsyncSnackBar({
+    required BuildContext context,
     required bool done,
     required Text text,
     required Icon icon,
+    required Color? foreColor,
     SnackBarAction? action,
   }) {
     return SnackBar(
       content: Row(
         children: [
-          Stack(
-            children: [
-              CircularProgressIndicator(
-                value: done ? 1 : null
-              ),
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: icon,
+          Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: Stack(
+              children: [
+                CircularProgressIndicator(value: done ? 1 : null),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: IconTheme(
+                      child: icon,
+                      data: IconThemeData(color: foreColor),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           text,
         ],

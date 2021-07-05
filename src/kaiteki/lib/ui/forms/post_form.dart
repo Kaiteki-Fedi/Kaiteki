@@ -191,26 +191,37 @@ class _PostFormState extends State<PostForm> {
 
     var messenger = ScaffoldMessenger.of(context);
 
+    var theme = Theme.of(context);
+    var snackBarTheme = theme.snackBarTheme;
+    var invertedBrigthness = theme.brightness == Brightness.light
+        ? Brightness.dark
+        : Brightness.light;
+    var fallbackTextStyle =
+        ThemeData(brightness: invertedBrigthness).textTheme.subtitle1;
+    var snackBarTextStyle = snackBarTheme.contentTextStyle ?? fallbackTextStyle;
+
     var snackBar = Utils.generateAsyncSnackBar(
+      context: context,
       done: false,
       text: Text("Sending post..."),
       icon: Icon(Mdi.textBox),
+      foreColor: snackBarTextStyle?.color,
     );
 
     messenger.showSnackBar(snackBar);
 
-    //await Future.delayed(Duration(seconds: 3), () {
-    //  print("This code executes after 5 seconds");
-    //});
+    await Future.delayed(Duration(seconds: 10), () {});
 
-    var post = await adapter.postStatus(_getPostDraft());
+    //var post = await adapter.postStatus(_getPostDraft());
 
     messenger.removeCurrentSnackBar();
 
     snackBar = Utils.generateAsyncSnackBar(
+      context: context,
       done: true,
       text: Text("Post sent"),
       icon: Icon(Mdi.check),
+      foreColor: snackBarTextStyle?.color,
       action: SnackBarAction(
         label: 'View post'.toUpperCase(),
         onPressed: () {
