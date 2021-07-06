@@ -220,9 +220,9 @@ class _PostFormState extends State<PostForm> {
 
     messenger.showSnackBar(snackBar);
 
-    await Future.delayed(const Duration(seconds: 10), () {});
+    //await Future.delayed(const Duration(seconds: 10), () {});
 
-    //var post = await adapter.postStatus(_getPostDraft());
+    /*var post =*/ await adapter.postStatus(_getPostDraft());
 
     messenger.removeCurrentSnackBar();
 
@@ -232,14 +232,14 @@ class _PostFormState extends State<PostForm> {
       text: const Text("Post sent"),
       icon: const Icon(Mdi.check),
       foreColor: snackBarTextStyle?.color,
-      action: SnackBarAction(
-        label: 'View post'.toUpperCase(),
-        onPressed: () {
-          //Navigator.of(context).push(MaterialPageRoute(
-          //  builder: (_) => ConversationScreen(post),
-          //));
-        },
-      ),
+      // action: SnackBarAction(
+      //   label: 'View post'.toUpperCase(),
+      //   onPressed: () {
+      //     Navigator.of(context).push(MaterialPageRoute(
+      //       builder: (_) => ConversationScreen(post),
+      //     ));
+      //   },
+      // ),
     );
 
     messenger.showSnackBar(snackBar);
