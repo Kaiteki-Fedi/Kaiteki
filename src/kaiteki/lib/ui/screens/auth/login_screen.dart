@@ -48,7 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              if (_loading) const Center(child: CircularProgressIndicator());
+              if (_loading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
               return FormWidget(
                 child: SingleChildScrollView(
