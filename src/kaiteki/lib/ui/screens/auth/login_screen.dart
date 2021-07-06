@@ -28,10 +28,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _instanceController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-
   bool _loading = false;
   String? _error;
 
@@ -83,14 +79,10 @@ class _LoginScreenState extends State<LoginScreen> {
       onValidatePassword: validatePassword,
       currentError: _error,
       onLogin: loginButtonPress,
-      onRegister: () {/* we don't have registering yet lol */},
-      instanceController: _instanceController,
-      usernameController: _usernameController,
-      passwordController: _passwordController,
     );
   }
 
-  String? validateInstance(String? instance) {
+  String? validateInstance(String? instance, String? username) {
     if (instance.isNullOrEmpty) {
       return "Please enter an instance";
     }
@@ -103,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
     var accounts = Provider.of<AccountManager>(context, listen: false);
     if (accounts.accounts.any((compound) =>
         compound.instance == instance &&
-        compound.accountSecret.username == _usernameController.text)) {
+        compound.accountSecret.username == username)) {
       return "There's already an account with the same instance and username";
     }
 
@@ -118,14 +110,14 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  String? validateUsername(String? username) {
+  String? validateUsername(String? instance, String? username) {
     if (username.isNullOrEmpty) {
       return "Please enter an username";
     }
 
     var accounts = Provider.of<AccountManager>(context, listen: false);
     if (accounts.accounts.any((compound) =>
-        compound.instance == _instanceController.text &&
+        compound.instance == instance &&
         compound.accountSecret.username == username)) {
       return "There's already an account with the same instance and username";
     }
@@ -139,7 +131,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return code;
   }
 
-  void loginButtonPress() async {
+  void loginButtonPress(
+    String instance,
+    String username,
+    String password,
+  ) async {
     try {
       setState(() => _loading = true);
 
@@ -147,9 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
           Provider.of<AccountManager>(context, listen: false);
 
       var result = await widget.onLogin.call(
-        _instanceController.value.text,
-        _usernameController.value.text,
-        _passwordController.value.text,
+        instance,
+        username,
+        password,
         requestMfa,
         accountContainer,
       );

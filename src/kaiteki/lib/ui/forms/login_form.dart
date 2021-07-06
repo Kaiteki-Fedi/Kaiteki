@@ -2,30 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/utils/lower_case_text_formatter.dart';
 import 'package:mdi/mdi.dart';
 
+typedef CredentialsCallback = void Function(
+  String instance,
+  String username,
+  String password,
+);
+
+typedef IdValidationCallback = String? Function(
+  String? instance,
+  String? username,
+);
+
 class LoginForm extends StatefulWidget {
   const LoginForm({
     Key? key,
-    required this.instanceController,
-    required this.usernameController,
-    required this.passwordController,
     required this.onValidateInstance,
     required this.onValidateUsername,
     required this.onValidatePassword,
     required this.onLogin,
-    required this.onRegister,
+    this.enabled = true,
     this.currentError,
   }) : super(key: key);
 
-  final TextEditingController instanceController;
-  final TextEditingController usernameController;
-  final TextEditingController passwordController;
+  final bool enabled;
 
-  final FormFieldValidator<String?> onValidateInstance;
-  final FormFieldValidator<String?> onValidateUsername;
+  final IdValidationCallback onValidateInstance;
+  final IdValidationCallback onValidateUsername;
   final FormFieldValidator<String?> onValidatePassword;
 
-  final VoidCallback onLogin;
-  final VoidCallback onRegister;
+  final CredentialsCallback onLogin;
 
   final String? currentError;
 
@@ -35,13 +40,16 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
+  final _instanceController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    var iconConstraint = const BoxConstraints.tightFor(width: 48, height: 24);
-    var theme = Theme.of(context);
-    var fieldMargin = const EdgeInsets.symmetric(vertical: 8.0);
-    var fieldPadding = const EdgeInsets.all(8.0);
+    final theme = Theme.of(context);
+    const iconConstraint = BoxConstraints.tightFor(width: 48, height: 24);
+    const fieldMargin = EdgeInsets.symmetric(vertical: 8.0);
+    const fieldPadding = EdgeInsets.all(8.0);
 
     return Form(
       key: _formKey,
@@ -52,18 +60,20 @@ class _LoginFormState extends State<LoginForm> {
             Padding(
               padding: fieldMargin,
               child: TextFormField(
-                controller: widget.instanceController,
-                decoration: InputDecoration(
+                controller: _instanceController,
+                decoration: const InputDecoration(
                   hintText: "Instance",
-                  prefixIcon: const Icon(Mdi.earth),
+                  prefixIcon: Icon(Mdi.earth),
                   prefixIconConstraints: iconConstraint,
-                  // TODO verify instance
-                  // suffixIcon: Icon(Mdi.check),//CircularProgressIndicator(),
-                  // suffixIconConstraints: iconConstraint
-                  border: const OutlineInputBorder(),
+                  border: OutlineInputBorder(),
                   contentPadding: fieldPadding,
                 ),
-                validator: widget.onValidateInstance,
+                validator: (instance) {
+                  return widget.onValidateInstance.call(
+                    instance,
+                    _usernameController.text,
+                  );
+                },
                 // ---
                 keyboardType: TextInputType.url,
                 autofillHints: const [AutofillHints.url],
@@ -74,15 +84,20 @@ class _LoginFormState extends State<LoginForm> {
             Padding(
               padding: fieldMargin,
               child: TextFormField(
-                controller: widget.usernameController,
-                decoration: InputDecoration(
+                controller: _usernameController,
+                decoration: const InputDecoration(
                   hintText: "Username",
-                  prefixIcon: const Icon(Mdi.account),
+                  prefixIcon: Icon(Mdi.account),
                   prefixIconConstraints: iconConstraint,
-                  border: const OutlineInputBorder(),
+                  border: OutlineInputBorder(),
                   contentPadding: fieldPadding,
                 ),
-                validator: widget.onValidateUsername,
+                validator: (username) {
+                  return widget.onValidateUsername.call(
+                    _instanceController.text,
+                    username,
+                  );
+                },
                 // ---
                 autofillHints: const [AutofillHints.username],
                 keyboardType: TextInputType.text,
@@ -91,12 +106,12 @@ class _LoginFormState extends State<LoginForm> {
             Padding(
               padding: fieldMargin,
               child: TextFormField(
-                controller: widget.passwordController,
-                decoration: InputDecoration(
+                controller: _passwordController,
+                decoration: const InputDecoration(
                   hintText: "Password",
-                  prefixIcon: const Icon(Mdi.key),
+                  prefixIcon: Icon(Mdi.key),
                   prefixIconConstraints: iconConstraint,
-                  border: const OutlineInputBorder(),
+                  border: OutlineInputBorder(),
                   contentPadding: fieldPadding,
                 ),
                 validator: widget.onValidatePassword,
@@ -115,15 +130,17 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                OutlinedButton(
-                  child: const Text("Need an account?"),
-                  onPressed: widget.onRegister,
-                ),
                 ElevatedButton(
                   child: const Text("Login"),
-                  onPressed: widget.onLogin,
+                  onPressed: () {
+                    widget.onLogin.call(
+                      _instanceController.text,
+                      _usernameController.text,
+                      _passwordController.text,
+                    );
+                  },
                 ),
               ],
             ),
