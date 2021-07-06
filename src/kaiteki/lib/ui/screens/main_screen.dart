@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
@@ -74,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
         appBar: AppBar(
           title: Text(
             appName,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
           ),
           actions: const [AccountSwitcherWidget(size: 40)],
         ),
@@ -107,7 +108,7 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: Text(
           appName,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
