@@ -33,6 +33,28 @@ class _PostFormState extends State<PostForm> {
   var _isPreviewExpanded = false;
   var _visibility = v.Visibility.public;
   var _formatting = Formatting.plainText;
+  final _attachMenuItems = const [
+    AttachMenuItem(
+      text: Text("Attach files"),
+      icon: Icon(Mdi.file),
+      onPressed: null,
+    ),
+    AttachMenuItem(
+      text: Text("Take picture"),
+      icon: Icon(Mdi.camera),
+      onPressed: null,
+    ),
+    AttachMenuItem(
+      text: Text("Create poll"),
+      icon: Icon(Mdi.pollBox),
+      onPressed: null,
+    ),
+    AttachMenuItem(
+      text: Text("Record voice"),
+      icon: Icon(Mdi.microphone),
+      onPressed: null,
+    ),
+  ];
 
   _PostFormState() {
     _typingTimer = RestartableTimer(const Duration(seconds: 1), () {
@@ -64,7 +86,7 @@ class _PostFormState extends State<PostForm> {
                 canTapOnHeader: true,
                 isExpanded: _isPreviewExpanded,
                 headerBuilder: (_, x) {
-                  return const ListTile(title: const Text("Preview"));
+                  return const ListTile(title: Text("Preview"));
                 },
                 body: FutureBuilder(
                   future: getPreviewFuture(manager),
@@ -89,8 +111,15 @@ class _PostFormState extends State<PostForm> {
               controller: _bodyController,
             ),
           ),
+          const Divider(),
           Row(
             children: [
+              IconButton(
+                onPressed: () => openAttachDrawer(),
+                icon: const Icon(Mdi.plusCircle),
+                splashRadius: 20,
+                tooltip: "Attach",
+              ),
               VisibilityButton(
                 visibility: _visibility,
                 callback: (value) => setState(() => _visibility = value),
@@ -99,33 +128,13 @@ class _PostFormState extends State<PostForm> {
                 formatting: _formatting,
                 callback: (value) => setState(() => _formatting = value),
               ),
-              // IconButton(
-              //   onPressed: () {},
-              //   icon: Icon(Mdi.upload),
-              //   splashRadius: 20,
-              //   tooltip: "Attach files",
-              // ),
               IconButton(
                 onPressed: () => openEmojiPicker(context, manager),
                 icon: const Icon(Mdi.emoticon),
                 splashRadius: 20,
                 tooltip: "Insert emoji",
               ),
-              // IconButton(
-              //   onPressed: () {},
-              //   icon: Icon(Mdi.sticker),
-              //   splashRadius: 20,
-              //   tooltip: "Add sticker",
-              // ),
-              // IconButton(
-              //   onPressed: () {},
-              //   icon: Icon(Mdi.pollBox),
-              //   splashRadius: 20,
-              //   tooltip: "Add poll",
-              // ),
-
               const Spacer(),
-
               ElevatedButton(
                 child: const Text("Submit"),
                 onPressed: () => post(context, manager.adapter),
@@ -268,4 +277,61 @@ class _PostFormState extends State<PostForm> {
       },
     );
   }
+
+  void openAttachDrawer() {
+    const columns = 2;
+    final size = MediaQuery.of(context).size;
+    final itemWidth = size.width / columns;
+    final itemAspectRatio = itemWidth / 128;
+
+    Scaffold.of(context).showBottomSheet(
+      (context) {
+        return BottomSheet(
+          elevation: 24,
+          builder: (BuildContext context) {
+            return GridView.count(
+              crossAxisCount: columns,
+              shrinkWrap: true,
+              childAspectRatio: itemAspectRatio,
+              padding: const EdgeInsets.all(8.0),
+              children: [
+                for (var item in _attachMenuItems)
+                  TextButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                        const EdgeInsets.all(16.0),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        item.icon,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: item.text,
+                        )
+                      ],
+                    ),
+                    onPressed: item.onPressed,
+                  ),
+              ],
+            );
+          },
+          onClosing: () {},
+        );
+      },
+    );
+  }
+}
+
+class AttachMenuItem {
+  final Icon icon;
+  final Text text;
+  final VoidCallback? onPressed;
+
+  const AttachMenuItem({
+    required this.icon,
+    required this.text,
+    required this.onPressed,
+  });
 }
