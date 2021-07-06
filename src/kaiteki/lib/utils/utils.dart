@@ -104,6 +104,7 @@ class Utils {
         ],
       ),
       action: action,
+      duration: done ? const Duration(seconds: 4) : const Duration(days: 1),
     );
   }
 }
