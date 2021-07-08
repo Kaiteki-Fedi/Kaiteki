@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/theming/toggle_button_theme.dart';
 import 'package:provider/provider.dart';
 
 class AppTheme {
@@ -10,11 +11,7 @@ class AppTheme {
   final ChatMessageTheme incomingChatMessage;
   final ChatMessageTheme outgoingChatMessage;
 
-  final Color reactionInactiveBackground;
-  final TextStyle reactionInactiveTextStyle;
-
-  final Color reactionActiveBackground;
-  final TextStyle reactionActiveTextStyle;
+  final ToggleButtonTheme reactionButtonTheme;
 
   final Color borderColor;
   final Color textColor;
@@ -33,10 +30,7 @@ class AppTheme {
     required this.incomingChatMessage,
     required this.outgoingChatMessage,
     required this.chatMessageRounding,
-    required this.reactionInactiveBackground,
-    required this.reactionInactiveTextStyle,
-    required this.reactionActiveBackground,
-    required this.reactionActiveTextStyle,
+    required this.reactionButtonTheme,
   });
 
   static AppTheme of(BuildContext context, {bool listen = false}) {

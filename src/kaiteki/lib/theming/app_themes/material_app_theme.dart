@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/theming/app_theme_source.dart';
 import 'package:kaiteki/theming/app_themes/app_theme.dart';
+import 'package:kaiteki/theming/toggle_button_theme.dart';
 
 class MaterialAppTheme implements AppThemeSource {
   final ThemeData materialTheme;
@@ -24,10 +25,7 @@ class MaterialAppTheme implements AppThemeSource {
       linkColor: materialTheme.accentColor,
       borderColor: materialTheme.dividerColor,
       textColor: materialTheme.textTheme.bodyText1!.color!,
-      reactionInactiveBackground: materialTheme.cardColor,
-      reactionActiveBackground: materialTheme.accentColor,
-      reactionInactiveTextStyle: materialTheme.textTheme.bodyText1!,
-      reactionActiveTextStyle: materialTheme.accentTextTheme.bodyText1!,
+      reactionButtonTheme: ToggleButtonTheme.from(materialTheme),
     );
   }
 }

@@ -30,13 +30,10 @@ class _ReactionWidgetState extends State<ReactionWidget> {
         const EdgeInsets.only(top: 4, bottom: 4, left: 6, right: 2);
 
     var reacted = widget.reaction.includesMe;
-    var theme = AppTheme.of(context);
-    var backgroundColor = reacted
-        ? theme.reactionActiveBackground
-        : theme.reactionInactiveBackground;
-    var textStyle = reacted
-        ? theme.reactionActiveTextStyle
-        : theme.reactionInactiveTextStyle;
+    var theme = AppTheme.of(context).reactionButtonTheme;
+    var backgroundColor =
+        reacted ? theme.activeBackground : theme.inactiveBackground;
+    var textStyle = reacted ? theme.activeTextStyle : theme.inactiveTextStyle;
 
     const emojiSize = 24.0;
 
