@@ -198,7 +198,7 @@ class ReplyBar extends StatelessWidget {
           // TODO: refactor the following widget pattern to a future "IconSpan"
           WidgetSpan(
             child: Icon(
-              Icons.reply,
+              Mdi.share,
               size: Utils.getLocalFontSize(context) * 1.25,
               color: Theme.of(context).disabledColor,
             ),
