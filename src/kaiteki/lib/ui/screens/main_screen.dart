@@ -20,6 +20,21 @@ class _MainScreenState extends State<MainScreen> {
   final _pageController = PageController();
   var _currentPage = 0;
   var pageViewKey = UniqueKey();
+  static const pages = [
+    TimelinePage(key: ValueKey(0)),
+    Center(
+      child: IconLandingWidget(
+        Mdi.dotsHorizontal,
+        "Not implemented yet...",
+      ),
+    ),
+    Center(
+      child: IconLandingWidget(
+        Mdi.dotsHorizontal,
+        "Not implemented yet...",
+      ),
+    ),
+  ];
 
   @override
   void initState() {
@@ -149,21 +164,7 @@ class _MainScreenState extends State<MainScreen> {
       controller: _pageController,
       physics: const NeverScrollableScrollPhysics(),
       key: pageViewKey,
-      children: const [
-        TimelinePage(key: ValueKey(0)),
-        Center(
-          child: IconLandingWidget(
-            Mdi.dotsHorizontal,
-            "Not implemented yet...",
-          ),
-        ),
-        Center(
-          child: IconLandingWidget(
-            Mdi.dotsHorizontal,
-            "Not implemented yet...",
-          ),
-        ),
-      ],
+      children: pages,
     );
   }
 
