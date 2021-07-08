@@ -41,8 +41,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
 
   @override
   void initState() {
-    var defaultTheme = ThemeData.from(colorScheme: DefaultAppThemes.darkScheme);
-    _themeContainer = ThemeContainer(MaterialAppTheme(defaultTheme));
+    _themeContainer = ThemeContainer(DefaultAppThemes.lightAppTheme);
 
     super.initState();
   }
