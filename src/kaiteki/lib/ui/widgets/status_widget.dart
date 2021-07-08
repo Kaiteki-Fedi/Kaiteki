@@ -193,6 +193,8 @@ class ReplyBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeContainer = Provider.of<ThemeContainer>(context);
+
     return RichText(
       text: TextSpan(
         style: textStyle,
@@ -211,7 +213,7 @@ class ReplyBar extends StatelessWidget {
           ),
           TextSpan(
             text: _post.replyToAccountId,
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: themeContainer.current.linkTextStyle,
           ),
         ],
       ),

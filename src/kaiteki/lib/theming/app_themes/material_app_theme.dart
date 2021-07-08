@@ -5,8 +5,9 @@ import 'package:kaiteki/theming/toggle_button_theme.dart';
 
 class MaterialAppTheme implements AppThemeSource {
   final ThemeData materialTheme;
+  final TextStyle? linkTextStyle;
 
-  const MaterialAppTheme(this.materialTheme);
+  const MaterialAppTheme(this.materialTheme, {this.linkTextStyle});
 
   @override
   AppTheme toTheme() {
@@ -20,9 +21,12 @@ class MaterialAppTheme implements AppThemeSource {
       incomingChatMessage: chatMessageTheme,
       outgoingChatMessage: chatMessageTheme,
       chatMessageRounding: 8,
-      repeatColor: Colors.greenAccent.shade200,
-      favoriteColor: Colors.orangeAccent.shade200,
-      linkColor: materialTheme.accentColor,
+      repeatColor: Colors.greenAccent.shade400,
+      favoriteColor: Colors.orangeAccent.shade400,
+      linkTextStyle: linkTextStyle ??
+          TextStyle(
+            color: materialTheme.accentColor,
+          ),
       borderColor: materialTheme.dividerColor,
       textColor: materialTheme.textTheme.bodyText1!.color!,
       reactionButtonTheme: ToggleButtonTheme.from(materialTheme),

@@ -26,9 +26,7 @@ class TextRendererTheme {
 
     return TextRendererTheme(
       textStyle,
-      textStyle.copyWith(
-        color: theme.materialTheme.accentColor,
-      ),
+      theme.linkTextStyle,
       Utils.getLocalFontSize(context),
     );
   }

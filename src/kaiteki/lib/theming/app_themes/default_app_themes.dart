@@ -3,8 +3,10 @@ import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/theming/app_themes/material_app_theme.dart';
 
 class DefaultAppThemes {
-  static MaterialAppTheme lightAppTheme =
-      MaterialAppTheme(ThemeData.from(colorScheme: lightScheme));
+  static MaterialAppTheme lightAppTheme = MaterialAppTheme(
+    ThemeData.from(colorScheme: lightScheme),
+    linkTextStyle: TextStyle(color: AppColors.kaitekiPink.shade700),
+  );
 
   static ColorScheme lightScheme = ColorScheme.light(
     background: AppColors.kaitekiLightBackground.shade100,
