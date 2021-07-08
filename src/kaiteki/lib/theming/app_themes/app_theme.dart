@@ -48,4 +48,8 @@ class ChatMessageTheme {
     required this.background,
     required this.border,
   });
+
+  ChatMessageTheme.from(ThemeData materialTheme)
+      : background = materialTheme.cardColor,
+        border = materialTheme.dividerColor;
 }

@@ -11,10 +11,7 @@ class MaterialAppTheme implements AppThemeSource {
 
   @override
   AppTheme toTheme() {
-    var chatMessageTheme = ChatMessageTheme(
-      background: materialTheme.cardColor,
-      border: materialTheme.dividerColor,
-    );
+    var chatMessageTheme = ChatMessageTheme.from(materialTheme);
 
     return AppTheme(
       materialTheme: materialTheme,
