@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_manager.dart';
@@ -33,25 +35,25 @@ class _PostFormState extends State<PostForm> {
   var _isPreviewExpanded = false;
   var _visibility = v.Visibility.public;
   var _formatting = Formatting.plainText;
-  final _attachMenuItems = const [
+  final _attachMenuItems = [
     AttachMenuItem(
-      text: Text("Attach files"),
-      icon: Icon(Mdi.file),
+      label: "Attach files",
+      icon: Mdi.file,
+      onPressed: () {},
+    ),
+    AttachMenuItem(
+      label: "Take picture",
+      icon: Mdi.camera,
       onPressed: null,
     ),
     AttachMenuItem(
-      text: Text("Take picture"),
-      icon: Icon(Mdi.camera),
+      label: "Create poll",
+      icon: Mdi.pollBox,
       onPressed: null,
     ),
     AttachMenuItem(
-      text: Text("Create poll"),
-      icon: Icon(Mdi.pollBox),
-      onPressed: null,
-    ),
-    AttachMenuItem(
-      text: Text("Record voice"),
-      icon: Icon(Mdi.microphone),
+      label: "Record voice",
+      icon: Mdi.microphone,
       onPressed: null,
     ),
   ];
@@ -279,45 +281,48 @@ class _PostFormState extends State<PostForm> {
   }
 
   void openAttachDrawer() {
-    const columns = 2;
-    final size = MediaQuery.of(context).size;
-    final itemWidth = size.width / columns;
-    final itemAspectRatio = itemWidth / 128;
-
     Scaffold.of(context).showBottomSheet(
       (context) {
-        return BottomSheet(
-          elevation: 24,
-          builder: (BuildContext context) {
-            return GridView.count(
-              crossAxisCount: columns,
-              shrinkWrap: true,
-              childAspectRatio: itemAspectRatio,
-              padding: const EdgeInsets.all(8.0),
-              children: [
-                for (var item in _attachMenuItems)
-                  TextButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                        const EdgeInsets.all(16.0),
+        return LayoutBuilder(
+          builder: (context, data) {
+            final columns = max((data.maxWidth ~/ 300) * 2, 2);
+            final itemWidth = data.maxWidth / columns;
+            final itemAspectRatio = itemWidth / 96;
+
+            return BottomSheet(
+              elevation: 24,
+              builder: (BuildContext context) {
+                return GridView.count(
+                  crossAxisCount: columns,
+                  shrinkWrap: true,
+                  childAspectRatio: itemAspectRatio,
+                  padding: const EdgeInsets.all(8.0),
+                  children: [
+                    for (var item in _attachMenuItems)
+                      TextButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.all(16.0),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(item.icon, size: 32),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Text(item.label),
+                            )
+                          ],
+                        ),
+                        onPressed: item.onPressed,
                       ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        item.icon,
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: item.text,
-                        )
-                      ],
-                    ),
-                    onPressed: item.onPressed,
-                  ),
-              ],
+                  ],
+                );
+              },
+              onClosing: () {},
             );
           },
-          onClosing: () {},
         );
       },
     );
@@ -325,13 +330,13 @@ class _PostFormState extends State<PostForm> {
 }
 
 class AttachMenuItem {
-  final Icon icon;
-  final Text text;
+  final IconData icon;
+  final String label;
   final VoidCallback? onPressed;
 
   const AttachMenuItem({
     required this.icon,
-    required this.text,
+    required this.label,
     required this.onPressed,
   });
 }
