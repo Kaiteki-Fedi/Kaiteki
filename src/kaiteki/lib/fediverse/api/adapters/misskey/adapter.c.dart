@@ -85,5 +85,6 @@ User toUser(MisskeyUser source) {
     bannerUrl: source.bannerUrl,
     id: source.id,
     description: source.description,
+    host: source.host,
   );
 }

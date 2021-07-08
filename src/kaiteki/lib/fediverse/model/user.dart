@@ -35,12 +35,16 @@ class User<T> {
   final int? followerCount;
   final int? followingCount;
 
+  /// The instance the user is on, [null] if it's the current local instance.
+  final String? host;
+
   const User({
     required this.id,
     required this.source,
     required this.joinDate,
     required this.username,
     required this.displayName,
+    required this.host,
     this.description,
     this.avatarUrl,
     this.bannerUrl,
@@ -59,6 +63,7 @@ class User<T> {
       joinDate: DateTime.now(),
       id: "CuteNeko-Account",
       source: null,
+      host: 'cute.social',
     );
   }
 }

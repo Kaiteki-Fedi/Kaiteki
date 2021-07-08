@@ -151,7 +151,9 @@ class MetaBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 6),
                 child: Text(
-                  _post.author.username,
+                  _post.author.host == null
+                      ? _post.author.username
+                      : _post.author.username + "@" + _post.author.host!,
                   style: TextStyle(
                     color: theme.materialTheme.disabledColor,
                   ),

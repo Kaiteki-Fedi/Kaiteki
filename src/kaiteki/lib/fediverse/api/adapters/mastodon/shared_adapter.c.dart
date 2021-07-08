@@ -89,5 +89,14 @@ User toUser(MastodonAccount source) {
     followerCount: source.followersCount,
     followingCount: source.followingCount,
     postCount: source.statusesCount,
+    host: getHost(source.acct),
   );
+}
+
+String? getHost(String acct) {
+  var split = acct.split('@');
+
+  if (split.length > 1) return split.last;
+
+  return null;
 }
