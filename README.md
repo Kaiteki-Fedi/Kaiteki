@@ -16,18 +16,38 @@ Currently Kaiteki is still in a **proof-of-concept/alpha stage**, with simple Ma
 
 If you want to try out Kaiteki, there are automatic builds available for use.
 
-| Platform | Build status | Link |
-| -------- | ------------ | ---- |
-| Web      | ![](https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Web) | [Visit web version](https://craftplacer.github.io/kaiteki/) |
-| Windows  | ![](https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Windows) | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/windows.yml) |
-| Linux    | ![](https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Linux) | [Check build artifacts](https://github.com/Craftplacer/kaiteki/actions/workflows/linux.yml) |
-| Android  | No CI/CD available yet ([See issue #2](https://github.com/Craftplacer/kaiteki/issues/2)) |
-| iOS      | Not supported | |
-| macOS    | Not supported | |
+<table>
+    <tr>
+        <th></th>
+        <th>Web<br>(recommended)</th>
+        <th>Windows</th>
+        <th>Linux</th>
+        <th>Android</th>
+        <th>macOS</th>
+        <th>iOS</th>
+    </tr>
+    <tr>
+        <th>Build status</th>
+        <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Web"></td>
+        <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Windows"></td>
+        <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Linux"></td>
+        <td rowspan=2>No CI/CD available yet.<br><a href="https://github.com/Craftplacer/kaiteki/issues/2">Help us!</a></td>
+        <td colspan=2 rowspan=2>Not supported.</td>
+    </tr>
+    <tr>
+        <th>Link</th>
+        <td><a href="https://craftplacer.moe/Kaiteki/">Visit web version</a></td>
+        <td>No reliable build outputs yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/63">Help us!</a></td>
+        <td>No reliable build outputs yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/62">Help us!</a></td>
+    </tr>
+</table>
+
 
 ## What's working, what's missing?
 
-Currently Kaiteki only allows viewing timelines. Estimated, most important API calls for Misskey, Pleroma/Mastodon are already implemented, but lack proper internal adapter design, alongside their user interface.
+Currently Kaiteki only allows viewing timelines, making text posts and viewing users.
+
+Most important API calls for Misskey, Mastodon/Pleroma are already implemented but need an UI implementation.
 
 ## Compiling Kaiteki
 
