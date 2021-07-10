@@ -1,4 +1,3 @@
-
 name: Feature request
 description: Suggest an idea for Kaiteki
 title: ""
@@ -7,17 +6,17 @@ body:
 - type: textarea
   id: feature
   attributes:
-    label: The feature
-    description: Explain how your feature is supposed to work.
+    label: "The feature"
+    description: "Explain how your feature is supposed to work."
   validations:
     required: true
 - type: textarea
   id: design
   attributes:
-    label: Designs
-    placeholder: Insert images/videos here to illustrate how your feature might be implemented.
+    label: "Designs"
+    placeholder: "Insert images/videos here to illustrate how your feature might be implemented."
 - type: textarea
   id: resources
   attributes:
-    label: Resources
-    placeholder: Insert links to documentation, libraries and other pieces of information that might help us implement this feature.
+    label: "Resources"
+    placeholder: "Insert links to documentation, libraries and other pieces of information that might help us implement this feature."
