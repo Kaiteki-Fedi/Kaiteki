@@ -19,15 +19,20 @@ body:
   id: reproduction
   attributes:
     label: To Reproduce
+    value: |
+      1.
+      2.
+      3.
+      ...
 - type: checkboxes
   id: platform
   attributes:
     label: What platform are you seeing the issue on?
     options:
-      - Android
-      - Windows
-      - Linux
-      - Web
+    - label: Android
+    - label: Windows
+    - label: Linux
+    - label: Web
 - type: textarea
   id: context
   attributes:
