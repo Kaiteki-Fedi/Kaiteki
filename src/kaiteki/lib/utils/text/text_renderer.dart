@@ -25,7 +25,7 @@ class TextRenderer {
   late final bool hasEmoji;
 
   TextRenderer({this.emojis, required this.theme}) {
-    hasEmoji = emojis != null || emojis!.isNotEmpty;
+    hasEmoji = emojis != null && emojis!.isNotEmpty;
 
     htmlConstructors = {
       "a": renderLink,
