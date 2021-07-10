@@ -1,40 +1,34 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
+description: Create a report to help us improve
 labels: bug
-assignees: ''
 body:
-  - type: textarea
-    id: what
-    attributes:
-      label: What happened?
-    validations:
-      required: true
-
-  - type: textarea
-    id: expected
-    attributes:
-      label: Expected behavior
-
-  - type: textarea
-    id: reproduction
-    attributes:
-      label: To Reproduce
-
-  - type: dropdown
-    id: platform
-    attributes:
-      label: What platform are you seeing the issue on?
-      multiple: true
-      options:
-        - Android
-        - Windows
-        - Linux
-        - Web
-
-  - type: textarea
-    id: context
-    attributes:
-      label: Additional context
+- type: textarea
+  id: what
+  attributes:
+    label: What happened?
+  validations:
+    required: true
+- type: textarea
+  id: expected
+  attributes:
+    label: Expected behavior
+- type: textarea
+  id: reproduction
+  attributes:
+    label: To Reproduce
+- type: dropdown
+  id: platform
+  attributes:
+    label: What platform are you seeing the issue on?
+    multiple: true
+    options:
+      - Android
+      - Windows
+      - Linux
+      - Web
+- type: textarea
+  id: context
+  attributes:
+    label: Additional context
 ---
