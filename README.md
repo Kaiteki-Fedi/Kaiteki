@@ -49,6 +49,8 @@ Currently Kaiteki only allows viewing timelines, making text posts and viewing u
 
 Most important API calls for Misskey, Mastodon/Pleroma are already implemented but need an UI implementation.
 
+Other features that are missing are extensive settings, unit tests, and many other things. **If you'd like to contribute, feel free to do so.**
+
 ## Compiling Kaiteki
 
 Depending on your platform you might have to take extra steps.
