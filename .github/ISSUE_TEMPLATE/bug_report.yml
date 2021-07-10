@@ -1,27 +1,28 @@
 name: Bug report
-description: Create a report to help us improve
-title: "<title>"
+description: Create a bug report about Kaiteki
+title: ""
 labels: [ bug ]
 body:
 - type: textarea
   id: what
   attributes:
     label: What happened?
+    placeholder: My computer exploded
   validations:
     required: true
 - type: textarea
   id: expected
   attributes:
     label: Expected behavior
+    placeholder: For it to work
 - type: textarea
   id: reproduction
   attributes:
     label: To Reproduce
-- type: dropdown
+- type: checkboxes
   id: platform
   attributes:
     label: What platform are you seeing the issue on?
-    multiple: true
     options:
       - Android
       - Windows
