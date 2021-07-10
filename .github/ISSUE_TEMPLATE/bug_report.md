@@ -4,28 +4,37 @@ about: Create a report to help us improve
 title: ''
 labels: bug
 assignees: ''
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+    validations:
+      required: true
 
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: To Reproduce
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: What platform are you seeing the issue on?
+      multiple: true
+      options:
+        - Android
+        - Windows
+        - Linux
+        - Web
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
 ---
-
-###### Describe the bug
-A clear and concise description of what the bug is.
-
-###### To Reproduce
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
-
-###### Expected behavior (if unclear)
-A clear and concise description of what you expected to happen.
-
-###### Screenshots (optional)
-If applicable, add screenshots to help explain your problem.
-
-###### Platform
-- Last Git commit/date of the version you are using
-- Web, Windows, Linux, Web, Android
-
-###### Additional context
-Add any other context about the problem here.
