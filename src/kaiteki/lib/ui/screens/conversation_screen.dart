@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -27,11 +26,14 @@ class ConversationScreen extends StatelessWidget {
               child: ThreadPostContainer(cookedThread),
             );
           } else if (snapshot.hasError) {
-            return Center(
-              child: IconLandingWidget(
-                Mdi.close,
-                snapshot.error.toString(),
-              ),
+            return Column(
+              children: [
+                StatusWidget(post),
+                const ListTile(
+                  leading: Icon(Mdi.close),
+                  title: Text("Failed to fetch thread"),
+                ),
+              ],
             );
           } else {
             return const Center(child: CircularProgressIndicator());
