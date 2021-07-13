@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: windows
-          path: '${{ env.SOURCE_PATH }}\build\windows\runner\Release\'
+          path: '${{ env.SOURCE_PATH }}\build\windows\runner\Debug\'
 
   package:
     name: Package
@@ -49,7 +49,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: windows
-          path: '${{ env.SOURCE_PATH }}\build\windows\runner\Release\'
+          path: '${{ env.SOURCE_PATH }}\build\windows\runner\Debug\'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
