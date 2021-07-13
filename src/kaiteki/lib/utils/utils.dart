@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 class Utils {
   // Change the logic of this method in case if unexpected results occur.
@@ -106,5 +107,17 @@ class Utils {
       action: action,
       duration: done ? const Duration(seconds: 4) : const Duration(days: 1),
     );
+  }
+
+  static TextStyle? getDefaultSnackBarTextStyle(BuildContext context) {
+    final theme = Theme.of(context);
+    final snackBarTheme = theme.snackBarTheme;
+
+    if (snackBarTheme.contentTextStyle == null) {
+      final themeData = ThemeData(brightness: theme.brightness.inverted);
+      return themeData.textTheme.subtitle1;
+    }
+
+    return snackBarTheme.contentTextStyle;
   }
 }

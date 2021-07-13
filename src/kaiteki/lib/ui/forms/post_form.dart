@@ -10,12 +10,14 @@ import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart' as v;
+import 'package:kaiteki/ui/screens/conversation_screen.dart';
+import 'package:kaiteki/ui/widgets/async_snackbar_content.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/widgets/formatting_button.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/ui/widgets/visibility_button.dart';
-import 'package:kaiteki/utils/utils.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
@@ -202,46 +204,68 @@ class _PostFormState extends State<PostForm> {
     Navigator.of(context).pop();
 
     var messenger = ScaffoldMessenger.of(context);
+    //var snackBarTextStyle = Utils.getDefaultSnackBarTextStyle(context);
 
-    var theme = Theme.of(context);
-    var snackBarTheme = theme.snackBarTheme;
-    var invertedBrigthness = theme.brightness == Brightness.light
-        ? Brightness.dark
-        : Brightness.light;
-    var fallbackTextStyle =
-        ThemeData(brightness: invertedBrigthness).textTheme.subtitle1;
-    var snackBarTextStyle = snackBarTheme.contentTextStyle ?? fallbackTextStyle;
+    var contentKey = UniqueKey();
 
-    var snackBar = Utils.generateAsyncSnackBar(
-      context: context,
-      done: false,
-      text: const Text("Sending post..."),
-      icon: const Icon(Mdi.textBox),
-      foreColor: snackBarTextStyle?.color,
-    );
+    var snackBar = SnackBar(
+      duration: const Duration(days: 1),
+      content: FutureBuilder(
+        future: Future.delayed(
+          const Duration(seconds: 4),
+          () => Post.example(),
+        ),
+        //future: adapter.postStatus(_getPostDraft()),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          switch (snapshot.state) {
+            case AsyncSnapshotState.errored:
+              Future.delayed(const Duration(seconds: 4), () {
+                messenger.hideCurrentSnackBar();
+              });
+              return AsyncSnackBarContent(
+                key: contentKey,
+                done: true,
+                icon: const Icon(Mdi.close),
+                text: const Text("Post failed to send"),
+              );
 
-    messenger.showSnackBar(snackBar);
+            case AsyncSnapshotState.loading:
+              return AsyncSnackBarContent(
+                key: contentKey,
+                done: false,
+                icon: const Icon(Mdi.textBox),
+                text: const Text("Sending post"),
+              );
 
-    //await Future.delayed(const Duration(seconds: 10), () {});
-
-    /*var post =*/ await adapter.postStatus(_getPostDraft());
-
-    messenger.removeCurrentSnackBar();
-
-    snackBar = Utils.generateAsyncSnackBar(
-      context: context,
-      done: true,
-      text: const Text("Post sent"),
-      icon: const Icon(Mdi.check),
-      foreColor: snackBarTextStyle?.color,
-      // action: SnackBarAction(
-      //   label: 'View post'.toUpperCase(),
-      //   onPressed: () {
-      //     Navigator.of(context).push(MaterialPageRoute(
-      //       builder: (_) => ConversationScreen(post),
-      //     ));
-      //   },
-      // ),
+            case AsyncSnapshotState.done:
+            default:
+              Future.delayed(const Duration(seconds: 4), () {
+                messenger.hideCurrentSnackBar();
+              });
+              return AsyncSnackBarContent(
+                key: contentKey,
+                done: true,
+                icon: const Icon(Mdi.check),
+                text: const Text("Post sent"),
+                trailing: TextButton(
+                  child: const Text("VIEW POST"),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(
+                      Theme.of(context).accentColor,
+                    ),
+                    visualDensity: VisualDensity.comfortable,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => ConversationScreen(snapshot.data!),
+                    ));
+                    messenger.hideCurrentSnackBar();
+                  },
+                ),
+              );
+          }
+        },
+      ),
     );
 
     messenger.showSnackBar(snackBar);
