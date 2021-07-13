@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: windows
-          path: '${{ env.SOURCE_PATH }}\build\windows\runner\Debug\'
+          path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/'
 
   package:
     name: Package
@@ -49,7 +49,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: windows
-          path: '${{ env.SOURCE_PATH }}\build\windows\runner\Debug\'
+          path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
@@ -62,4 +62,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: windows-msix
-          path: '${{ env.SOURCE_PATH }}\build\windows\runner\Release\kaiteki.msix'
+          path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/kaiteki.msix'
