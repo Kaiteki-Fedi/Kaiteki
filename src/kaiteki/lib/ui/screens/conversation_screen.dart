@@ -52,7 +52,9 @@ class Threader {
       var id = post.post.replyToPostId;
 
       if (id != null) {
-        threadPosts.firstWhere((p) => p.post.id == id).replies.add(post);
+        var parent = threadPosts.firstWhere((p) => p.post.id == id);
+        parent.replies.add(post);
+        post.parent = parent;
       }
     }
 
@@ -64,6 +66,7 @@ class Threader {
 class ThreadPost {
   Post post;
   late List<ThreadPost> replies;
+  ThreadPost? parent;
 
   ThreadPost(this.post, {replies}) {
     if (replies == null) {
@@ -82,32 +85,69 @@ class ThreadPostContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final threadLineColor = Theme.of(context).colorScheme.onSurface;
+    final isReply = post.parent != null;
+    final hasReplies = post.replies.isNotEmpty;
+    final hasParent = post.parent != null;
+    final hasParentMultipleReplies =
+        hasParent && post.parent!.replies.length > 1;
+    final isNotReplyOfOP = threadLayer != 1;
+
+    final lineShouldShow = threadLayer != 0;
+    final lineShouldFillPost =
+        hasReplies || (hasParentMultipleReplies && isNotReplyOfOP);
+    final lineShouldContinue = isReply && isNotReplyOfOP;
+    final lineShouldIndent = hasParentMultipleReplies && isNotReplyOfOP;
+
     return Column(
       children: [
-        StatusWidget(post.post),
-        if (post.replies.isNotEmpty)
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                VerticalDivider(
-                  thickness: 2,
-                  width: 8,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(
-                        getLineOpacity(threadLayer),
-                      ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      for (var reply in post.replies)
-                        ThreadPostContainer(
-                          reply,
-                          threadLayer: threadLayer + 1,
+        Stack(
+          alignment: Alignment.topLeft,
+          children: [
+            if (lineShouldShow)
+              Positioned.fill(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: lineShouldFillPost ? null : 24.0,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: lineShouldContinue ? 0.0 : 8.0,
                         ),
-                    ],
-                  ),
+                        child: const VerticalDivider(
+                          width: 64,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+            Padding(
+              padding: EdgeInsets.only(
+                left: lineShouldIndent ? 48.0 : 0.0,
+              ),
+              child: StatusWidget(
+                post.post,
+                showParentPost: false,
+              ),
+            ),
+          ],
+        ),
+        if (threadLayer == 0) const Divider(),
+        if (post.replies.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.only(
+              left: lineShouldIndent ? 48.0 : 0.0,
+            ),
+            child: Column(
+              children: [
+                for (var reply in post.replies)
+                  ThreadPostContainer(
+                    reply,
+                    threadLayer: threadLayer + 1,
+                  ),
               ],
             ),
           ),
