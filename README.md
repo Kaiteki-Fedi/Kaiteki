@@ -31,14 +31,19 @@ If you want to try out Kaiteki, there are automatic builds available for use.
         <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Web"></td>
         <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Windows"></td>
         <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Linux"></td>
-        <td rowspan=2>No CI/CD available yet.<br><a href="https://github.com/Craftplacer/kaiteki/issues/2">Help us!</a></td>
-        <td colspan=2 rowspan=2>Not supported.</td>
+        <td rowspan=3>No CI/CD available yet.<br><a href="https://github.com/Craftplacer/kaiteki/issues/2">Help us!</a></td>
+        <td colspan=2 rowspan=3>Not supported.</td>
     </tr>
     <tr>
-        <th>Link</th>
-        <td><a href="https://craftplacer.moe/Kaiteki/">Visit web version</a></td>
-        <td>No reliable build outputs yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/63">Help us!</a></td>
+        <th>Binaries</th>
+        <td rowspan=2><a href="https://craftplacer.moe/Kaiteki/">Visit web version</a></td>
+        <td><a href="https://github.com/Craftplacer/Kaiteki/actions/workflows/windows.yml">Check build artifacts</a></td>
         <td>No reliable build outputs yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/62">Help us!</a></td>
+    </tr>
+    <tr>
+        <th>Packages / Installers</th>
+        <td>No reliable packaging yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/63">Help us!</a></td>
+        <td>No reliable packaging yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/62">Help us!</a></td>
     </tr>
 </table>
 
