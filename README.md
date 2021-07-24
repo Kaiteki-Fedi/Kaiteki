@@ -43,7 +43,7 @@ If you want to try out Kaiteki, there are automatic builds available for use.
     <tr>
         <th>Packages / Installers</th>
         <td>No reliable packaging yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/63">Help us!</a></td>
-        <td>No reliable packaging yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/63">Help us!</a></td>
+        <td>No reliable packaging yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/62">Help us!</a></td>
     </tr>
 </table>
 
