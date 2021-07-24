@@ -101,10 +101,7 @@ class StatusWidget extends StatelessWidget {
 
                 if (renderedContent != null) RichText(text: renderedContent),
 
-                if (_post.attachments != null)
-                  AttachmentRow(
-                    attachments: _post.attachments!.toList(growable: false),
-                  ),
+                if (_post.attachments != null) AttachmentRow(post: _post),
 
                 if (_post.previewCard != null)
                   Padding(
@@ -300,24 +297,25 @@ class InteractionBar extends StatelessWidget {
 }
 
 class AttachmentRow extends StatelessWidget {
-  final List<Attachment> attachments;
+  final Post post;
 
   const AttachmentRow({
     Key? key,
-    required this.attachments,
+    required this.post,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var border = Theme.of(context).dividerColor;
     var borderRadius = BorderRadius.circular(8);
+    var attachmentIndex = 0;
 
     return LimitedBox(
       maxHeight: 280,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          for (var attachment in attachments)
+          for (var attachment in post.attachments!.take(4))
             Flexible(
               fit: FlexFit.loose,
               flex: 1,
@@ -327,7 +325,7 @@ class AttachmentRow extends StatelessWidget {
                   borderRadius: borderRadius,
                   border: Border.all(color: border, width: 1),
                 ),
-                child: getAttachmentWidget(attachment),
+                child: getAttachmentWidget(attachment, attachmentIndex++),
               ),
             ),
         ],
@@ -335,11 +333,15 @@ class AttachmentRow extends StatelessWidget {
     );
   }
 
-  Widget getAttachmentWidget(Attachment attachment) {
+  Widget getAttachmentWidget(Attachment attachment, int index) {
     var supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
 
     if (attachment.type == AttachmentType.image) {
-      return ImageAttachmentWidget(attachment);
+      return ImageAttachmentWidget(
+        attachment: attachment,
+        post: post,
+        index: index,
+      );
     } else if (attachment.type == AttachmentType.video && supportsVideoPlayer) {
       return VideoAttachmentWidget(attachment: attachment);
     } else {
