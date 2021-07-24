@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parseFragment;
 import 'package:kaiteki/fediverse/model/emoji.dart';
@@ -12,7 +13,10 @@ import 'package:kaiteki/utils/text/text_buffer.dart';
 import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-typedef HtmlConstructor = InlineSpan Function(dom.Element element);
+typedef HtmlConstructor = InlineSpan Function(
+  dom.Element element,
+  List<InlineSpan> subElements,
+);
 
 class TextRenderer {
   static const String emojiChar = ":";
@@ -29,6 +33,10 @@ class TextRenderer {
 
     htmlConstructors = {
       "a": renderLink,
+      "br": renderBreakLine,
+      "pre": renderCodeFont,
+      "code": renderCodeFont,
+      "p": renderParagraph,
     };
   }
 
@@ -98,7 +106,7 @@ class TextRenderer {
       var tag = node.localName!.toLowerCase();
 
       if (htmlConstructors.containsKey(tag)) {
-        resultingSpan = htmlConstructors[tag]!.call(node);
+        resultingSpan = htmlConstructors[tag]!.call(node, renderedSubNodes);
       } else {
         _logger.w("Unhandled HTML tag ($tag)");
       }
@@ -116,7 +124,7 @@ class TextRenderer {
     return resultingSpan;
   }
 
-  InlineSpan renderLink(dom.Element element) {
+  InlineSpan renderLink(dom.Element element, List<InlineSpan> subElements) {
     var recognizer = TapGestureRecognizer()
       ..onTap = () {
         // TODO add user mention link support
@@ -130,6 +138,32 @@ class TextRenderer {
       text: element.text,
       recognizer: recognizer,
       style: theme.linkTextStyle,
+    );
+  }
+
+  InlineSpan renderBreakLine(dom.Element _, List<InlineSpan> subElements) {
+    return TextSpan(text: "\n", style: theme.textStyle);
+  }
+
+  InlineSpan renderCodeFont(dom.Element element, List<InlineSpan> subElements) {
+    return TextSpan(
+      text: element.text,
+      style: theme.textStyle.merge(GoogleFonts.robotoMono()),
+    );
+  }
+
+  InlineSpan renderParagraph(
+      dom.Element element, List<InlineSpan> subElements) {
+    var text = "";
+
+    if (element.previousElementSibling?.localName == "p") {
+      text = "\n\n" + text;
+    }
+
+    return TextSpan(
+      text: text,
+      children: subElements,
+      style: theme.textStyle,
     );
   }
 
