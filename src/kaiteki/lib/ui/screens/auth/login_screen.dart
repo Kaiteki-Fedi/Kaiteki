@@ -31,6 +31,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _loading = false;
   String? _error;
 
+  final GlobalKey _loginFormKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -74,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _getLoginForm() {
     return LoginForm(
+      key: _loginFormKey,
       onValidateInstance: validateInstance,
       onValidateUsername: validateUsername,
       onValidatePassword: validatePassword,
