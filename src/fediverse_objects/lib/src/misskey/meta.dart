@@ -1,5 +1,6 @@
 import 'package:fediverse_objects/src/misskey/emoji.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'meta.g.dart';
 
 @JsonSerializable()
@@ -36,9 +37,9 @@ class MisskeyMeta {
 
   final int driveCapacityPerRemoteUserMb;
 
-  final bool cacheRemoteFiles;
+  final bool? cacheRemoteFiles;
 
-  final bool proxyRemoteFiles;
+  final bool? proxyRemoteFiles;
 
   final bool enableHcaptcha;
 
@@ -62,7 +63,7 @@ class MisskeyMeta {
 
   final Iterable<MisskeyEmoji> emojis;
 
-  final bool requireSetup;
+  final bool? requireSetup;
 
   final bool enableEmail;
 
@@ -91,8 +92,8 @@ class MisskeyMeta {
     required this.disableGlobalTimeline,
     required this.driveCapacityPerLocalUserMb,
     required this.driveCapacityPerRemoteUserMb,
-    required this.cacheRemoteFiles,
-    required this.proxyRemoteFiles,
+    this.cacheRemoteFiles,
+    this.proxyRemoteFiles,
     required this.enableHcaptcha,
     required this.hcaptchaSiteKey,
     required this.enableRecaptcha,
@@ -104,7 +105,7 @@ class MisskeyMeta {
     required this.iconUrl,
     required this.maxNoteTextLength,
     required this.emojis,
-    required this.requireSetup,
+    this.requireSetup,
     required this.enableEmail,
     required this.enableTwitterIntegration,
     required this.enableGithubIntegration,

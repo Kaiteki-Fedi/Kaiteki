@@ -11,16 +11,16 @@ MastodonInstance _$MastodonInstanceFromJson(Map<String, dynamic> json) {
     uri: json['uri'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
-    shortDescription: json['shortDescription'] as String,
     email: json['email'] as String,
     version: json['version'] as String,
     languages: (json['languages'] as List<dynamic>).map((e) => e as String),
     registrations: json['registrations'] as bool,
     approvalRequired: json['approval_required'] as bool,
-    invitesEnabled: json['invites_enabled'] as bool,
     urls: MastodonInstanceUrls.fromJson(json['urls'] as Map<String, dynamic>),
     stats: MastodonInstanceStatistics.fromJson(
         json['stats'] as Map<String, dynamic>),
+    shortDescription: json['shortDescription'] as String?,
+    invitesEnabled: json['invites_enabled'] as bool?,
     thumbnail: json['thumbnail'] as String?,
     contactAccount: json['contact_account'] == null
         ? null

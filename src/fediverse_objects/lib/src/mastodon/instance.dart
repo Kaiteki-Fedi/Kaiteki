@@ -2,6 +2,7 @@ import 'package:fediverse_objects/src/mastodon/account.dart';
 import 'package:fediverse_objects/src/mastodon/instance_statistics.dart';
 import 'package:fediverse_objects/src/mastodon/instance_urls.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'instance.g.dart';
 
 @JsonSerializable()
@@ -26,7 +27,7 @@ class MastodonInstance {
   final String description;
 
   /// A shorter description defined by the admin.
-  final String shortDescription;
+  final String? shortDescription;
 
   /// An email that may be contacted for any inquiries.
   final String email;
@@ -71,7 +72,7 @@ class MastodonInstance {
 
   /// Whether invites are enabled.
   @JsonKey(name: 'invites_enabled')
-  final bool invitesEnabled;
+  final bool? invitesEnabled;
 
   /// Whether registrations require moderator approval.
   @JsonKey(name: 'approval_required')
@@ -81,15 +82,15 @@ class MastodonInstance {
     required this.uri,
     required this.title,
     required this.description,
-    required this.shortDescription,
     required this.email,
     required this.version,
     required this.languages,
     required this.registrations,
     required this.approvalRequired,
-    required this.invitesEnabled,
     required this.urls,
     required this.stats,
+    this.shortDescription,
+    this.invitesEnabled,
 
     // optional attributes
     this.thumbnail,
