@@ -17,7 +17,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   Future<MastodonInstance> getInstance() async {
     return await sendJsonRequest(
-      HttpMethod.post,
+      HttpMethod.get,
       "api/v1/instance",
       (j) => MastodonInstance.fromJson(j),
     );

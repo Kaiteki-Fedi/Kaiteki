@@ -7,4 +7,10 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
   factory MastodonAdapter({MastodonClient? client}) {
     return MastodonAdapter._(client ?? MastodonClient());
   }
+
+  @override
+  Future<bool> probeInstance() async {
+    var instance = await client.getInstance();
+    return !instance.version.contains("Pleroma");
+  }
 }

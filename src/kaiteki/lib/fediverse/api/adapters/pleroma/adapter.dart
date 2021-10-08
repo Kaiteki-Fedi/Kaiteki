@@ -72,4 +72,10 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
     );
     return toPost(status);
   }
+
+  @override
+  Future<bool> probeInstance() async {
+    var instance = await client.getInstance();
+    return instance.version.contains("Pleroma");
+  }
 }

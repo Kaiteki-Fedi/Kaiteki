@@ -55,4 +55,6 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<Iterable<Post>> getStatusesOfUserById(String id);
 
   Future<Iterable<EmojiCategory>> getEmojis();
+
+  Future<bool> probeInstance();
 }

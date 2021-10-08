@@ -197,4 +197,10 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     var notes = await client.getConversation(reply.id);
     return notes.map(toPost).followedBy([reply]);
   }
+
+  @override
+  Future<bool> probeInstance() async {
+    await client.getInstanceMeta();
+    return true;
+  }
 }

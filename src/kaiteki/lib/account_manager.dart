@@ -116,6 +116,29 @@ class AccountManager extends ChangeNotifier {
     );
   }
 
+  Future<ApiDefinition?> probeInstance(String instance) async {
+    for (final definition in ApiDefinitions.definitions) {
+      try {
+        final adapter = definition.createAdapter();
+        adapter.client.instance = instance;
+
+        _logger.d('Probing for ${definition.name} on $instance...');
+
+        final probeResult = await adapter.probeInstance();
+
+        if (probeResult) {
+          _logger.d('Detected ${definition.name} on $instance');
+          return definition;
+        }
+      } catch (_) {
+        continue;
+      }
+    }
+
+    _logger.d("Couldn't detect backend on on $instance");
+    return null;
+  }
+
   //TODO: HACK, This should not exist, please refactor.
   getClientRepo() => _clientSecrets;
 }

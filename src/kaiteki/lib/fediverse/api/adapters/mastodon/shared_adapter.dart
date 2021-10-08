@@ -207,4 +207,9 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
     return posts;
   }
+
+  @override
+  Future<bool> probeInstance() {
+    throw UnimplementedError();
+  }
 }
