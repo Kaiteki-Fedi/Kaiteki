@@ -13,6 +13,7 @@ import 'package:kaiteki/ui/screens/auth/login_screen.dart';
 import 'package:kaiteki/ui/screens/main_screen.dart';
 import 'package:kaiteki/ui/screens/manage_accounts_screen.dart';
 import 'package:kaiteki/ui/screens/settings/about_screen.dart';
+import 'package:kaiteki/ui/screens/settings/credits_screen.dart';
 import 'package:kaiteki/ui/screens/settings/customization/customization_settings_screen.dart';
 import 'package:kaiteki/ui/screens/settings/debug/shared_preferences_screen.dart';
 import 'package:kaiteki/ui/screens/settings/debug_screen.dart';
@@ -94,6 +95,7 @@ class _KaitekiAppState extends State<KaitekiApp> {
               "/settings/debug": (_) => const DebugScreen(),
               "/settings/debug/preferences": (_) =>
                   const SharedPreferencesScreen(),
+              '/credits': (_) => const CreditsScreen(),
             },
             onGenerateRoute: _generateRoute,
           );

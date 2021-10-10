@@ -1,10 +1,8 @@
-import 'dart:math';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,7 +12,7 @@ class AboutScreen extends StatelessWidget {
     var messenger = ScaffoldMessenger.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("About")),
+      appBar: AppBar(title: const Text("About Kaiteki")),
       body: Center(
         child: SizedBox(
           width: Constants.defaultFormWidth,
@@ -22,25 +20,31 @@ class AboutScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  getRandomEmoticon(),
-                  textScaleFactor: 5,
+                Image.asset(
+                  "assets/icon.png",
+                  width: 128,
+                  height: 128,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(Constants.appName, textScaleFactor: 2),
+                    Text(
+                      Constants.appName,
+                      textScaleFactor: 2,
+                      style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: AppNameBadge(
-                        color: AppColors.kaitekiPink,
+                        color: kReleaseMode
+                            ? AppColors.kaitekiPink
+                            : Colors.red.shade900,
                         textColor: Colors.white,
-                        text: "ALPHA",
+                        text: kReleaseMode ? "ALPHA" : "DEBUG",
                       ),
                     ),
                   ],
                 ),
-                const Text(Constants.appTagline),
                 Card(
                   margin: const EdgeInsets.only(
                     left: 4.0,
@@ -52,7 +56,7 @@ class AboutScreen extends StatelessWidget {
                     children: [
                       ListTile(
                         leading: const Icon(Mdi.github),
-                        title: const Text("Github Repository"),
+                        title: const Text("GitHub Repository"),
                         trailing: const Icon(Mdi.openInNew),
                         onTap: () => launchUrl(
                           ScaffoldMessenger.of(context),
@@ -62,7 +66,7 @@ class AboutScreen extends StatelessWidget {
                       ListTile(
                         leading: const Icon(Mdi.license),
                         title: const Text("Open Source Licenses"),
-                        trailing: const Icon(Mdi.arrowRight),
+                        trailing: const Icon(Mdi.chevronRight),
                         onTap: () {
                           showLicensePage(
                             context: context,
@@ -70,83 +74,23 @@ class AboutScreen extends StatelessWidget {
                             applicationVersion: "1.0.0",
                           );
                         },
-                      )
-                    ],
-                  ),
-                ),
-                Card(
-                  margin: const EdgeInsets.only(
-                    left: 4.0,
-                    right: 4.0,
-                    top: 12.0,
-                    bottom: 4.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 12.0),
-                        child: SeparatorText("CREDITS"),
+                      ),
+                      const Divider(),
+                      ListTile(
+                        leading: const Icon(Mdi.accountMultiple),
+                        title: const Text("Credits"),
+                        onTap: () {
+                          Navigator.of(context).pushNamed("/credits");
+                        },
+                        trailing: const Icon(Mdi.chevronRight),
                       ),
                       ListTile(
-                        title: const Text("Craftplacer"),
-                        subtitle: const Text("Main developer"),
+                        leading: const FlutterLogo(),
+                        title: const Text("Made with Flutter"),
+                        onTap: () {
+                          launchUrl(messenger, "https://flutter.dev");
+                        },
                         trailing: const Icon(Mdi.openInNew),
-                        onTap: () => launchUrl(
-                          messenger,
-                          "https://github.com/Craftplacer",
-                        ),
-                      ),
-                      ListTile(
-                        title: const Text("Odyssey98"),
-                        subtitle: const Text("Icon design"),
-                        trailing: const Icon(Mdi.openInNew),
-                        onTap: () => launchUrl(
-                          messenger,
-                          "https://mstdn.social/@odyssey98",
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Card(
-                  margin: const EdgeInsets.only(
-                    left: 4,
-                    right: 4,
-                    top: 12.0,
-                    bottom: 4,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 12.0),
-                        child: SeparatorText("<3"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("Made with "),
-                            SizedBox(
-                              width: 85,
-                              child: InkWell(
-                                onTap: () => launchUrl(
-                                  messenger,
-                                  "https://flutter.dev",
-                                ),
-                                child: FlutterLogo(
-                                  style: FlutterLogoStyle.horizontal,
-                                  textColor: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                ),
-                              ),
-                            ),
-                            const Text(" and love"),
-                          ],
-                        ),
                       ),
                     ],
                   ),
@@ -167,24 +111,6 @@ class AboutScreen extends StatelessWidget {
         const SnackBar(content: Text("URL couldn't be opened.")),
       );
     }
-  }
-
-  String getRandomEmoticon() {
-    const List<String> emoticons = <String>[
-      "=w=",
-      ":3",
-      "~w~",
-      ">w<",
-      "owo",
-      "uwu",
-      "(´o w o`)",
-      "(｡♥‿♥｡)",
-      "(*^‿^*)"
-    ];
-
-    var index = Random().nextInt(emoticons.length);
-
-    return emoticons[index];
   }
 }
 
@@ -207,7 +133,7 @@ class AppNameBadge extends StatelessWidget {
         color: color,
         borderRadius: const BorderRadius.all(Radius.circular(24)),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Text(
         text,
         style: GoogleFonts.robotoMono(

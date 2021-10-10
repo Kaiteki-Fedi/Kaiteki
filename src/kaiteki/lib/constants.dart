@@ -1,8 +1,7 @@
 class Constants {
   static const String appName = "Kaiteki";
   static const String appWebsite = "https://github.com/Craftplacer/Kaiteki";
-  static const String appDescription = appTagline;
-  static const String appTagline = "the cute fediverse client";
+  static const String appDescription = "Cross-platform Fediverse client";
   static const String userAgent = "Kaiteki/1.0";
 
   static const String exampleAvatar =
