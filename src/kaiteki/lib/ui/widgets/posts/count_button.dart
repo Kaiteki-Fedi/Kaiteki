@@ -14,6 +14,7 @@ class CountButton extends StatelessWidget {
   final Widget? activeIcon;
 
   final VoidCallback? onTap;
+  final FocusNode? focusNode;
 
   const CountButton({
     Key? key,
@@ -26,6 +27,7 @@ class CountButton extends StatelessWidget {
     this.onTap,
     this.disabled = false,
     this.buttonOnly = false,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -40,6 +42,7 @@ class CountButton extends StatelessWidget {
         color: iconColor,
         onPressed: callback,
         enableFeedback: !disabled,
+        focusNode: focusNode,
       );
     } else {
       return TextButton.icon(
@@ -49,6 +52,7 @@ class CountButton extends StatelessWidget {
           foregroundColor: MaterialStateProperty.all<Color>(iconColor),
         ),
         label: Text(count.toString()),
+        focusNode: focusNode,
       );
     }
   }

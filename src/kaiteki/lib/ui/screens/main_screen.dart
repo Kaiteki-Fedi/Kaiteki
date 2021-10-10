@@ -4,8 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
+import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
 import 'package:kaiteki/ui/screens/settings/settings_screen.dart';
+import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
@@ -73,15 +75,24 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     var appName = "Kaiteki";
 
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        var desktopMode = Constants.desktopThreshold <= constraints.maxWidth;
-        if (desktopMode) {
-          return buildDesktopView(appName);
-        } else {
-          return buildMobileView(appName);
-        }
+    return FocusableActionDetector(
+      shortcuts: {
+        ShortcutKeys.newPostKeySet: NewPostIntent(),
       },
+      actions: {
+        NewPostIntent: CallbackAction(
+          onInvoke: (e) => onComposeStatus(context, null),
+      },
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          var desktopMode = Constants.desktopThreshold <= constraints.maxWidth;
+          if (desktopMode) {
+            return buildDesktopView(appName);
+          } else {
+            return buildMobileView(appName);
+          }
+        },
+      ),
     );
   }
 

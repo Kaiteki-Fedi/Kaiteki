@@ -8,6 +8,8 @@ import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
+import 'package:kaiteki/ui/intents.dart';
+import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/ui/widgets/attachments/fallback_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/attachments/video_attachment_widget.dart';
@@ -76,52 +78,64 @@ class StatusWidget extends StatelessWidget {
       ).renderFromHtml(_post.content!);
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: AvatarWidget(_post.author, size: 48),
-        ),
-        Expanded(
-          child: Padding(
+    return FocusableActionDetector(
+      shortcuts: {
+        ShortcutKeys.replyKeySet: ReplyIntent(),
+        ShortcutKeys.repeatKeySet: RepeatIntent(),
+        ShortcutKeys.favoriteKeySet: FavoriteIntent(),
+        // ShortcutKeys.reactKeySet: ReactIntent(),
+        ShortcutKeys.menuKeySet: MenuIntent(),
+      },
+      actions: {
+        ReplyIntent: CallbackAction(onInvoke: (e) => reply(context, _post)),
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
             padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MetaBar(
-                  renderedAuthor: renderedAuthor,
-                  post: _post,
-                  theme: theme,
-                ),
-
-                if (showParentPost && _post.replyToPostId != null)
-                  ReplyBar(textStyle: textStyle, post: _post),
-
-                if (renderedContent != null) RichText(text: renderedContent),
-
-                if (_post.attachments != null)
-                  AttachmentRow(
-                    attachments: _post.attachments!.toList(growable: false),
-                  ),
-
-                if (_post.previewCard != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: CardWidget(card: _post.previewCard!),
-                  ),
-
-                if (_post.reactions.isNotEmpty)
-                  ReactionRow(_post, _post.reactions),
-
-                if (showActions) InteractionBar(post: _post, theme: theme),
-                // ApplicationWidget(_post.application),
-              ],
-            ),
+            child: AvatarWidget(_post.author, size: 48),
           ),
-        )
-      ],
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MetaBar(
+                    renderedAuthor: renderedAuthor,
+                    post: _post,
+                    theme: theme,
+                  ),
+
+                  if (showParentPost && _post.replyToPostId != null)
+                    ReplyBar(textStyle: textStyle, post: _post),
+
+                  if (renderedContent != null) RichText(text: renderedContent),
+
+                  if (_post.attachments != null)
+                    AttachmentRow(
+                      attachments: _post.attachments!.toList(growable: false),
+                    ),
+
+                  if (_post.previewCard != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: CardWidget(card: _post.previewCard!),
+                    ),
+
+                  if (_post.reactions.isNotEmpty)
+                    ReactionRow(_post, _post.reactions),
+
+                  if (showActions) InteractionBar(post: _post, theme: theme),
+                  // ApplicationWidget(_post.application),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -251,25 +265,15 @@ class InteractionBar extends StatelessWidget {
           icon: const Icon(Icons.reply),
           count: _post.replyCount,
           buttonOnly: true,
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (_) => Dialog(
-                child: SizedBox(
-                  child: Scaffold(body: PostForm(replyTo: _post)),
-                  width: 800,
-                  height: 500,
-                ),
-              ),
-              barrierDismissible: true,
-            );
-          },
+          onTap: () => reply(context, _post),
+          focusNode: FocusNode(skipTraversal: true),
         ),
         CountButton(
           icon: const Icon(Icons.repeat),
           count: _post.repeatCount,
           active: _post.repeated,
           activeColor: theme.repeatColor,
+          focusNode: FocusNode(skipTraversal: true),
         ),
         CountButton(
           icon: const Icon(Mdi.starOutline),
@@ -277,10 +281,12 @@ class InteractionBar extends StatelessWidget {
           active: _post.liked,
           activeColor: theme.favoriteColor,
           activeIcon: const Icon(Icons.star),
+          focusNode: FocusNode(skipTraversal: true),
         ),
-        const IconButton(
-          icon: Icon(Icons.insert_emoticon),
+        IconButton(
+          icon: const Icon(Icons.insert_emoticon),
           onPressed: null,
+          focusNode: FocusNode(skipTraversal: true),
         ),
         PopupMenuButton<VoidCallback>(
           icon: const Icon(Icons.more_horiz),
@@ -354,4 +360,18 @@ class AttachmentRow extends StatelessWidget {
       return FallbackAttachmentWidget(attachment: attachment);
     }
   }
+}
+
+void reply(BuildContext context, Post post) {
+  showDialog(
+    context: context,
+    builder: (_) => Dialog(
+      child: SizedBox(
+        child: Scaffold(body: PostForm(replyTo: post)),
+        width: 800,
+        height: 500,
+      ),
+    ),
+    barrierDismissible: true,
+  );
 }
