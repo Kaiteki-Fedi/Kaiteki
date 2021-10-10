@@ -146,7 +146,6 @@ class MetaBar extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              // if (renderedAuthor != null)
               RichText(text: renderedAuthor),
               Padding(
                 padding: const EdgeInsets.only(left: 6),
@@ -163,17 +162,26 @@ class MetaBar extends StatelessWidget {
             ],
           ),
         ),
-        Text(
-          DateTime.now().difference(_post.postedAt).toStringHuman(),
-          style: TextStyle(
-            color: theme.materialTheme.disabledColor,
+        Tooltip(
+          message: _post.postedAt.toString(),
+          child: Text(
+            DateTime.now().difference(_post.postedAt).toStringHuman(),
+            style: TextStyle(
+              color: theme.materialTheme.disabledColor,
+            ),
           ),
         ),
         // if (_post.visibility != null)
-        Icon(
-          _post.visibility.toIconData(),
-          size: 20,
-          color: theme.materialTheme.disabledColor,
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Tooltip(
+            message: _post.visibility.toHumanString(),
+            child: Icon(
+              _post.visibility.toIconData(),
+              size: 20,
+              color: theme.materialTheme.disabledColor,
+            ),
+          ),
         ),
       ],
     );
