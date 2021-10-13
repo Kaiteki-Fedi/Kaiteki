@@ -44,6 +44,7 @@ MisskeyMeta _$MisskeyMetaFromJson(Map<String, dynamic> json) {
     enableGithubIntegration: json['enableGithubIntegration'] as bool,
     enableDiscordIntegration: json['enableDiscordIntegration'] as bool,
     enableServiceWorker: json['enableServiceWorker'] as bool,
+    backgroundImageUrl: json['backgroundImageUrl'] as String?,
   );
 }
 
@@ -84,4 +85,5 @@ Map<String, dynamic> _$MisskeyMetaToJson(MisskeyMeta instance) =>
       'enableGithubIntegration': instance.enableGithubIntegration,
       'enableDiscordIntegration': instance.enableDiscordIntegration,
       'enableServiceWorker': instance.enableServiceWorker,
+      'backgroundImageUrl': instance.backgroundImageUrl,
     };

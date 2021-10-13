@@ -75,6 +75,8 @@ class MisskeyMeta {
 
   final bool enableServiceWorker;
 
+  final String? backgroundImageUrl;
+
   const MisskeyMeta({
     required this.maintainerName,
     required this.maintainerEmail,
@@ -111,6 +113,7 @@ class MisskeyMeta {
     required this.enableGithubIntegration,
     required this.enableDiscordIntegration,
     required this.enableServiceWorker,
+    this.backgroundImageUrl,
   });
 
   factory MisskeyMeta.fromJson(Map<String, dynamic> json) =>
