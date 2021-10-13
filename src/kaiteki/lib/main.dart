@@ -11,6 +11,9 @@ import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/repositories/secret_storages/shared_preferences_secret_storage.dart';
+import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
+import 'package:kaiteki/theming/theme_container.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -50,19 +53,24 @@ void main() async {
 
   await accountContainer.loadAllAccounts();
 
-  FlutterLocalNotificationsPlugin? notificationsPlugin;
-
-  try {
-    notificationsPlugin = await initializeNotifications();
-  } catch (e) {
-    logger.e("Failed to initialize notifications", e);
-  }
+  // FlutterLocalNotificationsPlugin? notificationsPlugin;
+  //
+  // try {
+  //   notificationsPlugin = await initializeNotifications();
+  // } catch (e) {
+  //   logger.e("Failed to initialize notifications", e);
+  // }
 
   // construct app
-  var app = KaitekiApp(
-    accountContainer: accountContainer,
-    notifications: notificationsPlugin,
-    preferences: prefContainer,
+  var app = MultiProvider(
+    providers: [
+      ChangeNotifierProvider<ThemeContainer>(create: (BuildContext context) {
+        return ThemeContainer(DefaultAppThemes.lightAppTheme);
+      }),
+      ChangeNotifierProvider.value(value: accountContainer),
+      ChangeNotifierProvider.value(value: prefContainer),
+    ],
+    child: const KaitekiApp(),
   );
 
   // run.
