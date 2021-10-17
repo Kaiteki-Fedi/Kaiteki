@@ -13,4 +13,7 @@ abstract class SecretStorage {
 
   Future<void> deleteAccountSecret(AccountSecret accountSecret);
   Future<void> deleteClientSecret(ClientSecret clientSecret);
+
+  Future<bool> hasAccountSecret(AccountSecret accountSecret);
+  Future<bool> hasClientSecret(ClientSecret clientSecret);
 }

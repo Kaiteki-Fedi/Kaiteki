@@ -18,7 +18,7 @@ class AccountSecretRepository extends ChangeNotifier
       throw Exception("Account secret is already present in repository");
     }
 
-    _storage.saveAccountSecret(secret);
+    await _storage.saveAccountSecret(secret);
     notifyListeners();
   }
 
@@ -28,7 +28,7 @@ class AccountSecretRepository extends ChangeNotifier
       throw Exception("Account secret doesn't exist in repository");
     }
 
-    _storage.deleteAccountSecret(secret);
+    await _storage.deleteAccountSecret(secret);
     notifyListeners();
   }
 
@@ -54,5 +54,10 @@ class AccountSecretRepository extends ChangeNotifier
   Future<void> initialize() async {
     final accountSecrets = await _storage.fetchAccountSecrets();
     _secrets = accountSecrets.toList();
+  }
+
+  @override
+  Future<bool> contains(AccountSecret secret) async {
+    return await _storage.hasAccountSecret(secret);
   }
 }

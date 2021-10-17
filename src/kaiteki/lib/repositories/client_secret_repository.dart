@@ -18,7 +18,7 @@ class ClientSecretRepository extends ChangeNotifier
       throw Exception("Client secret is already present in repository");
     }
 
-    _storage.saveClientSecret(secret);
+    await _storage.saveClientSecret(secret);
     notifyListeners();
   }
 
@@ -28,7 +28,7 @@ class ClientSecretRepository extends ChangeNotifier
       throw Exception("Client secret doesn't exist in repository");
     }
 
-    _storage.deleteClientSecret(secret);
+    await _storage.deleteClientSecret(secret);
     notifyListeners();
   }
 
@@ -51,7 +51,12 @@ class ClientSecretRepository extends ChangeNotifier
 
   @override
   Future<void> initialize() async {
-    var clientSecrets = await _storage.fetchClientSecrets();
+    final clientSecrets = await _storage.fetchClientSecrets();
     _secrets = clientSecrets.toList();
+  }
+
+  @override
+  Future<bool> contains(ClientSecret secret) async {
+    return await _storage.hasClientSecret(secret);
   }
 }

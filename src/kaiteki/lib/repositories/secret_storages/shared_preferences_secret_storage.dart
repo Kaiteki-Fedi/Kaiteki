@@ -18,21 +18,22 @@ class SharedPreferencesSecureStorage extends SecretStorage {
     String username,
     String instance,
   ) async {
-    var secrets = await fetchAccountSecrets();
-    return secrets
-        .firstWhere((s) => s.username == username && s.instance == instance);
+    final secrets = await fetchAccountSecrets();
+    return secrets.firstWhere((s) {
+      return s.username == username && s.instance == instance;
+    });
   }
 
   @override
   Future<ClientSecret> fetchClientSecret(String instance) async {
-    var secrets = await fetchClientSecrets();
+    final secrets = await fetchClientSecrets();
     return secrets.firstWhere((s) => s.instance == instance);
   }
 
   @override
   Future<void> saveAccountSecret(AccountSecret secret) async {
-    var accounts = await fetchAccountSecrets();
-    var newList = accounts
+    final accounts = await fetchAccountSecrets();
+    final newList = accounts
         .where((s) => s != secret) // avoid duplicates, prefer updated
         .followedBy([secret]) // add additional secret
         .map((m) => m.toJson()) // convert to JSON maps
@@ -44,8 +45,8 @@ class SharedPreferencesSecureStorage extends SecretStorage {
 
   @override
   Future<void> saveClientSecret(ClientSecret secret) async {
-    var accounts = await fetchClientSecrets();
-    var newList = accounts
+    final accounts = await fetchClientSecrets();
+    final newList = accounts
         .where((s) => s != secret) // avoid duplicates, prefer updated
         .followedBy([secret]) // add additional secret
         .map((m) => m.toJson()) // convert to JSON maps
@@ -70,8 +71,8 @@ class SharedPreferencesSecureStorage extends SecretStorage {
       return [];
     }
 
-    var maps = strings.map(jsonDecode);
-    var secrets = maps.map((m) => AccountSecret.fromJson(m));
+    final maps = strings.map(jsonDecode);
+    final secrets = maps.map((m) => AccountSecret.fromJson(m));
     return secrets;
   }
 
@@ -90,20 +91,68 @@ class SharedPreferencesSecureStorage extends SecretStorage {
       return [];
     }
 
-    var maps = strings.map(jsonDecode);
-    var secrets = maps.map((m) => ClientSecret.fromJson(m));
+    final maps = strings.map(jsonDecode);
+    final secrets = maps.map((m) => ClientSecret.fromJson(m));
     return secrets;
   }
 
   @override
-  Future<void> deleteAccountSecret(AccountSecret accountSecret) {
-    // TODO: implement deleteAccountSecret
-    throw UnimplementedError();
+  Future<void> deleteAccountSecret(AccountSecret accountSecret) async {
+    final accounts = await fetchAccountSecrets();
+    final newList = accounts
+        .where((s) => s != accountSecret)
+        .map((m) => m.toJson()) // convert to JSON maps
+        .map(jsonEncode) // convert to JSON strings
+        .toList(); // Turn into a pure list
+
+    await _preferences.setStringList(_accountKey, newList);
   }
 
   @override
-  Future<void> deleteClientSecret(ClientSecret clientSecret) {
-    // TODO: implement deleteClientSecret
-    throw UnimplementedError();
+  Future<void> deleteClientSecret(ClientSecret clientSecret) async {
+    final accounts = await fetchClientSecrets();
+    final newList = accounts
+        .where((s) => s != clientSecret)
+        .map((m) => m.toJson()) // convert to JSON maps
+        .map(jsonEncode) // convert to JSON strings
+        .toList(); // Turn into a pure list
+
+    await _preferences.setStringList(_clientKey, newList);
+  }
+
+  @override
+  Future<bool> hasAccountSecret(AccountSecret accountSecret) async {
+    Iterable<String>? strings;
+
+    try {
+      strings = _preferences.getStringList(_accountKey);
+    } catch (e) {}
+
+    if (strings == null) {
+      return false;
+    }
+
+    final maps = strings.map(jsonDecode);
+    return maps.any((m) {
+      return AccountSecret.fromJson(m) == accountSecret;
+    });
+  }
+
+  @override
+  Future<bool> hasClientSecret(ClientSecret clientSecret) async {
+    Iterable<String>? strings;
+
+    try {
+      strings = _preferences.getStringList(_clientKey);
+    } catch (e) {}
+
+    if (strings == null) {
+      return false;
+    }
+
+    final maps = strings.map(jsonDecode);
+    return maps.any((m) {
+      return ClientSecret.fromJson(m) == clientSecret;
+    });
   }
 }

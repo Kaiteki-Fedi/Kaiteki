@@ -4,4 +4,5 @@ abstract class Repository<T> {
   void removeAll();
   Iterable<T> getAll();
   Future<void> initialize();
+  Future<bool> contains(T item);
 }
