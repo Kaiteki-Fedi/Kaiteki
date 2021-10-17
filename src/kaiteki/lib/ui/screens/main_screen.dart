@@ -82,6 +82,7 @@ class _MainScreenState extends State<MainScreen> {
       actions: {
         NewPostIntent: CallbackAction(
           onInvoke: (e) => onComposeStatus(context, null),
+        ),
       },
       child: LayoutBuilder(
         builder: (_, constraints) {
