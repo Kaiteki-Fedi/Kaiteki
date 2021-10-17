@@ -23,31 +23,31 @@ class EmojiSelector extends StatefulWidget {
 class _EmojiSelectorState extends State<EmojiSelector>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
-  late final ScrollController _scrollController;
-  final Map<int, GlobalKey> _itemKeys = <int, GlobalKey>{};
+  // late final ScrollController _scrollController;
+  // final Map<int, GlobalKey> _itemKeys = <int, GlobalKey>{};
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    // _scrollController = ScrollController();
 
     _tabController = TabController(
       vsync: this,
       length: widget.categories.length,
     );
 
-    _tabController.addListener(() {
-      var key = _itemKeys[_tabController.index];
-      var box = key!.currentContext!.findRenderObject()! as RenderBox;
-      var offset = box.localToGlobal(Offset.zero);
-
-      var animationHeight = _scrollController.offset + offset.dy - 56.0;
-      _scrollController.animateTo(
-        animationHeight,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.decelerate,
-      );
-    });
+    // _tabController.addListener(() {
+    //   var key = _itemKeys[_tabController.index];
+    //   var box = key!.currentContext!.findRenderObject()! as RenderBox;
+    //   var offset = box.localToGlobal(Offset.zero);
+    //
+    //   var animationHeight = _scrollController.offset + offset.dy - 56.0;
+    //   _scrollController.animateTo(
+    //     animationHeight,
+    //     duration: const Duration(milliseconds: 500),
+    //     curve: Curves.decelerate,
+    //   );
+    // });
   }
 
   @override

@@ -9,7 +9,7 @@ class AccountRequiredScreen extends StatelessWidget {
       body: SafeArea(
         child: FormWidget(
           padding: const EdgeInsets.all(24),
-          child: Column(
+          builder: (context, fillsPage) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
@@ -33,9 +33,7 @@ class AccountRequiredScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed("/accounts/add");
-                    },
+                    onPressed: () => Navigator.of(context).pushNamed("/login"),
                   ),
                 ),
               ),

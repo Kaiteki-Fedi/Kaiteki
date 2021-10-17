@@ -1,26 +1,32 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'client_secret.dart';
+part of 'discover_instances_screen.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ClientSecret _$ClientSecretFromJson(Map<String, dynamic> json) {
-  return ClientSecret(
-    json['instance'] as String,
-    json['id'] as String,
-    json['secret'] as String,
-    apiType: _$enumDecodeNullable(_$ApiTypeEnumMap, json['type']),
+InstanceData _$_InstanceCardDataFromJson(Map<String, dynamic> json) {
+  return InstanceData(
+    type: _$enumDecode(_$ApiTypeEnumMap, json['type']),
+    name: json['name'] as String,
+    shortDescription: json['shortDescription'] as String?,
+    favicon: json['favicon'] as String?,
+    rules: (json['rules'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    rulesUrl: json['rulesUrl'] as String?,
+    usesConvenant: json['usesConvenant'] as bool? ?? false,
   );
 }
 
-Map<String, dynamic> _$ClientSecretToJson(ClientSecret instance) =>
+Map<String, dynamic> _$_InstanceCardDataToJson(InstanceData instance) =>
     <String, dynamic>{
-      'id': instance.clientId,
-      'secret': instance.clientSecret,
-      'instance': instance.instance,
-      'type': _$ApiTypeEnumMap[instance.apiType],
+      'type': _$ApiTypeEnumMap[instance.type],
+      'name': instance.name,
+      'shortDescription': instance.shortDescription,
+      'favicon': instance.favicon,
+      'rules': instance.rules,
+      'rulesUrl': instance.rulesUrl,
+      'usesConvenant': instance.usesConvenant,
     };
 
 K _$enumDecode<K, V>(
@@ -47,17 +53,6 @@ K _$enumDecode<K, V>(
       return MapEntry(unknownValue, enumValues.values.first);
     },
   ).key;
-}
-
-K? _$enumDecodeNullable<K, V>(
-  Map<K, V> enumValues,
-  dynamic source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
 }
 
 const _$ApiTypeEnumMap = {

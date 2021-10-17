@@ -11,6 +11,7 @@ import 'package:kaiteki/fediverse/model/chat.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
+import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
@@ -199,8 +200,12 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<bool> probeInstance() async {
-    await client.getInstanceMeta();
-    return true;
+  Future<Instance> getInstance() async {
+    return toInstance(await client.getInstanceMeta(), client.baseUrl);
+  }
+
+  @override
+  Future<Instance> probeInstance() async {
+    return getInstance();
   }
 }

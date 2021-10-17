@@ -99,35 +99,36 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget buildDesktopView(String appName) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            appName,
-            style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-          ),
-          actions: const [AccountSwitcherWidget(size: 40)],
+      appBar: AppBar(
+        title: Text(
+          appName,
+          style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
         ),
-        body: Row(
-          children: [
-            NavigationRail(
-              selectedIndex: _currentPage,
-              onDestinationSelected: (x) => changePage(x),
-              destinations: [
-                for (var tab in _tabs)
-                  NavigationRailDestination(
-                    icon: Icon(tab.icon),
-                    label: Text(tab.text),
-                  ),
-                const NavigationRailDestination(
-                  icon: Icon(Mdi.cog),
-                  label: Text("Settings"),
+        actions: const [AccountSwitcherWidget(size: 40)],
+      ),
+      body: Row(
+        children: [
+          NavigationRail(
+            selectedIndex: _currentPage,
+            onDestinationSelected: (x) => changePage(x),
+            destinations: [
+              for (var tab in _tabs)
+                NavigationRailDestination(
+                  icon: Icon(tab.icon),
+                  label: Text(tab.text),
                 ),
-              ],
-            ),
-            const VerticalDivider(thickness: 1, width: 1),
-            Expanded(child: getPageView()),
-          ],
-        ),
-        floatingActionButton: getFabDesktop(context, _currentPage));
+              const NavigationRailDestination(
+                icon: Icon(Mdi.cog),
+                label: Text("Settings"),
+              ),
+            ],
+          ),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(child: getPageView()),
+        ],
+      ),
+      floatingActionButton: getFabDesktop(context, _currentPage),
+    );
   }
 
   Widget buildMobileView(String appName) {
@@ -247,10 +248,14 @@ class _MainScreenState extends State<MainScreen> {
       context: context,
       builder: (_) => Dialog(
         child: SizedBox(
-          child: Scaffold(body: PostForm(replyTo: replyTo)),
+          child: Scaffold(
+            body: PostForm(replyTo: replyTo),
+            backgroundColor: Colors.transparent,
+          ),
           width: 800,
           height: 500,
         ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       barrierDismissible: true,
     );

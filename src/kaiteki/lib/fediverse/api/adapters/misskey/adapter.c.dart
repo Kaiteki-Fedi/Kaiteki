@@ -88,3 +88,19 @@ User toUser(MisskeyUser source) {
     host: source.host,
   );
 }
+
+Instance toInstance(MisskeyMeta instance, String instanceUrl) {
+  final instanceUri = Uri.parse(instanceUrl);
+
+  return Instance(
+    name: instance.name,
+    iconUrl: instance.iconUrl == null
+        ? null
+        : instanceUri.resolve(instance.iconUrl!).toString(),
+    mascotUrl: instanceUri.resolve(instance.mascotImageUrl).toString(),
+    backgroundUrl: instance.backgroundImageUrl == null
+        ? null
+        : instanceUri.resolve(instance.backgroundImageUrl!).toString(),
+    source: instance,
+  );
+}

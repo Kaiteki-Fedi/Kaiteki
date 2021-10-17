@@ -100,3 +100,12 @@ String? getHost(String acct) {
 
   return null;
 }
+
+Instance toInstance(MastodonInstance instance) {
+  return Instance(
+    source: instance,
+    iconUrl: null,
+    name: instance.title,
+    backgroundUrl: instance.thumbnail,
+  );
+}

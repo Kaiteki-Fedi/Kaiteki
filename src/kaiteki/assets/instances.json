@@ -1,0 +1,255 @@
+[
+  {
+    "type": "pleroma",
+    "name": "fedi.absturztau.be",
+    "shortDescription":
+    "This instances tries to be as cute, fluffy and adorable as possible.",
+    "rules": [
+      "Don't post Illegal Content",
+      "CW stuff that is NSFW",
+      "And most important of all: Be excellent to each other"
+    ],
+    "favicon": "https://fedi.absturztau.be/favicon.png",
+    "rulesUrl": "https://fedi.absturztau.be/about",
+    "usesConvenant": true
+  },
+  {
+    "type": "pleroma",
+    "name": "udongein.xyz",
+    "shortDescription":
+    "Welcome to Udongein! The friendly comfy instance of Pleroma!",
+    "rules": [
+      "Don't post pornographic materials involving minors.",
+      "Don't share anyone's personal information without their consent, and delete content about a person should they ask.",
+      "For profit companies account aren't allowed. Offering sex services in exchange for money is prohibited.",
+      "Don't post Illegal-for-Finland content (the server is hosted from there).",
+      "Don't be racist, nazist, transphobic, etc. Hate speech and harassment are not allowed.",
+      "Boosting content is the same as posting content. Your boosts should follow the rules.",
+      "Don't spam. Bots will be immediately deleted (unless agreed with me).",
+      "Mark NSFW and suggestive material as \"Sensitive\"! Arts with visible underwear, swimsuits and all that are suggestive too and therefore must be marked \"Sensitive\". Never believe danbooru and other similar sources when it comes to safety. The NSFW rule also applies to graphical violence (such as gore). Do not post it for shock value.",
+      "Be nice!",
+      "Bunny-ears avi is not required, but very very and very welcomed!"
+    ],
+    "favicon": "https://udongein.xyz/favicon.png",
+    "rulesUrl": "https://udongein.xyz/about",
+    "usesConvenant": true
+  },
+  {
+    "type": "misskey",
+    "name": "misskey.io",
+    "shortDescription": "Misskey.ioは、地球で生まれた分散マイクロブログSNSです。",
+    "favicon":
+    "https://s3.arkjp.net/misskey/webpublic-0c66b1ca-b8c0-4eaa-9827-47674f4a1580.png"
+  },
+  {
+    "type": "mastodon",
+    "name": "mastodon.social",
+    "favicon": "https://mastodon.social/favicon.ico",
+    "shortDescription":
+    "Server run by the main developers of the project 🐘 It is not focused on any particular niche interest - everyone is welcome as long as you follow our code of conduct!",
+    "rules": [
+      "Sexually explicit or violent media must be marked as sensitive when posting",
+      "No racism, sexism, homophobia, transphobia, xenophobia, or casteism",
+      "No incitement of violence or promotion of violent ideologies",
+      "No harassment, dogpiling or doxxing of other users",
+      "No content illegal in Germany"
+    ],
+    "rulesUrl": "https://mastodon.social/about/more"
+  },
+  {
+    "type": "pleroma",
+    "name": "cdrom.tokyo",
+    "favicon": "https://cdrom.tokyo/favicon.png",
+    "shortDescription":
+    "cdrom.tokyo is one of many places where you can join the Fediverse!",
+    "rules": [
+      "The first rule of cdrom.tokyo is to have fun.",
+      "No spam.",
+      "You're required to mark NSFW media as such. Posting NSFW to the public timeline is not prohibited but please don't post things most people don't want to see to public timeline, use unlisted or followers-only posts instead. You can hide link previews by using the #nsfw hashtag in your post.",
+      "Don't do anything that will get me in trouble with Dutch authorities.",
+      "Don't give me a reason to write down more specific rules."
+    ],
+    "rulesUrl": "https://cdrom.tokyo/about",
+    "usesConvenant": true
+  },
+  {
+    "type": "pleroma",
+    "name": "blob.cat",
+    "favicon": "https://blob.cat/favicon.png",
+    "rules": [
+      "Never post anything illegal (USA jurisdiction)",
+      "Mark sensitive media as NSFW",
+      "Most importantly, be excellent to each other"
+    ],
+    "rulesUrl": "https://blob.cat/about"
+  },
+  {
+    "type": "pleroma",
+    "name": "outerheaven.club",
+    "shortDescription": "An instance without a specific theme except when it comes to having fun and taking it easy :comfy:",
+    "rules": [
+      "Lewd or violent content must be tagged. Marking them as sensitive is good, but providing context even with just one word to describe the content is preferable.",
+      "No restrictions on Subjects/Content Warnings (CWs) but please CW your spoilers!",
+      "No restrictions on the scopes.",
+      "Spamming and any behaviour that bother other users are forbidden.",
+      "Hate speech is not tolerated.",
+      "This instance is hosted in Europe, therefore any content considered illegal in Europe is also forbidden on this instance. This includes for example sexual content containing minors or gore.",
+      "If you wish to use this instance to host one of your bot, please contact the admin. He will be the one to decide if such bot can be allowed on this instance or not.",
+      "Promotional content is forbidden by default.",
+      "Finally, this is not a rule but please try and source your arts if possible! It only takes 2 minutes to reverse search a pic!"
+    ],
+    "favicon": "https://outerheaven.club/favicon.png",
+    "rulesUrl": "https://outerheaven.club/about"
+  },
+  {
+    "type": "pleroma",
+    "name": "stereophonic.space",
+    "shortDescription":
+    "Stereophonic.space is a nice and cozy socialization platform. We have cofe",
+    "favicon": "https://stereophonic.space/favicon.png",
+    "rules": [
+      "Try to be most excellect to your fellow fedi users!",
+      "Don't post private information of anyone other than yourself. It's a dick move!",
+      "Tag NSFW content with Content Warnings. NSFW content in profile pics and backgrounds is not allowed.",
+      "Absolutely no sexualized depictions of children. Stereophonic.space is not the place for this kind of content.",
+      "No commercial advertisement is allowed, with the exception of artists promoting their works.",
+      "Any content violating the Netherlands law is strictly prohibited.",
+      "Boosting something is considered the same as posting it yourself."
+    ],
+    "rulesUrl": "https://stereophonic.space/about"
+  },
+  {
+    "type": "pleroma",
+    "name": "cawfee.club",
+    "favicon": "https://cawfee.club/favicon.png",
+    "rulesUrl": "https://cawfee.club/about",
+    "rules": [
+      "No spam.",
+      "No 2D/3D porn or nudity.",
+      "No hornyposting.",
+      "Don't be a toxic asshat."
+    ]
+  },
+  {
+    "type": "pleroma",
+    "name": "shitposter.club",
+    "favicon": "https://shitposter.club/favicon.png",
+    "rulesUrl": "https://shitposter.club/about",
+    "rules": [
+      "no \"loli\" or child model pictures",
+      "no content that is illegal in the USA",
+      "if someone blocks you, do not evade the block to post at them",
+      "no \"doxing\", this rule errs on the side of caution",
+      "no spamming",
+      "while arguing and insulting is fine, persistent harassment of other users is not allowed",
+      "Imitating other users' name and avatar without their consent, including off-server accounts, is not allowed.",
+      "Please use the \"sensitive\" checkbox liberally for risque or shocking images."
+    ]
+  },
+  {
+    "type": "mastodon",
+    "name": "mstdn.social",
+    "favicon": "https://mstdn.social/favicon.ico",
+    "rules": [
+      "Sexually explicit or violent media must be marked as sensitive when posting.",
+      "No spam or advertising.",
+      "No racism, sexism, homophobia, transphobia, xenophobia, or casteism.",
+      "No incitement of violence or promotion of violent ideologies.",
+      "No harassment, dogpiling or doxxing of other users.",
+      "No illegal content."
+    ],
+    "rulesUrl": "https://mstdn.social/about/more"
+  },
+  {
+    "type": "mastodon",
+    "name": "mastodon.online",
+    "shortDescription": "This is a brand new server run by the main developers of the project as a spin-off of mastodon.social \uD83D\uDC18 It is not focused on any particular niche interest - everyone is welcome as long as you follow our code of conduct!",
+    "favicon": "https://mastodon.online/favicon.ico",
+    "rules": [
+      "No cross-posting from Twitter",
+      "Sexually explicit or violent media must be marked as sensitive when posting",
+      "No spam, advertising or bot accounts",
+      "No racism, sexism, homophobia, transphobia, xenophobia, or casteism",
+      "No incitement of violence or promotion of violent ideologies",
+      "No harassment, dogpiling or doxxing of other users",
+      "No content illegal in Germany"
+    ],
+    "rulesUrl": "https://mastodon.online/about/more"
+  },
+  {
+    "type": "mastodon",
+    "name": "koyu.space",
+    "favicon": "https://koyu.space/favicon.ico",
+    "rules": [
+      "Respect other users and their backgrounds",
+      "When interacting with users outside of this community, you have to follow the rules of their community. For the majority of cases, following our set of rules should be sufficient.",
+      "Don't share anyone's personal information without their consent, and delete content about a person should they ask.",
+      "For profit companies accounts aren't allowed.",
+      "Offering sex services is prohibited in this community.",
+      "Boosting content is considered the same as posting content. If you boost something, you can be held responsible.",
+      "If you misbehave somewhere else, we reserve the right to sanction you locally.",
+      "Don't go on a crusade against those who don't respect our local rules, people from other communities have no obligation to follow ours.",
+      "Please put a content warning behind spoilers, NSFW content, strong negativity, violence, politics, scary bugs and selfies",
+      "Spamming is of course not allowed.",
+      "You have to follow proper procedures when posting NSFW content.",
+      "If you are posting a media with Public privacy level, be sure to include a description for the visually or hearing impaired.",
+      "You have to try pineapple pizza. It's great.",
+      "Sexual depictions of minors (drawings included) are not allowed and are considered like pedopornography.",
+      "To keep it simple: Be nice to each other <3"
+    ],
+    "rulesUrl": "https://koyu.space/about/more"
+  },
+  {
+    "type": "mastodon",
+    "name": "mas.to",
+    "shortDescription": "mas.to is a general-topic, mainly English-speaking instance. We're enthusiastic about Mastodon and aim to run a fast, up-to-date and fun Mastodon instance.",
+    "favicon": "https://mas.to/favicon.ico",
+    "rules": [
+      "Threatening, abusive, intolerant or illegal behaviour may lead to moderation and/or further measures. We have a zero tolerance approach to discrimination, including (but not limited to) racism, sexism, homophobia or transphobia. Moderation decisions are final.",
+      "The Content Warning flag should be used for NSFW content, and NSFW media should be marked as sensitive.",
+      "Account registrations are monitored and accounts considered spam (including commercial advertising, political campaigning/propaganda, duplicate accounts or impersonating legal entities) will be moderated or removed.",
+      "We fully subscribe to and comply with the Mastodon Server Covenant. A number of instance blocks are implemented to comply with the principles of the covenant and to prevent our users from being exposed to content that does not comply with our instance rules."
+    ],
+    "rulesUrl": "https://mas.to/about/more"
+  },
+  {
+    "type": "misskey",
+    "name": "quietplace.xyz",
+      "shortDescription": "This is a city that holds the many dreams and stories of its people. Most of these stories are left untold. But some few find solace in the embrace of bricks and wood and glass. They are told over drinks, then take up residence in some stranger's memories. In one corner of the city stand a Quiet Place. A place that is only open when the sun is sleeping. A place where people share their stories. And these are their stories...",
+    "favicon": "https://quietplace.xyz/favicon.ico"
+  },
+  {
+    "type": "misskey",
+    "name": "mk.nixnet.social",
+    "favicon": "https://mk.nixnet.social/favicon.ico",
+    "rules": [
+      "Don't show the world your nudes",
+      "Be excellent to each other",
+      "Don't post illegal content",
+      "Don't be a jerk",
+      "Regarding legal pedophilic and similar content"
+    ],
+    "rulesUrl": "https://mk.nixnet.social/@amolith/pages/rules"
+  },
+  {
+    "type": "misskey",
+    "name": "jigglypuff.club",
+    "shortDescription": "Jigglypuff!",
+    "favicon": "https://jigglypuff.club/files/0118e4bf-ef61-4565-805e-7fa6271beb0a",
+    "rules": [
+      "No Transphobia, homophobia, racism."
+    ]
+  },
+  {
+    "type": "pleroma",
+    "name": "social.handholding.io",
+    "shortDescription": "Streaming, with a social touch",
+    "favicon": "https://social.handholding.io/favicon.png",
+    "rules": [
+      "Don't post anything illegal.",
+      "Don't intentionally create multiple accounts to circumvent people blocking you.",
+      "Don't be a bot (unless you post unlisted and do not auto-follow).",
+      "Don't setup any account solely to advertise a product or service."
+    ]
+  }
+]

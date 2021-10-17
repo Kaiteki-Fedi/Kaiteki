@@ -37,14 +37,18 @@ class EmojiWidget extends StatelessWidget {
           return widget;
         }
 
-        var progress = event.cumulativeBytesLoaded / event.expectedTotalBytes!;
-        var baseColor = Theme.of(context).disabledColor;
-        var opacityDifference = 1.0 - baseColor.opacity;
-        var finalOpacity = baseColor.opacity + (progress * opacityDifference);
+        const padding = 0.0;
 
-        return Icon(
-          Mdi.emoticonOutline,
-          color: baseColor.withOpacity(finalOpacity),
+        return Padding(
+          padding: const EdgeInsets.all(padding),
+          child: Container(
+            width: size - (padding * 2),
+            height: size - (padding * 2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6.0),
+              color: Theme.of(context).disabledColor,
+            ),
+          ),
         );
       },
       errorBuilder: (context, o, stack) {

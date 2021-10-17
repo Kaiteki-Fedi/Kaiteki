@@ -82,7 +82,7 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
   }
 
   void onTapAdd(BuildContext context) {
-    Navigator.of(context).pushNamed("/accounts/add");
+    Navigator.of(context).pushNamed("/login");
   }
 
   void onTapRemove(

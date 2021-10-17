@@ -3,8 +3,21 @@ import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/theming/app_themes/material_app_theme.dart';
 
 class DefaultAppThemes {
+  static const double rounding = 24.0;
+  static const BorderRadius borderRadius = BorderRadius.all(
+    Radius.circular(rounding),
+  );
+
   static MaterialAppTheme lightAppTheme = MaterialAppTheme(
-    ThemeData.from(colorScheme: lightScheme),
+    ThemeData.from(colorScheme: lightScheme).copyWith(
+      snackBarTheme: const SnackBarThemeData(
+        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+        behavior: SnackBarBehavior.floating,
+      ),
+      dialogTheme: const DialogTheme(
+        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      ),
+    ),
     linkTextStyle: TextStyle(color: AppColors.kaitekiPink.shade700),
   );
 

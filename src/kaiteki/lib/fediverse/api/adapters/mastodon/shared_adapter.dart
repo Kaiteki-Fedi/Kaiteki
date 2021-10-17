@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
+import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
@@ -209,7 +210,12 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<bool> probeInstance() {
+  Future<Instance> getInstance() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Instance?> probeInstance() {
     throw UnimplementedError();
   }
 }

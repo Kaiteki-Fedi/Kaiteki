@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart';
 
+typedef FormWidgetBuilder = Widget Function(
+  BuildContext context,
+  bool fillsPage,
+);
+
 /// A widget that automatically adjusts itself for certain resolutions
 class FormWidget extends StatelessWidget {
-  final Widget child;
+  final FormWidgetBuilder builder;
   final double contentWidth;
   final double contentHeight;
   final EdgeInsets padding;
 
   const FormWidget({
     Key? key,
-    required this.child,
+    required this.builder,
     this.contentWidth = Constants.defaultFormWidth,
     this.contentHeight = Constants.defaultFormHeight,
     this.padding = const EdgeInsets.symmetric(
@@ -31,7 +36,7 @@ class FormWidget extends StatelessWidget {
                 width: contentWidth,
                 height: contentHeight,
                 padding: padding,
-                child: child,
+                child: builder.call(context, false),
               ),
             ),
           );
@@ -39,7 +44,7 @@ class FormWidget extends StatelessWidget {
 
         return Padding(
           padding: padding,
-          child: child,
+          child: builder.call(context, true),
         );
       },
     );

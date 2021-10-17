@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/api/clients/pleroma_client.dart';
 import 'package:kaiteki/fediverse/model/chat.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
@@ -74,8 +75,50 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   }
 
   @override
-  Future<bool> probeInstance() async {
-    var instance = await client.getInstance();
-    return instance.version.contains("Pleroma");
+  Future<Instance?> probeInstance() async {
+    final instance = await client.getInstance();
+
+    if (!instance.version.contains("Pleroma")) {
+      return null;
+    }
+
+    return await _injectFE(toInstance(instance));
+  }
+
+  @override
+  Future<Instance> getInstance() async {
+    return await _injectFE(toInstance(await client.getInstance()));
+  }
+
+  Future<Instance> _injectFE(Instance instance) async {
+    final config = await client.getFrontendConfigurations();
+    final pleroma = config.pleroma;
+
+    final background = ensureAbsolute(pleroma?.background, client.instance);
+    final logo = ensureAbsolute(pleroma?.logo, client.instance);
+
+    return Instance(
+      name: instance.name,
+      source: instance,
+      mascotUrl: instance.mascotUrl,
+      backgroundUrl: background ?? instance.backgroundUrl,
+      iconUrl: logo ?? instance.iconUrl,
+    );
+  }
+
+  String? ensureAbsolute(String? input, String host) {
+    if (input == null) {
+      return null;
+    }
+
+    final uri = Uri.https(host, '');
+    final relative = Uri.parse(input);
+
+    if (!relative.isAbsolute) {
+      final resolved = uri.resolveUri(relative);
+      return resolved.toString();
+    }
+
+    return relative.toString();
   }
 }
