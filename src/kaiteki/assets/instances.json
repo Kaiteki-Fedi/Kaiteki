@@ -197,7 +197,8 @@
       "Sexual depictions of minors (drawings included) are not allowed and are considered like pedopornography.",
       "To keep it simple: Be nice to each other <3"
     ],
-    "rulesUrl": "https://koyu.space/about/more"
+    "rulesUrl": "https://koyu.space/about/more",
+    "usesConvenant": true
   },
   {
     "type": "mastodon",
@@ -215,21 +216,51 @@
   {
     "type": "misskey",
     "name": "quietplace.xyz",
-      "shortDescription": "This is a city that holds the many dreams and stories of its people. Most of these stories are left untold. But some few find solace in the embrace of bricks and wood and glass. They are told over drinks, then take up residence in some stranger's memories. In one corner of the city stand a Quiet Place. A place that is only open when the sun is sleeping. A place where people share their stories. And these are their stories...",
+    "shortDescription": "This is a city that holds the many dreams and stories of its people. Most of these stories are left untold. But some few find solace in the embrace of bricks and wood and glass. They are told over drinks, then take up residence in some stranger's memories. In one corner of the city stand a Quiet Place. A place that is only open when the sun is sleeping. A place where people share their stories. And these are their stories...",
     "favicon": "https://quietplace.xyz/favicon.ico"
   },
   {
     "type": "misskey",
     "name": "mk.nixnet.social",
+    "shortDescription": "General-purpose instance that aims to be friendly, reliable, and welcoming. Run by the people behind nixnet.services",
     "favicon": "https://mk.nixnet.social/favicon.ico",
     "rules": [
-      "Don't show the world your nudes",
+      "NSFW content must be behind CW with a description",
       "Be excellent to each other",
       "Don't post illegal content",
       "Don't be a jerk",
-      "Regarding legal pedophilic and similar content"
+      "No sexualised depictions of minors"
     ],
     "rulesUrl": "https://mk.nixnet.social/@amolith/pages/rules"
+  },
+  {
+    "type": "pleroma",
+    "name": "nixnet.social",
+    "shortDescription": "General-purpose instance that aims to be friendly, reliable, and welcoming. Run by the people behind nixnet.services",
+    "favicon": "https://nixnet.social/favicon.png",
+    "rules": [
+     "NSFW content must be behind CW with a description",
+     "Be excellent to each other",
+     "Don't post anything illegal",
+     "Don't be a jerk",
+     "No sexualised depictions of minors"
+    ],
+    "rulesUrl": "https://nixnet.social/about",
+    "usesConvenant": true
+  },
+  {
+    "type": "pleroma",
+    "name": "landofkittens.social",
+    "shortDescription": "A community based Fediverse server with kittens at heart",
+    "favicon": "https://landofkittens.social/favicon.png",
+    "rules": [
+      "No unmarked NSFW",
+      "Nothing illegal",
+      "No offensive content",
+      "Just be nice to each other"
+    ],
+    "rulesUrl": "https://landofkittens.social/about",
+    "usesConvenant": true
   },
   {
     "type": "misskey",
