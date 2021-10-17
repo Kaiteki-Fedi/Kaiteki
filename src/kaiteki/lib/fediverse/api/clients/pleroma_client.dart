@@ -54,4 +54,12 @@ class PleromaClient extends MastodonClient {
       (json) => PleromaEmojiPacksResponse.fromJson(json),
     );
   }
+
+  Future<FrontendConfiguration> getFrontendConfigurations() async {
+    return await sendJsonRequest(
+      HttpMethod.get,
+      "/api/pleroma/frontend_configurations",
+      (json) => FrontendConfiguration.fromJson(json),
+    );
+  }
 }
