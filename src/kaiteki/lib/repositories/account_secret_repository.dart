@@ -24,7 +24,7 @@ class AccountSecretRepository extends ChangeNotifier
 
   @override
   Future<void> remove(AccountSecret secret) async {
-    if (_secrets.contains(secret)) {
+    if (!_secrets.contains(secret)) {
       throw Exception("Account secret doesn't exist in repository");
     }
 
@@ -52,6 +52,7 @@ class AccountSecretRepository extends ChangeNotifier
 
   @override
   Future<void> initialize() async {
-    _secrets = (await _storage.fetchAccountSecrets()).toList();
+    final accountSecrets = await _storage.fetchAccountSecrets();
+    _secrets = accountSecrets.toList();
   }
 }

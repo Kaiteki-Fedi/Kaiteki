@@ -24,7 +24,7 @@ class ClientSecretRepository extends ChangeNotifier
 
   @override
   Future<void> remove(ClientSecret secret) async {
-    if (_secrets.contains(secret)) {
+    if (!_secrets.contains(secret)) {
       throw Exception("Client secret doesn't exist in repository");
     }
 
@@ -51,6 +51,7 @@ class ClientSecretRepository extends ChangeNotifier
 
   @override
   Future<void> initialize() async {
-    _secrets = (await _storage.fetchClientSecrets()).toList();
+    var clientSecrets = await _storage.fetchClientSecrets();
+    _secrets = clientSecrets.toList();
   }
 }
