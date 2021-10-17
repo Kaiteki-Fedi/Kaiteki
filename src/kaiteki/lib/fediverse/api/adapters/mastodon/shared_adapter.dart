@@ -66,9 +66,11 @@ class SharedMastodonAdapter<T extends MastodonClient>
         return LoginResult.failed(loginResponse.error);
       }
 
-      var code = await mfaCallback.call();
+      final code = await mfaCallback.call();
 
-      // if (code == null) return LoginResult.aborted();
+      if (code == null) {
+        return LoginResult.aborted();
+      }
 
       // TODO add error-able TOTP screens
       // TODO make use of a while loop to make this more efficient

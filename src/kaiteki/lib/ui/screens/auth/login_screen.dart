@@ -6,8 +6,8 @@ import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/ui/dialogs/api_type_dialog.dart';
+import 'package:kaiteki/ui/dialogs/mfa_dialog.dart';
 import 'package:kaiteki/ui/forms/login_form.dart';
-import 'package:kaiteki/ui/screens/auth/mfa_screen.dart';
 import 'package:kaiteki/ui/widgets/async_block_widget.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -220,9 +220,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  Future<String> requestMfa() async {
-    var route = MaterialPageRoute(builder: (_) => const MfaScreen());
-    var code = await Navigator.of(context).push(route);
+  Future<String?> requestMfa() async {
+    final code = await showDialog(
+      context: context,
+      builder: (context) => const MfaDialog(),
+      barrierDismissible: false,
+    );
+
     return code;
   }
 
