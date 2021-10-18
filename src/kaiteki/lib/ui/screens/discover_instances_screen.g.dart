@@ -6,7 +6,7 @@ part of 'discover_instances_screen.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-InstanceData _$_InstanceCardDataFromJson(Map<String, dynamic> json) {
+InstanceData _$InstanceDataFromJson(Map<String, dynamic> json) {
   return InstanceData(
     type: _$enumDecode(_$ApiTypeEnumMap, json['type']),
     name: json['name'] as String,
@@ -18,7 +18,7 @@ InstanceData _$_InstanceCardDataFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$_InstanceCardDataToJson(InstanceData instance) =>
+Map<String, dynamic> _$InstanceDataToJson(InstanceData instance) =>
     <String, dynamic>{
       'type': _$ApiTypeEnumMap[instance.type],
       'name': instance.name,

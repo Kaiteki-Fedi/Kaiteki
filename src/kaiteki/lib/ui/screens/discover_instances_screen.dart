@@ -108,8 +108,8 @@ class InstanceData {
   });
 
   factory InstanceData.fromJson(Map<String, dynamic> json) =>
-      _$_InstanceCardDataFromJson(json);
-  Map<String, dynamic> toJson() => _$_InstanceCardDataToJson(this);
+      _$InstanceDataFromJson(json);
+  Map<String, dynamic> toJson() => _$InstanceDataToJson(this);
 }
 
 class _InstanceCard extends StatelessWidget {
