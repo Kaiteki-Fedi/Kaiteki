@@ -6,17 +6,15 @@ part of 'instance_statistics.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonInstanceStatistics _$MastodonInstanceStatisticsFromJson(
-    Map<String, dynamic> json) {
-  return MastodonInstanceStatistics(
+InstanceStatistics _$InstanceStatisticsFromJson(Map<String, dynamic> json) {
+  return InstanceStatistics(
     userCount: json['user_count'] as int,
     statusCount: json['status_count'] as int,
     domainCount: json['domain_count'] as int,
   );
 }
 
-Map<String, dynamic> _$MastodonInstanceStatisticsToJson(
-        MastodonInstanceStatistics instance) =>
+Map<String, dynamic> _$InstanceStatisticsToJson(InstanceStatistics instance) =>
     <String, dynamic>{
       'user_count': instance.userCount,
       'status_count': instance.statusCount,

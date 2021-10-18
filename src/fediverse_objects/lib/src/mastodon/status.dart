@@ -1,28 +1,21 @@
-import 'package:fediverse_objects/src/mastodon/account.dart';
-import 'package:fediverse_objects/src/mastodon/application.dart';
-import 'package:fediverse_objects/src/mastodon/attachment.dart';
-import 'package:fediverse_objects/src/mastodon/card.dart';
-import 'package:fediverse_objects/src/mastodon/emoji.dart';
-import 'package:fediverse_objects/src/mastodon/mention.dart';
-import 'package:fediverse_objects/src/mastodon/poll.dart';
-import 'package:fediverse_objects/src/mastodon/tag.dart';
-import 'package:fediverse_objects/src/pleroma/status.dart';
+import 'package:fediverse_objects/mastodon.dart';
+import 'package:fediverse_objects/pleroma.dart' as p;
 import 'package:json_annotation/json_annotation.dart';
 
 part 'status.g.dart';
 
 @JsonSerializable()
-class MastodonStatus {
-  final MastodonAccount account;
+class Status {
+  final Account account;
 
   /// The application used to post this status.
-  final MastodonApplication? application;
+  final Application? application;
 
   /// Have you bookmarked this status?
   final bool? bookmarked;
 
   /// Preview card for links included within status content.
-  final MastodonCard? card;
+  final Card? card;
 
   final String content;
 
@@ -30,7 +23,7 @@ class MastodonStatus {
   final DateTime createdAt;
 
   /// Custom emoji to be used when rendering status content.
-  final Iterable<MastodonEmoji> emojis;
+  final Iterable<Emoji> emojis;
 
   /// Have you favourited this status?
   final bool? favourited;
@@ -54,10 +47,10 @@ class MastodonStatus {
 
   /// Media that is attached to this status.
   @JsonKey(name: 'media_attachments')
-  final Iterable<MastodonAttachment> mediaAttachments;
+  final Iterable<Attachment> mediaAttachments;
 
   /// Mentions of users within the status content.
-  final Iterable<MastodonMention> mentions;
+  final Iterable<Mention> mentions;
 
   /// Have you muted notifications for this status's conversation?
   final bool? muted;
@@ -67,10 +60,10 @@ class MastodonStatus {
   /// Only appears if the status is pinnable.
   final bool? pinned;
 
-  final PleromaStatus? pleroma;
+  final p.Status? pleroma;
 
   /// The status being reblogged.
-  final MastodonStatus? reblog;
+  final Status? reblog;
 
   /// Have you boosted this status?
   final bool? reblogged;
@@ -84,7 +77,7 @@ class MastodonStatus {
   final int repliesCount;
 
   /// The poll attached to the status.
-  final MastodonPoll? poll;
+  final Poll? poll;
 
   /// Is this status marked as sensitive content?
   final bool sensitive;
@@ -94,7 +87,7 @@ class MastodonStatus {
   final String spoilerText;
 
   /// Hashtags used within the status content.
-  final Iterable<MastodonTag> tags;
+  final Iterable<Tag> tags;
 
   final String uri;
 
@@ -114,7 +107,7 @@ class MastodonStatus {
   /// Returned instead of `content` when status is deleted, so the user may redraft from the source text without the client having to reverse-engineer the original text from the HTML content.
   final String? text;
 
-  MastodonStatus({
+  Status({
     required this.account,
     this.application,
     required this.content,
@@ -147,8 +140,7 @@ class MastodonStatus {
     this.poll,
   });
 
-  factory MastodonStatus.fromJson(Map<String, dynamic> json) =>
-      _$MastodonStatusFromJson(json);
+  factory Status.fromJson(Map<String, dynamic> json) => _$StatusFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonStatusToJson(this);
+  Map<String, dynamic> toJson() => _$StatusToJson(this);
 }

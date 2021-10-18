@@ -6,8 +6,8 @@ part of 'account.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonAccount _$MastodonAccountFromJson(Map<String, dynamic> json) {
-  return MastodonAccount(
+Account _$AccountFromJson(Map<String, dynamic> json) {
+  return Account(
     id: json['id'] as String,
     username: json['username'] as String,
     url: json['url'] as String,
@@ -20,7 +20,7 @@ MastodonAccount _$MastodonAccountFromJson(Map<String, dynamic> json) {
     headerStatic: json['header_static'] as String,
     locked: json['locked'] as bool,
     emojis: (json['emojis'] as List<dynamic>)
-        .map((e) => MastodonEmoji.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Emoji.fromJson(e as Map<String, dynamic>)),
     discoverable: json['discoverable'] as bool?,
     createdAt: DateTime.parse(json['created_at'] as String),
     lastStatusAt: json['last_status_at'] == null
@@ -31,14 +31,14 @@ MastodonAccount _$MastodonAccountFromJson(Map<String, dynamic> json) {
     followingCount: json['following_count'] as int,
     moved: json['moved'] as bool?,
     fields: (json['fields'] as List<dynamic>?)
-        ?.map((e) => MastodonField.fromJson(e as Map<String, dynamic>)),
+        ?.map((e) => Field.fromJson(e as Map<String, dynamic>)),
     bot: json['bot'] as bool?,
     source: json['source'] == null
         ? null
-        : MastodonSource.fromJson(json['source'] as Map<String, dynamic>),
+        : Source.fromJson(json['source'] as Map<String, dynamic>),
     pleroma: json['pleroma'] == null
         ? null
-        : PleromaAccount.fromJson(json['pleroma'] as Map<String, dynamic>),
+        : p.Account.fromJson(json['pleroma'] as Map<String, dynamic>),
     suspended: json['suspended'] as bool?,
     muteExpiredAt: json['muteExpiredAt'] == null
         ? null
@@ -46,8 +46,7 @@ MastodonAccount _$MastodonAccountFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MastodonAccountToJson(MastodonAccount instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
       'acct': instance.acct,
       'avatar': instance.avatar,
       'avatar_static': instance.avatarStatic,

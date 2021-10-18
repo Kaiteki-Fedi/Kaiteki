@@ -1,4 +1,3 @@
-import 'package:fediverse_objects/pleroma.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
@@ -11,6 +10,7 @@ import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:fediverse_objects/pleroma.dart' as pleroma;
 
 part 'adapter.c.dart';
 
@@ -26,7 +26,7 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {
     // TODO implement missing data, pleroma chat.
-    var sentMessage = await client.postChatMessage(
+    final sentMessage = await client.postChatMessage(
       chat.id,
       message.content.content!,
     );

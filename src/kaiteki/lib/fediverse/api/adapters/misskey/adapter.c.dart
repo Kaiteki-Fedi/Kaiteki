@@ -1,6 +1,6 @@
 part of 'adapter.dart';
 
-Post toPost(MisskeyNote source) {
+Post toPost(misskey.Note source) {
   var mappedEmoji = source.emojis.map(toEmoji);
 
   return Post(
@@ -45,7 +45,7 @@ Visibility toVisibility(String visibility) {
   }
 }
 
-Attachment toAttachment(MisskeyDriveFile file) {
+Attachment toAttachment(misskey.DriveFile file) {
   return Attachment(
     source: file,
     description: file.name,
@@ -65,7 +65,7 @@ Emoji getEmojiFromString(String emojiString, Iterable<Emoji> inheritingEmoji) {
   return UnicodeEmoji(emojiString, "", aliases: null);
 }
 
-CustomEmoji toEmoji(MisskeyEmoji emoji) {
+CustomEmoji toEmoji(misskey.Emoji emoji) {
   return CustomEmoji(
     source: emoji,
     name: emoji.name,
@@ -74,7 +74,7 @@ CustomEmoji toEmoji(MisskeyEmoji emoji) {
   );
 }
 
-User toUser(MisskeyUser source) {
+User toUser(misskey.User source) {
   return User(
     source: source,
     username: source.username,
@@ -89,7 +89,7 @@ User toUser(MisskeyUser source) {
   );
 }
 
-Instance toInstance(MisskeyMeta instance, String instanceUrl) {
+Instance toInstance(misskey.Meta instance, String instanceUrl) {
   final instanceUri = Uri.parse(instanceUrl);
 
   return Instance(

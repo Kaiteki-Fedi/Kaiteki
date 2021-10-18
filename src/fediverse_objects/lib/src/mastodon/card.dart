@@ -1,15 +1,15 @@
-import 'package:fediverse_objects/src/pleroma/card.dart';
+import 'package:fediverse_objects/pleroma.dart' as p;
 import 'package:json_annotation/json_annotation.dart';
 
 part 'card.g.dart';
 
 @JsonSerializable()
-class MastodonCard {
+class Card {
   final String description;
 
   final String? image;
 
-  final PleromaCard pleroma;
+  final p.Card pleroma;
 
   @JsonKey(name: 'provider_name')
   final String providerName;
@@ -23,7 +23,7 @@ class MastodonCard {
 
   final String url;
 
-  const MastodonCard(
+  const Card(
     this.description,
     this.image,
     this.pleroma,
@@ -34,8 +34,7 @@ class MastodonCard {
     this.url,
   );
 
-  factory MastodonCard.fromJson(Map<String, dynamic> json) =>
-      _$MastodonCardFromJson(json);
+  factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonCardToJson(this);
+  Map<String, dynamic> toJson() => _$CardToJson(this);
 }

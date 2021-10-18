@@ -6,19 +6,17 @@ part of 'push_subscription.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonPushSubscription _$MastodonPushSubscriptionFromJson(
-    Map<String, dynamic> json) {
-  return MastodonPushSubscription(
-    alerts: MastodonPushSubscriptionAlerts.fromJson(
-        json['alerts'] as Map<String, dynamic>),
+PushSubscription _$PushSubscriptionFromJson(Map<String, dynamic> json) {
+  return PushSubscription(
+    alerts:
+        PushSubscriptionAlerts.fromJson(json['alerts'] as Map<String, dynamic>),
     endpoint: json['endpoint'] as String,
     id: json['id'] as String,
     serverKey: json['server_key'] as String,
   );
 }
 
-Map<String, dynamic> _$MastodonPushSubscriptionToJson(
-        MastodonPushSubscription instance) =>
+Map<String, dynamic> _$PushSubscriptionToJson(PushSubscription instance) =>
     <String, dynamic>{
       'alerts': instance.alerts,
       'endpoint': instance.endpoint,

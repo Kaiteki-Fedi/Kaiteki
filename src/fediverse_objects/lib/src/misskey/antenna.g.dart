@@ -6,8 +6,8 @@ part of 'antenna.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyAntenna _$MisskeyAntennaFromJson(Map<String, dynamic> json) {
-  return MisskeyAntenna(
+Antenna _$AntennaFromJson(Map<String, dynamic> json) {
+  return Antenna(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     name: json['name'] as String,
@@ -27,8 +27,7 @@ MisskeyAntenna _$MisskeyAntennaFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyAntennaToJson(MisskeyAntenna instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$AntennaToJson(Antenna instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'name': instance.name,

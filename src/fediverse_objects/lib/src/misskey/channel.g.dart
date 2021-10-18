@@ -6,8 +6,8 @@ part of 'channel.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyChannel _$MisskeyChannelFromJson(Map<String, dynamic> json) {
-  return MisskeyChannel(
+Channel _$ChannelFromJson(Map<String, dynamic> json) {
+  return Channel(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     lastNotedAt: DateTime.parse(json['lastNotedAt'] as String),
@@ -21,8 +21,7 @@ MisskeyChannel _$MisskeyChannelFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyChannelToJson(MisskeyChannel instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ChannelToJson(Channel instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'lastNotedAt': instance.lastNotedAt.toIso8601String(),

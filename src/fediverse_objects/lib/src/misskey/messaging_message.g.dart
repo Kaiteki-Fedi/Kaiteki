@@ -6,27 +6,25 @@ part of 'messaging_message.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyMessagingMessage _$MisskeyMessagingMessageFromJson(
-    Map<String, dynamic> json) {
-  return MisskeyMessagingMessage(
+MessagingMessage _$MessagingMessageFromJson(Map<String, dynamic> json) {
+  return MessagingMessage(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     userId: json['userId'] as String,
-    user: MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
+    user: User.fromJson(json['user'] as Map<String, dynamic>),
     text: json['text'] as String,
     fileId: json['fileId'] as String,
-    file: MisskeyDriveFile.fromJson(json['file'] as Map<String, dynamic>),
+    file: DriveFile.fromJson(json['file'] as Map<String, dynamic>),
     recipientId: json['recipientId'] as String,
-    recipient: MisskeyUser.fromJson(json['recipient'] as Map<String, dynamic>),
+    recipient: User.fromJson(json['recipient'] as Map<String, dynamic>),
     groupId: json['groupId'] as String,
-    group: MisskeyUserGroup.fromJson(json['group'] as Map<String, dynamic>),
+    group: UserGroup.fromJson(json['group'] as Map<String, dynamic>),
     isRead: json['isRead'] as bool,
     reads: (json['reads'] as List<dynamic>).map((e) => e as String),
   );
 }
 
-Map<String, dynamic> _$MisskeyMessagingMessageToJson(
-        MisskeyMessagingMessage instance) =>
+Map<String, dynamic> _$MessagingMessageToJson(MessagingMessage instance) =>
     <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),

@@ -6,8 +6,8 @@ part of 'meta.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyMeta _$MisskeyMetaFromJson(Map<String, dynamic> json) {
-  return MisskeyMeta(
+Meta _$MetaFromJson(Map<String, dynamic> json) {
+  return Meta(
     maintainerName: json['maintainerName'] as String?,
     maintainerEmail: json['maintainerEmail'] as String?,
     version: json['version'] as String,
@@ -37,7 +37,7 @@ MisskeyMeta _$MisskeyMetaFromJson(Map<String, dynamic> json) {
     iconUrl: json['iconUrl'] as String?,
     maxNoteTextLength: json['maxNoteTextLength'] as int,
     emojis: (json['emojis'] as List<dynamic>)
-        .map((e) => MisskeyEmoji.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Emoji.fromJson(e as Map<String, dynamic>)),
     requireSetup: json['requireSetup'] as bool?,
     enableEmail: json['enableEmail'] as bool,
     enableTwitterIntegration: json['enableTwitterIntegration'] as bool,
@@ -48,8 +48,7 @@ MisskeyMeta _$MisskeyMetaFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyMetaToJson(MisskeyMeta instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$MetaToJson(Meta instance) => <String, dynamic>{
       'maintainerName': instance.maintainerName,
       'maintainerEmail': instance.maintainerEmail,
       'version': instance.version,

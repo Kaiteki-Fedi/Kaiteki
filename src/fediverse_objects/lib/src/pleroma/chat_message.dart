@@ -1,19 +1,20 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:fediverse_objects/src/mastodon/attachment.dart';
 import 'package:fediverse_objects/src/mastodon/card.dart';
 import 'package:fediverse_objects/src/mastodon/emoji.dart';
-import 'package:fediverse_objects/src/mastodon/attachment.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'chat_message.g.dart';
 
 @JsonSerializable()
-class PleromaChatMessage {
+class ChatMessage {
   /// The Mastodon API id of the actor
   @JsonKey(name: 'account_id')
   final String accountId;
 
-  final MastodonAttachment? attachment;
+  final Attachment? attachment;
 
   /// Preview card for links included within status content
-  final MastodonCard? card;
+  final Card? card;
 
   @JsonKey(name: 'chat_id')
   final String chatId;
@@ -23,14 +24,14 @@ class PleromaChatMessage {
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
 
-  final Iterable<MastodonEmoji> emojis;
+  final Iterable<Emoji> emojis;
 
   final String id;
 
   /// Whether a message has been marked as read.
   final bool unread;
 
-  const PleromaChatMessage({
+  const ChatMessage({
     required this.accountId,
     required this.chatId,
     required this.createdAt,
@@ -42,8 +43,8 @@ class PleromaChatMessage {
     this.content,
   });
 
-  factory PleromaChatMessage.fromJson(Map<String, dynamic> json) =>
-      _$PleromaChatMessageFromJson(json);
+  factory ChatMessage.fromJson(Map<String, dynamic> json) =>
+      _$ChatMessageFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PleromaChatMessageToJson(this);
+  Map<String, dynamic> toJson() => _$ChatMessageToJson(this);
 }

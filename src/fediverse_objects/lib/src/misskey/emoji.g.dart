@@ -6,8 +6,8 @@ part of 'emoji.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyEmoji _$MisskeyEmojiFromJson(Map<String, dynamic> json) {
-  return MisskeyEmoji(
+Emoji _$EmojiFromJson(Map<String, dynamic> json) {
+  return Emoji(
     id: json['id'] as String,
     aliases: (json['aliases'] as List<dynamic>).map((e) => e as String),
     name: json['name'] as String,
@@ -17,8 +17,7 @@ MisskeyEmoji _$MisskeyEmojiFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyEmojiToJson(MisskeyEmoji instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$EmojiToJson(Emoji instance) => <String, dynamic>{
       'id': instance.id,
       'aliases': instance.aliases.toList(),
       'name': instance.name,

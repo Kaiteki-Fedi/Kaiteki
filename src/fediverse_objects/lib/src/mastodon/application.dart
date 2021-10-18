@@ -1,9 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'application.g.dart';
 
 /// Represents an application that interfaces with the REST API to access accounts or post statuses.
 @JsonSerializable()
-class MastodonApplication {
+class Application {
   /// Client ID key, to be used for obtaining OAuth tokens
   @JsonKey(name: 'client_id')
   final String? clientId;
@@ -26,7 +27,7 @@ class MastodonApplication {
   /// The website associated with your application.
   final String? website;
 
-  const MastodonApplication({
+  const Application({
     required this.name,
     // optional attributes
     this.website,
@@ -37,8 +38,8 @@ class MastodonApplication {
     this.id,
   });
 
-  factory MastodonApplication.fromJson(Map<String, dynamic> json) =>
-      _$MastodonApplicationFromJson(json);
+  factory Application.fromJson(Map<String, dynamic> json) =>
+      _$ApplicationFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonApplicationToJson(this);
+  Map<String, dynamic> toJson() => _$ApplicationToJson(this);
 }

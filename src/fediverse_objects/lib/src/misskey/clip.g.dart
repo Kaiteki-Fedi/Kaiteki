@@ -6,20 +6,19 @@ part of 'clip.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyClip _$MisskeyClipFromJson(Map<String, dynamic> json) {
-  return MisskeyClip(
+Clip _$ClipFromJson(Map<String, dynamic> json) {
+  return Clip(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     userId: json['userId'] as String,
-    user: MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
+    user: User.fromJson(json['user'] as Map<String, dynamic>),
     name: json['name'] as String,
     description: json['description'] as String,
     isPublic: json['isPublic'] as bool,
   );
 }
 
-Map<String, dynamic> _$MisskeyClipToJson(MisskeyClip instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ClipToJson(Clip instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'userId': instance.userId,

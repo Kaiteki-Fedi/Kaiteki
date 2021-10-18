@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'instance_statistics.g.dart';
 
 @JsonSerializable()
-class MastodonInstanceStatistics {
+class InstanceStatistics {
   /// Users registered on this instance.
   @JsonKey(name: 'user_count')
   final int userCount;
@@ -15,14 +16,14 @@ class MastodonInstanceStatistics {
   @JsonKey(name: 'domain_count')
   final int domainCount;
 
-  const MastodonInstanceStatistics({
+  const InstanceStatistics({
     required this.userCount,
     required this.statusCount,
     required this.domainCount,
   });
 
-  factory MastodonInstanceStatistics.fromJson(Map<String, dynamic> json) =>
-      _$MastodonInstanceStatisticsFromJson(json);
+  factory InstanceStatistics.fromJson(Map<String, dynamic> json) =>
+      _$InstanceStatisticsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonInstanceStatisticsToJson(this);
+  Map<String, dynamic> toJson() => _$InstanceStatisticsToJson(this);
 }

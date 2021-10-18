@@ -6,8 +6,8 @@ part of 'user_group.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyUserGroup _$MisskeyUserGroupFromJson(Map<String, dynamic> json) {
-  return MisskeyUserGroup(
+UserGroup _$UserGroupFromJson(Map<String, dynamic> json) {
+  return UserGroup(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     name: json['name'] as String,
@@ -16,8 +16,7 @@ MisskeyUserGroup _$MisskeyUserGroupFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyUserGroupToJson(MisskeyUserGroup instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$UserGroupToJson(UserGroup instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'name': instance.name,

@@ -1,11 +1,12 @@
 import 'package:fediverse_objects/misskey.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:fediverse_objects/src/misskey/note.dart';
 import 'package:fediverse_objects/src/misskey/page.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'user.g.dart';
 
 @JsonSerializable()
-class MisskeyUser {
+class User {
   /// The unique identifier for this User.
   @JsonKey(name: 'id')
   final String id;
@@ -47,7 +48,7 @@ class MisskeyUser {
   final bool isCat;
 
   @JsonKey(name: 'emojis')
-  final Iterable<MisskeyEmoji> emojis;
+  final Iterable<Emoji> emojis;
 
   @JsonKey(name: 'url')
   final String url;
@@ -103,13 +104,13 @@ class MisskeyUser {
   final Iterable<String> pinnedNoteIds;
 
   @JsonKey(name: 'pinnedNotes')
-  final MisskeyNote pinnedNotes;
+  final Note pinnedNotes;
 
   @JsonKey(name: 'pinnedPageId')
   final String pinnedPageId;
 
   @JsonKey(name: 'pinnedPage')
-  final MisskeyPage pinnedPage;
+  final Page pinnedPage;
 
   @JsonKey(name: 'twoFactorEnabled')
   final bool twoFactorEnabled;
@@ -195,7 +196,7 @@ class MisskeyUser {
   @JsonKey(name: 'isMuted')
   final bool isMuted;
 
-  const MisskeyUser({
+  const User({
     required this.id,
     required this.name,
     required this.username,
@@ -257,7 +258,6 @@ class MisskeyUser {
     required this.isMuted,
   });
 
-  factory MisskeyUser.fromJson(Map<String, dynamic> json) =>
-      _$MisskeyUserFromJson(json);
-  Map<String, dynamic> toJson() => _$MisskeyUserToJson(this);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }

@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'push_subscription_alerts.g.dart';
 
 @JsonSerializable()
-class MastodonPushSubscriptionAlerts {
+class PushSubscriptionAlerts {
   /// Receive a push notification when a status you created has been favourited by someone else?
   final bool favourite;
 
@@ -18,7 +19,7 @@ class MastodonPushSubscriptionAlerts {
   /// Receive a push notification when a status you created has been boosted by someone else?
   final bool reblog;
 
-  const MastodonPushSubscriptionAlerts({
+  const PushSubscriptionAlerts({
     required this.favourite,
     required this.follow,
     required this.mention,
@@ -26,8 +27,8 @@ class MastodonPushSubscriptionAlerts {
     required this.reblog,
   });
 
-  factory MastodonPushSubscriptionAlerts.fromJson(Map<String, dynamic> json) =>
-      _$MastodonPushSubscriptionAlertsFromJson(json);
+  factory PushSubscriptionAlerts.fromJson(Map<String, dynamic> json) =>
+      _$PushSubscriptionAlertsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonPushSubscriptionAlertsToJson(this);
+  Map<String, dynamic> toJson() => _$PushSubscriptionAlertsToJson(this);
 }

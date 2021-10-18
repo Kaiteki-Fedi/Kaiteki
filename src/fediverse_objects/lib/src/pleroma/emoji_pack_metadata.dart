@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'emoji_pack_metadata.g.dart';
 
 @JsonSerializable()
-class PleromaEmojiPackMetadata {
+class EmojiPackMetadata {
   @JsonKey(name: 'can-download')
   final bool canDownload;
 
@@ -27,7 +27,7 @@ class PleromaEmojiPackMetadata {
   @JsonKey(name: 'share-files')
   final bool shareFiles;
 
-  const PleromaEmojiPackMetadata({
+  const EmojiPackMetadata({
     required this.canDownload,
     required this.description,
     required this.downloadSha256,
@@ -38,8 +38,8 @@ class PleromaEmojiPackMetadata {
     required this.shareFiles,
   });
 
-  factory PleromaEmojiPackMetadata.fromJson(Map<String, dynamic> json) =>
-      _$PleromaEmojiPackMetadataFromJson(json);
+  factory EmojiPackMetadata.fromJson(Map<String, dynamic> json) =>
+      _$EmojiPackMetadataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PleromaEmojiPackMetadataToJson(this);
+  Map<String, dynamic> toJson() => _$EmojiPackMetadataToJson(this);
 }

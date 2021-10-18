@@ -6,8 +6,8 @@ part of 'hashtag.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyHashtag _$MisskeyHashtagFromJson(Map<String, dynamic> json) {
-  return MisskeyHashtag(
+Hashtag _$HashtagFromJson(Map<String, dynamic> json) {
+  return Hashtag(
     tag: json['tag'] as String,
     mentionedUsersCount: json['mentionedUsersCount'] as int,
     mentionedLocalUsersCount: json['mentionedLocalUsersCount'] as int,
@@ -18,8 +18,7 @@ MisskeyHashtag _$MisskeyHashtagFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyHashtagToJson(MisskeyHashtag instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$HashtagToJson(Hashtag instance) => <String, dynamic>{
       'tag': instance.tag,
       'mentionedUsersCount': instance.mentionedUsersCount,
       'mentionedLocalUsersCount': instance.mentionedLocalUsersCount,

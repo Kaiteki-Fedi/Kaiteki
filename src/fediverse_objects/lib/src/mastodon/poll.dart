@@ -1,12 +1,13 @@
+import 'package:fediverse_objects/src/mastodon/emoji.dart';
 import 'package:fediverse_objects/src/mastodon/poll_option.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:fediverse_objects/src/mastodon/emoji.dart';
+
 part 'poll.g.dart';
 
 @JsonSerializable()
-class MastodonPoll {
+class Poll {
   /// Custom emoji to be used for rendering poll options.
-  final Iterable<MastodonEmoji> emojis;
+  final Iterable<Emoji> emojis;
 
   /// Is the poll currently expired?
   final bool expired;
@@ -22,7 +23,7 @@ class MastodonPoll {
   final bool multiple;
 
   /// Possible answers for the poll.
-  final Iterable<MastodonPollOption> options;
+  final Iterable<PollOption> options;
 
   /// When called with a user token, which options has the authorized user chosen?
   ///
@@ -41,7 +42,7 @@ class MastodonPoll {
   @JsonKey(name: 'votes_count')
   final int votesCount;
 
-  const MastodonPoll({
+  const Poll({
     required this.id,
     required this.expiresAt,
     required this.expired,
@@ -54,8 +55,7 @@ class MastodonPoll {
     required this.votesCount,
   });
 
-  factory MastodonPoll.fromJson(Map<String, dynamic> json) =>
-      _$MastodonPollFromJson(json);
+  factory Poll.fromJson(Map<String, dynamic> json) => _$PollFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonPollToJson(this);
+  Map<String, dynamic> toJson() => _$PollToJson(this);
 }

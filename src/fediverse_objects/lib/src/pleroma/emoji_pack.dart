@@ -4,20 +4,20 @@ import 'package:json_annotation/json_annotation.dart';
 part 'emoji_pack.g.dart';
 
 @JsonSerializable(createToJson: false)
-class PleromaEmojiPack {
+class EmojiPack {
   final Map<String, String> files;
 
-  final PleromaEmojiPackMetadata pack;
+  final EmojiPackMetadata pack;
 
   @JsonKey(name: 'files_count')
   final int? fileCount;
 
-  const PleromaEmojiPack({
+  const EmojiPack({
     required this.files,
     required this.pack,
     this.fileCount,
   });
 
-  factory PleromaEmojiPack.fromJson(Map<String, dynamic> json) =>
-      _$PleromaEmojiPackFromJson(json);
+  factory EmojiPack.fromJson(Map<String, dynamic> json) =>
+      _$EmojiPackFromJson(json);
 }

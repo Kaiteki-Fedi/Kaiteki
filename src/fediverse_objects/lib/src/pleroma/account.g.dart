@@ -6,8 +6,8 @@ part of 'account.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PleromaAccount _$PleromaAccountFromJson(Map<String, dynamic> json) {
-  return PleromaAccount(
+Account _$AccountFromJson(Map<String, dynamic> json) {
+  return Account(
     json['accepts_chat_messages'] as bool?,
     json['allow_following_move'] as bool?,
     json['chat_token'] as String?,
@@ -22,12 +22,11 @@ PleromaAccount _$PleromaAccountFromJson(Map<String, dynamic> json) {
     json['is_confirmed'] as bool?,
     json['notification_settings'] == null
         ? null
-        : PleromaNotificationSettings.fromJson(
+        : NotificationSettings.fromJson(
             json['notification_settings'] as Map<String, dynamic>),
     json['relationship'] == null
         ? null
-        : PleromaRelationship.fromJson(
-            json['relationship'] as Map<String, dynamic>),
+        : Relationship.fromJson(json['relationship'] as Map<String, dynamic>),
     json['skip_thread_containment'] as bool,
     json['unread_conversation_count'] as int?,
     json['favicon'] as String?,
@@ -35,8 +34,7 @@ PleromaAccount _$PleromaAccountFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$PleromaAccountToJson(PleromaAccount instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
       'accepts_chat_messages': instance.acceptsChatMessages,
       'allow_following_move': instance.allowFollowingMove,
       'favicon': instance.favicon,

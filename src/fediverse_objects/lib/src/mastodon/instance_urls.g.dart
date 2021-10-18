@@ -6,14 +6,13 @@ part of 'instance_urls.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonInstanceUrls _$MastodonInstanceUrlsFromJson(Map<String, dynamic> json) {
-  return MastodonInstanceUrls(
+InstanceUrls _$InstanceUrlsFromJson(Map<String, dynamic> json) {
+  return InstanceUrls(
     streamingApi: json['streaming_api'] as String,
   );
 }
 
-Map<String, dynamic> _$MastodonInstanceUrlsToJson(
-        MastodonInstanceUrls instance) =>
+Map<String, dynamic> _$InstanceUrlsToJson(InstanceUrls instance) =>
     <String, dynamic>{
       'streaming_api': instance.streamingApi,
     };

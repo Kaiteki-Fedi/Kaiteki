@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'relationship.g.dart';
 
 @JsonSerializable()
-class PleromaRelationship {
+class Relationship {
   @JsonKey(name: 'blocked_by')
   final bool? blockedBy;
 
@@ -33,7 +33,7 @@ class PleromaRelationship {
 
   final bool? subscribing;
 
-  const PleromaRelationship(
+  const Relationship(
     this.blockedBy,
     this.blocking,
     this.domainBlocking,
@@ -48,8 +48,8 @@ class PleromaRelationship {
     this.subscribing,
   );
 
-  factory PleromaRelationship.fromJson(Map<String, dynamic> json) =>
-      _$PleromaRelationshipFromJson(json);
+  factory Relationship.fromJson(Map<String, dynamic> json) =>
+      _$RelationshipFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PleromaRelationshipToJson(this);
+  Map<String, dynamic> toJson() => _$RelationshipToJson(this);
 }

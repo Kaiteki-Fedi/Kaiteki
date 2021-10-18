@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fediverse_objects/misskey.dart';
+import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:http/http.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/clients/fediverse_client_base.dart';
@@ -22,7 +22,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   @override
   ApiType get type => ApiType.misskey;
 
-  static final _logger = getLogger("MisskeyClient");
+  static final _logger = getLogger("misskey.MisskeyClient");
 
   Future<MisskeyCreateAppResponse> createApp(
     String name,
@@ -54,11 +54,11 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
-  Future<MisskeyPage> getPage(String username, String name) async {
+  Future<misskey.Page> getPage(String username, String name) async {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/pages/show",
-      (json) => MisskeyPage.fromJson(json),
+      (json) => misskey.Page.fromJson(json),
       body: {
         "username": username,
         "name": name,
@@ -75,16 +75,16 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
-  Future<MisskeyUser?> showUser(String userId) async {
+  Future<misskey.User?> showUser(String userId) async {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/users/show",
-      (json) => MisskeyUser.fromJson(json),
+      (json) => misskey.User.fromJson(json),
       body: {"userId": userId},
     );
   }
 
-  Future<MisskeyUser> showUserByName(
+  Future<misskey.User> showUserByName(
     String username, [
     String? instance,
   ]) async {
@@ -95,11 +95,11 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/users/show",
-      (json) => MisskeyUser.fromJson(json),
+      (json) => misskey.User.fromJson(json),
     );
   }
 
-  Future<Iterable<MisskeyNote>> showUserNotes(
+  Future<Iterable<misskey.Note>> showUserNotes(
     String userId,
     bool excludeNsfw,
     Iterable<String> fileTypes,
@@ -107,7 +107,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return await sendJsonRequestMultiple(
       HttpMethod.post,
       "api/users/notes",
-      (json) => MisskeyNote.fromJson(json),
+      (json) => misskey.Note.fromJson(json),
       body: {
         "userId": userId,
         "fileType": fileTypes,
@@ -125,46 +125,46 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
-  Future<Iterable<MisskeyNote>> getTimeline(
+  Future<Iterable<misskey.Note>> getTimeline(
     MisskeyTimelineRequest request,
   ) async {
     return await sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/timeline",
-      (json) => MisskeyNote.fromJson(json),
+      (json) => misskey.Note.fromJson(json),
       body: request,
     );
   }
 
-  Future<Iterable<MisskeyNote>> getLocalTimeline(
+  Future<Iterable<misskey.Note>> getLocalTimeline(
     MisskeyTimelineRequest request,
   ) async {
     return await sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/local-timeline",
-      (json) => MisskeyNote.fromJson(json),
+      (json) => misskey.Note.fromJson(json),
       body: request,
     );
   }
 
-  Future<Iterable<MisskeyNote>> getHybridTimeline(
+  Future<Iterable<misskey.Note>> getHybridTimeline(
     MisskeyTimelineRequest request,
   ) async {
     return await sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/hybrid-timeline",
-      (json) => MisskeyNote.fromJson(json),
+      (json) => misskey.Note.fromJson(json),
       body: request,
     );
   }
 
-  Future<Iterable<MisskeyNote>> getGlobalTimeline(
+  Future<Iterable<misskey.Note>> getGlobalTimeline(
     MisskeyTimelineRequest request,
   ) async {
     return await sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/global-timeline",
-      (json) => MisskeyNote.fromJson(json),
+      (json) => misskey.Note.fromJson(json),
       body: request,
     );
   }
@@ -172,15 +172,15 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   @override
   void checkResponse(StreamedResponse response) async {
     if (Utils.isUnsuccessfulStatusCode(response.statusCode)) {
-      MisskeyError? mkErr;
+      misskey.Error? mkErr;
 
       try {
         var body = await response.stream.bytesToString();
         var json = jsonDecode(body);
-        mkErr = MisskeyError.fromJson(json["error"]);
+        mkErr = misskey.Error.fromJson(json["error"]);
       } catch (ex) {
         _logger.e(
-          "Failed to gather Misskey error object from erroneous response.",
+          "Failed to gather misskey.Misskey error object from erroneous response.",
           ex,
         );
       }
@@ -197,21 +197,21 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   /// Gets your account information.
-  Future<MisskeyUser> i() async {
+  Future<misskey.User> i() async {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/i",
-      (json) => MisskeyUser.fromJson(json),
+      (json) => misskey.User.fromJson(json),
       body: {},
     );
   }
 
   /// Reacts to the specified note.
-  Future<MisskeyUser> createReaction(String noteId, String reaction) async {
+  Future<misskey.User> createReaction(String noteId, String reaction) async {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/notes/reactions/create",
-      (json) => MisskeyUser.fromJson(json),
+      (json) => misskey.User.fromJson(json),
       body: {
         "noteId": noteId,
         "reaction": reaction,
@@ -220,25 +220,25 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   /// Removes the reaction from the specified note.
-  Future<MisskeyUser> deleteReaction(String noteId) async {
+  Future<misskey.User> deleteReaction(String noteId) async {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/notes/reactions/delete",
-      (json) => MisskeyUser.fromJson(json),
+      (json) => misskey.User.fromJson(json),
       body: {"noteId": noteId},
     );
   }
 
-  Future<MisskeyMeta> getInstanceMeta({bool detail = false}) async {
+  Future<misskey.Meta> getInstanceMeta({bool detail = false}) async {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/meta",
-      (json) => MisskeyMeta.fromJson(json),
+      (json) => misskey.Meta.fromJson(json),
       body: {"detail": detail},
     );
   }
 
-  Future<Iterable<MisskeyNote>> getConversation(
+  Future<Iterable<misskey.Note>> getConversation(
     String id, {
     int limit = 30,
     int offset = 0,
@@ -246,7 +246,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return await sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/conversation",
-      (json) => MisskeyNote.fromJson(json),
+      (json) => misskey.Note.fromJson(json),
       body: {
         "noteId": id,
         "limit": limit,

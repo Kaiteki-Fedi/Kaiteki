@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'meta.g.dart';
 
 @JsonSerializable()
-class MisskeyMeta {
+class Meta {
   final String? maintainerName;
 
   final String? maintainerEmail;
@@ -61,7 +61,7 @@ class MisskeyMeta {
 
   final int maxNoteTextLength;
 
-  final Iterable<MisskeyEmoji> emojis;
+  final Iterable<Emoji> emojis;
 
   final bool? requireSetup;
 
@@ -77,7 +77,7 @@ class MisskeyMeta {
 
   final String? backgroundImageUrl;
 
-  const MisskeyMeta({
+  const Meta({
     required this.maintainerName,
     required this.maintainerEmail,
     required this.version,
@@ -116,8 +116,7 @@ class MisskeyMeta {
     this.backgroundImageUrl,
   });
 
-  factory MisskeyMeta.fromJson(Map<String, dynamic> json) =>
-      _$MisskeyMetaFromJson(json);
+  factory Meta.fromJson(Map<String, dynamic> json) => _$MetaFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MisskeyMetaToJson(this);
+  Map<String, dynamic> toJson() => _$MetaToJson(this);
 }

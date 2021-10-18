@@ -5,7 +5,7 @@ import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApplicationWidget extends StatelessWidget {
-  final MastodonApplication application;
+  final Application application;
 
   static final _logger = getLogger("ApplicationWidget");
 

@@ -1,14 +1,14 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:fediverse_objects/src/pleroma/notification.dart';
 import 'package:fediverse_objects/src/mastodon/account.dart';
 import 'package:fediverse_objects/src/mastodon/status.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'notification.g.dart';
 
 /// Represents a notification of an event relevant to the user.
 @JsonSerializable()
-class MastodonNotification {
+class Notification {
   /// The account that performed the action that generated the notification.
-  final MastodonAccount account;
+  final Account account;
 
   /// The timestamp of the notification.
   @JsonKey(name: 'created_at')
@@ -17,10 +17,10 @@ class MastodonNotification {
   /// The id of the notification in the database.
   final String id;
 
-  final PleromaNotification? pleroma;
+  final Notification? pleroma;
 
   /// Status that was the object of the notification, e.g. in mentions, reblogs, favourites, or polls.
-  final MastodonStatus? status;
+  final Status? status;
 
   /// The type of event that resulted in the notification.
   ///
@@ -37,7 +37,7 @@ class MastodonNotification {
   /// - `pleroma:report` = Someone was reported
   final String type;
 
-  const MastodonNotification({
+  const Notification({
     required this.account,
     required this.createdAt,
     required this.id,
@@ -46,8 +46,8 @@ class MastodonNotification {
     this.status,
   });
 
-  factory MastodonNotification.fromJson(Map<String, dynamic> json) =>
-      _$MastodonNotificationFromJson(json);
+  factory Notification.fromJson(Map<String, dynamic> json) =>
+      _$NotificationFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonNotificationToJson(this);
+  Map<String, dynamic> toJson() => _$NotificationToJson(this);
 }

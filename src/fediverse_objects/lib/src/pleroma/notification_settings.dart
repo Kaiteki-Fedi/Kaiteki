@@ -1,21 +1,22 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'notification_settings.g.dart';
 
 @JsonSerializable()
-class PleromaNotificationSettings {
+class NotificationSettings {
   @JsonKey(name: 'block_from_strangers')
   final bool blockFromStrangers;
 
   @JsonKey(name: 'hide_notification_contents')
   final bool hideNotificationContents;
 
-  const PleromaNotificationSettings(
+  const NotificationSettings(
     this.blockFromStrangers,
     this.hideNotificationContents,
   );
 
-  factory PleromaNotificationSettings.fromJson(Map<String, dynamic> json) =>
-      _$PleromaNotificationSettingsFromJson(json);
+  factory NotificationSettings.fromJson(Map<String, dynamic> json) =>
+      _$NotificationSettingsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PleromaNotificationSettingsToJson(this);
+  Map<String, dynamic> toJson() => _$NotificationSettingsToJson(this);
 }

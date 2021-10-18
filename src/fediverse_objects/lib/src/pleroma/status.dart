@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'status.g.dart';
 
 @JsonSerializable()
-class PleromaStatus {
+class Status {
   final Map<String, String>? content;
 
   @JsonKey(name: 'conversation_id')
@@ -14,7 +14,7 @@ class PleromaStatus {
   //final dynamic directConversationId;
 
   @JsonKey(name: 'emoji_reactions')
-  final Iterable<PleromaEmojiReaction>? emojiReactions;
+  final Iterable<EmojiReaction>? emojiReactions;
 
   @JsonKey(name: 'expires_at')
   final DateTime? expiresAt;
@@ -34,7 +34,7 @@ class PleromaStatus {
   @JsonKey(name: 'thread_muted')
   final bool? threadMuted;
 
-  const PleromaStatus(
+  const Status(
     this.content,
     this.conversationId,
     //this.directConversationId,
@@ -47,8 +47,8 @@ class PleromaStatus {
     this.threadMuted,
   );
 
-  factory PleromaStatus.fromJson(Map<String, dynamic> json) =>
-      _$PleromaStatusFromJson(json);
+  factory Status.fromJson(Map<String, dynamic> json) =>
+      _$StatusFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PleromaStatusToJson(this);
+  Map<String, dynamic> toJson() => _$StatusToJson(this);
 }

@@ -6,18 +6,18 @@ part of 'note.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyNote _$MisskeyNoteFromJson(Map<String, dynamic> json) {
-  return MisskeyNote(
+Note _$NoteFromJson(Map<String, dynamic> json) {
+  return Note(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     text: json['text'] as String,
     cw: json['cw'] as String,
     userId: json['userId'] as String,
-    user: MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
+    user: User.fromJson(json['user'] as Map<String, dynamic>),
     replyId: json['replyId'] as String,
     renoteId: json['renoteId'] as String,
-    reply: MisskeyNote.fromJson(json['reply'] as Map<String, dynamic>),
-    renote: MisskeyNote.fromJson(json['renote'] as Map<String, dynamic>),
+    reply: Note.fromJson(json['reply'] as Map<String, dynamic>),
+    renote: Note.fromJson(json['renote'] as Map<String, dynamic>),
     viaMobile: json['viaMobile'] as bool,
     isHidden: json['isHidden'] as bool,
     visibility: json['visibility'] as String,
@@ -26,14 +26,14 @@ MisskeyNote _$MisskeyNoteFromJson(Map<String, dynamic> json) {
         (json['visibleUserIds'] as List<dynamic>).map((e) => e as String),
     fileIds: (json['fileIds'] as List<dynamic>).map((e) => e as String),
     files: (json['files'] as List<dynamic>)
-        .map((e) => MisskeyDriveFile.fromJson(e as Map<String, dynamic>)),
+        .map((e) => DriveFile.fromJson(e as Map<String, dynamic>)),
     tags: (json['tags'] as List<dynamic>).map((e) => e as String),
     poll: json['poll'] as Map<String, dynamic>,
     channelId: json['channelId'] as String,
-    channel: MisskeyChannel.fromJson(json['channel'] as Map<String, dynamic>),
+    channel: Channel.fromJson(json['channel'] as Map<String, dynamic>),
     localOnly: json['localOnly'] as bool,
     emojis: (json['emojis'] as List<dynamic>)
-        .map((e) => MisskeyEmoji.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Emoji.fromJson(e as Map<String, dynamic>)),
     reactions: json['reactions'] as Map<String, dynamic>,
     renoteCount: json['renoteCount'] as int,
     repliesCount: json['repliesCount'] as int,
@@ -45,8 +45,7 @@ MisskeyNote _$MisskeyNoteFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyNoteToJson(MisskeyNote instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'text': instance.text,

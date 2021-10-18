@@ -1,16 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'field.g.dart';
 
 @JsonSerializable()
-class MastodonField {
+class Field {
   final String name;
 
   final String value;
 
-  const MastodonField(this.name, this.value);
+  const Field(this.name, this.value);
 
-  factory MastodonField.fromJson(Map<String /*!*/, dynamic> /*!*/ json) =>
-      _$MastodonFieldFromJson(json);
+  factory Field.fromJson(Map<String, dynamic> json) => _$FieldFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonFieldToJson(this);
+  Map<String, dynamic> toJson() => _$FieldToJson(this);
 }

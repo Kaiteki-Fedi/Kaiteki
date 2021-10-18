@@ -1,9 +1,10 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:fediverse_objects/src/mastodon/poll.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'scheduled_status_params.g.dart';
 
 @JsonSerializable()
-class MastodonScheduledStatusParams {
+class ScheduledStatusParams {
   final dynamic idempotency;
 
   @JsonKey(name: 'in_reply_to_id')
@@ -12,7 +13,7 @@ class MastodonScheduledStatusParams {
   @JsonKey(name: 'media_ids')
   final List<String>? mediaIds;
 
-  final MastodonPoll? poll;
+  final Poll? poll;
 
   @JsonKey(name: 'scheduled_at')
   final DateTime? scheduledAt;
@@ -26,7 +27,7 @@ class MastodonScheduledStatusParams {
 
   final String visibility;
 
-  const MastodonScheduledStatusParams({
+  const ScheduledStatusParams({
     required this.text,
     required this.visibility,
     this.poll,
@@ -38,8 +39,8 @@ class MastodonScheduledStatusParams {
     this.spoilerText,
   });
 
-  factory MastodonScheduledStatusParams.fromJson(Map<String, dynamic> json) =>
-      _$MastodonScheduledStatusParamsFromJson(json);
+  factory ScheduledStatusParams.fromJson(Map<String, dynamic> json) =>
+      _$ScheduledStatusParamsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonScheduledStatusParamsToJson(this);
+  Map<String, dynamic> toJson() => _$ScheduledStatusParamsToJson(this);
 }

@@ -6,27 +6,26 @@ part of 'chat_message.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PleromaChatMessage _$PleromaChatMessageFromJson(Map<String, dynamic> json) {
-  return PleromaChatMessage(
+ChatMessage _$ChatMessageFromJson(Map<String, dynamic> json) {
+  return ChatMessage(
     accountId: json['account_id'] as String,
     chatId: json['chat_id'] as String,
     createdAt: DateTime.parse(json['created_at'] as String),
     emojis: (json['emojis'] as List<dynamic>)
-        .map((e) => MastodonEmoji.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Emoji.fromJson(e as Map<String, dynamic>)),
     id: json['id'] as String,
     unread: json['unread'] as bool,
     attachment: json['attachment'] == null
         ? null
-        : MastodonAttachment.fromJson(
-            json['attachment'] as Map<String, dynamic>),
+        : Attachment.fromJson(json['attachment'] as Map<String, dynamic>),
     card: json['card'] == null
         ? null
-        : MastodonCard.fromJson(json['card'] as Map<String, dynamic>),
+        : Card.fromJson(json['card'] as Map<String, dynamic>),
     content: json['content'] as String?,
   );
 }
 
-Map<String, dynamic> _$PleromaChatMessageToJson(PleromaChatMessage instance) =>
+Map<String, dynamic> _$ChatMessageToJson(ChatMessage instance) =>
     <String, dynamic>{
       'account_id': instance.accountId,
       'attachment': instance.attachment,

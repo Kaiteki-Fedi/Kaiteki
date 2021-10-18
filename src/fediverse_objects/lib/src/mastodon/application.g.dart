@@ -6,8 +6,8 @@ part of 'application.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonApplication _$MastodonApplicationFromJson(Map<String, dynamic> json) {
-  return MastodonApplication(
+Application _$ApplicationFromJson(Map<String, dynamic> json) {
+  return Application(
     name: json['name'] as String,
     website: json['website'] as String?,
     vapidKey: json['vapid_key'] as String?,
@@ -17,8 +17,7 @@ MastodonApplication _$MastodonApplicationFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MastodonApplicationToJson(
-        MastodonApplication instance) =>
+Map<String, dynamic> _$ApplicationToJson(Application instance) =>
     <String, dynamic>{
       'client_id': instance.clientId,
       'client_secret': instance.clientSecret,

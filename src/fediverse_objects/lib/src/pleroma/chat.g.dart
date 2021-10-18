@@ -6,11 +6,11 @@ part of 'chat.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PleromaChat _$PleromaChatFromJson(Map<String, dynamic> json) {
-  return PleromaChat(
-    MastodonAccount.fromJson(json['account'] as Map<String, dynamic>),
+Chat _$ChatFromJson(Map<String, dynamic> json) {
+  return Chat(
+    mastodon.Account.fromJson(json['account'] as Map<String, dynamic>),
     json['id'] as String,
-    PleromaChatMessage.fromJson(json['last_message'] as Map<String, dynamic>),
+    ChatMessage.fromJson(json['last_message'] as Map<String, dynamic>),
     json['unread'] as int,
     DateTime.parse(json['updated_at'] as String),
   );

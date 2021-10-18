@@ -6,9 +6,9 @@ part of 'push_subscription_alerts.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonPushSubscriptionAlerts _$MastodonPushSubscriptionAlertsFromJson(
+PushSubscriptionAlerts _$PushSubscriptionAlertsFromJson(
     Map<String, dynamic> json) {
-  return MastodonPushSubscriptionAlerts(
+  return PushSubscriptionAlerts(
     favourite: json['favourite'] as bool,
     follow: json['follow'] as bool,
     mention: json['mention'] as bool,
@@ -17,8 +17,8 @@ MastodonPushSubscriptionAlerts _$MastodonPushSubscriptionAlertsFromJson(
   );
 }
 
-Map<String, dynamic> _$MastodonPushSubscriptionAlertsToJson(
-        MastodonPushSubscriptionAlerts instance) =>
+Map<String, dynamic> _$PushSubscriptionAlertsToJson(
+        PushSubscriptionAlerts instance) =>
     <String, dynamic>{
       'favourite': instance.favourite,
       'follow': instance.follow,

@@ -1,11 +1,12 @@
+import 'package:fediverse_objects/src/mastodon/account.dart' as mastodon;
 import 'package:json_annotation/json_annotation.dart';
-import 'package:fediverse_objects/src/mastodon/account.dart';
+
 part 'emoji_reaction.g.dart';
 
 @JsonSerializable()
-class PleromaEmojiReaction {
+class EmojiReaction {
   /// Array of accounts reacted with this emoji
-  final Iterable<MastodonAccount> accounts;
+  final Iterable<mastodon.Account> accounts;
 
   /// Count of reactions with this emoji
   final int count;
@@ -16,15 +17,15 @@ class PleromaEmojiReaction {
   /// Emoji
   final String name;
 
-  const PleromaEmojiReaction({
+  const EmojiReaction({
     required this.accounts,
     required this.count,
     required this.me,
     required this.name,
   });
 
-  factory PleromaEmojiReaction.fromJson(Map<String, dynamic> json) =>
-      _$PleromaEmojiReactionFromJson(json);
+  factory EmojiReaction.fromJson(Map<String, dynamic> json) =>
+      _$EmojiReactionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PleromaEmojiReactionToJson(this);
+  Map<String, dynamic> toJson() => _$EmojiReactionToJson(this);
 }

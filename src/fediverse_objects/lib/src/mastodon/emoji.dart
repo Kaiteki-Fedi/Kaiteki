@@ -4,7 +4,7 @@ part 'emoji.g.dart';
 
 /// Represents a custom emoji.
 @JsonSerializable()
-class MastodonEmoji {
+class Emoji {
   /// Used for sorting custom emoji in the picker.
   final String? category;
 
@@ -25,7 +25,7 @@ class MastodonEmoji {
   @JsonKey(name: 'visible_in_picker')
   final bool visibleInPicker;
 
-  const MastodonEmoji({
+  const Emoji({
     required this.shortcode,
     required this.url,
     required this.staticUrl,
@@ -34,8 +34,7 @@ class MastodonEmoji {
     this.tags,
   });
 
-  factory MastodonEmoji.fromJson(Map<String, dynamic> json) =>
-      _$MastodonEmojiFromJson(json);
+  factory Emoji.fromJson(Map<String, dynamic> json) => _$EmojiFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonEmojiToJson(this);
+  Map<String, dynamic> toJson() => _$EmojiToJson(this);
 }

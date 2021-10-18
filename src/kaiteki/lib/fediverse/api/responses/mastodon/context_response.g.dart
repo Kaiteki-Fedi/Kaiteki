@@ -9,8 +9,8 @@ part of 'context_response.dart';
 ContextResponse _$ContextResponseFromJson(Map<String, dynamic> json) {
   return ContextResponse(
     (json['ancestors'] as List<dynamic>)
-        .map((e) => MastodonStatus.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Status.fromJson(e as Map<String, dynamic>)),
     (json['descendants'] as List<dynamic>)
-        .map((e) => MastodonStatus.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Status.fromJson(e as Map<String, dynamic>)),
   );
 }

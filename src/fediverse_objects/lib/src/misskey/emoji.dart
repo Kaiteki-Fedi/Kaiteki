@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'emoji.g.dart';
 
 @JsonSerializable()
-class MisskeyEmoji {
+class Emoji {
   final String id;
 
   final Iterable<String> aliases;
@@ -15,7 +16,7 @@ class MisskeyEmoji {
 
   final String url;
 
-  const MisskeyEmoji({
+  const Emoji({
     required this.id,
     required this.aliases,
     required this.name,
@@ -24,8 +25,7 @@ class MisskeyEmoji {
     required this.url,
   });
 
-  factory MisskeyEmoji.fromJson(Map<String, dynamic> json) =>
-      _$MisskeyEmojiFromJson(json);
+  factory Emoji.fromJson(Map<String, dynamic> json) => _$EmojiFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MisskeyEmojiToJson(this);
+  Map<String, dynamic> toJson() => _$EmojiToJson(this);
 }

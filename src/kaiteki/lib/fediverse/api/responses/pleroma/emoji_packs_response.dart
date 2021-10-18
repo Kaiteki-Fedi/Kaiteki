@@ -7,7 +7,7 @@ part 'emoji_packs_response.g.dart';
 class PleromaEmojiPacksResponse {
   final int count;
 
-  final Map<String, PleromaEmojiPack> packs;
+  final Map<String, EmojiPack> packs;
 
   PleromaEmojiPacksResponse({
     required this.count,

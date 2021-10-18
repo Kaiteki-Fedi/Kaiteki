@@ -6,11 +6,11 @@ part of 'source.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonSource _$MastodonSourceFromJson(Map<String, dynamic> json) {
-  return MastodonSource(
+Source _$SourceFromJson(Map<String, dynamic> json) {
+  return Source(
     note: json['note'] as String,
     fields: (json['fields'] as List<dynamic>)
-        .map((e) => MastodonField.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Field.fromJson(e as Map<String, dynamic>)),
     privacy: json['privacy'] as String?,
     sensitive: json['sensitive'] as bool?,
     language: json['language'] as String?,
@@ -18,8 +18,7 @@ MastodonSource _$MastodonSourceFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MastodonSourceToJson(MastodonSource instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$SourceToJson(Source instance) => <String, dynamic>{
       'note': instance.note,
       'fields': instance.fields.toList(),
       'privacy': instance.privacy,

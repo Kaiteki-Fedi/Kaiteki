@@ -6,17 +6,16 @@ part of 'muting.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyMuting _$MisskeyMutingFromJson(Map<String, dynamic> json) {
-  return MisskeyMuting(
+Muting _$MutingFromJson(Map<String, dynamic> json) {
+  return Muting(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     muteeId: json['muteeId'] as String,
-    mutee: MisskeyUser.fromJson(json['mutee'] as Map<String, dynamic>),
+    mutee: User.fromJson(json['mutee'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$MisskeyMutingToJson(MisskeyMuting instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$MutingToJson(Muting instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'muteeId': instance.muteeId,

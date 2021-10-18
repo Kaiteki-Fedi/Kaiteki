@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/mastodon.dart';
+import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
@@ -93,7 +93,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     client.authenticationData!.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
-    MastodonAccount account;
+    mastodon.Account account;
 
     try {
       account = await client.verifyCredentials();
@@ -200,7 +200,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<Iterable<Post>> getThread(Post reply) async {
-    var status = reply.source as MastodonStatus;
+    var status = reply.source as mastodon.Status;
     var posts = <Post>[];
     var context = await client.getStatusContext(status.id);
 

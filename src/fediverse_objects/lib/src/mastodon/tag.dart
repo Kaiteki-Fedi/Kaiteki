@@ -1,19 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'tag.g.dart';
 
 @JsonSerializable()
-class MastodonTag {
+class Tag {
   final String name;
 
   final String url;
 
-  const MastodonTag({
+  const Tag({
     required this.name,
     required this.url,
   });
 
-  factory MastodonTag.fromJson(Map<String, dynamic> json) =>
-      _$MastodonTagFromJson(json);
+  factory Tag.fromJson(Map<String, dynamic> json) =>
+      _$TagFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonTagToJson(this);
+  Map<String, dynamic> toJson() => _$TagToJson(this);
 }

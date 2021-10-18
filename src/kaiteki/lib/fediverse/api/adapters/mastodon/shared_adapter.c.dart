@@ -1,6 +1,6 @@
 part of 'shared_adapter.dart';
 
-Post toPost(MastodonStatus source) {
+Post toPost(mastodon.Status source) {
   return Post(
     source: source,
     content: source.content,
@@ -41,7 +41,7 @@ Visibility toVisibility(String visibility) {
   }
 }
 
-Attachment toAttachment(MastodonAttachment attachment) {
+Attachment toAttachment(mastodon.Attachment attachment) {
   return Attachment(
     source: attachment,
     description: attachment.description,
@@ -65,7 +65,7 @@ AttachmentType toAttachmentType(String type) {
   }
 }
 
-CustomEmoji toEmoji(MastodonEmoji emoji) {
+CustomEmoji toEmoji(mastodon.Emoji emoji) {
   return CustomEmoji(
     source: emoji,
     url: emoji.staticUrl,
@@ -74,7 +74,7 @@ CustomEmoji toEmoji(MastodonEmoji emoji) {
   );
 }
 
-User toUser(MastodonAccount source) {
+User toUser(mastodon.Account source) {
   return User(
     source: source,
     displayName: source.displayName,
@@ -101,7 +101,7 @@ String? getHost(String acct) {
   return null;
 }
 
-Instance toInstance(MastodonInstance instance) {
+Instance toInstance(mastodon.Instance instance) {
   return Instance(
     source: instance,
     iconUrl: null,

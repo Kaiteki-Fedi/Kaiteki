@@ -6,8 +6,8 @@ part of 'page.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyPage _$MisskeyPageFromJson(Map<String, dynamic> json) {
-  return MisskeyPage(
+Page _$PageFromJson(Map<String, dynamic> json) {
+  return Page(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     updatedAt: DateTime.parse(json['updatedAt'] as String),
@@ -17,12 +17,11 @@ MisskeyPage _$MisskeyPageFromJson(Map<String, dynamic> json) {
     content: json['content'] as List<dynamic>,
     variables: json['variables'] as List<dynamic>,
     userId: json['userId'] as String,
-    user: MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
+    user: User.fromJson(json['user'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$MisskeyPageToJson(MisskeyPage instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$PageToJson(Page instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),

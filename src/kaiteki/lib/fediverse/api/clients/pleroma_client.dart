@@ -8,27 +8,27 @@ class PleromaClient extends MastodonClient {
   @override
   ApiType get type => ApiType.pleroma;
 
-  Future<Iterable<PleromaChat>> getChats() async {
+  Future<Iterable<Chat>> getChats() async {
     return await sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/pleroma/chats",
-      (json) => PleromaChat.fromJson(json),
+      (json) => Chat.fromJson(json),
     );
   }
 
-  Future<Iterable<PleromaChatMessage>> getChatMessages(String id) async {
+  Future<Iterable<ChatMessage>> getChatMessages(String id) async {
     return await sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/pleroma/chats/$id/messages",
-      (j) => PleromaChatMessage.fromJson(j),
+      (j) => ChatMessage.fromJson(j),
     );
   }
 
-  Future<PleromaChatMessage> postChatMessage(String id, String message) async {
+  Future<ChatMessage> postChatMessage(String id, String message) async {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/v1/pleroma/chats/$id/messages",
-      (j) => PleromaChatMessage.fromJson(j),
+      (j) => ChatMessage.fromJson(j),
       body: {"content": message},
     );
   }

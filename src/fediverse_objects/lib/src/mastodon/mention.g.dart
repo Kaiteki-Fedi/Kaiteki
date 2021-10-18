@@ -6,8 +6,8 @@ part of 'mention.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonMention _$MastodonMentionFromJson(Map<String, dynamic> json) {
-  return MastodonMention(
+Mention _$MentionFromJson(Map<String, dynamic> json) {
+  return Mention(
     account: json['acct'] as String,
     id: json['id'] as String,
     url: json['url'] as String,
@@ -15,8 +15,7 @@ MastodonMention _$MastodonMentionFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MastodonMentionToJson(MastodonMention instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$MentionToJson(Mention instance) => <String, dynamic>{
       'acct': instance.account,
       'id': instance.id,
       'url': instance.url,

@@ -1,14 +1,14 @@
+import 'package:fediverse_objects/pleroma.dart' as p;
 import 'package:fediverse_objects/src/mastodon/emoji.dart';
 import 'package:fediverse_objects/src/mastodon/field.dart';
 import 'package:fediverse_objects/src/mastodon/source.dart';
-import 'package:fediverse_objects/src/pleroma/account.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'account.g.dart';
 
 /// Represents a user of Mastodon and their associated profile.
 @JsonSerializable()
-class MastodonAccount {
+class Account {
   /// The Webfinger account URI.
   ///
   /// Equal to `username` for local users, or `username@domain` for remote users.
@@ -39,10 +39,10 @@ class MastodonAccount {
   /// Custom emoji entities to be used when rendering the profile.
   ///
   /// If none, an empty array will be returned.
-  final Iterable<MastodonEmoji> emojis;
+  final Iterable<Emoji> emojis;
 
   /// Additional metadata attached to a profile as name-value pairs.
-  final Iterable<MastodonField>? fields;
+  final Iterable<Field>? fields;
 
   /// The reported followers of this profile.
   @JsonKey(name: 'followers_count')
@@ -70,11 +70,11 @@ class MastodonAccount {
   /// The profile's bio / description. (Encoded in HTML)
   final String note;
 
-  /// Pleroma's extensions to [MastodonAccount].
-  final PleromaAccount? pleroma;
+  /// Pleroma's extensions to [Account].
+  final p.Account? pleroma;
 
   /// An extra entity to be used with API methods to [verify credentials](https://docs.joinmastodon.org/methods/accounts/#verify-account-credentials) and [update credentials](https://docs.joinmastodon.org/methods/accounts/#update-account-credentials).
-  final MastodonSource? source;
+  final Source? source;
 
   /// How many statuses are attached to this account.
   @JsonKey(name: 'statuses_count')
@@ -102,7 +102,7 @@ class MastodonAccount {
   /// When a timed mute will expire, if applicable.
   final DateTime? muteExpiredAt;
 
-  const MastodonAccount({
+  const Account({
     required this.id,
     required this.username,
     required this.url,
@@ -136,8 +136,8 @@ class MastodonAccount {
     this.muteExpiredAt,
   });
 
-  factory MastodonAccount.fromJson(Map<String, dynamic> json) =>
-      _$MastodonAccountFromJson(json);
+  factory Account.fromJson(Map<String, dynamic> json) =>
+      _$AccountFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonAccountToJson(this);
+  Map<String, dynamic> toJson() => _$AccountToJson(this);
 }

@@ -6,8 +6,8 @@ part of 'app.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyApp _$MisskeyAppFromJson(Map<String, dynamic> json) {
-  return MisskeyApp(
+App _$AppFromJson(Map<String, dynamic> json) {
+  return App(
     id: json['id'] as String,
     name: json['name'] as String,
     createdAt: json['createdAt'] as String,
@@ -18,8 +18,7 @@ MisskeyApp _$MisskeyAppFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyAppToJson(MisskeyApp instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$AppToJson(App instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'createdAt': instance.createdAt,

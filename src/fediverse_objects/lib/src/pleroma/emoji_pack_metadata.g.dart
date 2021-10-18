@@ -6,9 +6,8 @@ part of 'emoji_pack_metadata.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PleromaEmojiPackMetadata _$PleromaEmojiPackMetadataFromJson(
-    Map<String, dynamic> json) {
-  return PleromaEmojiPackMetadata(
+EmojiPackMetadata _$EmojiPackMetadataFromJson(Map<String, dynamic> json) {
+  return EmojiPackMetadata(
     canDownload: json['can-download'] as bool,
     description: json['description'] as String,
     downloadSha256: json['download-sha256'] as String,
@@ -20,8 +19,7 @@ PleromaEmojiPackMetadata _$PleromaEmojiPackMetadataFromJson(
   );
 }
 
-Map<String, dynamic> _$PleromaEmojiPackMetadataToJson(
-        PleromaEmojiPackMetadata instance) =>
+Map<String, dynamic> _$EmojiPackMetadataToJson(EmojiPackMetadata instance) =>
     <String, dynamic>{
       'can-download': instance.canDownload,
       'description': instance.description,

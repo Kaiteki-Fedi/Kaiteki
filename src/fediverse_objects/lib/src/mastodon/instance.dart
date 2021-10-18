@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'instance.g.dart';
 
 @JsonSerializable()
-class MastodonInstance {
+class Instance {
   /// (Added by Pleroma)
   @JsonKey(name: 'avatar_upload_limit')
   final int? avatarUploadLimit;
@@ -58,17 +58,17 @@ class MastodonInstance {
   final String uri;
 
   /// URLs of interest for clients apps.
-  final MastodonInstanceUrls urls;
+  final InstanceUrls urls;
 
   /// The version of Mastodon installed on the instance.
   final String version;
 
   /// Statistics about how much information the instance contains.
-  final MastodonInstanceStatistics stats;
+  final InstanceStatistics stats;
 
   /// A user that can be contacted, as an alternative to [email].
   @JsonKey(name: 'contact_account')
-  final MastodonAccount? contactAccount;
+  final Account? contactAccount;
 
   /// Whether invites are enabled.
   @JsonKey(name: 'invites_enabled')
@@ -78,7 +78,7 @@ class MastodonInstance {
   @JsonKey(name: 'approval_required')
   final bool approvalRequired;
 
-  const MastodonInstance({
+  const Instance({
     required this.uri,
     required this.title,
     required this.description,
@@ -106,8 +106,8 @@ class MastodonInstance {
     this.uploadLimit,
   });
 
-  factory MastodonInstance.fromJson(Map<String, dynamic> json) =>
-      _$MastodonInstanceFromJson(json);
+  factory Instance.fromJson(Map<String, dynamic> json) =>
+      _$InstanceFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonInstanceToJson(this);
+  Map<String, dynamic> toJson() => _$InstanceToJson(this);
 }

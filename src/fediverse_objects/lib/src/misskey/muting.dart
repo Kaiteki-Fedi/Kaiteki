@@ -1,31 +1,32 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:fediverse_objects/src/misskey/user.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'muting.g.dart';
 
 @JsonSerializable()
-class MisskeyMuting {
+class Muting {
   /// The unique identifier for this muting.
   @JsonKey(name: 'id')
   final String id;
-  
+
   /// The date that the muting was created.
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
-  
+
   @JsonKey(name: 'muteeId')
   final String muteeId;
-  
+
   /// The mutee.
   @JsonKey(name: 'mutee')
-  final MisskeyUser mutee;
-  
-  const MisskeyMuting({
+  final User mutee;
+
+  const Muting({
     required this.id,
     required this.createdAt,
     required this.muteeId,
     required this.mutee,
   });
 
-  factory MisskeyMuting.fromJson(Map<String, dynamic> json) => _$MisskeyMutingFromJson(json);
-  Map<String, dynamic> toJson() => _$MisskeyMutingToJson(this);
+  factory Muting.fromJson(Map<String, dynamic> json) => _$MutingFromJson(json);
+  Map<String, dynamic> toJson() => _$MutingToJson(this);
 }

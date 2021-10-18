@@ -6,8 +6,8 @@ part of 'emoji.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonEmoji _$MastodonEmojiFromJson(Map<String, dynamic> json) {
-  return MastodonEmoji(
+Emoji _$EmojiFromJson(Map<String, dynamic> json) {
+  return Emoji(
     shortcode: json['shortcode'] as String,
     url: json['url'] as String,
     staticUrl: json['static_url'] as String,
@@ -17,8 +17,7 @@ MastodonEmoji _$MastodonEmojiFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MastodonEmojiToJson(MastodonEmoji instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$EmojiToJson(Emoji instance) => <String, dynamic>{
       'category': instance.category,
       'shortcode': instance.shortcode,
       'static_url': instance.staticUrl,

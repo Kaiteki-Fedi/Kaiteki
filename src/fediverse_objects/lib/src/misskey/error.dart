@@ -1,16 +1,17 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'error.g.dart';
 
 @JsonSerializable()
-class MisskeyError {
+class Error {
   /// An error object.
   @JsonKey(name: 'error')
   final Map<String, dynamic> error;
-  
-  const MisskeyError({
+
+  const Error({
     required this.error,
   });
 
-  factory MisskeyError.fromJson(Map<String, dynamic> json) => _$MisskeyErrorFromJson(json);
-  Map<String, dynamic> toJson() => _$MisskeyErrorToJson(this);
+  factory Error.fromJson(Map<String, dynamic> json) => _$ErrorFromJson(json);
+  Map<String, dynamic> toJson() => _$ErrorToJson(this);
 }

@@ -6,8 +6,8 @@ part of 'drive_file.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyDriveFile _$MisskeyDriveFileFromJson(Map<String, dynamic> json) {
-  return MisskeyDriveFile(
+DriveFile _$DriveFileFromJson(Map<String, dynamic> json) {
+  return DriveFile(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     name: json['name'] as String,
@@ -21,14 +21,13 @@ MisskeyDriveFile _$MisskeyDriveFileFromJson(Map<String, dynamic> json) {
     thumbnailUrl: json['thumbnailUrl'] as String,
     comment: json['comment'] as String,
     folderId: json['folderId'] as String,
-    folder: MisskeyDriveFolder.fromJson(json['folder'] as Map<String, dynamic>),
+    folder: DriveFolder.fromJson(json['folder'] as Map<String, dynamic>),
     userId: json['userId'] as String,
-    user: MisskeyUser.fromJson(json['user'] as Map<String, dynamic>),
+    user: User.fromJson(json['user'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$MisskeyDriveFileToJson(MisskeyDriveFile instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$DriveFileToJson(DriveFile instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'name': instance.name,

@@ -1,27 +1,28 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'queue_count.g.dart';
 
 @JsonSerializable()
-class MisskeyQueueCount {
+class QueueCount {
   @JsonKey(name: 'waiting')
   final int waiting;
-  
+
   @JsonKey(name: 'active')
   final int active;
-  
+
   @JsonKey(name: 'completed')
   final int completed;
-  
+
   @JsonKey(name: 'failed')
   final int failed;
-  
+
   @JsonKey(name: 'delayed')
   final int delayed;
-  
+
   @JsonKey(name: 'paused')
   final int paused;
-  
-  const MisskeyQueueCount({
+
+  const QueueCount({
     required this.waiting,
     required this.active,
     required this.completed,
@@ -30,6 +31,7 @@ class MisskeyQueueCount {
     required this.paused,
   });
 
-  factory MisskeyQueueCount.fromJson(Map<String, dynamic> json) => _$MisskeyQueueCountFromJson(json);
-  Map<String, dynamic> toJson() => _$MisskeyQueueCountToJson(this);
+  factory QueueCount.fromJson(Map<String, dynamic> json) =>
+      _$QueueCountFromJson(json);
+  Map<String, dynamic> toJson() => _$QueueCountToJson(this);
 }

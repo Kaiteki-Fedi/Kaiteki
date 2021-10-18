@@ -1,10 +1,11 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:fediverse_objects/src/mastodon/push_subscription_alerts.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'push_subscription.g.dart';
 
 @JsonSerializable()
-class MastodonPushSubscription {
-  final MastodonPushSubscriptionAlerts alerts;
+class PushSubscription {
+  final PushSubscriptionAlerts alerts;
 
   final String endpoint;
 
@@ -13,15 +14,15 @@ class MastodonPushSubscription {
   @JsonKey(name: 'server_key')
   final String serverKey;
 
-  const MastodonPushSubscription({
+  const PushSubscription({
     required this.alerts,
     required this.endpoint,
     required this.id,
     required this.serverKey,
   });
 
-  factory MastodonPushSubscription.fromJson(Map<String, dynamic> json) =>
-      _$MastodonPushSubscriptionFromJson(json);
+  factory PushSubscription.fromJson(Map<String, dynamic> json) =>
+      _$PushSubscriptionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonPushSubscriptionToJson(this);
+  Map<String, dynamic> toJson() => _$PushSubscriptionToJson(this);
 }

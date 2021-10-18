@@ -6,8 +6,8 @@ part of 'instance.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonInstance _$MastodonInstanceFromJson(Map<String, dynamic> json) {
-  return MastodonInstance(
+Instance _$InstanceFromJson(Map<String, dynamic> json) {
+  return Instance(
     uri: json['uri'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
@@ -16,16 +16,14 @@ MastodonInstance _$MastodonInstanceFromJson(Map<String, dynamic> json) {
     languages: (json['languages'] as List<dynamic>).map((e) => e as String),
     registrations: json['registrations'] as bool,
     approvalRequired: json['approval_required'] as bool,
-    urls: MastodonInstanceUrls.fromJson(json['urls'] as Map<String, dynamic>),
-    stats: MastodonInstanceStatistics.fromJson(
-        json['stats'] as Map<String, dynamic>),
+    urls: InstanceUrls.fromJson(json['urls'] as Map<String, dynamic>),
+    stats: InstanceStatistics.fromJson(json['stats'] as Map<String, dynamic>),
     shortDescription: json['shortDescription'] as String?,
     invitesEnabled: json['invites_enabled'] as bool?,
     thumbnail: json['thumbnail'] as String?,
     contactAccount: json['contact_account'] == null
         ? null
-        : MastodonAccount.fromJson(
-            json['contact_account'] as Map<String, dynamic>),
+        : Account.fromJson(json['contact_account'] as Map<String, dynamic>),
     avatarUploadLimit: json['avatar_upload_limit'] as int?,
     backgroundImage: json['background_image'] as String?,
     backgroundUploadLimit: json['background_upload_limit'] as int?,
@@ -36,8 +34,7 @@ MastodonInstance _$MastodonInstanceFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MastodonInstanceToJson(MastodonInstance instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'avatar_upload_limit': instance.avatarUploadLimit,
       'background_image': instance.backgroundImage,
       'background_upload_limit': instance.backgroundUploadLimit,

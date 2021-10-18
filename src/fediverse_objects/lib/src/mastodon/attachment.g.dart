@@ -6,8 +6,8 @@ part of 'attachment.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonAttachment _$MastodonAttachmentFromJson(Map<String, dynamic> json) {
-  return MastodonAttachment(
+Attachment _$AttachmentFromJson(Map<String, dynamic> json) {
+  return Attachment(
     id: json['id'] as String,
     type: json['type'] as String,
     url: json['url'] as String,
@@ -19,7 +19,7 @@ MastodonAttachment _$MastodonAttachmentFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MastodonAttachmentToJson(MastodonAttachment instance) =>
+Map<String, dynamic> _$AttachmentToJson(Attachment instance) =>
     <String, dynamic>{
       'description': instance.description,
       'id': instance.id,

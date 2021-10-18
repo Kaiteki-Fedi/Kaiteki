@@ -1,12 +1,13 @@
-import 'package:fediverse_objects/src/misskey/emoji.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:fediverse_objects/src/misskey/user.dart';
-import 'package:fediverse_objects/src/misskey/drive_file.dart';
 import 'package:fediverse_objects/src/misskey/channel.dart';
+import 'package:fediverse_objects/src/misskey/drive_file.dart';
+import 'package:fediverse_objects/src/misskey/emoji.dart';
+import 'package:fediverse_objects/src/misskey/user.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'note.g.dart';
 
 @JsonSerializable()
-class MisskeyNote {
+class Note {
   /// The unique identifier for this Note.
   @JsonKey(name: 'id')
   final String id;
@@ -25,7 +26,7 @@ class MisskeyNote {
   final String userId;
 
   @JsonKey(name: 'user')
-  final MisskeyUser user;
+  final User user;
 
   @JsonKey(name: 'replyId')
   final String replyId;
@@ -34,10 +35,10 @@ class MisskeyNote {
   final String renoteId;
 
   @JsonKey(name: 'reply')
-  final MisskeyNote reply;
+  final Note reply;
 
   @JsonKey(name: 'renote')
-  final MisskeyNote renote;
+  final Note renote;
 
   @JsonKey(name: 'viaMobile')
   final bool viaMobile;
@@ -58,7 +59,7 @@ class MisskeyNote {
   final Iterable<String> fileIds;
 
   @JsonKey(name: 'files')
-  final Iterable<MisskeyDriveFile> files;
+  final Iterable<DriveFile> files;
 
   @JsonKey(name: 'tags')
   final Iterable<String> tags;
@@ -70,13 +71,13 @@ class MisskeyNote {
   final String channelId;
 
   @JsonKey(name: 'channel')
-  final MisskeyChannel channel;
+  final Channel channel;
 
   @JsonKey(name: 'localOnly')
   final bool localOnly;
 
   @JsonKey(name: 'emojis')
-  final Iterable<MisskeyEmoji> emojis;
+  final Iterable<Emoji> emojis;
 
   /// Key is either Unicode emoji or custom emoji, value is count of that emoji reaction.
   @JsonKey(name: 'reactions')
@@ -106,7 +107,7 @@ class MisskeyNote {
   @JsonKey(name: 'myReaction')
   final Map<String, dynamic> myReaction;
 
-  const MisskeyNote({
+  const Note({
     required this.id,
     required this.createdAt,
     required this.text,
@@ -140,7 +141,6 @@ class MisskeyNote {
     required this.myReaction,
   });
 
-  factory MisskeyNote.fromJson(Map<String, dynamic> json) =>
-      _$MisskeyNoteFromJson(json);
-  Map<String, dynamic> toJson() => _$MisskeyNoteToJson(this);
+  factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
+  Map<String, dynamic> toJson() => _$NoteToJson(this);
 }

@@ -6,14 +6,14 @@ part of 'scheduled_status_params.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonScheduledStatusParams _$MastodonScheduledStatusParamsFromJson(
+ScheduledStatusParams _$ScheduledStatusParamsFromJson(
     Map<String, dynamic> json) {
-  return MastodonScheduledStatusParams(
+  return ScheduledStatusParams(
     text: json['text'] as String,
     visibility: json['visibility'] as String,
     poll: json['poll'] == null
         ? null
-        : MastodonPoll.fromJson(json['poll'] as Map<String, dynamic>),
+        : Poll.fromJson(json['poll'] as Map<String, dynamic>),
     idempotency: json['idempotency'],
     inReplyToId: json['in_reply_to_id'] as String?,
     mediaIds:
@@ -26,8 +26,8 @@ MastodonScheduledStatusParams _$MastodonScheduledStatusParamsFromJson(
   );
 }
 
-Map<String, dynamic> _$MastodonScheduledStatusParamsToJson(
-        MastodonScheduledStatusParams instance) =>
+Map<String, dynamic> _$ScheduledStatusParamsToJson(
+        ScheduledStatusParams instance) =>
     <String, dynamic>{
       'idempotency': instance.idempotency,
       'in_reply_to_id': instance.inReplyToId,

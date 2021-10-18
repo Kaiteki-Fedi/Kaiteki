@@ -2,7 +2,7 @@ import 'package:fediverse_objects/misskey.dart';
 import 'package:kaiteki/fediverse/api/exceptions/api_exception.dart';
 
 class MisskeyException extends ApiException {
-  final MisskeyError error;
+  final Error error;
 
   MisskeyException(int statusCode, this.error) : super(statusCode);
 

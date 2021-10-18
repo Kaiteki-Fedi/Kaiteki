@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/mastodon.dart';
+import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
@@ -15,27 +15,27 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   @override
   ApiType get type => ApiType.mastodon;
 
-  Future<MastodonInstance> getInstance() async {
+  Future<mastodon.Instance> getInstance() async {
     return await sendJsonRequest(
       HttpMethod.get,
       "api/v1/instance",
-      (j) => MastodonInstance.fromJson(j),
+      (j) => mastodon.Instance.fromJson(j),
     );
   }
 
-  Future<MastodonAccount> getAccount(String id) async {
+  Future<mastodon.Account> getAccount(String id) async {
     return await sendJsonRequest(
       HttpMethod.get,
       "api/v1/accounts/$id",
-      (j) => MastodonAccount.fromJson(j),
+      (j) => mastodon.Account.fromJson(j),
     );
   }
 
-  Future<Iterable<MastodonStatus>> getStatuses(String id) async {
+  Future<Iterable<mastodon.Status>> getStatuses(String id) async {
     return await sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/accounts/$id/statuses",
-      (j) => MastodonStatus.fromJson(j),
+      (j) => mastodon.Status.fromJson(j),
     );
   }
 
@@ -70,23 +70,23 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<MastodonEmoji>> getCustomEmojis() async {
+  Future<Iterable<mastodon.Emoji>> getCustomEmojis() async {
     return await sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/custom_emojis",
-      (json) => MastodonEmoji.fromJson(json),
+      (json) => mastodon.Emoji.fromJson(json),
     );
   }
 
-  Future<MastodonAccount> verifyCredentials() async {
+  Future<mastodon.Account> verifyCredentials() async {
     return await sendJsonRequest(
       HttpMethod.get,
       "api/v1/accounts/verify_credentials",
-      (json) => MastodonAccount.fromJson(json),
+      (json) => mastodon.Account.fromJson(json),
     );
   }
 
-  Future<MastodonApplication> createApplication(
+  Future<mastodon.Application> createApplication(
       String instance,
       String clientName,
       String website,
@@ -95,7 +95,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/v1/apps",
-      (json) => MastodonApplication.fromJson(json),
+      (json) => mastodon.Application.fromJson(json),
       body: {
         "client_name": clientName,
         "website": website,
@@ -105,15 +105,15 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<MastodonStatus>> getPublicTimeline() async {
+  Future<Iterable<mastodon.Status>> getPublicTimeline() async {
     return await sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/timelines/public",
-      (j) => MastodonStatus.fromJson(j),
+      (j) => mastodon.Status.fromJson(j),
     );
   }
 
-  Future<Iterable<MastodonStatus>> getTimeline({
+  Future<Iterable<mastodon.Status>> getTimeline({
     bool? local,
     bool? remote,
     bool? onlyMedia,
@@ -135,11 +135,11 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return await sendJsonRequestMultiple(
       HttpMethod.get,
       Utils.withQueries("api/v1/timelines/home", queryParams),
-      (j) => MastodonStatus.fromJson(j),
+      (j) => mastodon.Status.fromJson(j),
     );
   }
 
-  Future<MastodonStatus> postStatus(
+  Future<mastodon.Status> postStatus(
     String status, {
     String? spoilerText,
     bool? pleromaPreview,
@@ -150,7 +150,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return await sendJsonRequest(
       HttpMethod.post,
       "api/v1/statuses",
-      (j) => MastodonStatus.fromJson(j),
+      (j) => mastodon.Status.fromJson(j),
       body: {
         "status": status,
         "source": Constants.appName,
@@ -163,11 +163,11 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<MastodonNotification>> getNotifications() async {
+  Future<Iterable<mastodon.Notification>> getNotifications() async {
     return await sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/notifications",
-      (j) => MastodonNotification.fromJson(j),
+      (j) => mastodon.Notification.fromJson(j),
     );
   }
 

@@ -6,8 +6,8 @@ part of 'user_list.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyUserList _$MisskeyUserListFromJson(Map<String, dynamic> json) {
-  return MisskeyUserList(
+UserList _$UserListFromJson(Map<String, dynamic> json) {
+  return UserList(
     id: json['id'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     name: json['name'] as String,
@@ -15,8 +15,7 @@ MisskeyUserList _$MisskeyUserListFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyUserListToJson(MisskeyUserList instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$UserListToJson(UserList instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'name': instance.name,

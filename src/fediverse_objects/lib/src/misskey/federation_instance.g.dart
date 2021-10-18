@@ -6,9 +6,8 @@ part of 'federation_instance.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyFederationInstance _$MisskeyFederationInstanceFromJson(
-    Map<String, dynamic> json) {
-  return MisskeyFederationInstance(
+FederationInstance _$FederationInstanceFromJson(Map<String, dynamic> json) {
+  return FederationInstance(
     id: json['id'] as String,
     caughtAt: DateTime.parse(json['caughtAt'] as String),
     host: json['host'] as String,
@@ -34,8 +33,7 @@ MisskeyFederationInstance _$MisskeyFederationInstanceFromJson(
   );
 }
 
-Map<String, dynamic> _$MisskeyFederationInstanceToJson(
-        MisskeyFederationInstance instance) =>
+Map<String, dynamic> _$FederationInstanceToJson(FederationInstance instance) =>
     <String, dynamic>{
       'id': instance.id,
       'caughtAt': instance.caughtAt.toIso8601String(),

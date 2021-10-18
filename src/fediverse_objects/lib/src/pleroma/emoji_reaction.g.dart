@@ -6,18 +6,17 @@ part of 'emoji_reaction.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PleromaEmojiReaction _$PleromaEmojiReactionFromJson(Map<String, dynamic> json) {
-  return PleromaEmojiReaction(
+EmojiReaction _$EmojiReactionFromJson(Map<String, dynamic> json) {
+  return EmojiReaction(
     accounts: (json['accounts'] as List<dynamic>)
-        .map((e) => MastodonAccount.fromJson(e as Map<String, dynamic>)),
+        .map((e) => mastodon.Account.fromJson(e as Map<String, dynamic>)),
     count: json['count'] as int,
     me: json['me'] as bool,
     name: json['name'] as String,
   );
 }
 
-Map<String, dynamic> _$PleromaEmojiReactionToJson(
-        PleromaEmojiReaction instance) =>
+Map<String, dynamic> _$EmojiReactionToJson(EmojiReaction instance) =>
     <String, dynamic>{
       'accounts': instance.accounts.toList(),
       'count': instance.count,

@@ -6,20 +6,18 @@ part of 'scheduled_status.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonScheduledStatus _$MastodonScheduledStatusFromJson(
-    Map<String, dynamic> json) {
-  return MastodonScheduledStatus(
+ScheduledStatus _$ScheduledStatusFromJson(Map<String, dynamic> json) {
+  return ScheduledStatus(
     id: json['id'] as String,
     mediaAttachments: (json['media_attachments'] as List<dynamic>)
-        .map((e) => MastodonAttachment.fromJson(e as Map<String, dynamic>)),
-    params: MastodonScheduledStatusParams.fromJson(
-        json['params'] as Map<String, dynamic>),
+        .map((e) => Attachment.fromJson(e as Map<String, dynamic>)),
+    params:
+        ScheduledStatusParams.fromJson(json['params'] as Map<String, dynamic>),
     scheduledAt: DateTime.parse(json['scheduled_at'] as String),
   );
 }
 
-Map<String, dynamic> _$MastodonScheduledStatusToJson(
-        MastodonScheduledStatus instance) =>
+Map<String, dynamic> _$ScheduledStatusToJson(ScheduledStatus instance) =>
     <String, dynamic>{
       'id': instance.id,
       'media_attachments': instance.mediaAttachments.toList(),

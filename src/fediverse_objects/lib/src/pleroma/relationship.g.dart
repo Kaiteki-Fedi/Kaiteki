@@ -6,8 +6,8 @@ part of 'relationship.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PleromaRelationship _$PleromaRelationshipFromJson(Map<String, dynamic> json) {
-  return PleromaRelationship(
+Relationship _$RelationshipFromJson(Map<String, dynamic> json) {
+  return Relationship(
     json['blocked_by'] as bool?,
     json['blocking'] as bool?,
     json['domain_blocking'] as bool?,
@@ -23,8 +23,7 @@ PleromaRelationship _$PleromaRelationshipFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$PleromaRelationshipToJson(
-        PleromaRelationship instance) =>
+Map<String, dynamic> _$RelationshipToJson(Relationship instance) =>
     <String, dynamic>{
       'blocked_by': instance.blockedBy,
       'blocking': instance.blocking,

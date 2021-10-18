@@ -1,20 +1,21 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'poll_option.g.dart';
 
 @JsonSerializable()
-class MastodonPollOption {
+class PollOption {
   final String title;
 
   @JsonKey(name: 'votes_count')
   final int? votesCount;
 
-  MastodonPollOption({
+  PollOption({
     required this.title,
     this.votesCount,
   });
 
-  factory MastodonPollOption.fromJson(Map<String, dynamic> json) =>
-      _$MastodonPollOptionFromJson(json);
+  factory PollOption.fromJson(Map<String, dynamic> json) =>
+      _$PollOptionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MastodonPollOptionToJson(this);
+  Map<String, dynamic> toJson() => _$PollOptionToJson(this);
 }

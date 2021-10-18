@@ -6,8 +6,8 @@ part of 'user.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyUser _$MisskeyUserFromJson(Map<String, dynamic> json) {
-  return MisskeyUser(
+User _$UserFromJson(Map<String, dynamic> json) {
+  return User(
     id: json['id'] as String,
     name: json['name'] as String,
     username: json['username'] as String,
@@ -20,7 +20,7 @@ MisskeyUser _$MisskeyUserFromJson(Map<String, dynamic> json) {
     isBot: json['isBot'] as bool,
     isCat: json['isCat'] as bool,
     emojis: (json['emojis'] as List<dynamic>)
-        .map((e) => MisskeyEmoji.fromJson(e as Map<String, dynamic>)),
+        .map((e) => Emoji.fromJson(e as Map<String, dynamic>)),
     url: json['url'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
     updatedAt: DateTime.parse(json['updatedAt'] as String),
@@ -39,11 +39,9 @@ MisskeyUser _$MisskeyUserFromJson(Map<String, dynamic> json) {
     notesCount: json['notesCount'] as int,
     pinnedNoteIds:
         (json['pinnedNoteIds'] as List<dynamic>).map((e) => e as String),
-    pinnedNotes:
-        MisskeyNote.fromJson(json['pinnedNotes'] as Map<String, dynamic>),
+    pinnedNotes: Note.fromJson(json['pinnedNotes'] as Map<String, dynamic>),
     pinnedPageId: json['pinnedPageId'] as String,
-    pinnedPage:
-        MisskeyPage.fromJson(json['pinnedPage'] as Map<String, dynamic>),
+    pinnedPage: Page.fromJson(json['pinnedPage'] as Map<String, dynamic>),
     twoFactorEnabled: json['twoFactorEnabled'] as bool,
     usePasswordLessLogin: json['usePasswordLessLogin'] as bool,
     securityKeys: json['securityKeys'] as bool,
@@ -77,8 +75,7 @@ MisskeyUser _$MisskeyUserFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyUserToJson(MisskeyUser instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'username': instance.username,

@@ -1,21 +1,22 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'notification.g.dart';
 
 @JsonSerializable()
-class PleromaNotification {
+class Notification {
   @JsonKey(name: 'is_muted')
   final bool isMuted;
 
   @JsonKey(name: 'is_seen')
   final bool isSeen;
 
-  const PleromaNotification({
+  const Notification({
     required this.isMuted,
     required this.isSeen,
   });
 
-  factory PleromaNotification.fromJson(Map<String, dynamic> json) =>
-      _$PleromaNotificationFromJson(json);
+  factory Notification.fromJson(Map<String, dynamic> json) =>
+      _$NotificationFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PleromaNotificationToJson(this);
+  Map<String, dynamic> toJson() => _$NotificationToJson(this);
 }

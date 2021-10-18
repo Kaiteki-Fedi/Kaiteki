@@ -1,40 +1,41 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:fediverse_objects/src/misskey/user.dart';
+import 'package:json_annotation/json_annotation.dart';
+
 part 'page.g.dart';
 
 @JsonSerializable()
-class MisskeyPage {
+class Page {
   @JsonKey(name: 'id')
   final String id;
-  
+
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
-  
+
   @JsonKey(name: 'updatedAt')
   final DateTime updatedAt;
-  
+
   @JsonKey(name: 'title')
   final String title;
-  
+
   @JsonKey(name: 'name')
   final String name;
-  
+
   @JsonKey(name: 'summary')
   final String summary;
-  
+
   @JsonKey(name: 'content')
   final Iterable<dynamic> content;
-  
+
   @JsonKey(name: 'variables')
   final Iterable<dynamic> variables;
-  
+
   @JsonKey(name: 'userId')
   final String userId;
-  
+
   @JsonKey(name: 'user')
-  final MisskeyUser user;
-  
-  const MisskeyPage({
+  final User user;
+
+  const Page({
     required this.id,
     required this.createdAt,
     required this.updatedAt,
@@ -47,6 +48,6 @@ class MisskeyPage {
     required this.user,
   });
 
-  factory MisskeyPage.fromJson(Map<String, dynamic> json) => _$MisskeyPageFromJson(json);
-  Map<String, dynamic> toJson() => _$MisskeyPageToJson(this);
+  factory Page.fromJson(Map<String, dynamic> json) => _$PageFromJson(json);
+  Map<String, dynamic> toJson() => _$PageToJson(this);
 }

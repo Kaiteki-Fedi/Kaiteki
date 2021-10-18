@@ -6,15 +6,14 @@ part of 'field.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonField _$MastodonFieldFromJson(Map<String, dynamic> json) {
-  return MastodonField(
+Field _$FieldFromJson(Map<String, dynamic> json) {
+  return Field(
     json['name'] as String,
     json['value'] as String,
   );
 }
 
-Map<String, dynamic> _$MastodonFieldToJson(MastodonField instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$FieldToJson(Field instance) => <String, dynamic>{
       'name': instance.name,
       'value': instance.value,
     };

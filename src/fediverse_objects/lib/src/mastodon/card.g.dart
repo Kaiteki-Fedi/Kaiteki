@@ -6,11 +6,11 @@ part of 'card.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MastodonCard _$MastodonCardFromJson(Map<String, dynamic> json) {
-  return MastodonCard(
+Card _$CardFromJson(Map<String, dynamic> json) {
+  return Card(
     json['description'] as String,
     json['image'] as String?,
-    PleromaCard.fromJson(json['pleroma'] as Map<String, dynamic>),
+    p.Card.fromJson(json['pleroma'] as Map<String, dynamic>),
     json['provider_name'] as String,
     json['provider_url'] as String,
     json['title'] as String,
@@ -19,8 +19,7 @@ MastodonCard _$MastodonCardFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MastodonCardToJson(MastodonCard instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$CardToJson(Card instance) => <String, dynamic>{
       'description': instance.description,
       'image': instance.image,
       'pleroma': instance.pleroma,

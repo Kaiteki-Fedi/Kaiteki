@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/misskey.dart';
+import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
@@ -106,9 +106,12 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(TimelineType type,
-      {String? sinceId, String? untilId}) async {
-    Iterable<MisskeyNote> notes;
+  Future<Iterable<Post>> getTimeline(
+    TimelineType type, {
+    String? sinceId,
+    String? untilId,
+  }) async {
+    Iterable<misskey.Note> notes;
 
     var request = MisskeyTimelineRequest(sinceId: sinceId, untilId: untilId);
     switch (type) {
@@ -160,7 +163,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<void> addReaction(Post post, Emoji emoji) async {
-    var note = post.source as MisskeyNote;
+    var note = post.source as misskey.Note;
 
     String emojiName;
 
@@ -177,7 +180,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<void> removeReaction(Post post, Emoji emoji) async {
-    var note = post.source as MisskeyNote;
+    var note = post.source as misskey.Note;
 
     // The "emoji" parameter is ignored,
     // because in Misskey you can only react once.

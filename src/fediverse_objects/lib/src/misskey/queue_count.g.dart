@@ -6,8 +6,8 @@ part of 'queue_count.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyQueueCount _$MisskeyQueueCountFromJson(Map<String, dynamic> json) {
-  return MisskeyQueueCount(
+QueueCount _$QueueCountFromJson(Map<String, dynamic> json) {
+  return QueueCount(
     waiting: json['waiting'] as int,
     active: json['active'] as int,
     completed: json['completed'] as int,
@@ -17,7 +17,7 @@ MisskeyQueueCount _$MisskeyQueueCountFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MisskeyQueueCountToJson(MisskeyQueueCount instance) =>
+Map<String, dynamic> _$QueueCountToJson(QueueCount instance) =>
     <String, dynamic>{
       'waiting': instance.waiting,
       'active': instance.active,
