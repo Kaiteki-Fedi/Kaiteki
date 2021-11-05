@@ -73,6 +73,23 @@ class Utils {
     return 400 <= code && code < 600;
   }
 
+  static TextStyle getLocalTextStyle(BuildContext context, TextStyle? style) {
+    final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
+    TextStyle? effectiveTextStyle = style;
+
+    if (style == null || style.inherit) {
+      effectiveTextStyle = defaultTextStyle.style.merge(style);
+    }
+
+    if (MediaQuery.boldTextOverride(context)) {
+      effectiveTextStyle = effectiveTextStyle!.merge(
+        const TextStyle(fontWeight: FontWeight.bold),
+      );
+    }
+
+    return effectiveTextStyle!;
+  }
+
   static SnackBar generateAsyncSnackBar({
     required BuildContext context,
     required bool done,

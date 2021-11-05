@@ -1,25 +1,21 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
-import 'package:kaiteki/ui/forms/post_form.dart';
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
-import 'package:kaiteki/ui/widgets/attachments/fallback_attachment_widget.dart';
-import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
-import 'package:kaiteki/ui/widgets/attachments/video_attachment_widget.dart';
+import 'package:kaiteki/ui/widgets/attachments.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/card_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/count_button.dart';
 import 'package:kaiteki/ui/widgets/posts/interaction_event_bar.dart';
 import 'package:kaiteki/ui/widgets/posts/reaction_row.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/extensions/duration.dart';
-import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:kaiteki/utils/utils.dart';
@@ -32,22 +28,22 @@ class StatusWidget extends StatelessWidget {
   final bool showParentPost;
   final bool showActions;
 
-  const StatusWidget(this._post,
-      {this.showParentPost = true, this.showActions = true});
+  const StatusWidget(
+    this._post, {
+    Key? key,
+    this.showParentPost = true,
+    this.showActions = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<ThemeContainer>(context);
-    var theme = container.current;
+    final container = Provider.of<ThemeContainer>(context);
+    final theme = container.current;
 
-    var postTextTheme = TextRendererTheme.fromContext(context);
-    var authorTextTheme = TextRendererTheme.fromContext(
-      context,
-      fontWeight: FontWeight.bold,
-    );
+    final rendererTheme = TextRendererTheme.fromContext(context);
+    const authorTextStyle = TextStyle(fontWeight: FontWeight.bold);
 
-    var textStyle = DefaultTextStyle.of(context).style;
-    var authorTextStyle = textStyle.copyWith(fontWeight: FontWeight.bold);
+    final content = _post.content;
 
     if (_post.repeatOf != null) {
       return Column(
@@ -67,15 +63,17 @@ class StatusWidget extends StatelessWidget {
 
     InlineSpan renderedAuthor = TextRenderer(
       emojis: _post.author.emojis,
-      theme: authorTextTheme,
-    ).renderFromHtml(_post.author.displayName);
-    InlineSpan? renderedContent;
+      theme: rendererTheme,
+    ).renderFromHtml(context, _post.author.displayName);
 
-    if (_post.content.isNotNullOrEmpty) {
-      renderedContent = TextRenderer(
+    InlineSpan? renderedContent;
+    if (content != null) {
+      final renderer = TextRenderer(
         emojis: _post.emojis,
-        theme: postTextTheme,
-      ).renderFromHtml(_post.content!);
+        theme: rendererTheme,
+      );
+
+      renderedContent = renderer.renderFromHtml(context, content);
     }
 
     return FocusableActionDetector(
@@ -105,14 +103,15 @@ class StatusWidget extends StatelessWidget {
                 children: [
                   MetaBar(
                     renderedAuthor: renderedAuthor,
+                    authorTextStyle: authorTextStyle,
                     post: _post,
                     theme: theme,
                   ),
 
                   if (showParentPost && _post.replyToPostId != null)
-                    ReplyBar(textStyle: textStyle, post: _post),
+                    ReplyBar(post: _post),
 
-                  if (renderedContent != null) RichText(text: renderedContent),
+                  if (renderedContent != null) Text.rich(renderedContent),
 
                   if (_post.attachments != null)
                     AttachmentRow(
