@@ -11,14 +11,15 @@ import 'package:mdi/mdi.dart';
 
 typedef CredentialsCallback = void Function(
   String instance,
-  // ApiDefinition api,
   String username,
   String password,
 );
+
 typedef IdValidationCallback = String? Function(
   String? instance,
   String? username,
 );
+
 typedef FetchInstanceCallback = Future<Instance?> Function(String instance);
 
 const iconConstraint = BoxConstraints.tightFor(width: 48, height: 24);
@@ -67,17 +68,17 @@ class LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        PageTransitionSwitcher(
-          key: _transitionKey,
-          transitionBuilder: _buildTransition,
-          duration: const Duration(milliseconds: 750),
-          reverse: !showAuthentication,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(
-              left: 24.0,
-              right: 24.0,
-              top: 64.0,
-            ),
+        SingleChildScrollView(
+          padding: const EdgeInsets.only(
+            left: 24.0,
+            right: 24.0,
+            top: 64.0,
+          ),
+          child: PageTransitionSwitcher(
+            key: _transitionKey,
+            transitionBuilder: _buildTransition,
+            duration: const Duration(milliseconds: 750),
+            reverse: !showAuthentication,
             child: _buildPage(),
           ),
         ),
@@ -276,18 +277,6 @@ class __InstancePageState extends State<_InstancePage> {
 
     return instances.where((instance) {
       return instance.name.contains(pattern);
-    });
-  }
-
-  Iterable<InstanceData> _buildAutocompleteOptions(textEditingValue) {
-    final instances = _instances;
-
-    if (instances == null) {
-      return [];
-    }
-
-    return instances.where((instance) {
-      return instance.name.contains(textEditingValue.text);
     });
   }
 
