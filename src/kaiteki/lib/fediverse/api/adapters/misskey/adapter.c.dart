@@ -25,7 +25,7 @@ Post toPost(misskey.Note source) {
     replyToPostId: source.replyId,
     id: source.id,
     visibility: toVisibility(source.visibility),
-    attachments: source.files.map(toAttachment),
+    attachments: source.files?.map(toAttachment) ?? [],
   );
 }
 
@@ -49,8 +49,8 @@ Attachment toAttachment(misskey.DriveFile file) {
   return Attachment(
     source: file,
     description: file.name,
-    previewUrl: file.url,
-    url: file.url,
+    previewUrl: file.thumbnailUrl ?? file.url!,
+    url: file.url!,
   );
 }
 
@@ -78,7 +78,7 @@ User toUser(misskey.User source) {
   return User(
     source: source,
     username: source.username,
-    displayName: source.name, // ?? source.username
+    displayName: source.name ?? source.username,
     joinDate: source.createdAt,
     emojis: source.emojis.map(toEmoji),
     avatarUrl: source.avatarUrl,
