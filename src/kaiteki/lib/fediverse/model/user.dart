@@ -7,7 +7,7 @@ class User<T> {
   final T? source;
 
   /// The time that this user was created.
-  final DateTime joinDate;
+  final DateTime? joinDate;
 
   /// The user's birthday, if known.
   final DateTime? birthday;
@@ -41,10 +41,10 @@ class User<T> {
   const User({
     required this.id,
     required this.source,
-    required this.joinDate,
     required this.username,
     required this.displayName,
     required this.host,
+    this.joinDate,
     this.description,
     this.avatarUrl,
     this.bannerUrl,
