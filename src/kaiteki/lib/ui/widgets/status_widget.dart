@@ -347,18 +347,6 @@ class AttachmentRow extends StatelessWidget {
       ),
     );
   }
-
-  Widget getAttachmentWidget(Attachment attachment) {
-    var supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
-
-    if (attachment.type == AttachmentType.image) {
-      return ImageAttachmentWidget(attachment);
-    } else if (attachment.type == AttachmentType.video && supportsVideoPlayer) {
-      return VideoAttachmentWidget(attachment: attachment);
-    } else {
-      return FallbackAttachmentWidget(attachment: attachment);
-    }
-  }
 }
 
 void reply(BuildContext context, Post post) {
