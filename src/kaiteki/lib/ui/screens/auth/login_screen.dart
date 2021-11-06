@@ -239,16 +239,18 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) {
           return AlertDialog(
             title: const Text("Misskey is currently unsupported"),
-            content: RichText(
-              text: TextSpan(
-                text:
-                    "Kaiteki Web doesn't support Misskey at the moment because Kaiteki uses private API calls.\n"
+            content: Text.rich(
+              TextSpan(
+                text: "Kaiteki Web doesn't support Misskey at the moment"
+                    "because Kaiteki uses private API calls.\n"
                     "For more information please visit ",
                 style: Theme.of(context).textTheme.bodyText1,
                 children: [
                   TextSpan(
                     text: helpArticle,
-                    style: TextStyle(color: Theme.of(context).accentColor),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
                         await launch(helpArticle);

@@ -50,14 +50,17 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
                 if (!_bannerDismissed)
                   MaterialBanner(
                     leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).accentColor,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
                       child: Icon(
                         Mdi.exclamation,
                         color: Theme.of(context).colorScheme.onSecondary,
                       ),
                     ),
                     content: const Text(
-                        "This is a list of handpicked instances, recommended by developers of Kaiteki and every supported instance software."),
+                      "This is a list of handpicked instances, recommended by "
+                      "developers of Kaiteki and every supported instance "
+                      "software.",
+                    ),
                     forceActionsBelow: true,
                     actions: [
                       TextButton(
@@ -109,6 +112,7 @@ class InstanceData {
 
   factory InstanceData.fromJson(Map<String, dynamic> json) =>
       _$InstanceDataFromJson(json);
+
   Map<String, dynamic> toJson() => _$InstanceDataToJson(this);
 }
 
@@ -246,7 +250,8 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                             await launch(
                                 "https://github.com/pixeldesu/fediverse-friendly-moderation-covenant/blob/master/README.md");
                           },
-                          backgroundColor: Theme.of(context).accentColor,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
                           label: Text(
                             "Uses the Fediverse-Friendly Moderation Covenant",
                             style: TextStyle(

@@ -22,7 +22,7 @@ class MaterialAppTheme implements AppThemeSource {
       favoriteColor: Colors.orangeAccent.shade400,
       linkTextStyle: linkTextStyle ??
           TextStyle(
-            color: materialTheme.accentColor,
+            color: materialTheme.colorScheme.secondary,
           ),
       borderColor: materialTheme.dividerColor,
       textColor: materialTheme.textTheme.bodyText1!.color!,

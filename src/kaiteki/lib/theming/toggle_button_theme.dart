@@ -15,8 +15,9 @@ class ToggleButtonTheme {
   });
 
   ToggleButtonTheme.from(ThemeData materialTheme)
-      : inactiveBackground = materialTheme.cardColor,
-        activeBackground = materialTheme.accentColor,
-        inactiveTextStyle = materialTheme.textTheme.bodyText1!,
-        activeTextStyle = materialTheme.accentTextTheme.bodyText1!;
+      : inactiveBackground = materialTheme.colorScheme.surface,
+        activeBackground = materialTheme.colorScheme.secondary,
+        inactiveTextStyle =
+            TextStyle(color: materialTheme.colorScheme.onSurface),
+        activeTextStyle = TextStyle(color: materialTheme.colorScheme.secondary);
 }

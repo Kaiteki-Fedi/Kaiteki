@@ -25,7 +25,9 @@ class _SensitivePostFilteringScreenState
       body: ListView(
         children: [
           SwitchListTile(
-            tileColor: enabled ? theme.accentColor : theme.colorScheme.surface,
+            tileColor: enabled
+                ? theme.colorScheme.secondary
+                : theme.colorScheme.surface,
             activeColor: theme.colorScheme.onPrimary,
             title: Text(
               enabled ? 'On' : 'Off',
