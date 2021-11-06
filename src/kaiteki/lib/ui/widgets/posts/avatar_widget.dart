@@ -6,12 +6,17 @@ import 'package:mdi/mdi.dart';
 /// A tap-able avatar.
 class AvatarWidget extends StatelessWidget {
   final User _user;
-  final double? size;
+  final double size;
   final double? radius;
   final bool openOnTap;
 
-  const AvatarWidget(this._user,
-      {this.size = 48, this.radius, this.openOnTap = true});
+  const AvatarWidget(
+    this._user, {
+    Key? key,
+    this.size = 48,
+    this.radius,
+    this.openOnTap = true,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,8 @@ class AvatarWidget extends StatelessWidget {
   }
 
   Widget _getAvatarImageWidget(BuildContext context) {
+    final size = this.size;
+
     if (_user.avatarUrl == null) {
       return Icon(
         Mdi.accountCircle,
@@ -36,7 +43,7 @@ class AvatarWidget extends StatelessWidget {
     }
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(size! / 2),
+      borderRadius: BorderRadius.circular(size / 2),
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,

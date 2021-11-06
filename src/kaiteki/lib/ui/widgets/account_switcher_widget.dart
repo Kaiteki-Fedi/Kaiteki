@@ -50,7 +50,7 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
     return AvatarWidget(
       container.currentAccount.account,
       openOnTap: false,
-      size: widget.size,
+      size: widget.size ?? 48,
     );
   }
 }
