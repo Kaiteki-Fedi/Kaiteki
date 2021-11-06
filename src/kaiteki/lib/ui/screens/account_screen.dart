@@ -48,26 +48,22 @@ class _AccountScreenState extends State<AccountScreen>
             var tooSmall = constraints.minWidth < 600;
 
             return Scaffold(
-              body: NestedScrollView(
-                headerSliverBuilder: (_, __) => [
-                  buildSliverAppBar(
-                    isLoading,
-                    !(tooSmall || isLoading),
-                    snapshot,
+              body: TabBarView(
+                controller: _tabController,
+                children: [
+                  PostsPage(
+                    isLoading: isLoading,
+                    container: container,
+                    widget: widget,
                   ),
+                  Container(),
+                  Container(),
                 ],
-                body: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    PostsPage(
-                      isLoading: isLoading,
-                      container: container,
-                      widget: widget,
-                    ),
-                    Container(),
-                    Container(),
-                  ],
-                ),
+              ),
+              appBar: _buildAppBar(
+                isLoading,
+                !(tooSmall || isLoading),
+                snapshot,
               ),
             );
           },
@@ -76,13 +72,12 @@ class _AccountScreenState extends State<AccountScreen>
     );
   }
 
-  SliverAppBar buildSliverAppBar(
+  AppBar _buildAppBar(
     bool isLoading,
     bool showCountBadges,
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
-    return SliverAppBar(
-      pinned: true,
+    return AppBar(
       bottom: TabBar(
         tabs: [
           Tab(
@@ -171,7 +166,6 @@ class _AccountScreenState extends State<AccountScreen>
           if (isLoading) const LinearProgressIndicator(),
         ],
       ),
-      expandedHeight: 250,
       toolbarHeight: 54,
     );
   }
