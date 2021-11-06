@@ -211,11 +211,7 @@ class _PostFormState extends State<PostForm> {
     var snackBar = SnackBar(
       duration: const Duration(days: 1),
       content: FutureBuilder(
-        future: Future.delayed(
-          const Duration(seconds: 4),
-          () => Post.example(),
-        ),
-        //future: adapter.postStatus(_getPostDraft()),
+        future: adapter.postStatus(_getPostDraft()),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.state) {
             case AsyncSnapshotState.errored:
