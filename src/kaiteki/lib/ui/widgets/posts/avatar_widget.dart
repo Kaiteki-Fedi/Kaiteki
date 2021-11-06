@@ -45,7 +45,22 @@ class AvatarWidget extends StatelessWidget {
           _user.avatarUrl!,
           width: size,
           height: size,
+          errorBuilder: (context, _, __) => _buildFallback(context, size),
         ),
+      ),
+    );
+  }
+
+  Widget _buildFallback(context, size) {
+    final padding = size / 6;
+    final theme = Theme.of(context);
+
+    return Container(
+      color: theme.disabledColor,
+      padding: EdgeInsets.all(padding),
+      child: Icon(
+        Mdi.account,
+        size: size - (padding * 2),
       ),
     );
   }
