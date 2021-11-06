@@ -19,8 +19,7 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
 
   FediverseAdapter(this.client);
 
-  /// Retrieves the profile of the currently authenticated user. If null gets
-  /// provided we may assume there was an error.
+  /// Retrieves the profile of the currently authenticated user.
   Future<User> getMyself();
 
   /// Attempts to sign into an instance. Additionally, mfaCallback can be used
