@@ -1,14 +1,14 @@
+import 'package:flutter/material.dart';
+
 export 'package:kaiteki/utils/extensions/duration.dart';
 export 'package:kaiteki/utils/extensions/iterable.dart';
 export 'package:kaiteki/utils/extensions/string.dart';
 
-import 'package:flutter/material.dart';
-
-extension ObjectExtensions on Object? {
-  TO? nullTransform<TI, TO>(TO Function(TI object) function) {
+extension ObjectExtensions<T> on Object? {
+  T2? nullTransform<T2>(T2 Function(T object) function) {
     if (this == null) return null;
 
-    return function.call(this! as TI);
+    return function.call(this! as T);
   }
 }
 
