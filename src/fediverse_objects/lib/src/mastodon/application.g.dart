@@ -6,16 +6,14 @@ part of 'application.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Application _$ApplicationFromJson(Map<String, dynamic> json) {
-  return Application(
-    name: json['name'] as String,
-    website: json['website'] as String?,
-    vapidKey: json['vapid_key'] as String?,
-    clientId: json['client_id'] as String?,
-    clientSecret: json['client_secret'] as String?,
-    id: json['id'] as String?,
-  );
-}
+Application _$ApplicationFromJson(Map<String, dynamic> json) => Application(
+      name: json['name'] as String,
+      website: json['website'] as String?,
+      vapidKey: json['vapid_key'] as String?,
+      clientId: json['client_id'] as String?,
+      clientSecret: json['client_secret'] as String?,
+      id: json['id'] as String?,
+    );
 
 Map<String, dynamic> _$ApplicationToJson(Application instance) =>
     <String, dynamic>{

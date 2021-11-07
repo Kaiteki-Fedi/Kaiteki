@@ -5,18 +5,15 @@ part 'muting.g.dart';
 
 @JsonSerializable()
 class Muting {
-  /// The unique identifier for this muting.
   @JsonKey(name: 'id')
   final String id;
 
-  /// The date that the muting was created.
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
 
   @JsonKey(name: 'muteeId')
   final String muteeId;
 
-  /// The mutee.
   @JsonKey(name: 'mutee')
   final User mutee;
 
@@ -28,5 +25,6 @@ class Muting {
   });
 
   factory Muting.fromJson(Map<String, dynamic> json) => _$MutingFromJson(json);
+
   Map<String, dynamic> toJson() => _$MutingToJson(this);
 }

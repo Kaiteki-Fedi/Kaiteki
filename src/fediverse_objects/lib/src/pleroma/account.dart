@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'account.g.dart';
 
 @JsonSerializable()
-class Account {
+class PleromaAccount {
   @JsonKey(name: 'accepts_chat_messages')
   final bool? acceptsChatMessages;
 
@@ -64,7 +64,7 @@ class Account {
   @JsonKey(name: 'unread_conversation_count')
   final int? unreadConversationCount;
 
-  const Account(
+  const PleromaAccount(
     this.acceptsChatMessages,
     this.allowFollowingMove,
     //this.backgroundImage,
@@ -88,8 +88,8 @@ class Account {
     this.settingsStore,
   );
 
-  factory Account.fromJson(Map<String, dynamic> json) =>
-      _$AccountFromJson(json);
+  factory PleromaAccount.fromJson(Map<String, dynamic> json) =>
+      _$PleromaAccountFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AccountToJson(this);
+  Map<String, dynamic> toJson() => _$PleromaAccountToJson(this);
 }

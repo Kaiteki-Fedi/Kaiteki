@@ -1,5 +1,5 @@
 import 'package:fediverse_objects/mastodon.dart';
-import 'package:fediverse_objects/pleroma.dart' as p;
+import 'package:fediverse_objects/src/pleroma/status.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'status.g.dart';
@@ -60,7 +60,7 @@ class Status {
   /// Only appears if the status is pinnable.
   final bool? pinned;
 
-  final p.Status? pleroma;
+  final PleromaStatus? pleroma;
 
   /// The status being reblogged.
   final Status? reblog;

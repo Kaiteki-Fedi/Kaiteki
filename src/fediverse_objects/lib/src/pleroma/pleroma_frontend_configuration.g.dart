@@ -7,12 +7,11 @@ part of 'pleroma_frontend_configuration.dart';
 // **************************************************************************
 
 PleromaFrontendConfiguration _$PleromaFrontendConfigurationFromJson(
-    Map<String, dynamic> json) {
-  return PleromaFrontendConfiguration(
-    logo: json['logo'] as String,
-    background: json['background'] as String,
-  );
-}
+        Map<String, dynamic> json) =>
+    PleromaFrontendConfiguration(
+      logo: json['logo'] as String,
+      background: json['background'] as String,
+    );
 
 Map<String, dynamic> _$PleromaFrontendConfigurationToJson(
         PleromaFrontendConfiguration instance) =>

@@ -5,19 +5,15 @@ part 'note_reaction.g.dart';
 
 @JsonSerializable()
 class NoteReaction {
-  /// The unique identifier for this reaction.
   @JsonKey(name: 'id')
   final String id;
 
-  /// The date that the reaction was created.
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
 
-  /// User who performed this reaction.
   @JsonKey(name: 'user')
   final User user;
 
-  /// The reaction type.
   @JsonKey(name: 'type')
   final String type;
 
@@ -30,5 +26,6 @@ class NoteReaction {
 
   factory NoteReaction.fromJson(Map<String, dynamic> json) =>
       _$NoteReactionFromJson(json);
+
   Map<String, dynamic> toJson() => _$NoteReactionToJson(this);
 }

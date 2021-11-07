@@ -6,15 +6,14 @@ part of 'emoji_reaction.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-EmojiReaction _$EmojiReactionFromJson(Map<String, dynamic> json) {
-  return EmojiReaction(
-    accounts: (json['accounts'] as List<dynamic>)
-        .map((e) => mastodon.Account.fromJson(e as Map<String, dynamic>)),
-    count: json['count'] as int,
-    me: json['me'] as bool,
-    name: json['name'] as String,
-  );
-}
+EmojiReaction _$EmojiReactionFromJson(Map<String, dynamic> json) =>
+    EmojiReaction(
+      accounts: (json['accounts'] as List<dynamic>)
+          .map((e) => Account.fromJson(e as Map<String, dynamic>)),
+      count: json['count'] as int,
+      me: json['me'] as bool,
+      name: json['name'] as String,
+    );
 
 Map<String, dynamic> _$EmojiReactionToJson(EmojiReaction instance) =>
     <String, dynamic>{

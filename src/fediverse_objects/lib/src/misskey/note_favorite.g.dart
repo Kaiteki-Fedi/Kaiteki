@@ -6,14 +6,12 @@ part of 'note_favorite.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-NoteFavorite _$NoteFavoriteFromJson(Map<String, dynamic> json) {
-  return NoteFavorite(
-    id: json['id'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    note: Note.fromJson(json['note'] as Map<String, dynamic>),
-    noteId: json['noteId'] as String,
-  );
-}
+NoteFavorite _$NoteFavoriteFromJson(Map<String, dynamic> json) => NoteFavorite(
+      id: json['id'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      note: Note.fromJson(json['note'] as Map<String, dynamic>),
+      noteId: json['noteId'] as String,
+    );
 
 Map<String, dynamic> _$NoteFavoriteToJson(NoteFavorite instance) =>
     <String, dynamic>{

@@ -4,26 +4,23 @@ part 'channel.g.dart';
 
 @JsonSerializable()
 class Channel {
-  /// The unique identifier for this Channel.
   @JsonKey(name: 'id')
   final String id;
 
-  /// The date that the Channel was created.
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
 
   @JsonKey(name: 'lastNotedAt')
-  final DateTime lastNotedAt;
+  final DateTime? lastNotedAt;
 
-  /// The name of the Channel.
   @JsonKey(name: 'name')
   final String name;
 
   @JsonKey(name: 'description')
-  final String description;
+  final String? description;
 
   @JsonKey(name: 'bannerUrl')
-  final String bannerUrl;
+  final String? bannerUrl;
 
   @JsonKey(name: 'notesCount')
   final int notesCount;
@@ -32,25 +29,26 @@ class Channel {
   final int usersCount;
 
   @JsonKey(name: 'isFollowing')
-  final bool isFollowing;
+  final bool? isFollowing;
 
   @JsonKey(name: 'userId')
-  final String userId;
+  final String? userId;
 
   const Channel({
     required this.id,
     required this.createdAt,
-    required this.lastNotedAt,
+    this.lastNotedAt,
     required this.name,
-    required this.description,
-    required this.bannerUrl,
+    this.description,
+    this.bannerUrl,
     required this.notesCount,
     required this.usersCount,
     required this.isFollowing,
-    required this.userId,
+    this.userId,
   });
 
   factory Channel.fromJson(Map<String, dynamic> json) =>
       _$ChannelFromJson(json);
+
   Map<String, dynamic> toJson() => _$ChannelToJson(this);
 }

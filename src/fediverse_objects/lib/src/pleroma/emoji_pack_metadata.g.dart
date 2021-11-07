@@ -6,18 +6,17 @@ part of 'emoji_pack_metadata.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-EmojiPackMetadata _$EmojiPackMetadataFromJson(Map<String, dynamic> json) {
-  return EmojiPackMetadata(
-    canDownload: json['can-download'] as bool,
-    description: json['description'] as String,
-    downloadSha256: json['download-sha256'] as String,
-    fallbackSource: json['fallback-src'] as String,
-    fallbackSourceSha256: json['fallback-src-sha256'] as String,
-    homepage: json['homepage'] as String,
-    license: json['license'] as String,
-    shareFiles: json['share-files'] as bool,
-  );
-}
+EmojiPackMetadata _$EmojiPackMetadataFromJson(Map<String, dynamic> json) =>
+    EmojiPackMetadata(
+      canDownload: json['can-download'] as bool,
+      description: json['description'] as String,
+      downloadSha256: json['download-sha256'] as String,
+      fallbackSource: json['fallback-src'] as String,
+      fallbackSourceSha256: json['fallback-src-sha256'] as String,
+      homepage: json['homepage'] as String,
+      license: json['license'] as String,
+      shareFiles: json['share-files'] as bool,
+    );
 
 Map<String, dynamic> _$EmojiPackMetadataToJson(EmojiPackMetadata instance) =>
     <String, dynamic>{

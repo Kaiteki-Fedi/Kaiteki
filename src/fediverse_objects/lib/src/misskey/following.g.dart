@@ -6,16 +6,18 @@ part of 'following.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Following _$FollowingFromJson(Map<String, dynamic> json) {
-  return Following(
-    id: json['id'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    followeeId: json['followeeId'] as String,
-    followee: User.fromJson(json['followee'] as Map<String, dynamic>),
-    followerId: json['followerId'] as String,
-    follower: User.fromJson(json['follower'] as Map<String, dynamic>),
-  );
-}
+Following _$FollowingFromJson(Map<String, dynamic> json) => Following(
+      id: json['id'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      followeeId: json['followeeId'] as String,
+      followee: json['followee'] == null
+          ? null
+          : User.fromJson(json['followee'] as Map<String, dynamic>),
+      followerId: json['followerId'] as String,
+      follower: json['follower'] == null
+          ? null
+          : User.fromJson(json['follower'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$FollowingToJson(Following instance) => <String, dynamic>{
       'id': instance.id,

@@ -6,13 +6,12 @@ part of 'instance_statistics.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-InstanceStatistics _$InstanceStatisticsFromJson(Map<String, dynamic> json) {
-  return InstanceStatistics(
-    userCount: json['user_count'] as int,
-    statusCount: json['status_count'] as int,
-    domainCount: json['domain_count'] as int,
-  );
-}
+InstanceStatistics _$InstanceStatisticsFromJson(Map<String, dynamic> json) =>
+    InstanceStatistics(
+      userCount: json['user_count'] as int,
+      statusCount: json['status_count'] as int,
+      domainCount: json['domain_count'] as int,
+    );
 
 Map<String, dynamic> _$InstanceStatisticsToJson(InstanceStatistics instance) =>
     <String, dynamic>{

@@ -21,7 +21,7 @@ class Page {
   final String name;
 
   @JsonKey(name: 'summary')
-  final String summary;
+  final String? summary;
 
   @JsonKey(name: 'content')
   final Iterable<dynamic> content;
@@ -41,7 +41,7 @@ class Page {
     required this.updatedAt,
     required this.title,
     required this.name,
-    required this.summary,
+    this.summary,
     required this.content,
     required this.variables,
     required this.userId,
@@ -49,5 +49,6 @@ class Page {
   });
 
   factory Page.fromJson(Map<String, dynamic> json) => _$PageFromJson(json);
+
   Map<String, dynamic> toJson() => _$PageToJson(this);
 }

@@ -32,7 +32,7 @@ class FederationInstance {
   final int driveFiles;
 
   @JsonKey(name: 'latestRequestSentAt')
-  final DateTime latestRequestSentAt;
+  final DateTime? latestRequestSentAt;
 
   @JsonKey(name: 'lastCommunicatedAt')
   final DateTime lastCommunicatedAt;
@@ -44,31 +44,31 @@ class FederationInstance {
   final bool isSuspended;
 
   @JsonKey(name: 'softwareName')
-  final String softwareName;
+  final String? softwareName;
 
   @JsonKey(name: 'softwareVersion')
-  final String softwareVersion;
+  final String? softwareVersion;
 
   @JsonKey(name: 'openRegistrations')
-  final bool openRegistrations;
+  final bool? openRegistrations;
 
   @JsonKey(name: 'name')
-  final String name;
+  final String? name;
 
   @JsonKey(name: 'description')
-  final String description;
+  final String? description;
 
   @JsonKey(name: 'maintainerName')
-  final String maintainerName;
+  final String? maintainerName;
 
   @JsonKey(name: 'maintainerEmail')
-  final String maintainerEmail;
+  final String? maintainerEmail;
 
   @JsonKey(name: 'iconUrl')
-  final String iconUrl;
+  final String? iconUrl;
 
   @JsonKey(name: 'infoUpdatedAt')
-  final DateTime infoUpdatedAt;
+  final DateTime? infoUpdatedAt;
 
   const FederationInstance({
     required this.id,
@@ -80,22 +80,23 @@ class FederationInstance {
     required this.followersCount,
     required this.driveUsage,
     required this.driveFiles,
-    required this.latestRequestSentAt,
+    this.latestRequestSentAt,
     required this.lastCommunicatedAt,
     required this.isNotResponding,
     required this.isSuspended,
-    required this.softwareName,
-    required this.softwareVersion,
-    required this.openRegistrations,
-    required this.name,
-    required this.description,
-    required this.maintainerName,
-    required this.maintainerEmail,
-    required this.iconUrl,
-    required this.infoUpdatedAt,
+    this.softwareName,
+    this.softwareVersion,
+    this.openRegistrations,
+    this.name,
+    this.description,
+    this.maintainerName,
+    this.maintainerEmail,
+    this.iconUrl,
+    this.infoUpdatedAt,
   });
 
   factory FederationInstance.fromJson(Map<String, dynamic> json) =>
       _$FederationInstanceFromJson(json);
+
   Map<String, dynamic> toJson() => _$FederationInstanceToJson(this);
 }

@@ -6,26 +6,28 @@ part of 'drive_file.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DriveFile _$DriveFileFromJson(Map<String, dynamic> json) {
-  return DriveFile(
-    id: json['id'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    name: json['name'] as String,
-    type: json['type'] as String,
-    md5: json['md5'] as String,
-    size: json['size'] as int,
-    isSensitive: json['isSensitive'] as bool,
-    blurhash: json['blurhash'] as String,
-    properties: json['properties'] as Map<String, dynamic>,
-    url: json['url'] as String,
-    thumbnailUrl: json['thumbnailUrl'] as String,
-    comment: json['comment'] as String,
-    folderId: json['folderId'] as String,
-    folder: DriveFolder.fromJson(json['folder'] as Map<String, dynamic>),
-    userId: json['userId'] as String,
-    user: User.fromJson(json['user'] as Map<String, dynamic>),
-  );
-}
+DriveFile _$DriveFileFromJson(Map<String, dynamic> json) => DriveFile(
+      id: json['id'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      name: json['name'] as String,
+      type: json['type'] as String,
+      md5: json['md5'] as String,
+      size: json['size'] as int,
+      isSensitive: json['isSensitive'] as bool,
+      blurhash: json['blurhash'] as String?,
+      properties: json['properties'] as Map<String, dynamic>,
+      url: json['url'] as String?,
+      thumbnailUrl: json['thumbnailUrl'] as String?,
+      comment: json['comment'] as String?,
+      folderId: json['folderId'] as String?,
+      folder: json['folder'] == null
+          ? null
+          : DriveFolder.fromJson(json['folder'] as Map<String, dynamic>),
+      userId: json['userId'] as String?,
+      user: json['user'] == null
+          ? null
+          : User.fromJson(json['user'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$DriveFileToJson(DriveFile instance) => <String, dynamic>{
       'id': instance.id,

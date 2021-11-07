@@ -6,17 +6,15 @@ part of 'clip.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Clip _$ClipFromJson(Map<String, dynamic> json) {
-  return Clip(
-    id: json['id'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    userId: json['userId'] as String,
-    user: User.fromJson(json['user'] as Map<String, dynamic>),
-    name: json['name'] as String,
-    description: json['description'] as String,
-    isPublic: json['isPublic'] as bool,
-  );
-}
+Clip _$ClipFromJson(Map<String, dynamic> json) => Clip(
+      id: json['id'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      userId: json['userId'] as String,
+      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      name: json['name'] as String,
+      description: json['description'] as String?,
+      isPublic: json['isPublic'] as bool,
+    );
 
 Map<String, dynamic> _$ClipToJson(Clip instance) => <String, dynamic>{
       'id': instance.id,

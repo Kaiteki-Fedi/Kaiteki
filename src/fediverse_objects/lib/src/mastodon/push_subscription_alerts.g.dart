@@ -7,15 +7,14 @@ part of 'push_subscription_alerts.dart';
 // **************************************************************************
 
 PushSubscriptionAlerts _$PushSubscriptionAlertsFromJson(
-    Map<String, dynamic> json) {
-  return PushSubscriptionAlerts(
-    favourite: json['favourite'] as bool,
-    follow: json['follow'] as bool,
-    mention: json['mention'] as bool,
-    poll: json['poll'] as bool,
-    reblog: json['reblog'] as bool,
-  );
-}
+        Map<String, dynamic> json) =>
+    PushSubscriptionAlerts(
+      favourite: json['favourite'] as bool,
+      follow: json['follow'] as bool,
+      mention: json['mention'] as bool,
+      poll: json['poll'] as bool,
+      reblog: json['reblog'] as bool,
+    );
 
 Map<String, dynamic> _$PushSubscriptionAlertsToJson(
         PushSubscriptionAlerts instance) =>

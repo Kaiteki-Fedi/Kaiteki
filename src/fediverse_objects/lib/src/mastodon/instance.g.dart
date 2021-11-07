@@ -6,33 +6,31 @@ part of 'instance.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Instance _$InstanceFromJson(Map<String, dynamic> json) {
-  return Instance(
-    uri: json['uri'] as String,
-    title: json['title'] as String,
-    description: json['description'] as String,
-    email: json['email'] as String,
-    version: json['version'] as String,
-    languages: (json['languages'] as List<dynamic>).map((e) => e as String),
-    registrations: json['registrations'] as bool,
-    approvalRequired: json['approval_required'] as bool,
-    urls: InstanceUrls.fromJson(json['urls'] as Map<String, dynamic>),
-    stats: InstanceStatistics.fromJson(json['stats'] as Map<String, dynamic>),
-    shortDescription: json['shortDescription'] as String?,
-    invitesEnabled: json['invites_enabled'] as bool?,
-    thumbnail: json['thumbnail'] as String?,
-    contactAccount: json['contact_account'] == null
-        ? null
-        : Account.fromJson(json['contact_account'] as Map<String, dynamic>),
-    avatarUploadLimit: json['avatar_upload_limit'] as int?,
-    backgroundImage: json['background_image'] as String?,
-    backgroundUploadLimit: json['background_upload_limit'] as int?,
-    bannerUploadLimit: json['banner_upload_limit'] as int?,
-    maxTootChars: json['max_toot_chars'] as int?,
-    pollLimits: json['poll_limits'],
-    uploadLimit: json['upload_limit'] as int?,
-  );
-}
+Instance _$InstanceFromJson(Map<String, dynamic> json) => Instance(
+      uri: json['uri'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      email: json['email'] as String,
+      version: json['version'] as String,
+      languages: (json['languages'] as List<dynamic>).map((e) => e as String),
+      registrations: json['registrations'] as bool,
+      approvalRequired: json['approval_required'] as bool,
+      urls: InstanceUrls.fromJson(json['urls'] as Map<String, dynamic>),
+      stats: InstanceStatistics.fromJson(json['stats'] as Map<String, dynamic>),
+      shortDescription: json['shortDescription'] as String?,
+      invitesEnabled: json['invites_enabled'] as bool?,
+      thumbnail: json['thumbnail'] as String?,
+      contactAccount: json['contact_account'] == null
+          ? null
+          : Account.fromJson(json['contact_account'] as Map<String, dynamic>),
+      avatarUploadLimit: json['avatar_upload_limit'] as int?,
+      backgroundImage: json['background_image'] as String?,
+      backgroundUploadLimit: json['background_upload_limit'] as int?,
+      bannerUploadLimit: json['banner_upload_limit'] as int?,
+      maxTootChars: json['max_toot_chars'] as int?,
+      pollLimits: json['poll_limits'],
+      uploadLimit: json['upload_limit'] as int?,
+    );
 
 Map<String, dynamic> _$InstanceToJson(Instance instance) => <String, dynamic>{
       'avatar_upload_limit': instance.avatarUploadLimit,

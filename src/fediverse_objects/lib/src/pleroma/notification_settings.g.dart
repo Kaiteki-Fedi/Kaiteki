@@ -6,12 +6,12 @@ part of 'notification_settings.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-NotificationSettings _$NotificationSettingsFromJson(Map<String, dynamic> json) {
-  return NotificationSettings(
-    json['block_from_strangers'] as bool,
-    json['hide_notification_contents'] as bool,
-  );
-}
+NotificationSettings _$NotificationSettingsFromJson(
+        Map<String, dynamic> json) =>
+    NotificationSettings(
+      json['block_from_strangers'] as bool,
+      json['hide_notification_contents'] as bool,
+    );
 
 Map<String, dynamic> _$NotificationSettingsToJson(
         NotificationSettings instance) =>

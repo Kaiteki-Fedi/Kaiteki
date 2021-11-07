@@ -5,27 +5,23 @@ part 'following.g.dart';
 
 @JsonSerializable()
 class Following {
-  /// The unique identifier for this following.
   @JsonKey(name: 'id')
   final String id;
 
-  /// The date that the following was created.
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
 
   @JsonKey(name: 'followeeId')
   final String followeeId;
 
-  /// The followee.
   @JsonKey(name: 'followee')
-  final User followee;
+  final User? followee;
 
   @JsonKey(name: 'followerId')
   final String followerId;
 
-  /// The follower.
   @JsonKey(name: 'follower')
-  final User follower;
+  final User? follower;
 
   const Following({
     required this.id,

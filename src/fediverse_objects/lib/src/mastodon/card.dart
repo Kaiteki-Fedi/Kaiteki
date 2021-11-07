@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/pleroma.dart' as p;
+import 'package:fediverse_objects/src/pleroma/card.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'card.g.dart';
@@ -9,7 +9,7 @@ class Card {
 
   final String? image;
 
-  final p.Card pleroma;
+  final PleromaCard pleroma;
 
   @JsonKey(name: 'provider_name')
   final String providerName;

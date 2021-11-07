@@ -6,14 +6,12 @@ part of 'blocking.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Blocking _$BlockingFromJson(Map<String, dynamic> json) {
-  return Blocking(
-    id: json['id'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    blockeeId: json['blockeeId'] as String,
-    blockee: User.fromJson(json['blockee'] as Map<String, dynamic>),
-  );
-}
+Blocking _$BlockingFromJson(Map<String, dynamic> json) => Blocking(
+      id: json['id'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      blockeeId: json['blockeeId'] as String,
+      blockee: User.fromJson(json['blockee'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$BlockingToJson(Blocking instance) => <String, dynamic>{
       'id': instance.id,

@@ -33,5 +33,6 @@ class QueueCount {
 
   factory QueueCount.fromJson(Map<String, dynamic> json) =>
       _$QueueCountFromJson(json);
+
   Map<String, dynamic> toJson() => _$QueueCountToJson(this);
 }

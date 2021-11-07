@@ -5,18 +5,15 @@ part 'blocking.g.dart';
 
 @JsonSerializable()
 class Blocking {
-  /// The unique identifier for this blocking.
   @JsonKey(name: 'id')
   final String id;
 
-  /// The date that the blocking was created.
   @JsonKey(name: 'createdAt')
   final DateTime createdAt;
 
   @JsonKey(name: 'blockeeId')
   final String blockeeId;
 
-  /// The blockee.
   @JsonKey(name: 'blockee')
   final User blockee;
 
@@ -29,5 +26,6 @@ class Blocking {
 
   factory Blocking.fromJson(Map<String, dynamic> json) =>
       _$BlockingFromJson(json);
+
   Map<String, dynamic> toJson() => _$BlockingToJson(this);
 }

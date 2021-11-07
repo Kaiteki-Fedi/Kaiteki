@@ -6,16 +6,14 @@ part of 'queue_count.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-QueueCount _$QueueCountFromJson(Map<String, dynamic> json) {
-  return QueueCount(
-    waiting: json['waiting'] as int,
-    active: json['active'] as int,
-    completed: json['completed'] as int,
-    failed: json['failed'] as int,
-    delayed: json['delayed'] as int,
-    paused: json['paused'] as int,
-  );
-}
+QueueCount _$QueueCountFromJson(Map<String, dynamic> json) => QueueCount(
+      waiting: json['waiting'] as int,
+      active: json['active'] as int,
+      completed: json['completed'] as int,
+      failed: json['failed'] as int,
+      delayed: json['delayed'] as int,
+      paused: json['paused'] as int,
+    );
 
 Map<String, dynamic> _$QueueCountToJson(QueueCount instance) =>
     <String, dynamic>{

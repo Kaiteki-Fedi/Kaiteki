@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/src/mastodon/account.dart' as mastodon;
+import 'package:fediverse_objects/src/mastodon/account.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'emoji_reaction.g.dart';
@@ -6,7 +6,7 @@ part 'emoji_reaction.g.dart';
 @JsonSerializable()
 class EmojiReaction {
   /// Array of accounts reacted with this emoji
-  final Iterable<mastodon.Account> accounts;
+  final Iterable<Account> accounts;
 
   /// Count of reactions with this emoji
   final int count;
