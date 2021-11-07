@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
-import 'package:kaiteki/ui/pages/chats_page.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
 import 'package:kaiteki/ui/screens/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
@@ -68,7 +67,12 @@ class _MainScreenState extends State<MainScreen> {
           text: Text("Not implemented yet..."),
         ),
       ),
-      ChatsPage(key: _chatsKey),
+      const Center(
+        child: IconLandingWidget(
+          icon: Icon(Mdi.dotsHorizontal),
+          text: Text("Not implemented yet..."),
+        ),
+      ),
     ];
   }
 
