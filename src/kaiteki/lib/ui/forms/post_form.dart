@@ -13,10 +13,9 @@ import 'package:kaiteki/fediverse/model/visibility.dart' as v;
 import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/async_snackbar_content.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
-import 'package:kaiteki/ui/widgets/formatting_button.dart';
+import 'package:kaiteki/ui/widgets/enum_icon_button.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
-import 'package:kaiteki/ui/widgets/visibility_button.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -77,15 +76,18 @@ class _PostFormState extends State<PostForm> {
   void initState() {
     super.initState();
 
-    _typingTimer = RestartableTimer(const Duration(seconds: 1), () {
-      _typingTimer.cancel();
-      setState(() {});
-    });
+    _typingTimer = RestartableTimer(
+      const Duration(seconds: 1),
+      () {
+        _typingTimer.cancel();
+        setState(() {});
+      },
+    );
 
     _bodyController = TextEditingController()..addListener(_typingTimer.reset);
 
-    _subjectController = TextEditingController()
-      ..addListener(_typingTimer.reset);
+    _subjectController = TextEditingController();
+    _subjectController.addListener(_typingTimer.reset);
   }
 
   @override
@@ -161,13 +163,21 @@ class _PostFormState extends State<PostForm> {
                 splashRadius: 20,
                 tooltip: "Attach",
               ),
-              VisibilityButton(
-                visibility: _visibility,
-                callback: (value) => setState(() => _visibility = value),
+              EnumIconButton<v.Visibility>(
+                tooltip: 'Change post scope',
+                onChanged: (value) => setState(() => _visibility = value),
+                value: _visibility,
+                values: v.Visibility.values,
+                iconBuilder: (value) => Icon(value.toIconData()),
+                textBuilder: (value) => Text(value.toHumanString()),
               ),
-              FormattingButton(
-                formatting: _formatting,
-                callback: (value) => setState(() => _formatting = value),
+              EnumIconButton<Formatting>(
+                tooltip: 'Change formatting',
+                onChanged: (value) => setState(() => _formatting = value),
+                value: _formatting,
+                values: Formatting.values,
+                iconBuilder: (value) => Icon(value.toIconData()),
+                textBuilder: (value) => Text(value.toHumanString()),
               ),
               IconButton(
                 onPressed: () => openEmojiPicker(context, manager),
