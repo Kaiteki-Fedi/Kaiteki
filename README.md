@@ -1,5 +1,7 @@
 # Kaiteki
 
+[![Translation status](http://wl.craftplacer.moe/widgets/kaiteki/-/app/svg-badge.svg)](http://wl.craftplacer.moe/engage/kaiteki/)
+
 <img align="right" src="assets/icons/windows/kaiteki.png" width=100>
 
 A [快適 (kaiteki)](http://takoboto.jp/?w=1200120) Fediverse client for microblogging instances, made with [Flutter](https://flutter.dev/) and [Dart](https://dart.dev/).
