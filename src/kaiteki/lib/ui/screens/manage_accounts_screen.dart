@@ -32,8 +32,8 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
                   const Padding(
                     padding: EdgeInsets.only(bottom: 16.0),
                     child: IconLandingWidget(
-                      Mdi.accountOutline,
-                      'No accounts',
+                      icon: Icon(Mdi.accountOutline),
+                      text: Text('No accounts'),
                     ),
                   ),
                   OutlinedButton.icon(

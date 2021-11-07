@@ -4,29 +4,34 @@ import 'package:flutter/rendering.dart';
 // TODO Provide defaults of widgets being used (Icon, Text) and give the user
 //       flexibility of using other widgets.
 class IconLandingWidget extends StatelessWidget {
-  final IconData icon;
-  final String text;
+  final Icon icon;
+  final Text text;
+  final double spacing;
 
-  const IconLandingWidget(this.icon, this.text, {Key? key}) : super(key: key);
+  const IconLandingWidget({
+    Key? key,
+    this.spacing = 6.0,
+    required this.icon,
+    required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
+    final color = theme.dividerColor;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          color: theme.dividerColor,
-          size: 96,
+        IconTheme(
+          data: IconThemeData(color: color, size: 72),
+          child: icon,
         ),
-        Text(
-          text,
-          style: TextStyle(
-            color: theme.textTheme.bodyText1?.color?.withOpacity(.75),
-            fontWeight: FontWeight.bold,
-          ),
+        SizedBox(height: spacing),
+        DefaultTextStyle(
+          style: TextStyle(color: color),
+          child: text,
         ),
       ],
     );

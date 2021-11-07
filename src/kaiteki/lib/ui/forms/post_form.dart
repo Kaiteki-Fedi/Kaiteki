@@ -208,8 +208,8 @@ class _PostFormState extends State<PostForm> {
             padding: const EdgeInsets.all(8.0),
             child: Center(
               child: IconLandingWidget(
-                Mdi.close,
-                snapshot.error.toString(),
+                icon: const Icon(Mdi.close),
+                text: Text(snapshot.error.toString()),
               ),
             ),
           );

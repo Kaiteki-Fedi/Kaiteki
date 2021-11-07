@@ -22,8 +22,8 @@ class _TimelinePageState extends State<TimelinePage> {
     if (!container.loggedIn) {
       return const Center(
         child: IconLandingWidget(
-          Mdi.key,
-          'You need to be signed in to view your timeline',
+          icon: Icon(Mdi.key),
+          text: Text('You need to be signed in to view your timeline'),
         ),
       );
     }
