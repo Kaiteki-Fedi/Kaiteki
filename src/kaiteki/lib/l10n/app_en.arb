@@ -1,16 +1,28 @@
 {
   "apiTypeDialog_title": "Couldn't detect instance type",
+  "@apiTypeDialog_title": {},
   "apiTypeDialog_description": "Kaiteki tried to find out what software the instance is running but couldn't figure it out. Please select the correct instance backend from down below.",
+  "@apiTypeDialog_description": {},
   "apiTypeDialog_missing": "Is something missing?",
+  "@apiTypeDialog_missing": {},
   "mfaTitle": "Two-Factor-Authentication",
+  "@mfaTitle": {},
   "mfaNoCode": "Please enter a code",
+  "@mfaNoCode": {},
   "okButtonLabel": "OK",
+  "@okButtonLabel": {},
   "cancelButtonLabel": "Cancel",
+  "@cancelButtonLabel": {},
   "verifyButtonLabel": "Verify",
+  "@verifyButtonLabel": {},
   "removeButtonLabel": "Remove",
+  "@removeButtonLabel": {},
   "viewPostButtonLabel": "View Post",
+  "@viewPostButtonLabel": {},
   "continueAnywayButtonLabel": "Continue anyway",
+  "@continueAnywayButtonLabel": {},
   "abortButtonLabel": "Abort",
+  "@abortButtonLabel": {},
   "sharedBackendFunctionality": "These are the features that both {api} and Kaiteki support:",
   "@sharedBackendFunctionality": {
     "placeholders": {
@@ -21,12 +33,19 @@
     }
   },
   "reactionSupport": "Reactions",
+  "@reactionSupport": {},
   "chatSupport": "Chats",
+  "@chatSupport": {},
   "previewSupport": "Post previews",
+  "@previewSupport": {},
   "discoverInstancesButtonLabel": "Discover instances",
+  "@discoverInstancesButtonLabel": {},
   "discoverInstancesTitle": "Discover Instances",
+  "@discoverInstancesTitle": {},
   "discoverInstancesDisclaimer": "This is a list of handpicked instances, recommended by the developers of Kaiteki and every supported instance software.",
+  "@discoverInstancesDisclaimer": {},
   "chooseButtonLabel": "Choose",
+  "@chooseButtonLabel": {},
   "runsOn": "Runs on {api}",
   "@runsOn": {
     "placeholders": {
@@ -37,10 +56,15 @@
     }
   },
   "usesFediverseCovenant": "Uses the Fediverse-Friendly Moderation Covenant",
+  "@usesFediverseCovenant": {},
   "visibilityButtonTooltip": "Change post scope",
+  "@visibilityButtonTooltip": {},
   "attachButtonTooltip": "Attach",
+  "@attachButtonTooltip": {},
   "emojiButtonTooltip": "Insert emoji",
-  "formattingButtonTooltip": "CHange formatting",
+  "@emojiButtonTooltip": {},
+  "formattingButtonTooltip": "Change formatting",
+  "@formattingButtonTooltip": {},
   "aboutInstanceTitle": "About {instance}",
   "@aboutInstanceTitle": {
     "placeholders": {
@@ -60,6 +84,8 @@
     }
   },
   "loginButtonLabel": "Login",
+  "@loginButtonLabel": {},
+  "featureSupported": "{feature} are supported",
   "@featureSupported": {
     "placeholders": {
       "feature": {
@@ -68,7 +94,7 @@
       }
     }
   },
-  "featureSupported": "{feature} are supported",
+  "featureUnsupported": "{feature} are not supported",
   "@featureUnsupported": {
     "placeholders": {
       "feature": {
@@ -77,15 +103,24 @@
       }
     }
   },
-  "featureUnsupported": "{feature} are not supported",
   "rules": "Rules",
+  "@rules": {},
   "rulesLearnMore": "Learn more about the rules",
+  "@rulesLearnMore": {},
   "postPreviewTitle": "Preview",
+  "@postPreviewTitle": {},
   "postPreviewWaiting": "Start writing a post to see a preview!",
+  "@postPreviewWaiting": {},
   "composeBodyHint": "Just landed in L.A.",
+  "@composeBodyHint": {},
   "composeSubjectHint": "Subject (optional)",
+  "@composeSubjectHint": {},
   "postSubmissionFailed": "Post failed to send",
+  "@postSubmissionFailed": {},
   "postSubmissionSending": "Sending post",
+  "@postSubmissionSending": {},
   "postSubmissionSent": "Post sent",
-  "submitButtonTooltip": "Submit"
+  "@postSubmissionSent": {},
+  "submitButtonTooltip": "Submit",
+  "@submitButtonTooltip": {}
 }
