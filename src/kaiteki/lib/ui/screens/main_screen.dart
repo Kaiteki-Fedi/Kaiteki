@@ -1,42 +1,32 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/ui/forms/post_form.dart';
+import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
+import 'package:kaiteki/ui/pages/chats_page.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
 import 'package:kaiteki/ui/screens/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final _chatsKey = UniqueKey();
+  final _timelineKey = UniqueKey();
+  late final List<Widget> _pages;
   late final List<_MainScreenTab> _tabs;
-  final _pageController = PageController();
   var _currentPage = 0;
-  var pageViewKey = UniqueKey();
-  static const pages = [
-    TimelinePage(key: ValueKey(0)),
-    Center(
-      child: IconLandingWidget(
-        Mdi.dotsHorizontal,
-        "Not implemented yet...",
-      ),
-    ),
-    Center(
-      child: IconLandingWidget(
-        Mdi.dotsHorizontal,
-        "Not implemented yet...",
-      ),
-    ),
-  ];
 
   @override
   void initState() {
@@ -44,7 +34,8 @@ class _MainScreenState extends State<MainScreen> {
 
     _tabs = [
       _MainScreenTab(
-        icon: Mdi.home,
+        selectedIcon: Icons.home,
+        icon: Icons.home_outlined,
         text: 'Timeline',
         fab: _FloatingActionButtonData(
           icon: Mdi.pencil,
@@ -54,7 +45,8 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       const _MainScreenTab(
-        icon: Mdi.bell,
+        selectedIcon: Icons.notifications_rounded,
+        icon: Icons.notifications_none,
         text: "Notifications",
         //fabTooltip: "Mark all as read",
         //fabText: "Read",
@@ -62,12 +54,21 @@ class _MainScreenState extends State<MainScreen> {
         //fabOnTap: () {},
       ),
       const _MainScreenTab(
-        icon: Mdi.forum,
+        selectedIcon: Icons.forum,
+        icon: Icons.forum_outlined,
         text: "Chats",
-        //fabTooltip: 'New chat',
-        //fabIcon: Mdi.plus,
-        //fabText: "New",
       ),
+    ];
+
+    _pages = [
+      TimelinePage(key: _timelineKey),
+      const Center(
+        child: IconLandingWidget(
+          icon: Icon(Mdi.dotsHorizontal),
+          text: Text("Not implemented yet..."),
+        ),
+      ),
+      ChatsPage(key: _chatsKey),
     ];
   }
 
@@ -81,77 +82,82 @@ class _MainScreenState extends State<MainScreen> {
       },
       actions: {
         NewPostIntent: CallbackAction(
-          onInvoke: (e) => onComposeStatus(context, null),
+          onInvoke: (e) => context.showPostDialog(),
         ),
       },
       child: LayoutBuilder(
         builder: (_, constraints) {
           var desktopMode = Constants.desktopThreshold <= constraints.maxWidth;
           if (desktopMode) {
-            return buildDesktopView(appName);
+            return _buildDesktopView(appName);
           } else {
-            return buildMobileView(appName);
+            return _buildMobileView(appName);
           }
         },
       ),
     );
   }
 
-  Widget buildDesktopView(String appName) {
+  Widget _buildDesktopView(String appName) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           appName,
           style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
         ),
-        actions: const [AccountSwitcherWidget(size: 40)],
+        actions: _buildAppBarActions(context),
       ),
       body: Row(
         children: [
           NavigationRail(
             selectedIndex: _currentPage,
             onDestinationSelected: (x) => changePage(x),
+            extended: false,
+            labelType: NavigationRailLabelType.none,
+            minWidth: 56,
+            leading: _buildComposeFab(context),
             destinations: [
               for (var tab in _tabs)
                 NavigationRailDestination(
                   icon: Icon(tab.icon),
+                  selectedIcon: Icon(tab.selectedIcon),
                   label: Text(tab.text),
                 ),
-              const NavigationRailDestination(
-                icon: Icon(Mdi.cog),
-                label: Text("Settings"),
-              ),
             ],
           ),
           const VerticalDivider(thickness: 1, width: 1),
-          Expanded(child: getPageView()),
+          Expanded(child: _getPage()),
         ],
       ),
-      floatingActionButton: getFabDesktop(context, _currentPage),
     );
   }
 
-  Widget buildMobileView(String appName) {
+  List<Widget> _buildAppBarActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.settings),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => SettingsScreen()),
+        ),
+        tooltip: "Settings",
+      ),
+      const AccountSwitcherWidget(size: 40),
+    ];
+  }
+
+  Widget _buildMobileView(String appName) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           appName,
           style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => SettingsScreen()),
-            ),
-          ),
-          const AccountSwitcherWidget(size: 40),
-        ],
+        actions: _buildAppBarActions(context),
       ),
-      body: getPageView(),
+      body: _getPage(),
       bottomNavigationBar: getNavigationBar(),
-      floatingActionButton: getFab(context, _currentPage),
+      floatingActionButton: getFab(context, _currentPage, false),
     );
   }
 
@@ -164,7 +170,7 @@ class _MainScreenState extends State<MainScreen> {
       i++;
 
       return ListTile(
-        leading: Icon(tab.icon),
+        leading: Icon(tab.selectedIcon),
         title: Text(tab.text),
         selected: _currentPage == x,
         onTap: () => changePage(x),
@@ -172,98 +178,89 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  getPageView() {
-    return PageView(
-      controller: _pageController,
-      physics: const NeverScrollableScrollPhysics(),
-      key: pageViewKey,
-      children: pages,
+  _getPage() {
+    return PageTransitionSwitcher(
+      duration: const Duration(milliseconds: 300),
+      transitionBuilder: animations.fadeThrough,
+      child: _pages[_currentPage],
     );
   }
 
-  getNavigationBar() {
-    if (_tabs.length < 2) return null;
+  BottomNavigationBar? getNavigationBar() {
+    if (_tabs.length < 2) {
+      return null;
+    }
 
     return BottomNavigationBar(
-      elevation: 8,
       onTap: changePage,
       currentIndex: _currentPage,
       items: [
         for (var tab in _tabs)
           BottomNavigationBarItem(
             icon: Icon(tab.icon),
+            activeIcon: Icon(tab.selectedIcon),
             label: tab.text,
           ),
       ],
     );
   }
 
-  void changePage(int index) {
-    var isOutsideOfTabs = _tabs.length <= index;
-    if (isOutsideOfTabs) {
-      var diff = _tabs.length - index;
-      switch (diff) {
-        case 0:
-          Navigator.of(context).pushNamed('/settings');
-          return;
-      }
+  void changePage(int index) => setState(() => _currentPage = index);
+
+  Widget _buildComposeFab(BuildContext context) {
+    return FloatingActionButton.small(
+      onPressed: () => context.showPostDialog(),
+      child: const Icon(Icons.edit_rounded),
+      elevation: 4.0,
+    );
+  }
+
+  Widget? getFab(BuildContext context, int index, bool desktop) {
+    final tab = _tabs[_currentPage];
+    final fab = tab.fab;
+
+    if (fab == null) {
+      return null;
     }
 
-    setState(() {
-      _currentPage = index;
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeInOut,
+    if (desktop) {
+      return FloatingActionButton.extended(
+        label: Text(fab.text),
+        icon: Icon(fab.icon),
+        onPressed: fab.onTap,
       );
-    });
-  }
-
-  FloatingActionButton? getFab(BuildContext context, int index) {
-    var tab = _tabs[_currentPage];
-
-    if (tab.fab == null) return null;
-
-    return FloatingActionButton(
-      tooltip: tab.fab!.tooltip,
-      child: Icon(tab.fab!.icon),
-      onPressed: tab.fab!.onTap,
-    );
-  }
-
-  FloatingActionButton? getFabDesktop(BuildContext context, int index) {
-    var tab = _tabs[_currentPage];
-
-    if (tab.fab == null) return null;
-
-    return FloatingActionButton.extended(
-      label: Text(tab.fab!.text),
-      icon: Icon(tab.fab!.icon),
-      onPressed: tab.fab!.onTap,
-    );
+    } else {
+      return FloatingActionButton(
+        tooltip: fab.tooltip,
+        child: Icon(fab.icon),
+        onPressed: fab.onTap,
+      );
+    }
   }
 }
 
 class _MainScreenTab {
   final String text;
+  final IconData selectedIcon;
   final IconData icon;
   final _FloatingActionButtonData? fab;
 
   const _MainScreenTab({
-    required this.icon,
+    required this.selectedIcon,
     required this.text,
+    required this.icon,
     this.fab,
   });
 }
 
 class _FloatingActionButtonData {
-  final void Function() onTap;
+  final VoidCallback? onTap;
   final String tooltip;
   final String text;
   final IconData icon;
 
   _FloatingActionButtonData({
-    required this.onTap,
+    this.onTap,
     required this.tooltip,
     required this.text,
     required this.icon,
