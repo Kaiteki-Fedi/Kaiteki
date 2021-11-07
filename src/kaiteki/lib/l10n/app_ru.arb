@@ -1,1 +1,126 @@
-{}
+{
+  "apiTypeDialog_missing": "Чего-то не хватает?",
+  "@apiTypeDialog_missing": {},
+  "mfaNoCode": "Пожалуйста, введите код",
+  "@mfaNoCode": {},
+  "okButtonLabel": "ОК",
+  "@okButtonLabel": {},
+  "cancelButtonLabel": "Отменить",
+  "@cancelButtonLabel": {},
+  "verifyButtonLabel": "Подтвердить",
+  "@verifyButtonLabel": {},
+  "removeButtonLabel": "Удалить",
+  "@removeButtonLabel": {},
+  "continueAnywayButtonLabel": "Всё равно продолжить",
+  "@continueAnywayButtonLabel": {},
+  "abortButtonLabel": "Прервать",
+  "@abortButtonLabel": {},
+  "sharedBackendFunctionality": "Каитеки и {api} поддерживают эти возможности:",
+  "@sharedBackendFunctionality": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "reactionSupport": "Реакции",
+  "@reactionSupport": {},
+  "chatSupport": "Чаты",
+  "@chatSupport": {},
+  "discoverInstancesButtonLabel": "Найти инстансы",
+  "@discoverInstancesButtonLabel": {},
+  "discoverInstancesTitle": "Найти Инстансы",
+  "@discoverInstancesTitle": {},
+  "chooseButtonLabel": "Выбрать",
+  "@chooseButtonLabel": {},
+  "runsOn": "Работает на {api}",
+  "@runsOn": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "usesFediverseCovenant": "Следует Cоглашению о Дружелюбной Модерации в Федивёрсе",
+  "@usesFediverseCovenant": {},
+  "viewPostButtonLabel": "Показать Пост",
+  "@viewPostButtonLabel": {},
+  "previewSupport": "Предпросмотр сообщений",
+  "@previewSupport": {},
+  "visibilityButtonTooltip": "Изменить масштаб поста",
+  "@visibilityButtonTooltip": {},
+  "attachButtonTooltip": "Прикрепить",
+  "@attachButtonTooltip": {},
+  "aboutInstanceTitle": "О сервере {instance}",
+  "@aboutInstanceTitle": {
+    "placeholders": {
+      "instance": {
+        "description": "Domain/hostname of the instance",
+        "example": "fedi.absturztau.be"
+      }
+    }
+  },
+  "loginButtonLabel": "Войти",
+  "@loginButtonLabel": {},
+  "aboutBackendTitle": "О {api}",
+  "@aboutBackendTitle": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "apiTypeDialog_description": "Каитеки не удалось распознать программное обеспечение этого сервера. Пожалуйста, выберите подходящий тип ниже.",
+  "@apiTypeDialog_description": {},
+  "emojiButtonTooltip": "Добавить эмодзи",
+  "@emojiButtonTooltip": {},
+  "featureSupported": "{feature} поддерживаются",
+  "@featureSupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "featureUnsupported": "{feature} не поддерживаются",
+  "@featureUnsupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "rules": "Правила",
+  "@rules": {},
+  "postPreviewTitle": "Предпросмотр",
+  "@postPreviewTitle": {},
+  "postPreviewWaiting": "Начни печатать, чтобы увидеть предпросмотр!",
+  "@postPreviewWaiting": {},
+  "composeBodyHint": "Съел этих мягких французских булок и выпил чаю.",
+  "@composeBodyHint": {},
+  "composeSubjectHint": "Тема (не обязательно)",
+  "@composeSubjectHint": {},
+  "postSubmissionFailed": "Не удалось отправить пост",
+  "@postSubmissionFailed": {},
+  "postSubmissionSending": "Отправляем пост",
+  "@postSubmissionSending": {},
+  "postSubmissionSent": "Пост отправлен",
+  "@postSubmissionSent": {},
+  "submitButtonTooltip": "Отправить",
+  "@submitButtonTooltip": {},
+  "rulesLearnMore": "Узнать правила подробнее",
+  "@rulesLearnMore": {},
+  "mfaTitle": "Двухфакторная Аутентификация",
+  "@mfaTitle": {},
+  "formattingButtonTooltip": "Изменить форматирование",
+  "@formattingButtonTooltip": {},
+  "apiTypeDialog_title": "Не удалось распознать тип сервера",
+  "@apiTypeDialog_title": {},
+  "discoverInstancesDisclaimer": "Это список вручную подобранных инстансов, рекомендуемых разработчиками Каитеки и поддерживаемого программного обеспечения.",
+  "@discoverInstancesDisclaimer": {}
+}
