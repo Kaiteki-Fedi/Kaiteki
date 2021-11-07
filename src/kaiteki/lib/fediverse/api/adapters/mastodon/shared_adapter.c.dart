@@ -20,9 +20,28 @@ Post toPost(mastodon.Status source) {
     visibility: toVisibility(source.visibility),
     replyToAccountId: source.inReplyToAccountId,
     replyToPostId: source.inReplyToId,
+    replyToUser: getRepliedUser(source),
     id: source.id,
     externalUrl: source.url,
     reactions: [], // TODO: add pleroma reactions?
+  );
+}
+
+User? getRepliedUser(mastodon.Status status) {
+  final mention = status.mentions.firstOrDefault((mention) {
+    return mention.id == status.inReplyToAccountId;
+  });
+
+  if (mention == null) {
+    return null;
+  }
+
+  return User(
+    host: getHost(mention.account),
+    username: mention.username,
+    id: mention.id,
+    displayName: mention.username,
+    source: mention,
   );
 }
 

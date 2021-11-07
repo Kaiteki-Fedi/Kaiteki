@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
           icon: Mdi.pencil,
           tooltip: 'Compose a new status',
           text: 'Compose',
-          onTap: () => onComposeStatus(context, null),
+          onTap: () => context.showPostDialog(),
         ),
       ),
       const _MainScreenTab(
@@ -241,25 +241,6 @@ class _MainScreenState extends State<MainScreen> {
       icon: Icon(tab.fab!.icon),
       onPressed: tab.fab!.onTap,
     );
-  }
-
-  void onComposeStatus(BuildContext context, Post? replyTo) async {
-    await showDialog(
-      context: context,
-      builder: (_) => Dialog(
-        child: SizedBox(
-          child: Scaffold(
-            body: PostForm(replyTo: replyTo),
-            backgroundColor: Colors.transparent,
-          ),
-          width: 800,
-          height: 500,
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      barrierDismissible: true,
-    );
-    // Navigator.push(context, MaterialPageRoute(builder: (_) => PostScreen()));
   }
 }
 

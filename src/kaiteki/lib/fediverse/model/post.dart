@@ -48,6 +48,7 @@ class Post<T> {
   final String? replyToPostId;
   final String? replyToAccountId;
   final Post? replyTo;
+  final User? replyToUser;
 
   final Post? repeatOf;
   final PreviewCard? previewCard;
@@ -78,6 +79,7 @@ class Post<T> {
     this.replyToAccountId,
     this.replyToPostId,
     this.externalUrl,
+    this.replyToUser,
   });
 
   factory Post.example() {

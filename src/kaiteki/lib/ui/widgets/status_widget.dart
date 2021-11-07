@@ -366,15 +366,5 @@ class AttachmentRow extends StatelessWidget {
 }
 
 void reply(BuildContext context, Post post) {
-  showDialog(
-    context: context,
-    builder: (_) => Dialog(
-      child: SizedBox(
-        child: Scaffold(body: PostForm(replyTo: post)),
-        width: 800,
-        height: 500,
-      ),
-    ),
-    barrierDismissible: true,
-  );
+  context.showPostDialog(replyTo: post);
 }

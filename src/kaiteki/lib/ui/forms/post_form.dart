@@ -23,8 +23,15 @@ import 'package:provider/provider.dart';
 
 class PostForm extends StatefulWidget {
   final Post? replyTo;
+  final bool enableSubject;
+  final bool expands;
 
-  const PostForm({Key? key, this.replyTo}) : super(key: key);
+  const PostForm({
+    Key? key,
+    this.replyTo,
+    this.enableSubject = true,
+    this.expands = false,
+  }) : super(key: key);
 
   @override
   _PostFormState createState() => _PostFormState();
@@ -34,7 +41,6 @@ class _PostFormState extends State<PostForm> {
   late TextEditingController _bodyController;
   late TextEditingController _subjectController;
   late RestartableTimer _typingTimer;
-  var _isPreviewExpanded = false;
   var _visibility = v.Visibility.public;
   var _formatting = Formatting.plainText;
   final _attachMenuItems = [
@@ -43,24 +49,34 @@ class _PostFormState extends State<PostForm> {
       icon: Mdi.file,
       onPressed: () {},
     ),
-    AttachMenuItem(
+    const AttachMenuItem(
       label: "Take picture",
       icon: Mdi.camera,
       onPressed: null,
     ),
-    AttachMenuItem(
+    const AttachMenuItem(
       label: "Create poll",
       icon: Mdi.pollBox,
       onPressed: null,
     ),
-    AttachMenuItem(
+    const AttachMenuItem(
       label: "Record voice",
       icon: Mdi.microphone,
       onPressed: null,
     ),
   ];
 
-  _PostFormState() {
+  @override
+  void dispose() {
+    super.dispose();
+
+    _typingTimer.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
     _typingTimer = RestartableTimer(const Duration(seconds: 1), () {
       _typingTimer.cancel();
       setState(() {});
@@ -74,49 +90,70 @@ class _PostFormState extends State<PostForm> {
 
   @override
   Widget build(BuildContext context) {
-    var manager = Provider.of<AccountManager>(context);
+    final manager = Provider.of<AccountManager>(context);
+    final flex = widget.expands ? 1 : 0;
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ExpansionPanelList(
-            expansionCallback: (_, v) {
-              setState(() => _isPreviewExpanded = !v);
-            },
+    return Column(
+      children: [
+        if (manager.adapter is PreviewSupport)
+          ExpansionTile(
+            title: const Text("Preview"),
             children: [
-              ExpansionPanel(
-                canTapOnHeader: true,
-                isExpanded: _isPreviewExpanded,
-                headerBuilder: (_, x) {
-                  return const ListTile(title: Text("Preview"));
-                },
-                body: FutureBuilder(
-                  future: getPreviewFuture(manager),
-                  builder: buildPreview,
-                ),
+              FutureBuilder(
+                future: getPreviewFuture(manager),
+                builder: buildPreview,
               ),
             ],
           ),
-          TextField(
-            decoration: const InputDecoration(hintText: "Subject (optional)"),
-            controller: _subjectController,
-          ),
-          Expanded(
-            child: TextField(
-              decoration: const InputDecoration(
-                hintText: "Just landed in L.A.",
-              ),
-              textAlignVertical: TextAlignVertical.top,
-              expands: true,
-              minLines: null,
-              maxLines: null,
-              controller: _bodyController,
+        Flexible(
+          flex: flex,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            child: Column(
+              children: [
+                if (widget.enableSubject)
+                  Column(
+                    children: [
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: "Subject (optional)",
+                          border: InputBorder.none,
+                        ),
+                        controller: _subjectController,
+                      ),
+                      const Divider(),
+                    ],
+                  ),
+                Flexible(
+                  flex: flex,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: "Just landed in L.A.",
+                      border: InputBorder.none,
+                    ),
+                    textAlignVertical: TextAlignVertical.top,
+                    expands: widget.expands,
+                    minLines: widget.expands ? null : 6,
+                    maxLines: null,
+                    controller: _bodyController,
+                  ),
+                ),
+              ],
             ),
           ),
-          const Divider(),
-          Row(
+        ),
+        const Divider(height: 1),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 8.0,
+            right: 10.0,
+            top: 8.0,
+            bottom: 8.0,
+          ),
+          child: Row(
             children: [
               IconButton(
                 onPressed: () => openAttachDrawer(),
@@ -139,14 +176,16 @@ class _PostFormState extends State<PostForm> {
                 tooltip: "Insert emoji",
               ),
               const Spacer(),
-              ElevatedButton(
-                child: const Text("Submit"),
+              FloatingActionButton.small(
+                child: const Icon(Mdi.send),
                 onPressed: () => post(context, manager.adapter),
+                elevation: 2.0,
+                tooltip: "Submit",
               ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -168,7 +207,10 @@ class _PostFormState extends State<PostForm> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: IconLandingWidget(Mdi.close, snapshot.error.toString()),
+              child: IconLandingWidget(
+                Mdi.close,
+                snapshot.error.toString(),
+              ),
             ),
           );
         } else {
@@ -247,7 +289,7 @@ class _PostFormState extends State<PostForm> {
                   child: const Text("VIEW POST"),
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(
-                      Theme.of(context).accentColor,
+                      Theme.of(context).colorScheme.secondary,
                     ),
                     visualDensity: VisualDensity.comfortable,
                   ),
