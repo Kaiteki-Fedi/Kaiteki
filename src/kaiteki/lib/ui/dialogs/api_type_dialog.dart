@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,13 +14,18 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final materialL10n = Localizations.of<MaterialLocalizations>(
+      context,
+      MaterialLocalizations,
+    )!;
+
     return AlertDialog(
-      title: const Text("Couldn't detect instance type"),
+      title: Text(l10n.apiTypeDialog_title),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-              "Kaiteki tried to find out what software the instance is running but couldn't figure it out. Please select the correct instance backend from down below."),
+          Text(l10n.apiTypeDialog_description),
           DropdownButton<ApiDefinition>(
             isExpanded: true,
             items: ApiDefinitions.definitions.map((def) {
@@ -67,11 +73,11 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
+          child: Text(materialL10n.cancelButtonLabel),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: const Text('OK'),
+          child: Text(materialL10n.okButtonLabel),
           onPressed: () => Navigator.of(context).pop(_api),
         ),
       ],

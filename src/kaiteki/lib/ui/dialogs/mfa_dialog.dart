@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MfaDialog extends StatefulWidget {
@@ -17,8 +18,9 @@ class _MfaDialogState extends State<MfaDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
-      title: const Text("Multi-Factor-Authentication"),
+      title: Text(l10n.mfaTitle),
       content: Form(
         key: _formKey,
         onChanged: _onFormChanged,
@@ -44,7 +46,7 @@ class _MfaDialogState extends State<MfaDialog> {
                 autocorrect: false,
                 onFieldSubmitted: (code) => _submit(context, code),
                 validator: (code) =>
-                    code?.isEmpty == false ? null : "Please enter a code",
+                    code?.isEmpty == false ? null : l10n.mfaNoCode,
               ),
             ),
           ],
@@ -52,13 +54,13 @@ class _MfaDialogState extends State<MfaDialog> {
       ),
       actions: [
         TextButton(
-          child: const Text("Cancel"),
+          child: Text(l10n.cancelButtonLabel),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: const Text("Verify"),
+          child: Text(l10n.verifyButtonLabel),
           onPressed: isValid
               ? () => _submit(context, _textController.value.text)
               : null,

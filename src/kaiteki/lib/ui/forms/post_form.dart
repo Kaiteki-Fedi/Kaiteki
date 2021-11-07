@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
@@ -94,12 +95,13 @@ class _PostFormState extends State<PostForm> {
   Widget build(BuildContext context) {
     final manager = Provider.of<AccountManager>(context);
     final flex = widget.expands ? 1 : 0;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       children: [
         if (manager.adapter is PreviewSupport)
           ExpansionTile(
-            title: const Text("Preview"),
+            title: Text(l10n.postPreviewTitle),
             children: [
               FutureBuilder(
                 future: getPreviewFuture(manager),
@@ -120,8 +122,8 @@ class _PostFormState extends State<PostForm> {
                   Column(
                     children: [
                       TextField(
-                        decoration: const InputDecoration(
-                          hintText: "Subject (optional)",
+                        decoration: InputDecoration(
+                          hintText: l10n.composeSubjectHint,
                           border: InputBorder.none,
                         ),
                         controller: _subjectController,
@@ -132,8 +134,8 @@ class _PostFormState extends State<PostForm> {
                 Flexible(
                   flex: flex,
                   child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: "Just landed in L.A.",
+                    decoration: InputDecoration(
+                      hintText: l10n.composeBodyHint,
                       border: InputBorder.none,
                     ),
                     textAlignVertical: TextAlignVertical.top,
@@ -161,10 +163,10 @@ class _PostFormState extends State<PostForm> {
                 onPressed: () => openAttachDrawer(),
                 icon: const Icon(Mdi.plusCircle),
                 splashRadius: 20,
-                tooltip: "Attach",
+                tooltip: l10n.attachButtonTooltip,
               ),
               EnumIconButton<v.Visibility>(
-                tooltip: 'Change post scope',
+                tooltip: l10n.visibilityButtonTooltip,
                 onChanged: (value) => setState(() => _visibility = value),
                 value: _visibility,
                 values: v.Visibility.values,
@@ -172,7 +174,7 @@ class _PostFormState extends State<PostForm> {
                 textBuilder: (value) => Text(value.toHumanString()),
               ),
               EnumIconButton<Formatting>(
-                tooltip: 'Change formatting',
+                tooltip: l10n.formattingButtonTooltip,
                 onChanged: (value) => setState(() => _formatting = value),
                 value: _formatting,
                 values: Formatting.values,
@@ -183,14 +185,14 @@ class _PostFormState extends State<PostForm> {
                 onPressed: () => openEmojiPicker(context, manager),
                 icon: const Icon(Mdi.emoticon),
                 splashRadius: 20,
-                tooltip: "Insert emoji",
+                tooltip: l10n.emojiButtonTooltip,
               ),
               const Spacer(),
               FloatingActionButton.small(
                 child: const Icon(Mdi.send),
                 onPressed: () => post(context, manager.adapter),
                 elevation: 2.0,
-                tooltip: "Submit",
+                tooltip: l10n.submitButtonTooltip,
               ),
             ],
           ),
@@ -203,13 +205,13 @@ class _PostFormState extends State<PostForm> {
     BuildContext context,
     AsyncSnapshot<Post<dynamic>> snapshot,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
     switch (snapshot.connectionState) {
       case ConnectionState.none:
-        return const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Center(
-            child: Text('Start writing a post to see a preview!'),
-          ),
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(child: Text(l10n.postPreviewWaiting)),
         );
 
       case ConnectionState.done:
@@ -253,12 +255,11 @@ class _PostFormState extends State<PostForm> {
   }
 
   void post(BuildContext context, FediverseAdapter adapter) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final contentKey = UniqueKey();
+    final l10n = AppLocalizations.of(context)!;
+
     Navigator.of(context).pop();
-
-    var messenger = ScaffoldMessenger.of(context);
-    //var snackBarTextStyle = Utils.getDefaultSnackBarTextStyle(context);
-
-    var contentKey = UniqueKey();
 
     var snackBar = SnackBar(
       duration: const Duration(days: 1),
@@ -274,7 +275,7 @@ class _PostFormState extends State<PostForm> {
                 key: contentKey,
                 done: true,
                 icon: const Icon(Mdi.close),
-                text: const Text("Post failed to send"),
+                text: Text(l10n.postSubmissionFailed),
               );
 
             case AsyncSnapshotState.loading:
@@ -282,7 +283,7 @@ class _PostFormState extends State<PostForm> {
                 key: contentKey,
                 done: false,
                 icon: const Icon(Mdi.textBox),
-                text: const Text("Sending post"),
+                text: Text(l10n.postSubmissionSending),
               );
 
             case AsyncSnapshotState.done:
@@ -294,9 +295,9 @@ class _PostFormState extends State<PostForm> {
                 key: contentKey,
                 done: true,
                 icon: const Icon(Mdi.check),
-                text: const Text("Post sent"),
+                text: Text(l10n.postSubmissionSent),
                 trailing: TextButton(
-                  child: const Text("VIEW POST"),
+                  child: Text(l10n.viewPostButtonLabel),
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(
                       Theme.of(context).colorScheme.secondary,

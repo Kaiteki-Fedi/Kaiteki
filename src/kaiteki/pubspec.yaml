@@ -21,6 +21,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+
   animations: ^2.0.0
   badges: ^2.0.1
   chewie: ^1.0.0
@@ -39,6 +43,7 @@ dependencies:
   url_launcher: ^6.0.3
   video_player: ^2.1.0
   flutter_typeahead: ^3.2.1
+  intl: ^0.17.0
 
   fediverse_objects:
     path: ../fediverse_objects
@@ -51,6 +56,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/icons/mastodon.png
     - assets/icons/pleroma.png
@@ -70,6 +76,9 @@ flutter:
           weight: 600
         - asset: assets/fonts/Quicksand-Bold.ttf
           weight: 700
+
+flutter_intl:
+  enabled: true
 
 msix_config:
   display_name: Kaiteki

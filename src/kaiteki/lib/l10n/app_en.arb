@@ -1,0 +1,91 @@
+{
+  "apiTypeDialog_title": "Couldn't detect instance type",
+  "apiTypeDialog_description": "Kaiteki tried to find out what software the instance is running but couldn't figure it out. Please select the correct instance backend from down below.",
+  "apiTypeDialog_missing": "Is something missing?",
+  "mfaTitle": "Two-Factor-Authentication",
+  "mfaNoCode": "Please enter a code",
+  "okButtonLabel": "OK",
+  "cancelButtonLabel": "Cancel",
+  "verifyButtonLabel": "Verify",
+  "removeButtonLabel": "Remove",
+  "viewPostButtonLabel": "View Post",
+  "continueAnywayButtonLabel": "Continue anyway",
+  "abortButtonLabel": "Abort",
+  "sharedBackendFunctionality": "These are the features that both {api} and Kaiteki support:",
+  "@sharedBackendFunctionality": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "reactionSupport": "Reactions",
+  "chatSupport": "Chats",
+  "previewSupport": "Post previews",
+  "discoverInstancesButtonLabel": "Discover instances",
+  "discoverInstancesTitle": "Discover Instances",
+  "discoverInstancesDisclaimer": "This is a list of handpicked instances, recommended by the developers of Kaiteki and every supported instance software.",
+  "chooseButtonLabel": "Choose",
+  "runsOn": "Runs on {api}",
+  "@runsOn": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "usesFediverseCovenant": "Uses the Fediverse-Friendly Moderation Covenant",
+  "visibilityButtonTooltip": "Change post scope",
+  "attachButtonTooltip": "Attach",
+  "emojiButtonTooltip": "Insert emoji",
+  "formattingButtonTooltip": "CHange formatting",
+  "aboutInstanceTitle": "About {instance}",
+  "@aboutInstanceTitle": {
+    "placeholders": {
+      "instance": {
+        "description": "Domain/hostname of the instance",
+        "example": "fedi.absturztau.be"
+      }
+    }
+  },
+  "aboutBackendTitle": "About {api}",
+  "@aboutBackendTitle": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "loginButtonLabel": "Login",
+  "@featureSupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "featureSupported": "{feature} are supported",
+  "@featureUnsupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "featureUnsupported": "{feature} are not supported",
+  "rules": "Rules",
+  "rulesLearnMore": "Learn more about the rules",
+  "postPreviewTitle": "Preview",
+  "postPreviewWaiting": "Start writing a post to see a preview!",
+  "composeBodyHint": "Just landed in L.A.",
+  "composeSubjectHint": "Subject (optional)",
+  "postSubmissionFailed": "Post failed to send",
+  "postSubmissionSending": "Sending post",
+  "postSubmissionSent": "Post sent",
+  "submitButtonTooltip": "Submit"
+}

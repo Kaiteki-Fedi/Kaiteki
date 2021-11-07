@@ -1,0 +1,19 @@
+{
+  "apiTypeDialog_title": "Instanz-Typ konnte nicht erkannt werden",
+  "apiTypeDialog_description": "Kaiteki ist fehlgeschlagen herauszufinden welche Software die Instanz besitzt. Bitte wähle das richtige Instanz-Backend von der Liste unten aus.",
+  "apiTypeDialog_missing": "Fehlt etwas?",
+  "2fa": "Zwei-Faktor-Authentifizierung",
+  "okButtonLabel": "OK",
+  "cancelButtonLabel": "Abbrechen",
+  "verifyButtonLabel": "Verifizieren",
+  "viewPostButtonLabel": "Beitrag anzeigen",
+  "continueAnywayButtonLabel": "Trotzdem fortfahren",
+  "sharedBackendFunctionality": "Dies sind die Features die beide $api und Kaiteki unterstützen:",
+  "reactionSupport": "Reaktionen",
+  "chatSupport": "Chats",
+  "previewSupport": "Beitrag-Vorschau",
+  "discoverInstancesButtonLabel": "Instanzen entdecken",
+  "discoverInstancesTitle": "Instanzen Entdecken",
+  "discoverInstancesDisclaimer": "Dies hier ist eine Liste von ausgewählten Instanzen, empfohlen von den Entwicklern von Kaiteki und den unterstützen Instanz-Software.",
+  "usesFediverseCovenant": "Folgt der Fediverse-freundlichen Moderationsvereinbarung"
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/preferences/preference_container.dart';
@@ -22,6 +23,8 @@ class KaitekiApp extends StatelessWidget {
           color: AppColors.kaitekiDarkBackground.shade900,
           themeMode: preferences.get().theme,
           initialRoute: "/",
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           routes: {
             "/": _buildMainRoute,
             "/accounts": (_) => const ManageAccountsScreen(),

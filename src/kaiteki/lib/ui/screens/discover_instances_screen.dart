@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
@@ -32,8 +33,12 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Discover Instances")),
+      appBar: AppBar(
+        title: Text(l10n.discoverInstancesTitle),
+      ),
       body: FutureBuilder(
         future: _instanceFetch,
         builder: (context, AsyncSnapshot<List<InstanceData>> snapshot) {
@@ -56,17 +61,13 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
                         color: Theme.of(context).colorScheme.onSecondary,
                       ),
                     ),
-                    content: const Text(
-                      "This is a list of handpicked instances, recommended by "
-                      "developers of Kaiteki and every supported instance "
-                      "software.",
-                    ),
+                    content: Text(l10n.discoverInstancesDisclaimer),
                     forceActionsBelow: true,
                     actions: [
                       TextButton(
                         onPressed: () =>
                             setState(() => _bannerDismissed = true),
-                        child: const Text("OK"),
+                        child: Text(l10n.okButtonLabel),
                       )
                     ],
                   ),
@@ -127,6 +128,7 @@ class _InstanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apiDefinition = ApiDefinitions.byType(data.type);
+    final l10n = AppLocalizations.of(context)!;
 
     return Card(
       margin: const EdgeInsets.all(12.0),
@@ -161,7 +163,7 @@ class _InstanceCard extends StatelessWidget {
                       spacing: 6,
                       children: [
                         Tooltip(
-                          message: "Runs on ${apiDefinition.name}",
+                          message: l10n.runsOn(apiDefinition.name),
                           child: Image.asset(
                             apiDefinition.theme.iconAssetLocation,
                             width: 24,
@@ -174,9 +176,9 @@ class _InstanceCard extends StatelessWidget {
                 ),
                 TextButton(
                   child: Row(
-                    children: const [
-                      Text("Choose"),
-                      Padding(
+                    children: [
+                      Text(l10n.chooseButtonLabel),
+                      const Padding(
                         padding: EdgeInsets.only(left: 8.0),
                         child: Icon(Mdi.arrowRight),
                       ),
@@ -222,11 +224,12 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final definition = ApiDefinitions.byType(data.type);
     final testAdapter = definition.createAdapter();
     var i = 1;
     return Scaffold(
-      appBar: AppBar(title: Text("About ${data.name}")),
+      appBar: AppBar(title: Text(l10n.aboutInstanceTitle(data.name))),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8.0),
         child: Center(
@@ -253,7 +256,7 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                           backgroundColor:
                               Theme.of(context).colorScheme.secondary,
                           label: Text(
-                            "Uses the Fediverse-Friendly Moderation Covenant",
+                            l10n.usesFediverseCovenant,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSecondary,
                             ),
@@ -283,7 +286,7 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                         ),
                       if (data.rulesUrl != null)
                         ListTile(
-                          title: const Text("Learn more about the rules"),
+                          title: Text(l10n.rulesLearnMore),
                           trailing: const Icon(Mdi.arrowRight),
                           onTap: () async => await launch(data.rulesUrl!),
                         ),
@@ -291,25 +294,29 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ExpansionTile(
-                title: Text("About ${definition.name}"),
+                title: Text(l10n.aboutBackendTitle(definition.name)),
                 children: [
                   ListTile(
                     title: Text(
-                        'These are the features that both Kaiteki and ${definition.name} support:'),
+                      l10n.sharedBackendFunctionality(definition.name),
+                    ),
                   ),
                   _buildFeatureListTile(
+                    context,
                     Mdi.forum,
-                    "Chats",
+                    l10n.chatSupport,
                     testAdapter is ChatSupport,
                   ),
                   _buildFeatureListTile(
+                    context,
                     Mdi.emoticon,
-                    "Reactions",
+                    l10n.reactionSupport,
                     testAdapter is ReactionSupport,
                   ),
                   _buildFeatureListTile(
+                    context,
                     Mdi.commentEditOutline,
-                    "Post previews",
+                    l10n.previewSupport,
                     testAdapter is PreviewSupport,
                   ),
                 ],
@@ -325,7 +332,7 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                           DiscoverInstanceScreenResult(data.name, false),
                         );
                       },
-                      child: const Text("Login"),
+                      child: Text(l10n.loginButtonLabel),
                     ),
                     // Padding(
                     //   padding: const EdgeInsets.only(left: 8.0),
@@ -348,12 +355,20 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureListTile(IconData icon, String feature, bool value) {
+  Widget _buildFeatureListTile(
+    BuildContext context,
+    IconData icon,
+    String feature,
+    bool value,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+    final label = value
+        ? l10n.featureSupported(feature)
+        : l10n.featureUnsupported(feature);
+
     return ListTile(
       leading: Icon(icon),
-      title: Text(
-        value ? "$feature are supported" : "$feature are not supported",
-      ),
+      title: Text(label),
       trailing: value ? const Icon(Mdi.check) : const Icon(Mdi.close),
     );
   }
