@@ -6,7 +6,7 @@
 
 A [快適 (kaiteki)](http://takoboto.jp/?w=1200120) Fediverse client for microblogging instances, made with [Flutter](https://flutter.dev/) and [Dart](https://dart.dev/).
 
-Currently Kaiteki is still in a **proof-of-concept/alpha stage**, with simple Mastodon/Pleroma and Misskey support, future backends could follow. See ["What's working, what's missing?"](#whats-working-whats-missing).
+Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple Mastodon/Pleroma and Misskey support, future backends could follow. See ["What's working, what's missing?"](#whats-working-whats-missing).
 
 ## Screenshots (outdated)
 
@@ -38,8 +38,8 @@ If you want to try out Kaiteki, there are automatic builds available for use.
     </tr>
     <tr>
         <th>Binaries</th>
-        <td rowspan=2><a href="https://craftplacer.moe/Kaiteki/">Visit web version</a></td>
-        <td><a href="https://github.com/Craftplacer/Kaiteki/actions/workflows/windows.yml">Check build artifacts</a></td>
+        <td rowspan=2><a href="https://kaiteki.craftplacer.moe/">Visit web version</a></td>
+        <td><a href="https://nightly.link/Craftplacer/Kaiteki/workflows/windows/master/windows.zip">Download latest binaries</a></td>
         <td>No reliable build outputs yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/62">Help us!</a></td>
     </tr>
     <tr>
@@ -52,9 +52,9 @@ If you want to try out Kaiteki, there are automatic builds available for use.
 
 ## What's working, what's missing?
 
-Currently Kaiteki only allows viewing timelines, making text posts and viewing users.
+Currently, Kaiteki only allows viewing timelines, making text posts and viewing users.
 
-Most important API calls for Misskey, Mastodon/Pleroma are already implemented but need an UI implementation.
+Most important API calls for Misskey, Mastodon/Pleroma are already implemented but need a UI implementation.
 
 Other features that are missing are extensive settings, unit tests, and many other things. **If you'd like to contribute, feel free to do so.**
 
