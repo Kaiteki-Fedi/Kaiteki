@@ -1,8 +1,8 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
-import 'package:http/http.dart' as http;
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/clients/fediverse_client_base.dart';
+import 'package:kaiteki/fediverse/api/http/response.dart';
 import 'package:kaiteki/fediverse/api/responses/mastodon/context_response.dart';
 import 'package:kaiteki/fediverse/api/responses/mastodon/login_response.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
@@ -180,7 +180,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   }
 
   @override
-  void checkResponse(http.StreamedResponse response) {}
+  Future<void> checkResponse(Response response) async {}
 
   @override
   Future<void> setClientAuthentication(ClientSecret secret) {

@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/exceptions/api_exception.dart';
+import 'package:kaiteki/fediverse/api/http/response.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
-import 'package:kaiteki/utils/utils.dart';
 
 typedef DeserializeFromJson<T> = T Function(Map<String, dynamic> json);
 
@@ -50,19 +50,17 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     DeserializeFromJson<T> toObject, {
     Object? body,
   }) async {
-    var requestBodyJson = body == null ? null : jsonEncode(body);
-    var requestContentType = body == null ? null : "application/json";
+    final requestBodyJson = body == null ? null : jsonEncode(body);
+    final requestContentType = body == null ? null : "application/json";
 
-    var response = await sendRequest(
+    final response = await sendRequest(
       method,
       endpoint,
       body: requestBodyJson,
       contentType: requestContentType,
     );
 
-    var bodyText = await response.stream.bytesToString();
-    var bodyJson = jsonDecode(bodyText);
-
+    final bodyJson = await response.getContentJson();
     return toObject.call(bodyJson);
   }
 
@@ -72,31 +70,29 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     DeserializeFromJson<T> toObject, {
     Object? body,
   }) async {
-    var requestBodyJson = body == null ? null : jsonEncode(body);
-    var requestContentType = body == null ? null : "application/json";
+    final requestBodyJson = body == null ? null : jsonEncode(body);
+    final requestContentType = body == null ? null : "application/json";
 
-    var response = await sendRequest(
+    final response = await sendRequest(
       method,
       endpoint,
       body: requestBodyJson,
       contentType: requestContentType,
     );
 
-    var bodyText = await response.stream.bytesToString();
-    var bodyJson = jsonDecode(bodyText);
-
+    final bodyJson = await response.getContentJson();
     return bodyJson.map<T>((json) => toObject.call(json));
   }
 
-  Future<StreamedResponse> sendRequest(
+  Future<Response> sendRequest(
     HttpMethod method,
     String endpoint, {
     String? body,
     String? contentType,
   }) async {
-    var methodString = method.toMethodString();
-    var url = Uri.parse("$baseUrl/$endpoint");
-    var request = Request(methodString, url);
+    final methodString = method.toMethodString();
+    final url = Uri.parse("$baseUrl/$endpoint");
+    final request = http.Request(methodString, url);
 
     if (body != null) request.body = body;
 
@@ -115,16 +111,17 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
       authenticationData!.applyTo(request);
     }
 
-    var response = await request.send();
+    final httpResponse = await request.send();
+    final response = Response(httpResponse);
 
-    checkResponse(response);
+    await checkResponse(response);
 
     return response;
   }
 
-  void checkResponse(StreamedResponse response) {
-    if (Utils.isUnsuccessfulStatusCode(response.statusCode)) {
-      throw ApiException(response.statusCode);
+  Future<void> checkResponse(Response response) async {
+    if (!response.isSuccessful) {
+      throw ApiException.fromResponse(response.response);
     }
   }
 }
