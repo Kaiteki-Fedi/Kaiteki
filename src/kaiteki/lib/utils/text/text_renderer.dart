@@ -134,9 +134,6 @@ class TextRenderer {
   ) {
     var recognizer = TapGestureRecognizer()
       ..onTap = () {
-        // TODO add user mention link support
-        // node.classes.contains("mention")
-
         var linkTarget = element.attributes["href"];
         launch(linkTarget!);
       };
