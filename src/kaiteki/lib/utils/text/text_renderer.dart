@@ -32,16 +32,16 @@ class TextRenderer {
     hasEmoji = emojis != null && emojis!.isNotEmpty;
 
     htmlConstructors = {
-      "a": renderLink,
-      "br": renderBreakLine,
-      "pre": renderCodeFont,
-      "code": renderCodeFont,
-      "p": renderParagraph,
+      "a": _renderLink,
+      "br": _renderBreakLine,
+      "pre": _renderCodeFont,
+      "code": _renderCodeFont,
+      "p": _renderParagraph,
     };
   }
 
-  InlineSpan renderFromHtml(String text) {
-    var fragment = parseFragment(text);
+  InlineSpan renderFromHtml(BuildContext context, String text) {
+    final fragment = parseFragment(text);
     return renderNode(fragment);
   }
 
@@ -98,15 +98,19 @@ class TextRenderer {
   InlineSpan renderNode(dom.Node node) {
     InlineSpan? resultingSpan;
 
-    var renderedSubNodes = node.nodes
-        .map<InlineSpan>((n) => renderNode(n))
-        .toList(growable: false);
+    final renderedSubNodes =
+        node.nodes.map<InlineSpan>(renderNode).toList(growable: false);
 
     if (node is dom.Element) {
-      var tag = node.localName!.toLowerCase();
+      final tag = node.localName!.toLowerCase();
 
       if (htmlConstructors.containsKey(tag)) {
-        resultingSpan = htmlConstructors[tag]!.call(node, renderedSubNodes);
+        final htmlConstructor = htmlConstructors[tag]!;
+
+        resultingSpan = htmlConstructor.call(
+          node,
+          renderedSubNodes,
+        );
       } else {
         _logger.w("Unhandled HTML tag ($tag)");
       }
@@ -124,7 +128,10 @@ class TextRenderer {
     return resultingSpan;
   }
 
-  InlineSpan renderLink(dom.Element element, List<InlineSpan> subElements) {
+  InlineSpan _renderLink(
+    dom.Element element,
+    List<InlineSpan> subElements,
+  ) {
     var recognizer = TapGestureRecognizer()
       ..onTap = () {
         // TODO add user mention link support
@@ -141,36 +148,37 @@ class TextRenderer {
     );
   }
 
-  InlineSpan renderBreakLine(dom.Element _, List<InlineSpan> subElements) {
-    return TextSpan(text: "\n", style: theme.textStyle);
+  InlineSpan _renderBreakLine(
+    dom.Element element,
+    List<InlineSpan> subElements,
+  ) {
+    return const TextSpan(text: "\n");
   }
 
-  InlineSpan renderCodeFont(dom.Element element, List<InlineSpan> subElements) {
+  InlineSpan _renderCodeFont(
+    dom.Element element,
+    List<InlineSpan> subElements,
+  ) {
     return TextSpan(
       text: element.text,
-      style: theme.textStyle.merge(GoogleFonts.robotoMono()),
+      style: GoogleFonts.robotoMono(),
     );
   }
 
-  InlineSpan renderParagraph(
-      dom.Element element, List<InlineSpan> subElements) {
+  InlineSpan _renderParagraph(
+    dom.Element element,
+    List<InlineSpan> subElements,
+  ) {
     var text = "";
 
     if (element.previousElementSibling?.localName == "p") {
       text = "\n\n" + text;
     }
 
-    return TextSpan(
-      text: text,
-      children: subElements,
-      style: theme.textStyle,
-    );
+    return TextSpan(text: text, children: subElements);
   }
 
   TextSpan _plain(TextBuffer buffer) {
-    return TextSpan(
-      style: theme.textStyle,
-      text: buffer.cut(),
-    );
+    return TextSpan(text: buffer.cut());
   }
 }

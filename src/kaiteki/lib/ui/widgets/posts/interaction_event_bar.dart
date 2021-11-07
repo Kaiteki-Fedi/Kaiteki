@@ -12,7 +12,7 @@ class InteractionEventBar extends StatelessWidget {
   final IconData icon;
   final User user;
   final TextStyle userTextStyle;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   const InteractionEventBar({
     required this.color,
@@ -20,7 +20,7 @@ class InteractionEventBar extends StatelessWidget {
     required this.text,
     required this.user,
     required this.userTextStyle,
-    required this.textStyle,
+    this.textStyle,
   });
 
   @override
@@ -38,14 +38,14 @@ class InteractionEventBar extends StatelessWidget {
             padding: avatarMargin,
             child: AvatarWidget(user, size: 16),
           ),
-          RichText(
-            text: TextSpan(
+          Text.rich(
+            TextSpan(
               style: textStyle,
               children: [
                 TextRenderer(
                   emojis: user.emojis,
                   theme: TextRendererTheme.fromContext(context),
-                ).renderFromHtml(user.displayName),
+                ).renderFromHtml(context, user.displayName),
                 const TextSpan(text: " "),
                 WidgetSpan(
                   child: Icon(

@@ -54,7 +54,6 @@ class StatusWidget extends StatelessWidget {
             color: theme.repeatColor,
             user: _post.author,
             userTextStyle: authorTextStyle,
-            textStyle: textStyle,
           ),
           StatusWidget(_post.repeatOf!),
         ],
@@ -145,33 +144,34 @@ class MetaBar extends StatelessWidget {
     required this.renderedAuthor,
     required Post post,
     required this.theme,
-  })   : _post = post,
+    this.authorTextStyle,
+  })  : _post = post,
         super(key: key);
 
   final InlineSpan renderedAuthor;
   final Post _post;
   final AppTheme theme;
+  final TextStyle? authorTextStyle;
 
   @override
   Widget build(BuildContext context) {
+    final secondaryText = _getSecondaryUserText(_post.author);
+    final secondaryColor = Theme.of(context).disabledColor;
+    final secondaryTextTheme = TextStyle(color: secondaryColor);
+
     return Row(
       children: [
         Expanded(
-          child: Row(
+          child: Wrap(
+            spacing: _equalUserName(_post.author) ? 0.0 : 6.0,
             children: [
-              RichText(text: renderedAuthor),
-              Padding(
-                padding: const EdgeInsets.only(left: 6),
-                child: Text(
-                  _post.author.host == null
-                      ? _post.author.username
-                      : _post.author.username + "@" + _post.author.host!,
-                  style: TextStyle(
-                    color: theme.materialTheme.disabledColor,
-                  ),
+              Text.rich(renderedAuthor, style: authorTextStyle),
+              if (secondaryText != null)
+                Text(
+                  secondaryText,
+                  style: secondaryTextTheme,
                   overflow: TextOverflow.fade,
                 ),
-              ),
             ],
           ),
         ),
@@ -179,9 +179,7 @@ class MetaBar extends StatelessWidget {
           message: _post.postedAt.toString(),
           child: Text(
             DateTime.now().difference(_post.postedAt).toStringHuman(),
-            style: TextStyle(
-              color: theme.materialTheme.disabledColor,
-            ),
+            style: secondaryTextTheme,
           ),
         ),
         // if (_post.visibility != null)
@@ -192,32 +190,50 @@ class MetaBar extends StatelessWidget {
             child: Icon(
               _post.visibility.toIconData(),
               size: 20,
-              color: theme.materialTheme.disabledColor,
+              color: secondaryColor,
             ),
           ),
         ),
       ],
     );
   }
+
+  String? _getSecondaryUserText(User user) {
+    String? result;
+
+    if (!_equalUserName(user)) {
+      result = user.username;
+    }
+
+    if (user.host != null) {
+      result = (result ?? '') + '@' + user.host!;
+    }
+
+    return result;
+  }
+
+  bool _equalUserName(User user) {
+    return user.username.toLowerCase() == user.displayName.toLowerCase();
+  }
 }
 
 class ReplyBar extends StatelessWidget {
   const ReplyBar({
     Key? key,
-    required this.textStyle,
-    required Post post,
-  })   : _post = post,
-        super(key: key);
+    this.textStyle,
+    required this.post,
+  }) : super(key: key);
 
-  final TextStyle textStyle;
-  final Post _post;
+  final TextStyle? textStyle;
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
     var themeContainer = Provider.of<ThemeContainer>(context);
+    final disabledColor = Theme.of(context).disabledColor;
 
-    return RichText(
-      text: TextSpan(
+    return Text.rich(
+      TextSpan(
         style: textStyle,
         children: [
           // TODO: refactor the following widget pattern to a future "IconSpan"
@@ -225,15 +241,15 @@ class ReplyBar extends StatelessWidget {
             child: Icon(
               Mdi.share,
               size: Utils.getLocalFontSize(context) * 1.25,
-              color: Theme.of(context).disabledColor,
+              color: disabledColor,
             ),
           ),
           TextSpan(
             text: " Reply to ",
-            style: TextStyle(color: Theme.of(context).disabledColor),
+            style: TextStyle(color: disabledColor),
           ),
           TextSpan(
-            text: _post.replyToAccountId,
+            text: post.replyToAccountId,
             style: themeContainer.current.linkTextStyle,
           ),
         ],
@@ -247,7 +263,7 @@ class InteractionBar extends StatelessWidget {
     Key? key,
     required Post post,
     required this.theme,
-  })   : _post = post,
+  })  : _post = post,
         super(key: key);
 
   final Post _post;

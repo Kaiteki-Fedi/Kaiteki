@@ -261,13 +261,13 @@ class AccountHeader extends StatelessWidget {
             ],
           ),
           if (account.description != null)
-            RichText(
-              text: TextSpan(
+            Text.rich(
+              TextSpan(
                 children: [
                   TextRenderer(
                     emojis: account.emojis,
                     theme: TextRendererTheme.fromContext(context),
-                  ).renderFromHtml(account.description!)
+                  ).renderFromHtml(context, account.description!)
                 ],
                 style: const TextStyle(
                   shadows: [Shadow(blurRadius: 2, offset: Offset(0, 1))],
