@@ -14,7 +14,7 @@ InstanceData _$InstanceDataFromJson(Map<String, dynamic> json) {
     favicon: json['favicon'] as String?,
     rules: (json['rules'] as List<dynamic>?)?.map((e) => e as String).toList(),
     rulesUrl: json['rulesUrl'] as String?,
-    usesConvenant: json['usesConvenant'] as bool? ?? false,
+    usesCovenant: json['usesConvenant'] as bool? ?? false,
   );
 }
 
@@ -26,7 +26,7 @@ Map<String, dynamic> _$InstanceDataToJson(InstanceData instance) =>
       'favicon': instance.favicon,
       'rules': instance.rules,
       'rulesUrl': instance.rulesUrl,
-      'usesConvenant': instance.usesConvenant,
+      'usesConvenant': instance.usesCovenant,
     };
 
 K _$enumDecode<K, V>(

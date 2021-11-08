@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
@@ -341,6 +342,7 @@ class __UserPageState extends State<_UserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -357,11 +359,11 @@ class __UserPageState extends State<_UserPage> {
           Padding(
             padding: fieldMargin,
             child: TextFormField(
-              decoration: const InputDecoration(
-                hintText: "E-mail address",
-                prefixIcon: Icon(Mdi.email),
+              decoration: InputDecoration(
+                hintText: l10n.emailFieldHint,
+                prefixIcon: const Icon(Mdi.email),
                 prefixIconConstraints: iconConstraint,
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 contentPadding: fieldPadding,
               ),
               autofillHints: const [AutofillHints.email],
@@ -373,9 +375,9 @@ class __UserPageState extends State<_UserPage> {
           child: TextFormField(
             autofocus: true,
             controller: widget.usernameController,
-            decoration: const InputDecoration(
-              hintText: "Username",
-              prefixIcon: Icon(Mdi.account),
+            decoration: InputDecoration(
+              hintText: l10n.usernameFieldHint,
+              prefixIcon: const Icon(Mdi.account),
               prefixIconConstraints: iconConstraint,
               border: OutlineInputBorder(),
               contentPadding: fieldPadding,
@@ -390,11 +392,11 @@ class __UserPageState extends State<_UserPage> {
           padding: fieldMargin,
           child: TextFormField(
             controller: widget.passwordController,
-            decoration: const InputDecoration(
-              hintText: "Password",
-              prefixIcon: Icon(Mdi.key),
+            decoration: InputDecoration(
+              hintText: l10n.passwordFieldHint,
+              prefixIcon: const Icon(Mdi.key),
               prefixIconConstraints: iconConstraint,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               contentPadding: fieldPadding,
             ),
             validator: widget.passwordValidator,
@@ -405,16 +407,16 @@ class __UserPageState extends State<_UserPage> {
         ),
         if (_register)
           TextFormField(
-            decoration: const InputDecoration(
-              hintText: "Repeat password",
-              prefixIcon: Icon(Mdi.key),
+            decoration: InputDecoration(
+              hintText: l10n.repeatPasswordFieldHint,
+              prefixIcon: const Icon(Mdi.key),
               prefixIconConstraints: iconConstraint,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               contentPadding: fieldPadding,
             ),
             validator: (input) {
               if (input != widget.passwordController!.text) {
-                return "Passwords must match";
+                return l10n.authPasswordNoMatch;
               }
             },
             keyboardType: TextInputType.text,
@@ -425,23 +427,27 @@ class __UserPageState extends State<_UserPage> {
           padding: const EdgeInsets.only(top: 8.0),
           child: Row(
             children: [
-              const TextButton(
-                child: Text('Forgot password'),
+              TextButton(
+                child: Text(l10n.forgotPasswordButtonLabel),
                 onPressed: null,
               ),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: TextButton(
-                  child: _register
-                      ? const Text('Log in with an existing account')
-                      : const Text('Create a new account'),
+                  child: Text(
+                    _register
+                        ? l10n.existingAccountButtonLabel
+                        : l10n.createAccountButtonLabel,
+                  ),
                   onPressed:
                       null, //() => setState(() => _register = !_register),
                 ),
               ),
               ElevatedButton(
-                child: _register ? const Text('Register') : const Text('Login'),
+                child: Text(
+                  _register ? l10n.registerButtonLabel : l10n.loginButtonLabel,
+                ),
                 onPressed: widget.onNext,
               ),
             ],

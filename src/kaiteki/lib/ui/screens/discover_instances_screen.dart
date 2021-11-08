@@ -99,7 +99,7 @@ class InstanceData {
   final String? rulesUrl;
 
   @JsonKey(defaultValue: false)
-  final bool usesConvenant;
+  final bool usesCovenant;
 
   const InstanceData({
     required this.type,
@@ -108,7 +108,7 @@ class InstanceData {
     this.favicon,
     this.rules,
     this.rulesUrl,
-    this.usesConvenant = false,
+    this.usesCovenant = false,
   });
 
   factory InstanceData.fromJson(Map<String, dynamic> json) =>
@@ -227,6 +227,7 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final definition = ApiDefinitions.byType(data.type);
     final testAdapter = definition.createAdapter();
+
     var i = 1;
     return Scaffold(
       appBar: AppBar(title: Text(l10n.aboutInstanceTitle(data.name))),
@@ -242,12 +243,12 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: ExpansionTile(
                     initiallyExpanded: true,
-                    title: const Text(
-                      "Rules",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    title: Text(
+                      l10n.rules,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     children: [
-                      if (data.usesConvenant)
+                      if (data.usesCovenant)
                         ActionChip(
                           onPressed: () async {
                             await launch(
@@ -268,22 +269,7 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       for (var rule in data.rules!)
-                        ListTile(
-                          leading: CircleAvatar(
-                            child: Text(
-                              (i++).toString(),
-                              textScaleFactor: 0.85,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            backgroundColor: Theme.of(context).disabledColor,
-                            radius: 12.0,
-                          ),
-                          title: Text(rule),
-                          dense: true,
-                        ),
+                        RuleListTile(number: i++, rule: rule),
                       if (data.rulesUrl != null)
                         ListTile(
                           title: Text(l10n.rulesLearnMore),
@@ -370,6 +356,37 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
       leading: Icon(icon),
       title: Text(label),
       trailing: value ? const Icon(Mdi.check) : const Icon(Mdi.close),
+    );
+  }
+}
+
+class RuleListTile extends StatelessWidget {
+  const RuleListTile({
+    Key? key,
+    required this.number,
+    required this.rule,
+  }) : super(key: key);
+
+  final int number;
+  final String rule;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        child: Text(
+          number.toString(),
+          textScaleFactor: 0.85,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Theme.of(context).disabledColor,
+        radius: 12.0,
+      ),
+      title: Text(rule),
+      dense: true,
     );
   }
 }

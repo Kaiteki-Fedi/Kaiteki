@@ -95,6 +95,33 @@ class AboutScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                Card(
+                  child: Column(
+                    children: [
+                      const Text("Visit our friends"),
+                      ListTile(
+                        leading: Image.asset(
+                          "assets/icons/pleroma.png",
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: const Text("Pleroma"),
+                        subtitle: Text(
+                          "Free and open communication for everyone.",
+                        ),
+                      ),
+                      ListTile(
+                        leading: Image.asset(
+                          "assets/icons/husky.png",
+                          width: 24,
+                          height: 24,
+                        ),
+                        title: const Text("Husky"),
+                        subtitle: Text("Fork of Tusky for Pleroma"),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

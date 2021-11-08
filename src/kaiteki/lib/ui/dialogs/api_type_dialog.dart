@@ -54,7 +54,7 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
             value: _api,
           ),
           TextButton(
-            child: const Text("Is something missing?"),
+            child: Text(l10n.apiTypeDialog_missing),
             onPressed: () async {
               const String url =
                   "https://github.com/Craftplacer/kaiteki/issues/new";
@@ -64,7 +64,7 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
                 await launch(url);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("URL couldn't be opened.")),
+                  SnackBar(content: Text(l10n.failedToLaunchUrl)),
                 );
               }
             },

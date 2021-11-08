@@ -15,6 +15,7 @@ class AccountScreen extends StatefulWidget {
   final User? initialUser;
 
   const AccountScreen.fromId(this.id) : initialUser = null;
+
   AccountScreen.fromUser(User this.initialUser) : id = initialUser.id;
 
   @override
@@ -142,15 +143,6 @@ class _AccountScreenState extends State<AccountScreen>
           ),
         ],
       ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
-            onPressed: () {},
-            child: const Text("FOLLOW"),
-          ),
-        ),
-      ],
       flexibleSpace: Stack(
         children: [
           FlexibleSpaceBar(

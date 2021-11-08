@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:mdi/mdi.dart';
@@ -16,6 +17,8 @@ class AccountSwitcherWidget extends StatefulWidget {
 class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return PopupMenuButton<String>(
       iconSize: widget.size,
       icon: buildIcon(context),
@@ -26,12 +29,12 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
       itemBuilder: (_) => [
         PopupMenuItem(
           child: Row(
-            children: const [
-              Padding(
+            children: [
+              const Padding(
                 padding: EdgeInsets.only(right: 12),
                 child: Icon(Mdi.dotsHorizontal),
               ),
-              Text("Manage Accounts"),
+              Text(l10n.manageAccountsTitle),
             ],
           ),
           value: "!",
