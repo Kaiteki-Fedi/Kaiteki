@@ -1,19 +1,121 @@
 {
   "apiTypeDialog_title": "Instanz-Typ konnte nicht erkannt werden",
+  "@apiTypeDialog_title": {},
   "apiTypeDialog_description": "Kaiteki ist fehlgeschlagen herauszufinden welche Software die Instanz besitzt. Bitte wähle das richtige Instanz-Backend von der Liste unten aus.",
+  "@apiTypeDialog_description": {},
   "apiTypeDialog_missing": "Fehlt etwas?",
+  "@apiTypeDialog_missing": {},
   "2fa": "Zwei-Faktor-Authentifizierung",
+  "@2fa": {},
   "okButtonLabel": "OK",
+  "@okButtonLabel": {},
   "cancelButtonLabel": "Abbrechen",
+  "@cancelButtonLabel": {},
   "verifyButtonLabel": "Verifizieren",
+  "@verifyButtonLabel": {},
   "viewPostButtonLabel": "Beitrag anzeigen",
+  "@viewPostButtonLabel": {},
   "continueAnywayButtonLabel": "Trotzdem fortfahren",
+  "@continueAnywayButtonLabel": {},
   "sharedBackendFunctionality": "Dies sind die Features die beide $api und Kaiteki unterstützen:",
+  "@sharedBackendFunctionality": {},
   "reactionSupport": "Reaktionen",
+  "@reactionSupport": {},
   "chatSupport": "Chats",
+  "@chatSupport": {},
   "previewSupport": "Beitrag-Vorschau",
+  "@previewSupport": {},
   "discoverInstancesButtonLabel": "Instanzen entdecken",
+  "@discoverInstancesButtonLabel": {},
   "discoverInstancesTitle": "Instanzen Entdecken",
+  "@discoverInstancesTitle": {},
   "discoverInstancesDisclaimer": "Dies hier ist eine Liste von ausgewählten Instanzen, empfohlen von den Entwicklern von Kaiteki und den unterstützen Instanz-Software.",
-  "usesFediverseCovenant": "Folgt der Fediverse-freundlichen Moderationsvereinbarung"
+  "@discoverInstancesDisclaimer": {},
+  "usesFediverseCovenant": "Folgt der Fediverse-freundlichen Moderationsvereinbarung",
+  "@usesFediverseCovenant": {},
+  "chooseButtonLabel": "Auswählen",
+  "@chooseButtonLabel": {},
+  "mfaNoCode": "Bitte gebe einen Code ein",
+  "@mfaNoCode": {},
+  "mfaTitle": "Zwei-Faktor-Authenzifizierung",
+  "@mfaTitle": {},
+  "removeButtonLabel": "Entfernen",
+  "@removeButtonLabel": {},
+  "abortButtonLabel": "Abbrechen",
+  "@abortButtonLabel": {},
+  "runsOn": "Läuft auf {api}",
+  "@runsOn": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "postPreviewWaiting": "Fang' an einen Beitrag zu schreiben um eine Vorschau zu sehen!",
+  "@postPreviewWaiting": {},
+  "postPreviewTitle": "Vorschau",
+  "@postPreviewTitle": {},
+  "composeBodyHint": "Sitze gerade im Hofbräuhaus.",
+  "@composeBodyHint": {},
+  "composeSubjectHint": "Betreff (optional)",
+  "@composeSubjectHint": {},
+  "postSubmissionFailed": "Beitrag fehlgeschlagen zu senden",
+  "@postSubmissionFailed": {},
+  "postSubmissionSending": "Sende Beitrag",
+  "@postSubmissionSending": {},
+  "postSubmissionSent": "Beitrag gesendet",
+  "@postSubmissionSent": {},
+  "submitButtonTooltip": "Absenden",
+  "@submitButtonTooltip": {},
+  "visibilityButtonTooltip": "Sichtbarkeitsumfang ändern",
+  "@visibilityButtonTooltip": {},
+  "attachButtonTooltip": "Anhängen",
+  "@attachButtonTooltip": {},
+  "emojiButtonTooltip": "Emoji einfügen",
+  "@emojiButtonTooltip": {},
+  "aboutInstanceTitle": "Über {instance}",
+  "@aboutInstanceTitle": {
+    "placeholders": {
+      "instance": {
+        "description": "Domain/hostname of the instance",
+        "example": "fedi.absturztau.be"
+      }
+    }
+  },
+  "aboutBackendTitle": "Über {api}",
+  "@aboutBackendTitle": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "loginButtonLabel": "Anmeldung",
+  "@loginButtonLabel": {},
+  "featureSupported": "{feature} sind unterstützt",
+  "@featureSupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "featureUnsupported": "{feature} sind nicht unterstützt",
+  "@featureUnsupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "rules": "Regeln",
+  "@rules": {},
+  "rulesLearnMore": "Lerne mehr über die Regeln",
+  "@rulesLearnMore": {},
+  "formattingButtonTooltip": "Formatierung ändern",
+  "@formattingButtonTooltip": {}
 }
