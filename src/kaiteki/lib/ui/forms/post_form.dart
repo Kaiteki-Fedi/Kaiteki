@@ -97,6 +97,10 @@ class _PostFormState extends State<PostForm> {
     final flex = widget.expands ? 1 : 0;
     final l10n = AppLocalizations.of(context)!;
 
+    if(widget.replyTo != null){
+      _visibility = widget.replyTo!.visibility;
+    }
+    
     return Column(
       children: [
         if (manager.adapter is PreviewSupport)
