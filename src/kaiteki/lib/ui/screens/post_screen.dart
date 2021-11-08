@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
@@ -22,6 +23,8 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return DynamicDialogContainer(
       builder: (BuildContext context, bool fullscreen) {
         TextSpan? replyTextSpan;
@@ -53,15 +56,16 @@ class _PostScreenState extends State<PostScreen> {
                   value: enableSubject,
                   onChanged: toggleSubject,
                 ),
-                if (!fullscreen) const DialogCloseButton(tooltip: "Discard"),
+                if (!fullscreen)
+                  DialogCloseButton(tooltip: l10n.discardButtonTooltip),
               ],
               automaticallyImplyLeading: false,
               leading: fullscreen
-                  ? const DialogCloseButton(tooltip: "Discard")
+                  ? DialogCloseButton(tooltip: l10n.discardButtonTooltip)
                   : null,
               foregroundColor: Theme.of(context).colorScheme.onBackground,
               title: replyTextSpan == null
-                  ? const Text("Compose new post")
+                  ? Text(l10n.composeDialogTitle)
                   : Text.rich(replyTextSpan),
               elevation: 0,
               backgroundColor: Colors.transparent,

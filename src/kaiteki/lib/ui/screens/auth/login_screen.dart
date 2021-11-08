@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
@@ -34,6 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final instance = _instance;
     final hasBackground = instance?.backgroundUrl != null;
+    final l10n = AppLocalizations.of(context)!;
+
     return WillPopScope(
       onWillPop: () async {
         if (_loading) {
@@ -60,9 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
             Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
-                title: instance == null || instance.name.isEmpty
-                    ? const Text("Log into an instance")
-                    : Text("Log into ${instance.name}"),
+                title: Text(instance == null || instance.name.isEmpty
+                    ? l10n.loginTitle
+                    : l10n.loginTitleInstance(instance.name)),
                 automaticallyImplyLeading: !_loading,
               ),
               body: FormWidget(
@@ -178,13 +181,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String? validateInstance(String? instance) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (instance.isNullOrEmpty) {
-      return "Please enter an instance";
+      return l10n.authNoInstance;
     }
 
     var lowerCase = instance!.toLowerCase();
     if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://")) {
-      return "Please only provide the domain name";
+      return l10n.authNoUrlAllowed;
     }
 
     // var accounts = Provider.of<AccountManager>(context, listen: false);
@@ -198,23 +203,27 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String? validatePassword(String? password) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (password.isNullOrEmpty) {
-      return "Please enter a password";
+      return l10n.authNoPassword;
     }
 
     return null;
   }
 
   String? validateUsername(String? instance, String? username) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (username.isNullOrEmpty) {
-      return "Please enter an username";
+      return l10n.authNoUsername;
     }
 
     var accounts = Provider.of<AccountManager>(context, listen: false);
     if (accounts.accounts.any((compound) =>
         compound.instance == instance &&
         compound.accountSecret.username == username)) {
-      return "There's already an account with the same instance and username";
+      return l10n.authDuplicate;
     }
 
     return null;
@@ -234,16 +243,15 @@ class _LoginScreenState extends State<LoginScreen> {
     const String helpArticle =
         "https://github.com/Craftplacer/Kaiteki/wiki/Unable-to-login-using-Kaiteki-Web";
 
+    final l10n = AppLocalizations.of(context)!;
     final dialogResult = await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Misskey is currently unsupported"),
+            title: Text(l10n.unsupportedInstanceTitle),
             content: Text.rich(
               TextSpan(
-                text: "Kaiteki Web doesn't support Misskey at the moment"
-                    "because Kaiteki uses private API calls.\n"
-                    "For more information please visit ",
+                text: l10n.unsupportedInstanceDescriptionCORS,
                 style: Theme.of(context).textTheme.bodyText1,
                 children: [
                   TextSpan(
@@ -261,11 +269,11 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             actions: [
               TextButton(
-                child: const Text("Continue anyway"),
+                child: Text(l10n.continueAnywayButtonLabel),
                 onPressed: () => Navigator.pop(context, true),
               ),
               TextButton(
-                child: const Text("Abort"),
+                child: Text(l10n.abortButtonLabel),
                 onPressed: () => Navigator.pop(context),
               ),
             ],

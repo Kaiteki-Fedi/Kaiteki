@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
@@ -16,10 +17,11 @@ class ManageAccountsScreen extends StatefulWidget {
 class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountManager>(context);
+    final container = Provider.of<AccountManager>(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Manage Accounts")),
+      appBar: AppBar(title: Text(l10n.manageAccountsTitle)),
       body: Builder(
         builder: (_) {
           var length = container.accounts.length;
@@ -29,16 +31,16 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 16.0),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: IconLandingWidget(
-                      icon: Icon(Mdi.accountOutline),
-                      text: Text('No accounts'),
+                      icon: const Icon(Mdi.accountOutline),
+                      text: Text(l10n.emptyAccounts),
                     ),
                   ),
                   OutlinedButton.icon(
                     icon: const Icon(Mdi.plus),
-                    label: const Text("Add Account"),
+                    label: Text(l10n.addAccountButtonLabel),
                     onPressed: () => onTapAdd(context),
                   )
                 ],
@@ -54,7 +56,7 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
               if (i == length + 1) {
                 return ListTile(
                   leading: const Icon(Mdi.plus),
-                  title: const Text("Add Account"),
+                  title: Text(l10n.addAccountButtonLabel),
                   onTap: () => onTapAdd(context),
                 );
               }
@@ -90,20 +92,20 @@ class _ManageAccountsScreenState extends State<ManageAccountsScreen> {
     AccountManager container,
     AccountCompound account,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Are you sure you want to remove this account?"),
-        content: const Text("You will have to add this account again later."),
+        title: Text(l10n.accountRemovalConfirmationTitle),
+        content: Text(l10n.accountRemovalConfirmationDescription),
         actions: <Widget>[
           TextButton(
-            child: const Text('CANCEL'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            child: Text(l10n.cancelButtonLabel),
+            onPressed: () => Navigator.of(context).pop(),
           ),
           TextButton(
-            child: const Text("REMOVE"),
+            child: Text(l10n.removeButtonLabel),
             onPressed: () {
               container.remove(account);
               Navigator.of(context).pop();

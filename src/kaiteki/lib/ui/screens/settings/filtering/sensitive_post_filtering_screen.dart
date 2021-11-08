@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,10 @@ class _SensitivePostFilteringScreenState
     var theme = Theme.of(context);
     var preferences = Provider.of<PreferenceContainer>(context);
     var enabled = preferences.get().sensitivePostFilter.enabled;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Filter sensitive posts'),
-      ),
+      appBar: AppBar(title: Text(l10n.settingsHideSensitivePosts)),
       body: ListView(
         children: [
           SwitchListTile(
@@ -30,7 +30,7 @@ class _SensitivePostFilteringScreenState
                 : theme.colorScheme.surface,
             activeColor: theme.colorScheme.onPrimary,
             title: Text(
-              enabled ? 'On' : 'Off',
+              enabled ? l10n.switchListTileTextOn : l10n.switchListTileTextOff,
               style: enabled
                   ? TextStyle(color: theme.colorScheme.onPrimary)
                   : null,
@@ -41,7 +41,7 @@ class _SensitivePostFilteringScreenState
             }),
           ),
           CheckboxListTile(
-            title: const Text("Include posts marked as sensitive"),
+            title: Text(l10n.filteringIncludeSensitive),
             onChanged: (bool? value) => preferences.update((p) {
               return p
                 ..sensitivePostFilter.filterPostsMarkedAsSensitive = value!;
@@ -52,7 +52,7 @@ class _SensitivePostFilteringScreenState
                 .filterPostsMarkedAsSensitive,
           ),
           CheckboxListTile(
-            title: const Text("Include posts with subject"),
+            title: Text(l10n.filteringIncludeSubject),
             onChanged: (bool? value) => preferences.update((p) {
               return p..sensitivePostFilter.filterPostsWithSubject = value!;
             }),

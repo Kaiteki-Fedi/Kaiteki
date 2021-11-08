@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
@@ -14,9 +15,11 @@ class ConversationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountManager>(context);
+    final container = Provider.of<AccountManager>(context);
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Conversation')),
+      appBar: AppBar(title: Text(l10n.conversationTitle)),
       body: FutureBuilder(
         future: container.adapter.getThread(post),
         builder: (_, AsyncSnapshot<Iterable<Post>> snapshot) {
@@ -29,9 +32,9 @@ class ConversationScreen extends StatelessWidget {
             return Column(
               children: [
                 StatusWidget(post),
-                const ListTile(
-                  leading: Icon(Mdi.close),
-                  title: Text("Failed to fetch thread"),
+                ListTile(
+                  leading: const Icon(Mdi.close),
+                  title: Text(l10n.threadRetrievalFailed),
                 ),
               ],
             );

@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
@@ -23,62 +23,63 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final _chatsKey = UniqueKey();
   final _timelineKey = UniqueKey();
-  late final List<Widget> _pages;
-  late final List<_MainScreenTab> _tabs;
+  List<Widget>? _pages;
+  List<_MainScreenTab>? _tabs;
   var _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-
-    _tabs = [
-      _MainScreenTab(
-        selectedIcon: Icons.home,
-        icon: Icons.home_outlined,
-        text: 'Timeline',
-        fab: _FloatingActionButtonData(
-          icon: Mdi.pencil,
-          tooltip: 'Compose a new status',
-          text: 'Compose',
-          onTap: () => context.showPostDialog(),
-        ),
-      ),
-      const _MainScreenTab(
-        selectedIcon: Icons.notifications_rounded,
-        icon: Icons.notifications_none,
-        text: "Notifications",
-        //fabTooltip: "Mark all as read",
-        //fabText: "Read",
-        //fabIcon: Mdi.checkAll,
-        //fabOnTap: () {},
-      ),
-      const _MainScreenTab(
-        selectedIcon: Icons.forum,
-        icon: Icons.forum_outlined,
-        text: "Chats",
-      ),
-    ];
-
-    _pages = [
-      TimelinePage(key: _timelineKey),
-      const Center(
-        child: IconLandingWidget(
-          icon: Icon(Mdi.dotsHorizontal),
-          text: Text("Not implemented yet..."),
-        ),
-      ),
-      const Center(
-        child: IconLandingWidget(
-          icon: Icon(Mdi.dotsHorizontal),
-          text: Text("Not implemented yet..."),
-        ),
-      ),
-    ];
   }
 
   @override
   Widget build(BuildContext context) {
     var appName = "Kaiteki";
+    final l10n = AppLocalizations.of(context)!;
+
+    _tabs ??= [
+      _MainScreenTab(
+        selectedIcon: Icons.home,
+        icon: Icons.home_outlined,
+        text: l10n.timelineTab,
+        fab: _FloatingActionButtonData(
+          icon: Mdi.pencil,
+          tooltip: l10n.composeDialogTitle,
+          text: l10n.composeButtonLabel,
+          onTap: () => context.showPostDialog(),
+        ),
+      ),
+      _MainScreenTab(
+        selectedIcon: Icons.notifications_rounded,
+        icon: Icons.notifications_none,
+        text: l10n.notificationsTab,
+        //fabTooltip: "Mark all as read",
+        //fabText: "Read",
+        //fabIcon: Mdi.checkAll,
+        //fabOnTap: () {},
+      ),
+      _MainScreenTab(
+        selectedIcon: Icons.forum,
+        icon: Icons.forum_outlined,
+        text: l10n.chatsTab,
+      ),
+    ];
+
+    _pages ??= [
+      TimelinePage(key: _timelineKey),
+      Center(
+        child: IconLandingWidget(
+          icon: const Icon(Mdi.dotsHorizontal),
+          text: Text(l10n.niy),
+        ),
+      ),
+      Center(
+        child: IconLandingWidget(
+          icon: const Icon(Mdi.dotsHorizontal),
+          text: Text(l10n.niy),
+        ),
+      ),
+    ];
 
     return FocusableActionDetector(
       shortcuts: {
@@ -121,7 +122,7 @@ class _MainScreenState extends State<MainScreen> {
             minWidth: 56,
             leading: _buildComposeFab(context),
             destinations: [
-              for (var tab in _tabs)
+              for (var tab in _tabs!)
                 NavigationRailDestination(
                   icon: Icon(tab.icon),
                   selectedIcon: Icon(tab.selectedIcon),
@@ -168,7 +169,7 @@ class _MainScreenState extends State<MainScreen> {
   Iterable<Widget> getTabListItems() {
     var i = 0;
 
-    return _tabs.map((tab) {
+    return _tabs!.map((tab) {
       var x = i;
 
       i++;
@@ -186,12 +187,12 @@ class _MainScreenState extends State<MainScreen> {
     return PageTransitionSwitcher(
       duration: const Duration(milliseconds: 300),
       transitionBuilder: animations.fadeThrough,
-      child: _pages[_currentPage],
+      child: _pages![_currentPage],
     );
   }
 
   BottomNavigationBar? getNavigationBar() {
-    if (_tabs.length < 2) {
+    if (_tabs!.length < 2) {
       return null;
     }
 
@@ -199,7 +200,7 @@ class _MainScreenState extends State<MainScreen> {
       onTap: changePage,
       currentIndex: _currentPage,
       items: [
-        for (var tab in _tabs)
+        for (var tab in _tabs!)
           BottomNavigationBarItem(
             icon: Icon(tab.icon),
             activeIcon: Icon(tab.selectedIcon),
@@ -220,7 +221,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget? getFab(BuildContext context, int index, bool desktop) {
-    final tab = _tabs[_currentPage];
+    final tab = _tabs![_currentPage];
     final fab = tab.fab;
 
     if (fab == null) {

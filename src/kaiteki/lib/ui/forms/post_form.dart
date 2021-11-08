@@ -338,9 +338,14 @@ class _PostFormState extends State<PostForm> {
     );
   }
 
-  Widget buildEmojiSelector(c, AsyncSnapshot<Iterable<EmojiCategory>> s) {
+  Widget buildEmojiSelector(
+    BuildContext context,
+    AsyncSnapshot<Iterable<EmojiCategory>> s,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (s.hasError) {
-      return const Center(child: Text("Failed to fetch emojis."));
+      return Center(child: Text(l10n.emojiRetrievalFailed));
     }
 
     if (!s.hasData) return const Center(child: CircularProgressIndicator());
