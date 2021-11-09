@@ -151,7 +151,6 @@ class SharedMastodonAdapter<T extends MastodonClient>
       Formatting.markdown: "text/markdown",
       Formatting.html: "text/html",
       Formatting.bbCode: "text/bbcode",
-      Formatting.mfm: "text/mfm+markdown",
     };
 
     return formattingToMimeType[formatting]!;
