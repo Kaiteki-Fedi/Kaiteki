@@ -19,29 +19,31 @@ class DynamicDialogContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final fullscreen = constraints.maxWidth < _maxDialogSize ||
-            constraints.maxHeight < _maxDialogSize;
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final fullscreen = constraints.maxWidth < _maxDialogSize ||
+              constraints.maxHeight < _maxDialogSize;
 
-        final borderRadius = getBorderRadius(fullscreen);
-        const duration = Duration(milliseconds: 125);
+          final borderRadius = getBorderRadius(fullscreen);
+          const duration = Duration(milliseconds: 125);
 
-        return Center(
-          child: AnimatedContainer(
-            constraints: getConstraints(constraints, fullscreen),
-            duration: duration,
-            curve: Curves.easeOutQuad,
-            child: Material(
-              borderRadius: borderRadius,
-              animationDuration: duration,
-              clipBehavior: Clip.antiAlias,
-              elevation: 8.0,
-              child: builder.call(context, fullscreen),
+          return Center(
+            child: AnimatedContainer(
+              constraints: getConstraints(constraints, fullscreen),
+              duration: duration,
+              curve: Curves.easeOutQuad,
+              child: Material(
+                borderRadius: borderRadius,
+                animationDuration: duration,
+                clipBehavior: Clip.antiAlias,
+                elevation: 8.0,
+                child: builder.call(context, fullscreen),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
