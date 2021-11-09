@@ -102,5 +102,298 @@
     }
   },
   "discoverInstancesDisclaimer": "Šis ir rūpīgi atlasīts instanci saraksts, ko iesaka Kaiteki izstrādātāji un katra atbalstītā instanci programmatūra.",
-  "@discoverInstancesDisclaimer": {}
+  "@discoverInstancesDisclaimer": {},
+  "takePictureButtonLabel": "Fotografēt",
+  "@takePictureButtonLabel": {},
+  "registerButtonLabel": "Reģistrēts",
+  "@registerButtonLabel": {},
+  "addAccountButtonLabel": "Pievienot Kontu",
+  "@addAccountButtonLabel": {},
+  "emojiRetrievalFailed": "Neizdevās izgūt emocijzīmes",
+  "@emojiRetrievalFailed": {},
+  "threadRetrievalFailed": "Neizdevās izgūt pavedienu",
+  "@threadRetrievalFailed": {},
+  "conversationTitle": "Saruna",
+  "@conversationTitle": {
+    "description": "Title used for conversation/thread page"
+  },
+  "emptyAccounts": "Nav kontu",
+  "@emptyAccounts": {
+    "description": "Placeholder text used if user doesn't have any accounts"
+  },
+  "manageAccountsTitle": "Pārvaldīt Kontus",
+  "@manageAccountsTitle": {},
+  "accountRemovalConfirmationTitle": "Vai tiešām vēlaties noņemt šo kontu?",
+  "@accountRemovalConfirmationTitle": {},
+  "authNoInstance": "Lūdzu, ievadiet instanci",
+  "@authNoInstance": {},
+  "createPollButtonLabel": "Izveidot aptauju",
+  "@createPollButtonLabel": {},
+  "recordVoiceButtonLabel": "Ierakstīt balss",
+  "@recordVoiceButtonLabel": {},
+  "subjectButtonLabelEnable": "Iespējot priekšmetu",
+  "@subjectButtonLabelEnable": {},
+  "subjectButtonLabelDisable": "Atspējot priekšmetu",
+  "@subjectButtonLabelDisable": {},
+  "rules": "Noteikumi",
+  "@rules": {},
+  "rulesLearnMore": "Uzziniet vairāk par noteikumiem",
+  "@rulesLearnMore": {},
+  "postPreviewTitle": "Priekšskatījums",
+  "@postPreviewTitle": {},
+  "postPreviewWaiting": "Sāciet rakstīt ziņu, lai redzētu priekšskatījumu!",
+  "@postPreviewWaiting": {},
+  "unsupportedInstanceTitle": "Šis instance tips pašlaik nav atbalstīts",
+  "@unsupportedInstanceTitle": {},
+  "composeBodyHint": "Tikko izkrauti L.A.",
+  "@composeBodyHint": {},
+  "composeSubjectHint": "Priekšmets (izvēles)",
+  "@composeSubjectHint": {},
+  "postSubmissionFailed": "Ziņu neizdevās nosūtīt",
+  "@postSubmissionFailed": {},
+  "postSubmissionSending": "Ziņojuma nosūtīšana",
+  "@postSubmissionSending": {},
+  "postSubmissionSent": "Ziņojums nosūtīts",
+  "@postSubmissionSent": {},
+  "submitButtonTooltip": "Iesniegt",
+  "@submitButtonTooltip": {},
+  "empty": "Izskatās tukšs šeit…",
+  "@empty": {},
+  "postsTab": "Ziņojumi",
+  "@postsTab": {},
+  "followersTab": "Sekotājs",
+  "@followersTab": {},
+  "followingTab": "Sekojat",
+  "@followingTab": {},
+  "timelineTab": "Plūsma",
+  "@timelineTab": {},
+  "notificationsTab": "Notifikacijas",
+  "@notificationsTab": {},
+  "chatsTab": "Čati",
+  "@chatsTab": {},
+  "niy": "Vēl nav īstenots",
+  "@niy": {},
+  "settings": "Iestatījums",
+  "@settings": {},
+  "welcome": "Laipni lūdzam uz Kaiteki!",
+  "@welcome": {},
+  "settingsHideSensitivePosts": "Slēpt sensitīvus ziņojumus",
+  "@settingsHideSensitivePosts": {},
+  "settingsSensitivePosts": "Sensitīvi ziņojumi",
+  "@settingsSensitivePosts": {},
+  "settingsSubjectPosts": "Ziņojumi ar priekšmetiem",
+  "@settingsSubjectPosts": {},
+  "settingsDisabled": "Deaktivizēts",
+  "@settingsDisabled": {},
+  "creditsTitle": "Kredīti",
+  "@creditsTitle": {},
+  "failedToLaunchUrl": "URL nevarēja atvērt",
+  "@failedToLaunchUrl": {},
+  "settingsAbout": "Par Kaiteki",
+  "@settingsAbout": {},
+  "settingsGeneral": "Vispārīgi",
+  "@settingsGeneral": {},
+  "settingsProfile": "Profils",
+  "@settingsProfile": {},
+  "settingsSecurity": "Drošība",
+  "@settingsSecurity": {},
+  "settingsFiltering": "Filtrēšana",
+  "@settingsFiltering": {},
+  "settingsNotifications": "Notifikacijas",
+  "@settingsNotifications": {},
+  "settingsImportExport": "Datu Importēšana / Eksportēšana",
+  "@settingsImportExport": {},
+  "settingsMutesBlocks": "Noslāpēti un Bloki",
+  "@settingsMutesBlocks": {},
+  "settingsCustomization": "Pielāgošana",
+  "@settingsCustomization": {},
+  "settingsTabs": "Zīmni",
+  "@settingsTabs": {},
+  "settingsDebugMaintenance": "Atkļūdošana un Uzturēšana",
+  "@settingsDebugMaintenance": {},
+  "authNoPassword": "Lūdzu, ievadiet paroli",
+  "@authNoPassword": {},
+  "authDuplicate": "Jau ir konts ar tādu pašu instanci un lietotājvārdu",
+  "@authDuplicate": {},
+  "authNoUrlAllowed": "Lūdzu, norādiet tikai domēna nosaukumu",
+  "@authNoUrlAllowed": {},
+  "loginTitle": "Pierakstīties instancē",
+  "@loginTitle": {},
+  "nextButtonLabel": "Tālāk",
+  "@nextButtonLabel": {},
+  "backButtonLabel": "Atpakaļ",
+  "@backButtonLabel": {},
+  "instanceFieldHint": "Instance",
+  "@instanceFieldHint": {},
+  "usernameFieldHint": "Lietotājvārds",
+  "@usernameFieldHint": {},
+  "passwordFieldHint": "Parole",
+  "@passwordFieldHint": {},
+  "emailFieldHint": "E-Pasta adrese",
+  "@emailFieldHint": {},
+  "authPasswordNoMatch": "Parolēm ir jāatbilst",
+  "@authPasswordNoMatch": {},
+  "forgotPasswordButtonLabel": "Aizmirsu paroli",
+  "@forgotPasswordButtonLabel": {},
+  "repeatPasswordFieldHint": "Atkārtot paroli",
+  "@repeatPasswordFieldHint": {},
+  "createAccountButtonLabel": "Izveidot jaunu kontu",
+  "@createAccountButtonLabel": {},
+  "accountRemovalConfirmationDescription": "Vēlāk šis konts būs jāpievieno vēlreiz.",
+  "@accountRemovalConfirmationDescription": {},
+  "switchListTileTextOn": "On",
+  "@switchListTileTextOn": {},
+  "switchListTileTextOff": "Off",
+  "@switchListTileTextOff": {},
+  "filteringIncludeSubject": "Iekļaut ziņojumus ar tēmu",
+  "@filteringIncludeSubject": {},
+  "filteringSensitiveTitle": "Filtrēt sensitīvus ziņojumus",
+  "@filteringSensitiveTitle": {},
+  "composeButtonLabel": "Rakstīt",
+  "@composeButtonLabel": {},
+  "composeDialogTitle": "Rakstīt jaunu ziņu",
+  "@composeDialogTitle": {},
+  "composeDialogTitleReply": "Atbildēt uz ",
+  "@composeDialogTitleReply": {
+    "description": "Title used when compose dialog is shown for writing a reply. Gets appended with replyee's display name"
+  },
+  "discardButtonTooltip": "Izmest",
+  "@discardButtonTooltip": {},
+  "theme": "Dizains",
+  "@theme": {},
+  "selectThemeTitle": "Izvēlieties dizains",
+  "@selectThemeTitle": {},
+  "themeLight": "Gaišs",
+  "@themeLight": {},
+  "themeDark": "Tumšs",
+  "@themeDark": {},
+  "themeSystem": "Sistēmas noklusējums",
+  "@themeSystem": {},
+  "creditsGithubRepo": "GitHub Repozitorijs",
+  "@creditsGithubRepo": {},
+  "creditsFlutter": "Izgatavots ar Flutter",
+  "@creditsFlutter": {},
+  "creditsFriends": "Apmeklējiet mūsu draugus",
+  "@creditsFriends": {},
+  "creditsPleromaDescription": "Brīva un atvērta komunikācija ikvienam",
+  "@creditsPleromaDescription": {},
+  "creditsHuskyDescription": "Forks no Tusky par Pleroma",
+  "@creditsHuskyDescription": {},
+  "viewOnlineButtonLabel": "Skatīt tiešsaistē",
+  "@viewOnlineButtonLabel": {
+    "description": "Button label used when certain content can't be displayed in Kaiteki but might able to in a web browser instead (e.g. videos)."
+  },
+  "timeDifferenceMinutes": "{minutes}m",
+  "@timeDifferenceMinutes": {
+    "description": "Text used to display how many minutes have passed since a certain event",
+    "placeholders": {
+      "minutes": {
+        "description": "Amount of minutes",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceHours": "{hours}h",
+  "@timeDifferenceHours": {
+    "description": "Text used to display how many hours have passed since a certain event",
+    "placeholders": {
+      "hours": {
+        "description": "Amount of hours",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceDays": "{days}d",
+  "@timeDifferenceDays": {
+    "description": "Text used to display how many days have passed since a certain event",
+    "placeholders": {
+      "days": {
+        "description": "Amount of days",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceWeeks": "{weeks}w",
+  "@timeDifferenceWeeks": {
+    "description": "Text used to display how many weeks have passed since a certain event",
+    "placeholders": {
+      "weeks": {
+        "description": "Amount of weeks",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceNow": "tagad",
+  "@timeDifferenceNow": {
+    "description": "Text used to display an event that just happened"
+  },
+  "timeDifferenceSeconds": "{seconds}s",
+  "@timeDifferenceSeconds": {
+    "description": "Text used to display how many seconds have passed since a certain event",
+    "placeholders": {
+      "seconds": {
+        "description": "Amount of seconds",
+        "example": "2"
+      }
+    }
+  },
+  "replyTo": "Atbildēt uz",
+  "@replyTo": {
+    "description": "Gets appended with replyee's display name"
+  },
+  "postRepeated": "atkārtots",
+  "@postRepeated": {
+    "description": "Gets prepended with repeater's display name"
+  },
+  "openInBrowserLabel": "Atvērt pārlūkprogrammā",
+  "@openInBrowserLabel": {},
+  "visibilityDirect": "Tiešs",
+  "@visibilityDirect": {},
+  "visibilityFollowersOnly": "Tikai-sekotāji",
+  "@visibilityFollowersOnly": {},
+  "visibilityUnlisted": "Nav uzskaitīti",
+  "@visibilityUnlisted": {},
+  "visibilityPublic": "Publiskais",
+  "@visibilityPublic": {},
+  "formattingPlain": "Vienkāršs teksts",
+  "@formattingPlain": {},
+  "formattingMfm": "Misskey-tipa Markdown",
+  "@formattingMfm": {},
+  "attachFilesButtonLabel": "Pievienot failus",
+  "@attachFilesButtonLabel": {},
+  "accountRequiredToContinue": "Lai turpinātu, jums ir pierakstieties uz vismaz vienā instancē.",
+  "@accountRequiredToContinue": {},
+  "settingsKaiteki": "Kaiteki Iestatījums",
+  "@settingsKaiteki": {},
+  "authNoUsername": "Lūdzu, ievadiet lietotājvārdu",
+  "@authNoUsername": {},
+  "loginTitleInstance": "Pierakstīties pakalpojumā {instance}",
+  "@loginTitleInstance": {
+    "placeholders": {
+      "instance": {
+        "description": "Instance name",
+        "example": "'the wired' or as fallback 'letsalllovela.in'"
+      }
+    }
+  },
+  "existingAccountButtonLabel": "Pierakstieties ar esošu kontu",
+  "@existingAccountButtonLabel": {},
+  "unsupportedInstanceDescriptionCORS": "Kaiteki Web šobrīd neatbalsta {api}, jo jūsu pārlūkprogramma bloķē pieprasījumus instancei ar izcelsmi no citām vietnēm. Lai iegūtu vairāk informācijas, lūdzu, apmeklējiet ",
+  "@unsupportedInstanceDescriptionCORS": {},
+  "filteringIncludeSensitive": "Iekļaut ziņojumus, kas atzīmēti kā sensitīvi",
+  "@filteringIncludeSensitive": {},
+  "creditsLicenses": "Brīvības Programmas Licence",
+  "@creditsLicenses": {},
+  "attachmentUnsupported": "Neatbalstīts Pielikums",
+  "@attachmentUnsupported": {},
+  "timeDifferenceYears": "{years}y",
+  "@timeDifferenceYears": {
+    "description": "Text used to display how many years have passed since a certain event",
+    "placeholders": {
+      "years": {
+        "description": "Amount of years",
+        "example": "2"
+      }
+    }
+  }
 }
