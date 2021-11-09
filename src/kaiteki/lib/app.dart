@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
 import 'package:kaiteki/ui/screens.dart';
@@ -20,7 +19,6 @@ class KaitekiApp extends StatelessWidget {
           title: "Kaiteki",
           theme: ThemeData.from(colorScheme: DefaultAppThemes.lightScheme),
           darkTheme: ThemeData.from(colorScheme: DefaultAppThemes.darkScheme),
-          color: AppColors.kaitekiDarkBackground.shade900,
           themeMode: preferences.get().theme,
           initialRoute: "/",
           localizationsDelegates: AppLocalizations.localizationsDelegates,
