@@ -1,1 +1,172 @@
-{}
+{
+  "apiTypeDialog_missing": "¿Falta algo?",
+  "@apiTypeDialog_missing": {},
+  "mfaTitle": "Autenticación en dos pasos",
+  "@mfaTitle": {},
+  "mfaNoCode": "Por favor introduzca un código",
+  "@mfaNoCode": {},
+  "okButtonLabel": "Ok",
+  "@okButtonLabel": {},
+  "cancelButtonLabel": "Cancelar",
+  "@cancelButtonLabel": {},
+  "verifyButtonLabel": "Verificar",
+  "@verifyButtonLabel": {},
+  "removeButtonLabel": "Eliminar",
+  "@removeButtonLabel": {},
+  "viewPostButtonLabel": "Ver el mensaje",
+  "@viewPostButtonLabel": {},
+  "continueAnywayButtonLabel": "Continuar de todos modos",
+  "@continueAnywayButtonLabel": {},
+  "abortButtonLabel": "Abortar",
+  "@abortButtonLabel": {},
+  "reactionSupport": "Reacciones",
+  "@reactionSupport": {},
+  "chatSupport": "Conversaciones",
+  "@chatSupport": {},
+  "chooseButtonLabel": "Elegir",
+  "@chooseButtonLabel": {},
+  "runsOn": "Funciona con {api}",
+  "@runsOn": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "emojiButtonTooltip": "Añadir emoji",
+  "@emojiButtonTooltip": {},
+  "formattingButtonTooltip": "Cambiar formato",
+  "@formattingButtonTooltip": {},
+  "aboutBackendTitle": "Sobre {api}",
+  "@aboutBackendTitle": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "featureUnsupported": "Sin soporte para {feature}",
+  "@featureUnsupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "rules": "Reglas",
+  "@rules": {},
+  "rulesLearnMore": "Aprende más sobre las reglas",
+  "@rulesLearnMore": {},
+  "postPreviewTitle": "Vista previa",
+  "@postPreviewTitle": {},
+  "postPreviewWaiting": "¡Empieza a escribir para la vista previa!",
+  "@postPreviewWaiting": {},
+  "composeSubjectHint": "Asunto (opcional)",
+  "@composeSubjectHint": {},
+  "postSubmissionFailed": "Falló la publicación del mensaje",
+  "@postSubmissionFailed": {},
+  "postSubmissionSent": "Mensaje publicado",
+  "@postSubmissionSent": {},
+  "submitButtonTooltip": "Enviar",
+  "@submitButtonTooltip": {},
+  "empty": "Esto está vacío…",
+  "@empty": {},
+  "postsTab": "Mensajes",
+  "@postsTab": {},
+  "followersTab": "Seguidores",
+  "@followersTab": {},
+  "followingTab": "Siguiendo",
+  "@followingTab": {},
+  "timelineTab": "Línea temporal",
+  "@timelineTab": {},
+  "notificationsTab": "Notificaciones",
+  "@notificationsTab": {},
+  "niy": "Sin implementar",
+  "@niy": {},
+  "settings": "Ajustes",
+  "@settings": {},
+  "settingsHideSensitivePosts": "Ocultar mensajes sensibles",
+  "@settingsHideSensitivePosts": {},
+  "settingsSensitivePosts": "Mensajes sensibles",
+  "@settingsSensitivePosts": {},
+  "settingsSubjectPosts": "Mensajes con asunto",
+  "@settingsSubjectPosts": {},
+  "settingsDisabled": "Deshabilitado",
+  "@settingsDisabled": {},
+  "creditsTitle": "Créditos",
+  "@creditsTitle": {},
+  "failedToLaunchUrl": "La URL no se pudo abrir",
+  "@failedToLaunchUrl": {},
+  "settingsAbout": "Acerca de Kaiteki",
+  "@settingsAbout": {},
+  "settingsGeneral": "General",
+  "@settingsGeneral": {},
+  "settingsProfile": "Perfil",
+  "@settingsProfile": {},
+  "settingsSecurity": "Seguridad",
+  "@settingsSecurity": {},
+  "settingsFiltering": "Filtrado",
+  "@settingsFiltering": {},
+  "settingsNotifications": "Notificaciones",
+  "@settingsNotifications": {},
+  "settingsImportExport": "Importar / Exportar datos",
+  "@settingsImportExport": {},
+  "settingsMutesBlocks": "Silenciar y bloquear",
+  "@settingsMutesBlocks": {},
+  "settingsKaiteki": "Ajustes de Kaiteki",
+  "@settingsKaiteki": {},
+  "composeBodyHint": "Acabo de aterrizar en Los Ángeles.",
+  "@composeBodyHint": {},
+  "apiTypeDialog_title": "No se pudo determinar el tipo de instancia",
+  "@apiTypeDialog_title": {},
+  "apiTypeDialog_description": "Kaiteki intentó determinar qué software utiliza la instancia pero no lo consiguió. Por favor, selecciona el correcto abajo.",
+  "@apiTypeDialog_description": {},
+  "sharedBackendFunctionality": "Estas son las características que tanto {api} como Kaiteki soportan:",
+  "@sharedBackendFunctionality": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "previewSupport": "Vista previa de mensajes",
+  "@previewSupport": {},
+  "discoverInstancesButtonLabel": "Descubre instancias",
+  "@discoverInstancesButtonLabel": {},
+  "discoverInstancesTitle": "Descubre instancias",
+  "@discoverInstancesTitle": {},
+  "discoverInstancesDisclaimer": "Esta es una lista de instancias seleccionadas a mano y recomendadas por los desarrolladores de Kaiteki, cuyo software es soportado.",
+  "@discoverInstancesDisclaimer": {},
+  "visibilityButtonTooltip": "Cambiar visibilidad",
+  "@visibilityButtonTooltip": {},
+  "attachButtonTooltip": "Adjuntar",
+  "@attachButtonTooltip": {},
+  "aboutInstanceTitle": "Acerca de {instance}",
+  "@aboutInstanceTitle": {
+    "placeholders": {
+      "instance": {
+        "description": "Domain/hostname of the instance",
+        "example": "fedi.absturztau.be"
+      }
+    }
+  },
+  "featureSupported": "Con soporte para {feature}",
+  "@featureSupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "postSubmissionSending": "Publicando mensaje",
+  "@postSubmissionSending": {},
+  "welcome": "¡Bienvenido a Kaiteki!",
+  "@welcome": {},
+  "accountRequiredToContinue": "Para continuar necesitas iniciar sesión en al menos una instancia.",
+  "@accountRequiredToContinue": {}
+}
