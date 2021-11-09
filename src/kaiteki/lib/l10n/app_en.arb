@@ -281,12 +281,19 @@
   "themeSystem": "System default",
   "@themeSystem": {},
   "creditsLicenses": "Open Source Licenses",
+  "@creditsLicenses": {},
   "creditsGithubRepo": "GitHub Repository",
+  "@creditsGithubRepo": {},
   "creditsFlutter": "Made with Flutter",
+  "@creditsFlutter": {},
   "creditsFriends": "Visit our friends",
+  "@creditsFriends": {},
   "creditsPleromaDescription": "Free and open communication for everyone",
+  "@creditsPleromaDescription": {},
   "creditsHuskyDescription": "Fork of Tusky for Pleroma",
+  "@creditsHuskyDescription": {},
   "attachmentUnsupported": "Unsupported attachment",
+  "@attachmentUnsupported": {},
   "viewOnlineButtonLabel": "View online",
   "@viewOnlineButtonLabel": {
     "description": "Button label used when certain content can't be displayed in Kaiteki but might able to in a web browser instead (e.g. videos)."
@@ -341,7 +348,7 @@
       }
     }
   },
-  "timeDifferenceSeconds": "{seconds}m",
+  "timeDifferenceSeconds": "{seconds}s",
   "@timeDifferenceSeconds": {
     "description": "Text used to display how many seconds have passed since a certain event",
     "placeholders": {
@@ -364,16 +371,29 @@
     "description": "Gets prepended with repeater's display name"
   },
   "openInBrowserLabel": "Open in browser",
+  "@openInBrowserLabel": {},
   "visibilityDirect": "Direct",
+  "@visibilityDirect": {},
   "visibilityFollowersOnly": "Followers-only",
+  "@visibilityFollowersOnly": {},
   "visibilityUnlisted": "Unlisted",
+  "@visibilityUnlisted": {},
   "visibilityPublic": "Public",
+  "@visibilityPublic": {},
   "formattingPlain": "Plain text",
+  "@formattingPlain": {},
   "formattingMfm": "Misskey-flavored Markdown",
+  "@formattingMfm": {},
   "attachFilesButtonLabel": "Attach files",
+  "@attachFilesButtonLabel": {},
   "takePictureButtonLabel": "Take picture",
+  "@takePictureButtonLabel": {},
   "createPollButtonLabel": "Create poll",
+  "@createPollButtonLabel": {},
   "recordVoiceButtonLabel": "Record voice",
+  "@recordVoiceButtonLabel": {},
   "subjectButtonLabelEnable": "Enable subject",
-  "subjectButtonLabelDisable": "Disable subject"
+  "@subjectButtonLabelEnable": {},
+  "subjectButtonLabelDisable": "Disable subject",
+  "@subjectButtonLabelDisable": {}
 }
