@@ -30,19 +30,14 @@ Post toPost(misskey.Note source) {
 }
 
 Visibility toVisibility(String visibility) {
-  switch (visibility) {
-    case "public":
-      return Visibility.public;
-    case "home":
-      return Visibility.unlisted;
-    case "followers":
-      return Visibility.followersOnly;
-    case "specified":
-      return Visibility.direct;
+  const stringToVisibility = {
+    "public": Visibility.public,
+    "home": Visibility.unlisted,
+    "followers": Visibility.followersOnly,
+    "specified": Visibility.direct,
+  };
 
-    default:
-      throw Exception("Missing case for $visibility");
-  }
+  return stringToVisibility[visibility]!;
 }
 
 Attachment toAttachment(misskey.DriveFile file) {

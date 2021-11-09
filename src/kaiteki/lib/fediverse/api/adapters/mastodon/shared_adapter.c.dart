@@ -46,18 +46,14 @@ User? getRepliedUser(mastodon.Status status) {
 }
 
 Visibility toVisibility(String visibility) {
-  switch (visibility) {
-    case 'public':
-      return Visibility.public;
-    case 'private':
-      return Visibility.followersOnly;
-    case 'direct':
-      return Visibility.direct;
-    case 'unlisted':
-      return Visibility.unlisted;
-    default:
-      throw 'Unknown visibility $visibility.';
-  }
+  const visibilityToString = {
+    'public': Visibility.public,
+    'private': Visibility.followersOnly,
+    'direct': Visibility.direct,
+    'unlisted': Visibility.unlisted,
+  };
+
+  return visibilityToString[visibility]!;
 }
 
 Attachment toAttachment(mastodon.Attachment attachment) {
@@ -71,17 +67,14 @@ Attachment toAttachment(mastodon.Attachment attachment) {
 }
 
 AttachmentType toAttachmentType(String type) {
-  switch (type) {
-    case 'image':
-      return AttachmentType.image;
-    // case 'gifv': return AttachmentType.animated;
-    case 'video':
-      return AttachmentType.video;
-    case 'audio':
-      return AttachmentType.audio;
-    default:
-      return AttachmentType.file;
-  }
+  const attachmentTypeToString = {
+    'image': AttachmentType.image,
+    'video': AttachmentType.video,
+    'audio': AttachmentType.audio,
+    // 'gifv': AttachmentType.animated,
+  };
+
+  return attachmentTypeToString[type] ?? AttachmentType.file;
 }
 
 CustomEmoji toEmoji(mastodon.Emoji emoji) {

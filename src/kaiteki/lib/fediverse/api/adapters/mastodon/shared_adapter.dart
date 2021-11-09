@@ -146,16 +146,15 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   String getContentType(Formatting formatting) {
-    switch (formatting) {
-      case Formatting.plainText:
-        return "text/plain";
-      case Formatting.markdown:
-        return "text/markdown";
-      case Formatting.html:
-        return "text/html";
-      case Formatting.bbCode:
-        return "text/bbcode";
-    }
+    const formattingToMimeType = {
+      Formatting.plainText: "text/plain",
+      Formatting.markdown: "text/markdown",
+      Formatting.html: "text/html",
+      Formatting.bbCode: "text/bbcode",
+      Formatting.mfm: "text/mfm+markdown",
+    };
+
+    return formattingToMimeType[formatting]!;
   }
 
   @override
