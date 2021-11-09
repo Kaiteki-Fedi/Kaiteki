@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/constants.dart';
@@ -9,10 +10,10 @@ import 'package:url_launcher/url_launcher.dart';
 class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var messenger = ScaffoldMessenger.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("About Kaiteki")),
+      appBar: AppBar(title: Text(l10n.settingsAbout)),
       body: Center(
         child: SizedBox(
           width: Constants.defaultFormWidth,
@@ -56,16 +57,16 @@ class AboutScreen extends StatelessWidget {
                     children: [
                       ListTile(
                         leading: const Icon(Mdi.github),
-                        title: const Text("GitHub Repository"),
+                        title: Text(l10n.creditsGithubRepo),
                         trailing: const Icon(Mdi.openInNew),
                         onTap: () => launchUrl(
-                          ScaffoldMessenger.of(context),
+                          context,
                           "https://github.com/Craftplacer/kaiteki",
                         ),
                       ),
                       ListTile(
                         leading: const Icon(Mdi.license),
-                        title: const Text("Open Source Licenses"),
+                        title: Text(l10n.creditsLicenses),
                         trailing: const Icon(Mdi.chevronRight),
                         onTap: () {
                           showLicensePage(
@@ -78,7 +79,7 @@ class AboutScreen extends StatelessWidget {
                       const Divider(),
                       ListTile(
                         leading: const Icon(Mdi.accountMultiple),
-                        title: const Text("Credits"),
+                        title: Text(l10n.creditsTitle),
                         onTap: () {
                           Navigator.of(context).pushNamed("/credits");
                         },
@@ -86,10 +87,8 @@ class AboutScreen extends StatelessWidget {
                       ),
                       ListTile(
                         leading: const FlutterLogo(),
-                        title: const Text("Made with Flutter"),
-                        onTap: () {
-                          launchUrl(messenger, "https://flutter.dev");
-                        },
+                        title: Text(l10n.creditsFlutter),
+                        onTap: () => launchUrl(context, "https://flutter.dev"),
                         trailing: const Icon(Mdi.openInNew),
                       ),
                     ],
@@ -98,7 +97,7 @@ class AboutScreen extends StatelessWidget {
                 Card(
                   child: Column(
                     children: [
-                      const Text("Visit our friends"),
+                      ListTile(title: Text(l10n.creditsFriends)),
                       ListTile(
                         leading: Image.asset(
                           "assets/icons/pleroma.png",
@@ -106,9 +105,11 @@ class AboutScreen extends StatelessWidget {
                           height: 24,
                         ),
                         title: const Text("Pleroma"),
-                        subtitle: Text(
-                          "Free and open communication for everyone.",
-                        ),
+                        subtitle: Text(l10n.creditsPleromaDescription),
+                        onTap: () {
+                          launchUrl(context, "https://pleroma.social/");
+                        },
+                        trailing: const Icon(Mdi.openInNew),
                       ),
                       ListTile(
                         leading: Image.asset(
@@ -117,7 +118,11 @@ class AboutScreen extends StatelessWidget {
                           height: 24,
                         ),
                         title: const Text("Husky"),
-                        subtitle: Text("Fork of Tusky for Pleroma"),
+                        subtitle: Text(l10n.creditsHuskyDescription),
+                        onTap: () {
+                          launchUrl(context, "https://husky.adol.pw/");
+                        },
+                        trailing: const Icon(Mdi.openInNew),
                       ),
                     ],
                   ),
@@ -130,12 +135,15 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Future<void> launchUrl(ScaffoldMessengerState scaffold, String url) async {
+  Future<void> launchUrl(BuildContext context, String url) async {
+    final scaffold = ScaffoldMessenger.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       scaffold.showSnackBar(
-        const SnackBar(content: Text("URL couldn't be opened.")),
+        SnackBar(content: Text(l10n.failedToLaunchUrl)),
       );
     }
   }

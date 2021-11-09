@@ -202,6 +202,7 @@ class __InstancePageState extends State<_InstancePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Form(
       key: _formKey,
       onChanged: _onFormChanged,
@@ -217,11 +218,11 @@ class __InstancePageState extends State<_InstancePage> {
                 // autofillHints: const [AutofillHints.url],
                 controller: widget.instanceController,
                 autofocus: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
                   contentPadding: fieldPadding,
-                  hintText: "Instance",
-                  prefixIcon: Icon(Mdi.earth),
+                  hintText: l10n.instanceFieldHint,
+                  prefixIcon: const Icon(Mdi.earth),
                   prefixIconConstraints: iconConstraint,
                 ),
                 inputFormatters: [LowerCaseTextFormatter()],
@@ -242,11 +243,11 @@ class __InstancePageState extends State<_InstancePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                child: const Text('Discover instances'),
+                child: Text(l10n.discoverInstancesButtonLabel),
                 onPressed: _onDiscoverInstancesPressed,
               ),
               ElevatedButton(
-                child: const Text('Next'),
+                child: Text(l10n.nextButtonLabel),
                 onPressed: _nextEnabled ? _submit : null,
               ),
             ],

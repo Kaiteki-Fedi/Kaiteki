@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -78,6 +79,7 @@ class _AccountScreenState extends State<AccountScreen>
     bool showCountBadges,
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return AppBar(
       bottom: TabBar(
         tabs: [
@@ -85,7 +87,7 @@ class _AccountScreenState extends State<AccountScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("POSTS"),
+                Text(l10n.postsTab),
                 if (showCountBadges)
                   buildBadge(
                     context,
@@ -98,7 +100,7 @@ class _AccountScreenState extends State<AccountScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("FOLLOWERS"),
+                Text(l10n.followersTab),
                 if (showCountBadges)
                   buildBadge(
                     context,
@@ -111,7 +113,7 @@ class _AccountScreenState extends State<AccountScreen>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("FOLLOWING"),
+                Text(l10n.followingTab),
                 if (showCountBadges)
                   buildBadge(
                     context,
@@ -132,8 +134,8 @@ class _AccountScreenState extends State<AccountScreen>
               child: isLoading
                   ? null
                   : Image.network(
-                      snapshot.data!.avatarUrl!,
-                    ),
+                snapshot.data!.avatarUrl!,
+              ),
             ),
           ),
           Text(
@@ -150,10 +152,10 @@ class _AccountScreenState extends State<AccountScreen>
             background: isLoading || snapshot.data!.bannerUrl != null
                 ? null
                 : Image.network(
-                    snapshot.data!.bannerUrl!,
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                  ),
+              snapshot.data!.bannerUrl!,
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
           ),
           if (isLoading) const LinearProgressIndicator(),
         ],

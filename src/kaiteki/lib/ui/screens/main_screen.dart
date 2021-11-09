@@ -138,6 +138,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   List<Widget> _buildAppBarActions(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return [
       IconButton(
         icon: const Icon(Icons.settings),
@@ -145,7 +147,7 @@ class _MainScreenState extends State<MainScreen> {
           context,
           MaterialPageRoute(builder: (_) => SettingsScreen()),
         ),
-        tooltip: "Settings",
+        tooltip: l10n.settings,
       ),
       const AccountSwitcherWidget(size: 40),
     ];

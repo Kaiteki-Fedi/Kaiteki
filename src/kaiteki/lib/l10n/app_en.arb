@@ -211,5 +211,97 @@
   "selectThemeTitle": "Select theme",
   "themeLight": "Light",
   "themeDark": "Dark",
-  "themeSystem": "System default"
+  "themeSystem": "System default",
+  "creditsLicenses": "Open Source Licenses",
+  "creditsGithubRepo": "GitHub Repository",
+  "creditsFlutter": "Made with Flutter",
+  "creditsFriends": "Visit our friends",
+  "creditsPleromaDescription": "Free and open communication for everyone",
+  "creditsHuskyDescription": "Fork of Tusky for Pleroma",
+  "attachmentUnsupported": "Unsupported attachment",
+  "viewOnlineButtonLabel": "View online",
+  "@viewOnlineButtonLabel": {
+    "description": "Button label used when certain content can't be displayed in Kaiteki but might able to in a web browser instead (e.g. videos)."
+  },
+  "timeDifferenceMinutes": "{minutes}m",
+  "@timeDifferenceMinutes": {
+    "description": "Text used to display how many minutes have passed since a certain event",
+    "placeholders": {
+      "minutes": {
+        "description": "Amount of minutes",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceHours": "{hours}h",
+  "@timeDifferenceHours": {
+    "description": "Text used to display how many hours have passed since a certain event",
+    "placeholders": {
+      "hours": {
+        "description": "Amount of hours",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceDays": "{days}d",
+  "@timeDifferenceDays": {
+    "description": "Text used to display how many days have passed since a certain event",
+    "placeholders": {
+      "days": {
+        "description": "Amount of days",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceWeeks": "{weeks}w",
+  "@timeDifferenceWeeks": {
+    "description": "Text used to display how many weeks have passed since a certain event",
+    "placeholders": {
+      "weeks": {
+        "description": "Amount of weeks",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceYears": "{years}y",
+  "@timeDifferenceYears": {
+    "description": "Text used to display how many years have passed since a certain event",
+    "placeholders": {
+      "years": {
+        "description": "Amount of years",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceSeconds": "{seconds}m",
+  "@timeDifferenceSeconds": {
+    "description": "Text used to display how many seconds have passed since a certain event",
+    "placeholders": {
+      "seconds": {
+        "description": "Amount of seconds",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceNow": "now",
+  "@timeDifferenceNow": {
+    "description": "Text used to display an event that just happened"
+  },
+  "replyTo": "Reply to",
+  "@replyTo": "Gets appended with replyee's display name",
+  "postRepeated": "repeated",
+  "@postRepeated": "Gets prepended with repeater's display name",
+  "openInBrowserLabel": "Open in browser",
+  "visibilityDirect": "Direct",
+  "visibilityFollowersOnly": "Followers-only",
+  "visibilityUnlisted": "Unlisted",
+  "visibilityPublic": "Public",
+  "formattingPlain": "Plain text",
+  "formattingMfm": "Misskey-flavored Markdown",
+  "attachFilesButtonLabel": "Attach files",
+  "takePictureButtonLabel": "Take picture",
+  "createPollButtonLabel": "Create poll",
+  "recordVoiceButtonLabel": "Record voice",
+  "subjectButtonLabelEnable": "Enable subject",
+  "subjectButtonLabelDisable": "Disable subject"
 }

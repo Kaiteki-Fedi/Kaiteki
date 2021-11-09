@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
@@ -44,13 +45,14 @@ class StatusWidget extends StatelessWidget {
     const authorTextStyle = TextStyle(fontWeight: FontWeight.bold);
 
     final content = _post.content;
+    final l10n = AppLocalizations.of(context)!;
 
     if (_post.repeatOf != null) {
       return Column(
         children: [
           InteractionEventBar(
             icon: Mdi.repeat,
-            text: "repeated",
+            text: l10n.postRepeated,
             color: theme.repeatColor,
             user: _post.author,
             userTextStyle: authorTextStyle,
@@ -178,7 +180,9 @@ class MetaBar extends StatelessWidget {
         Tooltip(
           message: _post.postedAt.toString(),
           child: Text(
-            DateTime.now().difference(_post.postedAt).toStringHuman(),
+            DateTime.now().difference(_post.postedAt).toStringHuman(
+                  context: context,
+                ),
             style: secondaryTextTheme,
           ),
         ),
@@ -231,6 +235,7 @@ class ReplyBar extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeContainer = Provider.of<ThemeContainer>(context);
     final disabledColor = Theme.of(context).disabledColor;
+    final l10n = AppLocalizations.of(context)!;
 
     return Text.rich(
       TextSpan(
@@ -245,7 +250,7 @@ class ReplyBar extends StatelessWidget {
             ),
           ),
           TextSpan(
-            text: " Reply to ",
+            text: ' ' + l10n.replyTo + ' ',
             style: TextStyle(color: disabledColor),
           ),
           TextSpan(
@@ -272,6 +277,7 @@ class InteractionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var openInBrowserAvailable = _post.externalUrl != null;
+    final l10n = AppLocalizations.of(context)!;
 
     // Added Material for fixing bork with Hero *shrug*
     return Row(
@@ -311,7 +317,7 @@ class InteractionBar extends StatelessWidget {
               PopupMenuItem(
                 enabled: openInBrowserAvailable,
                 child: ListTile(
-                  title: const Text('Open in browser'),
+                  title: Text(l10n.openInBrowserLabel),
                   leading: const Icon(Mdi.openInNew),
                   contentPadding: const EdgeInsets.all(0.0),
                   enabled: openInBrowserAvailable,

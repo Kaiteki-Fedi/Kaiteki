@@ -37,7 +37,7 @@ class _PostScreenState extends State<PostScreen> {
           );
 
           replyTextSpan = TextSpan(
-            text: "Reply to ",
+            text: l10n.composeDialogTitleReply,
             children: [
               renderer.renderFromHtml(
                 context,
