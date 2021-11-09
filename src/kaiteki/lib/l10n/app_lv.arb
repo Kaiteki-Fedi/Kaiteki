@@ -1,1 +1,106 @@
-{}
+{
+  "mfaTitle": "Divu Faktoru Autentifikāciju",
+  "@mfaTitle": {},
+  "mfaNoCode": "Lūdzu, ievadiet kodu",
+  "@mfaNoCode": {},
+  "okButtonLabel": "Labi",
+  "@okButtonLabel": {},
+  "cancelButtonLabel": "Atcelt",
+  "@cancelButtonLabel": {},
+  "verifyButtonLabel": "Pierādīt",
+  "@verifyButtonLabel": {},
+  "viewPostButtonLabel": "Skatīt Ziņu",
+  "@viewPostButtonLabel": {},
+  "continueAnywayButtonLabel": "Turpināt jebkurā gadījumā",
+  "@continueAnywayButtonLabel": {},
+  "abortButtonLabel": "Pārtraukt",
+  "@abortButtonLabel": {},
+  "reactionSupport": "Reakcijas",
+  "@reactionSupport": {},
+  "chatSupport": "Čati",
+  "@chatSupport": {},
+  "previewSupport": "Ziņojumu priekšskatījumi",
+  "@previewSupport": {},
+  "discoverInstancesButtonLabel": "Atklājiet instanci",
+  "@discoverInstancesButtonLabel": {},
+  "discoverInstancesTitle": "Atklājiet instanci",
+  "@discoverInstancesTitle": {},
+  "chooseButtonLabel": "Izvēlieties",
+  "@chooseButtonLabel": {},
+  "runsOn": "Darbojas uz {api}",
+  "@runsOn": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "usesFediverseCovenant": "Izmanto Fediverse-Friendly Moderation Covenant",
+  "@usesFediverseCovenant": {},
+  "visibilityButtonTooltip": "Mainīt ziņojuma jomu",
+  "@visibilityButtonTooltip": {},
+  "attachButtonTooltip": "Pievienot",
+  "@attachButtonTooltip": {},
+  "emojiButtonTooltip": "Ievietot emocijzīmes",
+  "@emojiButtonTooltip": {},
+  "formattingButtonTooltip": "Mainīt formatējumu",
+  "@formattingButtonTooltip": {},
+  "aboutInstanceTitle": "Par {instance}",
+  "@aboutInstanceTitle": {
+    "placeholders": {
+      "instance": {
+        "description": "Domain/hostname of the instance",
+        "example": "fedi.absturztau.be"
+      }
+    }
+  },
+  "aboutBackendTitle": "Par {api}",
+  "@aboutBackendTitle": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "loginButtonLabel": "Pierakstieties",
+  "@loginButtonLabel": {},
+  "featureSupported": "{feature} tiek atbalstīts",
+  "@featureSupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "featureUnsupported": "{feature} netiek atbalstīts",
+  "@featureUnsupported": {
+    "placeholders": {
+      "feature": {
+        "description": "Feature name, always in plural.",
+        "example": "Post previews"
+      }
+    }
+  },
+  "removeButtonLabel": "Noņemt",
+  "@removeButtonLabel": {},
+  "apiTypeDialog_title": "Nevarēja noteikt instances tipu",
+  "@apiTypeDialog_title": {},
+  "apiTypeDialog_description": "Kaiteki mēģināja noskaidrot, kādu programmatūru instance izmanto, bet nevarēja to izdomāt. Lūdzu, izvēlieties pareizo instances programmatūru no apakšas.",
+  "@apiTypeDialog_description": {},
+  "apiTypeDialog_missing": "Vai kaut kā trūkst?",
+  "@apiTypeDialog_missing": {},
+  "sharedBackendFunctionality": "Šīs ir funkcijas, kuras atbalsta gan {api}, gan Kaiteki:",
+  "@sharedBackendFunctionality": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
+  "discoverInstancesDisclaimer": "Šis ir rūpīgi atlasīts instanci saraksts, ko iesaka Kaiteki izstrādātāji un katra atbalstītā instanci programmatūra.",
+  "@discoverInstancesDisclaimer": {}
+}
