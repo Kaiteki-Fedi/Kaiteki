@@ -356,9 +356,13 @@
     "description": "Text used to display an event that just happened"
   },
   "replyTo": "Reply to",
-  "@replyTo": "Gets appended with replyee's display name",
+  "@replyTo": {
+    "description": "Gets appended with replyee's display name"
+  },
   "postRepeated": "repeated",
-  "@postRepeated": "Gets prepended with repeater's display name",
+  "@postRepeated": {
+    "description": "Gets prepended with repeater's display name"
+  },
   "openInBrowserLabel": "Open in browser",
   "visibilityDirect": "Direct",
   "visibilityFollowersOnly": "Followers-only",
