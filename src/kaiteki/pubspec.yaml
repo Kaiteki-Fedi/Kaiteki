@@ -61,6 +61,7 @@ flutter:
     - assets/icons/mastodon.png
     - assets/icons/pleroma.png
     - assets/icons/misskey.png
+    - assets/icons/husky.png
     - assets/icon.png
     - assets/instances.json
   fonts:
