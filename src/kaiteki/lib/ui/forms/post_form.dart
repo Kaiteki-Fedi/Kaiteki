@@ -89,6 +89,10 @@ class _PostFormState extends State<PostForm> {
 
     _subjectController = TextEditingController();
     _subjectController.addListener(_typingTimer.reset);
+
+    if(widget.replyTo != null){
+      _visibility = widget.replyTo!.visibility;
+    }
   }
 
   @override
@@ -96,10 +100,6 @@ class _PostFormState extends State<PostForm> {
     final manager = Provider.of<AccountManager>(context);
     final flex = widget.expands ? 1 : 0;
     final l10n = AppLocalizations.of(context)!;
-
-    if(widget.replyTo != null){
-      _visibility = widget.replyTo!.visibility;
-    }
     
     return Column(
       children: [
