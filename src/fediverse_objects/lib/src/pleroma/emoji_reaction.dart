@@ -6,7 +6,7 @@ part 'emoji_reaction.g.dart';
 @JsonSerializable()
 class EmojiReaction {
   /// Array of accounts reacted with this emoji
-  final Iterable<Account> accounts;
+  final Iterable<Account>? accounts;
 
   /// Count of reactions with this emoji
   final int count;
