@@ -1,4 +1,5 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
+import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
@@ -11,6 +12,7 @@ import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
+import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';

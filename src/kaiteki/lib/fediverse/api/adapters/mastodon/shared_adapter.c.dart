@@ -23,7 +23,16 @@ Post toPost(mastodon.Status source) {
     replyToUser: getRepliedUser(source),
     id: source.id,
     externalUrl: source.url,
-    reactions: [], // TODO: add pleroma reactions?
+    reactions: source.pleroma?.emojiReactions?.map(toReaction) ?? [],
+  );
+}
+
+Reaction toReaction(pleroma.EmojiReaction reaction) {
+  return Reaction(
+    includesMe: reaction.me,
+    count: reaction.count,
+    emoji: UnicodeEmoji(reaction.name, ""),
+    users: reaction.accounts?.map(toUser) ?? [],
   );
 }
 
