@@ -61,9 +61,13 @@ class EmojiWidget extends StatelessWidget {
   }
 
   Widget buildUnicodeEmoji(UnicodeEmoji unicodeEmoji) {
-    return Text(
-      unicodeEmoji.source!,
-      style: TextStyle(fontSize: size, height: size),
+    return SizedBox(
+      width: size,
+      height: size,
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: Text(unicodeEmoji.source!),
+      ),
     );
   }
 }
