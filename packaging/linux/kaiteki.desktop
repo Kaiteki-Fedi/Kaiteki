@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Version=1.5
+Version=1.0
 Categories=Network;InstantMessaging;GTK;
 Comment=The comfy Fediverse client
 Exec=kaiteki
