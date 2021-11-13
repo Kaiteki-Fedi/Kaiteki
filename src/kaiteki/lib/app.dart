@@ -25,7 +25,6 @@ class KaitekiApp extends StatelessWidget {
           supportedLocales: AppLocalizations.supportedLocales,
           routes: {
             "/": _buildMainRoute,
-            "/accounts": (_) => const ManageAccountsScreen(),
             "/about": (_) => AboutScreen(),
             "/settings": (_) => SettingsScreen(),
             "/settings/customization": (_) =>

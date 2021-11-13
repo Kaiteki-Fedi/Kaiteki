@@ -1,45 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/ui/dialogs/account_list_dialog.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
 
-class AccountSwitcherWidget extends StatefulWidget {
+class AccountSwitcherWidget extends StatelessWidget {
   final double? size;
 
   const AccountSwitcherWidget({Key? key, this.size}) : super(key: key);
 
   @override
-  _AccountSwitcherWidgetState createState() => _AccountSwitcherWidgetState();
-}
-
-class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
-  @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return PopupMenuButton<String>(
-      iconSize: widget.size,
+    return IconButton(
+      iconSize: size ?? 24,
       icon: buildIcon(context),
-      onSelected: (choice) {
-        assert(choice == "!");
-        Navigator.of(context).pushNamed("/accounts");
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AccountListDialog();
+          },
+        );
       },
-      itemBuilder: (_) => [
-        PopupMenuItem(
-          child: Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(right: 12),
-                child: Icon(Mdi.dotsHorizontal),
-              ),
-              Text(l10n.manageAccountsTitle),
-            ],
-          ),
-          value: "!",
-        ),
-      ],
     );
   }
 
@@ -53,7 +36,7 @@ class _AccountSwitcherWidgetState extends State<AccountSwitcherWidget> {
     return AvatarWidget(
       container.currentAccount.account,
       openOnTap: false,
-      size: widget.size ?? 48,
+      size: size ?? 24,
     );
   }
 }
