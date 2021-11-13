@@ -46,7 +46,7 @@ dependencies:
   intl: ^0.17.0
 
   fediverse_objects:
-    path: ../fediverse_objects
+    git: https://github.com/Kaiteki-Fedi/fediverse_objects.git
 
 dev_dependencies:
   build_runner: ^2.1.4
