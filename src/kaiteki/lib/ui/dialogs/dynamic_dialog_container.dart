@@ -56,11 +56,13 @@ class DynamicDialogContainer extends StatelessWidget {
   }
 
   BoxConstraints getConstraints(BoxConstraints constraints, bool fullscreen) {
+    final maxHeight = constraints.maxHeight - (48 * 2);
+
     return BoxConstraints(
       minWidth: min(constraints.maxWidth, _maxDialogSize),
       maxWidth: fullscreen ? constraints.maxWidth : _maxDialogSize,
       minHeight: fullscreen ? constraints.maxHeight : 0,
-      maxHeight: constraints.maxHeight,
+      maxHeight: fullscreen ? constraints.maxHeight : maxHeight,
     );
   }
 }
