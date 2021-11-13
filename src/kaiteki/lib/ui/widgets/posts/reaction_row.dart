@@ -7,7 +7,11 @@ class ReactionRow extends StatelessWidget {
   final Iterable<Reaction> _reactions;
   final Post _parentPost;
 
-  const ReactionRow(this._parentPost, this._reactions);
+  const ReactionRow(
+    this._parentPost,
+    this._reactions, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

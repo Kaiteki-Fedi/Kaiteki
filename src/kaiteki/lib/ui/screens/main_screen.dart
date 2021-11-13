@@ -6,7 +6,6 @@ import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
-import 'package:kaiteki/ui/screens/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
@@ -21,7 +20,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final _chatsKey = UniqueKey();
   final _timelineKey = UniqueKey();
   List<Widget>? _pages;
   List<_MainScreenTab>? _tabs;
@@ -143,10 +141,7 @@ class _MainScreenState extends State<MainScreen> {
     return [
       IconButton(
         icon: const Icon(Icons.settings),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => SettingsScreen()),
-        ),
+        onPressed: () => Navigator.of(context).pushNamed("/settings"),
         tooltip: l10n.settings,
       ),
       const AccountSwitcherWidget(size: 40),

@@ -29,4 +29,8 @@ class AccountSecret {
       return false;
     }
   }
+
+  @override
+  int get hashCode =>
+      instance.hashCode ^ username.hashCode ^ accessToken.hashCode;
 }

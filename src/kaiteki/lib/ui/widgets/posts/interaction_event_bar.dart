@@ -21,7 +21,8 @@ class InteractionEventBar extends StatelessWidget {
     required this.user,
     required this.userTextStyle,
     this.textStyle,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

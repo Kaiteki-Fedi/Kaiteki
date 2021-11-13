@@ -4,6 +4,8 @@ import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
 
 class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
+
   List<_Section> _getItems(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return <_Section>[

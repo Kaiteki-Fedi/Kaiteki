@@ -4,6 +4,8 @@ import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:mdi/mdi.dart';
 
 class AccountRequiredScreen extends StatelessWidget {
+  const AccountRequiredScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

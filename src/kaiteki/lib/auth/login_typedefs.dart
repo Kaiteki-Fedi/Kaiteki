@@ -1,4 +1,3 @@
-import 'package:flutter/painting.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 
@@ -9,9 +8,4 @@ typedef LoginCallback = Future<LoginResult> Function(
   String password,
   MfaCallback mfaCallback,
   AccountManager accounts,
-);
-
-typedef requestAvatar = Future<ImageProvider> Function(
-  String instance,
-  String username,
 );

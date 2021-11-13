@@ -10,7 +10,11 @@ class ThemePreviewWidget extends StatelessWidget {
   final AppThemeSource theme;
   final String defaultName;
 
-  const ThemePreviewWidget(this.theme, {this.defaultName = "Unnamed"});
+  const ThemePreviewWidget(
+    this.theme, {
+    this.defaultName = "Unnamed",
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

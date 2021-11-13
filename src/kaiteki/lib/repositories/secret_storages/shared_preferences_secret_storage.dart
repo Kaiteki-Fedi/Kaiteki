@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/repositories/secret_storages/secret_storage.dart';
@@ -8,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesSecureStorage extends SecretStorage {
   static const String _accountKey = "accounts";
   static const String _clientKey = "clientSecrets";
+
+  final _logger = getLogger('SharedPreferencesSecureStorage');
 
   final SharedPreferences _preferences;
 
@@ -62,7 +65,9 @@ class SharedPreferencesSecureStorage extends SecretStorage {
 
     try {
       strings = _preferences.getStringList(_accountKey);
-    } catch (e) {}
+    } catch (e) {
+      _logger.w("Failed to retrieve account secrets", e);
+    }
 
     if (strings == null) {
       // We end here because we have no data to transform.
@@ -82,7 +87,9 @@ class SharedPreferencesSecureStorage extends SecretStorage {
 
     try {
       strings = _preferences.getStringList(_clientKey);
-    } catch (e) {}
+    } catch (e) {
+      _logger.w("Failed to retrieve client secrets", e);
+    }
 
     if (strings == null) {
       // We end here because we have no data to transform.
@@ -126,7 +133,9 @@ class SharedPreferencesSecureStorage extends SecretStorage {
 
     try {
       strings = _preferences.getStringList(_accountKey);
-    } catch (e) {}
+    } catch (e) {
+      _logger.w("Failed to retrieve account secrets", e);
+    }
 
     if (strings == null) {
       return false;
@@ -144,7 +153,9 @@ class SharedPreferencesSecureStorage extends SecretStorage {
 
     try {
       strings = _preferences.getStringList(_clientKey);
-    } catch (e) {}
+    } catch (e) {
+      _logger.w("Failed to retrieve client secrets", e);
+    }
 
     if (strings == null) {
       return false;

@@ -15,9 +15,17 @@ class AccountScreen extends StatefulWidget {
   final String id;
   final User? initialUser;
 
-  const AccountScreen.fromId(this.id) : initialUser = null;
+  const AccountScreen.fromId(
+    this.id, {
+    Key? key,
+  })  : initialUser = null,
+        super(key: key);
 
-  AccountScreen.fromUser(User this.initialUser) : id = initialUser.id;
+  AccountScreen.fromUser(
+    User this.initialUser, {
+    Key? key,
+  })  : id = initialUser.id,
+        super(key: key);
 
   @override
   _AccountScreenState createState() => _AccountScreenState();
@@ -134,8 +142,8 @@ class _AccountScreenState extends State<AccountScreen>
               child: isLoading
                   ? null
                   : Image.network(
-                snapshot.data!.avatarUrl!,
-              ),
+                      snapshot.data!.avatarUrl!,
+                    ),
             ),
           ),
           Text(
@@ -152,10 +160,10 @@ class _AccountScreenState extends State<AccountScreen>
             background: isLoading || snapshot.data!.bannerUrl != null
                 ? null
                 : Image.network(
-              snapshot.data!.bannerUrl!,
-              fit: BoxFit.cover,
-              alignment: Alignment.center,
-            ),
+                    snapshot.data!.bannerUrl!,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  ),
           ),
           if (isLoading) const LinearProgressIndicator(),
         ],

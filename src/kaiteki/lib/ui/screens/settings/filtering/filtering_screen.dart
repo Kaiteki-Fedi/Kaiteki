@@ -5,6 +5,8 @@ import 'package:kaiteki/preferences/sensitive_post_filtering_preferences.dart';
 import 'package:provider/provider.dart';
 
 class FilteringScreen extends StatelessWidget {
+  const FilteringScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var container = Provider.of<PreferenceContainer>(context);

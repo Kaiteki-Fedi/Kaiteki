@@ -6,22 +6,6 @@ part of 'timeline.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyTimelineRequest _$MisskeyTimelineRequestFromJson(
-    Map<String, dynamic> json) {
-  return MisskeyTimelineRequest(
-    excludeNsfw: json['excludeNsfw'] as bool?,
-    fileType: (json['fileType'] as List<dynamic>?)?.map((e) => e as String),
-    limit: json['limit'] as int,
-    sinceId: json['sinceId'] as String?,
-    untilId: json['untilId'] as String?,
-    sinceDate: json['sinceDate'] as int?,
-    untilDate: json['untilDate'] as int?,
-    includeMyRenotes: json['includeMyRenotes'] as bool,
-    includeLocalRenotes: json['includeLocalRenotes'] as bool,
-    withFiles: json['withFiles'] as bool?,
-  );
-}
-
 Map<String, dynamic> _$MisskeyTimelineRequestToJson(
     MisskeyTimelineRequest instance) {
   final val = <String, dynamic>{

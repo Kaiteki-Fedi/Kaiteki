@@ -5,7 +5,7 @@ import 'package:mdi/mdi.dart';
 class ImageAttachmentWidget extends StatelessWidget {
   final Attachment attachment;
 
-  const ImageAttachmentWidget(this.attachment);
+  const ImageAttachmentWidget(this.attachment, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -10,36 +10,31 @@ class KaitekiApp extends StatelessWidget {
   const KaitekiApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext _) {
-    return Builder(
-      builder: (context) {
-        // TODO: (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
-        final preferences = Provider.of<PreferenceContainer>(context);
-        return MaterialApp(
-          title: "Kaiteki",
-          theme: ThemeData.from(colorScheme: DefaultAppThemes.lightScheme),
-          darkTheme: ThemeData.from(colorScheme: DefaultAppThemes.darkScheme),
-          themeMode: preferences.get().theme,
-          initialRoute: "/",
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          routes: {
-            "/": _buildMainRoute,
-            "/about": (_) => AboutScreen(),
-            "/settings": (_) => SettingsScreen(),
-            "/settings/customization": (_) =>
-                const CustomizationSettingsScreen(),
-            "/settings/filtering": (_) => FilteringScreen(),
-            "/settings/filtering/sensitivePosts": (_) =>
-                const SensitivePostFilteringScreen(),
-            "/settings/debug": (_) => const DebugScreen(),
-            "/settings/debug/preferences": (_) =>
-                const SharedPreferencesScreen(),
-            '/login': (_) => const LoginScreen(),
-            '/credits': (_) => const CreditsScreen(),
-            '/discover-instances': (_) => const DiscoverInstancesScreen(),
-          },
-        );
+  Widget build(BuildContext context) {
+    // TODO: (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
+    final preferences = Provider.of<PreferenceContainer>(context);
+    return MaterialApp(
+      title: "Kaiteki",
+      theme: ThemeData.from(colorScheme: DefaultAppThemes.lightScheme),
+      darkTheme: ThemeData.from(colorScheme: DefaultAppThemes.darkScheme),
+      themeMode: preferences.get().theme,
+      initialRoute: "/",
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      routes: {
+        "/": _buildMainRoute,
+        "/about": (_) => const AboutScreen(),
+        "/settings": (_) => const SettingsScreen(),
+        "/settings/customization": (_) => const CustomizationSettingsScreen(),
+        "/settings/filtering": (_) => const FilteringScreen(),
+        "/settings/filtering/sensitivePosts": (_) {
+          return const SensitivePostFilteringScreen();
+        },
+        "/settings/debug": (_) => const DebugScreen(),
+        "/settings/debug/preferences": (_) => const SharedPreferencesScreen(),
+        '/login': (_) => const LoginScreen(),
+        '/credits': (_) => const CreditsScreen(),
+        '/discover-instances': (_) => const DiscoverInstancesScreen(),
       },
     );
   }
@@ -49,9 +44,9 @@ class KaitekiApp extends StatelessWidget {
       final accountManager = Provider.of<AccountManager>(context);
 
       if (accountManager.loggedIn) {
-        return MainScreen();
+        return const MainScreen();
       } else {
-        return AccountRequiredScreen();
+        return const AccountRequiredScreen();
       }
     });
   }

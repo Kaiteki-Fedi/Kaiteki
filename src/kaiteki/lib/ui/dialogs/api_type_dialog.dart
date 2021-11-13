@@ -5,6 +5,8 @@ import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ApiTypeDialog extends StatefulWidget {
+  const ApiTypeDialog({Key? key}) : super(key: key);
+
   @override
   _ApiTypeDialogState createState() => _ApiTypeDialogState();
 }

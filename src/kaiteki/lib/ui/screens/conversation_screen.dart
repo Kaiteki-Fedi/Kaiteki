@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class ConversationScreen extends StatelessWidget {
   final Post post;
 
-  const ConversationScreen(this.post);
+  const ConversationScreen(this.post, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,11 @@ class ThreadPostContainer extends StatelessWidget {
   final ThreadPost post;
   final int threadLayer;
 
-  const ThreadPostContainer(this.post, {this.threadLayer = 0});
+  const ThreadPostContainer(
+    this.post, {
+    this.threadLayer = 0,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

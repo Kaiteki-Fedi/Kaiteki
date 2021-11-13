@@ -339,6 +339,7 @@ class _UserPage extends StatefulWidget {
 }
 
 class __UserPageState extends State<_UserPage> {
+  // ignore: prefer_final_fields
   bool _register = false;
 
   @override
@@ -380,7 +381,7 @@ class __UserPageState extends State<_UserPage> {
               hintText: l10n.usernameFieldHint,
               prefixIcon: const Icon(Mdi.account),
               prefixIconConstraints: iconConstraint,
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               contentPadding: fieldPadding,
             ),
             validator: widget.usernameValidator,

@@ -176,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return await showDialog<ApiDefinition?>(
       barrierDismissible: false,
       context: context,
-      builder: (_) => ApiTypeDialog(),
+      builder: (context) => const ApiTypeDialog(),
     );
   }
 

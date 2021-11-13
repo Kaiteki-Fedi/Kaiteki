@@ -10,9 +10,11 @@ class AccountCompound {
   final AccountSecret accountSecret;
   final ClientSecret clientSecret;
   final FediverseAdapter adapter;
+
   ApiType? get instanceType => clientSecret.apiType;
 
   User account;
+
   String get instance => clientSecret.instance;
 
   AccountCompound({
@@ -22,6 +24,7 @@ class AccountCompound {
     required this.clientSecret,
     required this.accountSecret,
   });
+
   // TODO assert check has been removed, due to compiler errors
   //: assert(accountSecret.identity.instance.equalsIgnoreCase(clientSecret.instance));
 
@@ -33,5 +36,13 @@ class AccountCompound {
     } else {
       return false;
     }
+  }
+
+  @override
+  int get hashCode {
+    return accountSecret.hashCode ^
+        clientSecret.hashCode ^
+        adapter.hashCode ^
+        instanceType.hashCode;
   }
 }
