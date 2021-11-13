@@ -46,7 +46,7 @@ class Post<T> {
 
   // REPLYING
   final String? replyToPostId;
-  final String? replyToAccountId;
+  final String? replyToUserId;
   final Post? replyTo;
   final User? replyToUser;
 
@@ -76,7 +76,7 @@ class Post<T> {
     this.likeCount = 0,
     this.repeatCount = 0,
     this.replyCount = 0,
-    this.replyToAccountId,
+    this.replyToUserId,
     this.replyToPostId,
     this.externalUrl,
     this.replyToUser,
