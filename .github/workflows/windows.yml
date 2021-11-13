@@ -32,7 +32,7 @@ jobs:
 
       - name: Build
         working-directory: ${{ env.SOURCE_PATH }}
-        run: 'flutter build windows'
+        run: 'flutter build windows --release'
         
       - name: Upload artifacts
         uses: actions/upload-artifact@v2

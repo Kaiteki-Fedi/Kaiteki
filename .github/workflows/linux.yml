@@ -35,10 +35,10 @@ jobs:
 
       - name: Build
         working-directory: ${{ env.SOURCE_PATH }}
-        run: 'flutter build linux'
+        run: 'flutter build linux --release'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: linux
-          path: '${{ env.SOURCE_PATH }}/build/linux/release/bundle/'
+          path: '${{ env.SOURCE_PATH }}/build/linux/x64/release/bundle/'
