@@ -145,7 +145,7 @@ class _PostFormState extends State<PostForm> {
                     textAlignVertical: TextAlignVertical.top,
                     expands: widget.expands,
                     minLines: widget.expands ? null : 6,
-                    maxLines: null,
+                    maxLines: widget.expands ? null : 8,
                     controller: _bodyController,
                   ),
                 ),
