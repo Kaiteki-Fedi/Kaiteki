@@ -263,4 +263,35 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     authenticationData = MisskeyAuthenticationData(secret.accessToken);
     return Future.value();
   }
+
+  Future<Iterable<misskey.MessagingMessage>> getChatHistory({
+    int limit = 10,
+    bool group = true,
+  }) async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.post,
+      "api/messaging/history",
+      (json) => misskey.MessagingMessage.fromJson(json),
+      body: {limit, group},
+    );
+  }
+
+  Future<Iterable<misskey.MessagingMessage>> getMessages({
+    int limit = 10,
+    bool markAsRead = true,
+    required String? userId,
+    required String? groupId,
+  }) async {
+    return await sendJsonRequestMultiple(
+      HttpMethod.post,
+      "api/messaging/messages",
+      (json) => misskey.MessagingMessage.fromJson(json),
+      body: {
+        if (userId != null) userId,
+        if (groupId != null) groupId,
+        limit,
+        markAsRead,
+      },
+    );
+  }
 }

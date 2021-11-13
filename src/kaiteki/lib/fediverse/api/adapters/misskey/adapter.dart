@@ -7,8 +7,8 @@ import 'package:kaiteki/fediverse/api/clients/misskey_client.dart';
 import 'package:kaiteki/fediverse/api/requests/misskey/sign_in.dart';
 import 'package:kaiteki/fediverse/api/requests/misskey/timeline.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/chat.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
+import 'package:kaiteki/fediverse/model/chat_target.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
@@ -101,8 +101,33 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Iterable<Chat>> getChats() {
-    throw UnimplementedError();
+  Future<Iterable<ChatTarget>> getChats() async {
+    final userChats = await client.getChatHistory(group: false);
+    final groupChats = await client.getChatHistory(group: true);
+
+    final allChats = groupChats.followedBy(userChats);
+
+    return allChats.map((msg) {
+      final lastMessage = toChatMessage(msg);
+
+      if (msg.groupId != null) {
+        return GroupChat(
+          source: msg,
+          id: msg.groupId,
+          createdAt: DateTime.now(),
+          lastMessage: lastMessage,
+          recipients: [toUser(msg.user!)],
+        );
+      } else {
+        return DirectChat(
+          source: msg,
+          id: msg.recipientId,
+          createdAt: DateTime.now(),
+          lastMessage: lastMessage,
+          recipient: toUser(msg.recipient!),
+        );
+      }
+    });
   }
 
   @override
@@ -129,8 +154,17 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Iterable<ChatMessage>> getChatMessages(Chat chat) {
-    throw UnimplementedError();
+  Future<Iterable<ChatMessage>> getChatMessages(ChatTarget chat) async {
+    final groupId = chat is GroupChat ? chat.id : null;
+    final userId = chat is DirectChat ? chat.id : null;
+
+    final messages = await client.getMessages(
+      userId: userId,
+      groupId: groupId,
+      markAsRead: false,
+    );
+
+    return messages.map(toChatMessage);
   }
 
   @override
@@ -151,7 +185,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) {
+  Future<ChatMessage> postChatMessage(ChatTarget chat, ChatMessage message) {
     throw UnimplementedError();
   }
 

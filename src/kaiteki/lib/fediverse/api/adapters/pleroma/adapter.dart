@@ -1,20 +1,20 @@
+import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/mastodon/shared_adapter.dart';
 import 'package:kaiteki/fediverse/api/clients/pleroma_client.dart';
-import 'package:kaiteki/fediverse/model/chat.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
+import 'package:kaiteki/fediverse/model/chat_target.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:fediverse_objects/pleroma.dart' as pleroma;
+import 'package:kaiteki/utils/extensions.dart';
 
 part 'adapter.c.dart';
 
-// TODO add missing implementations
 class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
     implements ChatSupport, ReactionSupport, PreviewSupport {
   PleromaAdapter._(PleromaClient client) : super(client);
@@ -24,13 +24,20 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   }
 
   @override
-  Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {
+  Future<ChatMessage> postChatMessage(
+    ChatTarget chat,
+    ChatMessage message,
+  ) async {
     // TODO implement missing data, pleroma chat.
+    final currentAccount = toUser(await client.verifyCredentials());
+
     final sentMessage = await client.postChatMessage(
       chat.id,
-      message.content.content!,
+      message.content!,
     );
-    return toChatMessage(sentMessage);
+
+    final pleromaChat = chat.source as pleroma.Chat;
+    return toChatMessage(sentMessage, pleromaChat, currentAccount);
   }
 
   @override
@@ -45,13 +52,19 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   bool supportsUnicodeEmoji = true;
 
   @override
-  Future<Iterable<ChatMessage>> getChatMessages(Chat chat) {
-    throw UnimplementedError();
+  Future<Iterable<ChatMessage>> getChatMessages(ChatTarget chat) async {
+    final currentAccount = toUser(await client.verifyCredentials());
+    final messages = await client.getChatMessages(chat.id);
+    final pleromaChat = chat.source as pleroma.Chat;
+    return messages
+        .map((msg) => toChatMessage(msg, pleromaChat, currentAccount));
   }
 
   @override
-  Future<Iterable<Chat>> getChats() {
-    throw UnimplementedError();
+  Future<Iterable<ChatTarget>> getChats() async {
+    final currentAccount = toUser(await client.verifyCredentials());
+    final chats = await client.getChats();
+    return chats.map((chat) => toChatTarget(chat, currentAccount));
   }
 
   @override

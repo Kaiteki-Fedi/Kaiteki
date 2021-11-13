@@ -99,3 +99,14 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
     source: instance,
   );
 }
+
+ChatMessage toChatMessage(misskey.MessagingMessage message) {
+  final file = message.file;
+  return ChatMessage(
+    author: toUser(message.user!),
+    content: message.text,
+    sentAt: message.createdAt,
+    emojis: [],
+    attachments: [if (file != null) toAttachment(file)],
+  );
+}
