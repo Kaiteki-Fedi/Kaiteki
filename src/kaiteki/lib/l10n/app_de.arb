@@ -274,5 +274,121 @@
   "filteringSensitiveTitle": "Filterung sensibler Beiträge",
   "@filteringSensitiveTitle": {},
   "empty": "Sieht hier leer aus…",
-  "@empty": {}
+  "@empty": {},
+  "creditsLicenses": "Open-Source Lizenzen",
+  "@creditsLicenses": {},
+  "creditsFlutter": "Mit Flutter gemacht",
+  "@creditsFlutter": {},
+  "creditsFriends": "Besuche unsere Freunde",
+  "@creditsFriends": {},
+  "creditsPleromaDescription": "Freie und offene Kommunikation für jeden",
+  "@creditsPleromaDescription": {},
+  "creditsHuskyDescription": "Fork von Tusky für Pleroma",
+  "@creditsHuskyDescription": {},
+  "attachmentUnsupported": "Nicht unterstützter Anhang",
+  "@attachmentUnsupported": {},
+  "creditsGithubRepo": "GitHub Repository",
+  "@creditsGithubRepo": {},
+  "timeDifferenceHours": "{hours} Std.",
+  "@timeDifferenceHours": {
+    "description": "Text used to display how many hours have passed since a certain event",
+    "placeholders": {
+      "hours": {
+        "description": "Amount of hours",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceMinutes": "{minutes} min.",
+  "@timeDifferenceMinutes": {
+    "description": "Text used to display how many minutes have passed since a certain event",
+    "placeholders": {
+      "minutes": {
+        "description": "Amount of minutes",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceDays": "{days} T",
+  "@timeDifferenceDays": {
+    "description": "Text used to display how many days have passed since a certain event",
+    "placeholders": {
+      "days": {
+        "description": "Amount of days",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceWeeks": "{weeks} W",
+  "@timeDifferenceWeeks": {
+    "description": "Text used to display how many weeks have passed since a certain event",
+    "placeholders": {
+      "weeks": {
+        "description": "Amount of weeks",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceYears": "{years} J",
+  "@timeDifferenceYears": {
+    "description": "Text used to display how many years have passed since a certain event",
+    "placeholders": {
+      "years": {
+        "description": "Amount of years",
+        "example": "2"
+      }
+    }
+  },
+  "timeDifferenceNow": "jetzt",
+  "@timeDifferenceNow": {
+    "description": "Text used to display an event that just happened"
+  },
+  "replyTo": "Antwort zu",
+  "@replyTo": {
+    "description": "Gets appended with replyee's display name"
+  },
+  "postRepeated": "wiederholte",
+  "@postRepeated": {
+    "description": "Gets prepended with repeater's display name"
+  },
+  "openInBrowserLabel": "Im Browser öffnen",
+  "@openInBrowserLabel": {},
+  "visibilityDirect": "Direkt",
+  "@visibilityDirect": {},
+  "visibilityFollowersOnly": "Nur Follower",
+  "@visibilityFollowersOnly": {},
+  "visibilityUnlisted": "Ungelistet",
+  "@visibilityUnlisted": {},
+  "visibilityPublic": "Öffentlich",
+  "@visibilityPublic": {},
+  "attachFilesButtonLabel": "Dateien anfügen",
+  "@attachFilesButtonLabel": {},
+  "formattingPlain": "Reintext",
+  "@formattingPlain": {},
+  "formattingMfm": "Misskey Markdown",
+  "@formattingMfm": {},
+  "takePictureButtonLabel": "Foto aufnehmen",
+  "@takePictureButtonLabel": {},
+  "subjectButtonLabelEnable": "Betreff aktivieren",
+  "@subjectButtonLabelEnable": {},
+  "subjectButtonLabelDisable": "Betreff deaktivieren",
+  "@subjectButtonLabelDisable": {},
+  "viewOnlineButtonLabel": "Online ansehen",
+  "@viewOnlineButtonLabel": {
+    "description": "Button label used when certain content can't be displayed in Kaiteki but might able to in a web browser instead (e.g. videos)."
+  },
+  "createPollButtonLabel": "Umfrage erstellen",
+  "@createPollButtonLabel": {},
+  "recordVoiceButtonLabel": "Stimme aufnehmen",
+  "@recordVoiceButtonLabel": {},
+  "timeDifferenceSeconds": "{seconds} Sek.",
+  "@timeDifferenceSeconds": {
+    "description": "Text used to display how many seconds have passed since a certain event",
+    "placeholders": {
+      "seconds": {
+        "description": "Amount of seconds",
+        "example": "2"
+      }
+    }
+  }
 }
