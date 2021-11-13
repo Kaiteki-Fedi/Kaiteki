@@ -17,15 +17,11 @@ class _TimelinePageState extends State<TimelinePage> {
     var container = Provider.of<AccountManager>(context);
     var timelineKey = ValueKey(container.currentAccount.hashCode);
 
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 800),
-        child: Timeline(
-          key: timelineKey,
-          adapter: container.adapter,
-          filters: [SensitivePostFilter()],
-        ),
-      ),
+    return Timeline(
+      key: timelineKey,
+      adapter: container.adapter,
+      filters: [SensitivePostFilter()],
+      maxWidth: 800,
     );
   }
 }

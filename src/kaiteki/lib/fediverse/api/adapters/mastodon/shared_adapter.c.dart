@@ -18,7 +18,7 @@ Post toPost(mastodon.Status source) {
     repeatCount: source.reblogsCount,
     replyCount: source.repliesCount,
     visibility: toVisibility(source.visibility),
-    replyToAccountId: source.inReplyToAccountId,
+    replyToUserId: source.inReplyToAccountId,
     replyToPostId: source.inReplyToId,
     replyToUser: getRepliedUser(source),
     id: source.id,
@@ -106,7 +106,8 @@ User toUser(mastodon.Account source) {
     id: source.id,
     description: source.note,
     emojis: source.emojis.map(toEmoji),
-    birthday: null, // Mastodon doesn't support this
+    birthday: null,
+    // Mastodon doesn't support this
     followerCount: source.followersCount,
     followingCount: source.followingCount,
     postCount: source.statusesCount,
