@@ -40,7 +40,7 @@ If you want to try out Kaiteki, there are automatic builds available for use.
         <th>Binaries</th>
         <td rowspan=2><a href="https://kaiteki.craftplacer.moe/">Visit web version</a></td>
         <td><a href="https://nightly.link/Craftplacer/Kaiteki/workflows/windows/master/windows.zip">Download latest binaries</a></td>
-        <td>No reliable build outputs yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/62">Help us!</a></td>
+        <td><a href="https://nightly.link/Craftplacer/Kaiteki/workflows/linux/master/linux.zip">Download latest binaries</a></td>
     </tr>
     <tr>
         <th>Packages / Installers</th>
