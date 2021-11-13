@@ -10,6 +10,7 @@ on:
     paths:
       - 'src/**'
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -42,3 +43,42 @@ jobs:
         with:
           name: linux
           path: '${{ env.SOURCE_PATH }}/build/linux/x64/release/bundle/'
+
+  package-appimage:
+    name: Package (AppImage)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name != 'pull_request'
+    steps:
+      - name: Install packaging dependencies
+        run: 'sudo apt-get install -y python3-pip python3-setuptools patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot strace fuse'
+
+      - name: Download AppImageTool
+        run: |
+          wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+          chmod +x appimagetool
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: linux
+          path: 'kaiteki.AppDir'
+
+      - name: Prepare directory
+        run: |
+          chmod +x kaiteki.AppDir/kaiteki
+          wget https://raw.githubusercontent.com/Craftplacer/Kaiteki/master/assets/icons/windows/kaiteki.png -O kaiteki.AppDir/kaiteki.png
+          wget https://raw.githubusercontent.com/Craftplacer/Kaiteki/master/assets/icons/windows/kaiteki.png -O kaiteki.AppDir/.DirIcon
+          wget https://raw.githubusercontent.com/Craftplacer/Kaiteki/master/packaging/linux/kaiteki.desktop -O kaiteki.AppDir/kaiteki.desktop
+          wget https://raw.githubusercontent.com/Craftplacer/Kaiteki/master/packaging/linux/AppRun -O kaiteki.AppDir/AppRun
+          chmod +x kaiteki.AppDir/AppRun
+
+      - name: Make AppImage
+        run: |
+          ./appimagetool --appimage-extract
+          ./squashfs-root/AppRun kaiteki.AppDir/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: 'Kaiteki-x86_64.AppImage'
