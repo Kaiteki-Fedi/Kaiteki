@@ -81,4 +81,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
+          name: appimage
           path: 'Kaiteki-x86_64.AppImage'
