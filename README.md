@@ -30,25 +30,25 @@ If you want to try out Kaiteki, there are automatic builds available for use.
     </tr>
     <tr>
         <th>Build status</th>
-        <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Web"></td>
-        <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Windows"></td>
-        <td><img src="https://img.shields.io/github/workflow/status/Craftplacer/kaiteki/Linux"></td>
-        <td rowspan=3>No CI/CD available yet.<br><a href="https://github.com/Craftplacer/kaiteki/issues/2">Help us!</a></td>
+        <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Web"></td>
+        <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Windows"></td>
+        <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Linux"></td>
+        <td rowspan=3>No CI/CD available yet.<br><a href="https://github.com/Kaiteki-Fedi/kaiteki/issues/2">Help us!</a></td>
         <td colspan=2 rowspan=3>Not supported.</td>
     </tr>
     <tr>
         <th>Binaries</th>
         <td rowspan=2><a href="https://kaiteki.craftplacer.moe/">Visit web version</a></td>
-        <td><a href="https://nightly.link/Craftplacer/Kaiteki/workflows/windows/master/windows.zip">Download latest binaries</a></td>
-        <td><a href="https://nightly.link/Craftplacer/Kaiteki/workflows/linux/master/linux.zip">Download latest binaries</a></td>
+        <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/windows/master/windows.zip">Download latest binaries</a></td>
+        <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/linux/master/linux.zip">Download latest binaries</a></td>
     </tr>
     <tr>
         <th>Packages / Installers</th>
-        <td>No reliable packaging yet.<br><a href="https://github.com/Craftplacer/Kaiteki/issues/63">Help us!</a></td>
+        <td>No reliable packaging yet.<br><a href="https://github.com/Kaiteki-Fedi/Kaiteki/issues/63">Help us!</a></td>
         <td>
-            <a href="https://nightly.link/Craftplacer/Kaiteki/workflows/linux/master/appimage.zip">AppImage</a>
+            <a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/linux/master/appimage.zip">AppImage</a>
             <br><br>
-            <a href="https://github.com/Craftplacer/Kaiteki/issues/62">Help us package for more platforms!</a>
+            <a href="https://github.com/Kaiteki-Fedi/Kaiteki/issues/62">Help us package for more platforms!</a>
         </td>
     </tr>
 </table>
