@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:mdi/mdi.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'discover_instances_screen.g.dart';
@@ -97,9 +100,8 @@ class InstanceData {
   final String? favicon;
   final List<String>? rules;
   final String? rulesUrl;
-
-  @JsonKey(defaultValue: false)
   final bool usesCovenant;
+  final bool usesMastodonCovenant;
 
   const InstanceData({
     required this.type,
@@ -109,6 +111,7 @@ class InstanceData {
     this.rules,
     this.rulesUrl,
     this.usesCovenant = false,
+    this.usesMastodonCovenant = false,
   });
 
   factory InstanceData.fromJson(Map<String, dynamic> json) =>
@@ -149,9 +152,7 @@ class _InstanceCard extends StatelessWidget {
                 ? null
                 : Text(data.shortDescription!),
           ),
-          const Divider(
-            height: 2,
-          ),
+          const Divider(height: 2),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
@@ -225,19 +226,73 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final definition = ApiDefinitions.byType(data.type);
-    final testAdapter = definition.createAdapter();
+    const chipPadding = EdgeInsets.all(8.0);
+    final theme = Theme.of(context);
 
     var i = 1;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.aboutInstanceTitle(data.name))),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              expandedHeight: 300.0,
+              pinned: true,
+              floating: true,
+              backgroundColor: theme.colorScheme.surface,
+              foregroundColor: theme.colorScheme.onSurface,
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: true,
+                title: Text(
+                  data.name,
+                  style: TextStyle(color: theme.colorScheme.onSurface),
+                ),
+                collapseMode: CollapseMode.pin,
+                background: ColoredBox(
+                  color: theme.colorScheme.background,
+                  child: ShaderMask(
+                    blendMode: BlendMode.dstATop,
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Colors.red.withOpacity(.50),
+                          Colors.transparent,
+                        ],
+                      ).createShader(bounds);
+                    },
+                    child: FutureBuilder(
+                      future: fetchInstanceBackground(context),
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<String?> snapshot,
+                      ) {
+                        final url = snapshot.data;
+
+                        if (url == null) {
+                          return const ColoredBox(color: Colors.grey);
+                        } else {
+                          return Image.network(url, fit: BoxFit.cover);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ];
+        },
+        body: SingleChildScrollView(
           child: Column(
             children: [
-              Text(data.name, style: Theme.of(context).textTheme.headline3),
-              if (data.shortDescription != null) Text(data.shortDescription!),
+              if (data.shortDescription != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 32.0,
+                  ),
+                  child: Text(data.shortDescription!),
+                ),
               if (data.rules != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -248,26 +303,24 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     children: [
-                      if (data.usesCovenant)
-                        ActionChip(
-                          onPressed: () async {
-                            await launch(
-                                "https://github.com/pixeldesu/fediverse-friendly-moderation-covenant/blob/master/README.md");
-                          },
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
-                          label: Text(
-                            l10n.usesFediverseCovenant,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondary,
-                            ),
-                          ),
-                          avatar: Icon(
-                            Mdi.star,
-                            size: 20,
-                            color: Theme.of(context).colorScheme.onSecondary,
-                          ),
+                      SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            if (data.usesCovenant)
+                              const Padding(
+                                padding: chipPadding,
+                                child: FediverseCovenantChip(),
+                              ),
+                            if (data.usesMastodonCovenant)
+                              const Padding(
+                                padding: chipPadding,
+                                child: MastodonCovenantChip(),
+                              ),
+                          ],
                         ),
+                      ),
                       for (var rule in data.rules!)
                         RuleListTile(number: i++, rule: rule),
                       if (data.rulesUrl != null)
@@ -279,58 +332,23 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              ExpansionTile(
-                title: Text(l10n.aboutBackendTitle(definition.name)),
-                children: [
-                  ListTile(
-                    title: Text(
-                      l10n.sharedBackendFunctionality(definition.name),
-                    ),
-                  ),
-                  _buildFeatureListTile(
-                    context,
-                    Mdi.forum,
-                    l10n.chatSupport,
-                    testAdapter is ChatSupport,
-                  ),
-                  _buildFeatureListTile(
-                    context,
-                    Mdi.emoticon,
-                    l10n.reactionSupport,
-                    testAdapter is ReactionSupport,
-                  ),
-                  _buildFeatureListTile(
-                    context,
-                    Mdi.commentEditOutline,
-                    l10n.previewSupport,
-                    testAdapter is PreviewSupport,
-                  ),
-                ],
-              ),
+              AdapterFeaturesExpansionTile(data.type),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   children: [
-                    TextButton(
+                    ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop(
                           DiscoverInstanceScreenResult(data.name, false),
                         );
                       },
+                      style: const ButtonStyle(
+                        visualDensity: VisualDensity.comfortable,
+                      ),
                       child: Text(l10n.loginButtonLabel),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 8.0),
-                    //   child: ElevatedButton(
-                    //     onPressed: () {
-                    //       Navigator.of(context).pop(
-                    //         DiscoverInstanceScreenResult(data.name, true),
-                    //       );
-                    //     },
-                    //     child: const Text("Create an account"),
-                    //   ),
-                    // ),
                   ],
                 ),
               )
@@ -338,6 +356,56 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<String?> fetchInstanceBackground(BuildContext context) async {
+    final accountManager = Provider.of<AccountManager>(context, listen: false);
+    final result = await accountManager.probeInstance(data.name);
+
+    if (result.successful) {
+      return result.instance!.backgroundUrl;
+    }
+
+    return null;
+  }
+}
+
+class AdapterFeaturesExpansionTile extends StatelessWidget {
+  final ApiType type;
+
+  const AdapterFeaturesExpansionTile(this.type, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final definition = ApiDefinitions.byType(type);
+    final name = definition.name;
+    final adapter = definition.createAdapter();
+
+    return ExpansionTile(
+      title: Text(l10n.aboutBackendTitle(name)),
+      children: [
+        ListTile(title: Text(l10n.sharedBackendFunctionality(name))),
+        _buildFeatureListTile(
+          context,
+          Mdi.forum,
+          l10n.chatSupport,
+          adapter is ChatSupport,
+        ),
+        _buildFeatureListTile(
+          context,
+          Mdi.emoticon,
+          l10n.reactionSupport,
+          adapter is ReactionSupport,
+        ),
+        _buildFeatureListTile(
+          context,
+          Mdi.commentEditOutline,
+          l10n.previewSupport,
+          adapter is PreviewSupport,
+        ),
+      ],
     );
   }
 
@@ -357,6 +425,62 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
       title: Text(label),
       trailing: value ? const Icon(Mdi.check) : const Icon(Mdi.close),
     );
+  }
+}
+
+class FediverseCovenantChip extends StatelessWidget {
+  static const String _url =
+      "https://github.com/pixeldesu/fediverse-friendly-moderation-covenant/blob/master/README.md";
+
+  const FediverseCovenantChip({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ActionChip(
+      onPressed: _onPressed,
+      backgroundColor: colorScheme.secondary,
+      label: Text(
+        l10n.usesFediverseCovenant,
+        style: TextStyle(color: colorScheme.onSecondary),
+      ),
+      avatar: Icon(
+        Mdi.star,
+        size: 20,
+        color: colorScheme.onSecondary,
+      ),
+    );
+  }
+
+  void _onPressed() async {
+    await launch(_url);
+  }
+}
+
+class MastodonCovenantChip extends StatelessWidget {
+  static const String _url = "https://joinmastodon.org/covenant";
+
+  const MastodonCovenantChip({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return ActionChip(
+      onPressed: _onPressed,
+      backgroundColor: AppColors.mastodonPrimary,
+      label: Text(
+        l10n.usesMastodonCovenant,
+        style: const TextStyle(color: Colors.white),
+      ),
+      avatar: const Icon(Mdi.mastodon, size: 20, color: Colors.white),
+    );
+  }
+
+  void _onPressed() async {
+    await launch(_url);
   }
 }
 

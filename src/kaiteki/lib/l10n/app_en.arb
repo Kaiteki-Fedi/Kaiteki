@@ -57,6 +57,8 @@
   },
   "usesFediverseCovenant": "Uses the Fediverse-Friendly Moderation Covenant",
   "@usesFediverseCovenant": {},
+  "usesMastodonCovenant": "Uses the Mastodon Server Covenant",
+  "@usesMastodonCovenant": {},
   "visibilityButtonTooltip": "Change post scope",
   "@visibilityButtonTooltip": {},
   "attachButtonTooltip": "Attach",
