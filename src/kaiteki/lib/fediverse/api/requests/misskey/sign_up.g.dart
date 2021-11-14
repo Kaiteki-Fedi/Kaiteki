@@ -6,16 +6,16 @@ part of 'sign_up.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeySignUpRequest _$MisskeySignUpRequestFromJson(Map<String, dynamic> json) {
-  return MisskeySignUpRequest(
-    username: json['username'] as String,
-    password: json['password'] as String,
-    token: json['token'] as String,
-    invitationCode: json['invitationCode'] as String?,
-    hcaptchaResponse: json['hcaptchaResponse'] as String?,
-    recaptchaResponse: json['recaptchaResponse'] as String?,
-  );
-}
+MisskeySignUpRequest _$MisskeySignUpRequestFromJson(
+        Map<String, dynamic> json) =>
+    MisskeySignUpRequest(
+      username: json['username'] as String,
+      password: json['password'] as String,
+      token: json['token'] as String,
+      invitationCode: json['invitationCode'] as String?,
+      hcaptchaResponse: json['hcaptchaResponse'] as String?,
+      recaptchaResponse: json['recaptchaResponse'] as String?,
+    );
 
 Map<String, dynamic> _$MisskeySignUpRequestToJson(
         MisskeySignUpRequest instance) =>

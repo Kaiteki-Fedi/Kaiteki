@@ -7,11 +7,10 @@ part of 'emoji_packs_response.dart';
 // **************************************************************************
 
 PleromaEmojiPacksResponse _$PleromaEmojiPacksResponseFromJson(
-    Map<String, dynamic> json) {
-  return PleromaEmojiPacksResponse(
-    count: json['count'] as int,
-    packs: (json['packs'] as Map<String, dynamic>).map(
-      (k, e) => MapEntry(k, EmojiPack.fromJson(e as Map<String, dynamic>)),
-    ),
-  );
-}
+        Map<String, dynamic> json) =>
+    PleromaEmojiPacksResponse(
+      count: json['count'] as int,
+      packs: (json['packs'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, EmojiPack.fromJson(e as Map<String, dynamic>)),
+      ),
+    );

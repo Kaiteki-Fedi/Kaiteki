@@ -7,13 +7,13 @@ part of 'sensitive_post_filtering_preferences.dart';
 // **************************************************************************
 
 SensitivePostFilteringPreferences _$SensitivePostFilteringPreferencesFromJson(
-    Map<String, dynamic> json) {
-  return SensitivePostFilteringPreferences(
-    enabled: json['enabled'] as bool,
-    filterPostsMarkedAsSensitive: json['filterPostsMarkedAsSensitive'] as bool,
-    filterPostsWithSubject: json['filterPostsWithSubject'] as bool,
-  );
-}
+        Map<String, dynamic> json) =>
+    SensitivePostFilteringPreferences(
+      enabled: json['enabled'] as bool? ?? false,
+      filterPostsMarkedAsSensitive:
+          json['filterPostsMarkedAsSensitive'] as bool? ?? true,
+      filterPostsWithSubject: json['filterPostsWithSubject'] as bool? ?? false,
+    );
 
 Map<String, dynamic> _$SensitivePostFilteringPreferencesToJson(
         SensitivePostFilteringPreferences instance) =>

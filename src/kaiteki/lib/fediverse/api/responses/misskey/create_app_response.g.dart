@@ -7,16 +7,16 @@ part of 'create_app_response.dart';
 // **************************************************************************
 
 MisskeyCreateAppResponse _$MisskeyCreateAppResponseFromJson(
-    Map<String, dynamic> json) {
-  return MisskeyCreateAppResponse(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    callbackUrl: json['callbackUrl'] as String,
-    permission:
-        (json['permission'] as List<dynamic>).map((e) => e as String).toList(),
-    secret: json['secret'] as String,
-  );
-}
+        Map<String, dynamic> json) =>
+    MisskeyCreateAppResponse(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      callbackUrl: json['callbackUrl'] as String,
+      permission: (json['permission'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      secret: json['secret'] as String,
+    );
 
 Map<String, dynamic> _$MisskeyCreateAppResponseToJson(
         MisskeyCreateAppResponse instance) =>
