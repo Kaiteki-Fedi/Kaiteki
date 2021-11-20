@@ -55,12 +55,12 @@ class Post<T> {
 
   final String? externalUrl;
 
-  const Post({
+  Post({
     required this.source,
     required this.postedAt,
     required this.author,
     required this.id,
-    required this.reactions,
+    Iterable<Reaction>? reactions,
     required this.visibility,
     this.content,
     this.subject,
@@ -80,7 +80,7 @@ class Post<T> {
     this.replyToPostId,
     this.externalUrl,
     this.replyToUser,
-  });
+  }) : reactions = reactions ?? [];
 
   factory Post.example() {
     return Post(
