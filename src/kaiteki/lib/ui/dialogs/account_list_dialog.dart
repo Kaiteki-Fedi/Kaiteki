@@ -127,7 +127,10 @@ class AccountRemovalDialog extends StatelessWidget {
         TextButton(
           child: Text(l10n.removeButtonLabel),
           onPressed: () {
-            final container = Provider.of<AccountManager>(context);
+            final container = Provider.of<AccountManager>(
+              context,
+              listen: false,
+            );
             container.remove(compound);
             Navigator.of(context).pop();
           },
