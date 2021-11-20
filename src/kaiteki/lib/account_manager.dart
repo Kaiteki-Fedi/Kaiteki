@@ -88,6 +88,11 @@ class AccountManager extends ChangeNotifier {
     var instance = accountSecret.instance;
     var clientSecret = _clientSecrets.get(instance)!;
 
+    if (clientSecret.apiType == null) {
+      _logger.d("Client secret didn't have contain API type.");
+      return;
+    }
+
     _logger.d('Trying to recover a ${clientSecret.apiType} account');
 
     var adapter = ApiDefinitions.byType(clientSecret.apiType!).createAdapter();
