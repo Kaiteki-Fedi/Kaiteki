@@ -33,13 +33,13 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   );
 
   /// Retrieves an user of another instance
-  Future<User> getUser(String username, [String instance]);
+  Future<User> getUser(String username, [String? instance]);
 
   /// Retrieves an user using an instance specific ID.
   Future<User> getUserById(String id);
 
   /// Posts a status, optionally in reply to another post.
-  Future<Post> postStatus(PostDraft draft, {Post parentPost});
+  Future<Post> postStatus(PostDraft draft, {Post? parentPost});
 
   /// Retrieves a thread from a reply
   Future<Iterable<Post>> getThread(Post reply);
