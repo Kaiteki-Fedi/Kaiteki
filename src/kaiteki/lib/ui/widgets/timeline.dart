@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
@@ -9,8 +10,10 @@ import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/post_filters/post_filter.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/screens/conversation_screen.dart';
+import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/utils/paged_network_stream.dart';
+import 'package:mdi/mdi.dart';
 
 class Timeline extends StatefulWidget {
   final FediverseAdapter adapter;
@@ -53,10 +56,18 @@ class TimelineState extends State<Timeline> {
         return;
       }
 
+      if (_model.hasReachedEnd) {
+        _logger.d('Reached end of timeline');
+        return;
+      }
+
       var threshold = (_scrollContainer.position.maxScrollExtent - 300);
       if (threshold < _scrollContainer.offset) {
         _isLoading = true;
-        _model.loadMore().then((_) => _isLoading = false).catchError((e) {
+
+        _model.loadMore().then((_) {
+          _isLoading = false;
+        }).catchError((e) {
           _logger.e('Failed to load more posts', e);
           _isLoading = false;
         });
@@ -82,45 +93,81 @@ class TimelineState extends State<Timeline> {
     BuildContext context,
     AsyncSnapshot<Iterable<Post>> snapshot,
   ) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    late final Map<Post, PostFilterResult> filtered;
-    final filters = widget.filters ?? [];
-
-    if (snapshot.hasData) {
-      filtered = Map.fromEntries(snapshot.data!.map((p) {
-        return MapEntry(
-          p,
-          PostFilter.runMultipleFilters(context, p, filters),
-        );
-      }).where((p) => p.value != PostFilterResult.hide));
-    } else {
-      filtered = <Post, PostFilterResult>{};
-    }
-
-    return RefreshIndicator(
-      onRefresh: refresh,
-      child: Center(
-        child: ListView.separated(
-          controller: _scrollContainer,
-          itemCount: filtered.length + 1,
-          separatorBuilder: (_, __) {
-            if (widget.wide) {
-              return const SizedBox();
-            }
-
-            return Center(
-              child: ConstrainedBox(
-                constraints: _constraints,
-                child: const Divider(thickness: 1),
+    final l10n = AppLocalizations.of(context)!;
+    if (snapshot.connectionState == ConnectionState.active) {
+      if (snapshot.hasError) {
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 40.0),
+              IconLandingWidget(
+                icon: const Icon(Mdi.textBoxRemove),
+                text: Text(l10n.timelineRetrievalFailed),
               ),
-            );
-          },
-          itemBuilder: (context, i) => _buildItem(context, i, filtered),
+              const SizedBox(height: 8.0),
+              TextButton(
+                child: Text(l10n.refresh),
+                onPressed: () => _model.refresh(),
+              ),
+            ],
+          ),
+        );
+      }
+
+      late final Map<Post, PostFilterResult> filtered;
+      final filters = widget.filters ?? [];
+
+      if (snapshot.hasData) {
+        filtered = Map.fromEntries(snapshot.data!.map((p) {
+          return MapEntry(
+            p,
+            PostFilter.runMultipleFilters(context, p, filters),
+          );
+        }).where((p) => p.value != PostFilterResult.hide));
+      } else {
+        filtered = <Post, PostFilterResult>{};
+      }
+
+      return RefreshIndicator(
+        onRefresh: refresh,
+        child: Center(
+          child: filtered.isEmpty
+              ? IconLandingWidget(
+                  icon: const Icon(Mdi.textBoxOutline),
+                  text: Text(l10n.empty),
+                )
+              : _buildList(filtered),
         ),
-      ),
+      );
+    }
+
+    return const Center(child: CircularProgressIndicator());
+  }
+
+  Widget _buildList(Map<Post, PostFilterResult> filtered) {
+    int itemCount = filtered.length;
+
+    if (!_model.hasReachedEnd) {
+      itemCount++;
+    }
+
+    return ListView.separated(
+      controller: _scrollContainer,
+      itemCount: itemCount,
+      separatorBuilder: (_, __) {
+        if (widget.wide) {
+          return const SizedBox();
+        }
+
+        return Center(
+          child: ConstrainedBox(
+            constraints: _constraints,
+            child: const Divider(thickness: 1),
+          ),
+        );
+      },
+      itemBuilder: (context, i) => _buildItem(context, i, filtered),
     );
   }
 
@@ -147,11 +194,13 @@ class TimelineState extends State<Timeline> {
           child: widget,
         ),
       );
-    } else {
+    } else if (_isLoading) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 64.0),
         child: Center(child: CircularProgressIndicator()),
       );
+    } else {
+      return const SizedBox(height: 96.0);
     }
   }
 

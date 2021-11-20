@@ -397,5 +397,7 @@
   "subjectButtonLabelEnable": "Enable subject",
   "@subjectButtonLabelEnable": {},
   "subjectButtonLabelDisable": "Disable subject",
-  "@subjectButtonLabelDisable": {}
+  "@subjectButtonLabelDisable": {},
+  "timelineRetrievalFailed": "Failed to fetch timeline",
+  "refresh": "Refresh"
 }

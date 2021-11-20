@@ -7,7 +7,12 @@ abstract class PagedNetworkStream<T, I> {
   I? _lastId;
   late final Stream<Iterable<T>> stream;
 
+  bool _hasReachedEnd = false;
+
+  bool get hasReachedEnd => _hasReachedEnd;
+
   Future<Iterable<T>> fetchObjects(I? firstId, I? lastId);
+
   I takeId(T object);
 
   PagedNetworkStream() {
@@ -24,11 +29,22 @@ abstract class PagedNetworkStream<T, I> {
 
   Future<void> loadMore() async {
     // TODO: Implement refresh adding items to the top.
-    var objects = await fetchObjects(null, _lastId);
+    late final Iterable<T> objects;
 
-    _objects.addAll(objects);
+    try {
+      objects = await fetchObjects(null, _lastId);
+    } catch (error) {
+      _controller.addError(error);
+      return;
+    }
+
+    if (objects.isNotEmpty) {
+      _objects.addAll(objects);
+      _lastId = takeId(objects.last);
+    }
+
     _controller.add(_objects);
 
-    _lastId = takeId(objects.last);
+    _hasReachedEnd = _lastId != null && objects.isEmpty;
   }
 }
