@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:kaiteki/utils/text/text_renderer_theme.dart';
@@ -88,6 +89,8 @@ class _AccountScreenState extends State<AccountScreen>
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
     final l10n = AppLocalizations.of(context)!;
+    final bannerUrl = snapshot.data?.bannerUrl;
+
     return AppBar(
       bottom: TabBar(
         tabs: [
@@ -133,36 +136,38 @@ class _AccountScreenState extends State<AccountScreen>
         ],
         controller: _tabController,
       ),
-      title: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: CircleAvatar(
-              maxRadius: 14,
-              child: isLoading
-                  ? null
-                  : Image.network(
-                      snapshot.data!.avatarUrl!,
-                    ),
+      title: snapshot.data == null
+          ? const SizedBox()
+          : Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: AvatarWidget(
+                    snapshot.data!,
+                    size: 24,
+                    openOnTap: false,
+                  ),
+                ),
+                Text(
+                  snapshot.data?.displayName ?? "",
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                ),
+              ],
             ),
-          ),
-          Text(
-            snapshot.data?.displayName ?? "",
-            overflow: TextOverflow.fade,
-            softWrap: false,
-          ),
-        ],
-      ),
       flexibleSpace: Stack(
         children: [
           FlexibleSpaceBar(
             collapseMode: CollapseMode.parallax,
-            background: isLoading || snapshot.data!.bannerUrl != null
+            background: bannerUrl == null
                 ? null
                 : Image.network(
-                    snapshot.data!.bannerUrl!,
+                    bannerUrl,
                     fit: BoxFit.cover,
                     alignment: Alignment.center,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const SizedBox();
+                    },
                   ),
           ),
           if (isLoading) const LinearProgressIndicator(),
