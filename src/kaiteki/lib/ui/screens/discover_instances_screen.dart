@@ -12,9 +12,9 @@ import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
+import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 part 'discover_instances_screen.g.dart';
 
@@ -327,7 +327,7 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                         ListTile(
                           title: Text(l10n.rulesLearnMore),
                           trailing: const Icon(Mdi.arrowRight),
-                          onTap: () async => await launch(data.rulesUrl!),
+                          onTap: () async => await context.launchUrl(data.rulesUrl!),
                         ),
                     ],
                   ),
@@ -440,7 +440,7 @@ class FediverseCovenantChip extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return ActionChip(
-      onPressed: _onPressed,
+      onPressed: () => _onPressed(context),
       backgroundColor: colorScheme.secondary,
       label: Text(
         l10n.usesFediverseCovenant,
@@ -454,8 +454,8 @@ class FediverseCovenantChip extends StatelessWidget {
     );
   }
 
-  void _onPressed() async {
-    await launch(_url);
+  void _onPressed(BuildContext context) async {
+    await context.launchUrl(_url);
   }
 }
 
@@ -469,7 +469,7 @@ class MastodonCovenantChip extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return ActionChip(
-      onPressed: _onPressed,
+      onPressed: () => _onPressed(context),
       backgroundColor: AppColors.mastodonPrimary,
       label: Text(
         l10n.usesMastodonCovenant,
@@ -479,8 +479,8 @@ class MastodonCovenantChip extends StatelessWidget {
     );
   }
 
-  void _onPressed() async {
-    await launch(_url);
+  void _onPressed(BuildContext context) async {
+    await context.launchUrl(_url);
   }
 }
 

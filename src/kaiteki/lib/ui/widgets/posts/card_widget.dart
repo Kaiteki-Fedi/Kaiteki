@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/preview_card.dart';
+import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CardWidget extends StatelessWidget {
   final PreviewCard card;
@@ -15,9 +15,7 @@ class CardWidget extends StatelessWidget {
       elevation: 2,
       color: theme.cardColor,
       child: InkWell(
-        onTap: () {
-          launch(card.link);
-        },
+        onTap: () => context.launchUrl(card.link),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

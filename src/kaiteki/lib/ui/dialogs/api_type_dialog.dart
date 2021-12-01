@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:kaiteki/utils/extensions/build_context.dart';
 
 class ApiTypeDialog extends StatefulWidget {
   const ApiTypeDialog({Key? key}) : super(key: key);
@@ -58,16 +58,8 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
           TextButton(
             child: Text(l10n.apiTypeDialog_missing),
             onPressed: () async {
-              const String url =
-                  "https://github.com/Craftplacer/kaiteki/issues/new";
-
-              if (await canLaunch(url)) {
+              if (await context.launchUrl("https://github.com/Craftplacer/kaiteki/issues/new")) {
                 Navigator.pop(context);
-                await launch(url);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(l10n.failedToLaunchUrl)),
-                );
               }
             },
           )

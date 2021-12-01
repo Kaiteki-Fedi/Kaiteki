@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
+import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class FallbackAttachmentWidget extends StatelessWidget {
   const FallbackAttachmentWidget({
@@ -28,9 +28,7 @@ class FallbackAttachmentWidget extends StatelessWidget {
           Text(l10n.attachmentUnsupported),
           OutlinedButton(
             child: Text(l10n.viewOnlineButtonLabel),
-            onPressed: () async {
-              await launch(attachment.url);
-            },
+            onPressed: () => context.launchUrl(attachment.url),
           ),
         ],
       ),

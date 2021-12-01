@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const _items = [
   _CreditsEntry("Craftplacer", "Maintainer, Translator (German)",
@@ -30,7 +29,7 @@ class CreditsScreen extends StatelessWidget {
             trailing: item.website.nullTransform(
               (website) => IconButton(
                 icon: const Icon(Mdi.openInNew),
-                onPressed: () => launchUrl(context, item.website!),
+                onPressed: () => context.launchUrl(item.website!),
               ),
             ),
           );
@@ -38,17 +37,6 @@ class CreditsScreen extends StatelessWidget {
         itemCount: _items.length,
       ),
     );
-  }
-
-  Future<void> launchUrl(BuildContext context, String url) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final l10n = AppLocalizations.of(context)!;
-
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.failedToLaunchUrl)));
-    }
   }
 }
 

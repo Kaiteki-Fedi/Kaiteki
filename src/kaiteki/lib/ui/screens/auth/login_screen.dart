@@ -13,7 +13,6 @@ import 'package:kaiteki/ui/widgets/async_block_widget.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -261,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        await launch(helpArticle);
+                        await context.launchUrl(helpArticle);
                       },
                   ),
                 ],

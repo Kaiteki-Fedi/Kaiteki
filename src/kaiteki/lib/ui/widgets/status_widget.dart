@@ -22,7 +22,6 @@ import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const _padding = EdgeInsets.symmetric(vertical: 4.0);
 
@@ -399,9 +398,7 @@ class InteractionBar extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(0.0),
                   enabled: openInBrowserAvailable,
                 ),
-                value: () async {
-                  await launch(_post.externalUrl!);
-                },
+                value: () => context.launchUrl(_post.externalUrl!),
               ),
             ];
           },

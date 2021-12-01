@@ -1,15 +1,13 @@
 class Constants {
   static const String appName = "Kaiteki";
-  static const String appWebsite = "https://github.com/Craftplacer/Kaiteki";
-  static const String appDescription = "Cross-platform Fediverse client";
+  static const String appWebsite = "https://craftplacer.moe/projects/kaiteki";
+  static const String githubRepository = "https://github.com/Kaiteki-Fedi/Kaiteki";
+  static const String appDescription = "The comfy Fediverse client";
   static const String userAgent = "Kaiteki/1.0";
 
   static const String exampleAvatar =
       "https://craftplacer.keybase.pub/cute.jpg";
 
-  /// the amount of dp/px until the application redefines the layout for
-  /// desktop view.
-  static const int desktopThreshold = 800;
   static const double defaultFormWidth = 448;
   static const double defaultFormHeight = 592;
 
@@ -30,4 +28,6 @@ class Constants {
     "read:favorites",
     "write:favorites",
   ];
+
+  static const double defaultSplashRadius = 24.0;
 }
