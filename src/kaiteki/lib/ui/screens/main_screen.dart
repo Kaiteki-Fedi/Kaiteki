@@ -23,12 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   final _timelineKey = UniqueKey();
   List<Widget>? _pages;
   List<_MainScreenTab>? _tabs;
-  var _currentPage = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  int _currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
