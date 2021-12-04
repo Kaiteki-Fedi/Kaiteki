@@ -4,8 +4,7 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
 import 'package:kaiteki/ui/widgets/dialog_close_button.dart';
-import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
 class PostScreen extends StatefulWidget {
@@ -24,26 +23,16 @@ class _PostScreenState extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final replyTo = widget.replyTo;
 
     return DynamicDialogContainer(
       builder: (BuildContext context, bool fullscreen) {
         TextSpan? replyTextSpan;
 
-        if (widget.replyTo != null) {
-          final rendererTheme = TextRendererTheme.fromContext(context);
-          final renderer = TextRenderer(
-            theme: rendererTheme,
-            emojis: widget.replyTo!.author.emojis,
-          );
-
+        if (replyTo != null) {
           replyTextSpan = TextSpan(
             text: l10n.composeDialogTitleReply,
-            children: [
-              renderer.renderFromHtml(
-                context,
-                widget.replyTo!.author.displayName,
-              )
-            ],
+            children: [replyTo.author.renderDisplayName(context)],
           );
         }
 

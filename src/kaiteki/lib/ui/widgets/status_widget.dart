@@ -65,12 +65,6 @@ class StatusWidget extends StatelessWidget {
       );
     }
 
-    final rendererTheme = TextRendererTheme.fromContext(context);
-    InlineSpan renderedAuthor = TextRenderer(
-      emojis: _post.author.emojis,
-      theme: rendererTheme,
-    ).renderFromHtml(context, _post.author.displayName);
-
     return FocusableActionDetector(
       shortcuts: {
         ShortcutKeys.replyKeySet: ReplyIntent(),
@@ -98,7 +92,7 @@ class StatusWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MetaBar(
-                    renderedAuthor: renderedAuthor,
+                      renderedAuthor: _post.author.renderDisplayName(context),
                     authorTextStyle: authorTextStyle,
                     post: _post,
                     theme: theme,
@@ -147,10 +141,7 @@ class _PostContentWidgetState extends State<PostContentWidget> {
     final post = widget.post;
 
     if (post.content != null) {
-      final theme = TextRendererTheme.fromContext(context);
-      final renderer = TextRenderer(emojis: post.emojis, theme: theme);
-
-      renderedContent = renderer.renderFromHtml(context, post.content!);
+      renderedContent = post.renderContent(context);
     }
 
     return Column(
