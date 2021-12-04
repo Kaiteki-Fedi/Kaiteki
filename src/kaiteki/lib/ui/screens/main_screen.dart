@@ -2,7 +2,6 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
@@ -10,6 +9,7 @@ import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki/utils/layout_helper.dart';
 import 'package:mdi/mdi.dart';
 
 class MainScreen extends StatefulWidget {
@@ -90,11 +90,14 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: LayoutBuilder(
         builder: (_, constraints) {
-          var desktopMode = Constants.desktopThreshold <= constraints.maxWidth;
-          if (desktopMode) {
+          switch (LayoutHelper.getScreenSize(constraints.maxWidth)) {
+            case ScreenSize.xs:
+              return _buildMobileView(appName);
+
+            case ScreenSize.s:
+            case ScreenSize.m:
+            case ScreenSize.l:
             return _buildDesktopView(appName);
-          } else {
-            return _buildMobileView(appName);
           }
         },
       ),
