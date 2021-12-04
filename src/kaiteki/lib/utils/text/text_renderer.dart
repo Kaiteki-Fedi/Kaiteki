@@ -37,6 +37,8 @@ class TextRenderer {
       "pre": _renderCodeFont,
       "code": _renderCodeFont,
       "p": _renderParagraph,
+      "i": _renderItalic,
+      "b": _renderBold,
     };
   }
 
@@ -159,6 +161,26 @@ class TextRenderer {
     return TextSpan(
       text: element.text,
       style: GoogleFonts.robotoMono(),
+    );
+  }
+
+  InlineSpan _renderItalic(
+    dom.Element element,
+    List<InlineSpan> subElements,
+  ) {
+    return TextSpan(
+      text: element.text,
+      style: const TextStyle(fontStyle: FontStyle.italic),
+    );
+  }
+
+  InlineSpan _renderBold(
+    dom.Element element,
+    List<InlineSpan> subElements,
+  ) {
+    return TextSpan(
+      text: element.text,
+      style: const TextStyle(fontWeight: FontWeight.bold),
     );
   }
 
