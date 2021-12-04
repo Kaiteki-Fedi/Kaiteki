@@ -44,16 +44,13 @@ class _AccountScreenState extends State<AccountScreen>
 
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountManager>(context);
+    final container = Provider.of<AccountManager>(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         return FutureBuilder(
           initialData: widget.initialUser,
-          future: Future<User<dynamic>>.delayed(
-            const Duration(seconds: 5),
-            () async => container.adapter.getUserById(widget.id),
-          ),
+          future: container.adapter.getUserById(widget.id),
           builder: (_, AsyncSnapshot<User> snapshot) {
             var isLoading = !(snapshot.hasData || snapshot.hasError);
             var tooSmall = constraints.minWidth < 600;
