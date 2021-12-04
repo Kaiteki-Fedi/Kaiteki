@@ -320,13 +320,17 @@ class ReplyBar extends StatelessWidget {
   }
 
   String _getText() {
-    final replyToUser = post.replyToUser;
-
-    if (replyToUser != null) {
-      return '@' + replyToUser.username;
+    final user = post.replyToUser;
+    if (user != null) {
+      return '@' + user.username;
     }
 
-    return post.replyToUserId!;
+    final id = post.replyToUserId;
+    if (id != null) {
+      return id;
+    }
+
+    return "unknown user";
   }
 }
 

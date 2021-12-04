@@ -91,8 +91,22 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Post> postStatus(PostDraft draft, {Post? parentPost}) {
-    throw UnimplementedError();
+  Future<Post> postStatus(PostDraft draft, {Post? parentPost}) async {
+    final visibility = <Visibility, String>{
+      Visibility.direct: "specified",
+      Visibility.followersOnly: "followers",
+      Visibility.unlisted: "home",
+      Visibility.public: "public",
+    }[draft.visibility]!;
+    
+    final note = await client.createNote(
+      visibility,
+      text: draft.content,
+      cw: draft.subject,
+      replyId: draft.replyTo?.id,
+    );
+
+    return toPost(note);
   }
 
   @override

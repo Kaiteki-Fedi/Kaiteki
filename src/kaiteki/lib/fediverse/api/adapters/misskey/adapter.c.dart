@@ -22,7 +22,9 @@ Post toPost(misskey.Note source) {
         emoji: getEmojiFromString(mkr.key, mappedEmoji),
       );
     }),
+    replyTo: source.reply == null ? null : toPost(source.reply!),
     replyToPostId: source.replyId,
+    repeatOf: source.renote == null ? null : toPost(source.renote!),
     id: source.id,
     visibility: toVisibility(source.visibility),
     attachments: source.files?.map(toAttachment) ?? [],
@@ -41,11 +43,18 @@ Visibility toVisibility(String visibility) {
 }
 
 Attachment toAttachment(misskey.DriveFile file) {
+  AttachmentType type = AttachmentType.file;
+
+  if (file.type.startsWith("image/")) {
+    type = AttachmentType.image;
+  }
+
   return Attachment(
     source: file,
     description: file.name,
     previewUrl: file.thumbnailUrl ?? file.url!,
     url: file.url!,
+    type: type,
   );
 }
 

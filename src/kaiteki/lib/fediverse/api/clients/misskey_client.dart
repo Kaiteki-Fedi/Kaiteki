@@ -40,6 +40,28 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
+  Future<misskey.Note> createNote(
+    String visibility, {
+    List<String>? visibleUserIds,
+    String? text,
+    String? cw,
+    String? replyId,
+  }) async {
+    // FIXME: Properly parse Misskey create note response
+    return await sendJsonRequest(
+      HttpMethod.post,
+      "api/notes/create",
+      (json) => misskey.Note.fromJson(json),
+      body: <String, dynamic>{
+        "visibility": visibility,
+        "visibleUserIds": visibleUserIds ?? [],
+        if (text != null) "text": text,
+        if (cw != null) "cw": cw,
+        if (replyId != null) "replyId": replyId,
+      },
+    );
+  }
+
   Future<MisskeyGenerateSessionResponse> generateSession(
     String appSecret,
   ) async {
