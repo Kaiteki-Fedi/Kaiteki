@@ -44,15 +44,42 @@ enum AsyncSnapshotState { errored, loading, done }
 extension UserExtensions on User {
   InlineSpan renderDisplayName(BuildContext context) {
     final theme = TextRendererTheme.fromContext(context);
-    final renderer = TextRenderer(emojis: emojis, theme: theme);
-    return renderer.renderFromHtml(context, displayName);
+    final renderer = TextRenderer(theme: theme);
+
+    return renderer.render(
+      context,
+      displayName,
+      textContext: TextContext(
+        users: [this],
+        emojis: emojis?.toList(growable: false),
+      ),
+    );
   }
 }
 
 extension PostExtensions on Post {
   InlineSpan renderContent(BuildContext context) {
     final theme = TextRendererTheme.fromContext(context);
-    final renderer = TextRenderer(emojis: emojis, theme: theme);
-    return renderer.renderFromHtml(context, content!);
+    final renderer = TextRenderer(theme: theme);
+    return renderer.render(
+      context,
+      content!,
+      textContext: TextContext(
+        emojis: emojis?.toList(growable: false),
+        users: [
+          if (replyToUser != null) replyToUser!,
+        ],
+      ),
+    );
+  }
+}
+
+extension VectorExtensions<T> on Iterable<Iterable<T>> {
+  List<T> concat() {
+    final list = <T>[];
+    for (final childList in this) {
+      list.addAll(childList);
+    }
+    return list;
   }
 }

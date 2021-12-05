@@ -1,203 +1,173 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart' show parseFragment;
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
-import 'package:kaiteki/utils/extensions/iterable.dart';
-import 'package:kaiteki/utils/text/text_buffer.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'dart:ui';
 
-typedef HtmlConstructor = InlineSpan Function(
-  dom.Element element,
-  List<InlineSpan> subElements,
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart' hide Element;
+import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/logger.dart';
+import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
+import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki/utils/text/elements.dart';
+import 'package:kaiteki/utils/text/parsers.dart';
+import 'package:kaiteki/utils/text/text_renderer_theme.dart';
+import 'package:provider/provider.dart';
+
+typedef RegExpMatchElementBuilder = Element Function(
+  RegExpMatch match,
+  String text,
 );
 
+class TextContext {
+  final List<User>? users;
+  final List<Emoji>? emojis;
+
+  TextContext({this.users, this.emojis});
+}
+
 class TextRenderer {
+  final TextParser parser = HtmlTextParser();
+
   static const String emojiChar = ":";
   static final _logger = getLogger("TextRenderer");
 
-  final Iterable<Emoji>? emojis;
   final TextRendererTheme theme;
 
-  late final Map<String, HtmlConstructor> htmlConstructors;
-  late final bool hasEmoji;
+  TextRenderer({required this.theme});
 
-  TextRenderer({this.emojis, required this.theme}) {
-    hasEmoji = emojis != null && emojis!.isNotEmpty;
+  InlineSpan render(
+    BuildContext context,
+    String text, {
+    TextContext? textContext,
+  }) {
+    textContext ?? TextContext();
 
-    htmlConstructors = {
-      "a": _renderLink,
-      "br": _renderBreakLine,
-      "pre": _renderCodeFont,
-      "code": _renderCodeFont,
-      "p": _renderParagraph,
-      "i": _renderItalic,
-      "b": _renderBold,
-    };
+    final elements = parser
+        .parse(text)
+        .parseWith(SocialTextParser())
+        .parseWith(MfmTextParser());
+
+    final renderedElements = elements.map((e) {
+      return _renderElement(context, e, textContext!);
+    });
+
+    return TextSpan(children: renderedElements.toList(growable: false));
   }
 
-  InlineSpan renderFromHtml(BuildContext context, String text) {
-    final fragment = parseFragment(text);
-    return renderNode(fragment);
-  }
+  InlineSpan _renderElement(
+    BuildContext context,
+    Element element,
+    TextContext textContext,
+  ) {
+    final childrenSpans = element.children //
+        ?.map((e) => _renderElement(context, e, textContext))
+        .toList(growable: false);
 
-  /// This method takes care of parsing emojis and other formatting.
-  InlineSpan renderText(String text, {List<InlineSpan>? children}) {
-    var spans = <InlineSpan>[];
-    var buffer = TextBuffer();
+    if (element is TextElement) {
+      InlineSpan span = TextSpan(
+        text: element.text,
+        style: element.getFlutterTextStyle(context),
+        children: childrenSpans,
+      );
 
-    var readingEmoji = false;
-    for (var i = 0; i < text.length; i++) {
-      var char = text[i];
-
-      if (char == emojiChar && hasEmoji) {
-        // If the condition below is true, we should've finished reading the
-        // name of an emoji.
-        if (readingEmoji) {
-          var emoji = emojis!.firstOrDefault((e) => e.name == buffer.text);
-
-          if (emoji == null || emoji is! CustomEmoji) {
-            // nothing found, so we restore the stolen colon and
-            // add a normal text span.
-            buffer.prepend(emojiChar);
-            spans.add(_plain(buffer));
-          } else {
-            buffer.clear();
-
-            spans.add(
-              WidgetSpan(
-                child: EmojiWidget(
-                  emoji: emoji,
-                  size: theme.emojiSize,
-                ),
-              ),
-            );
-          }
-
-          readingEmoji = false;
-        } else {
-          spans.add(_plain(buffer));
-          readingEmoji = true;
-        }
-      } else {
-        buffer.append(char);
-      }
-    }
-
-    if (buffer.text.isNotEmpty) {
-      spans.add(_plain(buffer));
-    }
-
-    return TextSpan(children: spans..addAll(children ?? []));
-  }
-
-  InlineSpan renderNode(dom.Node node) {
-    InlineSpan? resultingSpan;
-
-    final renderedSubNodes =
-        node.nodes.map<InlineSpan>(renderNode).toList(growable: false);
-
-    if (node is dom.Element) {
-      final tag = node.localName!.toLowerCase();
-
-      if (htmlConstructors.containsKey(tag)) {
-        final htmlConstructor = htmlConstructors[tag]!;
-
-        resultingSpan = htmlConstructor.call(
-          node,
-          renderedSubNodes,
+      if (element.style?.blur == true) {
+        return WidgetSpan(
+          child: ImageFiltered(
+            imageFilter: ImageFilter.blur(
+              sigmaX: 8.0,
+              sigmaY: 8.0,
+            ),
+            child: Text(element.text!),
+          ),
         );
-      } else {
-        _logger.w("Unhandled HTML tag ($tag)");
       }
-    } else if (node is dom.Text) {
-      dom.Text textElement = node;
 
-      resultingSpan = renderText(
-        textElement.text,
-        children: renderedSubNodes,
+      return span;
+    } else if (element is LinkElement) {
+      // FIXME: We should be passing down the "click-ability" to the children.
+
+      final recognizer = TapGestureRecognizer()
+        ..onTap = () => context.launchUrl(element.destination.toString());
+
+      return TextSpan(
+        style: theme.linkTextStyle,
+        recognizer: recognizer,
+        text: childrenSpans!.isNotEmpty
+            ? (childrenSpans!.first as TextSpan).text!
+            : null,
+      );
+    } else if (element is MentionElement) {
+      final userIndex = textContext.users?.indexWhere((user) {
+            return user.username == element.username;
+          }) ??
+          -1;
+      final user = userIndex == -1 ? null : textContext.users![userIndex];
+
+      return WidgetSpan(
+        child: UserChip(id: user?.id ?? "", user: user),
       );
     }
 
-    resultingSpan ??= TextSpan(children: renderedSubNodes);
-
-    return resultingSpan;
+    if (element is Element && element.children?.isNotEmpty == true) {
+      return TextSpan(children: childrenSpans);
+    } else {
+      return TextSpan(
+        text: "[NIY ${element.runtimeType}]",
+        style: const TextStyle(
+          backgroundColor: Colors.red,
+          color: Colors.white,
+        ),
+      );
+      throw StateError("");
+    }
   }
+}
 
-  InlineSpan _renderLink(
-    dom.Element element,
-    List<InlineSpan> subElements,
-  ) {
-    var recognizer = TapGestureRecognizer()
-      ..onTap = () {
-        var linkTarget = element.attributes["href"];
-        launch(linkTarget!);
-      };
+extension TextElementExtension on TextElement {
+  TextStyle getFlutterTextStyle(BuildContext context) {
+    final style = this.style;
 
-    return TextSpan(
-      text: element.text,
-      recognizer: recognizer,
-      style: theme.linkTextStyle,
-    );
-  }
-
-  InlineSpan _renderBreakLine(
-    dom.Element element,
-    List<InlineSpan> subElements,
-  ) {
-    return const TextSpan(text: "\n");
-  }
-
-  InlineSpan _renderCodeFont(
-    dom.Element element,
-    List<InlineSpan> subElements,
-  ) {
-    return TextSpan(
-      text: element.text,
-      style: GoogleFonts.robotoMono(),
-    );
-  }
-
-  InlineSpan _renderItalic(
-    dom.Element element,
-    List<InlineSpan> subElements,
-  ) {
-    return TextSpan(
-      text: element.text,
-      style: const TextStyle(fontStyle: FontStyle.italic),
-    );
-  }
-
-  InlineSpan _renderBold(
-    dom.Element element,
-    List<InlineSpan> subElements,
-  ) {
-    return TextSpan(
-      text: element.text,
-      style: const TextStyle(fontWeight: FontWeight.bold),
-    );
-  }
-
-  InlineSpan _renderParagraph(
-    dom.Element element,
-    List<InlineSpan> subElements,
-  ) {
-    var text = "";
-
-    if (element.previousElementSibling?.localName == "p") {
-      text = "\n\n" + text;
+    if (style == null) {
+      return const TextStyle();
     }
 
-    return TextSpan(text: text, children: subElements);
-  }
+    final inheritedSize = DefaultTextStyle.of(context).style.fontSize!;
 
-  TextSpan _plain(TextBuffer buffer) {
-    return TextSpan(text: buffer.cut());
+    return TextStyle(
+      fontWeight: style.bold == true ? FontWeight.bold : null,
+      fontStyle: style.italic == true ? FontStyle.italic : null,
+      fontSize: style.scale != 1.0 ? (inheritedSize * style.scale) : null,
+    );
+  }
+}
+
+class UserChip extends StatelessWidget {
+  final String id;
+  final User? user;
+
+  const UserChip({Key? key, required this.id, this.user}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final manager = Provider.of<AccountManager>(context);
+    return FutureBuilder(
+        initialData: user,
+        future: manager.adapter.getUserById(id),
+        builder: (context, AsyncSnapshot<User> snapshot) {
+          final user = snapshot.data;
+
+          return ActionChip(
+            avatar: user != null
+                ? AvatarWidget(
+                    user,
+                    size: 24,
+                  )
+                : null,
+            label: user != null
+                ? Text.rich(user.renderDisplayName(context))
+                : Text(id),
+            onPressed: () {},
+          );
+        });
   }
 }

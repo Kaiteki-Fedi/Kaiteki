@@ -17,8 +17,6 @@ import 'package:kaiteki/ui/widgets/posts/interaction_event_bar.dart';
 import 'package:kaiteki/ui/widgets/posts/reaction_row.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/extensions/duration.dart';
-import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -92,7 +90,7 @@ class StatusWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MetaBar(
-                      renderedAuthor: _post.author.renderDisplayName(context),
+                    renderedAuthor: _post.author.renderDisplayName(context),
                     authorTextStyle: authorTextStyle,
                     post: _post,
                     theme: theme,
@@ -156,9 +154,7 @@ class _PostContentWidgetState extends State<PostContentWidget> {
         if (renderedContent != null && !collapsed)
           Padding(
             padding: _padding,
-            child: Text.rich(
-              renderedContent!,
-            ),
+            child: Text.rich(renderedContent!),
           ),
       ],
     );
