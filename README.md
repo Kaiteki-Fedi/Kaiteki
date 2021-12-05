@@ -1,5 +1,6 @@
 # Kaiteki
 
+[![CodeFactor](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki/badge)](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki)
 [![Translation status](http://wl.craftplacer.moe/widgets/kaiteki/-/app/svg-badge.svg)](http://wl.craftplacer.moe/engage/kaiteki/)
 
 <img align="right" src="assets/icons/windows/kaiteki.png" width=100>
