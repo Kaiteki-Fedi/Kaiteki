@@ -2,15 +2,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Kaiteki",
+            "name": "Debug",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "Kaiteki (profile mode)",
+            "name": "Profile",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
-        }
+        },
+        {
+            "name": "Test",
+            "type": "dart",
+            "request": "launch",
+            "program": "./test/"
+        },
     ]
 }
