@@ -31,6 +31,7 @@ class HtmlTextParser implements TextParser {
       "p": _renderParagraph,
       "i": _renderItalic,
       "b": _renderBold,
+      "span": _renderAsContainer,
     };
   }
 
@@ -105,6 +106,11 @@ class HtmlTextParser implements TextParser {
 
     return TextElement(text, children: subElements);
   }
+
+  Element _renderAsContainer(dom.Element element, List<Element> subElements) {
+    return Element(children: subElements);
+  }
+}
 
 class MastodonHtmlTextParser extends HtmlTextParser {
   @override
