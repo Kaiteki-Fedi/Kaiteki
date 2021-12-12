@@ -183,12 +183,12 @@ extension TextElementExtension on TextElement {
       return const TextStyle();
     }
 
-    final inheritedSize = DefaultTextStyle.of(context).style.fontSize!;
+    final inheritedSize = DefaultTextStyle.of(context).style.fontSize;
 
     return TextStyle(
       fontWeight: style.bold == true ? FontWeight.bold : null,
       fontStyle: style.italic == true ? FontStyle.italic : null,
-      fontSize: style.scale != 1.0 ? (inheritedSize * style.scale) : null,
+      fontSize: style.scale != 1.0 ? (inheritedSize! * style.scale) : null,
     );
   }
 }

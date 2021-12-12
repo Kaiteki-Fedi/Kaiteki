@@ -15,8 +15,11 @@ class SocialTextParser implements TextParser {
     List<Element> elements = [TextElement(text, children: children)];
 
     regex(elements, _urlPattern, (match, _) {
-      final url = match.group(0)!;
-      return LinkElement(Uri.parse(url), children: [TextElement(url)]);
+      final url = match.group(0);
+      return LinkElement(
+        Uri.parse(url!),
+        children: [TextElement(url)],
+      );
     });
 
     regex(elements, _mentionPattern, (match, _) {
@@ -25,13 +28,13 @@ class SocialTextParser implements TextParser {
     });
 
     regex(elements, _hashtagPattern, (match, _) {
-      final hashtag = match.group(1)!;
-      return HashtagElement(hashtag);
+      final hashtag = match.group(1);
+      return HashtagElement(hashtag!);
     });
 
     regex(elements, _emojiPattern, (match, _) {
-      final emoji = match.group(1)!;
-      return EmojiElement(emoji);
+      final emoji = match.group(1);
+      return EmojiElement(emoji!);
     });
 
     return elements;

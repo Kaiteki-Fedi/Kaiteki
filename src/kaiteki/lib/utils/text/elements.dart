@@ -142,21 +142,24 @@ class EmojiElement extends Element {
 
 extension ElementExtensions on Element {
   String get allText {
-    String text = "";
-
-    if (this is TextElement) {
+    String initalText = "";
+    if (this is TextElement && (this as TextElement).text != null) {
       final elementText = (this as TextElement).text;
-      if (elementText != null) text = elementText;
+      if (elementText != null) {
+        initalText = elementText;
+      }
     }
+
+    final buffer = StringBuffer(initalText);
 
     final children = this.children;
     if (children != null) {
       for (final child in children) {
-        text += child.allText;
+        buffer.write(child.allText);
       }
     }
 
-    return text;
+    return buffer.toString();
   }
 }
 

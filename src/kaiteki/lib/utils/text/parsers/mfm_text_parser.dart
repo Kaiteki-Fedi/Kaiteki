@@ -10,32 +10,32 @@ class MfmTextParser implements TextParser {
     List<Element> elements = [TextElement(text)];
 
     regex(elements, _mfmPattern, (match, _) {
-      final key = match.group(1)!;
+      final key = match.group(1);
       // final args = match.group(2).split(",");
-      final content = match.group(3)!;
+      final content = match.group(3);
 
-      switch (key) {
+      switch (key!) {
         case "x2":
           return TextElement(
-            content,
+            content!,
             style: const TextElementStyle(scale: 2.0),
             children: children,
           );
         case "x3":
           return TextElement(
-            content,
+            content!,
             style: const TextElementStyle(scale: 3.0),
             children: children,
           );
         case "x4":
           return TextElement(
-            content,
+            content!,
             style: const TextElementStyle(scale: 4.0),
             children: children,
           );
         case "blur":
           return TextElement(
-            content,
+            content!,
             style: const TextElementStyle(blur: true),
             children: children,
           );
