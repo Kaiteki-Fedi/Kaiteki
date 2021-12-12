@@ -112,6 +112,12 @@ class HashtagElement extends Element {
   final String name;
 
   const HashtagElement(this.name);
+class EmojiElement extends Element {
+  final String name;
+
+  const EmojiElement(this.name);
+}
+
 }
 
 extension ElementListExtensions on List<Element> {

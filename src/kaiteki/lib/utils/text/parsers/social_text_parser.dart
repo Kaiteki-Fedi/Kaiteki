@@ -6,6 +6,7 @@ import 'package:kaiteki/utils/text/text_renderer.dart';
 class SocialTextParser implements TextParser {
   static final _mentionPattern = RegExp(r'\B\@([\w\-]+)(?:\@([\w\-\.]+))?');
   static final _hashtagPattern = RegExp(r'#([a-zA-Z0-9_]+)');
+  static final _emojiPattern = RegExp(r':([^:\s]+):');
   static final _urlPattern = RegExp(
       r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)');
 
@@ -28,6 +29,10 @@ class SocialTextParser implements TextParser {
       return HashtagElement(hashtag);
     });
 
+    regex(elements, _emojiPattern, (match, _) {
+      final emoji = match.group(1)!;
+      return EmojiElement(emoji);
+    });
 
     return elements;
   }
