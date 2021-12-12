@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/ui/screens/account_screen.dart';
+import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
@@ -58,54 +59,56 @@ class TextRenderer {
         .toList(growable: false);
 
     if (element is TextElement) {
-      InlineSpan span = TextSpan(
-        text: element.text,
-        style: element.getFlutterTextStyle(context),
-        children: childrenSpans,
-      );
-
-      if (element.style?.blur == true) {
-        return WidgetSpan(
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(
-              sigmaX: 8.0,
-              sigmaY: 8.0,
-            ),
-            child: Text(element.text!),
-          ),
-        );
-      }
-
-      return span;
+      return renderText(context, element, childrenSpans);
     } else if (element is LinkElement) {
-      // FIXME: We should be passing down the "click-ability" to the children.
-
-      final recognizer = TapGestureRecognizer()
-        ..onTap = () => context.launchUrl(element.destination.toString());
-
-      return TextSpan(
-        style: theme.linkTextStyle,
-        recognizer: recognizer,
-        text: childrenSpans!.isNotEmpty
-            ? (childrenSpans!.first as TextSpan).text!
-            : null,
-      );
+      return renderLink(context, element, childrenSpans!);
+    } else if (element is HashtagElement) {
+      return renderHashtag(context, textContext, element);
     } else if (element is MentionElement) {
       return renderMention(textContext, element);
+    } else if (element is EmojiElement) {
+      return renderEmoji(textContext, element);
     }
 
     if (element is Element && element.children?.isNotEmpty == true) {
       return TextSpan(children: childrenSpans);
-    } else {
-      return TextSpan(
-        text: "[NIY ${element.runtimeType}]",
-        style: const TextStyle(
-          backgroundColor: Colors.red,
-          color: Colors.white,
+    }
+
+    return TextSpan(
+      text: "[NIY ${element.runtimeType}]",
+      style: const TextStyle(
+        backgroundColor: Colors.red,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  InlineSpan renderText(
+    BuildContext context,
+    TextElement element,
+    List<InlineSpan>? childrenSpans,
+  ) {
+    InlineSpan span = TextSpan(
+      text: element.text,
+      style: element.getFlutterTextStyle(context),
+      children: childrenSpans,
+    );
+
+    if (element.style?.blur == true) {
+      return WidgetSpan(
+        child: ImageFiltered(
+          imageFilter: ImageFilter.blur(
+            sigmaX: 8.0,
+            sigmaY: 8.0,
+          ),
+          child: Text(element.text!),
         ),
       );
-      throw StateError("");
     }
+
+    return span;
+  }
+
   WidgetSpan renderMention(TextContext textContext, MentionElement element) {
     final i = textContext.users?.indexWhere(
           (user) => user.matches(element.reference),
@@ -119,6 +122,55 @@ class TextRenderer {
       alignment: PlaceholderAlignment.middle,
     );
   }
+
+  TextSpan renderHashtag(
+    BuildContext context,
+    TextContext textContext,
+    HashtagElement element,
+  ) {
+    final color = DefaultTextStyle.of(context).style.color!.withOpacity(.35);
+    return TextSpan(
+      children: [
+        TextSpan(text: '#', style: TextStyle(color: color)),
+        TextSpan(text: element.name),
+      ],
+    );
+  }
+
+  TextSpan renderLink(
+    BuildContext context,
+    LinkElement link,
+    List<InlineSpan> children,
+  ) {
+    // FIXME: We should be passing down the "click-ability" to the children.
+
+    final recognizer = TapGestureRecognizer()
+      ..onTap = () => context.launchUrl(link.destination.toString());
+
+    return TextSpan(
+      style: theme.linkTextStyle,
+      recognizer: recognizer,
+      text: link.allText,
+    );
+  }
+
+  InlineSpan renderEmoji(
+    TextContext textContext,
+    EmojiElement element,
+  ) {
+    final emoji = textContext.emojis!.firstOrDefault((e) {
+      return e.name == element.name;
+    });
+
+    if (emoji == null) {
+      return TextSpan(text: element.name);
+    }
+
+    return WidgetSpan(
+      child: EmojiWidget(emoji: emoji, size: theme.emojiSize),
+      baseline: TextBaseline.alphabetic,
+      alignment: PlaceholderAlignment.middle,
+    );
   }
 }
 
