@@ -28,9 +28,6 @@ class SocialTextParser implements TextParser {
       return HashtagElement(hashtag);
     });
 
-    // if (children != null) {
-    //   elements = elements.followedBy(children).toList(growable: false);
-    // }
 
     return elements;
   }
