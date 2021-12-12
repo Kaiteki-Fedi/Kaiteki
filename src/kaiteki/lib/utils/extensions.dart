@@ -50,7 +50,7 @@ extension UserExtensions on User {
       context,
       displayName,
       textContext: TextContext(
-        users: [this],
+        users: [],
         emojis: emojis?.toList(growable: false),
       ),
     );
@@ -66,9 +66,7 @@ extension PostExtensions on Post {
       content!,
       textContext: TextContext(
         emojis: emojis?.toList(growable: false),
-        users: [
-          if (replyToUser != null) replyToUser!,
-        ],
+        users: mentionedUsers,
       ),
     );
   }
@@ -81,5 +79,11 @@ extension VectorExtensions<T> on Iterable<Iterable<T>> {
       list.addAll(childList);
     }
     return list;
+  }
+}
+
+extension HtmlNodeExtensions on Node {
+  bool hasClass(String className) {
+    return attributes["class"]?.split(" ").contains(className) == true;
   }
 }

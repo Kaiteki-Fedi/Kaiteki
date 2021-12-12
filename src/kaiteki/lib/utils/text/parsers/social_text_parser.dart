@@ -1,3 +1,4 @@
+import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers/text_parser.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
@@ -18,7 +19,8 @@ class SocialTextParser implements TextParser {
     });
 
     regex(elements, _mentionPattern, (match, _) {
-      return MentionElement(match.group(1)!, match.group(2));
+      final reference = UserReference.handle(match.group(1)!, match.group(2));
+      return MentionElement(reference);
     });
 
     regex(elements, _hashtagPattern, (match, _) {

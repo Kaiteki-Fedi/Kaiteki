@@ -58,7 +58,7 @@ void textParsing() {
       () => expect(
         elements[0],
         const TypeMatcher<MentionElement>()
-            .having((e) => e.username, "username", "Craftplacer"),
+            .having((e) => e.reference.username, "username", "Craftplacer"),
       ),
     );
 
@@ -67,8 +67,8 @@ void textParsing() {
       () => expect(
         elements[2],
         const TypeMatcher<MentionElement>()
-            .having((e) => e.username, "username", "Craftplacer")
-            .having((e) => e.instance, "instance", "pl.craftplacer.moe"),
+            .having((e) => e.reference.username, "username", "Craftplacer")
+            .having((e) => e.reference.host, "instance", "pl.craftplacer.moe"),
       ),
     );
   });
@@ -87,7 +87,7 @@ void textParsing() {
               (e) => e.children![0],
               "child",
               const TypeMatcher<MentionElement>().having(
-                (m) => m.username,
+                (m) => m.reference.username,
                 "username",
                 equals("Craftplacer"),
               ),
@@ -106,7 +106,7 @@ void textParsing() {
       search(
           parseTwo.first,
           const TypeMatcher<MentionElement>().having(
-            (m) => m.username,
+            (m) => m.reference.username,
             "username",
             equals("Craftplacer"),
           ));

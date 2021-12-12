@@ -4,6 +4,7 @@ import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/preview_card.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 
 /// A class representing a post.
@@ -53,6 +54,8 @@ class Post<T> {
   final Post? repeatOf;
   final PreviewCard? previewCard;
 
+  final List<UserReference>? mentionedUsers;
+
   final String? externalUrl;
 
   Post({
@@ -80,7 +83,9 @@ class Post<T> {
     this.replyToPostId,
     this.externalUrl,
     this.replyToUser,
-  }) : reactions = reactions ?? [];
+    List<UserReference>? mentionedUsers,
+  })  : reactions = reactions ?? [],
+        mentionedUsers = mentionedUsers ?? [];
 
   factory Post.example() {
     return Post(

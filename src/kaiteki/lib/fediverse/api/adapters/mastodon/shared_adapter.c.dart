@@ -24,6 +24,14 @@ Post toPost(mastodon.Status source) {
     id: source.id,
     externalUrl: source.url,
     reactions: source.pleroma?.emojiReactions?.map(toReaction) ?? [],
+    mentionedUsers: source.mentions.map((e) {
+      return UserReference.all(
+        username: e.username,
+        id: e.id,
+        remoteUrl: e.url,
+        host: getHost(e.account),
+      );
+    }).toList(growable: false),
   );
 }
 

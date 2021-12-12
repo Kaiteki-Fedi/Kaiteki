@@ -1,3 +1,4 @@
+import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/parsers/text_parser.dart';
 
@@ -97,10 +98,14 @@ class LinkElement extends Element {
 }
 
 class MentionElement extends Element {
-  final String username;
-  final String? instance;
+  final UserReference reference;
 
-  const MentionElement(this.username, [this.instance]);
+  const MentionElement(this.reference);
+
+  @override
+  String toString() {
+    return "Mention";
+  }
 }
 
 class HashtagElement extends Element {
