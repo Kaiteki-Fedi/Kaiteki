@@ -1,4 +1,6 @@
+import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/logger.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
 import 'package:html/dom.dart' as dom;
@@ -38,6 +40,9 @@ class HtmlTextParser implements TextParser {
         .toList(growable: false);
 
     if (node is dom.Element) {
+      final override = renderNodeOverride(node);
+      if (override != null) return override;
+
       final tag = node.localName!.toLowerCase();
       final constructor = htmlConstructors[tag];
       if (constructor != null) {
@@ -52,6 +57,10 @@ class HtmlTextParser implements TextParser {
 
     return TextElement(node.text, children: renderedSubNodes);
     return Element(children: renderedSubNodes);
+  }
+
+  Element? renderNodeOverride(dom.Node node) {
+    return null;
   }
 
   Element _renderLink(dom.Element element, List<Element> subElements) {
@@ -95,5 +104,34 @@ class HtmlTextParser implements TextParser {
     }
 
     return TextElement(text, children: subElements);
+  }
+
+class MastodonHtmlTextParser extends HtmlTextParser {
+  @override
+  Element? renderNodeOverride(dom.Node node) {
+    if (node.hasClass("h-card")) {
+      final link = node.firstChild;
+
+      if (link != null) {
+        final result = renderNodeOverride(link);
+        if (result != null) return result;
+      }
+    }
+
+    final url = node.attributes["href"];
+    if (url != null) {
+      if (node.hasClass("mention")) {
+        return MentionElement(UserReference.url(url));
+      }
+    }
+
+    if (node.hasClass("hashtag")) {
+      final name = node.attributes["data-tag"];
+      if (name != null) {
+        return HashtagElement(name);
+      }
+    }
+
+    return null;
   }
 }

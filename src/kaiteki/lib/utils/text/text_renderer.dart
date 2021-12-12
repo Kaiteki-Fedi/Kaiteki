@@ -28,7 +28,8 @@ class TextContext {
 }
 
 class TextRenderer {
-  final TextParser parser = HtmlTextParser();
+  // TODO: Use appropiate parser on specific instances
+  final TextParser parser = MastodonHtmlTextParser();
   final TextRendererTheme theme;
 
   TextRenderer({required this.theme});
