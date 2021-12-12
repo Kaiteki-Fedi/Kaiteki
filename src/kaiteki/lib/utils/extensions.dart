@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 
@@ -85,5 +87,19 @@ extension VectorExtensions<T> on Iterable<Iterable<T>> {
 extension HtmlNodeExtensions on Node {
   bool hasClass(String className) {
     return attributes["class"]?.split(" ").contains(className) == true;
+  }
+}
+
+extension UserReferenceExtensions on UserReference {
+  Future<User?> resolve(FediverseAdapter adapter) async {
+    if (id != null) {
+      return await adapter.getUserById(id!);
+    }
+
+    // if (reference.username != null) {
+    //   return await manager.adapter.getUser(reference.username!, reference.host);
+    // }
+
+    return null;
   }
 }
