@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,8 +6,6 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
-import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -230,65 +226,6 @@ class PostsPage extends StatelessWidget {
           itemCount: snapshot.data?.length ?? 0,
         );
       },
-    );
-  }
-}
-
-class AccountHeader extends StatelessWidget {
-  const AccountHeader({
-    Key? key,
-    required this.account,
-  }) : super(key: key);
-
-  final User account;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-      decoration: BoxDecoration(image: getDecorationBackground(account)),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Image.network(account.avatarUrl!, width: 56, height: 56),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(account.displayName),
-                    Text('@' + account.username),
-                  ],
-                ),
-              )
-            ],
-          ),
-          if (account.description != null)
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextRenderer(
-                    emojis: account.emojis,
-                    theme: TextRendererTheme.fromContext(context),
-                  ).renderFromHtml(context, account.description!)
-                ],
-                style: const TextStyle(
-                  shadows: [Shadow(blurRadius: 2, offset: Offset(0, 1))],
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  DecorationImage? getDecorationBackground(User account) {
-    if (account.bannerUrl == null) return null;
-
-    return DecorationImage(
-      fit: BoxFit.cover,
-      image: NetworkImage(account.bannerUrl!),
     );
   }
 }
