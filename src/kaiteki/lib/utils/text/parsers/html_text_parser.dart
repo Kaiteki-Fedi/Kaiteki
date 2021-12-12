@@ -56,8 +56,11 @@ class HtmlTextParser implements TextParser {
     //  return TextElement(node.text, children: renderedSubNodes);
     //}
 
-    return TextElement(node.text, children: renderedSubNodes);
-    return Element(children: renderedSubNodes);
+    if (node.text == null) {
+      return Element(children: renderedSubNodes);
+    } else {
+      return TextElement(node.text, children: renderedSubNodes);
+    }
   }
 
   Element? renderNodeOverride(dom.Node node) {
