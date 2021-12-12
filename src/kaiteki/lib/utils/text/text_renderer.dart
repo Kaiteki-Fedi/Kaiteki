@@ -44,10 +44,7 @@ class TextRenderer {
   }) {
     textContext ?? TextContext();
 
-    final elements = parser
-        .parse(text)
-        .parseWith(SocialTextParser())
-        .parseWith(MfmTextParser());
+    final elements = parser.parse(text).parseWith(SocialTextParser());
 
     final renderedElements = elements.map((e) {
       return _renderElement(context, e, textContext!);
