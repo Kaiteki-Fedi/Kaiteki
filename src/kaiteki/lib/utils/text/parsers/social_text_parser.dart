@@ -12,7 +12,7 @@ class SocialTextParser implements TextParser {
 
   @override
   List<Element> parse(String text, [List<Element>? children]) {
-    List<Element> elements = [TextElement(text)];
+    List<Element> elements = [TextElement(text, children: children)];
 
     regex(elements, _urlPattern, (match, _) {
       final url = match.group(0)!;
