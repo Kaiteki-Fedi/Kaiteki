@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/ui/dialogs/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/ui/widgets/attachments.dart';
@@ -286,31 +289,41 @@ class ReplyBar extends StatelessWidget {
     var themeContainer = Provider.of<ThemeContainer>(context);
     final disabledColor = Theme.of(context).disabledColor;
     final l10n = AppLocalizations.of(context)!;
+    final adapter = Provider.of<AccountManager>(context).adapter;
 
     return Padding(
       padding: _padding,
-      child: Text.rich(
-        TextSpan(
-          style: textStyle,
-          children: [
-            // TODO: refactor the following widget pattern to a future "IconSpan"
-            WidgetSpan(
-              child: Icon(
-                Mdi.share,
-                size: Utils.getLocalFontSize(context) * 1.25,
-                color: disabledColor,
-              ),
-            ),
+      child: FutureBuilder(
+        future: UserReference(_getUserId()).resolve(adapter),
+        builder: (context, AsyncSnapshot<User?> snapshot) {
+          final span = snapshot.hasData
+              ? snapshot.data!.renderDisplayName(context)
+              : TextSpan(
+                  text: _getText(),
+                  style: themeContainer.current.linkTextStyle,
+                );
+
+          return Text.rich(
             TextSpan(
-              text: ' ' + l10n.replyTo + ' ',
-              style: TextStyle(color: disabledColor),
+              style: textStyle,
+              children: [
+                // TODO: refactor the following widget pattern to a future "IconSpan"
+                WidgetSpan(
+                  child: Icon(
+                    Mdi.share,
+                    size: Utils.getLocalFontSize(context) * 1.25,
+                    color: disabledColor,
+                  ),
+                ),
+                TextSpan(
+                  text: ' ' + l10n.replyTo + ' ',
+                  style: TextStyle(color: disabledColor),
+                ),
+                span,
+              ],
             ),
-            TextSpan(
-              text: _getText(),
-              style: themeContainer.current.linkTextStyle,
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -327,6 +340,12 @@ class ReplyBar extends StatelessWidget {
     }
 
     return "unknown user";
+  }
+
+  String _getUserId() {
+    if (post.replyToUserId != null) return post.replyToUserId!;
+    if (post.replyTo != null) return post.replyTo!.author.id;
+    throw Exception("Can't find user id as reply");
   }
 }
 
@@ -390,6 +409,17 @@ class InteractionBar extends StatelessWidget {
                   enabled: openInBrowserAvailable,
                 ),
                 value: () => context.launchUrl(_post.externalUrl!),
+              ),
+              PopupMenuItem(
+                child: const ListTile(
+                  title: Text("Debug text rendering"),
+                  leading: Icon(Mdi.bug),
+                  contentPadding: EdgeInsets.all(0.0),
+                ),
+                value: () => showDialog(
+                  context: context,
+                  builder: (context) => TextRenderDialog(_post),
+                ),
               ),
             ];
           },

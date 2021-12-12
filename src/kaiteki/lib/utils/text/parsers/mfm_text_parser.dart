@@ -44,9 +44,9 @@ class MfmTextParser implements TextParser {
       }
     });
 
-    // if (children != null) {
-    //   elements = elements.followedBy(children).toList(growable: false);
-    // }
+    if (children != null) {
+      elements = elements.followedBy(children).toList(growable: false);
+    }
 
     return elements;
   }

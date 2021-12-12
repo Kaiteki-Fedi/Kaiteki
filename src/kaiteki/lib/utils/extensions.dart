@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:html/dom.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';

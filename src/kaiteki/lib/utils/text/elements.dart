@@ -65,6 +65,11 @@ class TextElement extends Element {
       children: newChildren.toList(growable: false),
     );
   }
+
+  @override
+  String toString() {
+    return "Text ($text)";
+  }
 }
 
 class TextElementStyle {
@@ -95,6 +100,11 @@ class LinkElement extends Element {
     this.destination, {
     List<Element>? children,
   }) : super(children: children);
+
+  @override
+  String toString() {
+    return "Link ($destination)";
+  }
 }
 
 class MentionElement extends Element {
@@ -112,12 +122,42 @@ class HashtagElement extends Element {
   final String name;
 
   const HashtagElement(this.name);
+
+  @override
+  String toString() {
+    return "Hashtag";
+  }
+}
+
 class EmojiElement extends Element {
   final String name;
 
   const EmojiElement(this.name);
+
+  @override
+  String toString() {
+    return "Emoji (:$name:)";
+  }
 }
 
+extension ElementExtensions on Element {
+  String get allText {
+    String text = "";
+
+    if (this is TextElement) {
+      final elementText = (this as TextElement).text;
+      if (elementText != null) text = elementText;
+    }
+
+    final children = this.children;
+    if (children != null) {
+      for (final child in children) {
+        text += child.allText;
+      }
+    }
+
+    return text;
+  }
 }
 
 extension ElementListExtensions on List<Element> {
