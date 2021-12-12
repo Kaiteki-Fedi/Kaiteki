@@ -11,7 +11,7 @@ class MfmTextParser implements TextParser {
 
     regex(elements, _mfmPattern, (match, _) {
       final key = match.group(1)!;
-      final args = match.group(2);
+      // final args = match.group(2).split(",");
       final content = match.group(3)!;
 
       switch (key) {
