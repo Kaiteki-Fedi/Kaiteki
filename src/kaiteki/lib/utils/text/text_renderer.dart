@@ -5,7 +5,6 @@ import 'package:flutter/material.dart' hide Element;
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/ui/screens/account_screen.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
@@ -29,10 +28,6 @@ class TextContext {
 
 class TextRenderer {
   final TextParser parser = HtmlTextParser();
-
-  static const String emojiChar = ":";
-  static final _logger = getLogger("TextRenderer");
-
   final TextRendererTheme theme;
 
   TextRenderer({required this.theme});
