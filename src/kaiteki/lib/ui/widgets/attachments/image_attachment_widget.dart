@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/ui/screens/attachment_inspection_screen.dart';
 import 'package:mdi/mdi.dart';
 
 class ImageAttachmentWidget extends StatelessWidget {
   final Attachment attachment;
+  final int index;
+  final Post post;
 
-  const ImageAttachmentWidget(this.attachment, {Key? key}) : super(key: key);
+  const ImageAttachmentWidget({
+    required this.attachment,
+    required this.index,
+    required this.post,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,25 +54,12 @@ class ImageAttachmentWidget extends StatelessWidget {
   }
 
   void enlargeImage(BuildContext context) {
-    var background = Colors.black.withOpacity(0.5);
-
     showDialog(
       context: context,
       builder: (_) {
-        return Scaffold(
-          backgroundColor: background,
-          appBar: AppBar(
-            backgroundColor: Colors.black.withOpacity(0.5),
-          ),
-          body: InteractiveViewer(
-            child: Center(
-              child: Image.network(
-                attachment.url,
-                fit: BoxFit.fill,
-                semanticLabel: attachment.description,
-              ),
-            ),
-          ),
+        return AttachmentInspectionScreen(
+          attachments: post.attachments!,
+          index: index,
         );
       },
     );

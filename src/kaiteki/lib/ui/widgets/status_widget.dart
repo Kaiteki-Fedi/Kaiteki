@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
@@ -19,7 +17,6 @@ import 'package:kaiteki/ui/widgets/posts/count_button.dart';
 import 'package:kaiteki/ui/widgets/posts/interaction_event_bar.dart';
 import 'package:kaiteki/ui/widgets/posts/reaction_row.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/extensions/duration.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
 import 'package:provider/provider.dart';
@@ -75,7 +72,9 @@ class StatusWidget extends StatelessWidget {
         ShortcutKeys.menuKeySet: MenuIntent(),
       },
       actions: {
-        ReplyIntent: CallbackAction(onInvoke: (e) => reply(context, _post)),
+        ReplyIntent: CallbackAction(onInvoke: (_) {
+          return context.showPostDialog(replyTo: _post);
+        }),
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,10 +101,8 @@ class StatusWidget extends StatelessWidget {
                   if (showParentPost && _post.replyToPostId != null)
                     ReplyBar(post: _post),
                   PostContentWidget(post: _post),
-                  if (_post.attachments != null)
-                    AttachmentRow(
-                      attachments: _post.attachments!.toList(growable: false),
-                    ),
+                  if (_post.attachments?.isNotEmpty == true)
+                    AttachmentRow(post: _post),
                   if (_post.previewCard != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
@@ -372,7 +369,7 @@ class InteractionBar extends StatelessWidget {
           icon: const Icon(Icons.reply),
           count: _post.replyCount,
           buttonOnly: true,
-          onTap: () => reply(context, _post),
+          onTap: () => context.showPostDialog(replyTo: _post),
           focusNode: FocusNode(skipTraversal: true),
         ),
         CountButton(
@@ -430,40 +427,41 @@ class InteractionBar extends StatelessWidget {
 }
 
 class AttachmentRow extends StatelessWidget {
-  final List<Attachment> attachments;
+  final Post post;
 
   const AttachmentRow({
     Key? key,
-    required this.attachments,
+    required this.post,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var border = Theme.of(context).dividerColor;
     var borderRadius = BorderRadius.circular(8);
+    var attachmentIndex = 0;
 
-    return Padding(
-      padding: _padding,
-      child: LimitedBox(
-        maxHeight: 280,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            for (var attachment in attachments)
-              Flexible(
-                fit: FlexFit.loose,
-                flex: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                    // TODO (theming): Implement pleroma attachment rounding
-                    borderRadius: borderRadius,
-                    border: Border.all(color: border, width: 1),
-                  ),
-                  child: getAttachmentWidget(attachment),
+    return LimitedBox(
+      maxHeight: 280,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          for (var attachment in post.attachments!.take(4))
+            Flexible(
+              fit: FlexFit.loose,
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius,
+                  border: Border.all(color: border, width: 1),
+                ),
+                child: getAttachmentWidget(
+                  post,
+                  attachment,
+                  attachmentIndex++,
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
@@ -511,8 +509,4 @@ class SubjectBar extends StatelessWidget {
       ),
     );
   }
-}
-
-void reply(BuildContext context, Post post) {
-  context.showPostDialog(replyTo: post);
 }
