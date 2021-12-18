@@ -390,5 +390,13 @@
         "example": "2"
       }
     }
-  }
+  },
+  "usesMastodonCovenant": "Folgt der Mastodon Serververeinbarung",
+  "@usesMastodonCovenant": {},
+  "creditsWebsite": "Webseite",
+  "@creditsWebsite": {},
+  "timelineRetrievalFailed": "Fehler beim Abfragen der Zeitleiste",
+  "@timelineRetrievalFailed": {},
+  "refresh": "Neuladen",
+  "@refresh": {}
 }
