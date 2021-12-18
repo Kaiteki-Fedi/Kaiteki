@@ -26,11 +26,11 @@ class DefaultAppThemes {
     surface: AppColors.kaitekiLightBackground.shade50,
     // primary
     primary: AppColors.kaitekiPink.shade500,
-    primaryVariant: AppColors.kaitekiPink.shade700,
+    primaryContainer: AppColors.kaitekiPink.shade700,
     onPrimary: Colors.white,
     // secondary
     secondary: AppColors.kaitekiOrange.shade400,
-    secondaryVariant: AppColors.kaitekiOrange.shade600,
+    secondaryContainer: AppColors.kaitekiOrange.shade600,
     onSecondary: Colors.black,
     // error
     error: Colors.red,
@@ -46,11 +46,11 @@ class DefaultAppThemes {
     surface: AppColors.kaitekiDarkBackground.shade800,
     // primary
     primary: AppColors.kaitekiPink.shade200,
-    primaryVariant: AppColors.kaitekiPink.shade500,
+    primaryContainer: AppColors.kaitekiPink.shade500,
     onPrimary: Colors.black,
     // secondary
     secondary: AppColors.kaitekiPink.shade200,
-    secondaryVariant: AppColors.kaitekiPink.shade500,
+    secondaryContainer: AppColors.kaitekiPink.shade500,
     onSecondary: Colors.black,
     // error
     error: Colors.red,

@@ -192,7 +192,7 @@ class _AttachmentInspectionScreenState
           ),
         );
       default:
-        return Text("Hello world!");
+        throw "Out of bounds";
     }
   }
 }

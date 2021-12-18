@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:mdi/mdi.dart';
