@@ -37,7 +37,7 @@ class TextElement extends Element {
 
     final endIndex = index + length;
     if (endIndex < text.length) {
-      end = text.substring(endIndex, text.length - 1);
+      end = text.substring(endIndex, text.length);
     }
 
     return [
