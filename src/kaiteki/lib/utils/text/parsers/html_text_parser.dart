@@ -112,7 +112,7 @@ class HtmlTextParser implements TextParser {
 
   Element _renderAsContainer(dom.Element element, List<Element> subElements) {
     if (subElements.length == 1) {
-      return subElements.first!;
+      return subElements.first;
     } else {
       return Element(children: subElements);
     }
