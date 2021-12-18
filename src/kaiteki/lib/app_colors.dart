@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class AppColors {
   static MaterialColor kaitekiLightBackground = const MaterialColor(

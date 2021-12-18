@@ -90,7 +90,7 @@ class _PostFormState extends State<PostForm> {
     _subjectController = TextEditingController();
     _subjectController.addListener(_typingTimer.reset);
 
-    if(widget.replyTo != null){
+    if (widget.replyTo != null) {
       _visibility = widget.replyTo!.visibility;
     }
   }

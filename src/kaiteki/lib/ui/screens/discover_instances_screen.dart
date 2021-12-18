@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -327,7 +326,9 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                         ListTile(
                           title: Text(l10n.rulesLearnMore),
                           trailing: const Icon(Mdi.arrowRight),
-                          onTap: () async => await context.launchUrl(data.rulesUrl!),
+                          onTap: () async {
+                            await context.launchUrl(data.rulesUrl!);
+                          },
                         ),
                     ],
                   ),

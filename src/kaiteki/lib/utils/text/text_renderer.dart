@@ -71,7 +71,7 @@ class TextRenderer {
       return renderEmoji(textContext, element);
     }
 
-    if (element is Element && element.children?.isNotEmpty == true) {
+    if (element.children?.isNotEmpty == true) {
       return TextSpan(children: childrenSpans);
     }
 
