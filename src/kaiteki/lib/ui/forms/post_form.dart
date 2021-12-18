@@ -100,7 +100,7 @@ class _PostFormState extends State<PostForm> {
     final manager = Provider.of<AccountManager>(context);
     final flex = widget.expands ? 1 : 0;
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Column(
       children: [
         if (manager.adapter is PreviewSupport)
@@ -327,16 +327,24 @@ class _PostFormState extends State<PostForm> {
   void openEmojiPicker(BuildContext context, AccountManager container) {
     Scaffold.of(context).showBottomSheet(
       (context) {
-        return Material(
-          type: MaterialType.card,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(6.0)),
-          child: SizedBox(
-            height: 250,
-            child: FutureBuilder(
-              future: container.adapter.getEmojis(),
-              builder: buildEmojiSelector,
+        return BottomSheet(
+          builder: (BuildContext context) {
+            return SizedBox(
+              height: 250,
+              child: FutureBuilder(
+                future: container.adapter.getEmojis(),
+                builder: buildEmojiSelector,
+              ),
+            );
+          },
+          onClosing: () {},
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(12.0),
             ),
           ),
+          elevation: 16.0,
+          clipBehavior: Clip.antiAlias,
         );
       },
     );
