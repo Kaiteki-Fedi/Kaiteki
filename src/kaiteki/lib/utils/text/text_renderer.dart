@@ -213,14 +213,17 @@ class UserChip extends StatelessWidget {
         if (snapshot.hasData) {
           final user = snapshot.data!;
 
-          return ActionChip(
-            avatar: AvatarWidget(user, size: 24),
-            label: Text.rich(user.renderDisplayName(context)),
-            onPressed: () {
-              var screen = AccountScreen.fromUser(user);
-              var route = MaterialPageRoute(builder: (_) => screen);
-              Navigator.push(context, route);
-            },
+          return Tooltip(
+            message: getHandle(user),
+            child: ActionChip(
+              avatar: AvatarWidget(user, size: 24),
+              label: Text.rich(user.renderDisplayName(context)),
+              onPressed: () {
+                var screen = AccountScreen.fromUser(user);
+                var route = MaterialPageRoute(builder: (_) => screen);
+                Navigator.push(context, route);
+              },
+            ),
           );
         } else {
           return const Chip(
@@ -230,5 +233,13 @@ class UserChip extends StatelessWidget {
         }
       },
     );
+  }
+
+  String getHandle(User user) {
+    if (user.host == null) {
+      return '@${user.username}';
+    } else {
+      return '@${user.username}@${user.host}';
+    }
   }
 }
