@@ -35,6 +35,31 @@ Post toPost(mastodon.Status source) {
   );
 }
 
+Notification toNotification(mastodon.Notification notification) {
+  return Notification(
+    type: toNotificationType(notification.type),
+    user: notification.account.nullTransform((u) => toUser(u)),
+    post: notification.status.nullTransform((p) => toPost(p)),
+  );
+}
+
+NotificationType toNotificationType(String type) {
+  switch (type) {
+    case "favourite":
+      return NotificationType.liked;
+    case "reblog":
+      return NotificationType.repeated;
+    case "pleroma:emoji_reaction":
+      return NotificationType.reacted;
+    case "follow":
+      return NotificationType.followed;
+    case "mention":
+      return NotificationType.mentioned;
+    default:
+      throw "Unknown notification type: $type";
+  }
+}
+
 Reaction toReaction(pleroma.EmojiReaction reaction) {
   return Reaction(
     includesMe: reaction.me,

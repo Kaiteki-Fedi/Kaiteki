@@ -21,8 +21,7 @@ import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
-import 'package:kaiteki/utils/extensions/iterable.dart';
-import 'package:kaiteki/utils/extensions/string.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 
@@ -166,9 +165,9 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Iterable<Notification>> getNotifications() {
-    // TODO implement getNotifications
-    throw UnimplementedError();
+  Future<Iterable<Notification>> getNotifications() async {
+    final notifications = await client.getNotifications();
+    return notifications.map(toNotification);
   }
 
   @override

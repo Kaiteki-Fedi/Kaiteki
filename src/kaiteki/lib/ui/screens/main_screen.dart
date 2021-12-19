@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
+import 'package:kaiteki/ui/pages/notification_page.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/ui/widgets/account_switcher_widget.dart';
@@ -60,12 +61,7 @@ class _MainScreenState extends State<MainScreen> {
 
     _pages ??= [
       TimelinePage(key: _timelineKey),
-      Center(
-        child: IconLandingWidget(
-          icon: const Icon(Mdi.dotsHorizontal),
-          text: Text(l10n.niy),
-        ),
-      ),
+      const NotificationPage(),
       Center(
         child: IconLandingWidget(
           icon: const Icon(Mdi.dotsHorizontal),
@@ -92,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
             case ScreenSize.s:
             case ScreenSize.m:
             case ScreenSize.l:
-            return _buildDesktopView(appName);
+              return _buildDesktopView(appName);
           }
         },
       ),
