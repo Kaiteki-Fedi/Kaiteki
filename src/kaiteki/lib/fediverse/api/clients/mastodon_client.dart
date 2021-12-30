@@ -179,6 +179,30 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
+  Future<mastodon.Status> favouriteStatus(String id) async {
+    return await sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/favourite",
+      (j) => mastodon.Status.fromJson(j),
+    );
+  }
+
+  Future<mastodon.Status> getStatus(String id) async {
+    return await sendJsonRequest(
+      HttpMethod.get,
+      "api/v1/statuses/$id",
+      (j) => mastodon.Status.fromJson(j),
+    );
+  }
+
+  Future<mastodon.Status> unfavouriteStatus(String id) async {
+    return await sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/unfavourite",
+      (j) => mastodon.Status.fromJson(j),
+    );
+  }
+
   @override
   Future<void> checkResponse(Response response) async {}
 

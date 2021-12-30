@@ -221,4 +221,21 @@ class SharedMastodonAdapter<T extends MastodonClient>
   Future<Instance?> probeInstance() {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Post> getPostById(String id) async {
+    final status = await client.getStatus(id);
+    return toPost(status);
+  }
+
+  @override
+  Future<Post?> favoritePost(String id) async {
+    return toPost(await client.favouriteStatus(id));
+  }
+
+  @override
+  Future<User?> followUser(String id) {
+    // TODO: implement followUser
+    throw UnimplementedError();
+  }
 }

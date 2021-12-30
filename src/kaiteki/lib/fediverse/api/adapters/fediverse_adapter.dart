@@ -59,4 +59,19 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<Instance> getInstance();
 
   Future<Instance?> probeInstance();
+
+  /// Retrieves a post.
+  Future<Post> getPostById(String id);
+
+  /// Favorites a post.
+  ///
+  /// This method *may* return a [Post] with updated information depending on
+  /// the adapter implementation.
+  Future<Post?> favoritePost(String id);
+
+  /// Follows an user.
+  ///
+  /// This method *may* return a [User] with updated information depending on
+  /// the adapter implementation.
+  Future<User?> followUser(String id);
 }

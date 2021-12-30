@@ -98,7 +98,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       Visibility.unlisted: "home",
       Visibility.public: "public",
     }[draft.visibility]!;
-    
+
     final note = await client.createNote(
       visibility,
       text: draft.content,
@@ -224,5 +224,23 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<Instance> probeInstance() async {
     return getInstance();
+  }
+
+  @override
+  Future<Post?> favoritePost(String id) {
+    // TODO: implement favoritePost
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<User?> followUser(String id) {
+    // TODO: implement followUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Post> getPostById(String id) {
+    // TODO: implement getPostById
+    throw UnimplementedError();
   }
 }
