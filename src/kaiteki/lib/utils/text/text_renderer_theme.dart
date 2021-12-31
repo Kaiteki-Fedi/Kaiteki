@@ -13,7 +13,7 @@ class TextRendererTheme {
 
     return TextRendererTheme(
       theme.linkTextStyle,
-      Utils.getLocalFontSize(context) * 1.5,
+      getLocalFontSize(context) * 1.5,
     );
   }
 }

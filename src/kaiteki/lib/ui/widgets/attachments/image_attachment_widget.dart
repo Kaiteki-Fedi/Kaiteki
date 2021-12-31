@@ -18,7 +18,7 @@ class ImageAttachmentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var borderRadius = BorderRadius.circular(8);
+    final borderRadius = BorderRadius.circular(8);
 
     return GestureDetector(
       onTap: () => enlargeImage(context),
@@ -31,7 +31,7 @@ class ImageAttachmentWidget extends StatelessWidget {
               return w;
             }
 
-            var hasValue = c.expectedTotalBytes != null;
+            final hasValue = c.expectedTotalBytes != null;
 
             return Center(
               child: CircularProgressIndicator(

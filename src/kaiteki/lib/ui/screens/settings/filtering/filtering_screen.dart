@@ -31,7 +31,7 @@ class FilteringScreen extends ConsumerWidget {
                   const VerticalDivider(),
                   Switch(
                     value: prefs.sensitivePostFilter.enabled,
-                    onChanged: (bool value) => prefContainer.update((p) {
+                    onChanged: (value) => prefContainer.update((p) {
                       return p..sensitivePostFilter.enabled = value;
                     }),
                   )

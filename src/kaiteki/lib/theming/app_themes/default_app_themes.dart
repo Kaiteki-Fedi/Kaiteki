@@ -2,14 +2,50 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/theming/app_themes/material_app_theme.dart';
 
-class DefaultAppThemes {
-  static const double rounding = 24.0;
-  static const BorderRadius borderRadius = BorderRadius.all(
-    Radius.circular(rounding),
-  );
+const double rounding = 24.0;
+const BorderRadius borderRadius = BorderRadius.all(
+  Radius.circular(rounding),
+);
 
-  static MaterialAppTheme lightAppTheme = MaterialAppTheme(
-    ThemeData.from(colorScheme: lightScheme).copyWith(
+final MaterialAppTheme lightAppTheme = MaterialAppTheme(
+  ThemeData.from(colorScheme: lightScheme)._applyGeneralChanges(),
+  linkTextStyle: TextStyle(color: kaitekiPink.shade700),
+);
+
+final ColorScheme lightScheme = ColorScheme.light(
+  background: kaitekiLightBackground.shade100,
+  surface: kaitekiLightBackground.shade50,
+  // primary
+  primary: kaitekiPink.shade500,
+  primaryContainer: kaitekiPink.shade700,
+  // secondary
+  secondary: kaitekiOrange.shade400,
+  secondaryContainer: kaitekiOrange.shade600,
+  // error
+  error: Colors.red,
+  onError: Colors.black,
+);
+
+final MaterialAppTheme darkAppTheme = MaterialAppTheme(
+  ThemeData.from(colorScheme: darkScheme)._applyGeneralChanges(),
+);
+
+final ColorScheme darkScheme = ColorScheme.dark(
+  background: kaitekiDarkBackground.shade900,
+  surface: kaitekiDarkBackground.shade800,
+  // primary
+  primary: kaitekiPink.shade200,
+  primaryContainer: kaitekiPink.shade500,
+  // secondary
+  secondary: kaitekiPink.shade200,
+  secondaryContainer: kaitekiPink.shade500,
+  // error
+  error: Colors.red,
+);
+
+extension _ThemeDataExtensions on ThemeData {
+  ThemeData _applyGeneralChanges() {
+    return copyWith(
       snackBarTheme: const SnackBarThemeData(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         behavior: SnackBarBehavior.floating,
@@ -17,44 +53,6 @@ class DefaultAppThemes {
       dialogTheme: const DialogTheme(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
-    ),
-    linkTextStyle: TextStyle(color: AppColors.kaitekiPink.shade700),
-  );
-
-  static ColorScheme lightScheme = ColorScheme.light(
-    background: AppColors.kaitekiLightBackground.shade100,
-    surface: AppColors.kaitekiLightBackground.shade50,
-    // primary
-    primary: AppColors.kaitekiPink.shade500,
-    primaryContainer: AppColors.kaitekiPink.shade700,
-    onPrimary: Colors.white,
-    // secondary
-    secondary: AppColors.kaitekiOrange.shade400,
-    secondaryContainer: AppColors.kaitekiOrange.shade600,
-    onSecondary: Colors.black,
-    // error
-    error: Colors.red,
-    onError: Colors.black,
-    brightness: Brightness.light,
-  );
-
-  static MaterialAppTheme darkAppTheme =
-      MaterialAppTheme(ThemeData.from(colorScheme: darkScheme));
-
-  static ColorScheme darkScheme = ColorScheme.dark(
-    background: AppColors.kaitekiDarkBackground.shade900,
-    surface: AppColors.kaitekiDarkBackground.shade800,
-    // primary
-    primary: AppColors.kaitekiPink.shade200,
-    primaryContainer: AppColors.kaitekiPink.shade500,
-    onPrimary: Colors.black,
-    // secondary
-    secondary: AppColors.kaitekiPink.shade200,
-    secondaryContainer: AppColors.kaitekiPink.shade500,
-    onSecondary: Colors.black,
-    // error
-    error: Colors.red,
-    onError: Colors.black,
-    brightness: Brightness.dark,
-  );
+    );
+  }
 }

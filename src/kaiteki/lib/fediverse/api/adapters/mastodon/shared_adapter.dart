@@ -48,7 +48,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     client.instance = instance;
 
     // Retrieve or create client secret
-    var clientSecret = await LoginFunctions.getClientSecret(
+    final clientSecret = await LoginFunctions.getClientSecret(
       client,
       instance,
       accounts.getClientRepo(),
@@ -62,7 +62,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     String accessToken;
 
     // Try to login and handle error
-    var loginResponse = await client.login(username, password);
+    final loginResponse = await client.login(username, password);
 
     if (loginResponse.error.isNotNullOrEmpty) {
       if (loginResponse.error != "mfa_required") {
@@ -75,9 +75,9 @@ class SharedMastodonAdapter<T extends MastodonClient>
         return LoginResult.aborted();
       }
 
-      // TODO add error-able TOTP screens
-      // TODO make use of a while loop to make this more efficient
-      var mfaResponse = await client.respondMfa(
+      // TODO(Craftplacer): add error-able TOTP screens
+      // TODO(Craftplacer): make use of a while loop to make this more efficient
+      final mfaResponse = await client.respondMfa(
         loginResponse.mfaToken!,
         int.parse(code),
       );
@@ -92,7 +92,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     }
 
     // Create and set account secret
-    var accountSecret = AccountSecret(instance, username, accessToken);
+    final accountSecret = AccountSecret(instance, username, accessToken);
     client.authenticationData!.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
@@ -104,7 +104,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
       return LoginResult.failed("Failed to verify credentials");
     }
 
-    var compound = AccountCompound(
+    final compound = AccountCompound(
       container: accounts,
       adapter: this,
       account: toUser(account),
@@ -135,9 +135,9 @@ class SharedMastodonAdapter<T extends MastodonClient>
         break;
     }
 
-    var contentType = getContentType(draft.formatting);
+    final contentType = getContentType(draft.formatting);
 
-    var newPost = await client.postStatus(
+    final newPost = await client.postStatus(
       draft.content,
       pleromaPreview: false,
       visibility: visibility,
@@ -161,55 +161,56 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<User> getMyself() async {
-    var account = await client.verifyCredentials();
+    final account = await client.verifyCredentials();
     return toUser(account);
   }
 
   @override
   Future<Iterable<Notification>> getNotifications() {
-    // TODO implement getNotifications
+    // TODO(Craftplacer): implement getNotifications
     throw UnimplementedError();
   }
 
   @override
   Future<Iterable<Post>> getStatusesOfUserById(String id) async {
-    return (await client.getStatuses(id)).map((mst) => toPost(mst));
+    return (await client.getStatuses(id)).map(toPost);
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(TimelineType type,
-      {String? sinceId, String? untilId}) async {
-    var posts = await client.getTimeline(minId: sinceId, maxId: untilId);
-    return posts.map((m) => toPost(m));
+  Future<Iterable<Post>> getTimeline(
+    TimelineType type, {
+    String? sinceId,
+    String? untilId,
+  }) async {
+    final posts = await client.getTimeline(minId: sinceId, maxId: untilId);
+    return posts.map(toPost);
   }
 
   @override
   Future<User> getUser(String username, [String? instance]) {
-    // TODO implement getUser
+    // TODO(Craftplacer): implement getUser
     throw UnimplementedError();
   }
 
   @override
   Future<Iterable<EmojiCategory>> getEmojis() async {
-    var emojis = await client.getCustomEmojis();
-    var categories = emojis.groupBy((emoji) => emoji.category);
+    final emojis = await client.getCustomEmojis();
+    final categories = emojis.groupBy((emoji) => emoji.category);
 
     return categories.entries.map((kv) {
-      return EmojiCategory(kv.key!, kv.value.map(toEmoji));
+      return EmojiCategory(kv.key, kv.value.map(toEmoji));
     });
   }
 
   @override
   Future<Iterable<Post>> getThread(Post reply) async {
-    var status = reply.source as mastodon.Status;
-    var posts = <Post>[];
-    var context = await client.getStatusContext(status.id);
-
-    posts.addAll(context.ancestors.map(toPost));
-    posts.add(reply);
-    posts.addAll(context.descendants.map(toPost));
-
-    return posts;
+    final status = reply.source as mastodon.Status;
+    final context = await client.getStatusContext(status.id);
+    return <Post>[
+      ...context.ancestors.map(toPost),
+      reply,
+      ...context.descendants.map(toPost),
+    ];
   }
 
   @override
@@ -235,7 +236,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<User?> followUser(String id) {
-    // TODO: implement followUser
+    // TODO(Craftplacer): implement followUser
     throw UnimplementedError();
   }
 }

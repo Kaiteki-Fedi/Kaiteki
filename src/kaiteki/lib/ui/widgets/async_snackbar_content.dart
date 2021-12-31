@@ -17,7 +17,7 @@ class AsyncSnackBarContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var textStyle = _getSnackBarTextStyle(context);
+    final textStyle = _getSnackBarTextStyle(context);
     return Row(
       children: [
         Padding(
@@ -29,7 +29,6 @@ class AsyncSnackBarContent extends StatelessWidget {
               ),
               Positioned.fill(
                 child: Align(
-                  alignment: Alignment.center,
                   child: IconTheme(
                     child: icon,
                     data: IconThemeData(color: textStyle?.color),

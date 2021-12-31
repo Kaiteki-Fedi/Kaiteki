@@ -3,11 +3,11 @@ import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 
 class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
-  MastodonAdapter._(MastodonClient client) : super(client);
-
   factory MastodonAdapter({MastodonClient? client}) {
     return MastodonAdapter._(client ?? MastodonClient());
   }
+
+  MastodonAdapter._(MastodonClient client) : super(client);
 
   @override
   Future<Instance?> probeInstance() async {

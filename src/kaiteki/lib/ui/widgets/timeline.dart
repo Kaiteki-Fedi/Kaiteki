@@ -61,7 +61,7 @@ class TimelineState extends ConsumerState<Timeline> {
         return;
       }
 
-      var threshold = (_scrollContainer.position.maxScrollExtent - 300);
+      final threshold = _scrollContainer.position.maxScrollExtent - 300;
       if (threshold < _scrollContainer.offset) {
         _isLoading = true;
 
@@ -77,11 +77,10 @@ class TimelineState extends ConsumerState<Timeline> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<Iterable<Post>>(
       stream: _model.stream,
-      builder: (context, AsyncSnapshot<Iterable<Post>> snapshot) {
+      builder: (context, snapshot) {
         return PageTransitionSwitcher(
-          duration: const Duration(milliseconds: 300),
           transitionBuilder: animations.fadeThrough,
           child: _buildStream(context, ref, snapshot),
         );
@@ -109,7 +108,7 @@ class TimelineState extends ConsumerState<Timeline> {
               const SizedBox(height: 8.0),
               TextButton(
                 child: Text(l10n.refresh),
-                onPressed: () => _model.refresh(),
+                onPressed: _model.refresh,
               ),
             ],
           ),
@@ -120,12 +119,14 @@ class TimelineState extends ConsumerState<Timeline> {
       final filters = widget.filters ?? [];
 
       if (snapshot.hasData) {
-        filtered = Map.fromEntries(snapshot.data!.map((p) {
-          return MapEntry(
-            p,
-            PostFilter.runMultipleFilters(ref, p, filters),
-          );
-        }).where((p) => p.value != PostFilterResult.hide));
+        filtered = Map.fromEntries(
+          snapshot.data!.map((p) {
+            return MapEntry(
+              p,
+              PostFilter.runMultipleFilters(ref, p, filters),
+            );
+          }).where((p) => p.value != PostFilterResult.hide),
+        );
       } else {
         filtered = <Post, PostFilterResult>{};
       }
@@ -147,7 +148,7 @@ class TimelineState extends ConsumerState<Timeline> {
   }
 
   Widget _buildList(Map<Post, PostFilterResult> filtered) {
-    int itemCount = filtered.length;
+    var itemCount = filtered.length;
 
     if (!_model.hasReachedEnd) {
       itemCount++;
@@ -182,9 +183,11 @@ class TimelineState extends ConsumerState<Timeline> {
 
       final widget = InkWell(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ConversationScreen(post),
-          ));
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ConversationScreen(post),
+            ),
+          );
         },
         child: StatusWidget(post, wide: this.widget.wide),
       );
@@ -218,7 +221,7 @@ class TimelineModel extends PagedNetworkStream<Post, String> {
 
   @override
   Future<Iterable<Post>> fetchObjects(String? firstId, String? lastId) async {
-    return await _adapter.getTimeline(timelineType, untilId: lastId);
+    return _adapter.getTimeline(timelineType, untilId: lastId);
   }
 
   @override

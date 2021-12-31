@@ -5,7 +5,7 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 
-// TODO maybe make this UI-only and remove interaction between adapters and
+// TODO(Craftplacer): maybe make this UI-only and remove interaction between adapters and
 //      models?
 class ReactionWidget extends ConsumerStatefulWidget {
   final Post parentPost;
@@ -24,16 +24,15 @@ class ReactionWidget extends ConsumerStatefulWidget {
 class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
   @override
   Widget build(BuildContext context) {
-    var textPadding =
-        const EdgeInsets.only(top: 4, bottom: 4, left: 6, right: 2);
-
-    var reacted = widget.reaction.includesMe;
-    var theme = ref.watch(themeProvider).current.reactionButtonTheme;
-    var backgroundColor =
-        reacted ? theme.activeBackground : theme.inactiveBackground;
-    var textStyle = reacted ? theme.activeTextStyle : theme.inactiveTextStyle;
-
+    const textPadding = EdgeInsets.only(top: 4, bottom: 4, left: 6, right: 2);
     const emojiSize = 24.0;
+
+    final reacted = widget.reaction.includesMe;
+    final theme = ref.watch(themeProvider).current.reactionButtonTheme;
+    final backgroundColor = reacted //
+        ? theme.activeBackground
+        : theme.inactiveBackground;
+    final textStyle = reacted ? theme.activeTextStyle : theme.inactiveTextStyle;
 
     return Card(
       color: backgroundColor,
@@ -48,9 +47,11 @@ class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
                 widget.reaction.emoji,
               );
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Your instance does not support reactions."),
-              ));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Your instance does not support reactions."),
+                ),
+              );
             }
           },
           child: Row(

@@ -23,9 +23,9 @@ class ConversationScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.conversationTitle)),
-      body: FutureBuilder(
+      body: FutureBuilder<ThreadPost>(
         future: future,
-        builder: (_, AsyncSnapshot<ThreadPost> snapshot) {
+        builder: (_, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(
               child: ThreadPostContainer(snapshot.data!),
@@ -118,7 +118,6 @@ class ThreadPostContainer extends StatelessWidget {
             if (lineShouldShow)
               Positioned.fill(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
@@ -168,7 +167,7 @@ class ThreadPostContainer extends StatelessWidget {
 
   static double getLineOpacity(int layer, {int maxLayer = 5}) {
     layer = min(layer, maxLayer); // make sure maxLayer or less is taken
-    var opposite = maxLayer - layer; // flip values
+    final opposite = maxLayer - layer; // flip values
     return 0.25 + ((opposite / maxLayer) * 0.5); // return 0.0 - 0.5
   }
 }

@@ -1,3 +1,4 @@
+import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
@@ -10,22 +11,21 @@ import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:fediverse_objects/pleroma.dart' as pleroma;
 
 part 'adapter.c.dart';
 
-// TODO add missing implementations
+// TODO(Craftplacer): add missing implementations
 class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
     implements ChatSupport, ReactionSupport, PreviewSupport {
-  PleromaAdapter._(PleromaClient client) : super(client);
-
   factory PleromaAdapter({PleromaClient? client}) {
     return PleromaAdapter._(client ?? PleromaClient());
   }
 
+  PleromaAdapter._(PleromaClient client) : super(client);
+
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {
-    // TODO implement missing data, pleroma chat.
+    // TODO(Craftplacer): implement missing data, pleroma chat.
     final sentMessage = await client.postChatMessage(
       chat.id,
       message.content.content!,
@@ -66,7 +66,7 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
 
   @override
   Future<Post> getPreview(PostDraft draft) async {
-    var status = await client.postStatus(
+    final status = await client.postStatus(
       draft.content,
       contentType: getContentType(draft.formatting),
       pleromaPreview: true,
@@ -82,12 +82,12 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
       return null;
     }
 
-    return await _injectFE(toInstance(instance));
+    return _injectFE(toInstance(instance));
   }
 
   @override
   Future<Instance> getInstance() async {
-    return await _injectFE(toInstance(await client.getInstance()));
+    return _injectFE(toInstance(await client.getInstance()));
   }
 
   Future<Instance> _injectFE(Instance instance) async {

@@ -32,9 +32,9 @@ class CountButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var callback = active ? () {} : (disabled ? null : onTap);
-    var iconColor = _getIconColor(context);
-    var currentIcon = active ? (activeIcon ?? icon) : icon;
+    final callback = active ? () {} : (disabled ? null : onTap);
+    final iconColor = _getIconColor(context);
+    final currentIcon = active ? (activeIcon ?? icon) : icon;
 
     if (count == null || count! < 1) {
       return IconButton(
@@ -59,12 +59,12 @@ class CountButton extends StatelessWidget {
 
   Color _getIconColor(BuildContext context) {
     var inactiveColor = color;
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     inactiveColor ??= theme.disabledColor;
 
     if (buttonOnly) {
-      return Utils.getLocalTextColor(context);
+      return getLocalTextColor(context);
     } else if (active) {
       return activeColor ?? inactiveColor;
     } else {

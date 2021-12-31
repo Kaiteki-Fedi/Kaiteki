@@ -6,12 +6,13 @@ import 'package:kaiteki/model/post_filters/post_filter.dart';
 class SensitivePostFilter extends PostFilter {
   @override
   PostFilterResult checkPost(WidgetRef ref, Post post) {
-    var container = ref.watch(preferenceProvider);
-    var prefs = container.get();
+    final container = ref.watch(preferenceProvider);
+    final prefs = container.get();
+    final filterSettings = prefs.sensitivePostFilter;
 
-    if (prefs.sensitivePostFilter.enabled) {
-      var matchMarked = prefs.sensitivePostFilter.filterPostsMarkedAsSensitive;
-      var matchSubject = prefs.sensitivePostFilter.filterPostsWithSubject;
+    if (filterSettings.enabled) {
+      final matchMarked = filterSettings.filterPostsMarkedAsSensitive;
+      final matchSubject = filterSettings.filterPostsWithSubject;
 
       if ((matchMarked && post.nsfw) ||
           (matchSubject && post.subject?.isNotEmpty == true)) {

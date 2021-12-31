@@ -124,7 +124,7 @@ User toUser(mastodon.Account source) {
 }
 
 String? getHost(String acct) {
-  var split = acct.split('@');
+  final split = acct.split('@');
 
   if (split.length > 1) return split.last;
 

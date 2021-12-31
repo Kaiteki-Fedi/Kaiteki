@@ -10,43 +10,45 @@ class AccountListDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return DynamicDialogContainer(builder: (context, fullscreen) {
-      final manager = ref.watch(accountProvider);
-      final l10n = context.getL10n();
+    return DynamicDialogContainer(
+      builder: (context, fullscreen) {
+        final manager = ref.watch(accountProvider);
+        final l10n = context.getL10n();
 
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppBar(
-            title: Text(l10n.manageAccountsTitle),
-            backgroundColor: Colors.transparent,
-            foregroundColor: Theme.of(context).colorScheme.onSurface,
-            elevation: 0,
-          ),
-          Column(
-            children: [
-              for (final compound in manager.accounts)
-                AccountListTile(
-                  compound: compound,
-                  selected: manager.currentAccount == compound,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppBar(
+              title: Text(l10n.manageAccountsTitle),
+              backgroundColor: Colors.transparent,
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
+              elevation: 0,
+            ),
+            Column(
+              children: [
+                for (final compound in manager.accounts)
+                  AccountListTile(
+                    compound: compound,
+                    selected: manager.currentAccount == compound,
+                  ),
+                const Divider(),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Theme.of(context).disabledColor,
+                    foregroundColor: Colors.white,
+                    child: const Icon(Mdi.plus),
+                    radius: 22,
+                  ),
+                  title: Text(l10n.addAccountButtonLabel),
+                  onTap: () => onTapAdd(context),
                 ),
-              const Divider(),
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).disabledColor,
-                  foregroundColor: Colors.white,
-                  child: const Icon(Mdi.plus),
-                  radius: 22,
-                ),
-                title: Text(l10n.addAccountButtonLabel),
-                onTap: () => onTapAdd(context),
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
-        ],
-      );
-    });
+                const SizedBox(height: 8),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void onTapAdd(BuildContext context) {
@@ -84,11 +86,11 @@ class AccountListTile extends ConsumerWidget {
     );
   }
 
-  void _onSelect(WidgetRef ref) async {
+  Future<void> _onSelect(WidgetRef ref) async {
     await ref.read(accountProvider).changeAccount(compound);
   }
 
-  void _onRemove(BuildContext context) async {
+  Future<void> _onRemove(BuildContext context) async {
     await showDialog<void>(
       context: context,
       builder: (context) => AccountRemovalDialog(compound: compound),

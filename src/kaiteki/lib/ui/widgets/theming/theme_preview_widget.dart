@@ -18,13 +18,13 @@ class ThemePreviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var fakeContainer = ThemeContainer(MaterialAppTheme(ThemeData.dark()));
-    fakeContainer.source = theme;
+    final fakeContainer = ThemeContainer(
+      MaterialAppTheme(ThemeData.dark()),
+    )..source = theme;
 
     return ChangeNotifierProvider.value(
       value: fakeContainer,
       child: AbsorbPointer(
-        absorbing: true,
         child: Theme(
           data: fakeContainer.getMaterialTheme(),
           child: Scaffold(

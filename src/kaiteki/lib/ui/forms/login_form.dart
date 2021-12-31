@@ -109,7 +109,7 @@ class LoginFormState extends State<LoginForm> {
     );
   }
 
-  void onBackButtonPressed() async {
+  Future<void> onBackButtonPressed() async {
     if (showAuthentication) {
       setState(() => showAuthentication = false);
 
@@ -121,7 +121,7 @@ class LoginFormState extends State<LoginForm> {
     }
   }
 
-  void onNextButtonPressed() async {
+  Future<void> onNextButtonPressed() async {
     if (showAuthentication) {
       widget.onLogin.call(
         _instanceController.text,
@@ -214,7 +214,7 @@ class __InstancePageState extends State<_InstancePage> {
             padding: fieldMargin,
             child: TypeAheadFormField<InstanceData>(
               textFieldConfiguration: TextFieldConfiguration(
-                // TODO: `flutter_typeahead` is missing `autofillHints`
+                // TODO(Craftplacer): `flutter_typeahead` is missing `autofillHints`
                 // autofillHints: const [AutofillHints.url],
                 controller: widget.instanceController,
                 autofocus: true,
@@ -230,7 +230,6 @@ class __InstancePageState extends State<_InstancePage> {
                 onSubmitted: (_) => _submit(),
               ),
               hideOnEmpty: true,
-              getImmediateSuggestions: false,
               validator: widget.validator,
               suggestionsCallback: _fetchSuggestions,
               onSuggestionSelected: (suggestion) {
@@ -460,7 +459,7 @@ class __UserPageState extends State<_UserPage> {
   }
 
   Widget _getImageWidget() {
-    const double size = 96.0;
+    const size = 96.0;
 
     if (widget.image != null) {
       return Image.network(
@@ -473,7 +472,7 @@ class __UserPageState extends State<_UserPage> {
     return Container(
       width: size,
       height: size,
-      color: AppColors.kaitekiDarkBackground.shade500,
+      color: kaitekiDarkBackground.shade500,
       child: const Icon(
         Icons.public,
         size: 64.0,

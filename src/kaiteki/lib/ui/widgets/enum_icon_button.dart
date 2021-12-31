@@ -44,7 +44,7 @@ class EnumIconButton<T> extends StatelessWidget {
           child: ListTile(
             leading: iconBuilder.call(value),
             title: textBuilder.call(value),
-            contentPadding: const EdgeInsets.all(0.0),
+            contentPadding: EdgeInsets.zero,
             selected: value == this.value,
             enabled: canSelect,
           ),

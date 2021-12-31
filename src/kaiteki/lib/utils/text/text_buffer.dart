@@ -19,7 +19,7 @@ class TextBuffer {
   }
 
   String cut() {
-    var temp = text;
+    final temp = text;
     clear();
     return temp;
   }

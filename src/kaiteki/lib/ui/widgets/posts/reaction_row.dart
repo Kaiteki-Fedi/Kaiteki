@@ -16,7 +16,6 @@ class ReactionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      direction: Axis.horizontal,
       children: [
         for (var reaction in _reactions)
           ReactionWidget(parentPost: _parentPost, reaction: reaction),

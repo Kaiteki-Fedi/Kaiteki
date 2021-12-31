@@ -20,9 +20,9 @@ class _CustomizationBasicPageState
         ListTile(
           title: Text(l10n.theme),
           onTap: () async {
-            var selection = await showDialog<ThemeMode>(
+            final selection = await showDialog<ThemeMode>(
               context: context,
-              builder: (BuildContext context) {
+              builder: (context) {
                 return SimpleDialog(
                   title: Text(l10n.selectThemeTitle),
                   children: <Widget>[
@@ -58,9 +58,6 @@ class _CustomizationBasicPageState
 
       case ThemeMode.system:
         return l10n.themeSystem;
-
-      default:
-        return mode.toString();
     }
   }
 }

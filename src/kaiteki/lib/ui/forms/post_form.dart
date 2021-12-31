@@ -163,7 +163,7 @@ class _PostFormState extends ConsumerState<PostForm> {
           child: Row(
             children: [
               IconButton(
-                onPressed: () => openAttachDrawer(),
+                onPressed: openAttachDrawer,
                 icon: const Icon(Mdi.plusCircle),
                 splashRadius: 20,
                 tooltip: l10n.attachButtonTooltip,
@@ -231,19 +231,18 @@ class _PostFormState extends ConsumerState<PostForm> {
         } else {
           return StatusWidget(snapshot.data!, showActions: false);
         }
-
-      default:
-        return const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Center(child: CircularProgressIndicator()),
-        );
     }
+
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Center(child: CircularProgressIndicator()),
+    );
   }
 
   Future<Post>? getPreviewFuture(AccountManager manager) {
     if (_bodyController.value.text.isEmpty) return null;
 
-    var previewAdapter = manager.adapter as PreviewSupport;
+    final previewAdapter = manager.adapter as PreviewSupport;
     return previewAdapter.getPreview(_getPostDraft());
   }
 
@@ -257,23 +256,24 @@ class _PostFormState extends ConsumerState<PostForm> {
     );
   }
 
-  void post(BuildContext context, FediverseAdapter adapter) async {
+  Future<void> post(BuildContext context, FediverseAdapter adapter) async {
     final messenger = ScaffoldMessenger.of(context);
     final contentKey = UniqueKey();
     final l10n = context.getL10n();
 
     Navigator.of(context).pop();
 
-    var snackBar = SnackBar(
+    final snackBar = SnackBar(
       duration: const Duration(days: 1),
-      content: FutureBuilder(
+      content: FutureBuilder<Post>(
         future: adapter.postStatus(_getPostDraft()),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (context, snapshot) {
           switch (snapshot.state) {
             case AsyncSnapshotState.errored:
-              Future.delayed(const Duration(seconds: 4), () {
-                messenger.hideCurrentSnackBar();
-              });
+              Future.delayed(
+                const Duration(seconds: 4),
+                messenger.hideCurrentSnackBar,
+              );
               return AsyncSnackBarContent(
                 key: contentKey,
                 done: true,
@@ -288,34 +288,36 @@ class _PostFormState extends ConsumerState<PostForm> {
                 icon: const Icon(Mdi.textBox),
                 text: Text(l10n.postSubmissionSending),
               );
-
-            case AsyncSnapshotState.done:
-            default:
-              Future.delayed(const Duration(seconds: 4), () {
-                messenger.hideCurrentSnackBar();
-              });
-              return AsyncSnackBarContent(
-                key: contentKey,
-                done: true,
-                icon: const Icon(Mdi.check),
-                text: Text(l10n.postSubmissionSent),
-                trailing: TextButton(
-                  child: Text(l10n.viewPostButtonLabel),
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.secondary,
-                    ),
-                    visualDensity: VisualDensity.comfortable,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => ConversationScreen(snapshot.data!),
-                    ));
-                    messenger.hideCurrentSnackBar();
-                  },
-                ),
-              );
           }
+
+          Future.delayed(
+            const Duration(seconds: 4),
+            messenger.hideCurrentSnackBar,
+          );
+
+          return AsyncSnackBarContent(
+            key: contentKey,
+            done: true,
+            icon: const Icon(Mdi.check),
+            text: Text(l10n.postSubmissionSent),
+            trailing: TextButton(
+              child: Text(l10n.viewPostButtonLabel),
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.secondary,
+                ),
+                visualDensity: VisualDensity.comfortable,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => ConversationScreen(snapshot.data!),
+                  ),
+                );
+                messenger.hideCurrentSnackBar();
+              },
+            ),
+          );
         },
       ),
     );

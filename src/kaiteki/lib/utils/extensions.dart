@@ -102,7 +102,7 @@ extension HtmlNodeExtensions on Node {
 extension UserReferenceExtensions on UserReference {
   Future<User?> resolve(FediverseAdapter adapter) async {
     if (id != null) {
-      return await adapter.getUserById(id!);
+      return adapter.getUserById(id!);
     }
 
     // if (reference.username != null) {

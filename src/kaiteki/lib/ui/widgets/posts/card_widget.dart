@@ -10,7 +10,7 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Material(
       elevation: 2,
       color: theme.cardColor,
@@ -25,7 +25,6 @@ class CardWidget extends StatelessWidget {
                 width: 120,
               ),
             Flexible(
-              fit: FlexFit.loose,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(

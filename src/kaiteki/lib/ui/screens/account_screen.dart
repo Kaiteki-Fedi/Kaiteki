@@ -43,12 +43,12 @@ class _AccountScreenState extends ConsumerState<AccountScreen>
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        return FutureBuilder(
+        return FutureBuilder<User>(
           initialData: widget.initialUser,
           future: accounts.adapter.getUserById(widget.id),
-          builder: (_, AsyncSnapshot<User> snapshot) {
-            var isLoading = !(snapshot.hasData || snapshot.hasError);
-            var tooSmall = constraints.minWidth < 600;
+          builder: (_, snapshot) {
+            final isLoading = !(snapshot.hasData || snapshot.hasError);
+            final tooSmall = constraints.minWidth < 600;
 
             return Scaffold(
               body: TabBarView(
@@ -150,13 +150,11 @@ class _AccountScreenState extends ConsumerState<AccountScreen>
       flexibleSpace: Stack(
         children: [
           FlexibleSpaceBar(
-            collapseMode: CollapseMode.parallax,
             background: bannerUrl == null
                 ? null
                 : Image.network(
                     bannerUrl,
                     fit: BoxFit.cover,
-                    alignment: Alignment.center,
                     errorBuilder: (context, error, stackTrace) {
                       return const SizedBox();
                     },
@@ -206,11 +204,12 @@ class PostsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future:
-          isLoading ? null : container.adapter.getStatusesOfUserById(widget.id),
+    return FutureBuilder<Iterable<Post>>(
+      future: isLoading //
+          ? null
+          : container.adapter.getStatusesOfUserById(widget.id),
       initialData: const <Post>[],
-      builder: (BuildContext context, AsyncSnapshot<Iterable<Post>> snapshot) {
+      builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(
             child: Padding(
@@ -221,7 +220,7 @@ class PostsPage extends StatelessWidget {
         }
 
         return ListView.builder(
-          itemBuilder: (_, int i) => StatusWidget(snapshot.data!.elementAt(i)),
+          itemBuilder: (_, i) => StatusWidget(snapshot.data!.elementAt(i)),
           itemCount: snapshot.data?.length ?? 0,
         );
       },

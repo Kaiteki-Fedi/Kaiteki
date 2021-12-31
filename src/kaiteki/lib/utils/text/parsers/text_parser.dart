@@ -1,6 +1,7 @@
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 
+// ignore: one_member_abstracts
 abstract class TextParser {
   List<Element> parse(String text, [List<Element>? children]);
 }

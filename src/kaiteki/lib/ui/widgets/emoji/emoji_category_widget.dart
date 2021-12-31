@@ -44,9 +44,9 @@ class EmojiCategoryWidget extends StatelessWidget {
             child: GridView.builder(
               itemCount: category.emojis.length,
               itemBuilder: (context, i) {
-                var emoji = category.emojis.elementAt(i);
-                var tooltip = getTooltip(emoji);
-                var child = IconButton(
+                final emoji = category.emojis.elementAt(i);
+                final tooltip = getTooltip(emoji);
+                final child = IconButton(
                   icon: EmojiWidget(emoji: emoji, size: emojiSize),
                   onPressed: () => onEmojiSelected.call(emoji),
                   splashRadius: emojiSize * 0.75,
@@ -82,7 +82,7 @@ class EmojiCategoryWidget extends StatelessWidget {
   }
 
   void onInsertPack() {
-    for (var emoji in category.emojis) {
+    for (final emoji in category.emojis) {
       onEmojiSelected.call(emoji);
     }
   }

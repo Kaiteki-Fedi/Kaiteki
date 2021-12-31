@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// TODO: Provide defaults of widgets being used (Icon, Text) and give the user flexibility of using other widgets.
+// TODO(Craftplacer): Provide defaults of widgets being used (Icon, Text) and give the user flexibility of using other widgets.
 class IconLandingWidget extends StatelessWidget {
   final Icon icon;
   final Text text;

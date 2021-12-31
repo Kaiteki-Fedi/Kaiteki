@@ -57,7 +57,7 @@ class AccountManager extends ChangeNotifier {
   }
 
   bool contains(AccountCompound account) {
-    for (var otherAccount in _accounts) {
+    for (final otherAccount in _accounts) {
       if (otherAccount == account) return true;
     }
 
@@ -75,18 +75,18 @@ class AccountManager extends ChangeNotifier {
   Future<void> loadAllAccounts() async {
     _accounts.clear();
 
-    var secrets = _accountSecrets.getAll();
+    final secrets = _accountSecrets.getAll();
     await Future.forEach(secrets, _restoreSession);
 
     if (_accounts.isNotEmpty) {
-      // TODO: Store which account the user last used
+      // TODO(Craftplacer): Store which account the user last used
       await changeAccount(_accounts.first);
     }
   }
 
   Future<void> _restoreSession(AccountSecret accountSecret) async {
-    var instance = accountSecret.instance;
-    var clientSecret = _clientSecrets.get(instance)!;
+    final instance = accountSecret.instance;
+    final clientSecret = _clientSecrets.get(instance)!;
 
     if (clientSecret.apiType == null) {
       _logger.d("Client secret didn't have contain API type.");
@@ -95,7 +95,8 @@ class AccountManager extends ChangeNotifier {
 
     _logger.d('Trying to recover a ${clientSecret.apiType} account');
 
-    var adapter = ApiDefinitions.byType(clientSecret.apiType!).createAdapter();
+    final adapter =
+        ApiDefinitions.byType(clientSecret.apiType!).createAdapter();
     await adapter.client.setClientAuthentication(clientSecret);
     await adapter.client.setAccountAuthentication(accountSecret);
 
@@ -112,7 +113,7 @@ class AccountManager extends ChangeNotifier {
       return;
     }
 
-    var compound = AccountCompound(
+    final compound = AccountCompound(
       container: this,
       adapter: adapter,
       account: user,
@@ -166,8 +167,8 @@ class AccountManager extends ChangeNotifier {
     }
   }
 
-  //TODO: HACK, This should not exist, please refactor.
-  getClientRepo() => _clientSecrets;
+  // TODO(Craftplacer): HACK, This should not exist, please refactor.
+  ClientSecretRepository getClientRepo() => _clientSecrets;
 }
 
 class InstanceProbeResult {

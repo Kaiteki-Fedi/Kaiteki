@@ -142,7 +142,7 @@ class EmojiElement extends Element {
 
 extension ElementExtensions on Element {
   String get allText {
-    String initalText = "";
+    var initalText = "";
     if (this is TextElement && (this as TextElement).text != null) {
       final elementText = (this as TextElement).text;
       if (elementText != null) {

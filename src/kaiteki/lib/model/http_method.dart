@@ -16,8 +16,8 @@ extension HttpMethodExtensions on HttpMethod {
         return "PUT";
       case HttpMethod.delete:
         return "DELETE";
-      default:
-        throw "Given HttpMethod is out of bounds.";
     }
+
+    // throw ArgumentError("Given HttpMethod is out of bounds.");
   }
 }

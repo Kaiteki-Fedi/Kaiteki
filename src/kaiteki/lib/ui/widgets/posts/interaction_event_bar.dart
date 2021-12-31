@@ -24,7 +24,7 @@ class InteractionEventBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var avatarMargin = const EdgeInsets.only(
+    const avatarMargin = EdgeInsets.only(
       left: 28,
       right: 16,
     );
@@ -48,7 +48,7 @@ class InteractionEventBar extends ConsumerWidget {
                 WidgetSpan(
                   child: Icon(
                     icon,
-                    size: Utils.getLocalFontSize(context) * 1.25,
+                    size: getLocalFontSize(context) * 1.25,
                     color: color,
                   ),
                 ),

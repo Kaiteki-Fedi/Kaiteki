@@ -46,7 +46,7 @@ class AccountSecretRepository extends ChangeNotifier
 
   @override
   void removeAll() {
-    // TODO implement removeAll
+    // TODO(Craftplacer): implement removeAll
     throw UnimplementedError();
   }
 
@@ -58,6 +58,6 @@ class AccountSecretRepository extends ChangeNotifier
 
   @override
   Future<bool> contains(AccountSecret secret) async {
-    return await _storage.hasAccountSecret(secret);
+    return _storage.hasAccountSecret(secret);
   }
 }

@@ -191,8 +191,12 @@ class _AttachmentInspectionScreenState
             ),
           ),
         );
-      default:
-        throw "Out of bounds";
     }
+
+    throw ArgumentError.value(
+      attachment.type,
+      "attachment",
+      "Can't build widget for specified attachment type",
+    );
   }
 }

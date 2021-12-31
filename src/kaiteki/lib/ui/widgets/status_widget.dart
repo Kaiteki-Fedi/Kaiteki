@@ -61,16 +61,18 @@ class StatusWidget extends ConsumerWidget {
 
     return FocusableActionDetector(
       shortcuts: {
-        ShortcutKeys.replyKeySet: ReplyIntent(),
-        ShortcutKeys.repeatKeySet: RepeatIntent(),
-        ShortcutKeys.favoriteKeySet: FavoriteIntent(),
+        replyKeySet: ReplyIntent(),
+        repeatKeySet: RepeatIntent(),
+        favoriteKeySet: FavoriteIntent(),
         // ShortcutKeys.reactKeySet: ReactIntent(),
-        ShortcutKeys.menuKeySet: MenuIntent(),
+        menuKeySet: MenuIntent(),
       },
       actions: {
-        ReplyIntent: CallbackAction(onInvoke: (_) {
-          return context.showPostDialog(replyTo: _post);
-        }),
+        ReplyIntent: CallbackAction(
+          onInvoke: (_) {
+            return context.showPostDialog(replyTo: _post);
+          },
+        ),
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +80,7 @@ class StatusWidget extends ConsumerWidget {
           if (!wide)
             Padding(
               padding: const EdgeInsets.all(8),
-              child: AvatarWidget(_post.author, size: 48),
+              child: AvatarWidget(_post.author),
             ),
           Expanded(
             child: Padding(
@@ -180,7 +182,7 @@ class MetaBar extends StatelessWidget {
     final secondaryText = _getSecondaryUserText(_post.author);
     final secondaryColor = Theme.of(context).disabledColor;
     final secondaryTextTheme = TextStyle(color: secondaryColor);
-    double textSpacing = 0.0;
+    var textSpacing = 0.0;
 
     if (showAvatar) {
       textSpacing = 0.0;
@@ -287,9 +289,9 @@ class ReplyBar extends ConsumerWidget {
 
     return Padding(
       padding: _padding,
-      child: FutureBuilder(
+      child: FutureBuilder<User?>(
         future: UserReference(_getUserId()).resolve(adapter),
-        builder: (context, AsyncSnapshot<User?> snapshot) {
+        builder: (context, snapshot) {
           final span = snapshot.hasData
               ? snapshot.data!.renderDisplayName(context, ref)
               : TextSpan(
@@ -301,11 +303,11 @@ class ReplyBar extends ConsumerWidget {
             TextSpan(
               style: textStyle,
               children: [
-                // TODO: refactor the following widget pattern to a future "IconSpan"
+                // TODO(Craftplacer): refactor the following widget pattern to a future "IconSpan"
                 WidgetSpan(
                   child: Icon(
                     Mdi.share,
-                    size: Utils.getLocalFontSize(context) * 1.25,
+                    size: getLocalFontSize(context) * 1.25,
                     color: disabledColor,
                   ),
                 ),
@@ -356,7 +358,7 @@ class InteractionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var openInBrowserAvailable = _post.externalUrl != null;
+    final openInBrowserAvailable = _post.externalUrl != null;
     final l10n = context.getL10n();
 
     // Added Material for fixing bork with Hero *shrug*
@@ -392,14 +394,14 @@ class InteractionBar extends StatelessWidget {
         PopupMenuButton<VoidCallback>(
           icon: const Icon(Icons.more_horiz),
           onSelected: (callback) => callback.call(),
-          itemBuilder: (BuildContext context) {
+          itemBuilder: (context) {
             return [
               PopupMenuItem(
                 enabled: openInBrowserAvailable,
                 child: ListTile(
                   title: Text(l10n.openInBrowserLabel),
                   leading: const Icon(Mdi.openInNew),
-                  contentPadding: const EdgeInsets.all(0.0),
+                  contentPadding: EdgeInsets.zero,
                   enabled: openInBrowserAvailable,
                 ),
                 value: () => context.launchUrl(_post.externalUrl!),
@@ -408,7 +410,7 @@ class InteractionBar extends StatelessWidget {
                 child: const ListTile(
                   title: Text("Debug text rendering"),
                   leading: Icon(Mdi.bug),
-                  contentPadding: EdgeInsets.all(0.0),
+                  contentPadding: EdgeInsets.zero,
                 ),
                 value: () => showDialog(
                   context: context,
@@ -433,8 +435,8 @@ class AttachmentRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var border = Theme.of(context).dividerColor;
-    var borderRadius = BorderRadius.circular(8);
+    final border = Theme.of(context).dividerColor;
+    final borderRadius = BorderRadius.circular(8);
     var attachmentIndex = 0;
 
     return LimitedBox(
@@ -444,12 +446,10 @@ class AttachmentRow extends StatelessWidget {
         children: [
           for (var attachment in post.attachments!.take(4))
             Flexible(
-              fit: FlexFit.loose,
-              flex: 1,
-              child: Container(
+              child: DecoratedBox(
                 decoration: BoxDecoration(
                   borderRadius: borderRadius,
-                  border: Border.all(color: border, width: 1),
+                  border: Border.all(color: border),
                 ),
                 child: getAttachmentWidget(
                   post,

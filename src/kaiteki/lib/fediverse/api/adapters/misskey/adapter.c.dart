@@ -1,7 +1,7 @@
 part of 'adapter.dart';
 
 Post toPost(misskey.Note source) {
-  var mappedEmoji = source.emojis.map(toEmoji);
+  final mappedEmoji = source.emojis.map(toEmoji);
 
   return Post(
     source: source,
@@ -44,7 +44,7 @@ Visibility toVisibility(String visibility) {
 }
 
 Attachment toAttachment(misskey.DriveFile file) {
-  AttachmentType type = AttachmentType.file;
+  var type = AttachmentType.file;
 
   if (file.type.startsWith("image/")) {
     type = AttachmentType.image;
@@ -61,13 +61,14 @@ Attachment toAttachment(misskey.DriveFile file) {
 
 Emoji getEmojiFromString(String emojiString, Iterable<Emoji> inheritingEmoji) {
   if (emojiString.startsWith(":") && emojiString.endsWith(":")) {
-    var matchingEmoji = inheritingEmoji.firstWhere(
-        (e) => e.name == emojiString.substring(1, emojiString.length - 1));
+    final matchingEmoji = inheritingEmoji.firstWhere(
+      (e) => e.name == emojiString.substring(1, emojiString.length - 1),
+    );
 
     return matchingEmoji;
   }
 
-  return UnicodeEmoji(emojiString, "", aliases: null);
+  return UnicodeEmoji(emojiString, "");
 }
 
 CustomEmoji toEmoji(misskey.Emoji emoji) {

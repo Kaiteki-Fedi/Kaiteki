@@ -60,9 +60,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
-                title: Text(instance == null || instance.name.isEmpty
-                    ? l10n.loginTitle
-                    : l10n.loginTitleInstance(instance.name)),
+                title: Text(
+                  instance == null || instance.name.isEmpty
+                      ? l10n.loginTitle
+                      : l10n.loginTitleInstance(instance.name),
+                ),
                 automaticallyImplyLeading: !_loading,
               ),
               body: FormWidget(
@@ -91,11 +93,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             username,
                             password,
                           );
-                          return await asyncWrapper(future);
+                          return asyncWrapper(future);
                         },
-                        onFetchInstance: (instance) async {
+                        onFetchInstance: (instance) {
                           final future = fetchInstance(instance);
-                          return await asyncWrapper(future);
+                          return asyncWrapper(future);
                         },
                         onResetInstance: () => setState(() {
                           _api = null;
@@ -137,6 +139,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final Instance instance;
 
     if (result.successful) {
+      // ignore: unnecessary_null_checks
       api = result.definition!;
       instance = result.instance!;
     } else {
@@ -170,7 +173,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<ApiDefinition?> showInstanceDialog(BuildContext context) async {
-    return await showDialog<ApiDefinition?>(
+    return showDialog<ApiDefinition?>(
       barrierDismissible: false,
       context: context,
       builder: (context) => const ApiTypeDialog(),
@@ -184,7 +187,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return l10n.authNoInstance;
     }
 
-    var lowerCase = instance!.toLowerCase();
+    final lowerCase = instance!.toLowerCase();
     if (lowerCase.startsWith("http://") || lowerCase.startsWith("https://")) {
       return l10n.authNoUrlAllowed;
     }
@@ -216,10 +219,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return l10n.authNoUsername;
     }
 
-    var accounts = ref.read(accountProvider);
-    if (accounts.accounts.any((compound) =>
-        compound.instance == instance &&
-        compound.accountSecret.username == username)) {
+    final accounts = ref.read(accountProvider);
+    if (accounts.accounts.any(
+      (compound) =>
+          compound.instance == instance &&
+          compound.accountSecret.username == username,
+    )) {
       return l10n.authDuplicate;
     }
 
@@ -237,45 +242,46 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<bool> _showWebCompatibilityDialog() async {
-    const String helpArticle =
+    const helpArticle =
         "https://github.com/Craftplacer/Kaiteki/wiki/Unable-to-login-using-Kaiteki-Web";
 
     final l10n = context.getL10n();
     final dialogResult = await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(l10n.unsupportedInstanceTitle),
-            content: Text.rich(
-              TextSpan(
-                text: l10n.unsupportedInstanceDescriptionCORS,
-                style: Theme.of(context).textTheme.bodyText1,
-                children: [
-                  TextSpan(
-                    text: helpArticle,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () async {
-                        await context.launchUrl(helpArticle);
-                      },
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(l10n.unsupportedInstanceTitle),
+          content: Text.rich(
+            TextSpan(
+              text: l10n.unsupportedInstanceDescriptionCORS,
+              style: Theme.of(context).textTheme.bodyText1,
+              children: [
+                TextSpan(
+                  text: helpArticle,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
-                ],
-              ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      await context.launchUrl(helpArticle);
+                    },
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                child: Text(l10n.continueAnywayButtonLabel),
-                onPressed: () => Navigator.pop(context, true),
-              ),
-              TextButton(
-                child: Text(l10n.abortButtonLabel),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
+          ),
+          actions: [
+            TextButton(
+              child: Text(l10n.continueAnywayButtonLabel),
+              onPressed: () => Navigator.pop(context, true),
+            ),
+            TextButton(
+              child: Text(l10n.abortButtonLabel),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
 
     return dialogResult == true;
   }

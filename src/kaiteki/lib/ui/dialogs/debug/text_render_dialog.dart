@@ -64,7 +64,6 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog>
                     controller:
                         TextEditingController(text: widget.post.content),
                     readOnly: true,
-                    expands: false,
                     maxLines: null,
                   ),
                   TextField(
@@ -76,13 +75,11 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog>
                       text: elements.map(getTree).join("\n"),
                     ),
                     readOnly: true,
-                    expands: false,
                     maxLines: null,
                   ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        width: 1,
                         color: Theme.of(context).disabledColor,
                       ),
                       borderRadius: BorderRadius.circular(6.0),
@@ -102,11 +99,11 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog>
   }
 
   String getTree(Element element) {
-    String a = element.toString();
+    var a = element.toString();
 
     final children = element.children;
     if (children != null) {
-      for (var child in children) {
+      for (final child in children) {
         final childResult = getTree(child);
         a += "\n$childResult";
       }

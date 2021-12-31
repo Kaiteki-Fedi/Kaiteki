@@ -39,15 +39,15 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
       appBar: AppBar(
         title: Text(l10n.discoverInstancesTitle),
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<InstanceData>>(
         future: _instanceFetch,
-        builder: (context, AsyncSnapshot<List<InstanceData>> snapshot) {
+        builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final sortedInstances = snapshot.data!.toList(growable: false);
-          sortedInstances.sort((a, b) => a.name.compareTo(b.name));
+          final sortedInstances = snapshot.data!.toList(growable: false)
+            ..sort((a, b) => a.name.compareTo(b.name));
 
           return SingleChildScrollView(
             child: Column(
@@ -82,8 +82,8 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
 }
 
 Future<List<InstanceData>> fetchInstances() async {
-  var json = await rootBundle.loadString('assets/instances.json');
-  var list = jsonDecode(json) as List<dynamic>;
+  final json = await rootBundle.loadString('assets/instances.json');
+  final list = jsonDecode(json) as List<dynamic>;
   return list.map((e) {
     return InstanceData.fromJson(e);
   }).toList(growable: false);
@@ -186,10 +186,12 @@ class _InstanceCard extends StatelessWidget {
                     padding: MaterialStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () async {
-                    final result =
-                        await Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => DiscoverInstanceDetailsScreen(data: data),
-                    ));
+                    final result = await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            DiscoverInstanceDetailsScreen(data: data),
+                      ),
+                    );
 
                     if (result != null) {
                       Navigator.of(context).pop(result);
@@ -229,7 +231,7 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
     var i = 1;
     return Scaffold(
       body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverAppBar(
               expandedHeight: 300.0,
@@ -248,7 +250,7 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
                   color: theme.colorScheme.background,
                   child: ShaderMask(
                     blendMode: BlendMode.dstATop,
-                    shaderCallback: (Rect bounds) {
+                    shaderCallback: (bounds) {
                       return LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -258,14 +260,10 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
                         ],
                       ).createShader(bounds);
                     },
-                    child: FutureBuilder(
+                    child: FutureBuilder<String?>(
                       future: fetchInstanceBackground(ref),
-                      builder: (
-                        BuildContext context,
-                        AsyncSnapshot<String?> snapshot,
-                      ) {
+                      builder: (context, snapshot) {
                         final url = snapshot.data;
-
                         if (url == null) {
                           return const ColoredBox(color: Colors.grey);
                         } else {
@@ -453,7 +451,7 @@ class FediverseCovenantChip extends StatelessWidget {
     );
   }
 
-  void _onPressed(BuildContext context) async {
+  Future<void> _onPressed(BuildContext context) async {
     await context.launchUrl(_url);
   }
 }
@@ -469,7 +467,7 @@ class MastodonCovenantChip extends StatelessWidget {
 
     return ActionChip(
       onPressed: () => _onPressed(context),
-      backgroundColor: AppColors.mastodonPrimary,
+      backgroundColor: mastodonPrimary,
       label: Text(
         l10n.usesMastodonCovenant,
         style: const TextStyle(color: Colors.white),
@@ -478,7 +476,7 @@ class MastodonCovenantChip extends StatelessWidget {
     );
   }
 
-  void _onPressed(BuildContext context) async {
+  Future<void> _onPressed(BuildContext context) async {
     await context.launchUrl(_url);
   }
 }

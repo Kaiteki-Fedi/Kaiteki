@@ -26,7 +26,7 @@ class _PostScreenState extends ConsumerState<PostScreen> {
     final replyTo = widget.replyTo;
 
     return DynamicDialogContainer(
-      builder: (BuildContext context, bool fullscreen) {
+      builder: (context, fullscreen) {
         TextSpan? replyTextSpan;
 
         if (replyTo != null) {

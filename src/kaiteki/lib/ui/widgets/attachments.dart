@@ -9,7 +9,7 @@ import 'package:kaiteki/ui/widgets/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/widgets/attachments/video_attachment_widget.dart';
 
 Widget getAttachmentWidget(Post post, Attachment attachment, int index) {
-  var supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
+  final supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
 
   if (attachment.type == AttachmentType.image) {
     return ImageAttachmentWidget(

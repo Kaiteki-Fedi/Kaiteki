@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
@@ -27,7 +28,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var appName = "Kaiteki";
     final l10n = context.getL10n();
 
     _tabs ??= [
@@ -75,9 +75,7 @@ class _MainScreenState extends State<MainScreen> {
     ];
 
     return FocusableActionDetector(
-      shortcuts: {
-        ShortcutKeys.newPostKeySet: NewPostIntent(),
-      },
+      shortcuts: {newPostKeySet: NewPostIntent()},
       actions: {
         NewPostIntent: CallbackAction(
           onInvoke: (e) => context.showPostDialog(),
@@ -85,25 +83,25 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: LayoutBuilder(
         builder: (_, constraints) {
-          switch (LayoutHelper.getScreenSize(constraints.maxWidth)) {
+          switch (getScreenSize(constraints.maxWidth)) {
             case ScreenSize.xs:
-              return _buildMobileView(appName);
+              return _buildMobileView();
 
             case ScreenSize.s:
             case ScreenSize.m:
             case ScreenSize.l:
-              return _buildDesktopView(appName);
+              return _buildDesktopView();
           }
         },
       ),
     );
   }
 
-  Widget _buildDesktopView(String appName) {
+  Widget _buildDesktopView() {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          appName,
+          Constants.appName,
           style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
         ),
         actions: _buildAppBarActions(context),
@@ -112,8 +110,7 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           NavigationRail(
             selectedIndex: _currentPage,
-            onDestinationSelected: (x) => changePage(x),
-            extended: false,
+            onDestinationSelected: changePage,
             labelType: NavigationRailLabelType.none,
             minWidth: 56,
             leading: _buildComposeFab(context),
@@ -146,11 +143,11 @@ class _MainScreenState extends State<MainScreen> {
     ];
   }
 
-  Widget _buildMobileView(String appName) {
+  Widget _buildMobileView() {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          appName,
+          Constants.appName,
           style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
         ),
         actions: _buildAppBarActions(context),
@@ -165,7 +162,7 @@ class _MainScreenState extends State<MainScreen> {
     var i = 0;
 
     return _tabs!.map((tab) {
-      var x = i;
+      final x = i;
 
       i++;
 
@@ -178,9 +175,8 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  _getPage() {
+  Widget _getPage() {
     return PageTransitionSwitcher(
-      duration: const Duration(milliseconds: 300),
       transitionBuilder: animations.fadeThrough,
       child: _pages![_currentPage],
     );

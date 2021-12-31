@@ -36,14 +36,16 @@ void textParsing() {
     final elements = HtmlTextParser().parse(html);
 
     expect(
-        elements[0],
-        const TypeMatcher<TextElement>()
-            .having((e) => e.style!.italic, "italic", isTrue));
+      elements[0],
+      const TypeMatcher<TextElement>()
+          .having((e) => e.style!.italic, "italic", isTrue),
+    );
 
     expect(
-        elements[1],
-        const TypeMatcher<TextElement>()
-            .having((e) => e.style!.bold, "bold", isTrue));
+      elements[1],
+      const TypeMatcher<TextElement>()
+          .having((e) => e.style!.bold, "bold", isTrue),
+    );
   });
 
   group('parse mentions', () {
@@ -104,12 +106,13 @@ void textParsing() {
       final parseTwo = parseOne.parseWith(SocialTextParser());
 
       search(
-          parseTwo.first,
-          const TypeMatcher<MentionElement>().having(
-            (m) => m.reference.username,
-            "username",
-            equals("Craftplacer"),
-          ));
+        parseTwo.first,
+        const TypeMatcher<MentionElement>().having(
+          (m) => m.reference.username,
+          "username",
+          equals("Craftplacer"),
+        ),
+      );
     });
   });
 }
@@ -118,7 +121,7 @@ bool search(Element element, Matcher matcher, [bool recursive = false]) {
   if (matcher.matches(element, {})) {
     return true;
   } else {
-    for (var child in element.children ?? []) {
+    for (final child in element.children ?? []) {
       if (search(child, matcher, true)) {
         return true;
       }

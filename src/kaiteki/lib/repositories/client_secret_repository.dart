@@ -45,7 +45,7 @@ class ClientSecretRepository extends ChangeNotifier
 
   @override
   void removeAll() {
-    // TODO implement removeAll
+    // TODO(Craftplacer): implement removeAll
     throw UnimplementedError();
   }
 
@@ -56,7 +56,7 @@ class ClientSecretRepository extends ChangeNotifier
   }
 
   @override
-  Future<bool> contains(ClientSecret secret) async {
-    return await _storage.hasClientSecret(secret);
+  Future<bool> contains(ClientSecret secret) {
+    return _storage.hasClientSecret(secret);
   }
 }

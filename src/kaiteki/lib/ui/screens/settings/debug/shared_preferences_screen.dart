@@ -24,20 +24,20 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
           ),
         ],
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<SharedPreferences>(
         future: SharedPreferences.getInstance(),
-        builder: (context, AsyncSnapshot<SharedPreferences> snapshot) {
+        builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          var items = snapshot.data!.getKeys();
+          final items = snapshot.data!.getKeys();
           return ListView.builder(
             itemCount: items.length,
             itemBuilder: (_, i) {
-              var key = items.elementAt(i);
-              var value = snapshot.data!.get(key);
-              var icon = getIconForValue(value);
+              final key = items.elementAt(i);
+              final value = snapshot.data!.get(key);
+              final icon = getIconForValue(value);
 
               return ListTile(
                 leading: Icon(icon),
@@ -64,16 +64,16 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
     return Mdi.wrench;
   }
 
-  void _clearPreferences(BuildContext context) async {
-    var instance = await SharedPreferences.getInstance();
-    var result = await instance.clear();
+  Future<void> _clearPreferences(BuildContext context) async {
+    final instance = await SharedPreferences.getInstance();
+    final result = await instance.clear();
 
-    var message = result
+    final message = result
         ? 'The shared preferences have been cleared.'
         : 'The shared preferences couldn\'t be cleared';
-    var icon = result ? Mdi.check : Mdi.close;
+    final icon = result ? Mdi.check : Mdi.close;
 
-    var snackBar = SnackBar(
+    final snackBar = SnackBar(
       content: Row(
         children: [
           Padding(

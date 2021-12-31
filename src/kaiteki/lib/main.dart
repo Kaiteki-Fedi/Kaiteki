@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/di.dart';
@@ -19,11 +19,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 final logger = getLogger('Kaiteki');
 
 /// Main entrypoint.
-void main() async {
+Future<void> main() async {
   // we need to run this to be able to get access to SharedPreferences
   WidgetsFlutterBinding.ensureInitialized();
 
-  final themeContainer = ThemeContainer(DefaultAppThemes.lightAppTheme);
+  final themeContainer = ThemeContainer(lightAppTheme);
   final sharedPrefs = await SharedPreferences.getInstance();
   final accountManager = await getAccountManager(sharedPrefs);
   final appPreferences = getPreferences(sharedPrefs);

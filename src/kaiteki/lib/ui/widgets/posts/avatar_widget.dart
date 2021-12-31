@@ -25,8 +25,8 @@ class AvatarWidget extends StatelessWidget {
     return GestureDetector(
       child: _getAvatarImageWidget(context),
       onTap: () {
-        var screen = AccountScreen.fromUser(_user);
-        var route = MaterialPageRoute(builder: (_) => screen);
+        final screen = AccountScreen.fromUser(_user);
+        final route = MaterialPageRoute(builder: (_) => screen);
         Navigator.push(context, route);
       },
     );
@@ -44,7 +44,7 @@ class AvatarWidget extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(size / 2),
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
         ),

@@ -1,11 +1,11 @@
+import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/fediverse/api/adapters/mastodon/adapter.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
-import 'package:kaiteki/app_colors.dart';
 
 class MastodonApiDefinition extends ApiDefinition<MastodonAdapter> {
   @override
-  createAdapter() => MastodonAdapter();
+  MastodonAdapter createAdapter() => MastodonAdapter();
 
   @override
   String get name => 'Mastodon';
@@ -15,9 +15,9 @@ class MastodonApiDefinition extends ApiDefinition<MastodonAdapter> {
 
   @override
   ApiTheme get theme {
-    return ApiTheme(
-      backgroundColor: AppColors.mastodonSecondary,
-      primaryColor: AppColors.mastodonPrimary,
+    return const ApiTheme(
+      backgroundColor: mastodonSecondary,
+      primaryColor: mastodonPrimary,
       iconAssetLocation: 'assets/icons/mastodon.png',
     );
   }

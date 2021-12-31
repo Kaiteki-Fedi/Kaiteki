@@ -34,7 +34,7 @@ class UserReference {
       return remoteUrl == other.remoteUrl;
     }
 
-    if ((username != null && other.username != null)) {
+    if (username != null && other.username != null) {
       return username == other.username && host == other.host;
     }
 

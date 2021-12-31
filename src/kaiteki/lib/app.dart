@@ -1,5 +1,5 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
 import 'package:kaiteki/ui/screens.dart';
@@ -9,12 +9,12 @@ class KaitekiApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
+    // TODO(Craftplacer): (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
     final preferences = ref.watch(preferenceProvider);
     return MaterialApp(
       title: "Kaiteki",
-      theme: ThemeData.from(colorScheme: DefaultAppThemes.lightScheme),
-      darkTheme: ThemeData.from(colorScheme: DefaultAppThemes.darkScheme),
+      theme: ThemeData.from(colorScheme: lightScheme),
+      darkTheme: ThemeData.from(colorScheme: darkScheme),
       themeMode: preferences.get().theme,
       initialRoute: "/",
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -38,10 +38,12 @@ class KaitekiApp extends ConsumerWidget {
   }
 
   Widget _buildMainRoute(context) {
-    return Consumer(builder: (context, ref, child) {
-      return ref.watch(accountProvider).loggedIn
-          ? const MainScreen()
-          : const AccountRequiredScreen();
-    });
+    return Consumer(
+      builder: (context, ref, child) {
+        return ref.watch(accountProvider).loggedIn
+            ? const MainScreen()
+            : const AccountRequiredScreen();
+      },
+    );
   }
 }

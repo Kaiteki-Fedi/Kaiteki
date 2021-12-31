@@ -50,16 +50,15 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
                 ),
               );
             }).toList(growable: false),
-            onChanged: (ApiDefinition? newValue) {
-              setState(() => _api = newValue!);
-            },
+            onChanged: (newValue) => setState(() => _api = newValue!),
             value: _api,
           ),
           TextButton(
             child: Text(l10n.apiTypeDialog_missing),
             onPressed: () async {
-              if (await context.launchUrl(
-                  "https://github.com/Craftplacer/kaiteki/issues/new")) {
+              const issuesUrl =
+                  "https://github.com/Craftplacer/kaiteki/issues/new";
+              if (await context.launchUrl(issuesUrl)) {
                 Navigator.pop(context);
               }
             },

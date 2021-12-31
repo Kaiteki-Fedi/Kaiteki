@@ -27,7 +27,7 @@ class FormWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OrientationBuilder(
-      builder: (BuildContext context, Orientation orientation) {
+      builder: (context, orientation) {
         if (orientation == Orientation.landscape) {
           return Center(
             child: Card(

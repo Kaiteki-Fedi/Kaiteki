@@ -38,6 +38,7 @@ class EmojiWidget extends StatelessWidget {
         const padding = 0.0;
 
         return Padding(
+          // ignore: use_named_constants
           padding: const EdgeInsets.all(padding),
           child: Container(
             width: size - (padding * 2),
@@ -62,10 +63,7 @@ class EmojiWidget extends StatelessWidget {
     return SizedBox(
       width: size,
       height: size,
-      child: FittedBox(
-        fit: BoxFit.contain,
-        child: Text(unicodeEmoji.source!),
-      ),
+      child: FittedBox(child: Text(unicodeEmoji.source!)),
     );
   }
 }

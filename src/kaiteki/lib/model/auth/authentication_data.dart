@@ -8,7 +8,7 @@ abstract class AuthenticationData {
   Request applyTo(Request request);
 }
 
-/// TODO: Make MastodonAuthenticationData final, with copyWith method.
+// TODO(Craftplacer): Make MastodonAuthenticationData final, with copyWith method.
 class MastodonAuthenticationData implements AuthenticationData {
   String clientId;
   String clientSecret;
@@ -39,11 +39,11 @@ class MisskeyAuthenticationData implements AuthenticationData {
   Request applyTo(Request request) {
     if (token.isNullOrEmpty) return request;
 
-    // TODO we should avoid duplicate (de-)serialization.
-    var decoded = jsonDecode(request.body);
+    // TODO(Craftplacer): we should avoid duplicate (de-)serialization.
+    final decoded = jsonDecode(request.body);
     decoded["i"] = token;
 
-    var encoded = jsonEncode(decoded);
+    final encoded = jsonEncode(decoded);
     request.body = encoded;
 
     return request;

@@ -9,8 +9,6 @@ extension ApiTypeExtension on ApiType {
         return "pleroma";
       case ApiType.misskey:
         return "misskey";
-      default:
-        return toString();
     }
   }
 }

@@ -27,7 +27,7 @@ class TextContext {
 }
 
 class TextRenderer {
-  // TODO: Use appropiate parser on specific instances
+  // TODO(Craftplacer): Use appropiate parser on specific instances
   final TextParser parser = MastodonHtmlTextParser();
   final TextRendererTheme theme;
 
@@ -88,7 +88,7 @@ class TextRenderer {
     TextElement element,
     List<InlineSpan>? childrenSpans,
   ) {
-    InlineSpan span = TextSpan(
+    final InlineSpan span = TextSpan(
       text: element.text,
       style: element.getFlutterTextStyle(context),
       children: childrenSpans,
@@ -205,10 +205,10 @@ class UserChip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final adapter = ref.watch(accountProvider).adapter;
-    return FutureBuilder(
+    return FutureBuilder<User?>(
       initialData: user,
       future: reference.resolve(adapter),
-      builder: (context, AsyncSnapshot<User?> snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
           final user = snapshot.data!;
 
@@ -218,8 +218,8 @@ class UserChip extends ConsumerWidget {
               avatar: AvatarWidget(user, size: 24),
               label: Text.rich(user.renderDisplayName(context, ref)),
               onPressed: () {
-                var screen = AccountScreen.fromUser(user);
-                var route = MaterialPageRoute(builder: (_) => screen);
+                final screen = AccountScreen.fromUser(user);
+                final route = MaterialPageRoute(builder: (_) => screen);
                 Navigator.push(context, route);
               },
             ),

@@ -34,13 +34,13 @@ class _SensitivePostFilteringScreenState
                   : null,
             ),
             value: preferences.get().sensitivePostFilter.enabled,
-            onChanged: (bool value) => preferences.update((p) {
+            onChanged: (value) => preferences.update((p) {
               return p..sensitivePostFilter.enabled = value;
             }),
           ),
           CheckboxListTile(
             title: Text(l10n.filteringIncludeSensitive),
-            onChanged: (bool? value) => preferences.update((p) {
+            onChanged: (value) => preferences.update((p) {
               return p
                 ..sensitivePostFilter.filterPostsMarkedAsSensitive = value!;
             }),
@@ -51,7 +51,7 @@ class _SensitivePostFilteringScreenState
           ),
           CheckboxListTile(
             title: Text(l10n.filteringIncludeSubject),
-            onChanged: (bool? value) => preferences.update((p) {
+            onChanged: (value) => preferences.update((p) {
               return p..sensitivePostFilter.filterPostsWithSubject = value!;
             }),
             value: preferences.get().sensitivePostFilter.filterPostsWithSubject,

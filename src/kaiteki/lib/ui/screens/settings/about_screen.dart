@@ -39,9 +39,7 @@ class AboutScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: AppNameBadge(
-                        color: kReleaseMode
-                            ? AppColors.kaitekiPink
-                            : Colors.red.shade900,
+                        color: kReleaseMode ? kaitekiPink : Colors.red.shade900,
                         textColor: Colors.white,
                         text: kReleaseMode ? "ALPHA" : "DEBUG",
                       ),

@@ -1,5 +1,5 @@
-import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
 import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
@@ -8,20 +8,27 @@ import 'package:kaiteki/repositories/client_secret_repository.dart';
 class LoginFunctions {
   static final _logger = getLogger("LoginFunctions");
 
-  static Future<ClientSecret> getClientSecret(MastodonClient client,
-      String instance, ClientSecretRepository repository) async {
-    var clientSecret = repository.get(instance);
-
-    clientSecret ??= await createClientSecret(client, instance, repository);
-
-    return clientSecret;
+  static Future<ClientSecret> getClientSecret(
+    MastodonClient client,
+    String instance,
+    ClientSecretRepository repository,
+  ) async {
+    return repository.get(instance) ??
+        await createClientSecret(
+          client,
+          instance,
+          repository,
+        );
   }
 
-  static Future<ClientSecret> createClientSecret(MastodonClient client,
-      String instance, ClientSecretRepository repository) async {
+  static Future<ClientSecret> createClientSecret(
+    MastodonClient client,
+    String instance,
+    ClientSecretRepository repository,
+  ) async {
     _logger.v("creating new application on $instance");
 
-    var application = await client.createApplication(
+    final application = await client.createApplication(
       instance,
       Constants.appName,
       Constants.appWebsite,
@@ -29,7 +36,7 @@ class LoginFunctions {
       Constants.defaultScopes,
     );
 
-    var clientSecret = ClientSecret(
+    final clientSecret = ClientSecret(
       instance,
       application.clientId!,
       application.clientSecret!,

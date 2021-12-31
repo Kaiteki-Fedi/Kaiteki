@@ -21,7 +21,7 @@ class DynamicDialogContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
+        builder: (context, constraints) {
           final fullscreen = constraints.maxWidth < _maxDialogSize ||
               constraints.maxHeight < _maxDialogSize;
 

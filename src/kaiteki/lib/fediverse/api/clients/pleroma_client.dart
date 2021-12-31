@@ -9,7 +9,7 @@ class PleromaClient extends MastodonClient {
   ApiType get type => ApiType.pleroma;
 
   Future<Iterable<Chat>> getChats() async {
-    return await sendJsonRequestMultiple(
+    return sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/pleroma/chats",
       (json) => Chat.fromJson(json),
@@ -17,7 +17,7 @@ class PleromaClient extends MastodonClient {
   }
 
   Future<Iterable<ChatMessage>> getChatMessages(String id) async {
-    return await sendJsonRequestMultiple(
+    return sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/pleroma/chats/$id/messages",
       (j) => ChatMessage.fromJson(j),
@@ -25,7 +25,7 @@ class PleromaClient extends MastodonClient {
   }
 
   Future<ChatMessage> postChatMessage(String id, String message) async {
-    return await sendJsonRequest(
+    return sendJsonRequest(
       HttpMethod.post,
       "api/v1/pleroma/chats/$id/messages",
       (j) => ChatMessage.fromJson(j),
@@ -48,7 +48,7 @@ class PleromaClient extends MastodonClient {
   }
 
   Future<PleromaEmojiPacksResponse> getEmojiPacks() async {
-    return await sendJsonRequest(
+    return sendJsonRequest(
       HttpMethod.get,
       "/api/pleroma/emoji/packs",
       (json) => PleromaEmojiPacksResponse.fromJson(json),
@@ -56,7 +56,7 @@ class PleromaClient extends MastodonClient {
   }
 
   Future<FrontendConfiguration> getFrontendConfigurations() async {
-    return await sendJsonRequest(
+    return sendJsonRequest(
       HttpMethod.get,
       "/api/pleroma/frontend_configurations",
       (json) => FrontendConfiguration.fromJson(json),

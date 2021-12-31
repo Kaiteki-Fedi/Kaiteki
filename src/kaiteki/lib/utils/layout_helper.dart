@@ -1,16 +1,13 @@
-/// Implements code for helping with Material's responsive layout guidelines.
-class LayoutHelper {
-  /// Returns a [ScreenSize] as defined by <https://material.io/design/layout/responsive-layout-grid.html#breakpoints>
-  static ScreenSize getScreenSize(num width) {
-    if (width >= 1440) {
-      return ScreenSize.l;
-    } else if (width >= 1240) {
-      return ScreenSize.m;
-    } else if (width >= 600) {
-      return ScreenSize.s;
-    } else {
-      return ScreenSize.xs;
-    }
+/// Returns a [ScreenSize] as defined by <https://material.io/design/layout/responsive-layout-grid.html#breakpoints>
+ScreenSize getScreenSize(num width) {
+  if (width >= 1440) {
+    return ScreenSize.l;
+  } else if (width >= 1240) {
+    return ScreenSize.m;
+  } else if (width >= 600) {
+    return ScreenSize.s;
+  } else {
+    return ScreenSize.xs;
   }
 }
 

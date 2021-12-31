@@ -33,8 +33,8 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     String endpoint, {
     Object? body,
   }) async {
-    var requestBodyJson = body == null ? null : jsonEncode(body);
-    var requestContentType = body == null ? null : "application/json";
+    final requestBodyJson = body == null ? null : jsonEncode(body);
+    final requestContentType = body == null ? null : "application/json";
 
     await sendRequest(
       method,

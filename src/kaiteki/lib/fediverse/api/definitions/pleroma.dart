@@ -1,7 +1,7 @@
+import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/fediverse/api/adapters/pleroma/adapter.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
-import 'package:kaiteki/app_colors.dart';
 
 class PleromaApiDefinition extends ApiDefinition<PleromaAdapter> {
   @override
@@ -15,9 +15,9 @@ class PleromaApiDefinition extends ApiDefinition<PleromaAdapter> {
 
   @override
   ApiTheme get theme {
-    return ApiTheme(
-      backgroundColor: AppColors.pleromaSecondary,
-      primaryColor: AppColors.pleromaPrimary,
+    return const ApiTheme(
+      backgroundColor: pleromaSecondary,
+      primaryColor: pleromaPrimary,
       iconAssetLocation: 'assets/icons/pleroma.png',
     );
   }

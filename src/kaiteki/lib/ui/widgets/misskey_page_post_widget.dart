@@ -13,7 +13,7 @@ class MisskeyPagePostWidget extends StatefulWidget {
 class _MisskeyPagePostWidgetState extends State<MisskeyPagePostWidget> {
   @override
   Widget build(BuildContext context) {
-    var textController = TextEditingController(text: widget.content);
+    final textController = TextEditingController(text: widget.content);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +27,7 @@ class _MisskeyPagePostWidgetState extends State<MisskeyPagePostWidget> {
         ),
         const ElevatedButton(
           child: Icon(Mdi.send),
-          // TODO: (misskey) make status post component functional
+          // TODO(Craftplacer): (misskey) make status post component functional
           onPressed: null,
         )
       ],

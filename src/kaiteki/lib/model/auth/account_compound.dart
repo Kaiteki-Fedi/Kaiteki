@@ -25,7 +25,7 @@ class AccountCompound {
     required this.accountSecret,
   });
 
-  // TODO assert check has been removed, due to compiler errors
+  // TODO(Craftplacer): assert check has been removed, due to compiler errors
   //: assert(accountSecret.identity.instance.equalsIgnoreCase(clientSecret.instance));
 
   /// Checks whether the other [AccountCompound] has the same identifying data.

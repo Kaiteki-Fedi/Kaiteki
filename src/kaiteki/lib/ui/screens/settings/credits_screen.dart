@@ -3,12 +3,19 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
+// TODO(Craftplacer): Move credits to asset JSON file, https://github.com/Kaiteki-Fedi/Kaiteki/issues/121
 const _items = [
-  _CreditsEntry("Craftplacer", "Maintainer, Translator (German)",
-      "https://craftplacer.moe/"),
+  _CreditsEntry(
+    "Craftplacer",
+    "Maintainer, Translator (German)",
+    "https://craftplacer.moe/",
+  ),
   _CreditsEntry("Odyssey98", "Icon design", "https://mstdn.social/@odyssey98"),
   _CreditsEntry(
-      "NaiJi", "Translator (Russian)", "https://udongein.xyz/users/NaiJi"),
+    "NaiJi",
+    "Translator (Russian)",
+    "https://udongein.xyz/users/NaiJi",
+  ),
 ];
 
 class CreditsScreen extends StatelessWidget {

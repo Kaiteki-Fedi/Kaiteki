@@ -58,24 +58,26 @@ class SettingsScreen extends StatelessWidget {
 
   // GridView for desktop impl.
   List<Widget> _getListItems(BuildContext context, List<_Section> sections) {
-    var widgets = <Widget>[];
+    final widgets = <Widget>[];
 
-    for (int i = 0; i < sections.length; i++) {
+    for (var i = 0; i < sections.length; i++) {
       if (i > 0) widgets.add(const Divider());
 
-      var section = sections[i];
+      final section = sections[i];
 
       if (section.hasTitleHeader) {
         widgets.add(SeparatorText(section.title!));
       }
 
-      for (var item in section.items) {
-        widgets.add(ListTile(
-          leading: Icon(item.icon),
-          title: Text(item.title),
-          enabled: item.isEnabled,
-          onTap: item.isEnabled ? () => item.onTap!.call(context) : null,
-        ));
+      for (final item in section.items) {
+        widgets.add(
+          ListTile(
+            leading: Icon(item.icon),
+            title: Text(item.title),
+            enabled: item.isEnabled,
+            onTap: item.isEnabled ? () => item.onTap!.call(context) : null,
+          ),
+        );
       }
     }
 

@@ -28,18 +28,18 @@ import 'package:kaiteki/utils/extensions/iterable.dart';
 
 part 'adapter.c.dart';
 
-// TODO add missing implementations
+// TODO(Craftplacer): add missing implementations
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     implements ChatSupport, ReactionSupport {
-  MisskeyAdapter._(MisskeyClient client) : super(client);
-
   factory MisskeyAdapter({MisskeyClient? client}) {
     return MisskeyAdapter._(client ?? MisskeyClient());
   }
 
+  MisskeyAdapter._(MisskeyClient client) : super(client);
+
   @override
   Future<User> getUser(String username, [String? instance]) async {
-    var mkUser = await client.showUserByName(username, instance);
+    final mkUser = await client.showUserByName(username, instance);
     return toUser(mkUser);
   }
 
@@ -58,27 +58,27 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   ) async {
     client.instance = instance;
 
-    var authResponse = await client.signIn(
+    final authResponse = await client.signIn(
       MisskeySignInRequest(
         username: username,
         password: password,
       ),
     );
 
-    var mkClientSecret = ClientSecret(instance, "", "", apiType: client.type);
+    final mkClientSecret = ClientSecret(instance, "", "", apiType: client.type);
 
     // Create and set account secret
-    var accountSecret = AccountSecret(instance, username, authResponse.i);
+    final accountSecret = AccountSecret(instance, username, authResponse.i);
     client.authenticationData =
         MisskeyAuthenticationData(accountSecret.accessToken);
 
     // Check whether secrets work, and if we can get an account back
-    var account = await client.showUser(authResponse.id);
+    final account = await client.showUser(authResponse.id);
     if (account == null) {
       return LoginResult.failed("Failed to retrieve user info");
     }
 
-    var compound = AccountCompound(
+    final compound = AccountCompound(
       container: accounts,
       adapter: this,
       account: toUser(account),
@@ -127,12 +127,14 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }) async {
     Iterable<misskey.Note> notes;
 
-    var request = MisskeyTimelineRequest(sinceId: sinceId, untilId: untilId);
+    final request = MisskeyTimelineRequest(sinceId: sinceId, untilId: untilId);
+
     switch (type) {
       case TimelineType.home:
         notes = await client.getTimeline(request);
         break;
 
+      // ignore: no_default_cases
       default:
         throw UnimplementedError(
           "Fetching of timeline type $type is not implemented yet.",
@@ -154,7 +156,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<Post>> getStatusesOfUserById(String id) async {
-    var notes = await client.showUserNotes(id, true, [
+    final notes = await client.showUserNotes(id, true, [
       "image/jpeg",
       "image/png",
       "image/gif",
@@ -177,7 +179,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<void> addReaction(Post post, Emoji emoji) async {
-    var note = post.source as misskey.Note;
+    final note = post.source as misskey.Note;
 
     String emojiName;
 
@@ -194,7 +196,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<void> removeReaction(Post post, Emoji emoji) async {
-    var note = post.source as misskey.Note;
+    final note = post.source as misskey.Note;
 
     // The "emoji" parameter is ignored,
     // because in Misskey you can only react once.
@@ -203,8 +205,8 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<EmojiCategory>> getEmojis() async {
-    var instanceMeta = await client.getInstanceMeta();
-    var emojiCategories = instanceMeta.emojis.groupBy((e) => e.category);
+    final instanceMeta = await client.getInstanceMeta();
+    final emojiCategories = instanceMeta.emojis.groupBy((e) => e.category);
     return emojiCategories.entries.map(
       (kv) => EmojiCategory(kv.key, kv.value.map(toEmoji)),
     );
@@ -212,7 +214,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<Post>> getThread(Post reply) async {
-    var notes = await client.getConversation(reply.id);
+    final notes = await client.getConversation(reply.id);
     return notes.map(toPost).followedBy([reply]);
   }
 
@@ -228,19 +230,19 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Post?> favoritePost(String id) {
-    // TODO: implement favoritePost
+    // TODO(Craftplacer): implement favoritePost
     throw UnimplementedError();
   }
 
   @override
   Future<User?> followUser(String id) {
-    // TODO: implement followUser
+    // TODO(Craftplacer): implement followUser
     throw UnimplementedError();
   }
 
   @override
   Future<Post> getPostById(String id) {
-    // TODO: implement getPostById
+    // TODO(Craftplacer): implement getPostById
     throw UnimplementedError();
   }
 }

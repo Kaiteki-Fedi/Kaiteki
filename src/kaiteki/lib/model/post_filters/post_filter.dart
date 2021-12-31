@@ -11,9 +11,7 @@ abstract class PostFilter {
     Post post,
     Iterable<PostFilter> filters,
   ) {
-    var result = PostFilterResult.show;
-
-    for (var filter in filters) {
+    for (final filter in filters) {
       try {
         var filterResult = filter.checkPost(ref, post);
 
@@ -24,11 +22,11 @@ abstract class PostFilter {
           filterResult = PostFilterResult.collapse;
         }
       } catch (e) {
-        // TODO: Add log message
+        // TODO(Craftplacer): Add log message
       }
     }
 
-    return result;
+    return PostFilterResult.show;
   }
 }
 
