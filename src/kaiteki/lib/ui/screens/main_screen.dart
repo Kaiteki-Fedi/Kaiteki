@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/pages/timeline_page.dart';
@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     var appName = "Kaiteki";
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     _tabs ??= [
       _MainScreenTab(
@@ -92,7 +92,7 @@ class _MainScreenState extends State<MainScreen> {
             case ScreenSize.s:
             case ScreenSize.m:
             case ScreenSize.l:
-            return _buildDesktopView(appName);
+              return _buildDesktopView(appName);
           }
         },
       ),
@@ -134,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   List<Widget> _buildAppBarActions(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return [
       IconButton(

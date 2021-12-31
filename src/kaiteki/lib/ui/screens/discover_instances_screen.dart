@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app_colors.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
@@ -13,7 +12,6 @@ import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
 part 'discover_instances_screen.g.dart';
 
@@ -35,7 +33,7 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return Scaffold(
       appBar: AppBar(
@@ -130,7 +128,7 @@ class _InstanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apiDefinition = ApiDefinitions.byType(data.type);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return Card(
       margin: const EdgeInsets.all(12.0),
@@ -214,7 +212,7 @@ class DiscoverInstanceScreenResult {
   DiscoverInstanceScreenResult(this.instance, this.register);
 }
 
-class DiscoverInstanceDetailsScreen extends StatelessWidget {
+class DiscoverInstanceDetailsScreen extends ConsumerWidget {
   final InstanceData data;
 
   const DiscoverInstanceDetailsScreen({
@@ -223,8 +221,8 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.getL10n();
     const chipPadding = EdgeInsets.all(8.0);
     final theme = Theme.of(context);
 
@@ -261,7 +259,7 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
                       ).createShader(bounds);
                     },
                     child: FutureBuilder(
-                      future: fetchInstanceBackground(context),
+                      future: fetchInstanceBackground(ref),
                       builder: (
                         BuildContext context,
                         AsyncSnapshot<String?> snapshot,
@@ -360,9 +358,9 @@ class DiscoverInstanceDetailsScreen extends StatelessWidget {
     );
   }
 
-  Future<String?> fetchInstanceBackground(BuildContext context) async {
-    final accountManager = Provider.of<AccountManager>(context, listen: false);
-    final result = await accountManager.probeInstance(data.name);
+  Future<String?> fetchInstanceBackground(WidgetRef ref) async {
+    final accounts = ref.read(accountProvider);
+    final result = await accounts.probeInstance(data.name);
 
     if (result.successful) {
       return result.instance!.backgroundUrl;
@@ -379,7 +377,7 @@ class AdapterFeaturesExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     final definition = ApiDefinitions.byType(type);
     final name = definition.name;
     final adapter = definition.createAdapter();
@@ -416,7 +414,7 @@ class AdapterFeaturesExpansionTile extends StatelessWidget {
     String feature,
     bool value,
   ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     final label = value
         ? l10n.featureSupported(feature)
         : l10n.featureUnsupported(feature);
@@ -437,7 +435,7 @@ class FediverseCovenantChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     final colorScheme = Theme.of(context).colorScheme;
 
     return ActionChip(
@@ -467,7 +465,7 @@ class MastodonCovenantChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return ActionChip(
       onPressed: () => _onPressed(context),

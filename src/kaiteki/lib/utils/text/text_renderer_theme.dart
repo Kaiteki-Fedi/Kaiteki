@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/utils/utils.dart';
-import 'package:provider/provider.dart';
 
 class TextRendererTheme {
   final TextStyle linkTextStyle;
@@ -9,9 +8,8 @@ class TextRendererTheme {
 
   const TextRendererTheme(this.linkTextStyle, this.emojiSize);
 
-  factory TextRendererTheme.fromContext(BuildContext context) {
-    final themeContainer = Provider.of<ThemeContainer>(context);
-    final theme = themeContainer.current;
+  factory TextRendererTheme.fromContext(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider).current;
 
     return TextRendererTheme(
       theme.linkTextStyle,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
 
@@ -7,7 +7,7 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   List<_Section> _getItems(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     return <_Section>[
       _Section(
         items: [
@@ -85,7 +85,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = _getItems(context);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settings)),

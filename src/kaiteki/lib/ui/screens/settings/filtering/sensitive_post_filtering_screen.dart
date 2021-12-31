@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/preferences/preference_container.dart';
-import 'package:provider/provider.dart';
+import 'package:kaiteki/di.dart';
 
-class SensitivePostFilteringScreen extends StatefulWidget {
+class SensitivePostFilteringScreen extends ConsumerStatefulWidget {
   const SensitivePostFilteringScreen({Key? key}) : super(key: key);
 
   @override
@@ -12,13 +10,13 @@ class SensitivePostFilteringScreen extends StatefulWidget {
 }
 
 class _SensitivePostFilteringScreenState
-    extends State<SensitivePostFilteringScreen> {
+    extends ConsumerState<SensitivePostFilteringScreen> {
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var preferences = Provider.of<PreferenceContainer>(context);
-    var enabled = preferences.get().sensitivePostFilter.enabled;
-    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final preferences = ref.watch(preferenceProvider);
+    final enabled = preferences.get().sensitivePostFilter.enabled;
+    final l10n = context.getL10n();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsHideSensitivePosts)),

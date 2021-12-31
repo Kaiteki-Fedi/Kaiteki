@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
@@ -12,16 +11,15 @@ import 'package:kaiteki/ui/forms/login_form.dart';
 import 'package:kaiteki/ui/widgets/async_block_widget.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _loading = false;
   String? _error;
   Instance? _instance;
@@ -34,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final instance = _instance;
     final hasBackground = instance?.backgroundUrl != null;
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return WillPopScope(
       onWillPop: () async {
@@ -133,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<Instance?> fetchInstance(String instanceHost) async {
-    final accountManager = Provider.of<AccountManager>(context, listen: false);
+    final accountManager = ref.read(accountProvider);
     final result = await accountManager.probeInstance(instanceHost);
     final ApiDefinition? api;
     final Instance instance;
@@ -180,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String? validateInstance(String? instance) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     if (instance.isNullOrEmpty) {
       return l10n.authNoInstance;
@@ -191,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return l10n.authNoUrlAllowed;
     }
 
-    // var accounts = Provider.of<AccountManager>(context, listen: false);
+    // var accounts = ref.read(accountProvider);
     // if (accounts.accounts.any((compound) =>
     //     compound.instance == instance &&
     //     compound.accountSecret.username == username)) {
@@ -202,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String? validatePassword(String? password) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     if (password.isNullOrEmpty) {
       return l10n.authNoPassword;
@@ -212,13 +210,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String? validateUsername(String? instance, String? username) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     if (username.isNullOrEmpty) {
       return l10n.authNoUsername;
     }
 
-    var accounts = Provider.of<AccountManager>(context, listen: false);
+    var accounts = ref.read(accountProvider);
     if (accounts.accounts.any((compound) =>
         compound.instance == instance &&
         compound.accountSecret.username == username)) {
@@ -242,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
     const String helpArticle =
         "https://github.com/Craftplacer/Kaiteki/wiki/Unable-to-login-using-Kaiteki-Web";
 
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     final dialogResult = await showDialog(
         context: context,
         builder: (context) {
@@ -287,17 +285,14 @@ class _LoginScreenState extends State<LoginScreen> {
     String username,
     String password,
   ) async {
-    final accountContainer = Provider.of<AccountManager>(
-      context,
-      listen: false,
-    );
+    final accounts = ref.read(accountProvider);
     final adapter = _api!.createAdapter();
     final result = await adapter.login(
       instance,
       username,
       password,
       requestMfa,
-      accountContainer,
+      accounts,
     );
 
     if (result.successful) {

@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/ui/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
-class AccountListDialog extends StatelessWidget {
+class AccountListDialog extends ConsumerWidget {
   const AccountListDialog({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return DynamicDialogContainer(builder: (context, fullscreen) {
-      final container = Provider.of<AccountManager>(context);
-      final l10n = AppLocalizations.of(context)!;
+      final manager = ref.watch(accountProvider);
+      final l10n = context.getL10n();
+
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -26,10 +25,10 @@ class AccountListDialog extends StatelessWidget {
           ),
           Column(
             children: [
-              for (final compound in container.accounts)
+              for (final compound in manager.accounts)
                 AccountListTile(
                   compound: compound,
-                  selected: container.currentAccount == compound,
+                  selected: manager.currentAccount == compound,
                 ),
               const Divider(),
               ListTile(
@@ -55,7 +54,7 @@ class AccountListDialog extends StatelessWidget {
   }
 }
 
-class AccountListTile extends StatelessWidget {
+class AccountListTile extends ConsumerWidget {
   final AccountCompound compound;
   final bool selected;
 
@@ -66,7 +65,7 @@ class AccountListTile extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       selected: selected,
       leading: AvatarWidget(
@@ -76,7 +75,7 @@ class AccountListTile extends StatelessWidget {
       ),
       title: Text(compound.accountSecret.username),
       subtitle: Text(compound.instance),
-      onTap: () => _onSelect(context),
+      onTap: () => _onSelect(ref),
       trailing: IconButton(
         icon: const Icon(Mdi.close),
         onPressed: () => _onRemove(context),
@@ -85,24 +84,19 @@ class AccountListTile extends StatelessWidget {
     );
   }
 
-  void _onSelect(BuildContext context) async {
-    final container = Provider.of<AccountManager>(context, listen: false);
-    await container.changeAccount(compound);
+  void _onSelect(WidgetRef ref) async {
+    await ref.read(accountProvider).changeAccount(compound);
   }
 
-  void _onRemove(BuildContext context) {
-    showDialog<void>(
+  void _onRemove(BuildContext context) async {
+    await showDialog<void>(
       context: context,
-      builder: (context) {
-        return AccountRemovalDialog(
-          compound: compound,
-        );
-      },
+      builder: (context) => AccountRemovalDialog(compound: compound),
     );
   }
 }
 
-class AccountRemovalDialog extends StatelessWidget {
+class AccountRemovalDialog extends ConsumerWidget {
   final AccountCompound compound;
 
   const AccountRemovalDialog({
@@ -111,8 +105,8 @@ class AccountRemovalDialog extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.getL10n();
 
     return AlertDialog(
       title: Text(l10n.accountRemovalConfirmationTitle),
@@ -127,11 +121,7 @@ class AccountRemovalDialog extends StatelessWidget {
         TextButton(
           child: Text(l10n.removeButtonLabel),
           onPressed: () {
-            final container = Provider.of<AccountManager>(
-              context,
-              listen: false,
-            );
-            container.remove(compound);
+            ref.read(accountProvider).remove(compound);
             Navigator.of(context).pop();
           },
         )

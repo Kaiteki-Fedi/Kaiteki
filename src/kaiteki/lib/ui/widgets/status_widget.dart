@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/app_themes/app_theme.dart';
-import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/ui/dialogs/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
@@ -19,11 +17,10 @@ import 'package:kaiteki/ui/widgets/posts/reaction_row.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
 const _padding = EdgeInsets.symmetric(vertical: 4.0);
 
-class StatusWidget extends StatelessWidget {
+class StatusWidget extends ConsumerWidget {
   final Post _post;
   final bool showParentPost;
   final bool showActions;
@@ -38,11 +35,10 @@ class StatusWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const authorTextStyle = TextStyle(fontWeight: FontWeight.bold);
-    final container = Provider.of<ThemeContainer>(context);
-    final theme = container.current;
-    final l10n = AppLocalizations.of(context)!;
+    final theme = ref.watch(themeProvider).current;
+    final l10n = context.getL10n();
 
     if (_post.repeatOf != null) {
       return Column(
@@ -92,7 +88,8 @@ class StatusWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MetaBar(
-                    renderedAuthor: _post.author.renderDisplayName(context),
+                    renderedAuthor:
+                        _post.author.renderDisplayName(context, ref),
                     authorTextStyle: authorTextStyle,
                     post: _post,
                     theme: theme,
@@ -121,16 +118,16 @@ class StatusWidget extends StatelessWidget {
   }
 }
 
-class PostContentWidget extends StatefulWidget {
+class PostContentWidget extends ConsumerStatefulWidget {
   final Post post;
 
   const PostContentWidget({Key? key, required this.post}) : super(key: key);
 
   @override
-  State<PostContentWidget> createState() => _PostContentWidgetState();
+  ConsumerState<PostContentWidget> createState() => _PostContentWidgetState();
 }
 
-class _PostContentWidgetState extends State<PostContentWidget> {
+class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
   InlineSpan? renderedContent;
   bool collapsed = false;
 
@@ -139,7 +136,7 @@ class _PostContentWidgetState extends State<PostContentWidget> {
     final post = widget.post;
 
     if (post.content != null) {
-      renderedContent = post.renderContent(context);
+      renderedContent = post.renderContent(context, ref);
     }
 
     return Column(
@@ -271,7 +268,7 @@ class MetaBar extends StatelessWidget {
   }
 }
 
-class ReplyBar extends StatelessWidget {
+class ReplyBar extends ConsumerWidget {
   const ReplyBar({
     Key? key,
     this.textStyle,
@@ -282,11 +279,11 @@ class ReplyBar extends StatelessWidget {
   final Post post;
 
   @override
-  Widget build(BuildContext context) {
-    var themeContainer = Provider.of<ThemeContainer>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeContainer = ref.watch(themeProvider);
     final disabledColor = Theme.of(context).disabledColor;
-    final l10n = AppLocalizations.of(context)!;
-    final adapter = Provider.of<AccountManager>(context).adapter;
+    final l10n = context.getL10n();
+    final adapter = ref.watch(accountProvider).adapter;
 
     return Padding(
       padding: _padding,
@@ -294,7 +291,7 @@ class ReplyBar extends StatelessWidget {
         future: UserReference(_getUserId()).resolve(adapter),
         builder: (context, AsyncSnapshot<User?> snapshot) {
           final span = snapshot.hasData
-              ? snapshot.data!.renderDisplayName(context)
+              ? snapshot.data!.renderDisplayName(context, ref)
               : TextSpan(
                   text: _getText(),
                   style: themeContainer.current.linkTextStyle,
@@ -360,7 +357,7 @@ class InteractionBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var openInBrowserAvailable = _post.externalUrl != null;
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     // Added Material for fixing bork with Hero *shrug*
     return Row(

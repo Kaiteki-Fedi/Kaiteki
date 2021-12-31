@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
@@ -19,9 +19,8 @@ import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
-class PostForm extends StatefulWidget {
+class PostForm extends ConsumerStatefulWidget {
   final Post? replyTo;
   final bool enableSubject;
   final bool expands;
@@ -37,7 +36,7 @@ class PostForm extends StatefulWidget {
   _PostFormState createState() => _PostFormState();
 }
 
-class _PostFormState extends State<PostForm> {
+class _PostFormState extends ConsumerState<PostForm> {
   late TextEditingController _bodyController;
   late TextEditingController _subjectController;
   late RestartableTimer _typingTimer;
@@ -97,9 +96,9 @@ class _PostFormState extends State<PostForm> {
 
   @override
   Widget build(BuildContext context) {
-    final manager = Provider.of<AccountManager>(context);
+    final manager = ref.watch(accountProvider);
     final flex = widget.expands ? 1 : 0;
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return Column(
       children: [
@@ -209,7 +208,7 @@ class _PostFormState extends State<PostForm> {
     BuildContext context,
     AsyncSnapshot<Post<dynamic>> snapshot,
   ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     switch (snapshot.connectionState) {
       case ConnectionState.none:
@@ -261,7 +260,7 @@ class _PostFormState extends State<PostForm> {
   void post(BuildContext context, FediverseAdapter adapter) async {
     final messenger = ScaffoldMessenger.of(context);
     final contentKey = UniqueKey();
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     Navigator.of(context).pop();
 
@@ -354,7 +353,7 @@ class _PostFormState extends State<PostForm> {
     BuildContext context,
     AsyncSnapshot<Iterable<EmojiCategory>> s,
   ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     if (s.hasError) {
       return Center(child: Text(l10n.emojiRetrievalFailed));

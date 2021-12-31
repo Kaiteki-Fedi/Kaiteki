@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:kaiteki/app_colors.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/ui/screens/discover_instances_screen.dart';
 import 'package:kaiteki/utils/lower_case_text_formatter.dart';
@@ -202,7 +202,7 @@ class __InstancePageState extends State<_InstancePage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     return Form(
       key: _formKey,
       onChanged: _onFormChanged,
@@ -344,7 +344,7 @@ class __UserPageState extends State<_UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

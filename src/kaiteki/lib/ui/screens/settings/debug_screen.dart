@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 import 'package:mdi/mdi.dart';
 
 class DebugScreen extends StatefulWidget {
@@ -12,7 +12,7 @@ class DebugScreen extends StatefulWidget {
 class _DebugScreenState extends State<DebugScreen> {
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsDebugMaintenance)),

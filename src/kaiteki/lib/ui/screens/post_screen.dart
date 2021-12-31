@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/forms/post_form.dart';
@@ -7,7 +7,7 @@ import 'package:kaiteki/ui/widgets/dialog_close_button.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
-class PostScreen extends StatefulWidget {
+class PostScreen extends ConsumerStatefulWidget {
   final Post? replyTo;
 
   const PostScreen({Key? key, this.replyTo}) : super(key: key);
@@ -16,13 +16,13 @@ class PostScreen extends StatefulWidget {
   _PostScreenState createState() => _PostScreenState();
 }
 
-class _PostScreenState extends State<PostScreen> {
+class _PostScreenState extends ConsumerState<PostScreen> {
   bool enableSubject = false;
   final key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     final replyTo = widget.replyTo;
 
     return DynamicDialogContainer(
@@ -32,7 +32,7 @@ class _PostScreenState extends State<PostScreen> {
         if (replyTo != null) {
           replyTextSpan = TextSpan(
             text: l10n.composeDialogTitleReply,
-            children: [replyTo.author.renderDisplayName(context)],
+            children: [replyTo.author.renderDisplayName(context, ref)],
           );
         }
 

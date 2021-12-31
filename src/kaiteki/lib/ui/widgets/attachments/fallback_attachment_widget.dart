@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
@@ -14,7 +14,7 @@ class FallbackAttachmentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return Padding(
       padding: const EdgeInsets.all(24.0),

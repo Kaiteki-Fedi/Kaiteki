@@ -59,9 +59,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
               icon: const Icon(Mdi.close),
               onPressed: () => Navigator.of(context).pop(),
               splashRadius: Constants.defaultSplashRadius,
-              padding: EdgeInsets.symmetric(
-                horizontal: 12.0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
             ),
           ],
         ),

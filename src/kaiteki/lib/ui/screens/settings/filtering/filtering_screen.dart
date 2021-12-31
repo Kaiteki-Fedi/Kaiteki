@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/preferences/preference_container.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/preferences/sensitive_post_filtering_preferences.dart';
-import 'package:provider/provider.dart';
 
-class FilteringScreen extends StatelessWidget {
+class FilteringScreen extends ConsumerWidget {
   const FilteringScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var container = Provider.of<PreferenceContainer>(context);
-    var prefs = container.get();
-    final l10n = AppLocalizations.of(context)!;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefContainer = ref.watch(preferenceProvider);
+    final prefs = prefContainer.get();
+    final l10n = context.getL10n();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsFiltering)),
@@ -33,7 +31,7 @@ class FilteringScreen extends StatelessWidget {
                   const VerticalDivider(),
                   Switch(
                     value: prefs.sensitivePostFilter.enabled,
-                    onChanged: (bool value) => container.update((p) {
+                    onChanged: (bool value) => prefContainer.update((p) {
                       return p..sensitivePostFilter.enabled = value;
                     }),
                   )
@@ -50,7 +48,7 @@ class FilteringScreen extends StatelessWidget {
     BuildContext context,
     SensitivePostFilteringPreferences prefs,
   ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     if (!prefs.enabled) {
       return l10n.settingsDisabled;

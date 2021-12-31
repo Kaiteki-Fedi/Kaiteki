@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
-import 'package:kaiteki/theming/app_themes/app_theme.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
-import 'package:provider/provider.dart';
 
 // TODO maybe make this UI-only and remove interaction between adapters and
 //      models?
-class ReactionWidget extends StatefulWidget {
+class ReactionWidget extends ConsumerStatefulWidget {
   final Post parentPost;
   final Reaction reaction;
 
@@ -23,14 +21,14 @@ class ReactionWidget extends StatefulWidget {
   _ReactionWidgetState createState() => _ReactionWidgetState();
 }
 
-class _ReactionWidgetState extends State<ReactionWidget> {
+class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
   @override
   Widget build(BuildContext context) {
     var textPadding =
         const EdgeInsets.only(top: 4, bottom: 4, left: 6, right: 2);
 
     var reacted = widget.reaction.includesMe;
-    var theme = AppTheme.of(context).reactionButtonTheme;
+    var theme = ref.watch(themeProvider).current.reactionButtonTheme;
     var backgroundColor =
         reacted ? theme.activeBackground : theme.inactiveBackground;
     var textStyle = reacted ? theme.activeTextStyle : theme.inactiveTextStyle;
@@ -43,12 +41,17 @@ class _ReactionWidgetState extends State<ReactionWidget> {
         style: textStyle,
         child: InkWell(
           onTap: () async {
-            var container = Provider.of<AccountManager>(context, listen: false);
-            var reactiveAdapter = container.adapter as ReactionSupport;
-            await reactiveAdapter.addReaction(
-              widget.parentPost,
-              widget.reaction.emoji,
-            );
+            final adapter = ref.watch(accountProvider).adapter;
+            if (adapter is ReactionSupport) {
+              await (adapter as ReactionSupport).addReaction(
+                widget.parentPost,
+                widget.reaction.emoji,
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Your instance does not support reactions."),
+              ));
+            }
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,

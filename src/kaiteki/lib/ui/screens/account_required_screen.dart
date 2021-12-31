@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:mdi/mdi.dart';
 
@@ -8,7 +8,7 @@ class AccountRequiredScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return Scaffold(
       body: SafeArea(

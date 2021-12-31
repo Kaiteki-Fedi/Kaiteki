@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 /// A row that details an interaction for use in timelines
-class InteractionEventBar extends StatelessWidget {
+class InteractionEventBar extends ConsumerWidget {
   final Color color;
   final String text;
   final IconData icon;
@@ -22,7 +23,7 @@ class InteractionEventBar extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     var avatarMargin = const EdgeInsets.only(
       left: 28,
       right: 16,
@@ -40,7 +41,7 @@ class InteractionEventBar extends StatelessWidget {
             TextSpan(
               children: [
                 TextSpan(
-                  children: [user.renderDisplayName(context)],
+                  children: [user.renderDisplayName(context, ref)],
                   style: userTextStyle,
                 ),
                 const TextSpan(text: " "),

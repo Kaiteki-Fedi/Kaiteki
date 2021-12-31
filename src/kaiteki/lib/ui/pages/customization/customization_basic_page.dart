@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/preferences/preference_container.dart';
-import 'package:provider/provider.dart';
+import 'package:kaiteki/di.dart';
 
-class CustomizationBasicPage extends StatefulWidget {
+class CustomizationBasicPage extends ConsumerStatefulWidget {
   const CustomizationBasicPage({Key? key}) : super(key: key);
 
   @override
   _CustomizationBasicPageState createState() => _CustomizationBasicPageState();
 }
 
-class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
+class _CustomizationBasicPageState
+    extends ConsumerState<CustomizationBasicPage> {
   @override
   Widget build(BuildContext context) {
-    final preferences = Provider.of<PreferenceContainer>(context);
-    final l10n = AppLocalizations.of(context)!;
+    final prefs = ref.watch(preferenceProvider);
+    final l10n = context.getL10n();
 
     return ListView(
       children: [
@@ -39,16 +38,16 @@ class _CustomizationBasicPageState extends State<CustomizationBasicPage> {
 
             if (selection == null) return;
 
-            preferences.update((p) => p..theme = selection);
+            prefs.update((p) => p..theme = selection);
           },
-          subtitle: Text(_themeToString(context, preferences.get().theme)),
+          subtitle: Text(_themeToString(context, prefs.get().theme)),
         ),
       ],
     );
   }
 
   String _themeToString(BuildContext context, ThemeMode mode) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     switch (mode) {
       case ThemeMode.light:

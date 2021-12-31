@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
@@ -45,8 +46,8 @@ extension AsyncSnapshotExtensions on AsyncSnapshot {
 enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
-  InlineSpan renderDisplayName(BuildContext context) {
-    final theme = TextRendererTheme.fromContext(context);
+  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
+    final theme = TextRendererTheme.fromContext(context, ref);
     final renderer = TextRenderer(theme: theme);
 
     return renderer.render(
@@ -61,8 +62,8 @@ extension UserExtensions on User {
 }
 
 extension PostExtensions on Post {
-  InlineSpan renderContent(BuildContext context) {
-    final theme = TextRendererTheme.fromContext(context);
+  InlineSpan renderContent(BuildContext context, WidgetRef ref) {
+    final theme = TextRendererTheme.fromContext(context, ref);
     final renderer = TextRenderer(theme: theme);
     return renderer.render(
       context,

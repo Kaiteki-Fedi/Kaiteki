@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
-import 'package:provider/provider.dart';
 
-class AccountScreen extends StatefulWidget {
+class AccountScreen extends ConsumerStatefulWidget {
   final String id;
   final User? initialUser;
 
@@ -28,7 +27,7 @@ class AccountScreen extends StatefulWidget {
   _AccountScreenState createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen>
+class _AccountScreenState extends ConsumerState<AccountScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
 
@@ -40,13 +39,13 @@ class _AccountScreenState extends State<AccountScreen>
 
   @override
   Widget build(BuildContext context) {
-    final container = Provider.of<AccountManager>(context);
+    final accounts = ref.watch(accountProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         return FutureBuilder(
           initialData: widget.initialUser,
-          future: container.adapter.getUserById(widget.id),
+          future: accounts.adapter.getUserById(widget.id),
           builder: (_, AsyncSnapshot<User> snapshot) {
             var isLoading = !(snapshot.hasData || snapshot.hasError);
             var tooSmall = constraints.minWidth < 600;
@@ -57,7 +56,7 @@ class _AccountScreenState extends State<AccountScreen>
                 children: [
                   PostsPage(
                     isLoading: isLoading,
-                    container: container,
+                    container: accounts,
                     widget: widget,
                   ),
                   Container(),
@@ -81,7 +80,7 @@ class _AccountScreenState extends State<AccountScreen>
     bool showCountBadges,
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     final bannerUrl = snapshot.data?.bannerUrl;
 
     return AppBar(

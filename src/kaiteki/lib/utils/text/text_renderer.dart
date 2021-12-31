@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Element;
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
@@ -13,7 +13,6 @@ import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
 import 'package:kaiteki/utils/text/text_renderer_theme.dart';
-import 'package:provider/provider.dart';
 
 typedef RegExpMatchElementBuilder = Element Function(
   RegExpMatch match,
@@ -193,7 +192,7 @@ extension TextElementExtension on TextElement {
   }
 }
 
-class UserChip extends StatelessWidget {
+class UserChip extends ConsumerWidget {
   final UserReference reference;
   final User? user;
 
@@ -204,8 +203,8 @@ class UserChip extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final adapter = Provider.of<AccountManager>(context).adapter;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final adapter = ref.watch(accountProvider).adapter;
     return FutureBuilder(
       initialData: user,
       future: reference.resolve(adapter),
@@ -217,7 +216,7 @@ class UserChip extends StatelessWidget {
             message: getHandle(user),
             child: ActionChip(
               avatar: AvatarWidget(user, size: 24),
-              label: Text.rich(user.renderDisplayName(context)),
+              label: Text.rich(user.renderDisplayName(context, ref)),
               onPressed: () {
                 var screen = AccountScreen.fromUser(user);
                 var route = MaterialPageRoute(builder: (_) => screen);

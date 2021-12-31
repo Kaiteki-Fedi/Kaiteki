@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart' hide Element;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
 
-class TextRenderDialog extends StatefulWidget {
+class TextRenderDialog extends ConsumerStatefulWidget {
   final Post post;
 
   const TextRenderDialog(this.post, {Key? key}) : super(key: key);
 
   @override
-  State<TextRenderDialog> createState() => _TextRenderDialogState();
+  ConsumerState<TextRenderDialog> createState() => _TextRenderDialogState();
 }
 
-class _TextRenderDialogState extends State<TextRenderDialog>
+class _TextRenderDialogState extends ConsumerState<TextRenderDialog>
     with TickerProviderStateMixin {
   late final TabController _controller;
 
@@ -88,7 +89,7 @@ class _TextRenderDialogState extends State<TextRenderDialog>
                     ),
                     padding: const EdgeInsets.all(8.0),
                     child: Text.rich(
-                      widget.post.renderContent(context),
+                      widget.post.renderContent(context, ref),
                     ),
                   ),
                 ],

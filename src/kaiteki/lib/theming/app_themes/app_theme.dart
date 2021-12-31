@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/theme_container.dart';
 import 'package:kaiteki/theming/toggle_button_theme.dart';
-import 'package:provider/provider.dart';
 
 class AppTheme {
   final Color repeatColor;
@@ -33,11 +31,6 @@ class AppTheme {
     required this.chatMessageRounding,
     required this.reactionButtonTheme,
   });
-
-  static AppTheme of(BuildContext context, {bool listen = false}) {
-    var container = Provider.of<ThemeContainer>(context, listen: listen);
-    return container.current;
-  }
 }
 
 class ChatMessageTheme {

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
@@ -15,7 +15,7 @@ import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:kaiteki/utils/paged_network_stream.dart';
 import 'package:mdi/mdi.dart';
 
-class Timeline extends StatefulWidget {
+class Timeline extends ConsumerStatefulWidget {
   final FediverseAdapter adapter;
   final List<PostFilter>? filters;
   final double? maxWidth;
@@ -33,7 +33,7 @@ class Timeline extends StatefulWidget {
   TimelineState createState() => TimelineState();
 }
 
-class TimelineState extends State<Timeline> {
+class TimelineState extends ConsumerState<Timeline> {
   final _scrollContainer = ScrollController();
   late final TimelineModel _model;
   static final _logger = getLogger('Timeline');
@@ -83,7 +83,7 @@ class TimelineState extends State<Timeline> {
         return PageTransitionSwitcher(
           duration: const Duration(milliseconds: 300),
           transitionBuilder: animations.fadeThrough,
-          child: _buildStream(context, snapshot),
+          child: _buildStream(context, ref, snapshot),
         );
       },
     );
@@ -91,9 +91,10 @@ class TimelineState extends State<Timeline> {
 
   Widget _buildStream(
     BuildContext context,
+    WidgetRef ref,
     AsyncSnapshot<Iterable<Post>> snapshot,
   ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     if (snapshot.connectionState == ConnectionState.active) {
       if (snapshot.hasError) {
         return Center(
@@ -122,7 +123,7 @@ class TimelineState extends State<Timeline> {
         filtered = Map.fromEntries(snapshot.data!.map((p) {
           return MapEntry(
             p,
-            PostFilter.runMultipleFilters(context, p, filters),
+            PostFilter.runMultipleFilters(ref, p, filters),
           );
         }).where((p) => p.value != PostFilterResult.hide));
       } else {

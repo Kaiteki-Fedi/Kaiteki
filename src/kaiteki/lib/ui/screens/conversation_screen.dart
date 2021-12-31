@@ -1,27 +1,25 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
-class ConversationScreen extends StatelessWidget {
+class ConversationScreen extends ConsumerWidget {
   final Post post;
 
   const ConversationScreen(this.post, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final container = Provider.of<AccountManager>(context);
-    final l10n = AppLocalizations.of(context)!;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final adapter = ref.watch(accountProvider).adapter;
+    final l10n = context.getL10n();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.conversationTitle)),
       body: FutureBuilder(
-        future: container.adapter.getThread(post),
+        future: adapter.getThread(post),
         builder: (_, AsyncSnapshot<Iterable<Post>> snapshot) {
           if (snapshot.hasData) {
             var cookedThread = Threader.toThread(snapshot.data!);

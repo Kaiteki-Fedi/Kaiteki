@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
 
@@ -12,7 +12,7 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsAbout)),
@@ -66,7 +66,8 @@ class AboutScreen extends StatelessWidget {
                             context: context,
                             applicationName: Constants.appName,
                             applicationVersion: "1.0.0",
-                            applicationLegalese: "Licensed under the GNU Affero General Public License v3.0",
+                            applicationLegalese:
+                                "Licensed under the GNU Affero General Public License v3.0",
                           );
                         },
                       ),
@@ -100,7 +101,8 @@ class AboutScreen extends StatelessWidget {
                         ),
                         title: const Text("Pleroma"),
                         subtitle: Text(l10n.creditsPleromaDescription),
-                        onTap: () => context.launchUrl("https://pleroma.social/"),
+                        onTap: () =>
+                            context.launchUrl("https://pleroma.social/"),
                         trailing: const Icon(Mdi.openInNew),
                       ),
                       ListTile(
@@ -111,7 +113,8 @@ class AboutScreen extends StatelessWidget {
                         ),
                         title: const Text("Husky"),
                         subtitle: Text(l10n.creditsHuskyDescription),
-                        onTap: () => context.launchUrl("https://husky.adol.pw/"),
+                        onTap: () =>
+                            context.launchUrl("https://husky.adol.pw/"),
                         trailing: const Icon(Mdi.openInNew),
                       ),
                     ],
@@ -127,13 +130,15 @@ class AboutScreen extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Mdi.earth),
                         tooltip: l10n.creditsWebsite,
-                        onPressed: () => context.launchUrl(Constants.appWebsite),
+                        onPressed: () =>
+                            context.launchUrl(Constants.appWebsite),
                         splashRadius: Constants.defaultSplashRadius,
                       ),
                       IconButton(
                         icon: const Icon(Mdi.github),
                         tooltip: l10n.creditsGithubRepo,
-                        onPressed: () => context.launchUrl(Constants.githubRepository),
+                        onPressed: () =>
+                            context.launchUrl(Constants.githubRepository),
                         splashRadius: Constants.defaultSplashRadius,
                       ),
                     ],

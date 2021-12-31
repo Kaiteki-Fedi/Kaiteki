@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api/api_type.dart';
 import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
@@ -16,7 +16,7 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = context.getL10n();
     final materialL10n = Localizations.of<MaterialLocalizations>(
       context,
       MaterialLocalizations,
@@ -58,7 +58,8 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
           TextButton(
             child: Text(l10n.apiTypeDialog_missing),
             onPressed: () async {
-              if (await context.launchUrl("https://github.com/Craftplacer/kaiteki/issues/new")) {
+              if (await context.launchUrl(
+                  "https://github.com/Craftplacer/kaiteki/issues/new")) {
                 Navigator.pop(context);
               }
             },
