@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/widgets/status_widget.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
 class ConversationScreen extends ConsumerWidget {
@@ -15,16 +17,18 @@ class ConversationScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final adapter = ref.watch(accountProvider).adapter;
     final l10n = context.getL10n();
+    final future = adapter.getThread(post.getRoot()).then((thread) {
+      return compute(Threader.toThread, thread.toList(growable: false));
+    });
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.conversationTitle)),
       body: FutureBuilder(
-        future: adapter.getThread(post),
-        builder: (_, AsyncSnapshot<Iterable<Post>> snapshot) {
+        future: future,
+        builder: (_, AsyncSnapshot<ThreadPost> snapshot) {
           if (snapshot.hasData) {
-            var cookedThread = Threader.toThread(snapshot.data!);
             return SingleChildScrollView(
-              child: ThreadPostContainer(cookedThread),
+              child: ThreadPostContainer(snapshot.data!),
             );
           } else if (snapshot.hasError) {
             return Column(
@@ -33,6 +37,7 @@ class ConversationScreen extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Mdi.close),
                   title: Text(l10n.threadRetrievalFailed),
+                  subtitle: Text(snapshot.error.toString()),
                 ),
               ],
             );
@@ -47,19 +52,20 @@ class ConversationScreen extends ConsumerWidget {
 
 class Threader {
   static ThreadPost toThread(Iterable<Post> posts) {
-    var threadPosts = posts.map((post) => ThreadPost(post)).toList();
+    final threadPosts =
+        posts.map((post) => ThreadPost(post.getRoot())).toList();
 
-    for (var post in threadPosts) {
-      var id = post.post.replyToPostId;
+    for (final post in threadPosts) {
+      final id = post.post.replyToPostId;
 
       if (id != null) {
-        var parent = threadPosts.firstWhere((p) => p.post.id == id);
+        final parent = threadPosts.firstWhere((p) => p.post.id == id);
         parent.replies.add(post);
         post.parent = parent;
       }
     }
 
-    var op = threadPosts.firstWhere((p) => p.post.replyToPostId == null);
+    final op = threadPosts.firstWhere((p) => p.post.replyToPostId == null);
     return op;
   }
 }

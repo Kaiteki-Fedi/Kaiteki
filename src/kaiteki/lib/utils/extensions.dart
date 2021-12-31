@@ -74,6 +74,13 @@ extension PostExtensions on Post {
       ),
     );
   }
+
+  Post getRoot() => _getRoot(this);
+
+  Post _getRoot(Post post) {
+    final repeatChild = post.repeatOf;
+    return repeatChild == null ? post : _getRoot(repeatChild);
+  }
 }
 
 extension VectorExtensions<T> on Iterable<Iterable<T>> {
