@@ -1,0 +1,36 @@
+{
+	"folders": [
+		{
+			"path": "src/kaiteki",
+			"name": "Kaiteki"
+		}
+	],
+	"extensions": { "recommendations": [ "Dart-Code.flutter" ] },
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Debug",
+				"request": "launch",
+				"type": "dart",
+				"flutterMode": "debug",
+				"program": "lib/main.dart",
+				"cwd": "./src/kaiteki/",
+			},
+			{
+				"name": "Profile",
+				"request": "launch",
+				"type": "dart",
+				"flutterMode": "profile",
+				"program": "lib/main.dart",
+				"cwd": "./src/kaiteki/",
+			},
+			{
+				"name": "Test",
+				"type": "dart",
+				"request": "launch",
+				"program": "./test/"
+			},
+		]
+	}
+}
