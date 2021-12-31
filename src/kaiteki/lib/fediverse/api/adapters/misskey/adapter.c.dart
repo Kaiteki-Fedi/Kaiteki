@@ -28,6 +28,7 @@ Post toPost(misskey.Note source) {
     id: source.id,
     visibility: toVisibility(source.visibility),
     attachments: source.files?.map(toAttachment) ?? [],
+    externalUrl: source.url,
   );
 }
 
