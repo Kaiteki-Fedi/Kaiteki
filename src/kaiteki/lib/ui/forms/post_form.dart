@@ -324,28 +324,24 @@ class _PostFormState extends ConsumerState<PostForm> {
   }
 
   void openEmojiPicker(BuildContext context, AccountManager container) {
-    Scaffold.of(context).showBottomSheet(
-      (context) {
-        return BottomSheet(
-          builder: (BuildContext context) {
-            return SizedBox(
-              height: 250,
-              child: FutureBuilder(
-                future: container.adapter.getEmojis(),
-                builder: buildEmojiSelector,
-              ),
-            );
-          },
-          onClosing: () {},
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(12.0),
-            ),
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          height: 250,
+          child: FutureBuilder(
+            future: container.adapter.getEmojis(),
+            builder: buildEmojiSelector,
           ),
-          elevation: 16.0,
-          clipBehavior: Clip.antiAlias,
         );
       },
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(12.0),
+        ),
+      ),
+      elevation: 16.0,
+      clipBehavior: Clip.antiAlias,
     );
   }
 
@@ -370,50 +366,46 @@ class _PostFormState extends ConsumerState<PostForm> {
   }
 
   void openAttachDrawer() {
-    Scaffold.of(context).showBottomSheet(
-      (context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
         return LayoutBuilder(
           builder: (context, data) {
             final columns = max((data.maxWidth ~/ 300) * 2, 2);
             final itemWidth = data.maxWidth / columns;
             final itemAspectRatio = itemWidth / 96;
 
-            return BottomSheet(
-              elevation: 24,
-              builder: (BuildContext context) {
-                return GridView.count(
-                  crossAxisCount: columns,
-                  shrinkWrap: true,
-                  childAspectRatio: itemAspectRatio,
-                  padding: const EdgeInsets.all(8.0),
-                  children: [
-                    for (var item in _attachMenuItems)
-                      TextButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.all(16.0),
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(item.icon, size: 32),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(item.label),
-                            )
-                          ],
-                        ),
-                        onPressed: item.onPressed,
+            return GridView.count(
+              crossAxisCount: columns,
+              shrinkWrap: true,
+              childAspectRatio: itemAspectRatio,
+              padding: const EdgeInsets.all(8.0),
+              children: [
+                for (var item in _attachMenuItems)
+                  TextButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                        const EdgeInsets.all(16.0),
                       ),
-                  ],
-                );
-              },
-              onClosing: () {},
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(item.icon, size: 32),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Text(item.label),
+                        )
+                      ],
+                    ),
+                    onPressed: item.onPressed,
+                  ),
+              ],
             );
           },
         );
       },
+      elevation: 24,
     );
   }
 }
