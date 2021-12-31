@@ -206,7 +206,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     var instanceMeta = await client.getInstanceMeta();
     var emojiCategories = instanceMeta.emojis.groupBy((e) => e.category);
     return emojiCategories.entries.map(
-      (kv) => EmojiCategory(kv.key!, kv.value.map(toEmoji)),
+      (kv) => EmojiCategory(kv.key, kv.value.map(toEmoji)),
     );
   }
 
