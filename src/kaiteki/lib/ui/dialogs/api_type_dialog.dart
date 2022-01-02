@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/api/api_type.dart';
-import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/fediverse/definitions.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 
 class ApiTypeDialog extends StatefulWidget {

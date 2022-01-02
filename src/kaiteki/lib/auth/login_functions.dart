@@ -1,5 +1,5 @@
 import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/logger.dart';

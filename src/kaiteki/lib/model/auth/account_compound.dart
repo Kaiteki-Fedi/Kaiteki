@@ -1,6 +1,6 @@
 import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/fediverse/api/api_type.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';

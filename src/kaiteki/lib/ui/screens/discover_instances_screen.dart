@@ -5,11 +5,11 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
-import 'package:kaiteki/fediverse/api/adapters/interfaces/preview_support.dart';
-import 'package:kaiteki/fediverse/api/adapters/interfaces/reaction_support.dart';
-import 'package:kaiteki/fediverse/api/api_type.dart';
-import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/fediverse/definitions.dart';
+import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
+import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
+import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
 

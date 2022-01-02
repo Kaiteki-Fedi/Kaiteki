@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
-import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/definitions.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/logger.dart';
