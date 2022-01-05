@@ -59,6 +59,20 @@ extension UserExtensions on User {
       ),
     );
   }
+
+  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
+    final theme = TextRendererTheme.fromContext(context, ref);
+    final renderer = TextRenderer(theme: theme);
+
+    return renderer.render(
+      context,
+      description!,
+      textContext: TextContext(
+        users: [],
+        emojis: emojis?.toList(growable: false),
+      ),
+    );
+  }
 }
 
 extension PostExtensions on Post {
