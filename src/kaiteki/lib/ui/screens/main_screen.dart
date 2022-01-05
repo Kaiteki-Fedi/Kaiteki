@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
@@ -26,11 +27,27 @@ class _MainScreenState extends State<MainScreen> {
   List<_MainScreenTab>? _tabs;
   int _currentPage = 0;
 
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+  // TODO(Craftplacer): abstract this tab system a bit more and use enums to declare tab positioning, this allows us to later
+  List<Widget> getPages(AppLocalizations l10n) {
+    return [
+      TimelinePage(key: _timelineKey),
+      Center(
+        child: IconLandingWidget(
+          icon: const Icon(Mdi.dotsHorizontal),
+          text: Text(l10n.niy),
+        ),
+      ),
+      Center(
+        child: IconLandingWidget(
+          icon: const Icon(Mdi.dotsHorizontal),
+          text: Text(l10n.niy),
+        ),
+      ),
+    ];
+  }
 
-    _tabs ??= [
+  List<_MainScreenTab> getTabs(AppLocalizations l10n) {
+    return [
       _MainScreenTab(
         selectedIcon: Icons.home,
         icon: Icons.home_outlined,
@@ -46,10 +63,6 @@ class _MainScreenState extends State<MainScreen> {
         selectedIcon: Icons.notifications_rounded,
         icon: Icons.notifications_none,
         text: l10n.notificationsTab,
-        //fabTooltip: "Mark all as read",
-        //fabText: "Read",
-        //fabIcon: Mdi.checkAll,
-        //fabOnTap: () {},
       ),
       _MainScreenTab(
         selectedIcon: Icons.forum,
@@ -57,22 +70,13 @@ class _MainScreenState extends State<MainScreen> {
         text: l10n.chatsTab,
       ),
     ];
+  }
 
-    _pages ??= [
-      TimelinePage(key: _timelineKey),
-      Center(
-        child: IconLandingWidget(
-          icon: const Icon(Mdi.dotsHorizontal),
-          text: Text(l10n.niy),
-        ),
-      ),
-      Center(
-        child: IconLandingWidget(
-          icon: const Icon(Mdi.dotsHorizontal),
-          text: Text(l10n.niy),
-        ),
-      ),
-    ];
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.getL10n();
+    _tabs ??= getTabs(l10n);
+    _pages ??= getPages(l10n);
 
     return FocusableActionDetector(
       shortcuts: {newPostKeySet: NewPostIntent()},
@@ -83,50 +87,49 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: LayoutBuilder(
         builder: (_, constraints) {
-          switch (getScreenSize(constraints.maxWidth)) {
-            case ScreenSize.xs:
-              return _buildMobileView();
-
-            case ScreenSize.s:
-            case ScreenSize.m:
-            case ScreenSize.l:
-              return _buildDesktopView();
-          }
+          final isMobile = getScreenSize(constraints.maxWidth) == ScreenSize.xs;
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                Constants.appName,
+                style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+              ),
+              actions: _buildAppBarActions(context),
+            ),
+            body: isMobile //
+                ? _getPage()
+                : _buildDesktopView(),
+            bottomNavigationBar: isMobile //
+                ? _getNavigationBar()
+                : null,
+            floatingActionButton: _getFab(context, _currentPage, isMobile),
+          );
         },
       ),
     );
   }
 
   Widget _buildDesktopView() {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          Constants.appName,
-          style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+    return Row(
+      children: [
+        NavigationRail(
+          selectedIndex: _currentPage,
+          onDestinationSelected: _changePage,
+          labelType: NavigationRailLabelType.none,
+          minWidth: 56,
+          leading: const ComposeFloatingActionButton(small: true),
+          destinations: [
+            for (var tab in _tabs!)
+              NavigationRailDestination(
+                icon: Icon(tab.icon),
+                selectedIcon: Icon(tab.selectedIcon),
+                label: Text(tab.text),
+              ),
+          ],
         ),
-        actions: _buildAppBarActions(context),
-      ),
-      body: Row(
-        children: [
-          NavigationRail(
-            selectedIndex: _currentPage,
-            onDestinationSelected: changePage,
-            labelType: NavigationRailLabelType.none,
-            minWidth: 56,
-            leading: _buildComposeFab(context),
-            destinations: [
-              for (var tab in _tabs!)
-                NavigationRailDestination(
-                  icon: Icon(tab.icon),
-                  selectedIcon: Icon(tab.selectedIcon),
-                  label: Text(tab.text),
-                ),
-            ],
-          ),
-          const VerticalDivider(thickness: 1, width: 1),
-          Expanded(child: _getPage()),
-        ],
-      ),
+        const VerticalDivider(thickness: 1, width: 1),
+        Expanded(child: _getPage()),
+      ],
     );
   }
 
@@ -143,38 +146,6 @@ class _MainScreenState extends State<MainScreen> {
     ];
   }
 
-  Widget _buildMobileView() {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          Constants.appName,
-          style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-        ),
-        actions: _buildAppBarActions(context),
-      ),
-      body: _getPage(),
-      bottomNavigationBar: getNavigationBar(),
-      floatingActionButton: getFab(context, _currentPage, false),
-    );
-  }
-
-  Iterable<Widget> getTabListItems() {
-    var i = 0;
-
-    return _tabs!.map((tab) {
-      final x = i;
-
-      i++;
-
-      return ListTile(
-        leading: Icon(tab.selectedIcon),
-        title: Text(tab.text),
-        selected: _currentPage == x,
-        onTap: () => changePage(x),
-      );
-    });
-  }
-
   Widget _getPage() {
     return PageTransitionSwitcher(
       transitionBuilder: animations.fadeThrough,
@@ -182,13 +153,13 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  BottomNavigationBar? getNavigationBar() {
+  BottomNavigationBar? _getNavigationBar() {
     if (_tabs!.length < 2) {
       return null;
     }
 
     return BottomNavigationBar(
-      onTap: changePage,
+      onTap: _changePage,
       currentIndex: _currentPage,
       items: [
         for (var tab in _tabs!)
@@ -201,17 +172,9 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  void changePage(int index) => setState(() => _currentPage = index);
+  void _changePage(int index) => setState(() => _currentPage = index);
 
-  Widget _buildComposeFab(BuildContext context) {
-    return FloatingActionButton.small(
-      onPressed: () => context.showPostDialog(),
-      child: const Icon(Icons.edit_rounded),
-      elevation: 4.0,
-    );
-  }
-
-  Widget? getFab(BuildContext context, int index, bool desktop) {
+  Widget? _getFab(BuildContext context, int index, bool mobile) {
     final tab = _tabs![_currentPage];
     final fab = tab.fab;
 
@@ -219,17 +182,43 @@ class _MainScreenState extends State<MainScreen> {
       return null;
     }
 
-    if (desktop) {
+    if (mobile) {
+      return FloatingActionButton(
+        tooltip: fab.tooltip,
+        child: Icon(fab.icon),
+        onPressed: fab.onTap,
+      );
+    } else {
       return FloatingActionButton.extended(
         label: Text(fab.text),
         icon: Icon(fab.icon),
         onPressed: fab.onTap,
       );
+    }
+  }
+}
+
+class ComposeFloatingActionButton extends StatelessWidget {
+  final bool small;
+
+  const ComposeFloatingActionButton({
+    Key? key,
+    required this.small,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (small) {
+      return FloatingActionButton.small(
+        onPressed: () => context.showPostDialog(),
+        child: const Icon(Icons.edit_rounded),
+        elevation: 4.0,
+      );
     } else {
       return FloatingActionButton(
-        tooltip: fab.tooltip,
-        child: Icon(fab.icon),
-        onPressed: fab.onTap,
+        onPressed: () => context.showPostDialog(),
+        child: const Icon(Icons.edit_rounded),
+        elevation: 4.0,
       );
     }
   }
