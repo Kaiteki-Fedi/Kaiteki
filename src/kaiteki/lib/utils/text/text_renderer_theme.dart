@@ -1,19 +1,18 @@
 import 'package:flutter/widgets.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/utils/utils.dart';
 
 class TextRendererTheme {
   final TextStyle linkTextStyle;
-  final double emojiSize;
+  final double emojiScale;
 
-  const TextRendererTheme(this.linkTextStyle, this.emojiSize);
+  const TextRendererTheme(this.linkTextStyle, this.emojiScale);
 
   factory TextRendererTheme.fromContext(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider).current;
 
     return TextRendererTheme(
       theme.linkTextStyle,
-      getLocalFontSize(context) * 1.5,
+      1.5,
     );
   }
 }

@@ -13,6 +13,7 @@ import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
 import 'package:kaiteki/utils/text/text_renderer_theme.dart';
+import 'package:kaiteki/utils/utils.dart';
 
 typedef RegExpMatchElementBuilder = Element Function(
   RegExpMatch match,
@@ -166,8 +167,17 @@ class TextRenderer {
       return TextSpan(text: element.name);
     }
 
+    // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
     return WidgetSpan(
-      child: EmojiWidget(emoji: emoji, size: theme.emojiSize),
+      child: Builder(
+        builder: (context) {
+          final inheritedFontSize = getLocalFontSize(context);
+          return EmojiWidget(
+            emoji: emoji,
+            size: inheritedFontSize * theme.emojiScale,
+          );
+        },
+      ),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.middle,
     );
