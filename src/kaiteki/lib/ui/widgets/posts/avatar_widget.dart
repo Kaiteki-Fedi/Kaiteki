@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/ui/screens/account_screen.dart';
+import 'package:kaiteki/ui/screens/user_screen.dart';
 import 'package:mdi/mdi.dart';
 
 /// A tap-able avatar.
@@ -25,7 +25,7 @@ class AvatarWidget extends StatelessWidget {
     return GestureDetector(
       child: _getAvatarImageWidget(context),
       onTap: () {
-        final screen = AccountScreen.fromUser(_user);
+        final screen = UserScreen.fromUser(_user);
         final route = MaterialPageRoute(builder: (_) => screen);
         Navigator.push(context, route);
       },

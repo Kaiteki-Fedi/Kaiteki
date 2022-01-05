@@ -16,7 +16,7 @@ import 'package:kaiteki/ui/widgets/async_snackbar_content.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/widgets/enum_icon_button.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
-import 'package:kaiteki/ui/widgets/status_widget.dart';
+import 'package:kaiteki/ui/widgets/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 

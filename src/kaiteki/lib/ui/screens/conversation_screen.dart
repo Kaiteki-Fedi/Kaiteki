@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/ui/widgets/status_widget.dart';
+import 'package:kaiteki/ui/widgets/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 

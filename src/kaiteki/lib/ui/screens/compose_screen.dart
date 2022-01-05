@@ -7,16 +7,16 @@ import 'package:kaiteki/ui/widgets/dialog_close_button.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
-class PostScreen extends ConsumerStatefulWidget {
+class ComposeScreen extends ConsumerStatefulWidget {
   final Post? replyTo;
 
-  const PostScreen({Key? key, this.replyTo}) : super(key: key);
+  const ComposeScreen({Key? key, this.replyTo}) : super(key: key);
 
   @override
   _PostScreenState createState() => _PostScreenState();
 }
 
-class _PostScreenState extends ConsumerState<PostScreen> {
+class _PostScreenState extends ConsumerState<ComposeScreen> {
   bool enableSubject = false;
   final key = GlobalKey();
 

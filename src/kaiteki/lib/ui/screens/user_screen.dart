@@ -4,20 +4,20 @@ import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/ui/widgets/post_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/widgets/status_widget.dart';
 
-class AccountScreen extends ConsumerStatefulWidget {
+class UserScreen extends ConsumerStatefulWidget {
   final String id;
   final User? initialUser;
 
-  const AccountScreen.fromId(
+  const UserScreen.fromId(
     this.id, {
     Key? key,
   })  : initialUser = null,
         super(key: key);
 
-  AccountScreen.fromUser(
+  UserScreen.fromUser(
     User this.initialUser, {
     Key? key,
   })  : id = initialUser.id,
@@ -27,7 +27,7 @@ class AccountScreen extends ConsumerStatefulWidget {
   _AccountScreenState createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends ConsumerState<AccountScreen>
+class _AccountScreenState extends ConsumerState<UserScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
 
@@ -200,7 +200,7 @@ class PostsPage extends StatelessWidget {
 
   final bool isLoading;
   final AccountManager container;
-  final AccountScreen widget;
+  final UserScreen widget;
 
   @override
   Widget build(BuildContext context) {

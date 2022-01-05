@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/ui/screens/post_screen.dart';
+import 'package:kaiteki/ui/screens/compose_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension BuildContextExtensions on BuildContext {
@@ -9,7 +9,7 @@ extension BuildContextExtensions on BuildContext {
     final key = GlobalKey();
     await showDialog(
       context: this,
-      builder: (context) => PostScreen(
+      builder: (context) => ComposeScreen(
         key: key,
         replyTo: replyTo,
       ),

@@ -11,7 +11,7 @@ import 'package:kaiteki/model/post_filters/post_filter.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
-import 'package:kaiteki/ui/widgets/status_widget.dart';
+import 'package:kaiteki/ui/widgets/post_widget.dart';
 import 'package:kaiteki/utils/paged_network_stream.dart';
 import 'package:mdi/mdi.dart';
 
