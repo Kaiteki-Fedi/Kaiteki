@@ -399,5 +399,18 @@
   "subjectButtonLabelDisable": "Disable subject",
   "@subjectButtonLabelDisable": {},
   "timelineRetrievalFailed": "Failed to fetch timeline",
-  "refresh": "Refresh"
+  "refresh": "Refresh",
+  "attachmentNoDescription": "No description",
+  "attachmentDownloadButtonLabel": "Download attachment",
+  "attachmentDownloadInProgress": "Downloading attachment...",
+  "attachmentDownloadSuccessful": "Downloaded {fileName}",
+  "@attachmentDownloadSuccessful": {
+    "placeholders": {
+      "fileName": {
+        "description": "The name of the file that the user has downloaded",
+        "example": "image.jpg"
+      }
+    }
+  },
+  "attachmentDownloadDialogTitle": "Download attachment"
 }

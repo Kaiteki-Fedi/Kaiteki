@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:mdi/mdi.dart';
 
@@ -25,6 +30,8 @@ class _AttachmentInspectionScreenState
   late int currentPage;
   static const duration = Duration(milliseconds: 150);
 
+  Attachment get attachment => widget.attachments.elementAt(currentPage);
+
   bool get canNavigateBackwards => currentPage > 0;
   bool get canNavigateForwards => currentPage < (widget.attachments.length - 1);
 
@@ -42,6 +49,7 @@ class _AttachmentInspectionScreenState
     final count = widget.attachments.length;
     final singleAttachment = count == 1;
     final focusNode = FocusNode();
+    final l10n = context.getL10n();
 
     return Scaffold(
       backgroundColor: background,
@@ -49,11 +57,11 @@ class _AttachmentInspectionScreenState
         backgroundColor: background,
         title: buildTitle(context),
         centerTitle: true,
-        actions: const [
+        actions: [
           IconButton(
-            icon: Icon(Mdi.download),
-            onPressed: null,
-            tooltip: "Download attachment",
+            icon: const Icon(Mdi.download),
+            onPressed: () => downloadAttachment(context),
+            tooltip: l10n.attachmentDownloadButtonLabel,
           ),
         ],
       ),
@@ -133,14 +141,13 @@ class _AttachmentInspectionScreenState
 
   Widget buildTitle(BuildContext context) {
     final count = widget.attachments.length;
-    final attachment = widget.attachments.elementAt(currentPage);
-
     final hasDescription = attachment.description?.isNotEmpty == true;
+    final l10n = context.getL10n();
 
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(
-        hasDescription ? attachment.description! : "No description",
+        hasDescription ? attachment.description! : l10n.attachmentNoDescription,
         style: TextStyle(
           color: Colors.white,
           fontStyle: hasDescription ? null : FontStyle.italic,
@@ -198,5 +205,43 @@ class _AttachmentInspectionScreenState
       "attachment",
       "Can't build widget for specified attachment type",
     );
+  }
+
+  Future<void> downloadAttachment(BuildContext context) async {
+    final l10n = context.getL10n();
+    final messenger = ScaffoldMessenger.of(context);
+
+    final uri = Uri.parse(attachment.url);
+    final filePath = await FilePicker.platform.saveFile(
+      fileName: uri.pathSegments.last,
+      dialogTitle: l10n.attachmentDownloadDialogTitle,
+    );
+
+    if (filePath == null) {
+      return;
+    }
+
+    final request = http.Request("GET", uri);
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      final file = await File(filePath).create();
+      final sink = file.openWrite();
+
+      var snackBar = messenger.showSnackBar(
+        SnackBar(content: Text(l10n.attachmentDownloadInProgress)),
+      );
+
+      await response.stream.pipe(sink);
+
+      snackBar.close();
+      snackBar = messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n.attachmentDownloadSuccessful(file.uri.pathSegments.last),
+          ),
+        ),
+      );
+    }
   }
 }
