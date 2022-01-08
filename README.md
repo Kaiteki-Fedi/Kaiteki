@@ -12,7 +12,7 @@ Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple M
 ## Screenshots
 
 
-| ![](assets/screenshots/misskey-feed.jpg) | ![](assets/screenshots/pleroma-user-tablet.jpg) |
+| ![](assets/screenshots/misskey-feed-phone.jpg) | ![](assets/screenshots/pleroma-user-tablet.jpg) |
 | - | - |
 
 ## Platforms & Releases
