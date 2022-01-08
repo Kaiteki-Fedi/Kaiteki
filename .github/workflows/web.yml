@@ -10,11 +10,15 @@ on:
     paths:
       - 'src/**'
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.SOURCE_PATH }}
     steps:
       - uses: actions/checkout@v2
 
@@ -27,11 +31,9 @@ jobs:
         run: flutter config --enable-web
         
       - name: Get packages
-        working-directory: ${{ env.SOURCE_PATH }}
         run: 'flutter pub get'
       
       - name: Build
-        working-directory: ${{ env.SOURCE_PATH }}
         run: 'flutter build web --release'
         
       - name: Upload artifact

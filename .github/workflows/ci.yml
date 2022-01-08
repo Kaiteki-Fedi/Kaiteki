@@ -1,0 +1,42 @@
+name: Tests
+
+env:
+  SOURCE_PATH: './src/kaiteki'
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+  pull_request:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.SOURCE_PATH }}
+    steps:
+      - name: Wait for tests to succeed
+        uses: lewagon/wait-on-check-action@v1.0.0
+        with:
+          ref: ${{ github.ref }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 600
+          
+      - uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: beta
+  
+      - name: Get packages
+        run: 'flutter pub get'
+
+      - name: Analyze
+        run: 'flutter analyze --no-pub --no-fatal-infos --no-congratulate --no-preamble'
+
+      - name: Test
+        run: 'flutter test --no-pub'
