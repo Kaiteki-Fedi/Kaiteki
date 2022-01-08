@@ -38,6 +38,8 @@ class User<T> {
   /// The instance the user is on, [null] if it's the current local instance.
   final String? host;
 
+  final Map<String, String>? fields;
+
   const User({
     required this.id,
     required this.source,
@@ -53,6 +55,7 @@ class User<T> {
     this.postCount,
     this.followerCount,
     this.followingCount,
+    this.fields,
   });
 
   factory User.example() {

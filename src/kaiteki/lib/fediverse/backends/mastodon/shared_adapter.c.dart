@@ -114,13 +114,21 @@ User toUser(mastodon.Account source) {
     id: source.id,
     description: source.note,
     emojis: source.emojis.map(toEmoji),
-    birthday: null,
-    // Mastodon doesn't support this
     followerCount: source.followersCount,
     followingCount: source.followingCount,
     postCount: source.statusesCount,
     host: getHost(source.acct),
+    fields: _parseFields(source.fields),
   );
+}
+
+Map<String, String>? _parseFields(Iterable<mastodon.Field>? fields) {
+  if (fields == null) {
+    return null;
+  } else {
+    final entries = fields.map((f) => MapEntry(f.name, f.value));
+    return Map<String, String>.fromEntries(entries);
+  }
 }
 
 String? getHost(String acct) {

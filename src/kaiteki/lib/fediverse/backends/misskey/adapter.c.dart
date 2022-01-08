@@ -91,7 +91,16 @@ User toUser(misskey.User source) {
     bannerUrl: source.bannerUrl,
     id: source.id,
     description: source.description,
+    fields: _parseFields(source.fields),
     host: source.host,
+
+Map<String, String>? _parseFields(Iterable<Map<String, dynamic>>? fields) {
+  if (fields == null) {
+    return null;
+  }
+
+  Map<String, String>.fromEntries(
+    fields.map((o) => MapEntry(o["name"], o["value"])),
   );
 }
 
