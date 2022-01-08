@@ -9,11 +9,11 @@ A [快適 (kaiteki)](http://takoboto.jp/?w=1200120) Fediverse client for microbl
 
 Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple Mastodon/Pleroma and Misskey support, future backends could follow. See ["What's working, what's missing?"](#whats-working-whats-missing).
 
-## Screenshots (outdated)
+## Screenshots
 
-| Welcome page | Pleroma timeline | Misskey timeline | About page |
-| - | - | - | - |
-| ![](assets/screenshots/welcome.jpg) | ![](assets/screenshots/pleroma-feed.jpg) | ![](assets/screenshots/misskey-feed.jpg) | ![](assets/screenshots/about.jpg) |
+
+| ![](assets/screenshots/misskey-feed.jpg) | ![](assets/screenshots/pleroma-user-tablet.jpg) |
+| - | - |
 
 ## Platforms & Releases
 
