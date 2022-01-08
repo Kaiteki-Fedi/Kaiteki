@@ -223,7 +223,7 @@ class UserChip extends ConsumerWidget {
           final user = snapshot.data!;
 
           return Tooltip(
-            message: getHandle(user),
+            message: user.handle,
             child: ActionChip(
               avatar: AvatarWidget(user, size: 24),
               label: Text.rich(user.renderDisplayName(context, ref)),
@@ -242,13 +242,5 @@ class UserChip extends ConsumerWidget {
         }
       },
     );
-  }
-
-  String getHandle(User user) {
-    if (user.host == null) {
-      return '@${user.username}';
-    } else {
-      return '@${user.username}@${user.host}';
-    }
   }
 }

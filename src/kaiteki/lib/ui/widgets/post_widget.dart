@@ -241,9 +241,6 @@ class MetaBar extends StatelessWidget {
   }
 
   String? _getSecondaryUserText(User user) {
-    final name = user.username;
-    final host = user.host;
-
     if (!showAvatar) {
       String? result;
 
@@ -251,6 +248,7 @@ class MetaBar extends StatelessWidget {
         result = user.username;
       }
 
+      final host = user.host;
       if (host != null) {
         result = (result ?? '') + '@$host';
       }
@@ -258,11 +256,7 @@ class MetaBar extends StatelessWidget {
       return result;
     }
 
-    if (host != null) {
-      return '@$name@$host';
-    } else {
-      return '@$name';
-    }
+    return user.handle;
   }
 
   bool _equalUserName(User user) {

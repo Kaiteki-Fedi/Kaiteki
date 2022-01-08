@@ -73,6 +73,14 @@ extension UserExtensions on User {
       ),
     );
   }
+
+  String get handle {
+    if (host == null) {
+      return '@$username';
+    } else {
+      return '@$username@$host';
+    }
+  }
 }
 
 extension PostExtensions on Post {
