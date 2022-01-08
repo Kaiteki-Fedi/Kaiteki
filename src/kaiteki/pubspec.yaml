@@ -40,6 +40,7 @@ dependencies:
   json_annotation: any
   logger: ^1.0.0
   mdi: ^5.0.0-nullsafety.0
+  palette_generator: ^0.3.2
   shared_preferences: ^2.0.5
   state_notifier: ^0.7.1
   supercharged: ^2.0.0

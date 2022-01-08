@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:html/dom.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
@@ -23,10 +24,32 @@ extension ObjectExtensions<T> on Object? {
 
 extension BrightnessExtensions on Brightness {
   Brightness get inverted {
-    if (this == Brightness.light) {
-      return Brightness.dark;
-    } else {
-      return Brightness.dark;
+    switch (this) {
+      case Brightness.dark:
+        return Brightness.light;
+      case Brightness.light:
+        return Brightness.dark;
+    }
+  }
+
+  SystemUiOverlayStyle get systemUiOverlayStyle {
+    switch (this) {
+      case Brightness.dark:
+        return SystemUiOverlayStyle.dark;
+      case Brightness.light:
+        return SystemUiOverlayStyle.light;
+    }
+  }
+
+  Color getColor({
+    Color dark = const Color(0xFF000000),
+    Color light = const Color(0xFFFFFFFF),
+  }) {
+    switch (this) {
+      case Brightness.dark:
+        return dark;
+      case Brightness.light:
+        return light;
     }
   }
 }
@@ -47,26 +70,20 @@ enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
   InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
-    final theme = TextRendererTheme.fromContext(context, ref);
-    final renderer = TextRenderer(theme: theme);
-
-    return renderer.render(
-      context,
-      displayName,
-      textContext: TextContext(
-        users: [],
-        emojis: emojis?.toList(growable: false),
-      ),
-    );
+    return renderText(context, ref, displayName);
   }
 
   InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, description!);
+  }
+
+  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
     final theme = TextRendererTheme.fromContext(context, ref);
     final renderer = TextRenderer(theme: theme);
 
     return renderer.render(
       context,
-      description!,
+      text,
       textContext: TextContext(
         users: [],
         emojis: emojis?.toList(growable: false),
