@@ -117,8 +117,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
                   user: user,
                 ),
                 foregroundColor: brightness?.inverted.getColor(),
-                systemOverlayStyle: brightness?.systemUiOverlayStyle,
-                backgroundColor: snapshot.data?.vibrantColor?.color,
+                systemOverlayStyle: brightness?.inverted.systemUiOverlayStyle,
               ),
             ];
           },
@@ -530,48 +529,51 @@ class DesktopAccountHeader extends StatelessWidget {
           ],
         ),
         Positioned.fill(
-          child: ResponsiveLayoutBuilder(
-            builder: (context, constraints, data) {
-              // HACK(Craftplacer): Abusing Column to avoid vertical alignment from Center.
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Flexible(
-                          child: user == null
-                              ? const SizedBox()
-                              : DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: ElevationOverlay.applyOverlay(
-                                      context,
-                                      colorScheme.brightness == Brightness.dark
-                                          ? colorScheme.surface
-                                          : colorScheme.primary,
-                                      4.0,
+          child: SafeArea(
+            child: ResponsiveLayoutBuilder(
+              builder: (context, constraints, data) {
+                // HACK(Craftplacer): Abusing Column to avoid vertical alignment from Center.
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: user == null
+                                ? const SizedBox()
+                                : DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: ElevationOverlay.applyOverlay(
+                                        context,
+                                        colorScheme.brightness ==
+                                                Brightness.dark
+                                            ? colorScheme.surface
+                                            : colorScheme.primary,
+                                        4.0,
+                                      ),
+                                      borderRadius: avatarBorderRadius * 4,
                                     ),
-                                    borderRadius: avatarBorderRadius * 4,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(6.0),
-                                    child: AvatarWidget(
-                                      user!,
-                                      size: null,
-                                      radius: avatarBorderRadius,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: AvatarWidget(
+                                        user!,
+                                        size: null,
+                                        radius: avatarBorderRadius,
+                                      ),
                                     ),
                                   ),
-                                ),
-                        ),
-                        const SizedBox(width: _gutter), // Gutter
-                        const Flexible(flex: 3, child: SizedBox()),
-                      ],
+                          ),
+                          const SizedBox(width: _gutter), // Gutter
+                          const Flexible(flex: 3, child: SizedBox()),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         )
       ],
