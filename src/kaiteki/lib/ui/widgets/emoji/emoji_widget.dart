@@ -33,22 +33,9 @@ class EmojiWidget extends StatelessWidget {
       loadingBuilder: (context, widget, event) {
         if (event == null || event.expectedTotalBytes == null) {
           return widget;
+        } else {
+          return PlaceholderEmoji(size: size);
         }
-
-        const padding = 0.0;
-
-        return Padding(
-          // ignore: use_named_constants
-          padding: const EdgeInsets.all(padding),
-          child: Container(
-            width: size - (padding * 2),
-            height: size - (padding * 2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              color: Theme.of(context).disabledColor,
-            ),
-          ),
-        );
       },
       errorBuilder: (context, o, stack) {
         return Icon(
@@ -64,6 +51,33 @@ class EmojiWidget extends StatelessWidget {
       width: size,
       height: size,
       child: FittedBox(child: Text(unicodeEmoji.source!)),
+    );
+  }
+}
+
+class PlaceholderEmoji extends StatelessWidget {
+  final double size;
+
+  const PlaceholderEmoji({Key? key, required this.size}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const padding = 0.0;
+    final finalSize = size - (padding * 2);
+
+    return Padding(
+      // ignore: use_named_constants
+      padding: const EdgeInsets.all(padding),
+      child: DecoratedBox(
+        child: SizedBox(
+          width: finalSize,
+          height: finalSize,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.0),
+          color: Theme.of(context).disabledColor,
+        ),
+      ),
     );
   }
 }
