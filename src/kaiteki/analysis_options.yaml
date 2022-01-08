@@ -10,6 +10,7 @@ analyzer:
     # viewed with the todo lists within the IDE.
     todo: ignore
     fixme: ignore
+    hack: ignore
 
 linter:
   rules:
