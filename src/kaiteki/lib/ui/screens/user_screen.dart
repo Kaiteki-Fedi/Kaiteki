@@ -106,7 +106,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                actions: buildActions(),
+                actions: buildActions(context, user: user),
                 expandedHeight: user?.bannerUrl != null ? 450.0 : null,
                 pinned: true,
                 forceElevated: true,
@@ -274,7 +274,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     final bannerUrl = snapshot.data?.bannerUrl;
 
     return AppBar(
-      actions: buildActions(),
+      actions: buildActions(context, user: snapshot.data),
       bottom: TabBar(
         tabs: buildTabs(
           context,
@@ -347,32 +347,16 @@ class _UserScreenState extends ConsumerState<UserScreen>
     );
   }
 
-  List<Widget> buildActions() {
+  List<Widget> buildActions(BuildContext context, {User? user}) {
+    final l10n = context.getL10n();
+    final url = user?.url;
+
     return [
       IconButton(
+        tooltip: l10n.openInBrowserLabel,
         icon: const Icon(Mdi.openInNew),
-        onPressed: () {},
+        onPressed: url == null ? null : () => context.launchUrl(url),
       ),
-      PopupMenuButton(
-        itemBuilder: (context) {
-          return [
-            const PopupMenuItem(
-              child: ListTile(
-                leading: Icon(Mdi.volumeOff),
-                title: Text("Mute"),
-                contentPadding: EdgeInsets.zero,
-              ),
-            ),
-            const PopupMenuItem(
-              child: ListTile(
-                leading: Icon(Mdi.cancel),
-                title: Text("Block"),
-                contentPadding: EdgeInsets.zero,
-              ),
-            ),
-          ];
-        },
-      )
     ];
   }
 }

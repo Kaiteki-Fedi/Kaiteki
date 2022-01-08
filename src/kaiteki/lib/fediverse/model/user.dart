@@ -43,6 +43,9 @@ class User<T> {
 
   final Map<String, String>? fields;
 
+  /// External URL to the profile of this [User].
+  final String? url;
+
   const User({
     required this.id,
     required this.source,
@@ -60,6 +63,7 @@ class User<T> {
     this.followingCount,
     this.fields,
     this.location,
+    this.url,
   });
 
   factory User.example() {
