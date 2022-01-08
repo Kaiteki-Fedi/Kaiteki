@@ -80,7 +80,10 @@ class StatusWidget extends ConsumerWidget {
           if (!wide)
             Padding(
               padding: const EdgeInsets.all(8),
-              child: AvatarWidget(_post.author),
+              child: AvatarWidget(
+                _post.author,
+                onTap: () => context.showUser(_post.author),
+              ),
             ),
           Expanded(
             child: Padding(

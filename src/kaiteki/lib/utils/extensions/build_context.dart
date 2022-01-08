@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/screens/compose_screen.dart';
+import 'package:kaiteki/ui/screens/user_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension BuildContextExtensions on BuildContext {
@@ -15,6 +17,12 @@ extension BuildContextExtensions on BuildContext {
       ),
       barrierDismissible: true,
     );
+  }
+
+  Future<void> showUser(User user) async {
+    final route = MaterialPageRoute(builder: (_) => UserScreen.fromUser(user));
+    final navigator = Navigator.of(this);
+    await navigator.push(route);
   }
 
   Future<bool> launchUrl(String url) async {

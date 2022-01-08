@@ -1,74 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/ui/screens/user_screen.dart';
+import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
 import 'package:mdi/mdi.dart';
 
-/// A tap-able avatar.
 class AvatarWidget extends StatelessWidget {
-  final User _user;
-  final double size;
-  final double? radius;
-  final bool openOnTap;
+  final User user;
+  final double? size;
+  final VoidCallback? onTap;
+  final BorderRadius? radius;
 
   const AvatarWidget(
-    this._user, {
+    this.user, {
     Key? key,
     this.size = 48,
+    this.onTap,
     this.radius,
-    this.openOnTap = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (!openOnTap) return _getAvatarImageWidget(context);
+    var widget = buildAvatar(context);
 
-    return GestureDetector(
-      child: _getAvatarImageWidget(context),
-      onTap: () {
-        final screen = UserScreen.fromUser(_user);
-        final route = MaterialPageRoute(builder: (_) => screen);
-        Navigator.push(context, route);
-      },
-    );
+    if (onTap != null) {
+      widget = InkWell(child: widget, onTap: onTap);
+    }
+
+    return widget;
   }
 
-  Widget _getAvatarImageWidget(BuildContext context) {
+  Widget buildAvatar(BuildContext context) {
     final size = this.size;
+    final url = user.avatarUrl;
 
-    if (_user.avatarUrl == null) {
-      return Icon(
-        Mdi.accountCircle,
-        size: size,
+    final Widget avatar;
+
+    if (url == null) {
+      avatar = const FallbackAvatar();
+    } else {
+      avatar = ColoredBox(
+        color: Theme.of(context).cardColor,
+        child: Image.network(
+          url,
+          width: size,
+          height: size,
+          cacheWidth: size?.toInt(),
+          cacheHeight: size?.toInt(),
+          errorBuilder: (context, error, stackTrace) {
+            return const FallbackAvatar();
+          },
+        ),
       );
     }
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(size / 2),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-        ),
-        child: Image.network(
-          _user.avatarUrl!,
-          width: size,
-          height: size,
-          errorBuilder: (context, _, __) => _buildFallback(context, size),
-        ),
-      ),
-    );
+    if (radius == null) {
+      return ClipOval(child: avatar);
+    } else {
+      return ClipRRect(child: avatar, borderRadius: borderRadius);
+    }
   }
+}
 
-  Widget _buildFallback(context, size) {
-    final padding = size / 6;
-    final theme = Theme.of(context);
+class FallbackAvatar extends StatelessWidget {
+  const FallbackAvatar({
+    Key? key,
+  }) : super(key: key);
 
-    return Container(
-      color: theme.disabledColor,
-      padding: EdgeInsets.all(padding),
-      child: Icon(
-        Mdi.account,
-        size: size - (padding * 2),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.maxHeight;
+        final padding = size / 6;
+        final theme = Theme.of(context);
+
+        return Container(
+          color: theme.disabledColor,
+          padding: EdgeInsets.all(padding),
+          child: Icon(
+            Mdi.account,
+            size: size - (padding * 2),
+          ),
+        );
+      },
     );
   }
 }

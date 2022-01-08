@@ -72,7 +72,6 @@ class AccountListTile extends ConsumerWidget {
       selected: selected,
       leading: AvatarWidget(
         compound.account,
-        openOnTap: false,
         size: 44,
       ),
       title: Text(compound.accountSecret.username),
