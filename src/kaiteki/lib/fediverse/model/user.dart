@@ -38,6 +38,9 @@ class User<T> {
   /// The instance the user is on, [null] if it's the current local instance.
   final String? host;
 
+  /// The location defined by the user.
+  final String? location;
+
   final Map<String, String>? fields;
 
   const User({

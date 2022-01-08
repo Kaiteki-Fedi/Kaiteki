@@ -82,17 +82,22 @@ CustomEmoji toEmoji(misskey.Emoji emoji) {
 
 User toUser(misskey.User source) {
   return User(
-    source: source,
-    username: source.username,
-    displayName: source.name ?? source.username,
-    joinDate: source.createdAt,
-    emojis: source.emojis.map(toEmoji),
     avatarUrl: source.avatarUrl,
     bannerUrl: source.bannerUrl,
-    id: source.id,
+    birthday: _parseBirthday(source.birthday),
     description: source.description,
     fields: _parseFields(source.fields),
+    // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
+    displayName: source.name ?? source.username,
+    emojis: source.emojis.map(toEmoji),
     host: source.host,
+    id: source.id,
+    joinDate: source.createdAt,
+    location: source.location,
+    source: source,
+    username: source.username,
+  );
+}
 
 Map<String, String>? _parseFields(Iterable<Map<String, dynamic>>? fields) {
   if (fields == null) {
@@ -102,6 +107,15 @@ Map<String, String>? _parseFields(Iterable<Map<String, dynamic>>? fields) {
   Map<String, String>.fromEntries(
     fields.map((o) => MapEntry(o["name"], o["value"])),
   );
+}
+
+DateTime? _parseBirthday(String? birthday) {
+  if (birthday == null) {
+    return null;
+  }
+
+  final dateFormat = DateFormat("yyyy-MM-dd");
+  return dateFormat.parseStrict(birthday);
 }
 
 Instance toInstance(misskey.Meta instance, String instanceUrl) {
