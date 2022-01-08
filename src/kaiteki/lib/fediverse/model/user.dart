@@ -59,6 +59,7 @@ class User<T> {
     this.followerCount,
     this.followingCount,
     this.fields,
+    this.location,
   });
 
   factory User.example() {
