@@ -398,5 +398,22 @@
   "timelineRetrievalFailed": "Fehler beim Abfragen der Zeitleiste",
   "@timelineRetrievalFailed": {},
   "refresh": "Neuladen",
-  "@refresh": {}
+  "@refresh": {},
+  "attachmentNoDescription": "Keine Beschreibung",
+  "@attachmentNoDescription": {},
+  "attachmentDownloadInProgress": "Anhang wird heruntergeladen...",
+  "@attachmentDownloadInProgress": {},
+  "attachmentDownloadSuccessful": "{fileName} wurde heruntergeladen",
+  "@attachmentDownloadSuccessful": {
+    "placeholders": {
+      "fileName": {
+        "description": "The name of the file that the user has downloaded",
+        "example": "image.jpg"
+      }
+    }
+  },
+  "attachmentDownloadDialogTitle": "Anhang herunterladen",
+  "@attachmentDownloadDialogTitle": {},
+  "attachmentDownloadButtonLabel": "Anhang herunterladen",
+  "@attachmentDownloadButtonLabel": {}
 }
