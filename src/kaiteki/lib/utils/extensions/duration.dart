@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 
 extension DurationExtension on Duration {
   String toStringHuman({BuildContext? context}) {
-    final l10n = context != null ? AppLocalizations.of(context) : null;
+    final l10n = context?.getL10n();
 
     if (inDays != 0) {
       return l10n?.timeDifferenceDays(inDays) ?? "${inDays}d";

@@ -95,8 +95,7 @@ class AccountManager extends ChangeNotifier {
 
     _logger.d('Trying to recover a ${clientSecret.apiType} account');
 
-    final adapter =
-        ApiDefinitions.byType(clientSecret.apiType!).createAdapter();
+    final adapter = clientSecret.apiType!.getDefinition().createAdapter();
     await adapter.client.setClientAuthentication(clientSecret);
     await adapter.client.setAccountAuthentication(accountSecret);
 
@@ -134,7 +133,7 @@ class AccountManager extends ChangeNotifier {
       throw InstanceUnreachableException();
     }
 
-    for (final definition in ApiDefinitions.definitions) {
+    for (final definition in definitions) {
       try {
         final adapter = definition.createAdapter();
         adapter.client.instance = instance;

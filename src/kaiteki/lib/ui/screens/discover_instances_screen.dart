@@ -127,7 +127,7 @@ class _InstanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final apiDefinition = ApiDefinitions.byType(data.type);
+    final apiDefinition = data.type.getDefinition();
     final l10n = context.getL10n();
 
     return Card(
@@ -376,7 +376,7 @@ class AdapterFeaturesExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
-    final definition = ApiDefinitions.byType(type);
+    final definition = type.getDefinition();
     final name = definition.name;
     final adapter = definition.createAdapter();
 

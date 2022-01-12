@@ -30,14 +30,14 @@ class ApiTheme {
   });
 }
 
-class ApiDefinitions {
-  static List<ApiDefinition> definitions = <ApiDefinition>[
-    MastodonApiDefinition(),
-    PleromaApiDefinition(),
-    MisskeyApiDefinition(),
-  ];
-
-  static ApiDefinition byType(ApiType type) {
-    return definitions.firstWhere((definition) => definition.type == type);
+extension ApiTypeExtensions on ApiType {
+  ApiDefinition getDefinition() {
+    return definitions.firstWhere((definition) => definition.type == this);
   }
 }
+
+List<ApiDefinition> definitions = <ApiDefinition>[
+  MastodonApiDefinition(),
+  PleromaApiDefinition(),
+  MisskeyApiDefinition(),
+];

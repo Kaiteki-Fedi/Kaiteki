@@ -12,7 +12,7 @@ class ApiTypeDialog extends StatefulWidget {
 }
 
 class _ApiTypeDialogState extends State<ApiTypeDialog> {
-  ApiDefinition _api = ApiDefinitions.byType(ApiType.mastodon);
+  ApiDefinition _api = ApiType.mastodon.getDefinition();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
           Text(l10n.apiTypeDialog_description),
           DropdownButton<ApiDefinition>(
             isExpanded: true,
-            items: ApiDefinitions.definitions.map((def) {
+            items: definitions.map((def) {
               return DropdownMenuItem<ApiDefinition>(
                 value: def,
                 child: Row(
