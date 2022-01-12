@@ -19,7 +19,9 @@ class EmojiWidget extends StatelessWidget {
 
     if (emoji is UnicodeEmoji) return buildUnicodeEmoji(emoji as UnicodeEmoji);
 
-    throw "There's no implementation for $emoji in EmojiWidget. Can't build.";
+    throw UnimplementedError(
+      "There's no implementation for $emoji in EmojiWidget. Can't build.",
+    );
   }
 
   Widget buildCustomEmoji(CustomEmoji customEmoji) {
