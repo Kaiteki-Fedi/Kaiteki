@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/screens/compose_screen.dart';
@@ -30,10 +30,8 @@ extension BuildContextExtensions on BuildContext {
       await launch(url);
       return true;
     } else {
-      final messenger = ScaffoldMessenger.of(this);
-      final l10n = AppLocalizations.of(this)!;
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.failedToLaunchUrl)),
+      ScaffoldMessenger.of(this).showSnackBar(
+        SnackBar(content: Text(getL10n().failedToLaunchUrl)),
       );
       return false;
     }
