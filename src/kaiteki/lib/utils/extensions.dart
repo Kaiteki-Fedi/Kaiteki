@@ -101,7 +101,11 @@ extension UserExtensions on User {
 }
 
 extension PostExtensions on Post {
-  InlineSpan renderContent(BuildContext context, WidgetRef ref) {
+  InlineSpan renderContent(
+    BuildContext context,
+    WidgetRef ref, {
+    bool hideReplyee = false,
+  }) {
     final theme = TextRendererTheme.fromContext(context, ref);
     final renderer = TextRenderer(theme: theme);
     return renderer.render(
@@ -110,6 +114,13 @@ extension PostExtensions on Post {
       textContext: TextContext(
         emojis: emojis?.toList(growable: false),
         users: mentionedUsers,
+        excludedUsers: [
+          if (hideReplyee && replyToUser != null)
+            UserReference.handle(
+              replyToUser!.username,
+              replyToUser!.host,
+            )
+        ],
       ),
     );
   }

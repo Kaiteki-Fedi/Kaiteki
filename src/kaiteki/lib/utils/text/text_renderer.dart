@@ -23,8 +23,9 @@ typedef RegExpMatchElementBuilder = Element Function(
 class TextContext {
   final List<UserReference>? users;
   final List<Emoji>? emojis;
+  final List<UserReference>? excludedUsers;
 
-  TextContext({this.users, this.emojis});
+  TextContext({this.users, this.emojis, this.excludedUsers});
 }
 
 class TextRenderer {
@@ -39,30 +40,30 @@ class TextRenderer {
     String text, {
     TextContext? textContext,
   }) {
-    textContext ?? TextContext();
+    final tc = textContext ?? TextContext();
 
     final elements = parser.parse(text).parseWith(SocialTextParser());
 
-    final renderedElements = elements.map((e) {
-      return _renderElement(context, e, textContext!);
-    });
+    final renderedElements = renderChildren(context, elements, tc);
 
     return TextSpan(children: renderedElements.toList(growable: false));
   }
 
-  InlineSpan _renderElement(
+  InlineSpan? _renderElement(
     BuildContext context,
     Element element,
     TextContext textContext,
   ) {
-    final childrenSpans = element.children //
-        ?.map((e) => _renderElement(context, e, textContext))
-        .toList(growable: false);
+    final childrenSpans = renderChildren(
+      context,
+      element.children,
+      textContext,
+    );
 
     if (element is TextElement) {
       return renderText(context, element, childrenSpans);
     } else if (element is LinkElement) {
-      return renderLink(context, element, childrenSpans!);
+      return renderLink(context, element, childrenSpans);
     } else if (element is HashtagElement) {
       return renderHashtag(context, textContext, element);
     } else if (element is MentionElement) {
@@ -82,6 +83,26 @@ class TextRenderer {
         color: Colors.white,
       ),
     );
+  }
+
+  List<InlineSpan> renderChildren(
+    BuildContext context,
+    List<Element>? children,
+    TextContext textContext,
+  ) {
+    final spans = <InlineSpan>[];
+
+    if (children != null) {
+      for (final child in children) {
+        final element = _renderElement(context, child, textContext);
+
+        if (element != null) {
+          spans.add(element);
+        }
+      }
+    }
+
+    return spans;
   }
 
   InlineSpan renderText(
@@ -110,12 +131,15 @@ class TextRenderer {
     return span;
   }
 
-  WidgetSpan renderMention(TextContext textContext, MentionElement element) {
-    final i = textContext.users?.indexWhere(
-          (user) => user.matches(element.reference),
-        ) ??
-        -1;
+  WidgetSpan? renderMention(TextContext textContext, MentionElement element) {
+    final i = textContext.users?.indexWhere(element.reference.matches) ?? -1;
     final reference = i == -1 ? element.reference : textContext.users![i];
+
+    final isExcluded = textContext.excludedUsers?.any(reference.matches);
+
+    if (isExcluded == true) {
+      return null;
+    }
 
     return WidgetSpan(
       child: UserChip(reference: reference),
@@ -235,12 +259,23 @@ class UserChip extends ConsumerWidget {
             ),
           );
         } else {
-          return const Chip(
-            avatar: Icon(Icons.help),
-            label: Text("Unknown User"),
-          );
+          return Chip(label: Text(fallbackText));
         }
       },
     );
+  }
+
+  String get fallbackText {
+    if (reference.username != null) {
+      return reference.host != null
+          ? "@${reference.username}@${reference.host}"
+          : "@${reference.username}";
+    }
+
+    if (reference.remoteUrl != null) {
+      return reference.remoteUrl!;
+    }
+
+    return "Unknown User";
   }
 }

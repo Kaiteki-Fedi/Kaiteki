@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
@@ -25,6 +26,7 @@ class StatusWidget extends ConsumerWidget {
   final bool showParentPost;
   final bool showActions;
   final bool wide;
+  final bool hideReplyee;
 
   const StatusWidget(
     this._post, {
@@ -32,6 +34,7 @@ class StatusWidget extends ConsumerWidget {
     this.showParentPost = true,
     this.showActions = true,
     this.wide = false,
+    this.hideReplyee = false,
   }) : super(key: key);
 
   @override
@@ -102,7 +105,7 @@ class StatusWidget extends ConsumerWidget {
                   ),
                   if (showParentPost && _post.replyToPostId != null)
                     ReplyBar(post: _post),
-                  PostContentWidget(post: _post),
+                  PostContentWidget(post: _post, hideReplyee: hideReplyee),
                   if (_post.attachments?.isNotEmpty == true)
                     AttachmentRow(post: _post),
                   if (_post.previewCard != null)
@@ -125,8 +128,13 @@ class StatusWidget extends ConsumerWidget {
 
 class PostContentWidget extends ConsumerStatefulWidget {
   final Post post;
+  final bool hideReplyee;
 
-  const PostContentWidget({Key? key, required this.post}) : super(key: key);
+  const PostContentWidget({
+    Key? key,
+    required this.post,
+    required this.hideReplyee,
+  }) : super(key: key);
 
   @override
   ConsumerState<PostContentWidget> createState() => _PostContentWidgetState();
@@ -141,7 +149,11 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
     final post = widget.post;
 
     if (post.content != null) {
-      renderedContent = post.renderContent(context, ref);
+      renderedContent = post.renderContent(
+        context,
+        ref,
+        hideReplyee: widget.hideReplyee,
+      );
     }
 
     return Column(
@@ -437,7 +449,7 @@ class AttachmentRow extends StatelessWidget {
     var attachmentIndex = 0;
 
     return LimitedBox(
-      maxHeight: 280,
+      maxHeight: maxAttachmentHeight.toDouble(),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
