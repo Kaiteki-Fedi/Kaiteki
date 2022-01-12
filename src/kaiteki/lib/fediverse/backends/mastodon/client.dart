@@ -19,7 +19,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.get,
       "api/v1/instance",
-      (j) => mastodon.Instance.fromJson(j),
+      mastodon.Instance.fromJson,
     );
   }
 
@@ -27,7 +27,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.get,
       "api/v1/accounts/$id",
-      (j) => mastodon.Account.fromJson(j),
+      mastodon.Account.fromJson,
     );
   }
 
@@ -35,7 +35,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/accounts/$id/statuses",
-      (j) => mastodon.Status.fromJson(j),
+      mastodon.Status.fromJson,
     );
   }
 
@@ -44,7 +44,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "oauth/token",
-      (j) => LoginResponse.fromJson(j),
+      LoginResponse.fromJson,
       body: {
         "username": username,
         "password": password,
@@ -59,7 +59,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "/oauth/mfa/challenge",
-      (j) => LoginResponse.fromJson(j),
+      LoginResponse.fromJson,
       body: {
         "mfa_token": mfaToken,
         "code": code.toString(),
@@ -74,7 +74,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/custom_emojis",
-      (json) => mastodon.Emoji.fromJson(json),
+      mastodon.Emoji.fromJson,
     );
   }
 
@@ -82,7 +82,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.get,
       "api/v1/accounts/verify_credentials",
-      (json) => mastodon.Account.fromJson(json),
+      mastodon.Account.fromJson,
     );
   }
 
@@ -96,7 +96,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/v1/apps",
-      (json) => mastodon.Application.fromJson(json),
+      mastodon.Application.fromJson,
       body: {
         "client_name": clientName,
         "website": website,
@@ -110,7 +110,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/timelines/public",
-      (j) => mastodon.Status.fromJson(j),
+      mastodon.Status.fromJson,
     );
   }
 
@@ -136,7 +136,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.get,
       withQueries("api/v1/timelines/home", queryParams),
-      (j) => mastodon.Status.fromJson(j),
+      mastodon.Status.fromJson,
     );
   }
 
@@ -151,7 +151,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/v1/statuses",
-      (j) => mastodon.Status.fromJson(j),
+      mastodon.Status.fromJson,
       body: {
         "status": status,
         "source": Constants.appName,
@@ -168,7 +168,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/notifications",
-      (j) => mastodon.Notification.fromJson(j),
+      mastodon.Notification.fromJson,
     );
   }
 
@@ -176,7 +176,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.get,
       "api/v1/statuses/$id/context",
-      (j) => ContextResponse.fromJson(j),
+      ContextResponse.fromJson,
     );
   }
 
@@ -184,7 +184,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/v1/statuses/$id/favourite",
-      (j) => mastodon.Status.fromJson(j),
+      mastodon.Status.fromJson,
     );
   }
 
@@ -192,7 +192,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.get,
       "api/v1/statuses/$id",
-      (j) => mastodon.Status.fromJson(j),
+      mastodon.Status.fromJson,
     );
   }
 
@@ -200,7 +200,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/v1/statuses/$id/unfavourite",
-      (j) => mastodon.Status.fromJson(j),
+      mastodon.Status.fromJson,
     );
   }
 

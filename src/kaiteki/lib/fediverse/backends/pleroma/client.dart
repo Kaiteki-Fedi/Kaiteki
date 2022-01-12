@@ -12,7 +12,7 @@ class PleromaClient extends MastodonClient {
     return sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/pleroma/chats",
-      (json) => Chat.fromJson(json),
+      Chat.fromJson,
     );
   }
 
@@ -20,7 +20,7 @@ class PleromaClient extends MastodonClient {
     return sendJsonRequestMultiple(
       HttpMethod.get,
       "api/v1/pleroma/chats/$id/messages",
-      (j) => ChatMessage.fromJson(j),
+      ChatMessage.fromJson,
     );
   }
 
@@ -28,7 +28,7 @@ class PleromaClient extends MastodonClient {
     return sendJsonRequest(
       HttpMethod.post,
       "api/v1/pleroma/chats/$id/messages",
-      (j) => ChatMessage.fromJson(j),
+      ChatMessage.fromJson,
       body: {"content": message},
     );
   }
@@ -51,7 +51,7 @@ class PleromaClient extends MastodonClient {
     return sendJsonRequest(
       HttpMethod.get,
       "/api/pleroma/emoji/packs",
-      (json) => PleromaEmojiPacksResponse.fromJson(json),
+      PleromaEmojiPacksResponse.fromJson,
     );
   }
 
@@ -59,7 +59,7 @@ class PleromaClient extends MastodonClient {
     return sendJsonRequest(
       HttpMethod.get,
       "/api/pleroma/frontend_configurations",
-      (json) => FrontendConfiguration.fromJson(json),
+      FrontendConfiguration.fromJson,
     );
   }
 }

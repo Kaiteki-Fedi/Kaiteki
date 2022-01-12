@@ -30,7 +30,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/app/create",
-      (json) => MisskeyCreateAppResponse.fromJson(json),
+      MisskeyCreateAppResponse.fromJson,
       body: {
         "name": name,
         "description": description,
@@ -51,7 +51,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/notes/create",
-      (json) => misskey.Note.fromJson(json),
+      misskey.Note.fromJson,
       body: <String, dynamic>{
         "visibility": visibility,
         "visibleUserIds": visibleUserIds ?? [],
@@ -68,7 +68,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "/api/auth/session/generate",
-      (j) => MisskeyGenerateSessionResponse.fromJson(j),
+      MisskeyGenerateSessionResponse.fromJson,
       body: {"appSecret": appSecret},
     );
   }
@@ -77,7 +77,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/pages/show",
-      (json) => misskey.Page.fromJson(json),
+      misskey.Page.fromJson,
       body: {
         "username": username,
         "name": name,
@@ -89,7 +89,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/auth/session/userkey",
-      (json) => MisskeyUserkeyResponse.fromJson(json),
+      MisskeyUserkeyResponse.fromJson,
       body: {"appSecret": appSecret, "token": token},
     );
   }
@@ -98,7 +98,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/users/show",
-      (json) => misskey.User.fromJson(json),
+      misskey.User.fromJson,
       body: {"userId": userId},
     );
   }
@@ -114,7 +114,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/users/show",
-      (json) => misskey.User.fromJson(json),
+      misskey.User.fromJson,
     );
   }
 
@@ -126,7 +126,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/users/notes",
-      (json) => misskey.Note.fromJson(json),
+      misskey.Note.fromJson,
       body: {
         "userId": userId,
         "fileType": fileTypes,
@@ -139,7 +139,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/signin",
-      (json) => MisskeySignInResponse.fromJson(json),
+      MisskeySignInResponse.fromJson,
       body: request,
     );
   }
@@ -150,7 +150,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/timeline",
-      (json) => misskey.Note.fromJson(json),
+      misskey.Note.fromJson,
       body: request,
     );
   }
@@ -161,7 +161,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/local-timeline",
-      (json) => misskey.Note.fromJson(json),
+      misskey.Note.fromJson,
       body: request,
     );
   }
@@ -172,7 +172,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/hybrid-timeline",
-      (json) => misskey.Note.fromJson(json),
+      misskey.Note.fromJson,
       body: request,
     );
   }
@@ -183,7 +183,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/global-timeline",
-      (json) => misskey.Note.fromJson(json),
+      misskey.Note.fromJson,
       body: request,
     );
   }
@@ -219,7 +219,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/i",
-      (json) => misskey.User.fromJson(json),
+      misskey.User.fromJson,
       body: {},
     );
   }
@@ -229,7 +229,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/notes/reactions/create",
-      (json) => misskey.User.fromJson(json),
+      misskey.User.fromJson,
       body: {
         "noteId": noteId,
         "reaction": reaction,
@@ -242,7 +242,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/notes/reactions/delete",
-      (json) => misskey.User.fromJson(json),
+      misskey.User.fromJson,
       body: {"noteId": noteId},
     );
   }
@@ -251,7 +251,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequest(
       HttpMethod.post,
       "api/meta",
-      (json) => misskey.Meta.fromJson(json),
+      misskey.Meta.fromJson,
       body: {"detail": detail},
     );
   }
@@ -264,7 +264,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/notes/conversation",
-      (json) => misskey.Note.fromJson(json),
+      misskey.Note.fromJson,
       body: {
         "noteId": id,
         "limit": limit,

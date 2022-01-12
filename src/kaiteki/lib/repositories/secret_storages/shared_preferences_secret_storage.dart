@@ -76,8 +76,8 @@ class SharedPreferencesSecureStorage extends SecretStorage {
       return [];
     }
 
-    final maps = strings.map(jsonDecode);
-    final secrets = maps.map((m) => AccountSecret.fromJson(m));
+    final maps = strings.map(jsonDecode).cast<Map<String, dynamic>>();
+    final secrets = maps.map(AccountSecret.fromJson);
     return secrets;
   }
 
@@ -98,8 +98,8 @@ class SharedPreferencesSecureStorage extends SecretStorage {
       return [];
     }
 
-    final maps = strings.map(jsonDecode);
-    final secrets = maps.map((m) => ClientSecret.fromJson(m));
+    final maps = strings.map(jsonDecode).cast<Map<String, dynamic>>();
+    final secrets = maps.map(ClientSecret.fromJson);
     return secrets;
   }
 
