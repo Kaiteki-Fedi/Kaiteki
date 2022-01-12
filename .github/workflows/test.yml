@@ -18,13 +18,6 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - name: Wait for tests to succeed
-        uses: lewagon/wait-on-check-action@v1.0.0
-        with:
-          ref: ${{ github.ref }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 600
-          
       - uses: actions/checkout@v2
 
       - name: Setup Flutter
