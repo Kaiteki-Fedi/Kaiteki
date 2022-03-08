@@ -6,7 +6,6 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/ui/screens/user_screen.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -251,11 +250,7 @@ class UserChip extends ConsumerWidget {
             child: ActionChip(
               avatar: AvatarWidget(user, size: 24),
               label: Text.rich(user.renderDisplayName(context, ref)),
-              onPressed: () {
-                final screen = UserScreen.fromUser(user);
-                final route = MaterialPageRoute(builder: (_) => screen);
-                Navigator.push(context, route);
-              },
+              onPressed: () => context.showUser(user, ref),
             ),
           );
         } else {

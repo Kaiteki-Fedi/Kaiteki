@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/di.dart';
@@ -264,6 +265,8 @@ class __InstancePageState extends State<_InstancePage> {
               itemData.favicon!,
               width: 24,
               height: 24,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Mdi.earth),
             ),
       title: Text(itemData.name),
     );
@@ -298,7 +301,11 @@ class __InstancePageState extends State<_InstancePage> {
   }
 
   Future<void> _onDiscoverInstancesPressed() async {
-    final result = await Navigator.of(context).pushNamed('/discover-instances');
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const DiscoverInstancesScreen(),
+      ),
+    );
 
     if (result is DiscoverInstanceScreenResult) {
       _submitWithInstance(result.instance);
@@ -461,12 +468,17 @@ class __UserPageState extends State<_UserPage> {
   Widget _getImageWidget() {
     const size = 96.0;
 
-    if (widget.image != null) {
-      return Image.network(
-        widget.image!,
-        width: size,
-        filterQuality: FilterQuality.high,
-      );
+    final url = widget.image;
+    if (url != null) {
+      if (url.toLowerCase().endsWith(".svg")) {
+        return SvgPicture.network(url, width: size);
+      } else {
+        return Image.network(
+          url,
+          width: size,
+          filterQuality: FilterQuality.high,
+        );
+      }
     }
 
     return Container(

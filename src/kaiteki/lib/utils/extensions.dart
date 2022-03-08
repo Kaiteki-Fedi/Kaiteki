@@ -162,3 +162,10 @@ extension UserReferenceExtensions on UserReference {
     return null;
   }
 }
+
+extension WidgetRefExtensions on WidgetRef {
+  String getCurrentAccountHandle() {
+    final account = read(accountProvider).currentAccount.accountSecret;
+    return "@${account.username}@${account.instance}";
+  }
+}

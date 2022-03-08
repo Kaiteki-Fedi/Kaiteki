@@ -25,6 +25,14 @@ class AccountCompound {
     required this.accountSecret,
   });
 
+  bool matchesHandle(String handle) {
+    final split = handle.split('@');
+    final username = split[0];
+    final instance = split[1];
+    return username == accountSecret.username &&
+        instance == accountSecret.instance;
+  }
+
   // TODO(Craftplacer): assert check has been removed, due to compiler errors
   //: assert(accountSecret.identity.instance.equalsIgnoreCase(clientSecret.instance));
 

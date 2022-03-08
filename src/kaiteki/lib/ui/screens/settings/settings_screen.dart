@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/widgets/separator_text.dart';
 import 'package:mdi/mdi.dart';
@@ -17,9 +18,7 @@ class SettingsScreen extends StatelessWidget {
           _SettingsItem(
             icon: Mdi.filter,
             title: l10n.settingsFiltering,
-            onTap: (context) {
-              Navigator.pushNamed(context, "/settings/filtering");
-            },
+            onTap: (context) => context.push("/settings/filtering"),
           ),
           _SettingsItem(icon: Mdi.bell, title: l10n.settingsNotifications),
           _SettingsItem(icon: Mdi.bell, title: l10n.settingsImportExport),
@@ -32,9 +31,7 @@ class SettingsScreen extends StatelessWidget {
           _SettingsItem(
             icon: Mdi.palette,
             title: l10n.settingsCustomization,
-            onTap: (context) {
-              Navigator.pushNamed(context, "/settings/customization");
-            },
+            onTap: (context) => context.push("/settings/customization"),
           ),
           _SettingsItem(icon: Mdi.tab, title: l10n.settingsTabs),
         ],
@@ -44,12 +41,12 @@ class SettingsScreen extends StatelessWidget {
           _SettingsItem(
             icon: Mdi.information,
             title: l10n.settingsAbout,
-            onTap: (c) => Navigator.pushNamed(c, "/about"),
+            onTap: (context) => context.push("/about"),
           ),
           _SettingsItem(
             icon: Mdi.bug,
             title: l10n.settingsDebugMaintenance,
-            onTap: (c) => Navigator.pushNamed(c, "/settings/debug"),
+            onTap: (context) => context.push("/settings/debug"),
           )
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:mdi/mdi.dart';
 
@@ -35,9 +36,7 @@ class _DebugScreenState extends State<DebugScreen> {
           ListTile(
             leading: const Icon(Mdi.wrench),
             title: const Text("Manage shared preferences"),
-            onTap: () async {
-              Navigator.of(context).pushNamed('/settings/debug/preferences');
-            },
+            onTap: () => context.push('/settings/debug/preferences'),
           ),
         ],
       ),

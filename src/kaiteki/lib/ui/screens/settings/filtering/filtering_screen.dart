@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/preferences/sensitive_post_filtering_preferences.dart';
 
@@ -21,10 +22,7 @@ class FilteringScreen extends ConsumerWidget {
               subtitle: Text(
                 getSensitiveMediaSubtitle(context, prefs.sensitivePostFilter),
               ),
-              onTap: () {
-                Navigator.of(context)
-                    .pushNamed('/settings/filtering/sensitivePosts');
-              },
+              onTap: () => context.push('/settings/filtering/sensitivePosts'),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
@@ -139,7 +140,7 @@ class _MainScreenState extends State<MainScreen> {
     return [
       IconButton(
         icon: const Icon(Icons.settings),
-        onPressed: () => Navigator.of(context).pushNamed("/settings"),
+        onPressed: () => context.push("/settings"),
         tooltip: l10n.settings,
       ),
       const AccountSwitcherWidget(size: 40),

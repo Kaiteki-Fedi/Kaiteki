@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
@@ -85,7 +84,7 @@ class StatusWidget extends ConsumerWidget {
               padding: const EdgeInsets.all(8),
               child: AvatarWidget(
                 _post.author,
-                onTap: () => context.showUser(_post.author),
+                onTap: () => context.showUser(_post.author, ref),
               ),
             ),
           Expanded(
@@ -449,7 +448,7 @@ class AttachmentRow extends StatelessWidget {
     var attachmentIndex = 0;
 
     return LimitedBox(
-      maxHeight: maxAttachmentHeight.toDouble(),
+      maxHeight: 280,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

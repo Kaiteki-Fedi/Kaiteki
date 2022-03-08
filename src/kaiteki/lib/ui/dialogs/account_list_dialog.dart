@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/ui/dialogs/dynamic_dialog_container.dart';
@@ -51,9 +52,7 @@ class AccountListDialog extends ConsumerWidget {
     );
   }
 
-  void onTapAdd(BuildContext context) {
-    Navigator.of(context).pushNamed("/login");
-  }
+  void onTapAdd(BuildContext context) => context.push("/login");
 }
 
 class AccountListTile extends ConsumerWidget {

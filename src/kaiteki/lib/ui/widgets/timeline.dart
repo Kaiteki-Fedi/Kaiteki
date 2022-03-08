@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -9,7 +10,6 @@ import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/post_filters/post_filter.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/post_widget.dart';
 import 'package:kaiteki/utils/paged_network_stream.dart';
@@ -181,15 +181,20 @@ class TimelineState extends ConsumerState<Timeline> {
     if (i < posts.length) {
       final post = posts.keys.elementAt(i);
 
-      final widget = InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ConversationScreen(post),
-            ),
+      final widget = Consumer(
+        builder: (context, ref, child) {
+          return InkWell(
+            onTap: () {
+              final account =
+                  ref.read(accountProvider).currentAccount.accountSecret;
+              context.push(
+                "/@${account.username}@${account.instance}/posts/${post.id}",
+                extra: post,
+              );
+            },
+            child: StatusWidget(post, wide: this.widget.wide),
           );
         },
-        child: StatusWidget(post, wide: this.widget.wide),
       );
 
       return Center(

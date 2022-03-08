@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
@@ -11,7 +12,6 @@ import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart' as v;
-import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/widgets/async_snackbar_content.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/widgets/enum_icon_button.dart';
@@ -300,21 +300,25 @@ class _PostFormState extends ConsumerState<PostForm> {
             done: true,
             icon: const Icon(Mdi.check),
             text: Text(l10n.postSubmissionSent),
-            trailing: TextButton(
-              child: Text(l10n.viewPostButtonLabel),
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.secondary,
-                ),
-                visualDensity: VisualDensity.comfortable,
-              ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => ConversationScreen(snapshot.data!),
+            trailing: Consumer(
+              builder: (context, ref, child) {
+                return TextButton(
+                  child: Text(l10n.viewPostButtonLabel),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.secondary,
+                    ),
+                    visualDensity: VisualDensity.comfortable,
                   ),
+                  onPressed: () {
+                    final post = snapshot.data!;
+                    context.push(
+                      "/${ref.getCurrentAccountHandle()}/posts/${post.id}",
+                      extra: post,
+                    );
+                    messenger.hideCurrentSnackBar();
+                  },
                 );
-                messenger.hideCurrentSnackBar();
               },
             ),
           );

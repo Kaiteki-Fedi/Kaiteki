@@ -13,12 +13,12 @@ class TimelinePage extends ConsumerStatefulWidget {
 class _TimelinePageState extends ConsumerState<TimelinePage> {
   @override
   Widget build(BuildContext context) {
-    final accounts = ref.watch(accountProvider);
-    final timelineKey = ValueKey(accounts.currentAccount.hashCode);
+    final adapter = ref.watch(adapterProvider);
+    final timelineKey = ValueKey(adapter.client.hashCode);
 
     return Timeline(
       key: timelineKey,
-      adapter: accounts.adapter,
+      adapter: adapter,
       filters: [SensitivePostFilter()],
       maxWidth: 800,
     );

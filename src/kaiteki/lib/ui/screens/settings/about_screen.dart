@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/constants.dart';
@@ -72,9 +73,7 @@ class AboutScreen extends StatelessWidget {
                       ListTile(
                         leading: const Icon(Mdi.accountMultiple),
                         title: Text(l10n.creditsTitle),
-                        onTap: () {
-                          Navigator.of(context).pushNamed("/credits");
-                        },
+                        onTap: () => context.push("/credits"),
                         trailing: const Icon(Mdi.chevronRight),
                       ),
                     ],

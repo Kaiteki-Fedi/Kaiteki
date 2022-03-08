@@ -11,6 +11,7 @@ import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
+import 'package:kaiteki/utils/layout_helper.dart';
 import 'package:mdi/mdi.dart';
 
 part 'discover_instances_screen.g.dart';
@@ -39,41 +40,52 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
       appBar: AppBar(
         title: Text(l10n.discoverInstancesTitle),
       ),
-      body: FutureBuilder<List<InstanceData>>(
-        future: _instanceFetch,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: ResponsiveLayoutBuilder(
+        builder: (context, constraints, data) {
+          return FutureBuilder<List<InstanceData>>(
+            future: _instanceFetch,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          final sortedInstances = snapshot.data!.toList(growable: false)
-            ..sort((a, b) => a.name.compareTo(b.name));
+              final sortedInstances = snapshot.data!.toList(growable: false)
+                ..sort((a, b) => a.name.compareTo(b.name));
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                if (!_bannerDismissed)
-                  MaterialBanner(
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      child: Icon(
-                        Mdi.exclamation,
-                        color: Theme.of(context).colorScheme.onSecondary,
+              return Column(
+                children: [
+                  if (!_bannerDismissed)
+                    MaterialBanner(
+                      leading: CircleAvatar(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        child: Icon(
+                          Mdi.exclamation,
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
                       ),
+                      content: Text(l10n.discoverInstancesDisclaimer),
+                      forceActionsBelow: true,
+                      actions: [
+                        TextButton(
+                          onPressed: () =>
+                              setState(() => _bannerDismissed = true),
+                          child: Text(l10n.okButtonLabel),
+                        )
+                      ],
                     ),
-                    content: Text(l10n.discoverInstancesDisclaimer),
-                    forceActionsBelow: true,
-                    actions: [
-                      TextButton(
-                        onPressed: () =>
-                            setState(() => _bannerDismissed = true),
-                        child: Text(l10n.okButtonLabel),
-                      )
-                    ],
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: sortedInstances.length,
+                      itemBuilder: (context, index) {
+                        final item = sortedInstances[index];
+                        return _InstanceCard(data: item);
+                      },
+                    ),
                   ),
-                for (var item in sortedInstances) _InstanceCard(data: item),
-              ],
-            ),
+                ],
+              );
+            },
           );
         },
       ),
@@ -143,6 +155,9 @@ class _InstanceCard extends StatelessWidget {
                     width: 24,
                     height: 24,
                     filterQuality: FilterQuality.high,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.public);
+                    },
                   ),
             title: Text(data.name),
             subtitle: data.shortDescription == null
@@ -188,8 +203,9 @@ class _InstanceCard extends StatelessWidget {
                   onPressed: () async {
                     final result = await Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) =>
-                            DiscoverInstanceDetailsScreen(data: data),
+                        builder: (_) {
+                          return DiscoverInstanceDetailsScreen(data: data);
+                        },
                       ),
                     );
 

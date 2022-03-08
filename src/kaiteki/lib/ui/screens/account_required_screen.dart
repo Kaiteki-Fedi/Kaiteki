@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:mdi/mdi.dart';
@@ -33,16 +34,14 @@ class AccountRequiredScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onPressed: () => Navigator.of(context).pushNamed("/login"),
+                    onPressed: () => context.push("/login"),
                   ),
                 ),
               ),
               Row(
                 children: [
                   OutlinedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed("/settings");
-                    },
+                    onPressed: () => context.push("/settings"),
                     child: Text(l10n.settings),
                     style: const ButtonStyle(
                       visualDensity: VisualDensity.comfortable,

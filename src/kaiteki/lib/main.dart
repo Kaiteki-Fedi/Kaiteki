@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/di.dart';
@@ -20,6 +21,8 @@ final logger = getLogger('Kaiteki');
 
 /// Main entrypoint.
 Future<void> main() async {
+  GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
+
   // we need to run this to be able to get access to SharedPreferences
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -30,7 +33,7 @@ Future<void> main() async {
 
   // construct app & run
   final app = ProviderScope(
-    child: const KaitekiApp(),
+    child: KaitekiApp(),
     overrides: [
       themeProvider.overrideWithValue(themeContainer),
       preferenceProvider.overrideWithValue(appPreferences),
