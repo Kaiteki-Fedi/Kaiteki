@@ -5,7 +5,6 @@ import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
@@ -51,8 +50,6 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   });
 
   Future<Iterable<Notification>> getNotifications();
-
-  Future<Iterable<Post>> getStatusesOfUserById(String id);
 
   Future<Iterable<EmojiCategory>> getEmojis();
 

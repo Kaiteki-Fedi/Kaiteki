@@ -9,7 +9,6 @@ import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
@@ -163,12 +162,6 @@ class SharedMastodonAdapter<T extends MastodonClient>
   Future<User> getMyself() async {
     final account = await client.verifyCredentials();
     return toUser(account);
-  }
-
-  @override
-  Future<Iterable<Notification>> getNotifications() {
-    // TODO(Craftplacer): implement getNotifications
-    throw UnimplementedError();
   }
 
   @override

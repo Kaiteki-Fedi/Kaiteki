@@ -13,7 +13,6 @@ import 'package:kaiteki/fediverse/model/chat_message.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
@@ -147,11 +146,6 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<ChatMessage>> getChatMessages(Chat chat) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Iterable<Notification>> getNotifications() {
     throw UnimplementedError();
   }
 
