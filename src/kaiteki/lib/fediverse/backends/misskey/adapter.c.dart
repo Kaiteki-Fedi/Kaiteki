@@ -104,7 +104,7 @@ Map<String, String>? _parseFields(Iterable<Map<String, dynamic>>? fields) {
     return null;
   }
 
-  Map<String, String>.fromEntries(
+  return Map<String, String>.fromEntries(
     fields.map((o) => MapEntry(o["name"], o["value"])),
   );
 }
