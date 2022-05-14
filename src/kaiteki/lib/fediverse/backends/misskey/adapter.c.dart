@@ -84,18 +84,20 @@ User toUser(misskey.User source) {
   return User(
     avatarUrl: source.avatarUrl,
     bannerUrl: source.bannerUrl,
-    birthday: _parseBirthday(source.birthday),
     description: source.description,
-    fields: _parseFields(source.fields),
     // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
     displayName: source.name ?? source.username,
     emojis: source.emojis.map(toEmoji),
     host: source.host,
     id: source.id,
     joinDate: source.createdAt,
-    location: source.location,
     source: source,
     username: source.username,
+    details: UserDetails(
+      location: source.location,
+      birthday: _parseBirthday(source.birthday),
+      fields: _parseFields(source.fields),
+    ),
   );
 }
 

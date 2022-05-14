@@ -118,7 +118,7 @@ User toUser(mastodon.Account source) {
     followingCount: source.followingCount,
     postCount: source.statusesCount,
     host: getHost(source.acct),
-    fields: _parseFields(source.fields),
+    details: UserDetails(fields: _parseFields(source.fields)),
     url: source.url,
   );
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -10,8 +11,10 @@ import 'package:kaiteki/ui/widgets/post_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/layout_helper.dart';
+import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:mdi/mdi.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const _columnPadding = 12.0;
 const _gutter = 16.0;
@@ -372,9 +375,11 @@ class UserInfoWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final joinDate = user.joinDate;
-    final birthday = user.birthday;
-    final location = user.location;
-    final fields = user.fields;
+    final birthday = user.details.birthday;
+    final location = user.details.location;
+    final website = user.details.website;
+    final fields = user.details.fields;
+    final textRendererTheme = TextRendererTheme.fromContext(context, ref);
 
     final textStyle = TextStyle(color: Theme.of(context).disabledColor);
     return Column(
@@ -420,6 +425,23 @@ class UserInfoWidget extends ConsumerWidget {
                 ),
             ],
           ),
+        if (location != null)
+          _UserInfoRow(
+            leading: const Icon(Mdi.mapMarker),
+            body: Text(location),
+          ),
+        if (website != null)
+          _UserInfoRow(
+            leading: const Icon(Mdi.linkVariant),
+            body: Text.rich(
+              TextSpan(
+                text: website,
+                style: textRendererTheme.linkTextStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => launch(website),
+              ),
+            ),
+          ),
         if (joinDate != null)
           _UserInfoRow(
             leading: const Icon(Mdi.calendar),
@@ -433,11 +455,6 @@ class UserInfoWidget extends ConsumerWidget {
             body: Text(
               "Born ${DateFormat('dd MMMM yyyy').format(birthday)}",
             ),
-          ),
-        if (location != null)
-          _UserInfoRow(
-            leading: const Icon(Mdi.mapMarker),
-            body: Text(location),
           ),
       ],
     );
@@ -457,13 +474,19 @@ class _UserInfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).disabledColor;
+    const iconSize = 16.0;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconTheme(
-            data: IconThemeData(color: color, size: 16.0),
+          Baseline(
+            baseline: iconSize,
+            baselineType: TextBaseline.alphabetic,
+            child: IconTheme(
+              data: IconThemeData(color: color, size: iconSize),
             child: leading,
+            ),
           ),
           const SizedBox(width: 6),
           DefaultTextStyle(

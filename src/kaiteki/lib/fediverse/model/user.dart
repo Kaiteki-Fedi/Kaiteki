@@ -9,9 +9,6 @@ class User<T> {
   /// The time that this user was created.
   final DateTime? joinDate;
 
-  /// The user's birthday, if known.
-  final DateTime? birthday;
-
   final String username;
 
   /// The display name
@@ -38,10 +35,7 @@ class User<T> {
   /// The instance the user is on, [null] if it's the current local instance.
   final String? host;
 
-  /// The location defined by the user.
-  final String? location;
-
-  final Map<String, String>? fields;
+  final UserDetails details;
 
   /// External URL to the profile of this [User].
   final String? url;
@@ -56,13 +50,11 @@ class User<T> {
     this.description,
     this.avatarUrl,
     this.bannerUrl,
-    this.birthday,
+    this.details = const UserDetails(),
     this.emojis,
     this.postCount,
     this.followerCount,
     this.followingCount,
-    this.fields,
-    this.location,
     this.url,
   });
 
@@ -77,4 +69,21 @@ class User<T> {
       host: 'cute.social',
     );
   }
+}
+
+/// Details set by the [User].
+class UserDetails {
+  /// The user's birthday, if known.
+  final DateTime? birthday;
+
+  /// The user's website, if known.
+  final String? website;
+
+  /// The location defined by the user.
+  final String? location;
+
+  /// The fields defined by the user.
+  final Map<String, String>? fields;
+
+  const UserDetails({this.birthday, this.website, this.location, this.fields});
 }
