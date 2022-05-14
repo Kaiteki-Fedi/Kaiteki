@@ -49,7 +49,7 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
     String? untilId,
   });
 
-  Future<Iterable<Notification>> getNotifications();
+  Future<Iterable<Post>> getStatusesOfUserById(String id);
 
   Future<Iterable<EmojiCategory>> getEmojis();
 
