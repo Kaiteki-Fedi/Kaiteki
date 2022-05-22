@@ -15,7 +15,7 @@ abstract class ApiDefinition<T extends FediverseAdapter> {
 
   String get name;
 
-  String get id => type.toId();
+  String get id => type.name;
 }
 
 class ApiTheme {
