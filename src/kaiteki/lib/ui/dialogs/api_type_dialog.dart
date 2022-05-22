@@ -8,7 +8,7 @@ class ApiTypeDialog extends StatefulWidget {
   const ApiTypeDialog({Key? key}) : super(key: key);
 
   @override
-  _ApiTypeDialogState createState() => _ApiTypeDialogState();
+  State<ApiTypeDialog> createState() => _ApiTypeDialogState();
 }
 
 class _ApiTypeDialogState extends State<ApiTypeDialog> {

@@ -13,7 +13,7 @@ class ComposeScreen extends ConsumerStatefulWidget {
   const ComposeScreen({Key? key, this.replyTo}) : super(key: key);
 
   @override
-  _PostScreenState createState() => _PostScreenState();
+  ConsumerState<ComposeScreen> createState() => _PostScreenState();
 }
 
 class _PostScreenState extends ConsumerState<ComposeScreen> {

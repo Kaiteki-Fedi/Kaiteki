@@ -7,7 +7,7 @@ class MfaDialog extends StatefulWidget {
   const MfaDialog({Key? key}) : super(key: key);
 
   @override
-  _MfaDialogState createState() => _MfaDialogState();
+  State<MfaDialog> createState() => _MfaDialogState();
 }
 
 class _MfaDialogState extends State<MfaDialog> {

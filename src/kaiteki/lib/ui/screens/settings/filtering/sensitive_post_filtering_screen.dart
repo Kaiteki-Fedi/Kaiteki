@@ -5,7 +5,7 @@ class SensitivePostFilteringScreen extends ConsumerStatefulWidget {
   const SensitivePostFilteringScreen({Key? key}) : super(key: key);
 
   @override
-  _SensitivePostFilteringScreenState createState() =>
+  ConsumerState<SensitivePostFilteringScreen> createState() =>
       _SensitivePostFilteringScreenState();
 }
 

@@ -33,7 +33,7 @@ class PostForm extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  _PostFormState createState() => _PostFormState();
+  ConsumerState<PostForm> createState() => _PostFormState();
 }
 
 class _PostFormState extends ConsumerState<PostForm> {

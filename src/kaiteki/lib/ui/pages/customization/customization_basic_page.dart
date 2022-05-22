@@ -7,7 +7,8 @@ class CustomizationBasicPage extends ConsumerStatefulWidget {
   const CustomizationBasicPage({Key? key}) : super(key: key);
 
   @override
-  _CustomizationBasicPageState createState() => _CustomizationBasicPageState();
+  ConsumerState<CustomizationBasicPage> createState() =>
+      _CustomizationBasicPageState();
 }
 
 class _CustomizationBasicPageState

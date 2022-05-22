@@ -20,7 +20,7 @@ class AttachmentInspectionScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AttachmentInspectionScreenState createState() =>
+  State<AttachmentInspectionScreen> createState() =>
       _AttachmentInspectionScreenState();
 }
 

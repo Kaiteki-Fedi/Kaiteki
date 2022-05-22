@@ -18,7 +18,7 @@ class ReactionWidget extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  _ReactionWidgetState createState() => _ReactionWidgetState();
+  ConsumerState<ReactionWidget> createState() => _ReactionWidgetState();
 }
 
 class _ReactionWidgetState extends ConsumerState<ReactionWidget> {

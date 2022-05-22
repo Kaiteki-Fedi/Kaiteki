@@ -12,7 +12,7 @@ class VideoAttachmentWidget extends StatefulWidget {
   final Attachment attachment;
 
   @override
-  _VideoAttachmentWidgetState createState() => _VideoAttachmentWidgetState();
+  State<VideoAttachmentWidget> createState() => _VideoAttachmentWidgetState();
 }
 
 class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {

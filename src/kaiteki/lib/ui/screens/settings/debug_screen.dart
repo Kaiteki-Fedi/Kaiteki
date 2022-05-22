@@ -7,7 +7,7 @@ class DebugScreen extends StatefulWidget {
   const DebugScreen({Key? key}) : super(key: key);
 
   @override
-  _DebugScreenState createState() => _DebugScreenState();
+  State<DebugScreen> createState() => _DebugScreenState();
 }
 
 class _DebugScreenState extends State<DebugScreen> {

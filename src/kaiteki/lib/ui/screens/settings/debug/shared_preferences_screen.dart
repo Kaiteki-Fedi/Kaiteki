@@ -7,7 +7,7 @@ class SharedPreferencesScreen extends StatefulWidget {
   const SharedPreferencesScreen({Key? key}) : super(key: key);
 
   @override
-  _SharedPreferencesScreenState createState() =>
+  State<SharedPreferencesScreen> createState() =>
       _SharedPreferencesScreenState();
 }
 

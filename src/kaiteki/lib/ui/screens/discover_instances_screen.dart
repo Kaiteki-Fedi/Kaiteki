@@ -20,7 +20,7 @@ class DiscoverInstancesScreen extends StatefulWidget {
   const DiscoverInstancesScreen({Key? key}) : super(key: key);
 
   @override
-  _DiscoverInstancesScreenState createState() =>
+  State<DiscoverInstancesScreen> createState() =>
       _DiscoverInstancesScreenState();
 }
 

@@ -16,7 +16,7 @@ class EmojiSelector extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _EmojiSelectorState createState() => _EmojiSelectorState();
+  State<EmojiSelector> createState() => _EmojiSelectorState();
 }
 
 class _EmojiSelectorState extends State<EmojiSelector>

@@ -7,7 +7,7 @@ class TimelinePage extends ConsumerStatefulWidget {
   const TimelinePage({Key? key}) : super(key: key);
 
   @override
-  _TimelinePageState createState() => _TimelinePageState();
+  ConsumerState<TimelinePage> createState() => _TimelinePageState();
 }
 
 class _TimelinePageState extends ConsumerState<TimelinePage> {

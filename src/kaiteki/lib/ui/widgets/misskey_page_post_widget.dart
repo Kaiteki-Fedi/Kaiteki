@@ -7,7 +7,7 @@ class MisskeyPagePostWidget extends StatefulWidget {
   final String content;
 
   @override
-  _MisskeyPagePostWidgetState createState() => _MisskeyPagePostWidgetState();
+  State<MisskeyPagePostWidget> createState() => _MisskeyPagePostWidgetState();
 }
 
 class _MisskeyPagePostWidgetState extends State<MisskeyPagePostWidget> {

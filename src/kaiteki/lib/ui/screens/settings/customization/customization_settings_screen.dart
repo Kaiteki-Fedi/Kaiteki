@@ -6,7 +6,7 @@ class CustomizationSettingsScreen extends StatefulWidget {
   const CustomizationSettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _CustomizationSettingsScreenState createState() =>
+  State<CustomizationSettingsScreen> createState() =>
       _CustomizationSettingsScreenState();
 }
 

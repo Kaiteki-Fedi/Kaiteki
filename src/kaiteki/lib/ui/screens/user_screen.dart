@@ -36,7 +36,7 @@ class UserScreen extends ConsumerStatefulWidget {
         super(key: key);
 
   @override
-  _UserScreenState createState() => _UserScreenState();
+  ConsumerState<UserScreen> createState() => _UserScreenState();
 }
 
 class _UserScreenState extends ConsumerState<UserScreen>
