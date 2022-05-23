@@ -13,7 +13,9 @@ Post toPost(mastodon.Status source) {
     repeated: source.reblogged!,
     liked: source.favourited!,
     emojis: source.emojis.map(toEmoji),
-    attachments: source.mediaAttachments.map(toAttachment),
+    attachments: source.mediaAttachments.map(
+      (a) => toAttachment(a, status: source),
+    ),
     likeCount: source.favouritesCount,
     repeatCount: source.reblogsCount,
     replyCount: source.repliesCount,
@@ -73,13 +75,17 @@ Visibility toVisibility(String visibility) {
   return visibilityToString[visibility]!;
 }
 
-Attachment toAttachment(mastodon.Attachment attachment) {
+Attachment toAttachment(
+  mastodon.Attachment attachment, {
+  mastodon.Status? status,
+}) {
   return Attachment(
     source: attachment,
     description: attachment.description,
     url: attachment.url,
     previewUrl: attachment.previewUrl,
     type: toAttachmentType(attachment.type),
+    isSensitive: status?.sensitive ?? false,
   );
 }
 

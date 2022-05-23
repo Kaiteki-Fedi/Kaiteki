@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/definitions.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/logger.dart';
@@ -95,7 +95,7 @@ class AccountManager extends ChangeNotifier {
 
     _logger.d('Trying to recover a ${clientSecret.apiType} account');
 
-    final adapter = clientSecret.apiType!.getDefinition().createAdapter();
+    final adapter = clientSecret.apiType!.createAdapter();
     await adapter.client.setClientAuthentication(clientSecret);
     await adapter.client.setAccountAuthentication(accountSecret);
 
@@ -133,18 +133,18 @@ class AccountManager extends ChangeNotifier {
       throw InstanceUnreachableException();
     }
 
-    for (final definition in definitions) {
+    for (final apiType in ApiType.values) {
       try {
-        final adapter = definition.createAdapter();
+        final adapter = apiType.createAdapter();
         adapter.client.instance = instance;
 
-        _logger.d('Probing for ${definition.name} on $instance...');
+        _logger.d('Probing for ${apiType.displayName} on $instance...');
 
         final result = await adapter.probeInstance();
 
         if (result != null) {
-          _logger.d('Detected ${definition.name} on $instance');
-          return InstanceProbeResult.successful(definition, result);
+          _logger.d('Detected ${apiType.displayName} on $instance');
+          return InstanceProbeResult.successful(apiType, result);
         }
       } catch (_) {
         continue;
@@ -171,14 +171,17 @@ class AccountManager extends ChangeNotifier {
 }
 
 class InstanceProbeResult {
-  final ApiDefinition? definition;
+  final ApiType? type;
   final Instance? instance;
   final bool successful;
 
-  const InstanceProbeResult.successful(this.definition, this.instance)
-      : successful = true;
+  const InstanceProbeResult.successful(
+    this.type,
+    this.instance,
+  ) : successful = true;
+
   const InstanceProbeResult.failed()
       : successful = false,
-        definition = null,
+        type = null,
         instance = null;
 }

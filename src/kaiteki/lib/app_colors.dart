@@ -63,15 +63,3 @@ const MaterialColor kaitekiOrange = MaterialColor(
     900: Color(0xFFdc5036),
   },
 );
-
-// picked from https://pleroma.social/
-const Color pleromaPrimary = Color(0xFFF6A358);
-const Color pleromaSecondary = Color(0xFF11181E);
-
-// picked from https://joinmastodon.org/
-const Color mastodonPrimary = Color(0xFF4498DC);
-const Color mastodonSecondary = Color(0xFF1F232B);
-
-// picked from https://misskey.io/preferences
-const Color misskeyPrimary = Color(0xFF8DB600);
-const Color misskeySecondary = Color(0xFF000000);

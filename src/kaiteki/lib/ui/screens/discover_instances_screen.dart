@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/definitions.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
@@ -139,8 +137,8 @@ class _InstanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final apiDefinition = data.type.getDefinition();
     final l10n = context.getL10n();
+    final iconLocation = data.type.theme.iconAssetLocation;
 
     return Card(
       margin: const EdgeInsets.all(12.0),
@@ -176,12 +174,14 @@ class _InstanceCard extends StatelessWidget {
                       spacing: 6,
                       children: [
                         Tooltip(
-                          message: l10n.runsOn(apiDefinition.name),
-                          child: Image.asset(
-                            apiDefinition.theme.iconAssetLocation,
-                            width: 24,
-                            height: 24,
-                          ),
+                          message: l10n.runsOn(data.type.displayName),
+                          child: iconLocation == null
+                              ? const Icon(Mdi.earth)
+                              : Image.asset(
+                                  iconLocation,
+                                  width: 24,
+                                  height: 24,
+                                ),
                         ),
                       ],
                     ),
@@ -392,9 +392,8 @@ class AdapterFeaturesExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
-    final definition = type.getDefinition();
-    final name = definition.name;
-    final adapter = definition.createAdapter();
+    final name = type.displayName;
+    final adapter = type.createAdapter();
 
     return ExpansionTile(
       title: Text(l10n.aboutBackendTitle(name)),
@@ -483,7 +482,7 @@ class MastodonCovenantChip extends StatelessWidget {
 
     return ActionChip(
       onPressed: () => _onPressed(context),
-      backgroundColor: mastodonPrimary,
+      backgroundColor: ApiType.mastodon.theme.primaryColor,
       label: Text(
         l10n.usesMastodonCovenant,
         style: const TextStyle(color: Colors.white),
