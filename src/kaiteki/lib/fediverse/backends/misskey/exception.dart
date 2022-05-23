@@ -8,9 +8,10 @@ class MisskeyException extends ApiException {
 
   @override
   String toString() {
-    if (error.error["message"] != null) {
-      return error.error["message"];
-    }
+    // FIXME(Craftplacer): Wrong fields have been generated for Error
+    // if (error.error["message"] != null) {
+    //   return error.error["message"];
+    // }
 
     return super.toString();
   }

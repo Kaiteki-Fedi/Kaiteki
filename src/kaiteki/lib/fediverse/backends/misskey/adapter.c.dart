@@ -1,12 +1,12 @@
 part of 'adapter.dart';
 
 Post toPost(misskey.Note source) {
-  final mappedEmoji = source.emojis.map(toEmoji);
+  final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji);
 
   return Post(
     source: source,
     postedAt: source.createdAt,
-    author: toUser(source.user),
+    author: toUserFromLite(source.user),
     liked: false,
     repeated: false,
     content: source.text,
@@ -14,14 +14,15 @@ Post toPost(misskey.Note source) {
     replyCount: 0,
     likeCount: 0,
     repeatCount: 0,
-    reactions: source.reactions.entries.map((mkr) {
-      return Reaction(
-        count: mkr.value,
-        includesMe: mkr.key == source.myReaction,
-        users: [],
-        emoji: getEmojiFromString(mkr.key, mappedEmoji),
-      );
-    }),
+    // FIXME(Craftplacer): I give up
+    // reactions: source.reactions.map((mkr) {
+    //   return Reaction(
+    //     count: mkr.value,
+    //     includesMe: mkr.key == source.myReaction,
+    //     users: [],
+    //     emoji: getEmojiFromString(mkr.key, mappedEmoji),
+    //   );
+    // }),
     replyTo: source.reply == null ? null : toPost(source.reply!),
     replyToPostId: source.replyId,
     repeatOf: source.renote == null ? null : toPost(source.renote!),
@@ -101,6 +102,19 @@ User toUser(misskey.User source) {
   );
 }
 
+User toUserFromLite(misskey.UserLite source) {
+  return User(
+    avatarUrl: source.avatarUrl,
+    // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
+    displayName: source.name ?? source.username,
+    emojis: source.emojis.map(toEmoji),
+    host: source.host,
+    id: source.id,
+    source: source,
+    username: source.username,
+  );
+}
+
 Map<String, String>? _parseFields(Iterable<Map<String, dynamic>>? fields) {
   if (fields == null) {
     return null;
@@ -129,9 +143,7 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
         ? null
         : instanceUri.resolve(instance.iconUrl!).toString(),
     mascotUrl: instanceUri.resolve(instance.mascotImageUrl).toString(),
-    backgroundUrl: instance.backgroundImageUrl == null
-        ? null
-        : instanceUri.resolve(instance.backgroundImageUrl!).toString(),
+    backgroundUrl: instance.bannerUrl,
     source: instance,
   );
 }
