@@ -24,8 +24,6 @@ jobs:
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
-        with:
-          channel: beta
         
       - name: Update Linux repos
         run: 'sudo apt-get update --fix-missing && sudo apt-get -y upgrade'
