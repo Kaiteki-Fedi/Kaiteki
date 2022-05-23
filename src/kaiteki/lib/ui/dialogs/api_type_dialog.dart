@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/definitions.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 
 class ApiTypeDialog extends StatefulWidget {
@@ -12,7 +11,7 @@ class ApiTypeDialog extends StatefulWidget {
 }
 
 class _ApiTypeDialogState extends State<ApiTypeDialog> {
-  ApiDefinition _api = ApiType.mastodon.getDefinition();
+  ApiType _api = ApiType.mastodon;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +27,11 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(l10n.apiTypeDialog_description),
-          DropdownButton<ApiDefinition>(
+          DropdownButton<ApiType>(
             isExpanded: true,
-            items: definitions.map((def) {
-              return DropdownMenuItem<ApiDefinition>(
+            items: ApiType.values.map((def) {
+              final iconLocation = def.theme.iconAssetLocation;
+              return DropdownMenuItem<ApiType>(
                 value: def,
                 child: Row(
                   children: [
@@ -39,11 +39,13 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
                       padding: const EdgeInsets.only(
                         right: 8.0,
                       ),
-                      child: Image.asset(
-                        def.theme.iconAssetLocation,
-                        width: 24,
-                        height: 24,
-                      ),
+                      child: iconLocation == null
+                          ? Image.asset(
+                              iconLocation!,
+                              width: 24,
+                              height: 24,
+                            )
+                          : const SizedBox(),
                     ),
                     Text(def.name),
                   ],
