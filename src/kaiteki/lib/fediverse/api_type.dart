@@ -7,7 +7,7 @@ import 'package:kaiteki/fediverse/backends/pleroma/adapter.dart';
 enum ApiType {
   mastodon(createAdapter: MastodonAdapter.new, theme: mastodonTheme),
   pleroma(createAdapter: PleromaAdapter.new, theme: pleromaTheme),
-  misskey(createAdapter: MisskeyAdapter.new, theme: misskeyTheme),
+  misskey(createAdapter: MisskeyAdapter.new, theme: misskeyTheme);
 
   final String? _displayName;
   final FediverseAdapter Function() createAdapter;
