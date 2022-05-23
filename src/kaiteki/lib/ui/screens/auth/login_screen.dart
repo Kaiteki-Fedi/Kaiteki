@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/definitions.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/ui/dialogs/api_type_dialog.dart';
 import 'package:kaiteki/ui/dialogs/mfa_dialog.dart';
@@ -24,7 +23,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   String? _error;
   Instance? _instance;
   String? background;
-  ApiDefinition? _api;
+  ApiType? _type;
 
   final _loginFormKey = GlobalKey<LoginFormState>();
 
@@ -100,7 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           return asyncWrapper(future);
                         },
                         onResetInstance: () => setState(() {
-                          _api = null;
+                          _type = null;
                           _instance = null;
                         }),
                       ),
@@ -135,33 +134,33 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<Instance?> fetchInstance(String instanceHost) async {
     final accountManager = ref.read(accountProvider);
     final result = await accountManager.probeInstance(instanceHost);
-    final ApiDefinition? api;
+    final ApiType? type;
     final Instance instance;
 
     if (result.successful) {
       // ignore: unnecessary_null_checks
-      api = result.definition!;
+      type = result.type!;
       instance = result.instance!;
     } else {
-      api = await showInstanceDialog(context);
+      type = await showInstanceDialog(context);
 
-      if (api == null) {
+      if (type == null) {
         return null;
       }
 
-      final adapter = api.createAdapter();
+      final adapter = type.createAdapter();
       adapter.client.instance = instanceHost;
       instance = await adapter.getInstance();
     }
 
     // Check for known issue with Misskey instances
-    if (kIsWeb && api.type == ApiType.misskey) {
+    if (kIsWeb && type == ApiType.misskey) {
       if (!await _showWebCompatibilityDialog()) {
         return null;
       }
     }
 
-    _api = api;
+    _type = type;
     _instance = instance;
 
     // Set background
@@ -172,8 +171,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return _instance;
   }
 
-  Future<ApiDefinition?> showInstanceDialog(BuildContext context) async {
-    return showDialog<ApiDefinition?>(
+  Future<ApiType?> showInstanceDialog(BuildContext context) async {
+    return showDialog<ApiType?>(
       barrierDismissible: false,
       context: context,
       builder: (context) => const ApiTypeDialog(),
@@ -292,7 +291,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     String password,
   ) async {
     final accounts = ref.read(accountProvider);
-    final adapter = _api!.createAdapter();
+    final adapter = _type!.createAdapter();
     final result = await adapter.login(
       instance,
       username,
