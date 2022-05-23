@@ -5,6 +5,7 @@ class Attachment<T> {
   final String url;
   final String? description;
   final AttachmentType type;
+  final bool isSensitive;
 
   Attachment({
     required this.source,
@@ -12,6 +13,7 @@ class Attachment<T> {
     required this.url,
     this.description,
     this.type = AttachmentType.file,
+    this.isSensitive = false,
   });
 }
 
@@ -20,6 +22,7 @@ enum AttachmentType {
   image,
   video,
   audio,
+
   /// GIFs, other animatable-s, but that shouldn't contain any audio
   animated,
 }
