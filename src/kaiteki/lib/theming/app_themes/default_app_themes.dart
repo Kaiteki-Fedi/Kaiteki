@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/app_colors.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/theming/app_themes/material_app_theme.dart';
+
+final Color _seedColor = kaitekiPink.shade500;
 
 const double rounding = 24.0;
 const BorderRadius borderRadius = BorderRadius.all(
@@ -8,40 +11,50 @@ const BorderRadius borderRadius = BorderRadius.all(
 );
 
 final MaterialAppTheme lightAppTheme = MaterialAppTheme(
-  ThemeData.from(colorScheme: lightScheme)._applyGeneralChanges(),
+  ThemeData.from(
+    colorScheme: lightScheme,
+    useMaterial3: consts.useM3,
+  )._applyGeneralChanges(),
   linkTextStyle: TextStyle(color: kaitekiPink.shade700),
 );
 
-final ColorScheme lightScheme = ColorScheme.light(
-  background: kaitekiLightBackground.shade100,
-  surface: kaitekiLightBackground.shade50,
-  // primary
-  primary: kaitekiPink.shade500,
-  primaryContainer: kaitekiPink.shade700,
-  // secondary
-  secondary: kaitekiOrange.shade400,
-  secondaryContainer: kaitekiOrange.shade600,
-  // error
-  error: Colors.red,
-  onError: Colors.black,
-);
+final ColorScheme lightScheme = consts.useM3
+    ? ColorScheme.fromSeed(seedColor: _seedColor)
+    : ColorScheme.light(
+        background: kaitekiLightBackground.shade100,
+        surface: kaitekiLightBackground.shade50,
+        // primary
+        primary: kaitekiPink.shade500,
+        primaryContainer: kaitekiPink.shade700,
+        // secondary
+        secondary: kaitekiOrange.shade400,
+        secondaryContainer: kaitekiOrange.shade600,
+        // error
+        error: Colors.red,
+        onError: Colors.black,
+      );
 
 final MaterialAppTheme darkAppTheme = MaterialAppTheme(
-  ThemeData.from(colorScheme: darkScheme)._applyGeneralChanges(),
+  ThemeData.from(
+    colorScheme: darkScheme,
+    useMaterial3: consts.useM3,
+  )._applyGeneralChanges(),
 );
 
-final ColorScheme darkScheme = ColorScheme.dark(
-  background: kaitekiDarkBackground.shade900,
-  surface: kaitekiDarkBackground.shade800,
-  // primary
-  primary: kaitekiPink.shade200,
-  primaryContainer: kaitekiPink.shade500,
-  // secondary
-  secondary: kaitekiPink.shade200,
-  secondaryContainer: kaitekiPink.shade500,
-  // error
-  error: Colors.red,
-);
+final ColorScheme darkScheme = consts.useM3
+    ? ColorScheme.fromSeed(seedColor: _seedColor, brightness: Brightness.dark)
+    : ColorScheme.dark(
+        background: kaitekiDarkBackground.shade900,
+        surface: kaitekiDarkBackground.shade800,
+        // primary
+        primary: kaitekiPink.shade200,
+        primaryContainer: kaitekiPink.shade500,
+        // secondary
+        secondary: kaitekiPink.shade200,
+        secondaryContainer: kaitekiPink.shade500,
+        // error
+        error: Colors.red,
+      );
 
 extension _ThemeDataExtensions on ThemeData {
   ThemeData _applyGeneralChanges() {
