@@ -485,7 +485,7 @@ class _UserInfoRow extends StatelessWidget {
             baselineType: TextBaseline.alphabetic,
             child: IconTheme(
               data: IconThemeData(color: color, size: iconSize),
-            child: leading,
+              child: leading,
             ),
           ),
           const SizedBox(width: 6),
@@ -642,7 +642,7 @@ class PostsPage extends StatelessWidget {
         }
 
         return ListView.builder(
-          itemBuilder: (_, i) => StatusWidget(snapshot.data!.elementAt(i)),
+          itemBuilder: (_, i) => PostWidget(snapshot.data!.elementAt(i)),
           itemCount: snapshot.data?.length ?? 0,
         );
       },

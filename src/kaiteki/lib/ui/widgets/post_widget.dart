@@ -20,14 +20,14 @@ import 'package:mdi/mdi.dart';
 
 const _padding = EdgeInsets.symmetric(vertical: 4.0);
 
-class StatusWidget extends ConsumerWidget {
+class PostWidget extends ConsumerWidget {
   final Post _post;
   final bool showParentPost;
   final bool showActions;
   final bool wide;
   final bool hideReplyee;
 
-  const StatusWidget(
+  const PostWidget(
     this._post, {
     Key? key,
     this.showParentPost = true,
@@ -52,7 +52,7 @@ class StatusWidget extends ConsumerWidget {
             user: _post.author,
             userTextStyle: authorTextStyle,
           ),
-          StatusWidget(
+          PostWidget(
             _post.repeatOf!,
             showActions: showActions,
             wide: wide,

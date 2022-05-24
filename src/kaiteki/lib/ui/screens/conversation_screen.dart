@@ -68,7 +68,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         } else if (snapshot.hasError) {
           return Column(
             children: [
-              StatusWidget(widget.post),
+              PostWidget(widget.post),
               ListTile(
                 leading: const Icon(Mdi.close),
                 title: Text(l10n.threadRetrievalFailed),
@@ -94,13 +94,13 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final post = snapshot.data!.elementAt(index);
-              return StatusWidget(post);
+              return PostWidget(post);
             },
           );
         } else if (snapshot.hasError) {
           return Column(
             children: [
-              StatusWidget(widget.post),
+              PostWidget(widget.post),
               ListTile(
                 leading: const Icon(Mdi.close),
                 title: Text(l10n.threadRetrievalFailed),

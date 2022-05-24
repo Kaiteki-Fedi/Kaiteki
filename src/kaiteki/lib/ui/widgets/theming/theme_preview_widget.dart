@@ -32,7 +32,7 @@ class ThemePreviewWidget extends StatelessWidget {
               automaticallyImplyLeading: false,
               title: const Text("Preview"),
             ),
-            body: StatusWidget(Post.example()),
+            body: PostWidget(Post.example()),
           ),
         ),
       ),

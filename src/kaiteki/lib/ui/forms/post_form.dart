@@ -229,7 +229,7 @@ class _PostFormState extends ConsumerState<PostForm> {
             ),
           );
         } else {
-          return StatusWidget(snapshot.data!, showActions: false);
+          return PostWidget(snapshot.data!, showActions: false);
         }
     }
 

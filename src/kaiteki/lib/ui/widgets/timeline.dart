@@ -192,7 +192,7 @@ class TimelineState extends ConsumerState<Timeline> {
                 extra: post,
               );
             },
-            child: StatusWidget(post, wide: this.widget.wide),
+            child: PostWidget(post, wide: this.widget.wide),
           );
         },
       );

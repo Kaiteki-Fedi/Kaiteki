@@ -94,7 +94,7 @@ class ThreadPostContainer extends StatelessWidget {
               padding: EdgeInsets.only(
                 left: _lineShouldIndent ? 48.0 : 0.0,
               ),
-              child: StatusWidget(
+              child: PostWidget(
                 post.post,
                 showParentPost: false,
                 hideReplyee: true,
