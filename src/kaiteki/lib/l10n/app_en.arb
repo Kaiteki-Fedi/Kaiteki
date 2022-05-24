@@ -412,5 +412,6 @@
       }
     }
   },
-  "attachmentDownloadDialogTitle": "Download attachment"
+  "attachmentDownloadDialogTitle": "Download attachment",
+  "creditsTelegramChannel": "Telegram Channel"
 }

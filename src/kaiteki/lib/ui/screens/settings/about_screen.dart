@@ -140,6 +140,13 @@ class AboutScreen extends StatelessWidget {
                         },
                         splashRadius: consts.defaultSplashRadius,
                       ),
+                      IconButton(
+                        icon: const Icon(Mdi.telegram),
+                        tooltip: l10n.creditsTelegramChannel,
+                        onPressed: () {
+                          context.launchUrl(consts.telegramChannel);
+                        },
+                        splashRadius: consts.defaultSplashRadius,
                       ),
                     ],
                   ),
