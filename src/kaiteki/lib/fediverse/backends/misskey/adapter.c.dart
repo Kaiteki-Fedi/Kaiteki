@@ -7,13 +7,8 @@ Post toPost(misskey.Note source) {
     source: source,
     postedAt: source.createdAt,
     author: toUserFromLite(source.user),
-    liked: false,
-    repeated: false,
     content: source.text,
     emojis: mappedEmoji,
-    replyCount: 0,
-    likeCount: 0,
-    repeatCount: 0,
     // FIXME(Craftplacer): I give up
     // reactions: source.reactions.map((mkr) {
     //   return Reaction(

@@ -26,9 +26,8 @@ class _MisskeyPagePostWidgetState extends State<MisskeyPagePostWidget> {
           readOnly: true,
         ),
         const ElevatedButton(
-          child: Icon(Mdi.send),
-          // TODO(Craftplacer): (misskey) make status post component functional
           onPressed: null,
+          child: Icon(Mdi.send),
         )
       ],
     );

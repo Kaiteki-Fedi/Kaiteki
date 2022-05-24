@@ -71,13 +71,13 @@ class PlaceholderEmoji extends StatelessWidget {
       // ignore: use_named_constants
       padding: const EdgeInsets.all(padding),
       child: DecoratedBox(
-        child: SizedBox(
-          width: finalSize,
-          height: finalSize,
-        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6.0),
           color: Theme.of(context).disabledColor,
+        ),
+        child: SizedBox(
+          width: finalSize,
+          height: finalSize,
         ),
       ),
     );

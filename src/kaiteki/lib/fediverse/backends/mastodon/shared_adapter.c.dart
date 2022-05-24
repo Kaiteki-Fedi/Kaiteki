@@ -149,7 +149,6 @@ String? getHost(String acct) {
 Instance toInstance(mastodon.Instance instance) {
   return Instance(
     source: instance,
-    iconUrl: null,
     name: instance.title,
     backgroundUrl: instance.thumbnail,
   );

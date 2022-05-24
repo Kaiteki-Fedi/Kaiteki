@@ -104,7 +104,7 @@ class HtmlTextParser implements TextParser {
     var text = "";
 
     if (element.previousElementSibling?.localName?.toLowerCase() == "p") {
-      text = "\n\n" + text;
+      text = "\n\n$text";
     }
 
     return TextElement(text, children: subElements);

@@ -37,8 +37,8 @@ class AccountListDialog extends ConsumerWidget {
                   leading: CircleAvatar(
                     backgroundColor: Theme.of(context).disabledColor,
                     foregroundColor: Colors.white,
-                    child: const Icon(Mdi.plus),
                     radius: 22,
+                    child: const Icon(Mdi.plus),
                   ),
                   title: Text(l10n.addAccountButtonLabel),
                   onTap: () => onTapAdd(context),

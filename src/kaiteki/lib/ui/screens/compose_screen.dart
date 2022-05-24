@@ -101,6 +101,6 @@ class ToggleSubjectButton extends StatelessWidget {
   }
 
   String _getTooltip() {
-    return (value ? "Disable" : "Enable") + " Subject";
+    return "${value ? "Disable" : "Enable"} Subject";
   }
 }

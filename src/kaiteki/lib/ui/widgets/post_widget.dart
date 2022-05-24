@@ -264,7 +264,7 @@ class MetaBar extends StatelessWidget {
 
       final host = user.host;
       if (host != null) {
-        result = (result ?? '') + '@$host';
+        result = '${result ?? ''}@$host';
       }
 
       return result;
@@ -320,7 +320,7 @@ class ReplyBar extends ConsumerWidget {
                   ),
                 ),
                 TextSpan(
-                  text: ' ' + l10n.replyTo + ' ',
+                  text: ' ${l10n.replyTo} ',
                   style: TextStyle(color: disabledColor),
                 ),
                 span,
@@ -335,7 +335,7 @@ class ReplyBar extends ConsumerWidget {
   String _getText() {
     final user = post.replyToUser;
     if (user != null) {
-      return '@' + user.username;
+      return '@${user.username}';
     }
 
     final id = post.replyToUserId;

@@ -22,7 +22,7 @@ class AvatarWidget extends StatelessWidget {
     var widget = buildAvatar(context);
 
     if (onTap != null) {
-      widget = InkWell(child: widget, onTap: onTap);
+      widget = InkWell(onTap: onTap, child: widget);
     }
 
     return widget;
@@ -55,7 +55,7 @@ class AvatarWidget extends StatelessWidget {
     if (radius == null) {
       return ClipOval(child: avatar);
     } else {
-      return ClipRRect(child: avatar, borderRadius: borderRadius);
+      return ClipRRect(borderRadius: borderRadius, child: avatar);
     }
   }
 }

@@ -134,18 +134,18 @@ class ThemePreview extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         clipBehavior: Clip.antiAlias,
+        elevation: 4,
         child: InkWell(
           onTap: onTap,
           child: Container(
             width: 8 * 12,
             height: 8 * 12,
             padding: const EdgeInsets.all(8.0),
-            child: _buildContent(context),
             decoration: BoxDecoration(color: colorScheme.surface),
             foregroundDecoration: selected ? selectedDecoration : null,
+            child: _buildContent(context),
           ),
         ),
-        elevation: 4,
       ),
     );
   }
@@ -165,11 +165,11 @@ class ThemePreview extends StatelessWidget {
     } else {
       return Center(
         child: IconTheme(
-          child: icon!,
           data: IconThemeData(
             color: colorScheme.onSurface,
             size: 32,
           ),
+          child: icon!,
         ),
       );
     }

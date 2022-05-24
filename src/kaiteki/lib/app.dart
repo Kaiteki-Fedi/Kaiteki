@@ -103,8 +103,8 @@ class KaitekiApp extends ConsumerWidget {
         }
         if (adapter != null) {
           return ProviderScope(
-            child: child!,
             overrides: [adapterProvider.overrideWithValue(adapter)],
+            child: child!,
           );
         } else {
           return child!;

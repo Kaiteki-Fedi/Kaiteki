@@ -65,6 +65,9 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
   }
 
   Future<void> _clearPreferences(BuildContext context) async {
+    final theme = Theme.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+
     final instance = await SharedPreferences.getInstance();
     final result = await instance.clear();
 
@@ -80,8 +83,8 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
             padding: const EdgeInsets.only(right: 8.0),
             child: Icon(
               icon,
-              color: Theme.of(context).snackBarTheme.contentTextStyle?.color ??
-                  Colors.white,
+              color:
+                  theme.snackBarTheme.contentTextStyle?.color ?? Colors.white,
             ),
           ),
           Text(message),
@@ -89,6 +92,6 @@ class _SharedPreferencesScreenState extends State<SharedPreferencesScreen> {
       ),
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    messenger.showSnackBar(snackBar);
   }
 }

@@ -41,6 +41,8 @@ class EnumIconButton<T> extends StatelessWidget {
     return [
       for (T value in values!)
         PopupMenuItem<T>(
+          value: value,
+          enabled: canSelect,
           child: ListTile(
             leading: iconBuilder.call(value),
             title: textBuilder.call(value),
@@ -48,8 +50,6 @@ class EnumIconButton<T> extends StatelessWidget {
             selected: value == this.value,
             enabled: canSelect,
           ),
-          value: value,
-          enabled: canSelect,
         ),
     ];
   }

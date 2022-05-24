@@ -42,10 +42,10 @@ class AccountRequiredScreen extends StatelessWidget {
                 children: [
                   OutlinedButton(
                     onPressed: () => context.push("/settings"),
-                    child: Text(l10n.settings),
                     style: const ButtonStyle(
                       visualDensity: VisualDensity.comfortable,
                     ),
+                    child: Text(l10n.settings),
                   ),
                 ],
               )

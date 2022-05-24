@@ -107,8 +107,8 @@ class TimelineState extends ConsumerState<Timeline> {
               ),
               const SizedBox(height: 8.0),
               TextButton(
-                child: Text(l10n.refresh),
                 onPressed: _model.refresh,
+                child: Text(l10n.refresh),
               ),
             ],
           ),

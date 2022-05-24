@@ -186,8 +186,8 @@ class _MainScreenState extends State<MainScreen> {
     if (mobile) {
       return FloatingActionButton(
         tooltip: fab.tooltip,
-        child: Icon(fab.icon),
         onPressed: fab.onTap,
+        child: Icon(fab.icon),
       );
     } else {
       return FloatingActionButton.extended(
@@ -212,14 +212,14 @@ class ComposeFloatingActionButton extends StatelessWidget {
     if (small) {
       return FloatingActionButton.small(
         onPressed: () => context.showPostDialog(),
-        child: const Icon(Icons.edit_rounded),
         elevation: 4.0,
+        child: const Icon(Icons.edit_rounded),
       );
     } else {
       return FloatingActionButton(
         onPressed: () => context.showPostDialog(),
-        child: const Icon(Icons.edit_rounded),
         elevation: 4.0,
+        child: const Icon(Icons.edit_rounded),
       );
     }
   }

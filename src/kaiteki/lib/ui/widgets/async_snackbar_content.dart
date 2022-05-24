@@ -30,8 +30,8 @@ class AsyncSnackBarContent extends StatelessWidget {
               Positioned.fill(
                 child: Align(
                   child: IconTheme(
-                    child: icon,
                     data: IconThemeData(color: textStyle?.color),
+                    child: icon,
                   ),
                 ),
               ),

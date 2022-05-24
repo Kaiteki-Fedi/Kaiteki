@@ -188,19 +188,11 @@ class _InstanceCard extends StatelessWidget {
                   ),
                 ),
                 TextButton(
-                  child: Row(
-                    children: [
-                      Text(l10n.chooseButtonLabel),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Icon(Mdi.arrowRight),
-                      ),
-                    ],
-                  ),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(EdgeInsets.zero),
                   ),
                   onPressed: () async {
+                    final navigator = Navigator.of(context);
                     final result = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) {
@@ -210,9 +202,18 @@ class _InstanceCard extends StatelessWidget {
                     );
 
                     if (result != null) {
-                      Navigator.of(context).pop(result);
+                      navigator.pop(result);
                     }
                   },
+                  child: Row(
+                    children: [
+                      Text(l10n.chooseButtonLabel),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Icon(Mdi.arrowRight),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -510,6 +511,8 @@ class RuleListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
+        backgroundColor: Theme.of(context).disabledColor,
+        radius: 12.0,
         child: Text(
           number.toString(),
           textScaleFactor: 0.85,
@@ -518,8 +521,6 @@ class RuleListTile extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Theme.of(context).disabledColor,
-        radius: 12.0,
       ),
       title: Text(rule),
       dense: true,

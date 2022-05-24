@@ -192,10 +192,10 @@ class _PostFormState extends ConsumerState<PostForm> {
               ),
               const Spacer(),
               FloatingActionButton.small(
-                child: const Icon(Mdi.send),
                 onPressed: () => post(context, manager.adapter),
                 elevation: 2.0,
                 tooltip: l10n.submitButtonTooltip,
+                child: const Icon(Mdi.send),
               ),
             ],
           ),
@@ -303,7 +303,6 @@ class _PostFormState extends ConsumerState<PostForm> {
             trailing: Consumer(
               builder: (context, ref, child) {
                 return TextButton(
-                  child: Text(l10n.viewPostButtonLabel),
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(
                       Theme.of(context).colorScheme.secondary,
@@ -318,6 +317,7 @@ class _PostFormState extends ConsumerState<PostForm> {
                     );
                     messenger.hideCurrentSnackBar();
                   },
+                  child: Text(l10n.viewPostButtonLabel),
                 );
               },
             ),
@@ -394,6 +394,7 @@ class _PostFormState extends ConsumerState<PostForm> {
                         const EdgeInsets.all(16.0),
                       ),
                     ),
+                    onPressed: item.onPressed,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -404,7 +405,6 @@ class _PostFormState extends ConsumerState<PostForm> {
                         )
                       ],
                     ),
-                    onPressed: item.onPressed,
                   ),
               ],
             );

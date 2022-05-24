@@ -142,6 +142,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       type = result.type!;
       instance = result.instance!;
     } else {
+      if (!mounted) {
+        throw Exception("oopsie woopsie, mounted is false");
+        // If this triggers `dead_code`, why doesn't it make
+        // `use_build_context_synchronously` go away?
+        return null;
+      }
+
       type = await showInstanceDialog(context);
 
       if (type == null) {
@@ -290,6 +297,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     String username,
     String password,
   ) async {
+    final navigator = Navigator.of(context);
     final accounts = ref.read(accountProvider);
     final adapter = _type!.createAdapter();
     final result = await adapter.login(
@@ -301,7 +309,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
 
     if (result.successful) {
-      Navigator.of(context).pop();
+      navigator.pop();
     } else {
       setState(() => _error = result.reason);
     }

@@ -14,7 +14,7 @@ import 'package:kaiteki/utils/layout_helper.dart';
 import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:mdi/mdi.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 const _columnPadding = 12.0;
 const _gutter = 16.0;
@@ -322,7 +322,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     var text = count.toString();
 
     if (count / 1000 >= 1) {
-      text = (count / 1000).toStringAsFixed(2) + 'k';
+      text = '${(count / 1000).toStringAsFixed(2)}k';
     }
 
     return text;
@@ -438,7 +438,7 @@ class UserInfoWidget extends ConsumerWidget {
                 text: website,
                 style: textRendererTheme.linkTextStyle,
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => launch(website),
+                  ..onTap = () => launchUrlString(website),
               ),
             ),
           ),

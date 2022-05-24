@@ -102,11 +102,11 @@ class LoginFormState extends State<LoginForm> {
     Animation<double> secondaryAnimation,
   ) {
     return SharedAxisTransition(
-      child: child,
       animation: primaryAnimation,
       secondaryAnimation: secondaryAnimation,
       transitionType: SharedAxisTransitionType.horizontal,
       fillColor: Colors.transparent,
+      child: child,
     );
   }
 
@@ -243,12 +243,12 @@ class __InstancePageState extends State<_InstancePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                child: Text(l10n.discoverInstancesButtonLabel),
                 onPressed: _onDiscoverInstancesPressed,
+                child: Text(l10n.discoverInstancesButtonLabel),
               ),
               ElevatedButton(
-                child: Text(l10n.nextButtonLabel),
                 onPressed: _nextEnabled ? _submit : null,
+                child: Text(l10n.nextButtonLabel),
               ),
             ],
           ),
@@ -426,6 +426,7 @@ class __UserPageState extends State<_UserPage> {
               if (input != widget.passwordController!.text) {
                 return l10n.authPasswordNoMatch;
               }
+              return null;
             },
             keyboardType: TextInputType.text,
             autofillHints: const [AutofillHints.password],
@@ -436,27 +437,26 @@ class __UserPageState extends State<_UserPage> {
           child: Row(
             children: [
               TextButton(
-                child: Text(l10n.forgotPasswordButtonLabel),
                 onPressed: null,
+                child: Text(l10n.forgotPasswordButtonLabel),
               ),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: TextButton(
+                  onPressed: null,
                   child: Text(
                     _register
                         ? l10n.existingAccountButtonLabel
                         : l10n.createAccountButtonLabel,
-                  ),
-                  onPressed:
-                      null, //() => setState(() => _register = !_register),
+                  ), //() => setState(() => _register = !_register),
                 ),
               ),
               ElevatedButton(
+                onPressed: widget.onNext,
                 child: Text(
                   _register ? l10n.registerButtonLabel : l10n.loginButtonLabel,
                 ),
-                onPressed: widget.onNext,
               ),
             ],
           ),

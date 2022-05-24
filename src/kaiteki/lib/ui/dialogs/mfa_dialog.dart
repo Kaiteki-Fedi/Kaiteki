@@ -59,10 +59,10 @@ class _MfaDialogState extends State<MfaDialog> {
           },
         ),
         TextButton(
-          child: Text(l10n.verifyButtonLabel),
           onPressed: isValid
               ? () => _submit(context, _textController.value.text)
               : null,
+          child: Text(l10n.verifyButtonLabel),
         ),
       ],
     );

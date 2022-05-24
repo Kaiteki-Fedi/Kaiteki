@@ -15,7 +15,6 @@ import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
@@ -179,7 +178,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     String emojiName;
 
     if (emoji is CustomEmoji) {
-      emojiName = ':' + emoji.name + ':';
+      emojiName = ':${emoji.name}:';
     } else if (emoji is UnicodeEmoji) {
       emojiName = emoji.source!;
     } else {

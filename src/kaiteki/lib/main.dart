@@ -33,12 +33,12 @@ Future<void> main() async {
 
   // construct app & run
   final app = ProviderScope(
-    child: KaitekiApp(),
     overrides: [
       themeProvider.overrideWithValue(themeContainer),
       preferenceProvider.overrideWithValue(appPreferences),
       accountProvider.overrideWithValue(accountManager),
     ],
+    child: KaitekiApp(),
   );
 
   runApp(app);

@@ -21,7 +21,7 @@ String withQueries(
 
   if (queryParameters.isEmpty) return baseUrl;
 
-  return baseUrl + '?' + Uri(queryParameters: queryParameters).query;
+  return '$baseUrl?${Uri(queryParameters: queryParameters).query}';
 }
 
 void checkResponse(Response response) {
@@ -109,8 +109,8 @@ SnackBar generateAsyncSnackBar({
               Positioned.fill(
                 child: Align(
                   child: IconTheme(
-                    child: icon,
                     data: IconThemeData(color: foreColor),
+                    child: icon,
                   ),
                 ),
               ),

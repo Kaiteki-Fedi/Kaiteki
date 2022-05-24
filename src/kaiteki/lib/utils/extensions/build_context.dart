@@ -5,7 +5,7 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/screens/compose_screen.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 extension BuildContextExtensions on BuildContext {
   Future<void> showPostDialog({Post? replyTo}) async {
@@ -25,8 +25,8 @@ extension BuildContextExtensions on BuildContext {
   }
 
   Future<bool> launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
       return true;
     } else {
       ScaffoldMessenger.of(this).showSnackBar(
