@@ -1,5 +1,5 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
@@ -154,7 +154,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       mastodon.Status.fromJson,
       body: {
         "status": status,
-        "source": Constants.appName,
+        "source": consts.appName,
         "spoiler_text": spoilerText ?? "",
         "content_type": contentType,
         "preview": pleromaPreview.toString(),

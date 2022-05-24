@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -127,7 +127,7 @@ class KaitekiApp extends ConsumerWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData.from(colorScheme: lightScheme),
       themeMode: preferences.get().theme,
-      title: Constants.appName,
+      title: consts.appName,
     );
   }
 

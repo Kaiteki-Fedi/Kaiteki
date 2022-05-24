@@ -1,4 +1,4 @@
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
@@ -28,10 +28,10 @@ Future<ClientSecret> createClientSecret(
 
   final application = await client.createApplication(
     instance,
-    Constants.appName,
-    Constants.appWebsite,
+    consts.appName,
+    consts.appWebsite,
     "urn:ietf:wg:oauth:2.0:oob",
-    Constants.defaultScopes,
+    consts.defaultScopes,
   );
 
   final clientSecret = ClientSecret(

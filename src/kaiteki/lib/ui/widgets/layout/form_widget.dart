@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/constants.dart' as consts;
 
 typedef FormWidgetBuilder = Widget Function(
   BuildContext context,
@@ -16,8 +16,8 @@ class FormWidget extends StatelessWidget {
   const FormWidget({
     Key? key,
     required this.builder,
-    this.contentWidth = Constants.defaultFormWidth,
-    this.contentHeight = Constants.defaultFormHeight,
+    this.contentWidth = consts.defaultFormWidth,
+    this.contentHeight = consts.defaultFormHeight,
     this.padding = const EdgeInsets.symmetric(
       horizontal: 24.0,
       vertical: 64.0,

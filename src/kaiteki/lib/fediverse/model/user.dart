@@ -1,4 +1,4 @@
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/model/emoji.dart';
 
 /// A class representing an user or account.
@@ -62,7 +62,7 @@ class User<T> {
     return User(
       username: "NyaNya",
       displayName: "banned for being a cute neko",
-      avatarUrl: Constants.exampleAvatar,
+      avatarUrl: consts.exampleAvatar,
       joinDate: DateTime.now(),
       id: "CuteNeko-Account",
       source: null,

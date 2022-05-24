@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/app_colors.dart';
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
@@ -19,7 +19,7 @@ class AboutScreen extends StatelessWidget {
       appBar: AppBar(title: Text(l10n.settingsAbout)),
       body: Center(
         child: SizedBox(
-          width: Constants.defaultFormWidth,
+          width: consts.defaultFormWidth,
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +33,7 @@ class AboutScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      Constants.appName,
+                      consts.appName,
                       textScaleFactor: 2,
                       style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
                     ),
@@ -63,7 +63,7 @@ class AboutScreen extends StatelessWidget {
                         onTap: () {
                           showLicensePage(
                             context: context,
-                            applicationName: Constants.appName,
+                            applicationName: consts.appName,
                             applicationVersion: "1.0.0",
                             applicationLegalese:
                                 "Licensed under the GNU Affero General Public License v3.0",
@@ -127,16 +127,19 @@ class AboutScreen extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Mdi.earth),
                         tooltip: l10n.creditsWebsite,
-                        onPressed: () =>
-                            context.launchUrl(Constants.appWebsite),
-                        splashRadius: Constants.defaultSplashRadius,
+                        onPressed: () {
+                          context.launchUrl(consts.appWebsite);
+                        },
+                        splashRadius: consts.defaultSplashRadius,
                       ),
                       IconButton(
                         icon: const Icon(Mdi.github),
                         tooltip: l10n.creditsGithubRepo,
-                        onPressed: () =>
-                            context.launchUrl(Constants.githubRepository),
-                        splashRadius: Constants.defaultSplashRadius,
+                        onPressed: () {
+                          context.launchUrl(consts.githubRepository);
+                        },
+                        splashRadius: consts.defaultSplashRadius,
+                      ),
                       ),
                     ],
                   ),

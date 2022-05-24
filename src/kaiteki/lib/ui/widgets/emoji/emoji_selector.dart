@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_category_widget.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
@@ -58,7 +58,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
             IconButton(
               icon: const Icon(Mdi.close),
               onPressed: () => Navigator.of(context).pop(),
-              splashRadius: Constants.defaultSplashRadius,
+              splashRadius: consts.defaultSplashRadius,
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
             ),
           ],

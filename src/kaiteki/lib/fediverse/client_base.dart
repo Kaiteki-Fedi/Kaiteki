@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
-import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/http/response.dart';
@@ -99,7 +99,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     // We don't tamper with the "User-Agent" header on "web binaries", because
     // that triggers CORS killing our request.
     if (!kIsWeb) {
-      request.headers["User-Agent"] = Constants.userAgent;
+      request.headers["User-Agent"] = consts.userAgent;
     }
 
     if (contentType.isNotNullOrEmpty) {
