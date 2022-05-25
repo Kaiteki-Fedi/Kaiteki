@@ -11,9 +11,12 @@ Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple M
 
 ## Screenshots
 
-
-| ![](assets/screenshots/misskey-feed-phone.jpg) | ![](assets/screenshots/pleroma-user-tablet.jpg) |
-| - | - |
+<table>
+    <th>
+        <td><img src="assets/screenshots/misskey-feed-phone.jpg" height="250" alt="Screenshot of a Misskey feed inside Kaiteki on a phone"></td>
+        <td><img src="assets/screenshots/pleroma-user-tablet.jpg" height="250" alt="Screenshot of an user inside Kaiteki on a tablet"></td>
+    </th>
+</table>
 
 ## Platforms & Releases
 
@@ -34,7 +37,7 @@ If you want to try out Kaiteki, there are automatic builds available for use.
         <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Web"></td>
         <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Windows"></td>
         <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Linux"></td>
-        <td rowspan=3>No CI/CD available yet.<br><a href="https://github.com/Kaiteki-Fedi/kaiteki/issues/2">Help us!</a></td>
+        <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/Kaiteki/Android"></td>
         <td colspan=2 rowspan=3>Not supported.</td>
     </tr>
     <tr>
@@ -42,6 +45,7 @@ If you want to try out Kaiteki, there are automatic builds available for use.
         <td rowspan=2><a href="https://kaiteki.craftplacer.moe/">Visit web version</a></td>
         <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/windows/master/windows.zip">Download latest binaries</a></td>
         <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/linux/master/linux.zip">Download latest binaries</a></td>
+        <td rowspan=2><a href="https://github.com/Kaiteki-Fedi/Kaiteki/actions/workflows/android.yml">Download latest APK</a></td>
     </tr>
     <tr>
         <th>Packages / Installers</th>
@@ -66,18 +70,18 @@ Other features that are missing are extensive settings, unit tests, and many oth
 ## Compiling Kaiteki
 
 Depending on your platform you might have to take extra steps.
-See [this page for steps on compiling for desktop](https://flutter.dev/desktop#requirements), and [this page for steps on compiling for web](https://flutter.dev/docs/get-started/web).
+See [this page for steps on compiling for desktop](https://docs.flutter.dev/desktop), and [this page for steps on compiling for web](https://flutter.dev/docs/get-started/web).
 
 ```sh
 flutter upgrade # upgrade flutter to its latest version
 flutter pub get # get packages
 
-# run (debug)
+# run
 flutter run
-# or build (release)
-flutter build apk
-flutter build windows
-flutter build linux
-flutter build web
-# and so on...
+
+# ... or compile a release build
+flutter build apk --release
+flutter build windows --release
+flutter build linux --release
+flutter build web --release
 ```
