@@ -29,9 +29,11 @@ jobs:
         run: 'flutter pub get'
 
       - name: Dump signing key
-        run: echo $KEYSTORE_JKS | openssl base64 -d -out ${{ env.SOURCE_PATH }}/android/app/keystore.jks
-        env:
-          KEYSTORE_JKS: ${{ secrets.ANDROID_JKS }}
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: 'keystore.jks'
+          fileDir: '${{ env.SOURCE_PATH }}/android/app/'
+          encodedString: ${{ secrets.ANDROID_JKS }}
 
       - name: Build
         run: flutter build apk --release
