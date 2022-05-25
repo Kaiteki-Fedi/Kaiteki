@@ -1,4 +1,4 @@
-name: Linux
+name: Android
 
 env:
   SOURCE_PATH: './src/kaiteki'
