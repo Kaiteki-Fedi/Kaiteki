@@ -1,0 +1,46 @@
+name: Linux
+
+env:
+  SOURCE_PATH: './src/kaiteki'
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.SOURCE_PATH }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+
+      - name: Get packages
+        run: 'flutter pub get'
+
+      - name: Dump signing key
+        run: echo $KEYSTORE_JKS | openssl base64 -d -out ${{ env.SOURCE_PATH }}/android/app/keystore.jks
+        env:
+          KEYSTORE_JKS: ${{ secrets.ANDROID_JKS }}
+
+      - name: Build
+        run: flutter build apk --release
+        env:
+          STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux
+          path: '${{ env.SOURCE_PATH }}/build/app/outputs/flutter-apk/app-release.apk'
