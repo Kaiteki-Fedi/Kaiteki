@@ -120,12 +120,12 @@ class KaitekiApp extends ConsumerWidget {
     // TODO(Craftplacer): (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
     final preferences = ref.watch(preferenceProvider);
     return MaterialApp.router(
-      darkTheme: ThemeData.from(colorScheme: darkScheme),
+      darkTheme: darkAppTheme.materialTheme,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData.from(colorScheme: lightScheme),
+      theme: lightAppTheme.materialTheme,
       themeMode: preferences.get().theme,
       title: consts.appName,
     );

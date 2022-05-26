@@ -74,6 +74,13 @@ class _MainScreenState extends State<MainScreen> {
     ];
   }
 
+  static Color? getOutsideColor(BuildContext context) {
+    if (consts.useM3) {
+      return Theme.of(context).colorScheme.surfaceVariant;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
@@ -93,8 +100,11 @@ class _MainScreenState extends State<MainScreen> {
           final isMobile = screenSize == ScreenSize.xs;
           final showFab =
               !(!isMobile && _tabs![_currentPage].hideFabWhenDesktop);
+          final outsideColor = getOutsideColor(context);
           return Scaffold(
+            backgroundColor: outsideColor,
             appBar: AppBar(
+              backgroundColor: outsideColor,
               title: Text(
                 consts.appName,
                 style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
@@ -103,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             body: isMobile //
                 ? _getPage()
-                : _buildDesktopView(),
+                : _buildDesktopView(screenSize.index >= ScreenSize.m.index),
             bottomNavigationBar: isMobile //
                 ? _getNavigationBar()
                 : null,
@@ -116,26 +126,47 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildDesktopView() {
+  Widget _buildDesktopView(bool extendNavRail) {
+    final outsideColor = getOutsideColor(context);
     return Row(
       children: [
-        NavigationRail(
-          selectedIndex: _currentPage,
-          onDestinationSelected: _changePage,
-          labelType: NavigationRailLabelType.none,
-          minWidth: 56,
-          leading: const ComposeFloatingActionButton(small: true),
-          destinations: [
-            for (var tab in _tabs!)
-              NavigationRailDestination(
-                icon: Icon(tab.icon),
-                selectedIcon: Icon(tab.selectedIcon),
-                label: Text(tab.text),
+        Column(
+          children: [
+            Flexible(
+              child: NavigationRail(
+                backgroundColor: outsideColor,
+                useIndicator: consts.useM3,
+                selectedIndex: _currentPage,
+                onDestinationSelected: _changePage,
+                labelType: extendNavRail
+                    ? NavigationRailLabelType.none
+                    : NavigationRailLabelType.selected,
+                extended: extendNavRail,
+                // groupAlignment: consts.useM3 ? 0 : null,
+                minWidth: consts.useM3 ? null : 56,
+                leading: ComposeFloatingActionButton(
+                  type: extendNavRail
+                      ? ComposeFloatingActionButtonType.extended
+                      : ComposeFloatingActionButtonType.small,
+                  elevate: !consts.useM3,
+                ),
+                destinations: [
+                  for (var tab in _tabs!)
+                    NavigationRailDestination(
+                      icon: Icon(tab.icon),
+                      selectedIcon: Icon(tab.selectedIcon),
+                      label: Text(tab.text),
+                    ),
+                ],
               ),
+            ),
+            // if (consts.useM3) SizedBox(height: extendNavRail ? 96 : 72),
           ],
         ),
-        const VerticalDivider(thickness: 1, width: 1),
-        Expanded(child: _getPage()),
+        if (!consts.useM3) const VerticalDivider(thickness: 1, width: 1),
+        Expanded(
+          child: _roundWidgetM3(_getPage()),
+        ),
       ],
     );
   }
@@ -160,23 +191,47 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  BottomNavigationBar? _getNavigationBar() {
+  static Widget _roundWidgetM3(Widget widget) {
+    if (!consts.useM3) return widget;
+
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(topLeft: Radius.circular(16.0)),
+      child: widget,
+    );
+  }
+
+  Widget? _getNavigationBar() {
     if (_tabs!.length < 2) {
       return null;
     }
 
-    return BottomNavigationBar(
-      onTap: _changePage,
-      currentIndex: _currentPage,
-      items: [
-        for (var tab in _tabs!)
-          BottomNavigationBarItem(
-            icon: Icon(tab.icon),
-            activeIcon: Icon(tab.selectedIcon),
-            label: tab.text,
-          ),
-      ],
-    );
+    if (consts.useM3) {
+      return NavigationBar(
+        onDestinationSelected: _changePage,
+        selectedIndex: _currentPage,
+        destinations: [
+          for (var tab in _tabs!)
+            NavigationDestination(
+              icon: Icon(tab.icon),
+              selectedIcon: Icon(tab.selectedIcon),
+              label: tab.text,
+            ),
+        ],
+      );
+    } else {
+      return BottomNavigationBar(
+        onTap: _changePage,
+        currentIndex: _currentPage,
+        items: [
+          for (var tab in _tabs!)
+            BottomNavigationBarItem(
+              icon: Icon(tab.icon),
+              activeIcon: Icon(tab.selectedIcon),
+              label: tab.text,
+            ),
+        ],
+      );
+    }
   }
 
   void _changePage(int index) => setState(() => _currentPage = index);
@@ -206,30 +261,47 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class ComposeFloatingActionButton extends StatelessWidget {
-  final bool small;
+  final ComposeFloatingActionButtonType type;
+  final bool elevate;
 
   const ComposeFloatingActionButton({
     Key? key,
-    required this.small,
+    required this.type,
+    this.elevate = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (small) {
-      return FloatingActionButton.small(
-        onPressed: () => context.showPostDialog(),
-        elevation: 4.0,
-        child: const Icon(Icons.edit_rounded),
-      );
-    } else {
-      return FloatingActionButton(
-        onPressed: () => context.showPostDialog(),
-        elevation: 4.0,
-        child: const Icon(Icons.edit_rounded),
-      );
+    final elevation = elevate ? 4.0 : 0.0;
+    const icon = Icon(Icons.edit_rounded);
+    switch (type) {
+      case ComposeFloatingActionButtonType.small:
+        return FloatingActionButton.small(
+          onPressed: () => context.showPostDialog(),
+          elevation: elevation,
+          child: icon,
+        );
+      case ComposeFloatingActionButtonType.normal:
+        return FloatingActionButton(
+          onPressed: () => context.showPostDialog(),
+          elevation: elevation,
+          child: icon,
+        );
+      case ComposeFloatingActionButtonType.extended:
+        return SizedBox(
+          height: 48,
+          child: FloatingActionButton.extended(
+            onPressed: () => context.showPostDialog(),
+            elevation: elevation,
+            label: Text(context.getL10n().composeButtonLabel),
+            icon: icon,
+          ),
+        );
     }
   }
 }
+
+enum ComposeFloatingActionButtonType { small, normal, extended }
 
 class _MainScreenTab {
   final String text;
