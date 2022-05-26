@@ -69,6 +69,7 @@ flutter:
     - assets/icons/misskey.png
     - assets/icons/husky.png
     - assets/icon.png
+    - assets/credits.json
     - assets/instances.json
   fonts:
     - family: Quicksand
