@@ -59,6 +59,7 @@ class _MainScreenState extends State<MainScreen> {
           text: l10n.composeButtonLabel,
           onTap: () => context.showPostDialog(),
         ),
+        hideFabWhenDesktop: true,
       ),
       _MainScreenTab(
         selectedIcon: Icons.notifications_rounded,
@@ -88,7 +89,10 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: LayoutBuilder(
         builder: (_, constraints) {
-          final isMobile = getScreenSize(constraints.maxWidth) == ScreenSize.xs;
+          final screenSize = getScreenSize(constraints.maxWidth);
+          final isMobile = screenSize == ScreenSize.xs;
+          final showFab =
+              !(!isMobile && _tabs![_currentPage].hideFabWhenDesktop);
           return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -103,7 +107,9 @@ class _MainScreenState extends State<MainScreen> {
             bottomNavigationBar: isMobile //
                 ? _getNavigationBar()
                 : null,
-            floatingActionButton: _getFab(context, _currentPage, isMobile),
+            floatingActionButton: showFab //
+                ? _getFab(context, _currentPage, isMobile)
+                : null,
           );
         },
       ),
@@ -230,12 +236,14 @@ class _MainScreenTab {
   final IconData selectedIcon;
   final IconData icon;
   final _FloatingActionButtonData? fab;
+  final bool hideFabWhenDesktop;
 
   const _MainScreenTab({
     required this.selectedIcon,
     required this.text,
     required this.icon,
     this.fab,
+    this.hideFabWhenDesktop = false,
   });
 }
 
