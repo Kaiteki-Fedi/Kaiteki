@@ -146,6 +146,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         throw Exception("oopsie woopsie, mounted is false");
         // If this triggers `dead_code`, why doesn't it make
         // `use_build_context_synchronously` go away?
+        // ignore: dead_code
         return null;
       }
 
