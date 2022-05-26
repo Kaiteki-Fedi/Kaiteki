@@ -44,4 +44,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
+          name: android
           path: '${{ env.SOURCE_PATH }}/build/app/outputs/flutter-apk/app-release.apk'

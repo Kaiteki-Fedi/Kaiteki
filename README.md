@@ -45,7 +45,7 @@ If you want to try out Kaiteki, there are automatic builds available for use.
         <td rowspan=2><a href="https://kaiteki.craftplacer.moe/">Visit web version</a></td>
         <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/windows/master/windows.zip">Download latest binaries</a></td>
         <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/linux/master/linux.zip">Download latest binaries</a></td>
-        <td rowspan=2><a href="https://github.com/Kaiteki-Fedi/Kaiteki/actions/workflows/android.yml">Download latest APK</a></td>
+        <td rowspan=2><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/android/master/android.zip">Download latest APK</a></td>
     </tr>
     <tr>
         <th>Packages / Installers</th>
