@@ -90,7 +90,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     String? body,
     String? contentType,
   }) async {
-    final methodString = method.toMethodString();
+    final methodString = method.toString();
     final url = Uri.parse("$baseUrl/$endpoint");
     final request = http.Request(methodString, url);
 
