@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:http/http.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
+import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -10,6 +12,7 @@ import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/file.dart';
 
 /// An adapter containing a backing Fediverse client that.
 abstract class FediverseAdapter<Client extends FediverseClientBase> {
@@ -71,4 +74,6 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// This method *may* return a [User] with updated information depending on
   /// the adapter implementation.
   Future<User?> followUser(String id);
+
+  Future<Attachment> uploadAttachment(File file, String? description);
 }

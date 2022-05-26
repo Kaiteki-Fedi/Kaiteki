@@ -20,6 +20,7 @@ import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
@@ -117,22 +118,12 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<Post> postStatus(PostDraft draft, {Post? parentPost}) async {
-    String visibility;
-
-    switch (draft.visibility) {
-      case Visibility.public:
-        visibility = "public";
-        break;
-      case Visibility.unlisted:
-        visibility = "unlisted";
-        break;
-      case Visibility.followersOnly:
-        visibility = "private";
-        break;
-      case Visibility.direct:
-        visibility = "direct";
-        break;
-    }
+    final visibility = const <Visibility, String>{
+      Visibility.public: "public",
+      Visibility.unlisted: "unlisted",
+      Visibility.followersOnly: "private",
+      Visibility.direct: "direct"
+    }[draft.visibility]!;
 
     final contentType = getContentType(draft.formatting);
 
@@ -143,6 +134,9 @@ class SharedMastodonAdapter<T extends MastodonClient>
       spoilerText: draft.subject,
       inReplyToId: draft.replyTo?.id,
       contentType: contentType,
+      mediaIds: draft.attachments
+          .map((a) => (a.source as mastodon.Attachment).id)
+          .toList(),
     );
     return toPost(newPost);
   }
@@ -231,5 +225,11 @@ class SharedMastodonAdapter<T extends MastodonClient>
   Future<User?> followUser(String id) {
     // TODO(Craftplacer): implement followUser
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Attachment> uploadAttachment(File file, String? description) async {
+    final attachment = await client.uploadMedia(file, description);
+    return toAttachment(attachment);
   }
 }

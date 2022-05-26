@@ -1,4 +1,5 @@
 import 'package:fediverse_objects/misskey.dart' as misskey;
+import 'package:http/http.dart' show MultipartFile;
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
@@ -46,6 +47,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     String? text,
     String? cw,
     String? replyId,
+    List<String>? fileIds = const [],
   }) async {
     // FIXME: Properly parse Misskey create note response
     return sendJsonRequest(
@@ -58,6 +60,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
         if (text != null) "text": text,
         if (cw != null) "cw": cw,
         if (replyId != null) "replyId": replyId,
+        if (fileIds?.isNotEmpty == true) "fileIds": fileIds,
       },
     );
   }
@@ -284,5 +287,27 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     instance = secret.instance;
     authenticationData = MisskeyAuthenticationData(secret.accessToken);
     return Future.value();
+  }
+
+  Future<misskey.DriveFile> createDriveFile(
+    MultipartFile file, {
+    String? folderId,
+    String? name,
+    String? comment,
+
+    // bool? isSensitive,
+  }) {
+    return sendJsonMultiPartRequest(
+      HttpMethod.post,
+      "api/drive/files/create",
+      misskey.DriveFile.fromJson,
+      fields: <String, String>{
+        if (folderId != null) "folderId": folderId,
+        if (name != null) "name": name,
+        if (comment != null) "comment": comment,
+        // if (isSensitive != null) "isSensitive": isSensitive,
+      },
+      files: [file],
+    );
   }
 }

@@ -5,7 +5,7 @@ import 'package:kaiteki/utils/extensions/string.dart';
 
 abstract class AuthenticationData {
   /// Apply all necessary data to the outgoing HTTP request.
-  Request applyTo(Request request);
+  BaseRequest applyTo(BaseRequest request);
 }
 
 // TODO(Craftplacer): Make MastodonAuthenticationData final, with copyWith method.
@@ -21,7 +21,7 @@ class MastodonAuthenticationData implements AuthenticationData {
   });
 
   @override
-  Request applyTo(Request request) {
+  BaseRequest applyTo(BaseRequest request) {
     if (accessToken.isNotNullOrEmpty) {
       request.headers["Authorization"] = "Bearer $accessToken";
     }
@@ -36,15 +36,19 @@ class MisskeyAuthenticationData implements AuthenticationData {
   const MisskeyAuthenticationData(this.token);
 
   @override
-  Request applyTo(Request request) {
+  BaseRequest applyTo(BaseRequest request) {
     if (token.isNullOrEmpty) return request;
 
-    // TODO(Craftplacer): we should avoid duplicate (de-)serialization.
-    final decoded = jsonDecode(request.body);
-    decoded["i"] = token;
+    if (request is Request) {
+      // TODO(Craftplacer): we should avoid duplicate (de-)serialization.
+      final decoded = jsonDecode(request.body);
+      decoded["i"] = token;
 
-    final encoded = jsonEncode(decoded);
-    request.body = encoded;
+      final encoded = jsonEncode(decoded);
+      request.body = encoded;
+    } else if (request is MultipartRequest) {
+      request.fields["i"] = token;
+    }
 
     return request;
   }

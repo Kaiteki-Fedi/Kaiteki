@@ -1,4 +1,5 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
+import 'package:http/http.dart' show MultipartFile;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
@@ -8,6 +9,7 @@ import 'package:kaiteki/http/response.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/utils.dart';
 
@@ -147,6 +149,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     String? visibility,
     String? inReplyToId,
     String? contentType = "text/plain",
+    List<String> mediaIds = const [],
   }) async {
     return sendJsonRequest(
       HttpMethod.post,
@@ -160,6 +163,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
         "preview": pleromaPreview.toString(),
         "visibility": visibility,
         "in_reply_to_id": inReplyToId,
+        "media_ids": mediaIds
       },
     );
   }
@@ -222,5 +226,20 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     instance = secret.instance;
     authenticationData!.accessToken = secret.accessToken;
     return Future.value();
+  }
+
+  Future<mastodon.Attachment> uploadMedia(
+    File file,
+    String? description,
+  ) async {
+    return sendJsonMultiPartRequest(
+      HttpMethod.post,
+      "api/v1/media",
+      mastodon.Attachment.fromJson,
+      fields: {
+        if (description != null) "description": description,
+      },
+      files: [await file.toMultipartFile("file")],
+    );
   }
 }

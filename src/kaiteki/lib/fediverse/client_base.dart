@@ -64,6 +64,24 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     return toObject.call(bodyJson);
   }
 
+  Future<T> sendJsonMultiPartRequest<T>(
+    HttpMethod method,
+    String endpoint,
+    DeserializeFromJson<T> toObject, {
+    Map<String, String> fields = const {},
+    List<http.MultipartFile> files = const [],
+  }) async {
+    final response = await sendMultiPartRequest(
+      method,
+      endpoint,
+      fields: fields,
+      files: files,
+    );
+
+    final bodyJson = await response.getContentJson();
+    return toObject.call(bodyJson);
+  }
+
   Future<Iterable<T>> sendJsonRequestMultiple<T>(
     HttpMethod method,
     String endpoint,
@@ -94,28 +112,52 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     final url = Uri.parse("$baseUrl/$endpoint");
     final request = http.Request(methodString, url);
 
+    if (contentType.isNotNullOrEmpty) {
+      request.headers["Content-Type"] = contentType!;
+    }
+
     if (body != null) request.body = body;
 
+    _tamperRequest(request);
+
+    final httpResponse = await request.send();
+    final response = Response(httpResponse);
+    await checkResponse(response);
+    return response;
+  }
+
+  /// Adds default request data
+  void _tamperRequest(http.BaseRequest request) {
     // We don't tamper with the "User-Agent" header on "web binaries", because
     // that triggers CORS killing our request.
     if (!kIsWeb) {
       request.headers["User-Agent"] = consts.userAgent;
     }
 
-    if (contentType.isNotNullOrEmpty) {
-      request.headers["Content-Type"] = contentType!;
-    }
-
     // apply required authentication data if available
     if (authenticationData != null) {
       authenticationData!.applyTo(request);
     }
+  }
+
+  Future<Response> sendMultiPartRequest(
+    HttpMethod method,
+    String endpoint, {
+    Map<String, String> fields = const {},
+    List<http.MultipartFile> files = const [],
+  }) async {
+    final methodString = method.toString();
+    final url = Uri.parse("$baseUrl/$endpoint");
+    final request = http.MultipartRequest(methodString, url);
+
+    request.files.addAll(files);
+    request.fields.addAll(fields);
+
+    _tamperRequest(request);
 
     final httpResponse = await request.send();
     final response = Response(httpResponse);
-
     await checkResponse(response);
-
     return response;
   }
 

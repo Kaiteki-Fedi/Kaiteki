@@ -1,17 +1,20 @@
 import 'dart:math';
 
 import 'package:async/async.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
+import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart' as v;
+import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/ui/widgets/async_snackbar_content.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/widgets/enum_icon_button.dart';
@@ -42,11 +45,14 @@ class _PostFormState extends ConsumerState<PostForm> {
   late RestartableTimer _typingTimer;
   var _visibility = v.Visibility.public;
   var _formatting = Formatting.plainText;
-  final _attachMenuItems = [
+  final List<Future<Attachment>> attachments = [];
+
+  // FIXME(Craftplacer): Strings for PostForm's attach menu are not localized.
+  late final _attachMenuItems = [
     AttachMenuItem(
       label: "Attach files",
       icon: Mdi.file,
-      onPressed: () {},
+      onPressed: onAttachFile,
     ),
     const AttachMenuItem(
       label: "Take picture",
@@ -101,6 +107,7 @@ class _PostFormState extends ConsumerState<PostForm> {
     final l10n = context.getL10n();
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (manager.adapter is PreviewSupport)
           ExpansionTile(
@@ -152,6 +159,14 @@ class _PostFormState extends ConsumerState<PostForm> {
             ),
           ),
         ),
+        if (attachments.isNotEmpty) const Divider(height: 1),
+        if (attachments.isNotEmpty)
+          AttachmentTray(
+            attachments: attachments,
+            onRemoveAttachment: (i) => setState(() {
+              attachments.removeAt(i);
+            }),
+          ),
         const Divider(height: 1),
         Padding(
           padding: const EdgeInsets.only(
@@ -242,17 +257,19 @@ class _PostFormState extends ConsumerState<PostForm> {
   Future<Post>? getPreviewFuture(AccountManager manager) {
     if (_bodyController.value.text.isEmpty) return null;
 
+    final draft = _getPostDraft([]);
     final previewAdapter = manager.adapter as PreviewSupport;
-    return previewAdapter.getPreview(_getPostDraft());
+    return previewAdapter.getPreview(draft);
   }
 
-  PostDraft _getPostDraft() {
+  PostDraft _getPostDraft(List<Attachment> attachments) {
     return PostDraft(
       subject: _subjectController.value.text,
       content: _bodyController.value.text,
       visibility: _visibility,
       formatting: _formatting,
       replyTo: widget.replyTo,
+      attachments: attachments,
     );
   }
 
@@ -266,7 +283,11 @@ class _PostFormState extends ConsumerState<PostForm> {
     final snackBar = SnackBar(
       duration: const Duration(days: 1),
       content: FutureBuilder<Post>(
-        future: adapter.postStatus(_getPostDraft()),
+        future: () async {
+          final attachments = await Future.wait(this.attachments);
+          final draft = _getPostDraft(attachments);
+          return adapter.postStatus(draft);
+        }(),
         builder: (context, snapshot) {
           switch (snapshot.state) {
             case AsyncSnapshotState.errored:
@@ -414,7 +435,166 @@ class _PostFormState extends ConsumerState<PostForm> {
       elevation: 24,
     );
   }
+
+  Future<void> onAttachFile() async {
+    Navigator.pop(context);
+
+    final result = await FilePicker.platform.pickFiles(
+      dialogTitle: "Select file to upload as attachment",
+      lockParentWindow: true,
+    );
+
+    if (result == null) return;
+
+    final pickedFile = result.files.first;
+    final kaitekiFile = File.path(pickedFile.path!, name: pickedFile.name);
+    final adapter = ref.watch(accountProvider).adapter;
+    setState(
+      () => attachments.add(adapter.uploadAttachment(kaitekiFile, null)),
+    );
+  }
 }
+
+class AttachmentTray extends StatelessWidget {
+  final Function(int index)? onRemoveAttachment;
+
+  const AttachmentTray({
+    Key? key,
+    required this.attachments,
+    this.onRemoveAttachment,
+  }) : super(key: key);
+
+  final List<Future<Attachment>> attachments;
+
+  @override
+  Widget build(BuildContext context) {
+    var i = 0;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (var i = 0; i < attachments.length; i++)
+            AttachmentTrayItem(
+              attachment: attachments[i],
+              onRemove: () => onRemoveAttachment?.call(i),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class AttachmentTrayItem extends StatelessWidget {
+  final VoidCallback? onRemove;
+
+  const AttachmentTrayItem({
+    Key? key,
+    required this.attachment,
+    this.onRemove,
+  }) : super(key: key);
+
+  final Future<Attachment> attachment;
+
+  @override
+  Widget build(BuildContext context) {
+    const size = 72.0;
+
+    return FutureBuilder(
+      future: attachment,
+      // ignore: avoid_types_on_closure_parameters
+      builder: (context, AsyncSnapshot<Attachment> snapshot) {
+        final Widget widget;
+
+        if (snapshot.hasError) {
+          widget = const Center(child: Icon(Icons.error));
+        } else if (!snapshot.hasData) {
+          widget = const Center(child: CircularProgressIndicator());
+        } else {
+          final attachment = snapshot.data!;
+          switch (attachment.type) {
+            case AttachmentType.image:
+              widget = Image.network(
+                snapshot.data!.url,
+                fit: BoxFit.cover,
+              );
+              break;
+            case AttachmentType.video:
+              widget = const Center(child: Icon(Icons.video_file_rounded));
+              break;
+            case AttachmentType.audio:
+              widget = const Center(child: Icon(Icons.audio_file_rounded));
+              break;
+            case AttachmentType.file:
+            default:
+              widget = const Center(child: Icon(Icons.upload_file_rounded));
+              break;
+          }
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Material(
+            borderRadius: BorderRadius.circular(8.0),
+            elevation: 4.0,
+            child: Stack(
+              children: [
+                SizedBox(
+                  width: size,
+                  height: size,
+                  child: ColoredBox(
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    child: widget,
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  child: PopupMenuButton(
+                    iconSize: 20,
+                    splashRadius: 12,
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    onSelected: (action) {
+                      switch (action) {
+                        case AttachmentTryItemAction.remove:
+                          onRemove?.call();
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) {
+                      return [
+                        PopupMenuItem(
+                          value: AttachmentTryItemAction.remove,
+                          enabled: onRemove != null,
+                          child: const ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(Icons.close),
+                            title: Text("Remove attachment"),
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: AttachmentTryItemAction.addAltText,
+                          enabled: false,
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(
+                              Icons.drive_file_rename_outline_rounded,
+                            ),
+                            title: Text("Add alternate text"),
+                          ),
+                        ),
+                      ];
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+enum AttachmentTryItemAction { remove, addAltText }
 
 class AttachMenuItem {
   final IconData icon;

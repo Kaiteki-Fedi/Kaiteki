@@ -23,6 +23,7 @@ import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 
 part 'adapter.c.dart';
@@ -103,6 +104,9 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       text: draft.content,
       cw: draft.subject,
       replyId: draft.replyTo?.id,
+      fileIds: draft.attachments.map((a) {
+        return (a.source as misskey.DriveFile).id;
+      }).toList(),
     );
 
     return toPost(note);
@@ -238,5 +242,13 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   Future<Post> getPostById(String id) {
     // TODO(Craftplacer): implement getPostById
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Attachment> uploadAttachment(File file, String? description) async {
+    final driveFile = await client.createDriveFile(
+      await file.toMultipartFile("file"),
+    );
+    return toAttachment(driveFile);
   }
 }
