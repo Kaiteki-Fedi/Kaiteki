@@ -16,7 +16,7 @@ const double defaultFormHeight = 592;
 bool get useM3 => false;
 
 /// Whether to use frontend login endpoints or oauth ones.
-bool get useOAuth => false;
+bool get useOAuth => true;
 
 const List<String> defaultScopes = [
   "read",
