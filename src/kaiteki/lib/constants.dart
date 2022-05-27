@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 const String appName = "Kaiteki";
 const String appWebsite = "https://craftplacer.moe/projects/kaiteki";
 const String telegramChannel = "https://t.me/kaiteki_fedi";
@@ -17,7 +19,7 @@ const double defaultFormHeight = 592;
 bool get useM3 => false;
 
 /// Whether to use frontend login endpoints or oauth ones.
-bool get useOAuth => true;
+bool get useOAuth => !kIsWeb;
 
 const List<String> defaultScopes = [
   "read",
