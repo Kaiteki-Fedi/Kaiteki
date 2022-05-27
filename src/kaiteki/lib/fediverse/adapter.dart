@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:http/http.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
@@ -30,7 +29,8 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
     String instance,
     String username,
     String password,
-    MfaCallback mfaCallback,
+    MfaCallback requestMfa,
+    OAuthCallback requestOAuth,
     AccountManager accounts,
   );
 

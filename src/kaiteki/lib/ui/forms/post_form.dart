@@ -468,7 +468,6 @@ class AttachmentTray extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var i = 0;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(

@@ -1,5 +1,4 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
-import 'package:http/http.dart' show MultipartFile;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
@@ -53,6 +52,29 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
         "grant_type": "password",
         "client_id": authenticationData!.clientId,
         "client_secret": authenticationData!.clientSecret,
+      },
+    );
+  }
+
+  Future<LoginResponse> getToken(
+    String grantType,
+    String clientId,
+    String clientSecret,
+    String redirectUri, {
+    String? scope,
+    String? code,
+  }) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "oauth/token",
+      LoginResponse.fromJson,
+      body: {
+        "grant_type": grantType,
+        "client_id": clientId,
+        "client_secret": clientSecret,
+        "redirect_uri": redirectUri,
+        if (scope != null) "scope": scope,
+        if (code != null) "code": code,
       },
     );
   }

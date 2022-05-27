@@ -2,6 +2,7 @@ import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_functions.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
@@ -19,8 +20,10 @@ import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
+import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
+import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
@@ -37,21 +40,16 @@ class SharedMastodonAdapter<T extends MastodonClient>
     return toUser(await client.getAccount(id));
   }
 
-  @override
-  Future<LoginResult> login(
+  Future<ClientSecret> _makeClientSecret(
     String instance,
-    String username,
-    String password,
-    mfaCallback,
-    AccountManager accounts,
-  ) async {
-    client.instance = instance;
-
-    // Retrieve or create client secret
+    ClientSecretRepository clientRepo, [
+    String? redirectUri,
+  ]) async {
     final clientSecret = await getClientSecret(
       client,
       instance,
-      accounts.getClientRepo(),
+      clientRepo,
+      redirectUri,
     );
 
     client.authenticationData = MastodonAuthenticationData(
@@ -59,36 +57,87 @@ class SharedMastodonAdapter<T extends MastodonClient>
       clientSecret.clientSecret,
     );
 
-    String accessToken;
+    return clientSecret;
+  }
 
-    // Try to login and handle error
-    final loginResponse = await client.login(username, password);
+  @override
+  Future<LoginResult> login(
+    String instance,
+    String username,
+    String password,
+    requestMfa,
+    requestOAuth,
+    AccountManager accounts,
+  ) async {
+    late final ClientSecret clientSecret;
+    late final String accessToken;
 
-    if (loginResponse.error.isNotNullOrEmpty) {
-      if (loginResponse.error != "mfa_required") {
-        return LoginResult.failed(loginResponse.error);
-      }
+    client.instance = instance;
 
-      final code = await mfaCallback.call();
+    if (consts.useOAuth) {
+      // if (Platform.isAndroid | Platform.isIOS) {}
+      final scopes = consts.defaultScopes.join(" ");
+      late final String url;
+      final response = await requestOAuth((oauthUrl) async {
+        clientSecret = await _makeClientSecret(
+          instance,
+          accounts.getClientRepo(),
+          url = oauthUrl.toString(),
+        );
 
-      if (code == null) {
-        return LoginResult.aborted();
-      }
+        return Uri.https(instance, "/oauth/authorize", {
+          "response_type": "code",
+          "client_id": clientSecret.clientId,
+          "redirect_uri": url,
+          "scope": scopes,
+        });
+      });
 
-      // TODO(Craftplacer): add error-able TOTP screens
-      // TODO(Craftplacer): make use of a while loop to make this more efficient
-      final mfaResponse = await client.respondMfa(
-        loginResponse.mfaToken!,
-        int.parse(code),
+      final code = response["code"]!;
+      final loginResponse = await client.getToken(
+        "authorization_code",
+        clientSecret.clientId,
+        clientSecret.clientSecret,
+        url,
+        code: code,
+        scope: scopes,
       );
 
-      if (mfaResponse.error.isNotNullOrEmpty) {
-        return LoginResult.failed(mfaResponse.error);
-      } else {
-        accessToken = mfaResponse.accessToken!;
-      }
-    } else {
       accessToken = loginResponse.accessToken!;
+    } else {
+      clientSecret = await _makeClientSecret(
+        instance,
+        accounts.getClientRepo(),
+      );
+
+      final loginResponse = await client.login(username, password);
+
+      if (loginResponse.error.isNotNullOrEmpty) {
+        if (loginResponse.error != "mfa_required") {
+          return LoginResult.failed(loginResponse.error);
+        }
+
+        final code = await requestMfa.call();
+
+        if (code == null) {
+          return LoginResult.aborted();
+        }
+
+        // TODO(Craftplacer): add error-able TOTP screens
+        // TODO(Craftplacer): make use of a while loop to make this more efficient
+        final mfaResponse = await client.respondMfa(
+          loginResponse.mfaToken!,
+          int.parse(code),
+        );
+
+        if (mfaResponse.error.isNotNullOrEmpty) {
+          return LoginResult.failed(mfaResponse.error);
+        } else {
+          accessToken = mfaResponse.accessToken!;
+        }
+      } else {
+        accessToken = loginResponse.accessToken!;
+      }
     }
 
     // Create and set account secret

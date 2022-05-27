@@ -3,6 +3,7 @@ const String appWebsite = "https://craftplacer.moe/projects/kaiteki";
 const String telegramChannel = "https://t.me/kaiteki_fedi";
 const String githubRepository = "https://github.com/Kaiteki-Fedi/Kaiteki";
 const String appDescription = "The comfy Fediverse client";
+    "https://craftplacer.moe/projects/kaiteki/img/kaiteki.png";
 const String userAgent =
     "Kaiteki/1.0 (+https://craftplacer.moe/projects/kaiteki)";
 
@@ -13,6 +14,9 @@ const double defaultFormHeight = 592;
 
 /// Debug flag for Material 3
 bool get useM3 => false;
+
+/// Whether to use frontend login endpoints or oauth ones.
+bool get useOAuth => false;
 
 const List<String> defaultScopes = [
   "read",

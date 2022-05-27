@@ -1,6 +1,11 @@
+import 'dart:async';
+
+import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiteki/auth/login_functions.dart';
+import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
@@ -8,8 +13,10 @@ import 'package:kaiteki/ui/dialogs/api_type_dialog.dart';
 import 'package:kaiteki/ui/dialogs/mfa_dialog.dart';
 import 'package:kaiteki/ui/forms/login_form.dart';
 import 'package:kaiteki/ui/widgets/async_block_widget.dart';
+import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/layout/form_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -24,6 +31,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Instance? _instance;
   String? background;
   ApiType? _type;
+  bool _showOAuthPage = false;
 
   final _loginFormKey = GlobalKey<LoginFormState>();
 
@@ -34,14 +42,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final l10n = context.getL10n();
 
     return WillPopScope(
-      onWillPop: () async {
-        if (_loading) {
-          return false;
-        }
-
-        _loginFormKey.currentState!.onBackButtonPressed();
-        return false;
-      },
+      onWillPop: _onWillPop,
       child: Container(
         color: Theme.of(context).canvasColor,
         child: Stack(
@@ -69,39 +70,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               body: FormWidget(
                 padding: EdgeInsets.zero,
                 builder: (context, fillsPage) {
-                  return Container(
-                    color: Theme.of(context).cardColor.withOpacity(
-                          fillsPage ? .9 : 0,
-                        ),
-                    height: double.infinity,
-                    child: AsyncBlockWidget(
-                      blocking: _loading,
-                      duration: const Duration(milliseconds: 250),
-                      secondChild: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      child: LoginForm(
-                        key: _loginFormKey,
-                        onValidateInstance: validateInstance,
-                        onValidateUsername: validateUsername,
-                        onValidatePassword: validatePassword,
-                        currentError: _error,
-                        onLogin: (instance, username, password) async {
-                          final future = loginButtonPress(
-                            instance,
-                            username,
-                            password,
-                          );
-                          return asyncWrapper(future);
-                        },
-                        onFetchInstance: (instance) {
-                          final future = fetchInstance(instance);
-                          return asyncWrapper(future);
-                        },
-                        onResetInstance: () => setState(() {
-                          _type = null;
-                          _instance = null;
-                        }),
+                  final formWidgetColor = Theme.of(context)
+                      .cardColor
+                      .withOpacity(fillsPage ? .9 : 0);
+
+                  return ColoredBox(
+                    color: formWidgetColor,
+                    child: SizedBox(
+                      height: double.infinity,
+                      child: PageTransitionSwitcher(
+                        // key: _transitionKey,
+                        transitionBuilder: _buildTransition,
+                        duration: const Duration(milliseconds: 750),
+                        // reverse: !showAuthentication,
+                        child: _showOAuthPage
+                            ? _buildOAuthPage()
+                            : _buildLoginForm(),
                       ),
                     ),
                   );
@@ -112,6 +96,62 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildTransition(
+    Widget child,
+    Animation<double> primaryAnimation,
+    Animation<double> secondaryAnimation,
+  ) {
+    return SharedAxisTransition(
+      animation: primaryAnimation,
+      secondaryAnimation: secondaryAnimation,
+      transitionType: SharedAxisTransitionType.horizontal,
+      fillColor: Colors.transparent,
+      child: child,
+    );
+  }
+
+  AsyncBlockWidget _buildLoginForm() {
+    return AsyncBlockWidget(
+      blocking: _loading,
+      duration: const Duration(milliseconds: 250),
+      secondChild: const Center(
+        child: CircularProgressIndicator(),
+      ),
+      child: LoginForm(
+        key: _loginFormKey,
+        onValidateInstance: validateInstance,
+        onValidateUsername: validateUsername,
+        onValidatePassword: validatePassword,
+        currentError: _error,
+        onLogin: (instance, username, password) async {
+          final future = loginButtonPress(
+            instance,
+            username,
+            password,
+          );
+          return asyncWrapper(future);
+        },
+        onFetchInstance: (instance) {
+          final future = fetchInstance(instance);
+          return asyncWrapper(future);
+        },
+        onResetInstance: () => setState(() {
+          _type = null;
+          _instance = null;
+        }),
+      ),
+    );
+  }
+
+  Future<bool> _onWillPop() async {
+    if (_loading) {
+      return false;
+    }
+
+    _loginFormKey.currentState!.onBackButtonPressed();
+    return false;
   }
 
   Future<T> asyncWrapper<T>(Future<T> future) {
@@ -306,6 +346,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       username,
       password,
       requestMfa,
+      handleOAuth,
       accounts,
     );
 
@@ -317,4 +358,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> runAsync() async {}
+
+  Widget _buildOAuthPage() {
+    return const IconLandingWidget(
+      icon: Icon(Icons.key_rounded),
+      text: Text("Waiting for OAuth..."),
+    );
+  }
+
+  Future<Map<String, String>> handleOAuth(
+    GenerateOAuthUrlCallback generateUrl,
+  ) async {
+    setState(() => _showOAuthPage = true);
+    final response = await runOAuthServer((localUrl) async {
+      // TODO(Craftplacer): Show WebView inside login screen when possible
+      await launchUrl(await generateUrl(localUrl));
+    });
+    setState(() => _showOAuthPage = false);
+    return response;
+  }
 }

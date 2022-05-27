@@ -4,6 +4,7 @@ import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
+import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/create_app.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/generate_session.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
@@ -308,6 +309,15 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
         // if (isSensitive != null) "isSensitive": isSensitive,
       },
       files: [file],
+    );
+  }
+
+  Future<MisskeyCheckSessionResponse> checkSession(String session) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/miauth/$session/check",
+      MisskeyCheckSessionResponse.fromJson,
+      body: {},
     );
   }
 }

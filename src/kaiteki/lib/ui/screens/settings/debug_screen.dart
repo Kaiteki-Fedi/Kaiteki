@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/di.dart';
 import 'package:mdi/mdi.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DebugScreen extends StatefulWidget {
   const DebugScreen({Key? key}) : super(key: key);
@@ -37,6 +39,11 @@ class _DebugScreenState extends State<DebugScreen> {
             leading: const Icon(Mdi.wrench),
             title: const Text("Manage shared preferences"),
             onTap: () => context.push('/settings/debug/preferences'),
+          ),
+          ListTile(
+            leading: const Icon(Mdi.key),
+            title: const Text("Run OAuth Server"),
+            onTap: () => runOAuthServer(launchUrl),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:intl/intl.dart';
 import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/backends/misskey/client.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
@@ -25,6 +26,7 @@ import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
+import 'package:uuid/uuid.dart';
 
 part 'adapter.c.dart';
 
@@ -53,36 +55,59 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     String instance,
     String username,
     String password,
-    mfaCallback,
+    requestMfa,
+    requestOAuth,
     AccountManager accounts,
   ) async {
     client.instance = instance;
 
-    final authResponse = await client.signIn(
-      MisskeySignInRequest(
-        username: username,
-        password: password,
-      ),
-    );
+    final session = const Uuid().v4();
+    late final misskey.User user;
+    late final String token;
+    late final String id;
 
-    final mkClientSecret = ClientSecret(instance, "", "", apiType: client.type);
+    if (consts.useOAuth) {
+      final response = await requestOAuth((oauthUrl) async {
+        return Uri.https(instance, "/miauth/$session", {
+          "name": consts.appName,
+          "icon": consts.appRemoteIcon,
+          "callback": oauthUrl.toString(),
+          "permission": consts.defaultMisskeyPermissions.join(","),
+        });
+      });
+
+      final details = await client.checkSession(session);
+      user = details.user;
+      token = details.token;
+    } else {
+      final authResponse = await client.signIn(
+        MisskeySignInRequest(
+          username: username,
+          password: password,
+        ),
+      );
+
+      token = authResponse.i;
+      id = authResponse.id;
+    }
 
     // Create and set account secret
-    final accountSecret = AccountSecret(instance, username, authResponse.i);
-    client.authenticationData =
-        MisskeyAuthenticationData(accountSecret.accessToken);
+    final accountSecret = AccountSecret(instance, username, token);
+    client.authenticationData = MisskeyAuthenticationData(token);
 
-    // Check whether secrets work, and if we can get an account back
-    final account = await client.showUser(authResponse.id);
-    if (account == null) {
-      return LoginResult.failed("Failed to retrieve user info");
+    if (!consts.useOAuth) {
+      // Check whether secrets work, and if we can get an account back
+      final user = await client.showUser(id);
+      if (user == null) {
+        return LoginResult.failed("Failed to retrieve user info");
+      }
     }
 
     final compound = AccountCompound(
       container: accounts,
       adapter: this,
-      account: toUser(account),
-      clientSecret: mkClientSecret,
+      account: toUser(user),
+      clientSecret: ClientSecret(instance, "", "", apiType: client.type),
       accountSecret: accountSecret,
     );
     await accounts.addCurrentAccount(compound);

@@ -48,10 +48,12 @@ dependencies:
   oauth1: ^2.0.0
   palette_generator: ^0.3.2
   shared_preferences: ^2.0.5
+  shelf: ^1.3.0
   state_notifier: ^0.7.1
   supercharged: ^2.0.0
   tuple: ^2.0.0
   url_launcher: ^6.0.3
+  uuid: ^3.0.6
   video_player: ^2.1.0
 
 dev_dependencies:
@@ -72,6 +74,7 @@ flutter:
     - assets/icon.png
     - assets/credits.json
     - assets/instances.json
+    - assets/oauth-success.html
   fonts:
     - family: Quicksand
       fonts:
