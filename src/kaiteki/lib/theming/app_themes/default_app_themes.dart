@@ -10,11 +10,13 @@ const BorderRadius borderRadius = BorderRadius.all(
   Radius.circular(rounding),
 );
 
+final ThemeData lightThemeData = ThemeData.from(
+  colorScheme: lightScheme,
+  useMaterial3: consts.useM3,
+)._applyGeneralChanges();
+
 final MaterialAppTheme lightAppTheme = MaterialAppTheme(
-  ThemeData.from(
-    colorScheme: lightScheme,
-    useMaterial3: consts.useM3,
-  )._applyGeneralChanges(),
+  lightThemeData,
   linkTextStyle: TextStyle(color: kaitekiPink.shade700),
 );
 
@@ -34,12 +36,12 @@ final ColorScheme lightScheme = consts.useM3
         onError: Colors.black,
       );
 
-final MaterialAppTheme darkAppTheme = MaterialAppTheme(
-  ThemeData.from(
-    colorScheme: darkScheme,
-    useMaterial3: consts.useM3,
-  )._applyGeneralChanges(),
-);
+final ThemeData darkThemeData = ThemeData.from(
+  colorScheme: darkScheme,
+  useMaterial3: consts.useM3,
+)._applyGeneralChanges();
+
+final MaterialAppTheme darkAppTheme = MaterialAppTheme(darkThemeData);
 
 final ColorScheme darkScheme = consts.useM3
     ? ColorScheme.fromSeed(seedColor: _seedColor, brightness: Brightness.dark)
