@@ -288,7 +288,11 @@
     "shortDescription": "Fun hangout for furries and normies alike.",
     "favicon": "https://stop.voring.me/assets/about-icon.86c5c1fe.png",
     "rules": [
-      "None of the following:",
+      "Please read the whole TOS for the full rules list 🙇",
+      "Must be at least 13 years of age",
+      "If you are under 18, no NSFW content must be viewed or shared. All NSFW must be CW'd.",
+      "Try and be nice to everyone else!",
+      "None of the following is allowed:",
       "Gore/NSFL",
       "Racism/xenophobia or advocation of racism/xenophobia",
       "LGBTphobia or advocation of LGBTphobia",
@@ -296,8 +300,7 @@
       "Far-right wing/Nazi content/symbolism",
       "Pro anti-vax/anti-mask/covid denial content",
       "Doxing",
-      "Excessive spamming",
-      "Please read the whole TOS for the full rules list 🙇"
+      "Excessive spamming"
     ],
     "rulesUrl": "https://stop.voring.me/@thatonecalculator/pages/tos",
     "usesCovenant": true
