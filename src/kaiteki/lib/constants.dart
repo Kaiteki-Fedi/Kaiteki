@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 const String appName = "Kaiteki";
 const String appWebsite = "https://craftplacer.moe/projects/kaiteki";
@@ -14,6 +15,7 @@ const String exampleAvatar = "https://craftplacer.keybase.pub/cute.jpg";
 
 const double defaultFormWidth = 448;
 const double defaultFormHeight = 592;
+const dialogConstraints = BoxConstraints(minWidth: 280, maxWidth: 560);
 
 /// Debug flag for Material 3
 bool get useM3 => false;

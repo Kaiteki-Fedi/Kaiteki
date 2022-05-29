@@ -20,20 +20,18 @@ class HtmlTextParser implements TextParser {
     return fragment.nodes.map<Element>(renderNode).toList(growable: false);
   }
 
-  late final Map<String, HtmlElementConstructor> htmlConstructors;
+  static const Map<String, HtmlElementConstructor> htmlConstructors = {
+    "a": _renderLink,
+    "br": _renderBreakLine,
+    "pre": _renderCodeFont,
+    "code": _renderCodeFont,
+    "p": _renderParagraph,
+    "i": _renderItalic,
+    "b": _renderBold,
+    "span": _renderAsContainer,
+  };
 
-  HtmlTextParser() {
-    htmlConstructors = {
-      "a": _renderLink,
-      "br": _renderBreakLine,
-      "pre": _renderCodeFont,
-      "code": _renderCodeFont,
-      "p": _renderParagraph,
-      "i": _renderItalic,
-      "b": _renderBold,
-      "span": _renderAsContainer,
-    };
-  }
+  const HtmlTextParser();
 
   Element renderNode(dom.Node node) {
     final renderedSubNodes = node.nodes //
@@ -67,16 +65,22 @@ class HtmlTextParser implements TextParser {
     return null;
   }
 
-  Element _renderLink(dom.Element element, List<Element> subElements) {
+  static Element _renderLink(dom.Element element, List<Element> subElements) {
     final uri = Uri.parse(element.attributes["href"]!);
     return LinkElement(uri, children: subElements);
   }
 
-  Element _renderBreakLine(dom.Element element, List<Element> subElements) {
+  static Element _renderBreakLine(
+    dom.Element element,
+    List<Element> subElements,
+  ) {
     return const TextElement("\n");
   }
 
-  Element _renderCodeFont(dom.Element element, List<Element> subElements) {
+  static Element _renderCodeFont(
+    dom.Element element,
+    List<Element> subElements,
+  ) {
     return TextElement(
       null,
       style: const TextElementStyle(font: TextElementFont.monospace),
@@ -84,7 +88,7 @@ class HtmlTextParser implements TextParser {
     );
   }
 
-  Element _renderItalic(dom.Element element, List<Element> subElements) {
+  static Element _renderItalic(dom.Element element, List<Element> subElements) {
     return TextElement(
       null,
       style: const TextElementStyle(italic: true),
@@ -92,7 +96,7 @@ class HtmlTextParser implements TextParser {
     );
   }
 
-  Element _renderBold(dom.Element element, List<Element> subElements) {
+  static Element _renderBold(dom.Element element, List<Element> subElements) {
     return TextElement(
       null,
       style: const TextElementStyle(bold: true),
@@ -100,7 +104,10 @@ class HtmlTextParser implements TextParser {
     );
   }
 
-  Element _renderParagraph(dom.Element element, List<Element> subElements) {
+  static Element _renderParagraph(
+    dom.Element element,
+    List<Element> subElements,
+  ) {
     var text = "";
 
     if (element.previousElementSibling?.localName?.toLowerCase() == "p") {
@@ -110,7 +117,10 @@ class HtmlTextParser implements TextParser {
     return TextElement(text, children: subElements);
   }
 
-  Element _renderAsContainer(dom.Element element, List<Element> subElements) {
+  static Element _renderAsContainer(
+    dom.Element element,
+    List<Element> subElements,
+  ) {
     if (subElements.length == 1) {
       return subElements.first;
     } else {
@@ -120,6 +130,8 @@ class HtmlTextParser implements TextParser {
 }
 
 class MastodonHtmlTextParser extends HtmlTextParser {
+  const MastodonHtmlTextParser();
+
   @override
   Element? renderNodeOverride(dom.Node node) {
     if (node.hasClass("h-card")) {

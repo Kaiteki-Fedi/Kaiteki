@@ -6,12 +6,12 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 typedef RegExpMatchElementBuilder = Element Function(
@@ -29,22 +29,21 @@ class TextContext {
 
 class TextRenderer {
   // TODO(Craftplacer): Use appropiate parser on specific instances
-  final TextParser parser = MastodonHtmlTextParser();
-  final TextRendererTheme theme;
+  final TextParser parser = const MastodonHtmlTextParser();
 
-  TextRenderer({required this.theme});
+  const TextRenderer();
 
   InlineSpan render(
     BuildContext context,
     String text, {
     TextContext? textContext,
   }) {
-    final tc = textContext ?? TextContext();
-
-    final elements = parser.parse(text).parseWith(SocialTextParser());
-
-    final renderedElements = renderChildren(context, elements, tc);
-
+    final renderedElements = renderChildren(
+      context,
+      parser.parse(text).parseWith(const SocialTextParser()),
+      textContext ?? TextContext(),
+      context.getKaitekiTheme(),
+    );
     return TextSpan(children: renderedElements.toList(growable: false));
   }
 
@@ -52,23 +51,30 @@ class TextRenderer {
     BuildContext context,
     Element element,
     TextContext textContext,
+    KaitekiExtension? theme,
   ) {
     final childrenSpans = renderChildren(
       context,
       element.children,
       textContext,
+      theme,
     );
 
     if (element is TextElement) {
       return renderText(context, element, childrenSpans);
     } else if (element is LinkElement) {
-      return renderLink(context, element, childrenSpans);
+      return renderLink(
+        context,
+        element,
+        childrenSpans,
+        style: theme?.linkTextStyle,
+      );
     } else if (element is HashtagElement) {
       return renderHashtag(context, textContext, element);
     } else if (element is MentionElement) {
       return renderMention(textContext, element);
     } else if (element is EmojiElement) {
-      return renderEmoji(textContext, element);
+      return renderEmoji(textContext, element, scale: theme?.emojiScale);
     }
 
     if (element.children?.isNotEmpty == true) {
@@ -88,12 +94,13 @@ class TextRenderer {
     BuildContext context,
     List<Element>? children,
     TextContext textContext,
+    KaitekiExtension? theme,
   ) {
     final spans = <InlineSpan>[];
 
     if (children != null) {
       for (final child in children) {
-        final element = _renderElement(context, child, textContext);
+        final element = _renderElement(context, child, textContext, theme);
 
         if (element != null) {
           spans.add(element);
@@ -164,15 +171,16 @@ class TextRenderer {
   TextSpan renderLink(
     BuildContext context,
     LinkElement link,
-    List<InlineSpan> children,
-  ) {
+    List<InlineSpan> children, {
+    TextStyle? style,
+  }) {
     // FIXME: We should be passing down the "click-ability" to the children.
 
     final recognizer = TapGestureRecognizer()
       ..onTap = () => context.launchUrl(link.destination.toString());
 
     return TextSpan(
-      style: theme.linkTextStyle,
+      style: style,
       recognizer: recognizer,
       text: link.allText,
     );
@@ -180,8 +188,9 @@ class TextRenderer {
 
   InlineSpan renderEmoji(
     TextContext textContext,
-    EmojiElement element,
-  ) {
+    EmojiElement element, {
+    double? scale,
+  }) {
     final emoji = textContext.emojis!.firstOrDefault((e) {
       return e.name == element.name;
     });
@@ -197,7 +206,7 @@ class TextRenderer {
           final inheritedFontSize = getLocalFontSize(context);
           return EmojiWidget(
             emoji: emoji,
-            size: inheritedFontSize * theme.emojiScale,
+            size: inheritedFontSize * (scale ?? 1.0),
           );
         },
       ),

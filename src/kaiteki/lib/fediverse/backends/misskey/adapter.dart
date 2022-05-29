@@ -67,7 +67,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     late final String id;
 
     if (consts.useOAuth) {
-      final response = await requestOAuth((oauthUrl) async {
+      await requestOAuth((oauthUrl) async {
         return Uri.https(instance, "/miauth/$session", {
           "name": consts.appName,
           "icon": consts.appRemoteIcon,

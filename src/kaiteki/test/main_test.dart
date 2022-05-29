@@ -16,7 +16,7 @@ void textParsing() {
     );
 
     expect(
-      HtmlTextParser().parse(html).single,
+      const HtmlTextParser().parse(html).single,
       const TypeMatcher<LinkElement>()
           .having((e) => e.destination, 'destination', equals(expectedUri))
           .having(
@@ -33,7 +33,7 @@ void textParsing() {
 
   test('parse text with styles', () {
     const html = '<i>italic text</i><b>bold text</b>';
-    final elements = HtmlTextParser().parse(html);
+    final elements = const HtmlTextParser().parse(html);
 
     expect(
       elements[0],
@@ -49,7 +49,7 @@ void textParsing() {
   });
 
   group('parse mentions', () {
-    final elements = SocialTextParser().parse(
+    final elements = const SocialTextParser().parse(
       '@Craftplacer Hey are you there? '
       '@Craftplacer@pl.craftplacer.moe maybe at your alt.'
       '@@ @*@* @ @',
@@ -78,8 +78,9 @@ void textParsing() {
   group('mixed parsing', () {
     test('easy', () {
       const input = '<b>@Craftplacer Hey are you there?</b>';
-      final elements =
-          HtmlTextParser().parse(input).parseWith(SocialTextParser());
+      final elements = const HtmlTextParser() //
+          .parse(input)
+          .parseWith(const SocialTextParser());
 
       expect(
         elements[0],
@@ -102,8 +103,8 @@ void textParsing() {
           'Can you visit <a href="https://craftplacer.moe/">'
           'my website?</a></b>';
 
-      final parseOne = HtmlTextParser().parse(input);
-      final parseTwo = parseOne.parseWith(SocialTextParser());
+      final parseOne = const HtmlTextParser().parse(input);
+      final parseTwo = parseOne.parseWith(const SocialTextParser());
 
       search(
         parseTwo.first,

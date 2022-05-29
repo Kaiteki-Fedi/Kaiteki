@@ -4,7 +4,7 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
-import 'package:kaiteki/theming/app_themes/app_theme.dart';
+import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/dialogs/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
@@ -39,7 +39,8 @@ class PostWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const authorTextStyle = TextStyle(fontWeight: FontWeight.bold);
-    final theme = ref.watch(themeProvider).current;
+    // final theme = ref.watch(themeProvider).current;
+    final ext = Theme.of(context).extension<KaitekiExtension>()!;
     final l10n = context.getL10n();
 
     if (_post.repeatOf != null) {
@@ -48,7 +49,7 @@ class PostWidget extends ConsumerWidget {
           InteractionEventBar(
             icon: Mdi.repeat,
             text: l10n.postRepeated,
-            color: theme.repeatColor,
+            color: ext.repeatColor,
             user: _post.author,
             userTextStyle: authorTextStyle,
           ),
@@ -99,7 +100,7 @@ class PostWidget extends ConsumerWidget {
                         _post.author.renderDisplayName(context, ref),
                     authorTextStyle: authorTextStyle,
                     post: _post,
-                    theme: theme,
+                    theme: ext,
                     showAvatar: wide,
                   ),
                   if (showParentPost && _post.replyToPostId != null)
@@ -114,7 +115,7 @@ class PostWidget extends ConsumerWidget {
                     ),
                   if (_post.reactions.isNotEmpty)
                     ReactionRow(_post, _post.reactions),
-                  if (showActions) InteractionBar(post: _post, theme: theme),
+                  if (showActions) InteractionBar(post: _post, theme: ext),
                 ],
               ),
             ),
@@ -187,7 +188,7 @@ class MetaBar extends StatelessWidget {
 
   final InlineSpan renderedAuthor;
   final Post _post;
-  final AppTheme theme;
+  final KaitekiExtension theme;
   final TextStyle? authorTextStyle;
   final bool showAvatar;
 
@@ -362,7 +363,7 @@ class InteractionBar extends StatelessWidget {
         super(key: key);
 
   final Post _post;
-  final AppTheme theme;
+  final KaitekiExtension theme;
 
   @override
   Widget build(BuildContext context) {
@@ -414,17 +415,18 @@ class InteractionBar extends StatelessWidget {
                 ),
                 value: () => context.launchUrl(_post.externalUrl!),
               ),
-              PopupMenuItem(
-                child: const ListTile(
-                  title: Text("Debug text rendering"),
-                  leading: Icon(Mdi.bug),
-                  contentPadding: EdgeInsets.zero,
+              if (_post.content != null)
+                PopupMenuItem(
+                  child: const ListTile(
+                    title: Text("Debug text rendering"),
+                    leading: Icon(Mdi.bug),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  value: () => showDialog(
+                    context: context,
+                    builder: (context) => TextRenderDialog(_post),
+                  ),
                 ),
-                value: () => showDialog(
-                  context: context,
-                  builder: (context) => TextRenderDialog(_post),
-                ),
-              ),
             ];
           },
         ),

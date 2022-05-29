@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/theming/app_themes/material_app_theme.dart';
+import 'package:kaiteki/theming/kaiteki_extension.dart';
 
 final Color _seedColor = kaitekiPink.shade500;
 
-const double rounding = 24.0;
+const double rounding = 12.0;
 const BorderRadius borderRadius = BorderRadius.all(
   Radius.circular(rounding),
 );
@@ -68,6 +69,7 @@ extension _ThemeDataExtensions on ThemeData {
       dialogTheme: const DialogTheme(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
+      extensions: [KaitekiExtension.material(this)],
     );
   }
 }

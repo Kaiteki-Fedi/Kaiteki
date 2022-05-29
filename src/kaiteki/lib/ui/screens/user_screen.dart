@@ -11,7 +11,6 @@ import 'package:kaiteki/ui/widgets/post_widget.dart';
 import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/layout_helper.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:mdi/mdi.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -379,7 +378,6 @@ class UserInfoWidget extends ConsumerWidget {
     final location = user.details.location;
     final website = user.details.website;
     final fields = user.details.fields;
-    final textRendererTheme = TextRendererTheme.fromContext(context, ref);
 
     final textStyle = TextStyle(color: Theme.of(context).disabledColor);
     return Column(
@@ -436,7 +434,7 @@ class UserInfoWidget extends ConsumerWidget {
             body: Text.rich(
               TextSpan(
                 text: website,
-                style: textRendererTheme.linkTextStyle,
+                style: context.getKaitekiTheme()!.linkTextStyle,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => launchUrlString(website),
               ),

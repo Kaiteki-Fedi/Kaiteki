@@ -11,6 +11,8 @@ class SocialTextParser implements TextParser {
     r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)',
   );
 
+  const SocialTextParser();
+
   @override
   List<Element> parse(String text, [List<Element>? children]) {
     final elements = <Element>[TextElement(text, children: children)];

@@ -7,7 +7,6 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 
 export 'package:kaiteki/utils/extensions/build_context.dart';
 export 'package:kaiteki/utils/extensions/duration.dart';
@@ -78,10 +77,7 @@ extension UserExtensions on User {
   }
 
   InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
-    final theme = TextRendererTheme.fromContext(context, ref);
-    final renderer = TextRenderer(theme: theme);
-
-    return renderer.render(
+    return const TextRenderer().render(
       context,
       text,
       textContext: TextContext(
@@ -106,9 +102,7 @@ extension PostExtensions on Post {
     WidgetRef ref, {
     bool hideReplyee = false,
   }) {
-    final theme = TextRendererTheme.fromContext(context, ref);
-    final renderer = TextRenderer(theme: theme);
-    return renderer.render(
+    return const TextRenderer().render(
       context,
       content!,
       textContext: TextContext(

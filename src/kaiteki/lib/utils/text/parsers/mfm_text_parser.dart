@@ -5,6 +5,8 @@ import 'package:kaiteki/utils/text/text_renderer.dart';
 class MfmTextParser implements TextParser {
   static final _mfmPattern = RegExp(r'\$\[(?:(\w+)(?:\.(.*?))?\s(.+?))\]');
 
+  const MfmTextParser();
+
   @override
   List<Element> parse(String text, [List<Element>? children]) {
     var elements = <Element>[TextElement(text)];

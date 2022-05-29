@@ -27,10 +27,10 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog>
 
   @override
   Widget build(BuildContext context) {
-    final elements = MastodonHtmlTextParser()
+    final elements = const MastodonHtmlTextParser()
         .parse(widget.post.content!)
-        .parseWith(SocialTextParser())
-        .parseWith(MfmTextParser());
+        .parseWith(const SocialTextParser())
+        .parseWith(const MfmTextParser());
 
     return AlertDialog(
       title: const Text("Text rendering"),

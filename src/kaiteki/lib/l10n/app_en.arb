@@ -231,7 +231,14 @@
   "unsupportedInstanceTitle": "This instance type is currently unsupported",
   "@unsupportedInstanceTitle": {},
   "unsupportedInstanceDescriptionCORS": "Kaiteki Web doesn't support {api} at the moment because your browser blocks requests to the instance with origin from other websites. For more information please visit ",
-  "@unsupportedInstanceDescriptionCORS": {},
+  "@unsupportedInstanceDescriptionCORS": {
+    "placeholders": {
+      "api": {
+        "description": "Name of the instance backend software",
+        "example": "Pleroma"
+      }
+    }
+  },
   "addAccountButtonLabel": "Add Account",
   "@addAccountButtonLabel": {},
   "emojiRetrievalFailed": "Failed to retrieve emojis",

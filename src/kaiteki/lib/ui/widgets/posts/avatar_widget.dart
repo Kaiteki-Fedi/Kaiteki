@@ -19,44 +19,45 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var widget = buildAvatar(context);
-
-    if (onTap != null) {
-      widget = InkWell(onTap: onTap, child: widget);
-    }
-
-    return widget;
-  }
-
-  Widget buildAvatar(BuildContext context) {
     final size = this.size;
     final url = user.avatarUrl;
 
-    final Widget avatar;
+    Widget avatar;
+    final Widget fallback = SizedBox(
+      width: size,
+      height: size,
+      child: const FallbackAvatar(),
+    );
 
     if (url == null) {
-      avatar = const FallbackAvatar();
+      avatar = fallback;
     } else {
-      avatar = ColoredBox(
-        color: Theme.of(context).cardColor,
-        child: Image.network(
-          url,
-          width: size,
-          height: size,
-          cacheWidth: size?.toInt(),
-          cacheHeight: size?.toInt(),
-          errorBuilder: (context, error, stackTrace) {
-            return const FallbackAvatar();
-          },
-        ),
+      avatar = Image.network(
+        url,
+        width: size,
+        height: size,
+        cacheWidth: size?.toInt(),
+        cacheHeight: size?.toInt(),
+        errorBuilder: (_, __, ___) => fallback,
       );
     }
 
-    if (radius == null) {
-      return ClipOval(child: avatar);
-    } else {
-      return ClipRRect(borderRadius: borderRadius, child: avatar);
+    avatar = ColoredBox(
+      color: Theme.of(context).colorScheme.surfaceVariant,
+      child: avatar,
+    );
+
+    if (onTap != null) {
+      avatar = InkWell(onTap: onTap, child: avatar);
     }
+
+    // Add rounding
+    // ignore: join_return_with_assignment
+    avatar = radius == null
+        ? ClipOval(child: avatar)
+        : ClipRRect(borderRadius: borderRadius, child: avatar);
+
+    return avatar;
   }
 }
 
@@ -71,10 +72,8 @@ class FallbackAvatar extends StatelessWidget {
       builder: (context, constraints) {
         final size = constraints.maxHeight;
         final padding = size / 6;
-        final theme = Theme.of(context);
 
-        return Container(
-          color: theme.disabledColor,
+        return Padding(
           padding: EdgeInsets.all(padding),
           child: Icon(
             Mdi.account,

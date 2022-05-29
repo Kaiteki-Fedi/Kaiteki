@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:animations/animations.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
@@ -203,9 +202,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     // Check for known issue with Misskey instances
     if (kIsWeb && type == ApiType.misskey) {
-      if (!await _showWebCompatibilityDialog()) {
-        return null;
-      }
+      // if (!await _showWebCompatibilityDialog()) {
+      //   return null;
+      // }
     }
 
     _type = type;
@@ -223,7 +222,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return showDialog<ApiType?>(
       barrierDismissible: false,
       context: context,
-      builder: (context) => const ApiTypeDialog(),
+      builder: (context) => const Center(child: ApiTypeDialog()),
     );
   }
 
@@ -286,51 +285,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
 
     return code;
-  }
-
-  Future<bool> _showWebCompatibilityDialog() async {
-    const helpArticle =
-        "https://github.com/Craftplacer/Kaiteki/wiki/Unable-to-login-using-Kaiteki-Web";
-
-    final l10n = context.getL10n();
-    final dialogResult = await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l10n.unsupportedInstanceTitle),
-          content: Text.rich(
-            TextSpan(
-              text: l10n.unsupportedInstanceDescriptionCORS,
-              style: Theme.of(context).textTheme.bodyText1,
-              children: [
-                TextSpan(
-                  text: helpArticle,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () async {
-                      await context.launchUrl(helpArticle);
-                    },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text(l10n.continueAnywayButtonLabel),
-              onPressed: () => Navigator.pop(context, true),
-            ),
-            TextButton(
-              child: Text(l10n.abortButtonLabel),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
-      },
-    );
-
-    return dialogResult == true;
   }
 
   Future<void> loginButtonPress(
