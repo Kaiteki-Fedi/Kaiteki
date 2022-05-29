@@ -282,7 +282,7 @@
       "Don't setup any account solely to advertise a product or service."
     ]
   },
-    {
+  {
     "type": "misskey",
     "name": "stop.voring.me",
     "shortDescription": "Fun hangout for furries and normies alike.",
@@ -299,5 +299,5 @@
     ],
     "rulesUrl": "https://stop.voring.me/@thatonecalculator/pages/tos",
     "usesCovenant": true
-  },
+  }
 ]
