@@ -281,5 +281,24 @@
       "Don't be a bot (unless you post unlisted and do not auto-follow).",
       "Don't setup any account solely to advertise a product or service."
     ]
+  },
+  {
+    "type": "misskey",
+    "name": "stop.voring.me",
+    "shortDescription": "Fun hangout for furries and normies alike.",
+    "favicon": "https://stop.voring.me/assets/about-icon.86c5c1fe.png",
+    "rules": [
+      "Must be at least 13 years of age",
+      "If you are under 18, no NSFW content must be viewed or shared. All NSFW must be CW'd.",
+      "No Gore/NSFL",
+      "No racism/xenophobia or advocation of racism/xenophobia",
+      "No LGBTphobia or advocation of LGBTphobia",
+      "No content illegal in the United States of America",
+      "No far-right wing/Nazi content/symbolism",
+      "No pro anti-vax/anti-mask/covid denial content",
+      "No doxing",
+      "No excessive spamming"
+    ],
+    "rulesUrl": "https://stop.voring.me/@thatonecalculator/pages/tos",
   }
 ]
