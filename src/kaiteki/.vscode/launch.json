@@ -2,9 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Kaiteki",
+            "name": "Kaiteki (debug mode)",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "flutterMode": "debug",
         },
         {
             "name": "Kaiteki (profile mode)",
@@ -18,5 +19,11 @@
             "type": "dart",
             "flutterMode": "release"
         },
+        {
+            "name": "Widgetbook",
+            "request": "launch",
+            "type": "dart",
+            "program": "widgetbook/main.dart"
+        }
     ]
 }
