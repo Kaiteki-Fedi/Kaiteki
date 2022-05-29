@@ -35,7 +35,7 @@ class AboutScreen extends StatelessWidget {
                     Text(
                       consts.appName,
                       textScaleFactor: 2,
-                      style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+                      style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

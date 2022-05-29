@@ -107,7 +107,7 @@ class _MainScreenState extends State<MainScreen> {
               backgroundColor: outsideColor,
               title: Text(
                 consts.appName,
-                style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+                style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
               ),
               actions: _buildAppBarActions(context),
             ),

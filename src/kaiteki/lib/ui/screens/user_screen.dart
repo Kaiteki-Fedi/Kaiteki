@@ -273,6 +273,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
     final bannerUrl = snapshot.data?.bannerUrl;
+    final displayName = snapshot.data?.renderDisplayName(context, ref);
 
     return AppBar(
       actions: buildActions(context, user: snapshot.data),
@@ -296,22 +297,29 @@ class _UserScreenState extends ConsumerState<UserScreen>
                     size: 24,
                   ),
                 ),
-                Text(
-                  snapshot.data?.displayName ?? "",
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
+                Flexible(
+                  child: displayName == null
+                      ? const Text("...")
+                      : Text.rich(
+                          displayName,
+                          overflow: TextOverflow.fade,
+                          softWrap: false,
+                        ),
                 ),
               ],
             ),
       flexibleSpace: FlexibleSpaceBar(
         background: bannerUrl == null
             ? null
-            : Image.network(
-                bannerUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const SizedBox();
-                },
+            : Opacity(
+                opacity: 0.25,
+                child: Image.network(
+                  bannerUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const SizedBox();
+                  },
+                ),
               ),
       ),
     );
@@ -392,8 +400,9 @@ class UserInfoWidget extends ConsumerWidget {
           user.handle,
           style: Theme.of(context).textTheme.bodySmall,
         ),
-        const SizedBox(height: 12.0),
-        Text.rich(user.renderDescription(context, ref)),
+        if (user.description != null) const SizedBox(height: 12.0),
+        if (user.description != null)
+          Text.rich(user.renderDescription(context, ref)),
         const SizedBox(height: 12.0),
         if (fields != null)
           Table(

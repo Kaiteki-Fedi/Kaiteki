@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/theming/app_themes/material_app_theme.dart';
@@ -70,6 +71,9 @@ extension _ThemeDataExtensions on ThemeData {
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
       extensions: [KaitekiExtension.material(this)],
+      textTheme: GoogleFonts.robotoTextTheme().copyWith(
+        caption: const TextStyle(letterSpacing: 0),
+      ),
     );
   }
 }
