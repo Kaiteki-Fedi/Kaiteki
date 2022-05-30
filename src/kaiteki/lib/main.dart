@@ -21,7 +21,7 @@ final logger = getLogger('Kaiteki');
 
 /// Main entrypoint.
 Future<void> main() async {
-  GoRouter.setUrlPathStrategy(UrlPathStrategy.path);
+  GoRouter.setUrlPathStrategy(UrlPathStrategy.hash);
 
   // we need to run this to be able to get access to SharedPreferences
   WidgetsFlutterBinding.ensureInitialized();
