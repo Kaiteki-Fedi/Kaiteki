@@ -13,7 +13,7 @@ import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/repositories/secret_storages/shared_preferences_secret_storage.dart';
-import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
+import 'package:kaiteki/theming/default_app_themes.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +26,7 @@ Future<void> main() async {
   // we need to run this to be able to get access to SharedPreferences
   WidgetsFlutterBinding.ensureInitialized();
 
-  final themeContainer = ThemeContainer(lightAppTheme);
+  final themeContainer = ThemeContainer(lightThemeData);
   final sharedPrefs = await SharedPreferences.getInstance();
   final accountManager = await getAccountManager(sharedPrefs);
   final appPreferences = getPreferences(sharedPrefs);

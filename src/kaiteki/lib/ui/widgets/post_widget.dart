@@ -291,7 +291,6 @@ class ReplyBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeContainer = ref.watch(themeProvider);
     final disabledColor = Theme.of(context).disabledColor;
     final l10n = context.getL10n();
     final adapter = ref.watch(accountProvider).adapter;
@@ -305,7 +304,7 @@ class ReplyBar extends ConsumerWidget {
               ? snapshot.data!.renderDisplayName(context, ref)
               : TextSpan(
                   text: _getText(),
-                  style: themeContainer.current.linkTextStyle,
+                  style: context.getKaitekiTheme()!.linkTextStyle,
                 );
 
           return Text.rich(

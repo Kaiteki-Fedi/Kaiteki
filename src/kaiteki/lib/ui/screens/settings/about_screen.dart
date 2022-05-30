@@ -37,13 +37,19 @@ class AboutScreen extends StatelessWidget {
                       textScaleFactor: 2,
                       style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AppNameBadge(
-                        color: kReleaseMode ? kaitekiPink : Colors.red.shade900,
-                        textColor: Colors.white,
-                        text: kReleaseMode ? "ALPHA" : "DEBUG",
-                      ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: kReleaseMode
+                          ? AppNameBadge(
+                              color: kaitekiPink,
+                              textColor: Colors.white,
+                              text: "ALPHA",
+                            )
+                          : AppNameBadge(
+                              color: Color(0xFFB71C1C),
+                              textColor: Colors.white,
+                              text: "DEBUG",
+                            ),
                     ),
                   ],
                 ),

@@ -583,7 +583,7 @@ class DesktopAccountHeader extends StatelessWidget {
                                             : colorScheme.primary,
                                         4.0,
                                       ),
-                                      borderRadius: avatarBorderRadius * 4,
+                                      borderRadius: avatarBorderRadius * 2,
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(6.0),

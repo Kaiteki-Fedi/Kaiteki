@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
+import 'package:kaiteki/theming/default_app_themes.dart';
 import 'package:mdi/mdi.dart';
 
 class CustomizationBasicPage extends ConsumerStatefulWidget {
@@ -67,7 +67,7 @@ class ThemeSelector extends StatelessWidget {
           icon: const Icon(Mdi.autoFix),
         ),
         Theme(
-          data: lightAppTheme.materialTheme,
+          data: lightThemeData,
           child: ThemePreview(
             name: _themeToString(context, ThemeMode.light),
             selected: theme == ThemeMode.light,
@@ -75,7 +75,7 @@ class ThemeSelector extends StatelessWidget {
           ),
         ),
         Theme(
-          data: darkAppTheme.materialTheme,
+          data: darkThemeData,
           child: ThemePreview(
             name: _themeToString(context, ThemeMode.dark),
             selected: theme == ThemeMode.dark,

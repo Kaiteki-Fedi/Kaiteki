@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/app_themes/app_theme.dart';
+import 'package:kaiteki/theming/chat_message_theme.dart';
 import 'package:kaiteki/theming/toggle_button_theme.dart';
 
 class KaitekiExtension extends ThemeExtension<KaitekiExtension> {

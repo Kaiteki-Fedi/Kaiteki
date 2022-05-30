@@ -6,7 +6,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
+import 'package:kaiteki/theming/default_app_themes.dart';
 import 'package:kaiteki/ui/screens.dart';
 import 'package:kaiteki/ui/screens/conversation_screen.dart';
 import 'package:kaiteki/ui/screens/user_screen.dart';
@@ -120,12 +120,12 @@ class KaitekiApp extends ConsumerWidget {
     // TODO(Craftplacer): (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
     final preferences = ref.watch(preferenceProvider);
     return MaterialApp.router(
-      darkTheme: darkAppTheme.materialTheme,
+      darkTheme: darkThemeData,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: lightAppTheme.materialTheme,
+      theme: lightThemeData,
       themeMode: preferences.get().theme,
       title: consts.appName,
     );

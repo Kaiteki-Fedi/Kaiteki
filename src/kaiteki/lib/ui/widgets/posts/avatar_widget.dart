@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/theming/app_themes/default_app_themes.dart';
+import 'package:kaiteki/theming/default_app_themes.dart';
 import 'package:mdi/mdi.dart';
 
 class AvatarWidget extends StatelessWidget {
