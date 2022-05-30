@@ -12,10 +12,8 @@ Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple M
 ## Screenshots
 
 <table>
-    <th>
-        <td><img src="assets/screenshots/misskey-feed-phone.jpg" height="250" alt="Screenshot of a Misskey feed inside Kaiteki on a phone"></td>
-        <td><img src="assets/screenshots/pleroma-user-tablet.jpg" height="250" alt="Screenshot of an user inside Kaiteki on a tablet"></td>
-    </th>
+    <td><img src="assets/screenshots/misskey-feed-phone.jpg" width="110" alt="Screenshot of a Misskey feed inside Kaiteki on a phone"></td>
+    <td><img src="assets/screenshots/pleroma-user-tablet.jpg" width="400" alt="Screenshot of an user inside Kaiteki on a tablet"></td>
 </table>
 
 ## Platforms & Releases
