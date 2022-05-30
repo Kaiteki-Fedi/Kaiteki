@@ -37,11 +37,12 @@ jobs:
           encodedString: ${{ secrets.ANDROID_JKS }}
 
       - name: Build
-        steps:
-          - if: github.event_name == 'pull_request'
-            run: flutter build apk --build-number $(date +%s)
-          - if: github.event_name != 'pull_request'
-            run: flutter build apk --build-number $(date +%s) --release
+        if: github.event_name == 'pull_request'
+        run: flutter build apk --build-number $(date +%s)
+
+      - name: Build withr release key
+        if: github.event_name != 'pull_request'
+        run: flutter build apk --build-number $(date +%s) --release
         env:
           STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
