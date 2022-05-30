@@ -71,9 +71,9 @@ extension _ThemeDataExtensions on ThemeData {
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
       extensions: [KaitekiExtension.material(this)],
-      textTheme: GoogleFonts.robotoTextTheme().copyWith(
-        caption: const TextStyle(letterSpacing: 0),
-      ),
+      // textTheme:GoogleFonts.robotoTextTheme().copyWith(
+      //   caption: const TextStyle(letterSpacing: 0),
+      // ),
     );
   }
 }

@@ -10,7 +10,6 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
   final Color borderColor;
   final Color favoriteColor;
   final Color repeatColor;
-  final Color textColor;
   final double chatMessageRounding;
   final double emojiScale;
   final TextStyle linkTextStyle;
@@ -26,7 +25,6 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
     required this.linkTextStyle,
     required this.reactionButtonTheme,
     required this.repeatColor,
-    required this.textColor,
   });
 
   factory KaitekiExtension.material(ThemeData theme) {
@@ -40,7 +38,6 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
         color: theme.colorScheme.secondary,
       ),
       borderColor: theme.dividerColor,
-      textColor: theme.textTheme.bodyText1!.color!,
       reactionButtonTheme: ToggleButtonTheme.from(theme),
       chatMessageRounding: 8,
       emojiScale: 1.5,
@@ -70,7 +67,6 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
       linkTextStyle: linkTextStyle ?? this.linkTextStyle,
       reactionButtonTheme: reactionButtonTheme ?? this.reactionButtonTheme,
       repeatColor: repeatColor ?? this.repeatColor,
-      textColor: textColor ?? this.textColor,
     );
   }
 
@@ -81,7 +77,7 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
   ) {
     if (other == null) {
       return this;
-    } else {
+    } else if (other.type is KaitekiExtension) {
       final ext = other.type as KaitekiExtension;
       // TODO(Craftplacer): complete lerp
 
@@ -95,8 +91,9 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
         linkTextStyle: linkTextStyle,
         reactionButtonTheme: reactionButtonTheme,
         repeatColor: Color.lerp(repeatColor, ext.repeatColor, t)!,
-        textColor: Color.lerp(textColor, ext.textColor, t)!,
       );
+    } else {
+      return this;
     }
   }
 }
