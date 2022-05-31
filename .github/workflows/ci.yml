@@ -14,6 +14,7 @@ on:
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -23,6 +24,8 @@ jobs:
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
+        with:
+          cache: true
   
       - name: Get packages
         run: 'flutter pub get'
@@ -45,6 +48,8 @@ jobs:
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
+        with:
+          cache: true
         
       - name: Update Linux repos
         run: 'sudo apt-get update --fix-missing && sudo apt-get -y upgrade'
@@ -118,6 +123,8 @@ jobs:
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
+        with:
+          cache: true
 
       - name: Get packages
         run: 'flutter pub get'
@@ -130,11 +137,11 @@ jobs:
           fileDir: '${{ env.SOURCE_PATH }}/android/app/'
           encodedString: ${{ secrets.ANDROID_JKS }}
 
-      - name: Build
+      - name: Build without release key
         if: github.event_name == 'pull_request'
         run: flutter build apk --build-number $(date +%s)
 
-      - name: Build withr release key
+      - name: Build with release key
         if: github.event_name != 'pull_request'
         run: flutter build apk --build-number $(date +%s) --release
         env:
@@ -159,6 +166,8 @@ jobs:
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
+        with:
+          cache: true
         
       - name: Enable Windows Desktop
         run: 'flutter config --enable-windows-desktop'
@@ -187,6 +196,8 @@ jobs:
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
+        with:
+          cache: true
 
       - name: Enable web
         run: flutter config --enable-web
@@ -238,6 +249,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
           files: |
             android/*.apk
             appimage/*.AppImage
