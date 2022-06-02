@@ -46,16 +46,6 @@ double? getMargin(num width) {
   }
 }
 
-EdgeInsets getMarginPadding(num width) {
-  final margin = getMargin(width);
-
-  if (margin == null) {
-    return EdgeInsets.zero;
-  } else {
-    return EdgeInsets.symmetric(horizontal: margin);
-  }
-}
-
 double getColumns(num width) {
   if (width >= smallBreakpoint2) {
     return 12;

@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app.dart';
@@ -75,18 +73,4 @@ PreferenceContainer getPreferences(SharedPreferences sharedPrefs) {
   }
 
   return PreferenceContainer(appPreferences);
-}
-
-/// Initializes flutter_local_notifications.
-Future<FlutterLocalNotificationsPlugin?> initializeNotifications() async {
-  if (kIsWeb) return null;
-
-  final plugin = FlutterLocalNotificationsPlugin();
-  const initSettings = InitializationSettings(
-    android: AndroidInitializationSettings("@mipmap/ic_kaiteki"),
-  );
-
-  await plugin.initialize(initSettings);
-
-  return plugin;
 }

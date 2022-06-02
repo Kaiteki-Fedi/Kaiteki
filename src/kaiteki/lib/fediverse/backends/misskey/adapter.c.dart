@@ -55,18 +55,6 @@ Attachment toAttachment(misskey.DriveFile file) {
   );
 }
 
-Emoji getEmojiFromString(String emojiString, Iterable<Emoji> inheritingEmoji) {
-  if (emojiString.startsWith(":") && emojiString.endsWith(":")) {
-    final matchingEmoji = inheritingEmoji.firstWhere(
-      (e) => e.name == emojiString.substring(1, emojiString.length - 1),
-    );
-
-    return matchingEmoji;
-  }
-
-  return UnicodeEmoji(emojiString, "");
-}
-
 CustomEmoji toEmoji(misskey.Emoji emoji) {
   return CustomEmoji(
     source: emoji,

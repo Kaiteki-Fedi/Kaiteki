@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
-// Change the logic of this method in case if unexpected results occur.
-bool compareInstance(String instanceA, String instanceB) =>
-    compareCaseInsensitive(instanceA, instanceB);
-
 bool compareCaseInsensitive(String a, String b) =>
     a.toLowerCase() == b.toLowerCase();
 
@@ -71,23 +67,6 @@ Color getLocalTextColor(BuildContext context) {
 
 bool isUnsuccessfulStatusCode(int code) {
   return 400 <= code && code < 600;
-}
-
-TextStyle getLocalTextStyle(BuildContext context, TextStyle? style) {
-  final defaultTextStyle = DefaultTextStyle.of(context);
-  var effectiveTextStyle = style;
-
-  if (style == null || style.inherit) {
-    effectiveTextStyle = defaultTextStyle.style.merge(style);
-  }
-
-  if (MediaQuery.boldTextOverride(context)) {
-    effectiveTextStyle = effectiveTextStyle!.merge(
-      const TextStyle(fontWeight: FontWeight.bold),
-    );
-  }
-
-  return effectiveTextStyle!;
 }
 
 SnackBar generateAsyncSnackBar({
