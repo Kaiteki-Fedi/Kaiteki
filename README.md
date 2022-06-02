@@ -1,7 +1,7 @@
 # Kaiteki
 
-[![CodeFactor](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki/badge)](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki)
-[![Translation status](http://wl.craftplacer.moe/widgets/kaiteki/-/app/svg-badge.svg)](http://wl.craftplacer.moe/engage/kaiteki/)
+[![Build status](https://img.shields.io/github/workflow/status/Kaiteki-Fedi/Kaiteki/Build%20&%20Deploy)](https://github.com/Kaiteki-Fedi/Kaiteki/actions/workflows/ci.yml) [![CodeFactor](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki/badge)](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki)
+[![Translation status](https://wl.craftplacer.moe/widgets/kaiteki/-/app/svg-badge.svg)](https://wl.craftplacer.moe/engage/kaiteki/)
 
 <img align="right" src="assets/icons/windows/kaiteki.png" width=100>
 
@@ -31,19 +31,12 @@ If you want to try out Kaiteki, there are automatic builds available for use.
         <th>iOS</th>
     </tr>
     <tr>
-        <th>Build status</th>
-        <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Web"></td>
-        <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Windows"></td>
-        <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/kaiteki/Linux"></td>
-        <td><img src="https://img.shields.io/github/workflow/status/Kaiteki-Fedi/Kaiteki/Android"></td>
-        <td colspan=2 rowspan=3>Not supported.</td>
-    </tr>
-    <tr>
         <th>Binaries</th>
         <td rowspan=2><a href="https://kaiteki.craftplacer.moe/">Visit web version</a></td>
         <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/windows/master/windows.zip">Download latest binaries</a></td>
         <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/linux/master/linux.zip">Download latest binaries</a></td>
         <td rowspan=2><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/android/master/android.zip">Download latest APK</a></td>
+        <td colspan=2 rowspan=2>Not supported.</td>
     </tr>
     <tr>
         <th>Packages / Installers</th>
