@@ -3,11 +3,13 @@ import 'package:kaiteki/fediverse/api_theme.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/adapter.dart';
 import 'package:kaiteki/fediverse/backends/misskey/adapter.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/adapter.dart';
+import 'package:kaiteki/fediverse/backends/twitter/adapter.dart';
 
 enum ApiType {
   mastodon(createAdapter: MastodonAdapter.new, theme: mastodonTheme),
   pleroma(createAdapter: PleromaAdapter.new, theme: pleromaTheme),
-  misskey(createAdapter: MisskeyAdapter.new, theme: misskeyTheme);
+  misskey(createAdapter: MisskeyAdapter.new, theme: misskeyTheme),
+  twitter(createAdapter: TwitterAdapter.new, theme: twitterTheme);
 
   final String? _displayName;
   final FediverseAdapter Function() createAdapter;

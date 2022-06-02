@@ -9,8 +9,9 @@
 .history
 .svn/
 
-# Signing keys
+# Tokens & keys
 *.jks
+lib/fediverse/backends/twitter/keys.dart
 
 # IntelliJ related
 *.iml
