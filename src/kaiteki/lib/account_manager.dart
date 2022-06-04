@@ -86,16 +86,23 @@ class AccountManager extends ChangeNotifier {
 
   Future<void> _restoreSession(AccountSecret accountSecret) async {
     final instance = accountSecret.instance;
-    final clientSecret = _clientSecrets.get(instance)!;
+    final clientSecret = _clientSecrets.get(instance);
 
-    if (clientSecret.apiType == null) {
+    if (clientSecret == null) {
+      _logger.w("Couldn't find a matching client secret for account");
+      return;
+    }
+
+    final apiType = clientSecret.apiType;
+
+    if (apiType == null) {
       _logger.d("Client secret didn't have contain API type.");
       return;
     }
 
-    _logger.d('Trying to recover a ${clientSecret.apiType} account');
+    _logger.d('Trying to recover a ${apiType.displayName} account');
 
-    final adapter = clientSecret.apiType!.createAdapter();
+    final adapter = apiType.createAdapter();
     await adapter.client.setClientAuthentication(clientSecret);
     await adapter.client.setAccountAuthentication(accountSecret);
 
