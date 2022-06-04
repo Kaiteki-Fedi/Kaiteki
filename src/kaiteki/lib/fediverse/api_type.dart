@@ -12,6 +12,7 @@ enum ApiType {
   final String? _displayName;
   final FediverseAdapter Function() createAdapter;
   final ApiTheme theme;
+  final List<String>? hosts;
 
   String get displayName {
     return _displayName ?? name[0].toUpperCase() + name.substring(1);
@@ -21,5 +22,6 @@ enum ApiType {
     String? displayName,
     required this.createAdapter,
     required this.theme,
+    this.hosts,
   }) : _displayName = displayName;
 }

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'discover_instances_screen.dart';
+part of 'instances.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

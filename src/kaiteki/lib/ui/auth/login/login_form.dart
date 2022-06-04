@@ -6,8 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:kaiteki/app_colors.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/ui/auth/discover_instances_screen.dart';
+import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
+import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
 import 'package:kaiteki/utils/lower_case_text_formatter.dart';
 import 'package:mdi/mdi.dart';
 

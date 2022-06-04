@@ -7,6 +7,7 @@ import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/fediverse/instance_prober.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/ui/auth/login/api_type_dialog.dart';
 import 'package:kaiteki/ui/auth/login/login_form.dart';
@@ -171,8 +172,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<Instance?> fetchInstance(String instanceHost) async {
-    final accountManager = ref.read(accountProvider);
-    final result = await accountManager.probeInstance(instanceHost);
+    final result = await probeInstance(instanceHost);
     final ApiType? type;
     final Instance instance;
 
