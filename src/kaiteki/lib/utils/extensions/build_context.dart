@@ -5,8 +5,8 @@ import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
-import 'package:kaiteki/ui/dialogs/api_web_compatibility_dialog.dart';
-import 'package:kaiteki/ui/screens/compose_screen.dart';
+import 'package:kaiteki/ui/auth/login/api_web_compatibility_dialog.dart';
+import 'package:kaiteki/ui/shared/compose_screen.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 

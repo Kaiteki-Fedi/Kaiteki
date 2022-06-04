@@ -10,7 +10,8 @@ ClientSecret _$ClientSecretFromJson(Map<String, dynamic> json) => ClientSecret(
       json['instance'] as String,
       json['id'] as String,
       json['secret'] as String,
-      apiType: $enumDecodeNullable(_$ApiTypeEnumMap, json['type']),
+      apiType: $enumDecodeNullable(_$ApiTypeEnumMap, json['type'],
+          unknownValue: JsonKey.nullForUndefinedEnumValue),
     );
 
 Map<String, dynamic> _$ClientSecretToJson(ClientSecret instance) =>

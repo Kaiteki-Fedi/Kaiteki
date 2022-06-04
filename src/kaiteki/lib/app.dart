@@ -7,9 +7,20 @@ import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/theming/default_app_themes.dart';
-import 'package:kaiteki/ui/screens.dart';
-import 'package:kaiteki/ui/screens/conversation_screen.dart';
-import 'package:kaiteki/ui/screens/user_screen.dart';
+import 'package:kaiteki/ui/account_required_screen.dart';
+import 'package:kaiteki/ui/auth/discover_instances_screen.dart';
+import 'package:kaiteki/ui/auth/login/login_screen.dart';
+import 'package:kaiteki/ui/main/main_screen.dart';
+import 'package:kaiteki/ui/settings/about_screen.dart';
+import 'package:kaiteki/ui/settings/credits_screen.dart';
+import 'package:kaiteki/ui/settings/customization/customization_settings_screen.dart';
+import 'package:kaiteki/ui/settings/debug/shared_preferences_screen.dart';
+import 'package:kaiteki/ui/settings/debug_screen.dart';
+import 'package:kaiteki/ui/settings/filtering/filtering_screen.dart';
+import 'package:kaiteki/ui/settings/filtering/sensitive_post_filtering_screen.dart';
+import 'package:kaiteki/ui/settings/settings_screen.dart';
+import 'package:kaiteki/ui/shared/conversation_screen.dart';
+import 'package:kaiteki/ui/user/user_screen.dart';
 
 class KaitekiApp extends ConsumerWidget {
   late final GoRouter _router = GoRouter(

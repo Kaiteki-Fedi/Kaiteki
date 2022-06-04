@@ -68,15 +68,15 @@ extension AsyncSnapshotExtensions on AsyncSnapshot {
 enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
-  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
-    return renderText(context, ref, displayName);
+  InlineSpan renderDisplayName(BuildContext context) {
+    return renderText(context, displayName);
   }
 
-  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
-    return renderText(context, ref, description!);
+  InlineSpan renderDescription(BuildContext context) {
+    return renderText(context, description!);
   }
 
-  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
+  InlineSpan renderText(BuildContext context, String text) {
     return const TextRenderer().render(
       context,
       text,

@@ -6,9 +6,9 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/default_app_themes.dart';
-import 'package:kaiteki/ui/dialogs/api_type_dialog.dart';
-import 'package:kaiteki/ui/dialogs/api_web_compatibility_dialog.dart';
-import 'package:kaiteki/ui/widgets/post_widget.dart';
+import 'package:kaiteki/ui/auth/login/api_type_dialog.dart';
+import 'package:kaiteki/ui/auth/login/api_web_compatibility_dialog.dart';
+import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 import 'widgetboot_extensions.dart';
