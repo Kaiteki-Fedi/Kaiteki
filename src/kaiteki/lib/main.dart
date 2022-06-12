@@ -44,9 +44,11 @@ Future<void> main() async {
 
 /// Initializes the account manager.
 Future<AccountManager> getAccountManager(SharedPreferences sharedPrefs) async {
-  final secrets = SharedPreferencesSecureStorage(sharedPrefs);
-  final accounts = AccountSecretRepository(secrets);
-  final clients = ClientSecretRepository(secrets);
+  final accountStorage = SharedPreferencesAccountSecretStorage(sharedPrefs);
+  final accounts = AccountSecretRepository(accountStorage);
+
+  final clientStorage = SharedPreferencesClientSecretStorage(sharedPrefs);
+  final clients = ClientSecretRepository(clientStorage);
 
   try {
     await accounts.initialize();
