@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/ui/onboarding/onboarding_screen.dart';
 import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -44,6 +45,15 @@ class _DebugScreenState extends State<DebugScreen> {
             leading: const Icon(Mdi.key),
             title: const Text("Run OAuth Server"),
             onTap: () => runOAuthServer(launchUrl),
+          ),
+          ListTile(
+            leading: const Icon(Mdi.hand),
+            title: const Text("Open onboarding"),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const OnboardingScreen(),
+              ),
+            ),
           ),
         ],
       ),

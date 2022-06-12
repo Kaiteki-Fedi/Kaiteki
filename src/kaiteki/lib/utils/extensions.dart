@@ -53,6 +53,17 @@ extension BrightnessExtensions on Brightness {
   }
 }
 
+extension TextDirectionExtensions on TextDirection {
+  TextDirection get inverted {
+    switch (this) {
+      case TextDirection.ltr:
+        return TextDirection.rtl;
+      case TextDirection.rtl:
+        return TextDirection.ltr;
+    }
+  }
+}
+
 extension AsyncSnapshotExtensions on AsyncSnapshot {
   AsyncSnapshotState get state {
     if (hasError) {
