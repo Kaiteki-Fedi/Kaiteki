@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:http/http.dart' hide Response;
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/api_exception.dart';
@@ -13,11 +14,13 @@ import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
 typedef DeserializeFromJson<T> = T Function(Map<String, dynamic> json);
-typedef RequestIntercept = Function(http.BaseRequest request);
+typedef RequestIntercept = Function(BaseRequest request);
 
 /// Class that contains basic properties and methods for building a Fediverse client.
 abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   String get baseUrl => "https://$instance";
+
+  final _http = http.Client();
 
   AuthData? authenticationData;
   late String instance;
@@ -70,7 +73,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     String endpoint,
     DeserializeFromJson<T> toObject, {
     Map<String, String> fields = const {},
-    List<http.MultipartFile> files = const [],
+    List<MultipartFile> files = const [],
   }) async {
     final response = await sendMultiPartRequest(
       method,
@@ -112,7 +115,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   }) async {
     final methodString = method.toString();
     final url = Uri.parse("$baseUrl/$endpoint");
-    final request = http.Request(methodString, url);
+    final request = Request(methodString, url);
 
     if (contentType.isNotNullOrEmpty) {
       request.headers["Content-Type"] = contentType!;
@@ -122,7 +125,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
 
     _tamperRequest(request, intercept);
 
-    final httpResponse = await request.send();
+    final httpResponse = await _http.send(request);
     final response = Response(httpResponse);
     await checkResponse(response);
     return response;
@@ -149,7 +152,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     String endpoint, {
     RequestIntercept? intercept,
     Map<String, String> fields = const {},
-    List<http.MultipartFile> files = const [],
+    List<MultipartFile> files = const [],
   }) async {
     final methodString = method.toString();
     final url = Uri.parse("$baseUrl/$endpoint");
@@ -160,7 +163,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
 
     _tamperRequest(request, intercept);
 
-    final httpResponse = await request.send();
+    final httpResponse = await _http.send(request);
     final response = Response(httpResponse);
     await checkResponse(response);
     return response;
