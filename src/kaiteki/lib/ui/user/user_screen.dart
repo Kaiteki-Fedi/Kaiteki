@@ -11,7 +11,6 @@ import 'package:kaiteki/ui/user/user_info_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/layout_helper.dart';
 import 'package:mdi/mdi.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
   final String id;
@@ -37,12 +36,17 @@ class _UserScreenState extends ConsumerState<UserScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late Future<User> _future;
-  late Future<PaletteGenerator?> _bannerFuture;
+  ImageProvider? _bannerProvider;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 3);
+
+    final bannerUrl = widget.initialUser?.bannerUrl;
+    if (bannerUrl != null) {
+      _bannerProvider = NetworkImage(bannerUrl);
+    }
   }
 
   @override
@@ -50,15 +54,6 @@ class _UserScreenState extends ConsumerState<UserScreen>
     super.didChangeDependencies();
     final accounts = ref.watch(accountProvider);
     _future = accounts.adapter.getUserById(widget.id);
-    _bannerFuture = _future.then((user) async {
-      final banner = user.bannerUrl;
-      if (banner == null) {
-        return null;
-      } else {
-        final image = NetworkImage(banner);
-        return PaletteGenerator.fromImageProvider(image);
-      }
-    });
   }
 
   @override
@@ -75,7 +70,11 @@ class _UserScreenState extends ConsumerState<UserScreen>
                 return _buildMobile(snapshot, constraints);
               case ScreenSize.m:
               case ScreenSize.l:
-                return _buildDesktop(context, snapshot, constraints);
+                return _buildDesktop(
+                  context,
+                  snapshot,
+                  constraints,
+                );
             }
           },
         );
@@ -90,80 +89,67 @@ class _UserScreenState extends ConsumerState<UserScreen>
   ) {
     final user = snapshot.data;
 
-    return FutureBuilder<PaletteGenerator?>(
-      future: _bannerFuture,
-      builder: (context, snapshot) {
-        final brightness = snapshot.data != null //
-            ? ThemeData.estimateBrightnessForColor(
-                snapshot.data!.paletteColors.first.color,
-              )
-            : null;
-
-        return NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverAppBar(
-                actions: buildActions(context, user: user),
-                expandedHeight: user?.bannerUrl != null ? 450.0 : null,
-                pinned: true,
-                forceElevated: true,
-                flexibleSpace: DesktopUserHeader(
-                  tabController: _tabController,
-                  tabs: buildTabs(context, user, true, Axis.horizontal),
-                  constraints: constraints,
-                  user: user,
-                ),
-                backgroundColor: snapshot.data?.paletteColors.first.color,
-                foregroundColor: brightness?.inverted.getColor(),
-                systemOverlayStyle: brightness?.inverted.systemUiOverlayStyle,
+    return Material(
+      child: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              actions: buildActions(context, user: user),
+              expandedHeight: user?.bannerUrl != null ? 450.0 : null,
+              pinned: true,
+              forceElevated: true,
+              flexibleSpace: DesktopUserHeader(
+                tabController: _tabController,
+                tabs: buildTabs(context, user, true, Axis.horizontal),
+                constraints: constraints,
+                user: user,
+                color: null,
               ),
-            ];
-          },
-          body: Material(
-            child: ResponsiveLayoutBuilder(
-              builder: (context, constraints, data) {
-                return Row(
-                  children: [
-                    Flexible(
-                      child: Column(
-                        children: [
-                          if (user != null)
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(columnPadding),
-                                  child: UserInfoWidget(user: user),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: gutter), // Gutter
-                    Flexible(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.all(columnPadding),
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            PostsPage(
-                              container: ref.watch(accountProvider),
-                              widget: widget,
-                            ),
-                            Container(),
-                            Container(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
             ),
-          ),
-        );
-      },
+          ];
+        },
+        body: ResponsiveLayoutBuilder(
+          builder: (context, constraints, data) {
+            return Row(
+              children: [
+                Flexible(
+                  child: Column(
+                    children: [
+                      if (user != null)
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(columnPadding),
+                              child: UserInfoWidget(user: user),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: gutter), // Gutter
+                Flexible(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(columnPadding),
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        PostsPage(
+                          container: ref.watch(accountProvider),
+                          widget: widget,
+                        ),
+                        Container(),
+                        Container(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -198,13 +184,13 @@ class _UserScreenState extends ConsumerState<UserScreen>
     final tooSmall = constraints.minWidth < 600;
 
     return Scaffold(
-      body: body,
       appBar: snapshot.hasData //
           ? _buildAppBar(
               !(tooSmall || isLoading),
               snapshot,
             )
           : AppBar(),
+      body: body,
     );
   }
 
@@ -268,7 +254,6 @@ class _UserScreenState extends ConsumerState<UserScreen>
     bool showCountBadges,
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
-    final bannerUrl = snapshot.data?.bannerUrl;
     final displayName = snapshot.data?.renderDisplayName(context);
 
     return AppBar(
@@ -305,12 +290,12 @@ class _UserScreenState extends ConsumerState<UserScreen>
               ],
             ),
       flexibleSpace: FlexibleSpaceBar(
-        background: bannerUrl == null
+        background: _bannerProvider == null
             ? null
             : Opacity(
                 opacity: 0.25,
-                child: Image.network(
-                  bannerUrl,
+                child: Image(
+                  image: _bannerProvider!,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return const SizedBox();

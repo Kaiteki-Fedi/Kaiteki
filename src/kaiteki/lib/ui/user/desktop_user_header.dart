@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/layout_helper.dart';
 
 class DesktopUserHeader extends StatelessWidget {
@@ -9,6 +10,7 @@ class DesktopUserHeader extends StatelessWidget {
   final List<Tab> tabs;
   final BoxConstraints constraints;
   final User? user;
+  final Color? color;
 
   const DesktopUserHeader({
     Key? key,
@@ -16,6 +18,7 @@ class DesktopUserHeader extends StatelessWidget {
     required this.tabs,
     required this.constraints,
     this.user,
+    required this.color,
   }) : super(key: key);
 
   Color getAppBarBackgroundColor(ThemeData theme) {
@@ -31,8 +34,9 @@ class DesktopUserHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatarBorderRadius = BorderRadius.circular(8.0);
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final foregroundColor = color.nullTransform(
+      (c) => ThemeData.estimateBrightnessForColor(c).inverted.getColor(),
+    );
 
     return Stack(
       children: [
@@ -57,6 +61,8 @@ class DesktopUserHeader extends StatelessWidget {
                         child: TabBar(
                           controller: tabController,
                           tabs: tabs,
+                          indicatorColor: foregroundColor,
+                          labelColor: foregroundColor,
                         ),
                       ),
                     ),
@@ -81,24 +87,7 @@ class DesktopUserHeader extends StatelessWidget {
                           Flexible(
                             child: user == null
                                 ? const SizedBox()
-                                : DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: ElevationOverlay.applyOverlay(
-                                        context,
-                                        getAppBarBackgroundColor(theme),
-                                        4.0,
-                                      ),
-                                      borderRadius: avatarBorderRadius * 2,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: AvatarWidget(
-                                        user!,
-                                        size: null,
-                                        radius: avatarBorderRadius,
-                                      ),
-                                    ),
-                                  ),
+                                : _buildAvatar(context, avatarBorderRadius),
                           ),
                           const SizedBox(width: gutter), // Gutter
                           const Flexible(flex: 3, child: SizedBox()),
@@ -112,6 +101,30 @@ class DesktopUserHeader extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  DecoratedBox _buildAvatar(
+    BuildContext context,
+    BorderRadius borderRadius,
+  ) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: ElevationOverlay.applyOverlay(
+          context,
+          color ?? getAppBarBackgroundColor(Theme.of(context)),
+          4.0,
+        ),
+        borderRadius: borderRadius * 2,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: AvatarWidget(
+          user!,
+          size: null,
+          radius: borderRadius,
+        ),
+      ),
     );
   }
 
