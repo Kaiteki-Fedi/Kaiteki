@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -7,12 +8,12 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
+import 'package:kaiteki/ui/main/compose_fab.dart';
 import 'package:kaiteki/ui/main/timeline_page.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/layout_helper.dart';
 import 'package:mdi/mdi.dart';
 
 class MainScreen extends StatefulWidget {
@@ -94,35 +95,48 @@ class _MainScreenState extends State<MainScreen> {
           onInvoke: (e) => context.showPostDialog(),
         ),
       },
-      child: LayoutBuilder(
-        builder: (_, constraints) {
-          final screenSize = getScreenSize(constraints.maxWidth);
-          final isMobile = screenSize == ScreenSize.xs;
-          final showFab =
-              !(!isMobile && _tabs![_currentPage].hideFabWhenDesktop);
+      child: BreakpointBuilder(
+        builder: (_, breakpoint) {
+          final isMobile = breakpoint.window == WindowSize.xsmall;
           final outsideColor = getOutsideColor(context);
-          return Scaffold(
-            backgroundColor: outsideColor,
-            appBar: AppBar(
+
+          if (breakpoint.window == WindowSize.xsmall) {
+            return Scaffold(
               backgroundColor: outsideColor,
-              title: Text(
-                consts.appName,
-                style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
-              ),
-              actions: _buildAppBarActions(context),
-            ),
-            body: isMobile //
-                ? _getPage()
-                : _buildDesktopView(screenSize.index >= ScreenSize.m.index),
-            bottomNavigationBar: isMobile //
-                ? _getNavigationBar()
-                : null,
-            floatingActionButton: showFab //
-                ? _getFab(context, _currentPage, isMobile)
-                : null,
-          );
+              appBar: buildAppBar(outsideColor, context),
+              body: _getPage(),
+              bottomNavigationBar: _getNavigationBar(),
+              floatingActionButton: _getFab(context, _currentPage, true),
+            );
+          } else {
+            final showFab = !_tabs![_currentPage].hideFabWhenDesktop;
+            return Scaffold(
+              backgroundColor: outsideColor,
+              appBar: buildAppBar(outsideColor, context),
+              body: _buildDesktopView(breakpoint.window >= WindowSize.medium),
+              floatingActionButton:
+                  showFab ? _getFab(context, _currentPage, isMobile) : null,
+            );
+          }
         },
       ),
+    );
+  }
+
+  AppBar buildAppBar(Color? outsideColor, BuildContext context) {
+    return AppBar(
+      backgroundColor: outsideColor,
+      foregroundColor: outsideColor != null
+          ? ThemeData.estimateBrightnessForColor(outsideColor)
+              .inverted
+              .getColor()
+          : null,
+      title: Text(
+        consts.appName,
+        style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
+      ),
+      elevation: consts.useM3 ? 0.0 : null,
+      actions: _buildAppBarActions(context),
     );
   }
 
@@ -176,7 +190,12 @@ class _MainScreenState extends State<MainScreen> {
 
     return [
       IconButton(
-        icon: const Icon(Icons.settings),
+        icon: const Icon(Icons.refresh_rounded),
+        onPressed: null,
+        tooltip: l10n.refreshTimelineButtonLabel,
+      ),
+      IconButton(
+        icon: const Icon(Icons.settings_rounded),
         onPressed: () => context.push("/settings"),
         tooltip: l10n.settings,
       ),
@@ -259,49 +278,6 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 }
-
-class ComposeFloatingActionButton extends StatelessWidget {
-  final ComposeFloatingActionButtonType type;
-  final bool elevate;
-
-  const ComposeFloatingActionButton({
-    Key? key,
-    required this.type,
-    this.elevate = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final elevation = elevate ? 4.0 : 0.0;
-    const icon = Icon(Icons.edit_rounded);
-    switch (type) {
-      case ComposeFloatingActionButtonType.small:
-        return FloatingActionButton.small(
-          onPressed: () => context.showPostDialog(),
-          elevation: elevation,
-          child: icon,
-        );
-      case ComposeFloatingActionButtonType.normal:
-        return FloatingActionButton(
-          onPressed: () => context.showPostDialog(),
-          elevation: elevation,
-          child: icon,
-        );
-      case ComposeFloatingActionButtonType.extended:
-        return SizedBox(
-          height: 48,
-          child: FloatingActionButton.extended(
-            onPressed: () => context.showPostDialog(),
-            elevation: elevation,
-            label: Text(context.getL10n().composeButtonLabel),
-            icon: icon,
-          ),
-        );
-    }
-  }
-}
-
-enum ComposeFloatingActionButtonType { small, normal, extended }
 
 class _MainScreenTab {
   final String text;
