@@ -22,6 +22,7 @@ enum ApiType {
     String? displayName,
     required this.createAdapter,
     required this.theme,
+    // ignore: unused_element, used for Twitter later on
     this.hosts,
   }) : _displayName = displayName;
 }
