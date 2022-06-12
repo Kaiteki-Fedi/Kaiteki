@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/ui/shared/dynamic_dialog_container.dart';
+import 'package:kaiteki/ui/shared/dialogs/account_removal_dialog.dart';
+import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:mdi/mdi.dart';
 
@@ -78,7 +79,7 @@ class AccountListTile extends ConsumerWidget {
       onTap: () => _onSelect(ref),
       trailing: IconButton(
         icon: const Icon(Mdi.close),
-        onPressed: () => _onRemove(context),
+        onPressed: () => _onRemove(context, ref),
         splashRadius: 24,
       ),
     );
@@ -88,44 +89,14 @@ class AccountListTile extends ConsumerWidget {
     await ref.read(accountProvider).changeAccount(compound);
   }
 
-  Future<void> _onRemove(BuildContext context) async {
-    await showDialog<void>(
+  Future<void> _onRemove(BuildContext context, WidgetRef ref) async {
+    final result = await showDialog<bool>(
       context: context,
-      builder: (context) => AccountRemovalDialog(compound: compound),
+      builder: (context) => const AccountRemovalDialog(),
     );
-  }
-}
 
-class AccountRemovalDialog extends ConsumerWidget {
-  final AccountCompound compound;
-
-  const AccountRemovalDialog({
-    Key? key,
-    required this.compound,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.getL10n();
-
-    return AlertDialog(
-      title: Text(l10n.accountRemovalConfirmationTitle),
-      content: Text(l10n.accountRemovalConfirmationDescription),
-      actions: <Widget>[
-        TextButton(
-          child: Text(l10n.cancelButtonLabel),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text(l10n.removeButtonLabel),
-          onPressed: () {
-            ref.read(accountProvider).remove(compound);
-            Navigator.of(context).pop();
-          },
-        )
-      ],
-    );
+    if (result == true) {
+      ref.read(accountProvider).remove(compound);
+    }
   }
 }

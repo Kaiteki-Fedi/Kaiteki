@@ -11,3 +11,5 @@ class FavoriteIntent extends Intent {}
 class ReactIntent extends Intent {}
 
 class MenuIntent extends Intent {}
+
+class SendIntent extends Intent {}

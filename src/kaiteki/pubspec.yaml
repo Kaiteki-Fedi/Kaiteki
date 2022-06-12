@@ -22,6 +22,7 @@ dependencies:
   animations: ^2.0.0
   async: ^2.9.0
   badges: ^2.0.1
+  breakpoint: ^1.2.0
   chewie: ^1.0.0
   crypto: ^3.0.1
   fediverse_objects:

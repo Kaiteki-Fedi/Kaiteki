@@ -15,11 +15,13 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart' as v;
 import 'package:kaiteki/model/file.dart';
+import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
+import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
@@ -36,16 +38,21 @@ class PostForm extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  ConsumerState<PostForm> createState() => _PostFormState();
+  ConsumerState<PostForm> createState() => PostFormState();
 }
 
-class _PostFormState extends ConsumerState<PostForm> {
+class PostFormState extends ConsumerState<PostForm> {
   late TextEditingController _bodyController;
   late TextEditingController _subjectController;
   late RestartableTimer _typingTimer;
   var _visibility = v.Visibility.public;
   var _formatting = Formatting.plainText;
   final List<Future<Attachment>> attachments = [];
+
+  bool get isEmpty =>
+      _bodyController.value.text.isEmpty &&
+      _subjectController.value.text.isEmpty &&
+      attachments.isEmpty;
 
   // FIXME(Craftplacer): Strings for PostForm's attach menu are not localized.
   late final _attachMenuItems = [
@@ -106,116 +113,124 @@ class _PostFormState extends ConsumerState<PostForm> {
     final flex = widget.expands ? 1 : 0;
     final l10n = context.getL10n();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (manager.adapter is PreviewSupport)
-          ExpansionTile(
-            title: Text(l10n.postPreviewTitle),
-            children: [
-              FutureBuilder(
-                future: getPreviewFuture(manager),
-                builder: buildPreview,
-              ),
-            ],
-          ),
-        Flexible(
-          flex: flex,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: Column(
+    return FocusableActionDetector(
+      shortcuts: {commitKeySet: SendIntent()},
+      actions: {
+        SendIntent: CallbackAction(
+          onInvoke: (_) => post(context, manager.adapter),
+        ),
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (manager.adapter is PreviewSupport)
+            ExpansionTile(
+              title: Text(l10n.postPreviewTitle),
               children: [
-                if (widget.enableSubject)
-                  Column(
-                    children: [
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: l10n.composeSubjectHint,
-                          border: InputBorder.none,
+                FutureBuilder(
+                  future: getPreviewFuture(manager),
+                  builder: buildPreview,
+                ),
+              ],
+            ),
+          Flexible(
+            flex: flex,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: Column(
+                children: [
+                  if (widget.enableSubject)
+                    Column(
+                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                            hintText: l10n.composeSubjectHint,
+                            border: InputBorder.none,
+                          ),
+                          controller: _subjectController,
                         ),
-                        controller: _subjectController,
-                      ),
-                      const Divider(),
-                    ],
-                  ),
-                Flexible(
-                  flex: flex,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: l10n.composeBodyHint,
-                      border: InputBorder.none,
+                        const Divider(),
+                      ],
                     ),
-                    textAlignVertical: TextAlignVertical.top,
-                    expands: widget.expands,
-                    minLines: widget.expands ? null : 6,
-                    maxLines: widget.expands ? null : 8,
-                    controller: _bodyController,
+                  Flexible(
+                    flex: flex,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: l10n.composeBodyHint,
+                        border: InputBorder.none,
+                      ),
+                      textAlignVertical: TextAlignVertical.top,
+                      expands: widget.expands,
+                      minLines: widget.expands ? null : 6,
+                      maxLines: widget.expands ? null : 8,
+                      controller: _bodyController,
+                    ),
                   ),
+                ],
+              ),
+            ),
+          ),
+          if (attachments.isNotEmpty) const Divider(height: 1),
+          if (attachments.isNotEmpty)
+            AttachmentTray(
+              attachments: attachments,
+              onRemoveAttachment: (i) => setState(() {
+                attachments.removeAt(i);
+              }),
+            ),
+          const Divider(height: 1),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 8.0,
+              right: 10.0,
+              top: 8.0,
+              bottom: 8.0,
+            ),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: openAttachDrawer,
+                  icon: const Icon(Mdi.plusCircle),
+                  splashRadius: 20,
+                  tooltip: l10n.attachButtonTooltip,
+                ),
+                EnumIconButton<v.Visibility>(
+                  tooltip: l10n.visibilityButtonTooltip,
+                  onChanged: (value) => setState(() => _visibility = value),
+                  value: _visibility,
+                  values: v.Visibility.values,
+                  iconBuilder: (value) => Icon(value.toIconData()),
+                  textBuilder: (value) => Text(value.toHumanString()),
+                ),
+                EnumIconButton<Formatting>(
+                  tooltip: l10n.formattingButtonTooltip,
+                  onChanged: (value) => setState(() => _formatting = value),
+                  value: _formatting,
+                  values: Formatting.values,
+                  iconBuilder: (value) => Icon(value.toIconData()),
+                  textBuilder: (value) => Text(value.toHumanString()),
+                ),
+                IconButton(
+                  onPressed: () => openEmojiPicker(context, manager),
+                  icon: const Icon(Mdi.emoticon),
+                  splashRadius: 20,
+                  tooltip: l10n.emojiButtonTooltip,
+                ),
+                const Spacer(),
+                FloatingActionButton.small(
+                  onPressed: () => post(context, manager.adapter),
+                  elevation: 2.0,
+                  tooltip: l10n.submitButtonTooltip,
+                  child: const Icon(Mdi.send),
                 ),
               ],
             ),
           ),
-        ),
-        if (attachments.isNotEmpty) const Divider(height: 1),
-        if (attachments.isNotEmpty)
-          AttachmentTray(
-            attachments: attachments,
-            onRemoveAttachment: (i) => setState(() {
-              attachments.removeAt(i);
-            }),
-          ),
-        const Divider(height: 1),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            right: 10.0,
-            top: 8.0,
-            bottom: 8.0,
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: openAttachDrawer,
-                icon: const Icon(Mdi.plusCircle),
-                splashRadius: 20,
-                tooltip: l10n.attachButtonTooltip,
-              ),
-              EnumIconButton<v.Visibility>(
-                tooltip: l10n.visibilityButtonTooltip,
-                onChanged: (value) => setState(() => _visibility = value),
-                value: _visibility,
-                values: v.Visibility.values,
-                iconBuilder: (value) => Icon(value.toIconData()),
-                textBuilder: (value) => Text(value.toHumanString()),
-              ),
-              EnumIconButton<Formatting>(
-                tooltip: l10n.formattingButtonTooltip,
-                onChanged: (value) => setState(() => _formatting = value),
-                value: _formatting,
-                values: Formatting.values,
-                iconBuilder: (value) => Icon(value.toIconData()),
-                textBuilder: (value) => Text(value.toHumanString()),
-              ),
-              IconButton(
-                onPressed: () => openEmojiPicker(context, manager),
-                icon: const Icon(Mdi.emoticon),
-                splashRadius: 20,
-                tooltip: l10n.emojiButtonTooltip,
-              ),
-              const Spacer(),
-              FloatingActionButton.small(
-                onPressed: () => post(context, manager.adapter),
-                elevation: 2.0,
-                tooltip: l10n.submitButtonTooltip,
-                child: const Icon(Mdi.send),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -300,6 +315,10 @@ class _PostFormState extends ConsumerState<PostForm> {
                 done: true,
                 icon: const Icon(Mdi.close),
                 text: Text(l10n.postSubmissionFailed),
+                trailing: TextButton(
+                  child: Text(l10n.whyButtonLabel),
+                  onPressed: () {},
+                ),
               );
 
             case AsyncSnapshotState.loading:

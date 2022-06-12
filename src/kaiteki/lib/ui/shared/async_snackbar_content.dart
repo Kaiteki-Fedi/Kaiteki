@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/utils/extensions.dart';
 
 class AsyncSnackBarContent extends StatelessWidget {
   final Icon icon;
@@ -17,7 +16,6 @@ class AsyncSnackBarContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = _getSnackBarTextStyle(context);
     return Row(
       children: [
         Padding(
@@ -30,7 +28,9 @@ class AsyncSnackBarContent extends StatelessWidget {
               Positioned.fill(
                 child: Align(
                   child: IconTheme(
-                    data: IconThemeData(color: textStyle?.color),
+                    data: IconThemeData(
+                      color: DefaultTextStyle.of(context).style.color,
+                    ),
                     child: icon,
                   ),
                 ),
@@ -43,17 +43,5 @@ class AsyncSnackBarContent extends StatelessWidget {
         if (trailing != null) trailing!,
       ],
     );
-  }
-
-  TextStyle? _getSnackBarTextStyle(BuildContext context) {
-    final theme = Theme.of(context);
-    final snackBarTheme = theme.snackBarTheme;
-
-    if (snackBarTheme.contentTextStyle == null) {
-      final themeData = ThemeData(brightness: theme.brightness.inverted);
-      return themeData.textTheme.subtitle1;
-    }
-
-    return snackBarTheme.contentTextStyle;
   }
 }

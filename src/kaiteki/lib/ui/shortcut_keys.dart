@@ -7,3 +7,7 @@ final repeatKeySet = LogicalKeySet(LogicalKeyboardKey.keyT);
 final favoriteKeySet = LogicalKeySet(LogicalKeyboardKey.keyL);
 final bookmarkKeySet = LogicalKeySet(LogicalKeyboardKey.keyB);
 final menuKeySet = LogicalKeySet(LogicalKeyboardKey.contextMenu);
+final commitKeySet = LogicalKeySet(
+  LogicalKeyboardKey.control,
+  LogicalKeyboardKey.enter,
+);

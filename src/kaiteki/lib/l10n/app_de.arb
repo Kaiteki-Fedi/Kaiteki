@@ -156,9 +156,9 @@
   "@manageAccountsTitle": {},
   "addAccountButtonLabel": "Konto Hinzufügen",
   "@addAccountButtonLabel": {},
-  "accountRemovalConfirmationTitle": "Bist du dir sicher, dass du dieses Konto entfernen willst?",
+  "accountRemovalConfirmationTitle": "Konto entfernen?",
   "@accountRemovalConfirmationTitle": {},
-  "accountRemovalConfirmationDescription": "Du wirst das Konto später wieder hinzufügen müssen.",
+  "accountRemovalConfirmationDescription": "Wenn Du dieses Konto entfernst wirst Du dich später erneut anmelden müssen um dies wieder zu verwenden.",
   "@accountRemovalConfirmationDescription": {},
   "unsupportedInstanceDescriptionCORS": "Kaiteki Web unterstützt derzeit {api} nicht, da dein Browser Anfragen zu der Instanz mit Herkunft von anderen Webseiten blockiert. Für mehr Informationen bitte besuche ",
   "@unsupportedInstanceDescriptionCORS": {},
@@ -415,5 +415,12 @@
   "attachmentDownloadDialogTitle": "Anhang herunterladen",
   "@attachmentDownloadDialogTitle": {},
   "attachmentDownloadButtonLabel": "Anhang herunterladen",
-  "@attachmentDownloadButtonLabel": {}
+  "@attachmentDownloadButtonLabel": {},
+  "creditsTelegramChannel": "Telegram Kanal",
+  "discardDraftDialogTitle": "Entwurf verwerfen?",
+  "discardDraftDialogDescription": "Bist Du dir sicher, dass du diesen Entwurf verwerfen willst?",
+  "discardButtonLabel": "Verwerfen",
+  "keepWritingButtonLabel": "Weiterschreiben",
+  "whyButtonLabel": "Warum?",
+  "refreshTimelineButtonLabel": "Aktualisieren"
 }
