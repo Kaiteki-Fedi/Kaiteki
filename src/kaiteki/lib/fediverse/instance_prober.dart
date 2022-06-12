@@ -98,8 +98,37 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
   });
 
   final href = supportedLink["href"] as String;
-  final nodeInfoResp = await http.get(Uri.parse(href));
-  final nodeInfo = NodeInfo.fromJson(jsonDecode(nodeInfoResp.body));
+  final hrefUri = Uri.tryParse(href);
+
+  if (hrefUri == null) {
+    _logger.w("Failed to parse nodeinfo URL: $href");
+    return null;
+  }
+
+  final nodeInfoResponse = await http.get(hrefUri);
+  late final String nodeInfoBody;
+
+  try {
+    nodeInfoBody = nodeInfoResponse.body;
+  } catch (e, s) {
+    // Checking type with string because we don't depend on `http`'s dependency `string_scanner`
+    final isHttpBug = e.runtimeType.toString() == "SourceSpanFormatException" &&
+        (e as dynamic).message == "Invalid media type: expected no more input.";
+    if (isHttpBug) {
+      _logger.w(
+        "Enforcing UTF-8 for nodeinfo response\n"
+        "Dart's `http` package still doesn't gracefully handle edge-case `Content-Type`s\n"
+        "Give them greetings from me over at https://github.com/dart-lang/http/issues/180",
+      );
+
+      nodeInfoBody = utf8.decode(nodeInfoResponse.bodyBytes);
+    } else {
+      _logger.w("Failed to read body from nodeinfo response", e, s);
+      return null;
+    }
+  }
+
+  final nodeInfo = NodeInfo.fromJson(jsonDecode(nodeInfoBody));
 
   final apiType = {
     "mastodon": ApiType.mastodon,
