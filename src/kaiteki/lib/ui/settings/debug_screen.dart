@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/onboarding/onboarding_screen.dart';
@@ -42,11 +41,6 @@ class _DebugScreenState extends State<DebugScreen> {
               ),
               dense: true,
             ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.tune_rounded),
-            title: const Text("Manage shared preferences"),
-            onTap: () => context.push('/settings/debug/preferences'),
           ),
           ListTile(
             leading: const Icon(Icons.key_rounded),
