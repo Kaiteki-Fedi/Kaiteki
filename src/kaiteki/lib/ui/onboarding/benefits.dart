@@ -19,7 +19,7 @@ List<UserBenefit> get benefits {
       "Kaiteki supports all kinds of devices and social media — ranging from Twitter to the Fediverse and from Windows to the Web",
       // ignore: prefer_const_constructors, error G8388A750: Constant evaluation error
       () => Icon(
-        key: ValueKey(1),
+        key: const ValueKey(1),
         Icons.check_circle_outline_rounded,
         size: _iconSize,
       ),
@@ -29,7 +29,7 @@ List<UserBenefit> get benefits {
       "Sign with more than one account for each of your social media",
       // ignore: prefer_const_constructors, error G8388A750: Constant evaluation error
       () => Icon(
-        key: ValueKey(2),
+        key: const ValueKey(2),
         Icons.people_outline_rounded,
         size: _iconSize,
       ),
@@ -39,7 +39,7 @@ List<UserBenefit> get benefits {
       "Open-source, designed with Material Design and care to attention",
       // ignore: prefer_const_constructors, error G8388A750: Constant evaluation error
       () => Icon(
-        key: ValueKey(3),
+        key: const ValueKey(3),
         Icons.favorite_rounded,
         size: _iconSize,
       ),
