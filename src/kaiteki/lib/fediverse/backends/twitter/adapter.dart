@@ -28,7 +28,6 @@ import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:oauth1/oauth1.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 part 'adapter.c.dart';
 

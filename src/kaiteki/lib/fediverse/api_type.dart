@@ -9,7 +9,11 @@ enum ApiType {
   mastodon(createAdapter: MastodonAdapter.new, theme: mastodonTheme),
   pleroma(createAdapter: PleromaAdapter.new, theme: pleromaTheme),
   misskey(createAdapter: MisskeyAdapter.new, theme: misskeyTheme),
-  twitter(createAdapter: TwitterAdapter.new, theme: twitterTheme);
+  twitter(
+    createAdapter: TwitterAdapter.new,
+    theme: twitterTheme,
+    hosts: ["twitter.com"],
+  );
 
   final String? _displayName;
   final FediverseAdapter Function() createAdapter;

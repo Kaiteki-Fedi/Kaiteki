@@ -6,7 +6,6 @@ import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/http_method.dart';
-import 'package:kaiteki/utils/oauth.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class TwitterClient extends FediverseClientBase {
@@ -68,12 +67,12 @@ class TwitterClient extends FediverseClientBase {
       HttpMethod.post,
       "oauth/request_token?oauth_callback=oob&x_auth_access_type=write",
       intercept: (request) {
-        request.headers["Authorization"] = generateAuthorizationHeader(
-          HttpMethod.post,
-          request.url,
-          {"oauth_consumer_key": consumerKey},
-          consumerSecret,
-        );
+        // request.headers["Authorization"] = generateAuthorizationHeader(
+        //   HttpMethod.post,
+        //   request.url,
+        //   {"oauth_consumer_key": consumerKey},
+        //   consumerSecret,
+        // );
         request.headers["Accept"] = "*/*";
       },
     );
