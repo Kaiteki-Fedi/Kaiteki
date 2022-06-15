@@ -1,11 +1,14 @@
 import 'package:animations/animations.dart';
 import 'package:async/async.dart';
 import 'package:breakpoint/breakpoint.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/ui/onboarding/benefits.dart';
 import 'package:kaiteki/ui/onboarding/self_select_screen.dart';
 import 'package:kaiteki/utils/extensions/m3.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const transitionDuration = Duration(milliseconds: 800);
 const pageDuration = Duration(seconds: 5);
@@ -27,10 +30,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     super.initState();
 
-    final timerDuration = pageDuration + transitionDuration;
+    const timerDuration = pageDuration;
     timer = RestartableTimer(
       timerDuration,
-      () => setState(() => _currentPage = isLastPage ? 0 : _currentPage + 1),
+      () {
+        setState(() => _currentPage = isLastPage ? 0 : _currentPage + 1);
+        timer.reset();
+      },
     );
     timer.reset();
   }
@@ -48,7 +54,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: BreakpointBuilder(
         builder: (context, breakpoint) {
-            return breakpoint.window >= WindowSize.medium ?  buildLandscape():buildPortrait();
+          return breakpoint.window >= WindowSize.medium
+              ? buildLandscape()
+              : buildPortrait();
         },
       ),
     );
@@ -148,6 +156,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   center: false,
                 ),
               ),
+              const AlphaDisclaimer(),
+              const SizedBox(height: 24.0),
               OpenContainer(
                 transitionType: ContainerTransitionType.fadeThrough,
                 tappable: false,
@@ -181,6 +191,52 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       alignment: center ? Alignment.center : Alignment.centerLeft,
       padding: EdgeInsets.zero,
       fadeEdges: false,
+    );
+  }
+}
+
+class AlphaDisclaimer extends StatelessWidget {
+  const AlphaDisclaimer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cautionColor = ColorScheme.fromSeed(
+      seedColor: Colors.amberAccent,
+      brightness: theme.brightness,
+    ).primary.harmonizeWith(theme.colorScheme.primary);
+    return Row(
+      children: [
+        Icon(Icons.warning_rounded, color: cautionColor),
+        const SizedBox(width: 8.0),
+        Text.rich(
+          style: TextStyle(color: cautionColor, height: 1.35),
+          TextSpan(
+            children: [
+              const TextSpan(text: "Kaiteki is "),
+              const TextSpan(
+                text: "alpha",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const TextSpan(text: " software. "),
+              TextSpan(
+                text: "What does this mean?",
+                style: const TextStyle(decoration: TextDecoration.underline),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () async {
+                    final url = Uri.parse("");
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(
+                        url,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    }
+                  },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
