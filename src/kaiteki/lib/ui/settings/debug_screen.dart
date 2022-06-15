@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/onboarding/onboarding_screen.dart';
@@ -41,6 +42,11 @@ class _DebugScreenState extends State<DebugScreen> {
               ),
               dense: true,
             ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.palette_rounded),
+            title: const Text("Show theme"),
+            onTap: () => context.push("/settings/debug/theme"),
           ),
           ListTile(
             leading: const Icon(Icons.key_rounded),
