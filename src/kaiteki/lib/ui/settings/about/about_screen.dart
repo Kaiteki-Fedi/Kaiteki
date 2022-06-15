@@ -66,7 +66,7 @@ class AboutScreen extends StatelessWidget {
                             ListTile(
                               leading: const Icon(Mdi.license),
                               title: Text(l10n.creditsLicenses),
-                              trailing: const Icon(Mdi.chevronRight),
+                              trailing: const Icon(Icons.chevron_right_rounded),
                               onTap: () {
                                 showLicensePage(
                                   context: context,
@@ -78,10 +78,10 @@ class AboutScreen extends StatelessWidget {
                               },
                             ),
                             ListTile(
-                              leading: const Icon(Mdi.accountMultiple),
+                              leading: const Icon(Icons.people_rounded),
                               title: Text(l10n.creditsTitle),
                               onTap: () => context.push("/credits"),
-                              trailing: const Icon(Mdi.chevronRight),
+                              trailing: const Icon(Icons.chevron_right_rounded),
                             ),
                           ],
                         ),
@@ -95,7 +95,7 @@ class AboutScreen extends StatelessWidget {
                               title: const Text("Flutter"),
                               onTap: () =>
                                   context.launchUrl("https://flutter.dev"),
-                              trailing: const Icon(Mdi.openInNew),
+                              trailing: const Icon(Icons.open_in_new_rounded),
                             ),
                             const Divider(),
                             ListTile(
@@ -108,7 +108,7 @@ class AboutScreen extends StatelessWidget {
                               subtitle: Text(l10n.creditsPleromaDescription),
                               onTap: () =>
                                   context.launchUrl("https://pleroma.social/"),
-                              trailing: const Icon(Mdi.openInNew),
+                              trailing: const Icon(Icons.open_in_new_rounded),
                             ),
                             ListTile(
                               leading: Image.asset(
@@ -120,7 +120,7 @@ class AboutScreen extends StatelessWidget {
                               subtitle: Text(l10n.creditsHuskyDescription),
                               onTap: () =>
                                   context.launchUrl("https://husky.adol.pw/"),
-                              trailing: const Icon(Mdi.openInNew),
+                              trailing: const Icon(Icons.open_in_new_rounded),
                             ),
                           ],
                         ),
@@ -133,7 +133,7 @@ class AboutScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton(
-                              icon: const Icon(Mdi.earth),
+                              icon: const Icon(Icons.public_rounded),
                               tooltip: l10n.creditsWebsite,
                               onPressed: () {
                                 context.launchUrl(consts.appWebsite);

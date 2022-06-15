@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:mdi/mdi.dart';
 
 /// A widget that displays an emoji.
 class EmojiWidget extends StatelessWidget {
@@ -39,12 +38,7 @@ class EmojiWidget extends StatelessWidget {
           return PlaceholderEmoji(size: size);
         }
       },
-      errorBuilder: (context, o, stack) {
-        return Icon(
-          Mdi.emoticonCry,
-          color: Colors.red.withOpacity(0.25),
-        );
-      },
+      errorBuilder: (_, __, ___) => PlaceholderEmoji(size: size),
     );
   }
 
@@ -67,6 +61,14 @@ class PlaceholderEmoji extends StatelessWidget {
     const padding = 0.0;
     final finalSize = size - (padding * 2);
 
+    // return DecoratedBox(
+    //   decoration: BoxDecoration(
+    //     shape: BoxShape.circle,
+    //     color: Theme.of(context).disabledColor,
+    //   ),
+    //   child: SizedBox.square(dimension: size),
+    // );
+
     return Padding(
       // ignore: use_named_constants
       padding: const EdgeInsets.all(padding),
@@ -75,10 +77,7 @@ class PlaceholderEmoji extends StatelessWidget {
           borderRadius: BorderRadius.circular(6.0),
           color: Theme.of(context).disabledColor,
         ),
-        child: SizedBox(
-          width: finalSize,
-          height: finalSize,
-        ),
+        child: SizedBox.square(dimension: finalSize),
       ),
     );
   }

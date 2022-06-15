@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:mdi/mdi.dart';
 
 class FediverseCovenantChip extends StatelessWidget {
   static const String _url =
@@ -22,7 +21,7 @@ class FediverseCovenantChip extends StatelessWidget {
         style: TextStyle(color: colorScheme.onSecondary),
       ),
       avatar: Icon(
-        Mdi.star,
+        Icons.star_rounded,
         size: 20,
         color: colorScheme.onSecondary,
       ),

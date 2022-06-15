@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:mdi/mdi.dart';
 
 class AccountSwitcherWidget extends ConsumerWidget {
   final double? size;
@@ -29,7 +28,7 @@ class AccountSwitcherWidget extends ConsumerWidget {
     final container = ref.watch(accountProvider);
 
     if (!container.loggedIn) {
-      return const Icon(Mdi.accountCircle);
+      return const Icon(Icons.account_circle_rounded);
     }
 
     return AvatarWidget(

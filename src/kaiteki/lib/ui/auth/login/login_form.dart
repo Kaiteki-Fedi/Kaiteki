@@ -11,7 +11,6 @@ import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
 import 'package:kaiteki/utils/lower_case_text_formatter.dart';
-import 'package:mdi/mdi.dart';
 
 typedef CredentialsCallback = void Function(
   String instance,
@@ -225,7 +224,7 @@ class __InstancePageState extends State<_InstancePage> {
                   border: const OutlineInputBorder(),
                   contentPadding: fieldPadding,
                   hintText: l10n.instanceFieldHint,
-                  prefixIcon: const Icon(Mdi.earth),
+                  prefixIcon: const Icon(Icons.public_rounded),
                   prefixIconConstraints: iconConstraint,
                 ),
                 inputFormatters: [LowerCaseTextFormatter()],
@@ -260,15 +259,15 @@ class __InstancePageState extends State<_InstancePage> {
   }
 
   Widget _buildSuggestionWidget(BuildContext context, InstanceData itemData) {
+    const fallbackIcon = Icon(Icons.public_rounded);
     return ListTile(
       leading: itemData.favicon == null
-          ? const Icon(Mdi.earth)
+          ? fallbackIcon
           : Image.network(
               itemData.favicon!,
               width: 24,
               height: 24,
-              errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Mdi.earth),
+              errorBuilder: (_, __, ___) => fallbackIcon,
             ),
       title: Text(itemData.name),
     );
@@ -371,7 +370,7 @@ class __UserPageState extends State<_UserPage> {
             child: TextFormField(
               decoration: InputDecoration(
                 hintText: l10n.emailFieldHint,
-                prefixIcon: const Icon(Mdi.email),
+                prefixIcon: const Icon(Icons.mail_rounded),
                 prefixIconConstraints: iconConstraint,
                 border: const OutlineInputBorder(),
                 contentPadding: fieldPadding,
@@ -387,7 +386,7 @@ class __UserPageState extends State<_UserPage> {
             controller: widget.usernameController,
             decoration: InputDecoration(
               hintText: l10n.usernameFieldHint,
-              prefixIcon: const Icon(Mdi.account),
+              prefixIcon: const Icon(Icons.person_rounded),
               prefixIconConstraints: iconConstraint,
               border: const OutlineInputBorder(),
               contentPadding: fieldPadding,
@@ -404,7 +403,7 @@ class __UserPageState extends State<_UserPage> {
             controller: widget.passwordController,
             decoration: InputDecoration(
               hintText: l10n.passwordFieldHint,
-              prefixIcon: const Icon(Mdi.key),
+              prefixIcon: const Icon(Icons.vpn_key_rounded),
               prefixIconConstraints: iconConstraint,
               border: const OutlineInputBorder(),
               contentPadding: fieldPadding,
@@ -419,7 +418,7 @@ class __UserPageState extends State<_UserPage> {
           TextFormField(
             decoration: InputDecoration(
               hintText: l10n.repeatPasswordFieldHint,
-              prefixIcon: const Icon(Mdi.key),
+              prefixIcon: const Icon(Icons.vpn_key_rounded),
               prefixIconConstraints: iconConstraint,
               border: const OutlineInputBorder(),
               contentPadding: fieldPadding,

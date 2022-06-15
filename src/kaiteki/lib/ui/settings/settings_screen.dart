@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/separator_text.dart';
-import 'package:mdi/mdi.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -12,39 +11,57 @@ class SettingsScreen extends StatelessWidget {
     return <_Section>[
       _Section(
         items: [
-          _SettingsItem(icon: Mdi.wrench, title: l10n.settingsGeneral),
-          _SettingsItem(icon: Mdi.account, title: l10n.settingsProfile),
-          _SettingsItem(icon: Mdi.lock, title: l10n.settingsSecurity),
           _SettingsItem(
-            icon: Mdi.filter,
+            icon: Icons.build_rounded,
+            title: l10n.settingsGeneral,
+          ),
+          _SettingsItem(
+            icon: Icons.person_rounded,
+            title: l10n.settingsProfile,
+          ),
+          _SettingsItem(
+            icon: Icons.lock_rounded,
+            title: l10n.settingsSecurity,
+          ),
+          _SettingsItem(
+            icon: Icons.filter_alt_rounded,
             title: l10n.settingsFiltering,
             onTap: (context) => context.push("/settings/filtering"),
           ),
-          _SettingsItem(icon: Mdi.bell, title: l10n.settingsNotifications),
-          _SettingsItem(icon: Mdi.bell, title: l10n.settingsImportExport),
-          _SettingsItem(icon: Mdi.eyeOff, title: l10n.settingsMutesBlocks),
+          _SettingsItem(
+            icon: Icons.notifications_rounded,
+            title: l10n.settingsNotifications,
+          ),
+          _SettingsItem(
+            icon: Icons.import_export_rounded,
+            title: l10n.settingsImportExport,
+          ),
+          _SettingsItem(
+            icon: Icons.visibility_off_rounded,
+            title: l10n.settingsMutesBlocks,
+          ),
         ],
       ),
       _Section(
         title: l10n.settingsKaiteki,
         items: [
           _SettingsItem(
-            icon: Mdi.palette,
+            icon: Icons.palette_rounded,
             title: l10n.settingsCustomization,
             onTap: (context) => context.push("/settings/customization"),
           ),
-          _SettingsItem(icon: Mdi.tab, title: l10n.settingsTabs),
+          _SettingsItem(icon: Icons.tab_rounded, title: l10n.settingsTabs),
         ],
       ),
       _Section(
         items: [
           _SettingsItem(
-            icon: Mdi.information,
+            icon: Icons.info_rounded,
             title: l10n.settingsAbout,
             onTap: (context) => context.push("/about"),
           ),
           _SettingsItem(
-            icon: Mdi.bug,
+            icon: Icons.bug_report_rounded,
             title: l10n.settingsDebugMaintenance,
             onTap: (context) => context.push("/settings/debug"),
           )

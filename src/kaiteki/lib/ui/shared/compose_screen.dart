@@ -6,7 +6,6 @@ import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/compose/post_form.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:mdi/mdi.dart';
 
 class ComposeScreen extends ConsumerStatefulWidget {
   final Post? replyTo;
@@ -108,7 +107,7 @@ class ToggleSubjectButton extends StatelessWidget {
 
     return IconButton(
       onPressed: onChanged,
-      icon: const Icon(Mdi.textShort),
+      icon: const Icon(Icons.short_text_rounded),
       tooltip: _getTooltip(),
       color: color,
     );

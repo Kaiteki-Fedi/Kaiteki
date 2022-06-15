@@ -3,7 +3,6 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/ui/auth/discover_instances/instance_card.dart';
 import 'package:kaiteki/utils/layout_helper.dart';
-import 'package:mdi/mdi.dart';
 
 class DiscoverInstancesScreen extends StatefulWidget {
   const DiscoverInstancesScreen({Key? key}) : super(key: key);
@@ -49,7 +48,7 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
                         backgroundColor:
                             Theme.of(context).colorScheme.secondary,
                         child: Icon(
-                          Mdi.exclamation,
+                          Icons.priority_high_rounded,
                           color: Theme.of(context).colorScheme.onSecondary,
                         ),
                       ),

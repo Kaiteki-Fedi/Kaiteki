@@ -6,7 +6,6 @@ import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/layout_helper.dart';
 import 'package:kaiteki/utils/threader.dart';
-import 'package:mdi/mdi.dart';
 
 class ConversationScreen extends ConsumerStatefulWidget {
   final Post post;
@@ -49,7 +48,11 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         title: Text(l10n.conversationTitle),
         actions: [
           IconButton(
-            icon: Icon(showThreaded ? Mdi.fileTree : Mdi.fileTreeOutline),
+            icon: Icon(
+              showThreaded
+                  ? Icons.view_timeline_rounded
+                  : Icons.article_rounded,
+            ),
             onPressed: () => setState(() => showThreaded = !showThreaded),
           ),
         ],
@@ -81,7 +84,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
             children: [
               PostWidget(widget.post),
               ListTile(
-                leading: const Icon(Mdi.close),
+                leading: const Icon(Icons.close_rounded),
                 title: Text(l10n.threadRetrievalFailed),
                 subtitle: Text(snapshot.error.toString()),
               ),
@@ -113,7 +116,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
             children: [
               PostWidget(widget.post),
               ListTile(
-                leading: const Icon(Mdi.close),
+                leading: const Icon(Icons.close_rounded),
                 title: Text(l10n.threadRetrievalFailed),
                 subtitle: Text(snapshot.error.toString()),
               ),

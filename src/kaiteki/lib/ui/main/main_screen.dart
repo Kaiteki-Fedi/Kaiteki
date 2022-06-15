@@ -14,7 +14,6 @@ import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:mdi/mdi.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -35,13 +34,13 @@ class _MainScreenState extends State<MainScreen> {
       TimelinePage(key: _timelineKey),
       Center(
         child: IconLandingWidget(
-          icon: const Icon(Mdi.dotsHorizontal),
+          icon: const Icon(Icons.more_horiz_rounded),
           text: Text(l10n.niy),
         ),
       ),
       Center(
         child: IconLandingWidget(
-          icon: const Icon(Mdi.dotsHorizontal),
+          icon: const Icon(Icons.more_horiz_rounded),
           text: Text(l10n.niy),
         ),
       ),
@@ -55,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
         icon: Icons.home_outlined,
         text: l10n.timelineTab,
         fab: _FloatingActionButtonData(
-          icon: Mdi.pencil,
+          icon: Icons.edit_rounded,
           tooltip: l10n.composeDialogTitle,
           text: l10n.composeButtonLabel,
           onTap: () => context.showPostDialog(),

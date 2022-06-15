@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/theming/default_app_themes.dart';
-import 'package:mdi/mdi.dart';
 
 class AvatarWidget extends StatelessWidget {
   final User user;
@@ -76,7 +75,7 @@ class FallbackAvatar extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.all(padding),
           child: Icon(
-            Mdi.account,
+            Icons.person_rounded,
             size: size - (padding * 2),
           ),
         );

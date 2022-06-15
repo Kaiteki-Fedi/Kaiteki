@@ -3,7 +3,6 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_category_widget.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
-import 'package:mdi/mdi.dart';
 
 class EmojiSelector extends StatefulWidget {
   final EmojiSelected onEmojiSelected;
@@ -56,7 +55,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
             ),
             const VerticalDivider(),
             IconButton(
-              icon: const Icon(Mdi.close),
+              icon: const Icon(Icons.close_rounded),
               onPressed: () => Navigator.of(context).pop(),
               splashRadius: consts.defaultSplashRadius,
               padding: const EdgeInsets.symmetric(horizontal: 12.0),

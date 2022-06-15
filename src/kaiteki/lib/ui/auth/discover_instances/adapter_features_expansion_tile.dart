@@ -4,7 +4,6 @@ import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:mdi/mdi.dart';
 
 class AdapterFeaturesExpansionTile extends StatelessWidget {
   final ApiType type;
@@ -23,19 +22,19 @@ class AdapterFeaturesExpansionTile extends StatelessWidget {
         ListTile(title: Text(l10n.sharedBackendFunctionality(name))),
         _buildFeatureListTile(
           context,
-          Mdi.forum,
+          Icons.forum_rounded,
           l10n.chatSupport,
           adapter is ChatSupport,
         ),
         _buildFeatureListTile(
           context,
-          Mdi.emoticon,
+          Icons.mood_rounded,
           l10n.reactionSupport,
           adapter is ReactionSupport,
         ),
         _buildFeatureListTile(
           context,
-          Mdi.commentEditOutline,
+          Icons.rate_review_rounded,
           l10n.previewSupport,
           adapter is PreviewSupport,
         ),
@@ -57,7 +56,9 @@ class AdapterFeaturesExpansionTile extends StatelessWidget {
     return ListTile(
       leading: Icon(icon),
       title: Text(label),
-      trailing: value ? const Icon(Mdi.check) : const Icon(Mdi.close),
+      trailing: value
+          ? const Icon(Icons.check_rounded)
+          : const Icon(Icons.close_rounded),
     );
   }
 }

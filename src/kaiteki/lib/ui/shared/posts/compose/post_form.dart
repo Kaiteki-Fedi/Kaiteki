@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Visibility;
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/di.dart';
@@ -13,17 +13,20 @@ import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart' as v;
+import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+import 'package:kaiteki/ui/shared/posts/compose/attachment_tray.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
+
+const double splashRadius = 20.0;
 
 class PostForm extends ConsumerStatefulWidget {
   final Post? replyTo;
@@ -42,10 +45,21 @@ class PostForm extends ConsumerStatefulWidget {
 }
 
 class PostFormState extends ConsumerState<PostForm> {
-  late TextEditingController _bodyController;
-  late TextEditingController _subjectController;
-  late RestartableTimer _typingTimer;
-  var _visibility = v.Visibility.public;
+  late final TextEditingController _bodyController = TextEditingController()
+    ..addListener(_typingTimer.reset);
+
+  late final TextEditingController _subjectController = TextEditingController()
+    ..addListener(_typingTimer.reset);
+
+  late final RestartableTimer _typingTimer = RestartableTimer(
+    const Duration(seconds: 1),
+    () {
+      _typingTimer.cancel();
+      setState(() {});
+    },
+  );
+
+  var _visibility = Visibility.public;
   var _formatting = Formatting.plainText;
   final List<Future<Attachment>> attachments = [];
 
@@ -58,22 +72,22 @@ class PostFormState extends ConsumerState<PostForm> {
   late final _attachMenuItems = [
     AttachMenuItem(
       label: "Attach files",
-      icon: Mdi.file,
+      icon: Icons.insert_drive_file_rounded,
       onPressed: onAttachFile,
     ),
     const AttachMenuItem(
       label: "Take picture",
-      icon: Mdi.camera,
+      icon: Icons.camera_rounded,
       onPressed: null,
     ),
     const AttachMenuItem(
       label: "Create poll",
-      icon: Mdi.pollBox,
+      icon: Icons.poll_rounded,
       onPressed: null,
     ),
     const AttachMenuItem(
       label: "Record voice",
-      icon: Mdi.microphone,
+      icon: Icons.mic_rounded,
       onPressed: null,
     ),
   ];
@@ -88,19 +102,6 @@ class PostFormState extends ConsumerState<PostForm> {
   @override
   void initState() {
     super.initState();
-
-    _typingTimer = RestartableTimer(
-      const Duration(seconds: 1),
-      () {
-        _typingTimer.cancel();
-        setState(() {});
-      },
-    );
-
-    _bodyController = TextEditingController()..addListener(_typingTimer.reset);
-
-    _subjectController = TextEditingController();
-    _subjectController.addListener(_typingTimer.reset);
 
     if (widget.replyTo != null) {
       _visibility = widget.replyTo!.visibility;
@@ -158,6 +159,7 @@ class PostFormState extends ConsumerState<PostForm> {
                   Flexible(
                     flex: flex,
                     child: TextField(
+                      autofocus: true,
                       decoration: InputDecoration(
                         hintText: l10n.composeBodyHint,
                         border: InputBorder.none,
@@ -191,40 +193,13 @@ class PostFormState extends ConsumerState<PostForm> {
             ),
             child: Row(
               children: [
-                IconButton(
-                  onPressed: openAttachDrawer,
-                  icon: const Icon(Mdi.plusCircle),
-                  splashRadius: 20,
-                  tooltip: l10n.attachButtonTooltip,
-                ),
-                EnumIconButton<v.Visibility>(
-                  tooltip: l10n.visibilityButtonTooltip,
-                  onChanged: (value) => setState(() => _visibility = value),
-                  value: _visibility,
-                  values: v.Visibility.values,
-                  iconBuilder: (value) => Icon(value.toIconData()),
-                  textBuilder: (value) => Text(value.toHumanString()),
-                ),
-                EnumIconButton<Formatting>(
-                  tooltip: l10n.formattingButtonTooltip,
-                  onChanged: (value) => setState(() => _formatting = value),
-                  value: _formatting,
-                  values: Formatting.values,
-                  iconBuilder: (value) => Icon(value.toIconData()),
-                  textBuilder: (value) => Text(value.toHumanString()),
-                ),
-                IconButton(
-                  onPressed: () => openEmojiPicker(context, manager),
-                  icon: const Icon(Mdi.emoticon),
-                  splashRadius: 20,
-                  tooltip: l10n.emojiButtonTooltip,
-                ),
+                ..._buildActions(context),
                 const Spacer(),
                 FloatingActionButton.small(
                   onPressed: () => post(context, manager.adapter),
                   elevation: 2.0,
                   tooltip: l10n.submitButtonTooltip,
-                  child: const Icon(Mdi.send),
+                  child: const Icon(Icons.send_rounded),
                 ),
               ],
             ),
@@ -472,147 +447,44 @@ class PostFormState extends ConsumerState<PostForm> {
       () => attachments.add(adapter.uploadAttachment(kaitekiFile, null)),
     );
   }
-}
 
-class AttachmentTray extends StatelessWidget {
-  final Function(int index)? onRemoveAttachment;
-
-  const AttachmentTray({
-    Key? key,
-    required this.attachments,
-    this.onRemoveAttachment,
-  }) : super(key: key);
-
-  final List<Future<Attachment>> attachments;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (var i = 0; i < attachments.length; i++)
-            AttachmentTrayItem(
-              attachment: attachments[i],
-              onRemove: () => onRemoveAttachment?.call(i),
-            ),
-        ],
+  List<Widget> _buildActions(BuildContext context) {
+    final l10n = context.getL10n();
+    final manager = ref.watch(accountProvider);
+    return [
+      IconButton(
+        onPressed: openAttachDrawer,
+        icon: const Icon(Icons.add_circle_rounded),
+        splashRadius: splashRadius,
+        tooltip: l10n.attachButtonTooltip,
       ),
-    );
+      EnumIconButton<Visibility>(
+        tooltip: l10n.visibilityButtonTooltip,
+        onChanged: (value) => setState(() => _visibility = value),
+        value: _visibility,
+        values: Visibility.values,
+        splashRadius: splashRadius,
+        iconBuilder: (value) => Icon(value.toIconData()),
+        textBuilder: (value) => Text(value.toDisplayString()),
+      ),
+      EnumIconButton<Formatting>(
+        tooltip: l10n.formattingButtonTooltip,
+        onChanged: (value) => setState(() => _formatting = value),
+        value: _formatting,
+        values: Formatting.values,
+        splashRadius: splashRadius,
+        iconBuilder: (value) => Icon(value.toIconData()),
+        textBuilder: (value) => Text(value.toDisplayString()),
+      ),
+      IconButton(
+        onPressed: () => openEmojiPicker(context, manager),
+        icon: const Icon(Icons.mood_rounded),
+        splashRadius: splashRadius,
+        tooltip: l10n.emojiButtonTooltip,
+      )
+    ];
   }
 }
-
-class AttachmentTrayItem extends StatelessWidget {
-  final VoidCallback? onRemove;
-
-  const AttachmentTrayItem({
-    Key? key,
-    required this.attachment,
-    this.onRemove,
-  }) : super(key: key);
-
-  final Future<Attachment> attachment;
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 72.0;
-
-    return FutureBuilder(
-      future: attachment,
-      // ignore: avoid_types_on_closure_parameters
-      builder: (context, AsyncSnapshot<Attachment> snapshot) {
-        final Widget widget;
-
-        if (snapshot.hasError) {
-          widget = const Center(child: Icon(Icons.error));
-        } else if (!snapshot.hasData) {
-          widget = const Center(child: CircularProgressIndicator());
-        } else {
-          final attachment = snapshot.data!;
-          switch (attachment.type) {
-            case AttachmentType.image:
-              widget = Image.network(
-                snapshot.data!.url,
-                fit: BoxFit.cover,
-              );
-              break;
-            case AttachmentType.video:
-              widget = const Center(child: Icon(Icons.video_file_rounded));
-              break;
-            case AttachmentType.audio:
-              widget = const Center(child: Icon(Icons.audio_file_rounded));
-              break;
-            case AttachmentType.file:
-            default:
-              widget = const Center(child: Icon(Icons.upload_file_rounded));
-              break;
-          }
-        }
-
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Material(
-            borderRadius: BorderRadius.circular(8.0),
-            elevation: 4.0,
-            child: Stack(
-              children: [
-                SizedBox(
-                  width: size,
-                  height: size,
-                  child: ColoredBox(
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                    child: widget,
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  child: PopupMenuButton(
-                    iconSize: 20,
-                    splashRadius: 12,
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                    onSelected: (action) {
-                      switch (action) {
-                        case AttachmentTryItemAction.remove:
-                          onRemove?.call();
-                          break;
-                      }
-                    },
-                    itemBuilder: (context) {
-                      return [
-                        PopupMenuItem(
-                          value: AttachmentTryItemAction.remove,
-                          enabled: onRemove != null,
-                          child: const ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Icon(Icons.close),
-                            title: Text("Remove attachment"),
-                          ),
-                        ),
-                        const PopupMenuItem(
-                          value: AttachmentTryItemAction.addAltText,
-                          enabled: false,
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Icon(
-                              Icons.drive_file_rename_outline_rounded,
-                            ),
-                            title: Text("Add alternate text"),
-                          ),
-                        ),
-                      ];
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-enum AttachmentTryItemAction { remove, addAltText }
 
 class AttachMenuItem {
   final IconData icon;

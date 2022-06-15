@@ -5,7 +5,6 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 /// A vertical list describing the provided user.
@@ -47,12 +46,12 @@ class UserInfoWidget extends ConsumerWidget {
               : _buildUserFieldsColumn(context, fields),
         if (location != null)
           _UserInfoRow(
-            leading: const Icon(Mdi.mapMarker),
+            leading: const Icon(Icons.place_rounded),
             body: Text(location),
           ),
         if (website != null)
           _UserInfoRow(
-            leading: const Icon(Mdi.linkVariant),
+            leading: const Icon(Icons.link_rounded),
             body: Text.rich(
               TextSpan(
                 text: website,
@@ -64,14 +63,14 @@ class UserInfoWidget extends ConsumerWidget {
           ),
         if (joinDate != null)
           _UserInfoRow(
-            leading: const Icon(Mdi.calendar),
+            leading: const Icon(Icons.event_rounded),
             body: Text(
               "Joined ${DateFormat('MMMM yyyy').format(joinDate)}",
             ),
           ),
         if (birthday != null)
           _UserInfoRow(
-            leading: const Icon(Mdi.cake),
+            leading: const Icon(Icons.cake_rounded),
             body: Text(
               "Born ${DateFormat('dd MMMM yyyy').format(birthday)}",
             ),

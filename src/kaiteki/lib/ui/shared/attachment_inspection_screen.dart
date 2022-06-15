@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:mdi/mdi.dart';
 
 class AttachmentInspectionScreen extends StatefulWidget {
   final Iterable<Attachment> attachments;
@@ -59,7 +58,7 @@ class _AttachmentInspectionScreenState
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Mdi.download),
+            icon: const Icon(Icons.download_rounded),
             onPressed: () => downloadAttachment(context),
             tooltip: l10n.attachmentDownloadButtonLabel,
           ),
@@ -87,7 +86,7 @@ class _AttachmentInspectionScreenState
                   onPressed: canNavigateBackwards ? previousPage : null,
                   child: Opacity(
                     opacity: canNavigateBackwards ? 1 : .25,
-                    child: const Icon(Mdi.chevronLeft),
+                    child: const Icon(Icons.chevron_left_rounded),
                   ),
                 ),
               ),
@@ -109,7 +108,7 @@ class _AttachmentInspectionScreenState
                   onPressed: canNavigateForwards ? nextPage : null,
                   child: Opacity(
                     opacity: canNavigateForwards ? 1 : .25,
-                    child: const Icon(Mdi.chevronRight),
+                    child: const Icon(Icons.chevron_right_rounded),
                   ),
                 ),
               ),

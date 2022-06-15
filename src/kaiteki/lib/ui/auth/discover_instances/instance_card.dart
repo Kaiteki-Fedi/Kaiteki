@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instance_details_screen.dart';
-import 'package:mdi/mdi.dart';
 
 class InstanceCard extends StatelessWidget {
   final InstanceData data;
@@ -53,7 +52,7 @@ class InstanceCard extends StatelessWidget {
                         Tooltip(
                           message: l10n.runsOn(data.type.displayName),
                           child: iconLocation == null
-                              ? const Icon(Mdi.earth)
+                              ? const Icon(Icons.public_rounded)
                               : Image.asset(
                                   iconLocation,
                                   width: 24,
@@ -87,7 +86,7 @@ class InstanceCard extends StatelessWidget {
                       Text(l10n.chooseButtonLabel),
                       const Padding(
                         padding: EdgeInsets.only(left: 8.0),
-                        child: Icon(Mdi.arrowRight),
+                        child: Icon(Icons.arrow_forward_rounded),
                       ),
                     ],
                   ),

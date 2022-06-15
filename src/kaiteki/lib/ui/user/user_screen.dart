@@ -10,7 +10,6 @@ import 'package:kaiteki/ui/user/posts_page.dart';
 import 'package:kaiteki/ui/user/user_info_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/layout_helper.dart';
-import 'package:mdi/mdi.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
   final String id;
@@ -161,7 +160,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
 
     if (snapshot.hasError) {
       body = const IconLandingWidget(
-        icon: Icon(Mdi.accountAlert),
+        icon: Icon(Icons.error_rounded),
         text: Text("Failed retrieving account"),
       );
     } else if (!snapshot.hasData) {
@@ -344,7 +343,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     return [
       IconButton(
         tooltip: l10n.openInBrowserLabel,
-        icon: const Icon(Mdi.openInNew),
+        icon: const Icon(Icons.open_in_new_rounded),
         onPressed: url == null ? null : () => context.launchUrl(url),
       ),
     ];

@@ -43,6 +43,7 @@ class CountButton extends StatelessWidget {
         onPressed: callback,
         enableFeedback: !disabled,
         focusNode: focusNode,
+        splashRadius: 18,
       );
     } else {
       return TextButton.icon(

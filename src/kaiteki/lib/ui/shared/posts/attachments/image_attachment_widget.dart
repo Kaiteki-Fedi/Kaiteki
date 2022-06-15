@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/shared/attachment_inspection_screen.dart';
-import 'package:mdi/mdi.dart';
 
 class ImageAttachmentWidget extends StatelessWidget {
   final Attachment attachment;
@@ -43,7 +42,7 @@ class ImageAttachmentWidget extends StatelessWidget {
             );
           },
           errorBuilder: (_, w, c) {
-            return const Center(child: Icon(Mdi.imageBroken));
+            return const Center(child: Icon(Icons.hide_image_rounded));
           },
           //width: 100,
           fit: BoxFit.contain,

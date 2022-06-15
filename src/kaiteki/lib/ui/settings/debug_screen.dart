@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/onboarding/onboarding_screen.dart';
-import 'package:mdi/mdi.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DebugScreen extends StatefulWidget {
@@ -24,30 +23,38 @@ class _DebugScreenState extends State<DebugScreen> {
         children: [
           const Material(
             elevation: 6,
-            color: Colors.red,
+            color: Colors.amberAccent,
             child: ListTile(
-              leading: Icon(Mdi.alert),
+              leading: Icon(Icons.warning_rounded, color: Colors.black),
               title: Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+                padding: EdgeInsets.only(top: 8.0),
                 child: Text(
-                  'Please proceed here with caution as some settings might have unintended behavior or delete your user settings.',
+                  "Proceed with caution",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              subtitle: Padding(
+                padding: EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  "Some settings might delete your user settings or have unintended behavior.",
+                  style: TextStyle(color: Colors.black54),
                 ),
               ),
               dense: true,
             ),
           ),
           ListTile(
-            leading: const Icon(Mdi.wrench),
+            leading: const Icon(Icons.tune_rounded),
             title: const Text("Manage shared preferences"),
             onTap: () => context.push('/settings/debug/preferences'),
           ),
           ListTile(
-            leading: const Icon(Mdi.key),
+            leading: const Icon(Icons.key_rounded),
             title: const Text("Run OAuth Server"),
             onTap: () => runOAuthServer(launchUrl),
           ),
           ListTile(
-            leading: const Icon(Mdi.hand),
+            leading: const Icon(Icons.waving_hand_rounded),
             title: const Text("Open onboarding"),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(

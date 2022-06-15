@@ -8,8 +8,6 @@ import 'package:kaiteki/ui/auth/discover_instances/fediverse_convenant_chip.dart
 import 'package:kaiteki/ui/auth/discover_instances/mastodon_convenant_chip.dart';
 import 'package:kaiteki/ui/auth/discover_instances/rule_list_tile.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/extensions/m3.dart';
-import 'package:mdi/mdi.dart';
 
 class DiscoverInstanceDetailsScreen extends ConsumerWidget {
   final InstanceData data;
@@ -118,7 +116,7 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
                       if (data.rulesUrl != null)
                         ListTile(
                           title: Text(l10n.rulesLearnMore),
-                          trailing: const Icon(Mdi.arrowRight),
+                          trailing: const Icon(Icons.open_in_new_rounded),
                           onTap: () async {
                             await context.launchUrl(data.rulesUrl!);
                           },

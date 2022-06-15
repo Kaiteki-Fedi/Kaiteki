@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/theming/default_app_themes.dart';
 import 'package:kaiteki/ui/settings/customization/theme_preview.dart';
-import 'package:mdi/mdi.dart';
 
 class ThemeSelector extends StatelessWidget {
   final ThemeMode theme;
@@ -23,7 +22,7 @@ class ThemeSelector extends StatelessWidget {
           name: _themeToString(context, ThemeMode.system),
           selected: theme == ThemeMode.system,
           onTap: () => onSelected(ThemeMode.system),
-          icon: const Icon(Mdi.autoFix),
+          icon: const Icon(Icons.auto_fix_high_rounded),
         ),
         Theme(
           data: lightThemeData,

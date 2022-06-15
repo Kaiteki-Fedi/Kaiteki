@@ -3,7 +3,6 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/intents.dart';
@@ -16,7 +15,6 @@ import 'package:kaiteki/ui/shared/posts/reaction_row.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
-import 'package:mdi/mdi.dart';
 
 const _padding = EdgeInsets.symmetric(vertical: 4.0);
 
@@ -47,7 +45,7 @@ class PostWidget extends ConsumerWidget {
       return Column(
         children: [
           InteractionEventBar(
-            icon: Mdi.repeat,
+            icon: Icons.repeat_rounded,
             text: l10n.postRepeated,
             color: ext.repeatColor,
             user: _post.author,
@@ -241,7 +239,7 @@ class MetaBar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Tooltip(
-              message: _post.visibility.toHumanString(),
+              message: _post.visibility.toDisplayString(),
               child: Icon(
                 _post.visibility.toIconData(),
                 size: 20,
@@ -312,10 +310,13 @@ class ReplyBar extends ConsumerWidget {
               children: [
                 // TODO(Craftplacer): refactor the following widget pattern to a future "IconSpan"
                 WidgetSpan(
-                  child: Icon(
-                    Mdi.share,
-                    size: getLocalFontSize(context) * 1.25,
-                    color: disabledColor,
+                  child: Directionality(
+                    textDirection: Directionality.of(context).inverted,
+                    child: Icon(
+                      Icons.reply_rounded,
+                      size: getLocalFontSize(context) * 1.25,
+                      color: disabledColor,
+                    ),
                   ),
                 ),
                 TextSpan(
@@ -382,7 +383,7 @@ class InteractionBar extends StatelessWidget {
             child: Row(
               children: [
                 CountButton(
-                  icon: const Icon(Icons.reply),
+                  icon: const Icon(Icons.reply_rounded),
                   count: _post.replyCount,
                   buttonOnly: true,
                   onTap: () => context.showPostDialog(replyTo: _post),
@@ -396,7 +397,7 @@ class InteractionBar extends StatelessWidget {
             child: Row(
               children: [
                 CountButton(
-                  icon: const Icon(Icons.repeat),
+                  icon: const Icon(Icons.repeat_rounded),
                   count: _post.repeatCount,
                   active: _post.repeated,
                   activeColor: theme.repeatColor,
@@ -410,11 +411,11 @@ class InteractionBar extends StatelessWidget {
             child: Row(
               children: [
                 CountButton(
-                  icon: const Icon(Mdi.starOutline),
+                  icon: const Icon(Icons.star_border_rounded),
                   count: _post.likeCount,
                   active: _post.liked,
                   activeColor: theme.favoriteColor,
-                  activeIcon: const Icon(Icons.star),
+                  activeIcon: const Icon(Icons.star_rounded),
                   focusNode: FocusNode(skipTraversal: true),
                 ),
               ],
@@ -425,7 +426,7 @@ class InteractionBar extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.insert_emoticon),
+                  icon: const Icon(Icons.mood_rounded),
                   onPressed: null,
                   focusNode: FocusNode(skipTraversal: true),
                 ),
@@ -445,7 +446,7 @@ class InteractionBar extends StatelessWidget {
                         enabled: openInBrowserAvailable,
                         child: ListTile(
                           title: Text(l10n.openInBrowserLabel),
-                          leading: const Icon(Mdi.openInNew),
+                          leading: const Icon(Icons.open_in_new_rounded),
                           contentPadding: EdgeInsets.zero,
                           enabled: openInBrowserAvailable,
                         ),
@@ -455,7 +456,7 @@ class InteractionBar extends StatelessWidget {
                         PopupMenuItem(
                           child: const ListTile(
                             title: Text("Debug text rendering"),
-                            leading: Icon(Mdi.bug),
+                            leading: Icon(Icons.bug_report_rounded),
                             contentPadding: EdgeInsets.zero,
                           ),
                           value: () => showDialog(
@@ -540,8 +541,8 @@ class SubjectBar extends StatelessWidget {
                   ),
             ),
             trailing: collapsed
-                ? const Icon(Mdi.chevronUp)
-                : const Icon(Mdi.chevronDown),
+                ? const Icon(Icons.expand_less_rounded)
+                : const Icon(Icons.expand_more_rounded),
             contentPadding: EdgeInsets.zero,
             onTap: onTap,
           ),

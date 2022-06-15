@@ -6,7 +6,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:mdi/mdi.dart';
 
 part 'credits_screen.g.dart';
 
@@ -80,7 +79,7 @@ class CreditsItemWidget extends StatelessWidget {
       subtitle: Text(item.roles.join(", ")),
       trailing: item.url.nullTransform(
         (website) => IconButton(
-          icon: const Icon(Mdi.openInNew),
+          icon: const Icon(Icons.open_in_new_rounded),
           onPressed: () => context.launchUrl(item.url!),
         ),
       ),
