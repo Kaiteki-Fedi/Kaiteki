@@ -25,6 +25,10 @@ dependencies:
   breakpoint: ^1.2.0
   chewie: ^1.0.0
   crypto: ^3.0.1
+  dynamic_color:
+    git: 
+      url: https://github.com/Craftplacer/material-dynamic-color-flutter.git
+      ref: kaiteki
   fediverse_objects:
     git: https://github.com/Kaiteki-Fedi/fediverse_objects.git
   file_picker: ^4.3.0

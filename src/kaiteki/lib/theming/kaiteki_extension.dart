@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/theming/chat_message_theme.dart';
 import 'package:kaiteki/theming/toggle_button_theme.dart';
@@ -30,13 +31,11 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
   factory KaitekiExtension.material(ThemeData theme) {
     final chatMessageTheme = ChatMessageTheme.from(theme);
     return KaitekiExtension(
-      repeatColor: Colors.green,
-      favoriteColor: Colors.orange,
+      repeatColor: Colors.green.harmonizeWith(theme.colorScheme.primary),
+      favoriteColor: Colors.orange.harmonizeWith(theme.colorScheme.primary),
       chatMessageIncoming: chatMessageTheme,
       chatMessageOutgoing: chatMessageTheme,
-      linkTextStyle: TextStyle(
-        color: theme.colorScheme.secondary,
-      ),
+      linkTextStyle: TextStyle(color: theme.colorScheme.secondary),
       borderColor: theme.dividerColor,
       reactionButtonTheme: ToggleButtonTheme.from(theme),
       chatMessageRounding: 8,
