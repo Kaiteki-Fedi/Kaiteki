@@ -7,8 +7,8 @@ import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
-import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
-import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
+import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
+import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
@@ -258,7 +258,7 @@ class UserChip extends ConsumerWidget {
             message: user.handle,
             child: ActionChip(
               avatar: AvatarWidget(user, size: 24),
-              label: Text.rich(user.renderDisplayName(context, ref)),
+              label: Text.rich(user.renderDisplayName(context)),
               onPressed: () => context.showUser(user, ref),
             ),
           );

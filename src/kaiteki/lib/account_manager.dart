@@ -1,9 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
@@ -86,16 +82,23 @@ class AccountManager extends ChangeNotifier {
 
   Future<void> _restoreSession(AccountSecret accountSecret) async {
     final instance = accountSecret.instance;
-    final clientSecret = _clientSecrets.get(instance)!;
+    final clientSecret = _clientSecrets.get(instance);
 
-    if (clientSecret.apiType == null) {
+    if (clientSecret == null) {
+      _logger.w("Couldn't find a matching client secret for account");
+      return;
+    }
+
+    final apiType = clientSecret.apiType;
+
+    if (apiType == null) {
       _logger.d("Client secret didn't have contain API type.");
       return;
     }
 
-    _logger.d('Trying to recover a ${clientSecret.apiType} account');
+    _logger.d('Trying to recover a ${apiType.displayName} account');
 
-    final adapter = clientSecret.apiType!.createAdapter();
+    final adapter = apiType.createAdapter();
     await adapter.client.setClientAuthentication(clientSecret);
     await adapter.client.setAccountAuthentication(accountSecret);
 
@@ -127,61 +130,6 @@ class AccountManager extends ChangeNotifier {
     );
   }
 
-  Future<InstanceProbeResult> probeInstance(String instance) async {
-    final isInstanceAvailable = await _checkInstanceAvailability(instance);
-    if (!isInstanceAvailable) {
-      throw InstanceUnreachableException();
-    }
-
-    for (final apiType in ApiType.values) {
-      try {
-        final adapter = apiType.createAdapter();
-        adapter.client.instance = instance;
-
-        _logger.d('Probing for ${apiType.displayName} on $instance...');
-
-        final result = await adapter.probeInstance();
-
-        if (result != null) {
-          _logger.d('Detected ${apiType.displayName} on $instance');
-          return InstanceProbeResult.successful(apiType, result);
-        }
-      } catch (_) {
-        continue;
-      }
-    }
-
-    _logger.d("Couldn't detect backend on on $instance");
-    return const InstanceProbeResult.failed();
-  }
-
-  Future<bool> _checkInstanceAvailability(String instance) async {
-    final uri = Uri.https(instance, '');
-
-    try {
-      final response = await http.get(uri);
-      return response.statusCode == 200;
-    } catch (e) {
-      return false;
-    }
-  }
-
   // TODO(Craftplacer): HACK, This should not exist, please refactor.
   ClientSecretRepository getClientRepo() => _clientSecrets;
-}
-
-class InstanceProbeResult {
-  final ApiType? type;
-  final Instance? instance;
-  final bool successful;
-
-  const InstanceProbeResult.successful(
-    this.type,
-    this.instance,
-  ) : successful = true;
-
-  const InstanceProbeResult.failed()
-      : successful = false,
-        type = null,
-        instance = null;
 }

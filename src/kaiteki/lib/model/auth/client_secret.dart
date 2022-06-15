@@ -13,7 +13,7 @@ class ClientSecret {
 
   final String instance;
 
-  @JsonKey(name: "type")
+  @JsonKey(name: "type", unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
   final ApiType? apiType;
 
   const ClientSecret(

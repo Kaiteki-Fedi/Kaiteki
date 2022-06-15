@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
+import 'package:oauth1/oauth1.dart';
+// ignore: implementation_imports
+import 'package:oauth1/src/authorization_header_builder.dart';
 
 abstract class AuthenticationData {
   /// Apply all necessary data to the outgoing HTTP request.
@@ -50,6 +53,26 @@ class MisskeyAuthenticationData implements AuthenticationData {
       request.fields["i"] = token;
     }
 
+    return request;
+  }
+}
+
+class TwitterAuthenticationData implements AuthenticationData {
+  final Credentials credentials;
+  final ClientCredentials clientCredentials;
+
+  TwitterAuthenticationData(this.credentials, this.clientCredentials);
+
+  @override
+  BaseRequest applyTo(BaseRequest request) {
+    final ahb = AuthorizationHeaderBuilder()
+      ..signatureMethod = SignatureMethods.hmacSha1
+      ..clientCredentials = clientCredentials
+      ..credentials = credentials
+      ..method = request.method
+      ..url = request.url.toString();
+
+    request.headers["Authorization"] = ahb.build().toString();
     return request;
   }
 }

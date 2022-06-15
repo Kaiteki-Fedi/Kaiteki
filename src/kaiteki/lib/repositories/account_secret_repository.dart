@@ -8,7 +8,7 @@ import 'package:kaiteki/utils/extensions/string.dart';
 class AccountSecretRepository extends ChangeNotifier
     implements Repository<AccountSecret> {
   late final List<AccountSecret> _secrets;
-  final SecretStorage _storage;
+  final AccountSecretStorage _storage;
 
   AccountSecretRepository(this._storage);
 
@@ -18,7 +18,7 @@ class AccountSecretRepository extends ChangeNotifier
       throw Exception("Account secret is already present in repository");
     }
 
-    await _storage.saveAccountSecret(secret);
+    await _storage.save(secret);
     notifyListeners();
   }
 
@@ -28,7 +28,7 @@ class AccountSecretRepository extends ChangeNotifier
       throw Exception("Account secret doesn't exist in repository");
     }
 
-    await _storage.deleteAccountSecret(secret);
+    await _storage.delete(secret);
     notifyListeners();
   }
 
@@ -52,12 +52,12 @@ class AccountSecretRepository extends ChangeNotifier
 
   @override
   Future<void> initialize() async {
-    final accountSecrets = await _storage.fetchAccountSecrets();
+    final accountSecrets = await _storage.values;
     _secrets = accountSecrets.toList();
   }
 
   @override
   Future<bool> contains(AccountSecret secret) async {
-    return _storage.hasAccountSecret(secret);
+    return _storage.has(secret.instance, secret.username);
   }
 }

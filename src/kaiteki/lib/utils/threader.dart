@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/ui/widgets/post_widget.dart';
+import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 ThreadPost toThread(Iterable<Post> posts) {

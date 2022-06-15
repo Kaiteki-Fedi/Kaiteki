@@ -255,9 +255,9 @@
   },
   "manageAccountsTitle": "Manage Accounts",
   "@manageAccountsTitle": {},
-  "accountRemovalConfirmationTitle": "Are you sure you want to remove this account?",
+  "accountRemovalConfirmationTitle": "Remove account?",
   "@accountRemovalConfirmationTitle": {},
-  "accountRemovalConfirmationDescription": "You will have to add this account again later.",
+  "accountRemovalConfirmationDescription": "If you remove this account you will have to sign in later to use it again.",
   "@accountRemovalConfirmationDescription": {},
   "switchListTileTextOn": "On",
   "@switchListTileTextOn": {},
@@ -420,5 +420,11 @@
     }
   },
   "attachmentDownloadDialogTitle": "Download attachment",
-  "creditsTelegramChannel": "Telegram Channel"
+  "creditsTelegramChannel": "Telegram Channel",
+  "discardDraftDialogTitle": "Discard draft?",
+  "discardDraftDialogDescription": "Are you sure you want to discard the draft?",
+  "discardButtonLabel": "Discard",
+  "keepWritingButtonLabel": "Keep writing",
+  "whyButtonLabel": "Why?",
+  "refreshTimelineButtonLabel": "Refresh"
 }

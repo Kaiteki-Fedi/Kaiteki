@@ -8,13 +8,14 @@
 				"pub",
 				"run",
 				"build_runner",
-				"watch"
+				"watch",
+				"--delete-conflicting-outputs"
 			],
 			"problemMatcher": [
 				"$dart-build_runner"
 			],
 			"group": "build",
-			"label": "flutter: flutter pub run build_runner watch",
+			"label": "build_runner watch",
 			"detail": ""
 		}
 	]
