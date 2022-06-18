@@ -85,9 +85,12 @@ class DesktopUserHeader extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Flexible(
-                            child: user == null
-                                ? const SizedBox()
-                                : _buildAvatar(context, avatarBorderRadius),
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: user == null
+                                  ? const SizedBox()
+                                  : _buildAvatar(context, avatarBorderRadius),
+                            ),
                           ),
                           const SizedBox(width: gutter), // Gutter
                           const Flexible(flex: 3, child: SizedBox()),
