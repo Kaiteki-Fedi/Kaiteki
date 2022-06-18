@@ -135,7 +135,7 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
       return Uri.parse(authUrl);
     });
 
-    final username = authResp.optionalParameters['screen_name']!;
+    var username = authResp.optionalParameters['screen_name'];
 
     client.authenticationData = TwitterAuthenticationData(
       authResp.credentials,
@@ -144,6 +144,7 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
 
     try {
       account = await client.verifyCredentials();
+      username ??= account.screenName;
     } catch (e) {
       return LoginResult.failed("Failed to verify credentials");
     }
