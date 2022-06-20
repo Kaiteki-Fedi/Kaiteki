@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
+import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
@@ -17,6 +17,8 @@ import 'package:kaiteki/model/file.dart';
 abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// The original client/backend that is being adapted.
   Client client;
+
+  AdapterCapabilities get capabilities;
 
   FediverseAdapter(this.client);
 
@@ -53,8 +55,6 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   });
 
   Future<Iterable<Post>> getStatusesOfUserById(String id);
-
-  Future<Iterable<EmojiCategory>> getEmojis();
 
   Future<Instance> getInstance();
 

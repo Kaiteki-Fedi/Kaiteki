@@ -17,7 +17,7 @@ class Post<T> {
   final DateTime postedAt;
   final User author;
   final bool nsfw;
-  final Visibility visibility;
+  final Visibility? visibility;
 
   // ENGAGEMENT
   /// Whether the user has liked (favorited) this post

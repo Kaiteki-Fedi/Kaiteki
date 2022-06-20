@@ -1,16 +1,11 @@
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart';
+import 'package:kaiteki/fediverse/backends/pleroma/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/client.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:kaiteki/fediverse/model/chat.dart';
-import 'package:kaiteki/fediverse/model/chat_message.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 
 part 'adapter.c.dart';
 
@@ -37,12 +32,6 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
   Future<User> getUser(String username, [String? instance]) {
     throw UnimplementedError();
   }
-
-  @override
-  bool supportsCustomEmoji = false;
-
-  @override
-  bool supportsUnicodeEmoji = true;
 
   @override
   Future<Iterable<ChatMessage>> getChatMessages(Chat chat) {
@@ -121,4 +110,7 @@ class PleromaAdapter extends SharedMastodonAdapter<PleromaClient>
 
     return relative.toString();
   }
+
+  @override
+  PleromaCapabilities get capabilities => const PleromaCapabilities();
 }

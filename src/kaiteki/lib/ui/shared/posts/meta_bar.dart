@@ -22,6 +22,7 @@ class MetaBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final visibility = _post.visibility;
     final secondaryText = _getSecondaryUserText(_post.author);
     final secondaryColor = Theme.of(context).disabledColor;
     final secondaryTextTheme = TextStyle(color: secondaryColor);
@@ -66,18 +67,18 @@ class MetaBar extends StatelessWidget {
               style: secondaryTextTheme,
             ),
           ),
-          // if (_post.visibility != null)
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Tooltip(
-              message: _post.visibility.toDisplayString(),
-              child: Icon(
-                _post.visibility.toIconData(),
-                size: 20,
-                color: secondaryColor,
+          if (visibility != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Tooltip(
+                message: visibility.toDisplayString(),
+                child: Icon(
+                  visibility.toIconData(),
+                  size: 20,
+                  color: secondaryColor,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

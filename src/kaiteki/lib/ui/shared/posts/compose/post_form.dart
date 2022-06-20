@@ -7,13 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
-import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
@@ -103,8 +99,9 @@ class PostFormState extends ConsumerState<PostForm> {
   void initState() {
     super.initState();
 
-    if (widget.replyTo != null) {
-      _visibility = widget.replyTo!.visibility;
+    final op = widget.replyTo;
+    if (op?.visibility != null) {
+      _visibility = op!.visibility!;
     }
   }
 
@@ -351,7 +348,7 @@ class PostFormState extends ConsumerState<PostForm> {
         return SizedBox(
           height: 250,
           child: FutureBuilder(
-            future: container.adapter.getEmojis(),
+            future: (container.adapter as CustomEmojiSupport).getEmojis(),
             builder: buildEmojiSelector,
           ),
         );
@@ -476,12 +473,13 @@ class PostFormState extends ConsumerState<PostForm> {
         iconBuilder: (value) => Icon(value.toIconData()),
         textBuilder: (value) => Text(value.toDisplayString()),
       ),
-      IconButton(
-        onPressed: () => openEmojiPicker(context, manager),
-        icon: const Icon(Icons.mood_rounded),
-        splashRadius: splashRadius,
-        tooltip: l10n.emojiButtonTooltip,
-      )
+      if (manager.adapter is CustomEmojiSupport)
+        IconButton(
+          onPressed: () => openEmojiPicker(context, manager),
+          icon: const Icon(Icons.mood_rounded),
+          splashRadius: splashRadius,
+          tooltip: l10n.emojiButtonTooltip,
+        )
     ];
   }
 }
