@@ -1,14 +1,14 @@
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/layout_helper.dart';
 
 class DesktopUserHeader extends StatelessWidget {
   final TabController tabController;
   final List<Tab> tabs;
-  final BoxConstraints constraints;
   final User? user;
   final Color? color;
 
@@ -16,7 +16,6 @@ class DesktopUserHeader extends StatelessWidget {
     Key? key,
     required this.tabController,
     required this.tabs,
-    required this.constraints,
     this.user,
     required this.color,
   }) : super(key: key);
@@ -38,49 +37,50 @@ class DesktopUserHeader extends StatelessWidget {
       (c) => ThemeData.estimateBrightnessForColor(c).inverted.getColor(),
     );
 
-    return Stack(
-      children: [
-        Column(
+    return BreakpointBuilder(
+      builder: (context, breakpoint) {
+        return Stack(
           children: [
-            Flexible(child: FlexibleSpaceBar(background: buildBackground())),
-            ResponsiveLayoutBuilder(
-              builder: (context, constraints, data) {
-                return Row(
-                  children: [
-                    const Flexible(
-                      fit: FlexFit.tight,
-                      child: SizedBox(),
-                    ),
-                    const SizedBox(width: gutter), // Gutter
-                    Flexible(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: columnPadding,
-                        ),
-                        child: TabBar(
-                          controller: tabController,
-                          tabs: tabs,
-                          indicatorColor: foregroundColor,
-                          labelColor: foregroundColor,
+            Column(
+              children: [
+                Flexible(
+                  child: FlexibleSpaceBar(background: buildBackground()),
+                ),
+                BreakpointContainer(
+                  breakpoint: breakpoint,
+                  child: Row(
+                    children: [
+                      const Flexible(
+                        fit: FlexFit.tight,
+                        child: SizedBox(),
+                      ),
+                      SizedBox(width: breakpoint.gutters),
+                      Flexible(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: columnPadding,
+                          ),
+                          child: TabBar(
+                            controller: tabController,
+                            tabs: tabs,
+                            indicatorColor: foregroundColor,
+                            labelColor: foregroundColor,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        Positioned.fill(
-          child: SafeArea(
-            child: ResponsiveLayoutBuilder(
-              builder: (context, constraints, data) {
-                // HACK(Craftplacer): Abusing Column to avoid vertical alignment from Center.
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
+            Positioned.fill(
+              child: SafeArea(
+                child: BreakpointContainer(
+                  breakpoint: breakpoint,
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Expanded(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -97,13 +97,13 @@ class DesktopUserHeader extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ],
-                );
-              },
-            ),
-          ),
-        )
-      ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 

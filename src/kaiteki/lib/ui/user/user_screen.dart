@@ -1,7 +1,9 @@
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
@@ -9,7 +11,6 @@ import 'package:kaiteki/ui/user/desktop_user_header.dart';
 import 'package:kaiteki/ui/user/posts_page.dart';
 import 'package:kaiteki/ui/user/user_info_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/layout_helper.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
   final String id;
@@ -61,20 +62,11 @@ class _UserScreenState extends ConsumerState<UserScreen>
       initialData: widget.initialUser,
       future: _future,
       builder: (_, snapshot) {
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            switch (getScreenSize(constraints.maxWidth)) {
-              case ScreenSize.xs:
-              case ScreenSize.s:
-                return _buildMobile(snapshot, constraints);
-              case ScreenSize.m:
-              case ScreenSize.l:
-                return _buildDesktop(
-                  context,
-                  snapshot,
-                  constraints,
-                );
-            }
+        return BreakpointBuilder(
+          builder: (context, breakpoint) {
+            return breakpoint.window < WindowSize.medium
+                ? _buildMobile(snapshot, breakpoint.window)
+                : _buildDesktop(context, snapshot, breakpoint);
           },
         );
       },
@@ -84,7 +76,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
   Widget _buildDesktop(
     BuildContext context,
     AsyncSnapshot<User> snapshot,
-    BoxConstraints constraints,
+    Breakpoint breakpoint,
   ) {
     final user = snapshot.data;
 
@@ -100,53 +92,51 @@ class _UserScreenState extends ConsumerState<UserScreen>
               flexibleSpace: DesktopUserHeader(
                 tabController: _tabController,
                 tabs: buildTabs(context, user, true, Axis.horizontal),
-                constraints: constraints,
                 user: user,
                 color: null,
               ),
             ),
           ];
         },
-        body: ResponsiveLayoutBuilder(
-          builder: (context, constraints, data) {
-            return Row(
-              children: [
-                Flexible(
-                  child: Column(
-                    children: [
-                      if (user != null)
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.all(columnPadding),
-                              child: UserInfoWidget(user: user),
-                            ),
+        body: BreakpointContainer(
+          breakpoint: breakpoint,
+          child: Row(
+            children: [
+              Flexible(
+                child: Column(
+                  children: [
+                    if (user != null)
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(columnPadding),
+                            child: UserInfoWidget(user: user),
                           ),
                         ),
+                      ),
+                  ],
+                ),
+              ),
+              SizedBox(width: breakpoint.gutters),
+              Flexible(
+                flex: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(columnPadding),
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      PostsPage(
+                        container: ref.watch(accountProvider),
+                        widget: widget,
+                      ),
+                      Container(),
+                      Container(),
                     ],
                   ),
                 ),
-                const SizedBox(width: gutter), // Gutter
-                Flexible(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(columnPadding),
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        PostsPage(
-                          container: ref.watch(accountProvider),
-                          widget: widget,
-                        ),
-                        Container(),
-                        Container(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -154,7 +144,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
 
   Widget _buildMobile(
     AsyncSnapshot<User> snapshot,
-    BoxConstraints constraints,
+    WindowSize windowSize,
   ) {
     final Widget body;
 
@@ -180,7 +170,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     }
 
     final isLoading = !(snapshot.hasData || snapshot.hasError);
-    final tooSmall = constraints.minWidth < 600;
+    final tooSmall = windowSize < WindowSize.small;
 
     return Scaffold(
       appBar: snapshot.hasData //
