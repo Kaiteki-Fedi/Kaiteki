@@ -3,4 +3,5 @@ enum Formatting {
   markdown,
   html,
   bbCode,
+  misskeyMarkdown,
 }
