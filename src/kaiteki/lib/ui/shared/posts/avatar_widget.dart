@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/theming/default_app_themes.dart';
 
 class AvatarWidget extends StatelessWidget {
   final User user;
@@ -31,30 +30,38 @@ class AvatarWidget extends StatelessWidget {
     if (url == null) {
       avatar = fallback;
     } else {
-      avatar = Image.network(
-        url,
+      avatar = Ink.image(
+        image: NetworkImage(url),
         width: size,
         height: size,
-        cacheWidth: size?.toInt(),
-        cacheHeight: size?.toInt(),
-        errorBuilder: (_, __, ___) => fallback,
+        fit: BoxFit.cover,
+        // onImageError: (_, __, ___) => fallback,
       );
+      // avatar = Image.network(
+      //   url,
+      //   width: size,
+      //   height: size,
+      //   cacheWidth: size?.toInt(),
+      //   cacheHeight: size?.toInt(),
+      //   errorBuilder: (_, __, ___) => fallback,
+      // );
     }
-
-    avatar = ColoredBox(
-      color: Theme.of(context).colorScheme.surfaceVariant,
-      child: avatar,
-    );
 
     if (onTap != null) {
       avatar = InkWell(onTap: onTap, child: avatar);
+      // avatar = Ink.image(child: avatar);
     }
 
-    // Add rounding
+    final borderRadius = radius;
     // ignore: join_return_with_assignment
-    avatar = radius == null
-        ? ClipOval(child: avatar)
-        : ClipRRect(borderRadius: borderRadius, child: avatar);
+    avatar = Material(
+      clipBehavior: Clip.antiAlias,
+      shape: borderRadius == null
+          ? const CircleBorder()
+          : RoundedRectangleBorder(borderRadius: borderRadius),
+      color: Theme.of(context).colorScheme.surfaceVariant,
+      child: avatar,
+    );
 
     return avatar;
   }

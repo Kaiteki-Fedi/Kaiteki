@@ -45,6 +45,8 @@ extension FormattingExtensions on Formatting {
         return Icons.code_rounded;
       case Formatting.bbCode:
         return Icons.data_array_rounded;
+      case Formatting.misskeyMarkdown:
+        return Mdi.languageMarkdown;
     }
   }
 
@@ -58,6 +60,8 @@ extension FormattingExtensions on Formatting {
         return "HTML";
       case Formatting.bbCode:
         return "BBCode";
+      case Formatting.misskeyMarkdown:
+        return "Misskey-flavored Markdown (MFM)";
     }
   }
 }

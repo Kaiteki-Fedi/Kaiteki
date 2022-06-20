@@ -7,13 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
-import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
@@ -60,7 +56,7 @@ class PostFormState extends ConsumerState<PostForm> {
   );
 
   var _visibility = Visibility.public;
-  var _formatting = Formatting.plainText;
+  Formatting? _formatting;
   final List<Future<Attachment>> attachments = [];
 
   bool get isEmpty =>
@@ -103,8 +99,9 @@ class PostFormState extends ConsumerState<PostForm> {
   void initState() {
     super.initState();
 
-    if (widget.replyTo != null) {
-      _visibility = widget.replyTo!.visibility;
+    final op = widget.replyTo;
+    if (op?.visibility != null) {
+      _visibility = op!.visibility!;
     }
   }
 
@@ -351,7 +348,7 @@ class PostFormState extends ConsumerState<PostForm> {
         return SizedBox(
           height: 250,
           child: FutureBuilder(
-            future: container.adapter.getEmojis(),
+            future: (container.adapter as CustomEmojiSupport).getEmojis(),
             builder: buildEmojiSelector,
           ),
         );
@@ -451,6 +448,7 @@ class PostFormState extends ConsumerState<PostForm> {
   List<Widget> _buildActions(BuildContext context) {
     final l10n = context.getL10n();
     final manager = ref.watch(accountProvider);
+    final formattingList = manager.adapter.capabilities.supportedFormattings;
     return [
       IconButton(
         onPressed: openAttachDrawer,
@@ -458,30 +456,33 @@ class PostFormState extends ConsumerState<PostForm> {
         splashRadius: splashRadius,
         tooltip: l10n.attachButtonTooltip,
       ),
+      if (manager.adapter is CustomEmojiSupport)
+        IconButton(
+          onPressed: () => openEmojiPicker(context, manager),
+          icon: const Icon(Icons.mood_rounded),
+          splashRadius: splashRadius,
+          tooltip: l10n.emojiButtonTooltip,
+        ),
+      const SizedBox(height: 24, child: VerticalDivider()),
       EnumIconButton<Visibility>(
         tooltip: l10n.visibilityButtonTooltip,
         onChanged: (value) => setState(() => _visibility = value),
         value: _visibility,
         values: Visibility.values,
         splashRadius: splashRadius,
-        iconBuilder: (value) => Icon(value.toIconData()),
-        textBuilder: (value) => Text(value.toDisplayString()),
+        iconBuilder: (_, value) => Icon(value.toIconData()),
+        textBuilder: (_, value) => Text(value.toDisplayString()),
       ),
-      EnumIconButton<Formatting>(
-        tooltip: l10n.formattingButtonTooltip,
-        onChanged: (value) => setState(() => _formatting = value),
-        value: _formatting,
-        values: Formatting.values,
-        splashRadius: splashRadius,
-        iconBuilder: (value) => Icon(value.toIconData()),
-        textBuilder: (value) => Text(value.toDisplayString()),
-      ),
-      IconButton(
-        onPressed: () => openEmojiPicker(context, manager),
-        icon: const Icon(Icons.mood_rounded),
-        splashRadius: splashRadius,
-        tooltip: l10n.emojiButtonTooltip,
-      )
+      if (formattingList.length >= 2)
+        EnumIconButton<Formatting>(
+          tooltip: l10n.formattingButtonTooltip,
+          onChanged: (value) => setState(() => _formatting = value),
+          value: _formatting ?? formattingList.first,
+          values: formattingList,
+          splashRadius: splashRadius,
+          iconBuilder: (_, value) => Icon(value.toIconData()),
+          textBuilder: (_, value) => Text(value.toDisplayString()),
+        ),
     ];
   }
 }

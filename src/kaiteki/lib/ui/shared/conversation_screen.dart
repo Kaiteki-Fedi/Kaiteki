@@ -1,10 +1,12 @@
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/layout_helper.dart';
+
 import 'package:kaiteki/utils/threader.dart';
 
 class ConversationScreen extends ConsumerStatefulWidget {
@@ -57,9 +59,12 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
           ),
         ],
       ),
-      body: ResponsiveLayoutBuilder(
-        builder: (context, constraints, data) {
-          return showThreaded ? buildThreaded(context) : buildFlat(context);
+      body: BreakpointBuilder(
+        builder: (context, breakpoint) {
+          return BreakpointContainer(
+            breakpoint: breakpoint,
+            child: showThreaded ? buildThreaded(context) : buildFlat(context),
+          );
         },
       ),
     );

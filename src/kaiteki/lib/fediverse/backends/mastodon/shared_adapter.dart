@@ -4,19 +4,11 @@ import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
-import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/reaction.dart';
-import 'package:kaiteki/fediverse/model/timeline_type.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:kaiteki/fediverse/capabilities.dart';
+import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -32,7 +24,7 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
 class SharedMastodonAdapter<T extends MastodonClient>
-    extends FediverseAdapter<T> {
+    extends FediverseAdapter<T> implements CustomEmojiSupport {
   SharedMastodonAdapter(T client) : super(client);
 
   @override
@@ -190,7 +182,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     return toPost(newPost);
   }
 
-  String getContentType(Formatting formatting) {
+  String? getContentType(Formatting? formatting) {
     const formattingToMimeType = {
       Formatting.plainText: "text/plain",
       Formatting.markdown: "text/markdown",
@@ -198,7 +190,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
       Formatting.bbCode: "text/bbcode",
     };
 
-    return formattingToMimeType[formatting]!;
+    return formattingToMimeType[formatting];
   }
 
   @override
@@ -281,4 +273,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     final attachment = await client.uploadMedia(file, description);
     return toAttachment(attachment);
   }
+
+  @override
+  AdapterCapabilities get capabilities => const MastodonCapabilities();
 }

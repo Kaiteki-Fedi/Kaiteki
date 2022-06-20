@@ -6,18 +6,33 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 1
+            },
         },
         {
             "name": "Kaiteki (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 2
+            }
         },
         {
             "name": "Kaiteki (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 3
+            }
         },
         {
             "name": "Widgetbook",

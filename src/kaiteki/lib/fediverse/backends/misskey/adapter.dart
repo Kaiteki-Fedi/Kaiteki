@@ -3,22 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/backends/misskey/capabilties.dart';
 import 'package:kaiteki/fediverse/backends/misskey/client.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
+import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/chat.dart';
-import 'package:kaiteki/fediverse/model/chat_message.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/timeline_type.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -32,7 +24,7 @@ part 'adapter.c.dart';
 
 // TODO(Craftplacer): add missing implementations
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
-    implements ChatSupport, ReactionSupport {
+    implements ChatSupport, ReactionSupport, CustomEmojiSupport {
   factory MisskeyAdapter({MisskeyClient? client}) {
     return MisskeyAdapter._(client ?? MisskeyClient());
   }
@@ -195,12 +187,6 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  bool supportsCustomEmoji = true;
-
-  @override
-  bool supportsUnicodeEmoji = true;
-
-  @override
   Future<void> addReaction(Post post, Emoji emoji) async {
     final note = post.source as misskey.Note;
 
@@ -276,4 +262,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     );
     return toAttachment(driveFile);
   }
+
+  @override
+  MisskeyCapabilities get capabilities => const MisskeyCapabilities();
 }

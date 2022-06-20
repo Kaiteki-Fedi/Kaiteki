@@ -38,7 +38,7 @@ extension BuildContextExtensions on BuildContext {
 
   Future<bool> launchUrl(String url) async {
     if (await canLaunchUrlString(url)) {
-      await launchUrlString(url);
+      await launchUrlString(url, mode: LaunchMode.externalApplication);
       return true;
     } else {
       ScaffoldMessenger.of(this).showSnackBar(

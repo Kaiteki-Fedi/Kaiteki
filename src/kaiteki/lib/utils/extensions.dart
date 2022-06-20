@@ -1,3 +1,4 @@
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html/dom.dart';
@@ -174,5 +175,23 @@ extension WidgetRefExtensions on WidgetRef {
   String getCurrentAccountHandle() {
     final account = read(accountProvider).currentAccount.accountSecret;
     return "@${account.username}@${account.instance}";
+  }
+}
+
+extension BreakpointExtensions on Breakpoint {
+  double? get margin {
+    if (window == WindowSize.xsmall) return 16;
+    if (window == WindowSize.small && columns == 8) return 32;
+    if (window == WindowSize.small && columns == 12) return null;
+    if (window == WindowSize.medium) return 200;
+    return null;
+  }
+
+  double? get body {
+    if (window == WindowSize.xsmall) return null;
+    if (window == WindowSize.small && columns == 8) return null;
+    if (window == WindowSize.small && columns == 12) return 840;
+    if (window == WindowSize.medium) return null;
+    return 1040;
   }
 }
