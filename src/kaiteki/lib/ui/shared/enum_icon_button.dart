@@ -33,6 +33,7 @@ class EnumIconButton<T> extends StatelessWidget {
       tooltip: tooltip,
       itemBuilder: _buildItems,
       splashRadius: splashRadius,
+      offset: const Offset(-8, -12),
     );
   }
 
