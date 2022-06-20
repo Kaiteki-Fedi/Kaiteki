@@ -56,7 +56,7 @@ class PostFormState extends ConsumerState<PostForm> {
   );
 
   var _visibility = Visibility.public;
-  var _formatting = Formatting.plainText;
+  Formatting? _formatting;
   final List<Future<Attachment>> attachments = [];
 
   bool get isEmpty =>
@@ -448,6 +448,7 @@ class PostFormState extends ConsumerState<PostForm> {
   List<Widget> _buildActions(BuildContext context) {
     final l10n = context.getL10n();
     final manager = ref.watch(accountProvider);
+    final formattingList = manager.adapter.capabilities.supportedFormattings;
     return [
       IconButton(
         onPressed: openAttachDrawer,
@@ -455,31 +456,33 @@ class PostFormState extends ConsumerState<PostForm> {
         splashRadius: splashRadius,
         tooltip: l10n.attachButtonTooltip,
       ),
-      EnumIconButton<Visibility>(
-        tooltip: l10n.visibilityButtonTooltip,
-        onChanged: (value) => setState(() => _visibility = value),
-        value: _visibility,
-        values: Visibility.values,
-        splashRadius: splashRadius,
-        iconBuilder: (value) => Icon(value.toIconData()),
-        textBuilder: (value) => Text(value.toDisplayString()),
-      ),
-      EnumIconButton<Formatting>(
-        tooltip: l10n.formattingButtonTooltip,
-        onChanged: (value) => setState(() => _formatting = value),
-        value: _formatting,
-        values: Formatting.values,
-        splashRadius: splashRadius,
-        iconBuilder: (value) => Icon(value.toIconData()),
-        textBuilder: (value) => Text(value.toDisplayString()),
-      ),
       if (manager.adapter is CustomEmojiSupport)
         IconButton(
           onPressed: () => openEmojiPicker(context, manager),
           icon: const Icon(Icons.mood_rounded),
           splashRadius: splashRadius,
           tooltip: l10n.emojiButtonTooltip,
-        )
+        ),
+      const SizedBox(height: 24, child: VerticalDivider()),
+      EnumIconButton<Visibility>(
+        tooltip: l10n.visibilityButtonTooltip,
+        onChanged: (value) => setState(() => _visibility = value),
+        value: _visibility,
+        values: Visibility.values,
+        splashRadius: splashRadius,
+        iconBuilder: (_, value) => Icon(value.toIconData()),
+        textBuilder: (_, value) => Text(value.toDisplayString()),
+      ),
+      if (formattingList.length >= 2)
+        EnumIconButton<Formatting>(
+          tooltip: l10n.formattingButtonTooltip,
+          onChanged: (value) => setState(() => _formatting = value),
+          value: _formatting ?? formattingList.first,
+          values: formattingList,
+          splashRadius: splashRadius,
+          iconBuilder: (_, value) => Icon(value.toIconData()),
+          textBuilder: (_, value) => Text(value.toDisplayString()),
+        ),
     ];
   }
 }

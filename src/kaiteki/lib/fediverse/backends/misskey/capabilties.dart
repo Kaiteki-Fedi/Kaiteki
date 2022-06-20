@@ -1,5 +1,6 @@
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
+import 'package:kaiteki/fediverse/model/formatting.dart';
 
 class MisskeyCapabilities extends AdapterCapabilities
     implements ReactionSupportCapabilities {
@@ -13,4 +14,9 @@ class MisskeyCapabilities extends AdapterCapabilities
   bool get supportsUnicodeEmojiReactions => true;
 
   const MisskeyCapabilities();
+
+  @override
+  List<Formatting> get supportedFormattings {
+    return List.unmodifiable([Formatting.misskeyMarkdown]);
+  }
 }

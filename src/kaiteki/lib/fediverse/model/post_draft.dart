@@ -6,7 +6,7 @@ import 'package:kaiteki/fediverse/model/visibility.dart';
 class PostDraft {
   final String content;
   final Visibility visibility;
-  final Formatting formatting;
+  final Formatting? formatting;
   final String subject;
   final Post? replyTo;
   final List<Attachment> attachments;

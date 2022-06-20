@@ -182,7 +182,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     return toPost(newPost);
   }
 
-  String getContentType(Formatting formatting) {
+  String? getContentType(Formatting? formatting) {
     const formattingToMimeType = {
       Formatting.plainText: "text/plain",
       Formatting.markdown: "text/markdown",
@@ -190,7 +190,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
       Formatting.bbCode: "text/bbcode",
     };
 
-    return formattingToMimeType[formatting]!;
+    return formattingToMimeType[formatting];
   }
 
   @override
