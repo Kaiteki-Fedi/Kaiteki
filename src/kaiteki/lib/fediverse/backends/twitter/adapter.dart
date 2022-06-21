@@ -2,6 +2,7 @@ import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/fediverse/backends/twitter/capabilties.dart';
 import 'package:kaiteki/fediverse/backends/twitter/client.dart';
 import 'package:kaiteki/fediverse/backends/twitter/keys.dart';
 import 'package:kaiteki/fediverse/backends/twitter/model/entities/entities.dart'
@@ -12,6 +13,7 @@ import 'package:kaiteki/fediverse/backends/twitter/model/entities/media.dart';
 import 'package:kaiteki/fediverse/backends/twitter/model/entities/url.dart';
 import 'package:kaiteki/fediverse/backends/twitter/model/tweet.dart' as twitter;
 import 'package:kaiteki/fediverse/backends/twitter/model/user.dart' as twitter;
+import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/emoji_category.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
@@ -121,19 +123,32 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
     final clientCredentials = ClientCredentials(token, secret);
     // create Authorization object with client credentials and platform definition
 
-    // return auth.requestTokenCredentials(
-    //  res.credentials,
-    //  await requestMfa() ?? "",
-    // );
-
     final auth = Authorization(clientCredentials, platform);
+
+    late final AuthorizationResponse tempResp;
     late final AuthorizationResponse authResp;
-    final resp = await requestOAuth((oAuthUrl) async {
-      authResp = await auth.requestTemporaryCredentials(oAuthUrl.toString());
-      final authUrl =
-          auth.getResourceOwnerAuthorizationURI(authResp.credentials.token);
-      return Uri.parse(authUrl);
-    });
+
+    const usePin = false;
+
+    // ignore: dead_code
+    if (usePin) {
+      tempResp = await auth.requestTemporaryCredentials("oob");
+      authResp = await auth.requestTokenCredentials(
+        tempResp.credentials,
+        await requestMfa() ?? "",
+      );
+    } else {
+      final response = await requestOAuth((oAuthUrl) async {
+        tempResp = await auth.requestTemporaryCredentials(oAuthUrl.toString());
+        return Uri.parse(
+          auth.getResourceOwnerAuthorizationURI(tempResp.credentials.token),
+        );
+      });
+      authResp = await auth.requestTokenCredentials(
+        tempResp.credentials,
+        response["oauth_verifier"]!,
+      );
+    }
 
     var username = authResp.optionalParameters['screen_name'];
 
