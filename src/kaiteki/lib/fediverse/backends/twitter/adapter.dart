@@ -214,4 +214,7 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
     // TODO: implement followUser
     throw UnimplementedError();
   }
+
+  @override
+  AdapterCapabilities get capabilities => const TwitterCapabilities();
 }
