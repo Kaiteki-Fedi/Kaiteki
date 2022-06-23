@@ -12,4 +12,6 @@ class TwitterCapabilities extends AdapterCapabilities {
   @override
   bool get supportsScopes => false;
 
+  @override
+  bool get supportsSubjects => false;
 }

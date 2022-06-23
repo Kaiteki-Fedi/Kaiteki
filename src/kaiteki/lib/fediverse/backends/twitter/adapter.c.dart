@@ -3,13 +3,13 @@ part of 'adapter.dart';
 Post toPost(twitter.Tweet tweet) {
   final content = removeEntities(tweet.text, tweet.entities);
 
+  final retweetedStatus = tweet.retweetedStatus;
   final quotedStatus = tweet.quotedStatus;
   return Post(
     author: toUser(tweet.user),
     id: tweet.idStr,
     postedAt: tweet.createdAt,
     source: tweet,
-    visibility: Visibility.public,
     content: content,
     likeCount: tweet.favoriteCount,
     repeatCount: tweet.retweetCount,
@@ -19,7 +19,8 @@ Post toPost(twitter.Tweet tweet) {
     mentionedUsers: tweet.entities.userMentions?.map((e) {
       return UserReference(e.idStr);
     }).toList(),
-    repeatOf: quotedStatus == null ? null : toPost(quotedStatus),
+    quotedPost: quotedStatus != null ? toPost(quotedStatus) : null,
+    repeatOf: retweetedStatus != null ? toPost(retweetedStatus) : null,
   );
 }
 
