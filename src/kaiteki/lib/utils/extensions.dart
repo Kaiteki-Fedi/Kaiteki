@@ -191,3 +191,17 @@ extension BreakpointExtensions on Breakpoint {
     return 1040;
   }
 }
+
+extension QueryExtension on Map<String, String> {
+  String toQueryString() {
+    if (isEmpty) return "";
+
+    final pairs = <String>[];
+    for (final kv in entries) {
+      final key = Uri.encodeQueryComponent(kv.key);
+      final value = Uri.encodeQueryComponent(kv.value);
+      pairs.add("$key=$value");
+    }
+    return "?${pairs.join("&")}";
+  }
+}
