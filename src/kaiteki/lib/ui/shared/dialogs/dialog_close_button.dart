@@ -10,7 +10,7 @@ class DialogCloseButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.close),
       tooltip: tooltip,
-      onPressed: () => Navigator.of(context).pop(),
+      onPressed: () => Navigator.of(context).maybePop(),
     );
   }
 }
