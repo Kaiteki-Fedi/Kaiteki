@@ -6,6 +6,7 @@ import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/posts/card_widget.dart';
+import 'package:kaiteki/ui/shared/posts/embedded_post.dart';
 import 'package:kaiteki/ui/shared/posts/interaction_bar.dart';
 import 'package:kaiteki/ui/shared/posts/interaction_event_bar.dart';
 import 'package:kaiteki/ui/shared/posts/meta_bar.dart';
@@ -97,6 +98,11 @@ class PostWidget extends ConsumerWidget {
                   if (showParentPost && _post.replyToPostId != null)
                     ReplyBar(post: _post),
                   PostContentWidget(post: _post, hideReplyee: hideReplyee),
+                  if (_post.quotedPost != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [EmbeddedPostWidget(_post.quotedPost!)],
+                    ),
                   if (_post.attachments?.isNotEmpty == true)
                     AttachmentRow(post: _post),
                   if (_post.previewCard != null)

@@ -52,6 +52,7 @@ class Post<T> {
   final User? replyToUser;
 
   final Post? repeatOf;
+  final Post? quotedPost;
   final PreviewCard? previewCard;
 
   final List<UserReference>? mentionedUsers;
@@ -83,6 +84,7 @@ class Post<T> {
     this.replyToPostId,
     this.externalUrl,
     this.replyToUser,
+    this.quotedPost,
     List<UserReference>? mentionedUsers,
   })  : reactions = reactions ?? [],
         mentionedUsers = mentionedUsers ?? [];
