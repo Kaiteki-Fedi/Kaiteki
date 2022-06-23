@@ -24,6 +24,7 @@ class Tweet {
   final String lang;
   final String text;
   final Tweet? quotedStatus;
+  final Tweet? retweetedStatus;
   final User user;
 
   const Tweet({
@@ -40,6 +41,7 @@ class Tweet {
     required this.retweeted,
     required this.text,
     required this.user,
+    this.retweetedStatus,
   });
 
   factory Tweet.fromJson(Map<String, dynamic> json) => _$TweetFromJson(json);

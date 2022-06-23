@@ -22,6 +22,9 @@ Tweet _$TweetFromJson(Map<String, dynamic> json) => Tweet(
       retweeted: json['retweeted'] as bool,
       text: json['text'] as String,
       user: User.fromJson(json['user'] as Map<String, dynamic>),
+      retweetedStatus: json['retweeted_status'] == null
+          ? null
+          : Tweet.fromJson(json['retweeted_status'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TweetToJson(Tweet instance) => <String, dynamic>{
@@ -37,5 +40,6 @@ Map<String, dynamic> _$TweetToJson(Tweet instance) => <String, dynamic>{
       'lang': instance.lang,
       'text': instance.text,
       'quoted_status': instance.quotedStatus,
+      'retweeted_status': instance.retweetedStatus,
       'user': instance.user,
     };
