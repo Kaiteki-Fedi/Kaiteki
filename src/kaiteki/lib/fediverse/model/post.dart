@@ -65,7 +65,7 @@ class Post<T> {
     required this.author,
     required this.id,
     Iterable<Reaction>? reactions,
-    required this.visibility,
+    this.visibility,
     this.content,
     this.subject,
     this.nsfw = false,
