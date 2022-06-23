@@ -11,18 +11,11 @@ import 'package:kaiteki/fediverse/backends/twitter/model/entities/media.dart'
     as twitter;
 import 'package:kaiteki/fediverse/backends/twitter/model/entities/media.dart';
 import 'package:kaiteki/fediverse/backends/twitter/model/entities/url.dart';
+import 'package:kaiteki/fediverse/backends/twitter/model/media_upload.dart';
 import 'package:kaiteki/fediverse/backends/twitter/model/tweet.dart' as twitter;
 import 'package:kaiteki/fediverse/backends/twitter/model/user.dart' as twitter;
 import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/timeline_type.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -45,9 +38,6 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
     // TODO(Craftplacer): implement favoritePost, https://github.com/Kaiteki-Fedi/Kaiteki/issues/132
     throw UnimplementedError();
   }
-
-  @override
-  Future<Iterable<EmojiCategory>> getEmojis() async => [];
 
   @override
   Future<Instance> getInstance() async {
@@ -179,19 +169,19 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
       accountSecret: accountSecret,
     );
     await accounts.addCurrentAccount(compound);
-    // request temporary credentials (request tokens)
 
-    // await launch(
-    //   "https://api.twitter.com/oauth/authorize"
-    //   "?oauth_token=$accessToken"
-    //   "&screen_name=$username",
-    // );
     return LoginResult.successful();
   }
 
   @override
   Future<Post> postStatus(PostDraft draft, {Post? parentPost}) async {
-    final tweet = await client.updateStatus(draft.content);
+    final tweet = await client.updateStatus(
+      draft.content,
+      mediaIds: draft.attachments.map((a) {
+        return (a.source as MediaUpload).mediaIdString;
+      }).toList(growable: false),
+      replyToStatusId: draft.replyTo?.id,
+    );
     return toPost(tweet);
   }
 
@@ -204,9 +194,13 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
   }
 
   @override
-  Future<Attachment> uploadAttachment(File file, String? description) {
-    // TODO: implement uploadAttachment
-    throw UnimplementedError();
+  Future<Attachment> uploadAttachment(File file, String? description) async {
+    final upload = await client.uploadMedia(file);
+    return Attachment(
+      type: AttachmentType.image,
+      source: upload,
+      url: "", previewUrl: '', // TODO(Craftplacer): implement proper preview
+    );
   }
 
   @override

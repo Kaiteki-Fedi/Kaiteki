@@ -1,11 +1,14 @@
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/twitter/auth/oauth_token.dart';
+import 'package:kaiteki/fediverse/backends/twitter/model/media_upload.dart';
 import 'package:kaiteki/fediverse/backends/twitter/model/tweet.dart';
 import 'package:kaiteki/fediverse/backends/twitter/model/user.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/model/http_method.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class TwitterClient extends FediverseClientBase {
@@ -42,10 +45,19 @@ class TwitterClient extends FediverseClientBase {
     );
   }
 
-  Future<Tweet> updateStatus(String status) async {
+  Future<Tweet> updateStatus(
+    String status, {
+    List<String> mediaIds = const [],
+    String? replyToStatusId,
+  }) async {
+    final query = {
+      "status": status,
+      "media_ids": mediaIds.join(","),
+      if (replyToStatusId != null) "in_reply_to_status_id": replyToStatusId,
+    };
     return sendJsonRequest(
       HttpMethod.post,
-      "1.1/statuses/update.json?status=${Uri.encodeQueryComponent(status)}",
+      "1.1/statuses/update.json${query.toQueryString()}",
       Tweet.fromJson,
       body: {},
     );
@@ -153,6 +165,16 @@ class TwitterClient extends FediverseClientBase {
         },
       ),
       Tweet.fromJson,
+    );
+  }
+
+  Future<MediaUpload> uploadMedia(File file) async {
+    return await sendJsonMultiPartRequest(
+      HttpMethod.post,
+      "https://upload.twitter.com/1.1/media/upload.json?media_category=tweet_image",
+      MediaUpload.fromJson,
+      fields: {"media_category": "tweet_image"},
+      files: [await file.toMultipartFile("media")],
     );
   }
 }
