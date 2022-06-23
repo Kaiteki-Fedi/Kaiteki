@@ -6,6 +6,7 @@ import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/posts/card_widget.dart';
+import 'package:kaiteki/ui/shared/posts/embedded_post.dart';
 import 'package:kaiteki/ui/shared/posts/interaction_bar.dart';
 import 'package:kaiteki/ui/shared/posts/interaction_event_bar.dart';
 import 'package:kaiteki/ui/shared/posts/meta_bar.dart';
@@ -35,7 +36,6 @@ class PostWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const authorTextStyle = TextStyle(fontWeight: FontWeight.bold);
     // final theme = ref.watch(themeProvider).current;
     final ext = Theme.of(context).extension<KaitekiExtension>()!;
     final l10n = context.getL10n();
@@ -48,7 +48,6 @@ class PostWidget extends ConsumerWidget {
             text: l10n.postRepeated,
             color: ext.repeatColor,
             user: _post.author,
-            userTextStyle: authorTextStyle,
           ),
           PostWidget(
             _post.repeatOf!,
@@ -93,14 +92,17 @@ class PostWidget extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MetaBar(
-                    renderedAuthor: _post.author.renderDisplayName(context),
-                    authorTextStyle: authorTextStyle,
                     post: _post,
                     showAvatar: wide,
                   ),
                   if (showParentPost && _post.replyToPostId != null)
                     ReplyBar(post: _post),
                   PostContentWidget(post: _post, hideReplyee: hideReplyee),
+                  if (_post.quotedPost != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [EmbeddedPostWidget(_post.quotedPost!)],
+                    ),
                   if (_post.attachments?.isNotEmpty == true)
                     AttachmentRow(post: _post),
                   if (_post.previewCard != null)
@@ -146,7 +148,6 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
     if (post.content != null) {
       renderedContent = post.renderContent(
         context,
-        ref,
         hideReplyee: widget.hideReplyee,
       );
     }

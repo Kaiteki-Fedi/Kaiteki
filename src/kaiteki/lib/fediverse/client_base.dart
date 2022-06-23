@@ -114,7 +114,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     RequestIntercept? intercept,
   }) async {
     final methodString = method.toString();
-    final url = Uri.parse("$baseUrl/$endpoint");
+    final url = _getUri(endpoint);
     final request = Request(methodString, url);
 
     if (contentType.isNotNullOrEmpty) {
@@ -129,6 +129,12 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     final response = Response(httpResponse);
     await checkResponse(response);
     return response;
+  }
+
+  Uri _getUri(String endpoint) {
+    final endpointUrl = Uri.tryParse(endpoint);
+    if (endpointUrl?.hasAbsolutePath == true) return endpointUrl!;
+    return Uri.parse("$baseUrl/$endpoint");
   }
 
   /// Adds default request data
@@ -155,7 +161,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
     List<MultipartFile> files = const [],
   }) async {
     final methodString = method.toString();
-    final url = Uri.parse("$baseUrl/$endpoint");
+    final url = _getUri(endpoint);
     final request = http.MultipartRequest(methodString, url);
 
     request.files.addAll(files);

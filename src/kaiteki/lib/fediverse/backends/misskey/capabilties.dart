@@ -19,4 +19,7 @@ class MisskeyCapabilities extends AdapterCapabilities
   List<Formatting> get supportedFormattings {
     return List.unmodifiable([Formatting.misskeyMarkdown]);
   }
+
+  @override
+  bool get supportsSubjects => true;
 }

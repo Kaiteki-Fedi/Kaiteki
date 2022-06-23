@@ -111,11 +111,7 @@ extension UserExtensions on User {
 }
 
 extension PostExtensions on Post {
-  InlineSpan renderContent(
-    BuildContext context,
-    WidgetRef ref, {
-    bool hideReplyee = false,
-  }) {
+  InlineSpan renderContent(BuildContext context, {bool hideReplyee = false}) {
     return const TextRenderer().render(
       context,
       content!,
@@ -193,5 +189,19 @@ extension BreakpointExtensions on Breakpoint {
     if (window == WindowSize.small && columns == 12) return 840;
     if (window == WindowSize.medium) return null;
     return 1040;
+  }
+}
+
+extension QueryExtension on Map<String, String> {
+  String toQueryString() {
+    if (isEmpty) return "";
+
+    final pairs = <String>[];
+    for (final kv in entries) {
+      final key = Uri.encodeQueryComponent(kv.key);
+      final value = Uri.encodeQueryComponent(kv.value);
+      pairs.add("$key=$value");
+    }
+    return "?${pairs.join("&")}";
   }
 }

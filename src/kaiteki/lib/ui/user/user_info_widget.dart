@@ -44,12 +44,12 @@ class UserInfoWidget extends ConsumerWidget {
           false
               ? _buildUserFieldsTable(context, fields)
               : _buildUserFieldsColumn(context, fields),
-        if (location != null)
+        if (location != null && location.isNotEmpty)
           _UserInfoRow(
             leading: const Icon(Icons.place_rounded),
             body: Text(location),
           ),
-        if (website != null)
+        if (website != null && website.isNotEmpty)
           _UserInfoRow(
             leading: const Icon(Icons.link_rounded),
             body: Text.rich(

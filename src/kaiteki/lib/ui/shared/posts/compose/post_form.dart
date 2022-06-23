@@ -464,15 +464,16 @@ class PostFormState extends ConsumerState<PostForm> {
           tooltip: l10n.emojiButtonTooltip,
         ),
       const SizedBox(height: 24, child: VerticalDivider()),
-      EnumIconButton<Visibility>(
-        tooltip: l10n.visibilityButtonTooltip,
-        onChanged: (value) => setState(() => _visibility = value),
-        value: _visibility,
-        values: Visibility.values,
-        splashRadius: splashRadius,
-        iconBuilder: (_, value) => Icon(value.toIconData()),
-        textBuilder: (_, value) => Text(value.toDisplayString()),
-      ),
+      if (manager.adapter.capabilities.supportsScopes)
+        EnumIconButton<Visibility>(
+          tooltip: l10n.visibilityButtonTooltip,
+          onChanged: (value) => setState(() => _visibility = value),
+          value: _visibility,
+          values: Visibility.values,
+          splashRadius: splashRadius,
+          iconBuilder: (_, value) => Icon(value.toIconData()),
+          textBuilder: (_, value) => Text(value.toDisplayString()),
+        ),
       if (formattingList.length >= 2)
         EnumIconButton<Formatting>(
           tooltip: l10n.formattingButtonTooltip,

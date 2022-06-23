@@ -23,6 +23,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
+    final manager = ref.watch(accountProvider);
     final replyTo = widget.replyTo;
 
     return WillPopScope(
@@ -53,10 +54,11 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
             children: [
               AppBar(
                 actions: [
-                  ToggleSubjectButton(
-                    value: enableSubject,
-                    onChanged: toggleSubject,
-                  ),
+                  if (manager.adapter.capabilities.supportsSubjects)
+                    ToggleSubjectButton(
+                      value: enableSubject,
+                      onChanged: toggleSubject,
+                    ),
                   if (!fullscreen)
                     DialogCloseButton(tooltip: l10n.discardButtonTooltip),
                 ],
