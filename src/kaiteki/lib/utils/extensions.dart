@@ -111,11 +111,7 @@ extension UserExtensions on User {
 }
 
 extension PostExtensions on Post {
-  InlineSpan renderContent(
-    BuildContext context,
-    WidgetRef ref, {
-    bool hideReplyee = false,
-  }) {
+  InlineSpan renderContent(BuildContext context, {bool hideReplyee = false}) {
     return const TextRenderer().render(
       context,
       content!,

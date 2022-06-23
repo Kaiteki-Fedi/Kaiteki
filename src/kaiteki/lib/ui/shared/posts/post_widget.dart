@@ -35,7 +35,6 @@ class PostWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const authorTextStyle = TextStyle(fontWeight: FontWeight.bold);
     // final theme = ref.watch(themeProvider).current;
     final ext = Theme.of(context).extension<KaitekiExtension>()!;
     final l10n = context.getL10n();
@@ -48,7 +47,6 @@ class PostWidget extends ConsumerWidget {
             text: l10n.postRepeated,
             color: ext.repeatColor,
             user: _post.author,
-            userTextStyle: authorTextStyle,
           ),
           PostWidget(
             _post.repeatOf!,
@@ -93,8 +91,6 @@ class PostWidget extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MetaBar(
-                    renderedAuthor: _post.author.renderDisplayName(context),
-                    authorTextStyle: authorTextStyle,
                     post: _post,
                     showAvatar: wide,
                   ),
@@ -146,7 +142,6 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
     if (post.content != null) {
       renderedContent = post.renderContent(
         context,
-        ref,
         hideReplyee: widget.hideReplyee,
       );
     }
