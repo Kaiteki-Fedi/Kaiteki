@@ -9,13 +9,11 @@ class MetaBar extends StatelessWidget {
   const MetaBar({
     Key? key,
     required Post post,
-    this.authorTextStyle,
     this.showAvatar = false,
   })  : _post = post,
         super(key: key);
 
   final Post _post;
-  final TextStyle? authorTextStyle;
   final bool showAvatar;
 
   @override

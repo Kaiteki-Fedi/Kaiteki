@@ -10,17 +10,16 @@ class InteractionBar extends StatelessWidget {
   const InteractionBar({
     Key? key,
     required Post post,
-    required this.theme,
   })  : _post = post,
         super(key: key);
 
   final Post _post;
-  final KaitekiExtension theme;
 
   @override
   Widget build(BuildContext context) {
     final openInBrowserAvailable = _post.externalUrl != null;
     final l10n = context.getL10n();
+    final kTheme = context.kaitekiExtension!;
 
     // Added Material for fixing bork with Hero *shrug*
     return ConstrainedBox(
@@ -53,7 +52,7 @@ class InteractionBar extends StatelessWidget {
                   icon: const Icon(Icons.repeat_rounded),
                   count: _post.repeatCount,
                   active: _post.repeated,
-                  activeColor: theme.repeatColor,
+                  activeColor: kTheme.repeatColor,
                   focusNode: FocusNode(skipTraversal: true),
                 ),
               ],
@@ -67,7 +66,7 @@ class InteractionBar extends StatelessWidget {
                   icon: const Icon(Icons.star_border_rounded),
                   count: _post.likeCount,
                   active: _post.liked,
-                  activeColor: theme.favoriteColor,
+                  activeColor: kTheme.favoriteColor,
                   activeIcon: const Icon(Icons.star_rounded),
                   focusNode: FocusNode(skipTraversal: true),
                 ),

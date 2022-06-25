@@ -96,3 +96,11 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
     }
   }
 }
+
+extension BuildContextExtensions on BuildContext {
+  KaitekiExtension? get kaitekiExtension => Theme.of(this).kaitekiExtension;
+}
+
+extension ThemeExtensions on ThemeData {
+  KaitekiExtension? get kaitekiExtension => extension<KaitekiExtension>();
+}

@@ -36,8 +36,6 @@ class PostWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final theme = ref.watch(themeProvider).current;
-    final ext = Theme.of(context).extension<KaitekiExtension>()!;
     final l10n = context.getL10n();
 
     if (_post.repeatOf != null) {
@@ -46,7 +44,7 @@ class PostWidget extends ConsumerWidget {
           InteractionEventBar(
             icon: Icons.repeat_rounded,
             text: l10n.postRepeated,
-            color: ext.repeatColor,
+            color: context.kaitekiExtension!.repeatColor,
             user: _post.author,
           ),
           PostWidget(
@@ -112,7 +110,7 @@ class PostWidget extends ConsumerWidget {
                     ),
                   if (_post.reactions.isNotEmpty)
                     ReactionRow(_post, _post.reactions),
-                  if (showActions) InteractionBar(post: _post, theme: ext),
+                  if (showActions) InteractionBar(post: _post),
                 ],
               ),
             ),

@@ -11,14 +11,12 @@ class InteractionEventBar extends ConsumerWidget {
   final String text;
   final IconData icon;
   final User user;
-  final TextStyle? userTextStyle;
 
   const InteractionEventBar({
     required this.color,
     required this.icon,
     required this.text,
     required this.user,
-    this.userTextStyle,
     Key? key,
   }) : super(key: key);
 
@@ -40,10 +38,7 @@ class InteractionEventBar extends ConsumerWidget {
           Text.rich(
             TextSpan(
               children: [
-                TextSpan(
-                  children: [user.renderDisplayName(context)],
-                  style: userTextStyle,
-                ),
+                TextSpan(children: [user.renderDisplayName(context)]),
                 const TextSpan(text: " "),
                 WidgetSpan(
                   child: Icon(
