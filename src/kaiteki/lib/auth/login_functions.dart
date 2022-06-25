@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
@@ -63,21 +64,26 @@ Future<Map<String, String>> runOAuthServer(
   OAuthUrlCreatedCallback ready,
 ) async {
   final requestStream = StreamController<Map<String, String>>();
-  final sucessPage = await rootBundle.loadString('assets/oauth-success.html');
-  final handler = const Pipeline().addHandler((request) {
-    requestStream.add(request.url.queryParameters);
-    return Response(
-      200,
-      body: sucessPage,
-      headers: {"Content-Type": "text/html; charset=UTF-8"},
-    );
-  });
+  HttpServer? server;
 
-  // Start server, close & return when new request comes in
-  const port = 8080;
-  final server = await serve(handler, "localhost", port, shared: true);
-  ready(Uri.http('localhost:$port', '/'));
-  final query = await requestStream.stream.first;
-  server.close();
-  return query;
+  try {
+    final sucessPage = await rootBundle.loadString('assets/oauth-success.html');
+    final handler = const Pipeline().addHandler((request) {
+      requestStream.add(request.url.queryParameters);
+      return Response(
+        200,
+        body: sucessPage,
+        headers: {"Content-Type": "text/html; charset=UTF-8"},
+      );
+    });
+
+    // Start server, close & return when new request comes in
+    const port = 8080;
+    server = await serve(handler, "localhost", port, shared: true);
+    ready(Uri.http('localhost:$port', '/'));
+    return await requestStream.stream.first;
+  } finally {
+    server?.close();
+    requestStream.close();
+  }
 }
