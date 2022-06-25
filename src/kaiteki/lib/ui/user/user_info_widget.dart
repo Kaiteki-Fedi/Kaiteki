@@ -40,10 +40,7 @@ class UserInfoWidget extends ConsumerWidget {
         if (user.description != null)
           Text.rich(user.renderDescription(context)),
         const SizedBox(height: 12.0),
-        if (fields != null)
-          false
-              ? _buildUserFieldsTable(context, fields)
-              : _buildUserFieldsColumn(context, fields),
+        if (fields != null) _buildUserFieldsColumn(context, fields),
         if (location != null && location.isNotEmpty)
           _UserInfoRow(
             leading: const Icon(Icons.place_rounded),
@@ -79,39 +76,39 @@ class UserInfoWidget extends ConsumerWidget {
     );
   }
 
-  Table _buildUserFieldsTable(
-    BuildContext context,
-    Map<String, String> fields,
-  ) {
-    final textStyle = TextStyle(color: Theme.of(context).disabledColor);
-    return Table(
-      columnWidths: const {
-        0: IntrinsicColumnWidth(),
-        1: FlexColumnWidth(),
-      },
-      children: [
-        for (final field in fields.entries)
-          TableRow(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
-                child: Text.rich(
-                  user.renderText(context, field.key),
-                  style: textStyle,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text.rich(
-                  user.renderText(context, field.value),
-                  style: textStyle,
-                ),
-              ),
-            ],
-          ),
-      ],
-    );
-  }
+  // Table _buildUserFieldsTable(
+  //   BuildContext context,
+  //   Map<String, String> fields,
+  // ) {
+  //   final textStyle = TextStyle(color: Theme.of(context).disabledColor);
+  //   return Table(
+  //     columnWidths: const {
+  //       0: IntrinsicColumnWidth(),
+  //       1: FlexColumnWidth(),
+  //     },
+  //     children: [
+  //       for (final field in fields.entries)
+  //         TableRow(
+  //           children: [
+  //             Padding(
+  //               padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+  //               child: Text.rich(
+  //                 user.renderText(context, field.key),
+  //                 style: textStyle,
+  //               ),
+  //             ),
+  //             Padding(
+  //               padding: const EdgeInsets.only(bottom: 8.0),
+  //               child: Text.rich(
+  //                 user.renderText(context, field.value),
+  //                 style: textStyle,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildUserFieldsColumn(
     BuildContext context,
