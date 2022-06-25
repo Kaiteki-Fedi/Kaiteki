@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Element;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -40,6 +41,7 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
         width: 800,
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Wrap(
               spacing: 8,
@@ -75,20 +77,6 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
     );
   }
 
-  String getTree(Element element) {
-    var a = element.toString();
-
-    final children = element.children;
-    if (children != null) {
-      for (final child in children) {
-        final childResult = getTree(child);
-        a += "\n$childResult";
-      }
-    }
-
-    return a.split("\n").join("\n⮩ ");
-  }
-
   Widget _buildRaw() {
     return TextField(
       decoration: const InputDecoration(
@@ -107,17 +95,40 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
         .parseWith(const SocialTextParser())
         .parseWith(const MfmTextParser());
 
-    return TextField(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-      ),
-      style: GoogleFonts.robotoMono(),
-      controller: TextEditingController(
-        text: elements.map(getTree).join("\n"),
-      ),
-      readOnly: true,
-      maxLines: null,
+    return TreeView(
+      nodes: elements.map(_buildNode).toList(growable: false),
+      indent: 28,
     );
+  }
+
+  TreeNode _buildNode(Element element) {
+    return TreeNode(
+      children: element.children?.isNotEmpty == true
+          ? element.children?.map(_buildNode).toList(growable: false)
+          : null,
+      content: Flexible(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              color: Theme.of(context).colorScheme.primary,
+              _getElementIcon(element),
+            ),
+            const SizedBox(width: 8),
+            Flexible(child: Text(element.toString())),
+          ],
+        ),
+      ),
+    );
+  }
+
+  IconData _getElementIcon(Element element) {
+    if (element is LinkElement) return Icons.link_rounded;
+    if (element is MentionElement) return Icons.alternate_email_rounded;
+    if (element is TextElement) return Icons.short_text_rounded;
+    if (element is EmojiElement) return Icons.insert_emoticon_rounded;
+    if (element is HashtagElement) return Icons.tag_rounded;
+    return Icons.square_rounded;
   }
 
   Widget _buildRendered() {
