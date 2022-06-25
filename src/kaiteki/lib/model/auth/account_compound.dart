@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
@@ -5,19 +6,18 @@ import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 
+@immutable
 class AccountCompound {
   final AccountManager container;
   final AccountSecret accountSecret;
   final ClientSecret clientSecret;
   final FediverseAdapter adapter;
+  final User account;
 
   ApiType? get instanceType => clientSecret.apiType;
-
-  User account;
-
   String get instance => clientSecret.instance;
 
-  AccountCompound({
+  const AccountCompound({
     required this.container,
     required this.adapter,
     required this.account,
@@ -32,9 +32,6 @@ class AccountCompound {
     return username == accountSecret.username &&
         instance == accountSecret.instance;
   }
-
-  // TODO(Craftplacer): assert check has been removed, due to compiler errors
-  //: assert(accountSecret.identity.instance.equalsIgnoreCase(clientSecret.instance));
 
   /// Checks whether the other [AccountCompound] has the same identifying data.
   @override
@@ -51,6 +48,7 @@ class AccountCompound {
     return accountSecret.hashCode ^
         clientSecret.hashCode ^
         adapter.hashCode ^
-        instanceType.hashCode;
+        instanceType.hashCode ^
+        account.hashCode;
   }
 }
