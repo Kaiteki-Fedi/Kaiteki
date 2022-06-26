@@ -77,7 +77,7 @@ Future<InstanceProbeResult?> _probeKnownInstances(String host) async {
   return null;
 }
 
-Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
+Future<NodeInfo?> fetchNodeInfo(String host) async {
   final response = await http.get(Uri.https(host, "/.well-known/nodeinfo"));
 
   final Map<String, dynamic> object;
@@ -128,23 +128,26 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
     }
   }
 
-  final nodeInfo = NodeInfo.fromJson(jsonDecode(nodeInfoBody));
+  return NodeInfo.fromJson(jsonDecode(nodeInfoBody));
+}
 
-  final apiType = {
+Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
+  final nodeInfo = await fetchNodeInfo(host);
+  if (nodeInfo == null) return null;
+
+  final apiType = const {
     "mastodon": ApiType.mastodon,
     "pleroma": ApiType.pleroma,
     "misskey": ApiType.misskey,
   }[nodeInfo.software.name];
 
-  if (apiType == null) {
-    return null;
-  } else {
-    return InstanceProbeResult.successful(
-      apiType,
-      null,
-      InstanceProbeMethod.nodeInfo,
-    );
-  }
+  if (apiType == null) return null;
+
+  return InstanceProbeResult.successful(
+    apiType,
+    null,
+    InstanceProbeMethod.nodeInfo,
+  );
 }
 
 Future<InstanceProbeResult?> _probeEndpoints(String host) async {
