@@ -301,8 +301,16 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<List<Post>> getBookmarks() async {
-    final statuses = await client.getBookmarkedStatuses();
+  Future<List<Post>> getBookmarks({
+    String? maxId,
+    String? sinceId,
+    String? minId,
+  }) async {
+    final statuses = await client.getBookmarkedStatuses(
+      maxId: maxId,
+      sinceId: sinceId,
+      minId: minId,
+    );
     return statuses.map(toPost).toList();
   }
 

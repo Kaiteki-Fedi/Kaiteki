@@ -246,10 +246,21 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<mastodon.Status>> getBookmarkedStatuses() async {
+  Future<Iterable<mastodon.Status>> getBookmarkedStatuses({
+    String? maxId,
+    String? sinceId,
+    String? minId,
+    int? limit,
+  }) async {
+    final queryParams = {
+      'max_id': maxId,
+      'since_id': sinceId,
+      'min_id': minId,
+      'limit': limit,
+    };
     return sendJsonRequestMultiple(
       HttpMethod.get,
-      "api/v1/bookmarks",
+      withQueries("api/v1/bookmarks", queryParams),
       mastodon.Status.fromJson,
     );
   }

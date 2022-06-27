@@ -17,7 +17,8 @@ String withQueries(
 
   if (queryParameters.isEmpty) return baseUrl;
 
-  return '$baseUrl?${Uri(queryParameters: queryParameters).query}';
+  final query = Uri(queryParameters: queryParameters).query;
+  return '$baseUrl?$query';
 }
 
 void checkResponse(Response response) {

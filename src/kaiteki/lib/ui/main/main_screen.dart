@@ -8,6 +8,7 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
+import 'package:kaiteki/ui/main/bookmarks_page.dart';
 import 'package:kaiteki/ui/main/compose_fab.dart';
 import 'package:kaiteki/ui/main/timeline_page.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
@@ -44,6 +45,7 @@ class _MainScreenState extends State<MainScreen> {
           text: Text(l10n.niy),
         ),
       ),
+      const BookmarksPage(),
     ];
   }
 
@@ -70,6 +72,11 @@ class _MainScreenState extends State<MainScreen> {
         selectedIcon: Icons.forum,
         icon: Icons.forum_outlined,
         text: l10n.chatsTab,
+      ),
+      _MainScreenTab(
+        selectedIcon: Icons.bookmark_rounded,
+        icon: Icons.bookmark_border_rounded,
+        text: l10n.bookmarksTab,
       ),
     ];
   }

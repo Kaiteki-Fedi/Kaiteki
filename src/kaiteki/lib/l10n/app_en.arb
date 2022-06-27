@@ -433,5 +433,6 @@
   "postFavoriteFailed": "Failed to un-/favorite post",
   "postRepeatFailed": "Failed to un-/repeat post",
   "postRemoveFromBookmarks": "Unbookmark",
-  "postAddToBookmarks": "Bookmark"
+  "postAddToBookmarks": "Bookmark",
+  "bookmarksTab": "Bookmarks"
 }

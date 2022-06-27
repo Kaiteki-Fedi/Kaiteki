@@ -12,5 +12,9 @@ abstract class BookmarkSupport {
   Future<Post?> unbookmarkPost(String id);
 
   /// Fetches a list of bookmarks the user has made.
-  Future<List<Post>> getBookmarks();
+  Future<List<Post>> getBookmarks({
+    String? maxId,
+    String? sinceId,
+    String? minId,
+  });
 }
