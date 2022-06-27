@@ -238,12 +238,6 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Post?> favoritePost(String id) {
-    // TODO(Craftplacer): implement favoritePost
-    throw UnimplementedError();
-  }
-
-  @override
   Future<User?> followUser(String id) {
     // TODO(Craftplacer): implement followUser
     throw UnimplementedError();
@@ -271,9 +265,6 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     final note = await client.createRenote(id);
     return toPost(note);
   }
-
-  @override
-  Future<Post?> unfavoritePost(String id) => throw UnimplementedError();
 
   @override
   Future<Post?> unrepeatPost(String id) => throw UnimplementedError();
