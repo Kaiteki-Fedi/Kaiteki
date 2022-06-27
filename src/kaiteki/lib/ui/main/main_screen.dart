@@ -18,14 +18,14 @@ import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   final _timelineKey = UniqueKey();
   List<Widget>? _pages;
   List<MainScreenTab>? _tabs;
@@ -138,6 +138,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildDrawer(BuildContext context) {
+    final handle = ref.getCurrentAccountHandle();
+    final l10n = context.getL10n();
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -146,7 +148,7 @@ class _MainScreenState extends State<MainScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 18.0,
-                vertical: 24.0,
+                vertical: 16.0,
               ),
               child: Text(
                 "Kaiteki",
@@ -156,13 +158,24 @@ class _MainScreenState extends State<MainScreen> {
             ..._tabs!.map((tab) => _buildDrawerTab(context, tab)),
             const Divider(),
             ListTile(
+              leading: const Icon(Icons.flag_rounded),
+              title: Text(l10n.reportsTitle),
+              onTap: () => context.push("/$handle/reports"),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.manage_accounts_rounded),
+              title: Text(l10n.accountSettingsTitle),
+              onTap: () => context.push("/$handle/settings"),
+            ),
+            ListTile(
               leading: const Icon(Icons.settings_rounded),
-              title: Text(context.getL10n().settings),
+              title: Text(l10n.settings),
               onTap: () => context.push("/settings"),
             ),
             ListTile(
               leading: const Icon(Icons.info_outline_rounded),
-              title: Text(context.getL10n().settingsAbout),
+              title: Text(l10n.settingsAbout),
               onTap: () => context.push("/about"),
             ),
           ],
