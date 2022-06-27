@@ -130,6 +130,6 @@ class AccountManager extends ChangeNotifier {
     );
   }
 
-  // TODO(Craftplacer): HACK, This should not exist, please refactor.
+  // HACK(Craftplacer): This should not exist, please refactor.
   ClientSecretRepository getClientRepo() => _clientSecrets;
 }
