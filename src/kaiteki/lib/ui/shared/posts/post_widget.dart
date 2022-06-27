@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/intents.dart';
@@ -69,6 +70,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       );
     }
 
+    final adapter = ref.watch(adapterProvider);
+
     return FocusableActionDetector(
       shortcuts: {
         replyKeySet: ReplyIntent(),
@@ -109,7 +112,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                   if (widget.showParentPost && _post.replyToPostId != null)
                     ReplyBar(post: _post),
                   PostContentWidget(
-                      post: _post, hideReplyee: widget.hideReplyee),
+                    post: _post,
+                    hideReplyee: widget.hideReplyee,
+                  ),
                   if (_post.quotedPost != null)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -129,11 +134,11 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                       post: _post,
                       onReply: () => context.showPostDialog(replyTo: _post),
                       onFavorite: () async {
-                        final adapter = ref.read(adapterProvider);
                         try {
+                          final f = adapter as FavoriteSupport;
                           final newPost = _post.liked
-                              ? await adapter.unfavoritePost(_post.id)
-                              : await adapter.favoritePost(_post.id);
+                              ? await f.unfavoritePost(_post.id)
+                              : await f.favoritePost(_post.id);
 
                           setState(() => _post = newPost!);
                         } catch (e, s) {
@@ -160,7 +165,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                           );
                         }
                       },
-                      favorited: _post.liked,
+                      favorited: adapter is FavoriteSupport //
+                          ? _post.liked
+                          : null,
                       repeated: _post.repeated,
                       reacted: false,
                     ),

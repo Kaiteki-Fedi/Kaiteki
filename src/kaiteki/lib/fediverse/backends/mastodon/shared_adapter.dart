@@ -8,6 +8,7 @@ import 'package:kaiteki/fediverse/backends/mastodon/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
+import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
@@ -24,7 +25,7 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
 class SharedMastodonAdapter<T extends MastodonClient>
-    extends FediverseAdapter<T> implements CustomEmojiSupport {
+    extends FediverseAdapter<T> implements CustomEmojiSupport, FavoriteSupport {
   SharedMastodonAdapter(T client) : super(client);
 
   @override

@@ -63,16 +63,6 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// Retrieves a post.
   Future<Post> getPostById(String id);
 
-  /// Favorites a post.
-  ///
-  /// This method *may* return a [Post] that was favorited.
-  Future<Post?> favoritePost(String id);
-
-  /// Unfavorites a post.
-  ///
-  /// This method *may* return the [Post] that was unfavorited.
-  Future<Post?> unfavoritePost(String id);
-
   /// Repeats a post.
   ///
   /// This method *may* return a [Post] containing the repeated post.
