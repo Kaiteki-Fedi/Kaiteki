@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/fediverse/capabilities.dart';
+import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
@@ -25,7 +26,8 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
 class SharedMastodonAdapter<T extends MastodonClient>
-    extends FediverseAdapter<T> implements CustomEmojiSupport, FavoriteSupport {
+    extends FediverseAdapter<T>
+    implements CustomEmojiSupport, FavoriteSupport, BookmarkSupport {
   SharedMastodonAdapter(T client) : super(client);
 
   @override
@@ -289,6 +291,24 @@ class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<Post?> unrepeatPost(String id) async {
     final status = await client.unreblogStatus(id);
+    return toPost(status);
+  }
+
+  @override
+  Future<Post?> bookmarkPost(String id) async {
+    final status = await client.bookmarkStatus(id);
+    return toPost(status);
+  }
+
+  @override
+  Future<List<Post>> getBookmarks() async {
+    final statuses = await client.getBookmarkedStatuses();
+    return statuses.map(toPost).toList();
+  }
+
+  @override
+  Future<Post?> unbookmarkPost(String id) async {
+    final status = await client.unbookmarkStatus(id);
     return toPost(status);
   }
 }

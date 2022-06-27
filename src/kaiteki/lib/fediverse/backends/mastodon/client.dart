@@ -246,6 +246,30 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
+  Future<Iterable<mastodon.Status>> getBookmarkedStatuses() async {
+    return sendJsonRequestMultiple(
+      HttpMethod.get,
+      "api/v1/bookmarks",
+      mastodon.Status.fromJson,
+    );
+  }
+
+  Future<mastodon.Status> bookmarkStatus(String id) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/bookmark",
+      mastodon.Status.fromJson,
+    );
+  }
+
+  Future<mastodon.Status> unbookmarkStatus(String id) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/unbookmark",
+      mastodon.Status.fromJson,
+    );
+  }
+
   @override
   Future<void> checkResponse(Response response) async {}
 

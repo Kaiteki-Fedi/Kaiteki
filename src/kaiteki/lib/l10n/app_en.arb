@@ -422,9 +422,16 @@
   "attachmentDownloadDialogTitle": "Download attachment",
   "creditsTelegramChannel": "Telegram Channel",
   "discardDraftDialogTitle": "Discard draft?",
-  "discardDraftDialogDescription": "Are you sure you want to discard the draft?",
+  "discardDraftDialogDescription": "Are you sure you want to discard this draft?",
   "discardButtonLabel": "Discard",
   "keepWritingButtonLabel": "Keep writing",
   "whyButtonLabel": "Why?",
-  "refreshTimelineButtonLabel": "Refresh"
+  "refreshTimelineButtonLabel": "Refresh",
+  "postBookmarkAdded": "Bookmark added",
+  "postBookmarkRemoved": "Bookmark removed",
+  "postBookmarkFailed": "Failed to add or remove post from bookmarks",
+  "postFavoriteFailed": "Failed to un-/favorite post",
+  "postRepeatFailed": "Failed to un-/repeat post",
+  "postRemoveFromBookmarks": "Unbookmark",
+  "postAddToBookmarks": "Bookmark"
 }

@@ -35,6 +35,8 @@ class Post<T> {
   /// How many users have replied to this post
   final int replyCount;
 
+  final bool bookmarked;
+
   /// What reactions this post has
   final Iterable<Reaction> reactions;
 
@@ -86,6 +88,7 @@ class Post<T> {
     this.replyToUser,
     this.quotedPost,
     List<UserReference>? mentionedUsers,
+    this.bookmarked = false,
   })  : reactions = reactions ?? [],
         mentionedUsers = mentionedUsers ?? [];
 

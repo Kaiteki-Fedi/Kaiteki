@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/ui/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
@@ -133,43 +135,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                     InteractionBar(
                       post: _post,
                       onReply: () => context.showPostDialog(replyTo: _post),
-                      onFavorite: () async {
-                        try {
-                          final f = adapter as FavoriteSupport;
-                          final newPost = _post.liked
-                              ? await f.unfavoritePost(_post.id)
-                              : await f.favoritePost(_post.id);
-
-                          setState(() => _post = newPost!);
-                        } catch (e, s) {
-                          context.showErrorSnackbar(
-                            text: const Text("Failed to favorite post"),
-                            stackTrace: s,
-                            error: e,
-                          );
-                        }
-                      },
-                      onRepeat: () async {
-                        final adapter = ref.read(adapterProvider);
-                        try {
-                          final newPost = _post.repeated
-                              ? await adapter.unrepeatPost(_post.id)
-                              : (await adapter.repeatPost(_post.id))!.repeatOf!;
-
-                          setState(() => _post = newPost!);
-                        } catch (e, s) {
-                          context.showErrorSnackbar(
-                            text: const Text("Failed to repeat post"),
-                            stackTrace: s,
-                            error: e,
-                          );
-                        }
-                      },
+                      onFavorite: _onFavorite,
+                      onRepeat: _onRepeat,
                       favorited: adapter is FavoriteSupport //
                           ? _post.liked
                           : null,
                       repeated: _post.repeated,
                       reacted: false,
+                      buildActions: _buildActions,
                     ),
                 ],
               ),
@@ -178,6 +151,137 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         ],
       ),
     );
+  }
+
+  List<PopupMenuEntry> _buildActions(BuildContext context) {
+    final openInBrowserAvailable = _post.externalUrl != null;
+    final l10n = context.getL10n();
+    final adapter = ref.read(adapterProvider);
+
+    return [
+      if (adapter is BookmarkSupport)
+        PopupMenuItem(
+          value: _onBookmark,
+          child: ListTile(
+            title: Text(
+              _post.bookmarked
+                  ? l10n.postRemoveFromBookmarks
+                  : l10n.postAddToBookmarks,
+            ),
+            leading: Icon(
+              _post.bookmarked
+                  ? Icons.bookmark_rounded
+                  : Icons.bookmark_border_rounded,
+              color: _post.bookmarked //
+                  ? context.kaitekiExtension!.bookmarkColor
+                  : null,
+            ),
+            contentPadding: EdgeInsets.zero,
+          ),
+        ),
+      const PopupMenuDivider(),
+      PopupMenuItem(
+        enabled: openInBrowserAvailable,
+        child: ListTile(
+          title: Text(l10n.openInBrowserLabel),
+          leading: const Icon(Icons.open_in_new_rounded),
+          contentPadding: EdgeInsets.zero,
+          enabled: openInBrowserAvailable,
+        ),
+        value: () => context.launchUrl(_post.externalUrl!),
+      ),
+      if (_post.content != null)
+        PopupMenuItem(
+          child: const ListTile(
+            title: Text("Debug text rendering"),
+            leading: Icon(Icons.bug_report_rounded),
+            contentPadding: EdgeInsets.zero,
+          ),
+          value: () => showDialog(
+            context: context,
+            builder: (context) => TextRenderDialog(_post),
+          ),
+        ),
+    ];
+  }
+
+  Future<void> _onFavorite() async {
+    final adapter = ref.read(adapterProvider);
+    final l10n = context.getL10n();
+    try {
+      final f = adapter as FavoriteSupport;
+      final newPost = _post.liked
+          ? await f.unfavoritePost(_post.id)
+          : await f.favoritePost(_post.id);
+
+      setState(() => _post = newPost!);
+    } catch (e, s) {
+      context.showErrorSnackbar(
+        text: Text(l10n.postFavoriteFailed),
+        stackTrace: s,
+        error: e,
+      );
+    }
+  }
+
+  Future<void> _onBookmark() async {
+    final adapter = ref.read(adapterProvider);
+    final l10n = context.getL10n();
+    try {
+      final f = adapter as BookmarkSupport;
+      final newPost = _post.bookmarked
+          ? await f.unbookmarkPost(_post.id)
+          : await f.bookmarkPost(_post.id);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Builder(
+                  builder: (context) => Icon(
+                    Icons.check_rounded,
+                    color: DefaultTextStyle.of(context).style.color,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  _post.bookmarked
+                      ? l10n.postBookmarkRemoved
+                      : l10n.postBookmarkAdded,
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
+      setState(() => _post = newPost!);
+    } catch (e, s) {
+      context.showErrorSnackbar(
+        text: Text(l10n.postBookmarkFailed),
+        stackTrace: s,
+        error: e,
+      );
+    }
+  }
+
+  Future<void> _onRepeat() async {
+    final adapter = ref.read(adapterProvider);
+    final l10n = context.getL10n();
+    try {
+      final newPost = _post.repeated
+          ? await adapter.unrepeatPost(_post.id)
+          : (await adapter.repeatPost(_post.id))!.repeatOf!;
+
+      setState(() => _post = newPost!);
+    } catch (e, s) {
+      context.showErrorSnackbar(
+        text: Text(l10n.postRepeatFailed),
+        stackTrace: s,
+        error: e,
+      );
+    }
   }
 }
 

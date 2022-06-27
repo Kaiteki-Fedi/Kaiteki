@@ -8,6 +8,7 @@ Post toPost(mastodon.Status source) {
     nsfw: source.sensitive,
     subject: source.spoilerText,
     author: toUser(source.account),
+    bookmarked: source.bookmarked ?? false,
     repeatOf: source.reblog != null ? toPost(source.reblog!) : null,
     // shouldn't be null because we currently expect the user to be signed in
     repeated: source.reblogged!,

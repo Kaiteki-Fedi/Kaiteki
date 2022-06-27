@@ -8,6 +8,7 @@ import 'package:kaiteki/theming/toggle_button_theme.dart';
 class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
   final ChatMessageTheme chatMessageIncoming;
   final ChatMessageTheme chatMessageOutgoing;
+  final Color bookmarkColor;
   final Color borderColor;
   final Color favoriteColor;
   final Color repeatColor;
@@ -17,6 +18,7 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
   final ToggleButtonTheme reactionButtonTheme;
 
   const KaitekiExtension({
+    required this.bookmarkColor,
     required this.borderColor,
     required this.chatMessageIncoming,
     required this.chatMessageOutgoing,
@@ -31,15 +33,16 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
   factory KaitekiExtension.material(ThemeData theme) {
     final chatMessageTheme = ChatMessageTheme.from(theme);
     return KaitekiExtension(
-      repeatColor: Colors.green.harmonizeWith(theme.colorScheme.primary),
-      favoriteColor: Colors.orange.harmonizeWith(theme.colorScheme.primary),
+      bookmarkColor: Colors.pink.harmonizeWith(theme.colorScheme.primary),
+      borderColor: theme.dividerColor,
       chatMessageIncoming: chatMessageTheme,
       chatMessageOutgoing: chatMessageTheme,
-      linkTextStyle: TextStyle(color: theme.colorScheme.secondary),
-      borderColor: theme.dividerColor,
-      reactionButtonTheme: ToggleButtonTheme.from(theme),
       chatMessageRounding: 8,
       emojiScale: 1.5,
+      favoriteColor: Colors.orange.harmonizeWith(theme.colorScheme.primary),
+      linkTextStyle: TextStyle(color: theme.colorScheme.secondary),
+      reactionButtonTheme: ToggleButtonTheme.from(theme),
+      repeatColor: Colors.green.harmonizeWith(theme.colorScheme.primary),
     );
   }
 
@@ -47,6 +50,7 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
   ThemeExtension<KaitekiExtension> copyWith({
     ChatMessageTheme? chatMessageIncoming,
     ChatMessageTheme? chatMessageOutgoing,
+    Color? bookmarkColor,
     Color? borderColor,
     Color? favoriteColor,
     Color? repeatColor,
@@ -57,6 +61,7 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
     ToggleButtonTheme? reactionButtonTheme,
   }) {
     return KaitekiExtension(
+      bookmarkColor: bookmarkColor ?? this.bookmarkColor,
       borderColor: borderColor ?? this.borderColor,
       chatMessageIncoming: chatMessageIncoming ?? this.chatMessageIncoming,
       chatMessageOutgoing: chatMessageOutgoing ?? this.chatMessageOutgoing,
@@ -81,6 +86,7 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
       // TODO(Craftplacer): complete lerp
 
       return KaitekiExtension(
+        bookmarkColor: Color.lerp(bookmarkColor, ext.bookmarkColor, t)!,
         borderColor: Color.lerp(borderColor, ext.borderColor, t)!,
         chatMessageIncoming: chatMessageIncoming,
         chatMessageOutgoing: chatMessageOutgoing,
