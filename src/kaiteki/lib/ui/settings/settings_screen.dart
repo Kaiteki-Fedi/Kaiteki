@@ -56,11 +56,6 @@ class SettingsScreen extends StatelessWidget {
       _Section(
         items: [
           _SettingsItem(
-            icon: Icons.info_rounded,
-            title: l10n.settingsAbout,
-            onTap: (context) => context.push("/about"),
-          ),
-          _SettingsItem(
             icon: Icons.bug_report_rounded,
             title: l10n.settingsDebugMaintenance,
             onTap: (context) => context.push("/settings/debug"),

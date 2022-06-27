@@ -10,6 +10,8 @@ import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/main/bookmarks_page.dart';
 import 'package:kaiteki/ui/main/compose_fab.dart';
+import 'package:kaiteki/ui/main/fab_data.dart';
+import 'package:kaiteki/ui/main/tab.dart';
 import 'package:kaiteki/ui/main/timeline_page.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
@@ -26,7 +28,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final _timelineKey = UniqueKey();
   List<Widget>? _pages;
-  List<_MainScreenTab>? _tabs;
+  List<MainScreenTab>? _tabs;
   int _currentPage = 0;
 
   // TODO(Craftplacer): abstract this tab system a bit more and use enums to declare tab positioning, this allows us to later
@@ -49,13 +51,14 @@ class _MainScreenState extends State<MainScreen> {
     ];
   }
 
-  List<_MainScreenTab> getTabs(AppLocalizations l10n) {
+  List<MainScreenTab> getTabs(AppLocalizations l10n) {
     return [
-      _MainScreenTab(
+      MainScreenTab(
+        index: 0,
         selectedIcon: Icons.home,
         icon: Icons.home_outlined,
         text: l10n.timelineTab,
-        fab: _FloatingActionButtonData(
+        fab: FloatingActionButtonData(
           icon: Icons.edit_rounded,
           tooltip: l10n.composeDialogTitle,
           text: l10n.composeButtonLabel,
@@ -63,17 +66,20 @@ class _MainScreenState extends State<MainScreen> {
         ),
         hideFabWhenDesktop: true,
       ),
-      _MainScreenTab(
+      MainScreenTab(
+        index: 1,
         selectedIcon: Icons.notifications_rounded,
         icon: Icons.notifications_none,
         text: l10n.notificationsTab,
       ),
-      _MainScreenTab(
+      MainScreenTab(
+        index: 2,
         selectedIcon: Icons.forum,
         icon: Icons.forum_outlined,
         text: l10n.chatsTab,
       ),
-      _MainScreenTab(
+      MainScreenTab(
+        index: 3,
         selectedIcon: Icons.bookmark_rounded,
         icon: Icons.bookmark_border_rounded,
         text: l10n.bookmarksTab,
@@ -113,6 +119,7 @@ class _MainScreenState extends State<MainScreen> {
               body: _getPage(),
               bottomNavigationBar: _getNavigationBar(),
               floatingActionButton: _getFab(context, _currentPage, true),
+              drawer: _buildDrawer(context),
             );
           } else {
             final showFab = !_tabs![_currentPage].hideFabWhenDesktop;
@@ -122,10 +129,61 @@ class _MainScreenState extends State<MainScreen> {
               body: _buildDesktopView(breakpoint.window >= WindowSize.medium),
               floatingActionButton:
                   showFab ? _getFab(context, _currentPage, isMobile) : null,
+              drawer: _buildDrawer(context),
             );
           }
         },
       ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+                vertical: 24.0,
+              ),
+              child: Text(
+                "Kaiteki",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+            ..._tabs!.map((tab) => _buildDrawerTab(context, tab)),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.settings_rounded),
+              title: Text(context.getL10n().settings),
+              onTap: () => context.push("/settings"),
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outline_rounded),
+              title: Text(context.getL10n().settingsAbout),
+              onTap: () => context.push("/about"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDrawerTab(BuildContext context, MainScreenTab tab) {
+    return ListTile(
+      leading: _currentPage == tab.index //
+          ? Icon(tab.selectedIcon)
+          : Icon(tab.icon),
+      title: Text(tab.text),
+      selected: _currentPage == tab.index,
+      onTap: () {
+        setState(() {
+          _currentPage = tab.index;
+        });
+        Navigator.pop(context);
+      },
     );
   }
 
@@ -199,11 +257,6 @@ class _MainScreenState extends State<MainScreen> {
         icon: const Icon(Icons.refresh_rounded),
         onPressed: null,
         tooltip: l10n.refreshTimelineButtonLabel,
-      ),
-      IconButton(
-        icon: const Icon(Icons.settings_rounded),
-        onPressed: () => context.push("/settings"),
-        tooltip: l10n.settings,
       ),
       const AccountSwitcherWidget(size: 40),
     ];
@@ -283,34 +336,4 @@ class _MainScreenState extends State<MainScreen> {
       );
     }
   }
-}
-
-class _MainScreenTab {
-  final String text;
-  final IconData selectedIcon;
-  final IconData icon;
-  final _FloatingActionButtonData? fab;
-  final bool hideFabWhenDesktop;
-
-  const _MainScreenTab({
-    required this.selectedIcon,
-    required this.text,
-    required this.icon,
-    this.fab,
-    this.hideFabWhenDesktop = false,
-  });
-}
-
-class _FloatingActionButtonData {
-  final VoidCallback? onTap;
-  final String tooltip;
-  final String text;
-  final IconData icon;
-
-  _FloatingActionButtonData({
-    this.onTap,
-    required this.tooltip,
-    required this.text,
-    required this.icon,
-  });
 }
