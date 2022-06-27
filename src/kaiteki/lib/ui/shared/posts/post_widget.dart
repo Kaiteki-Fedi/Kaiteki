@@ -27,6 +27,7 @@ class PostWidget extends ConsumerStatefulWidget {
   final bool showActions;
   final bool wide;
   final bool hideReplyee;
+  final bool hideAvatar;
 
   const PostWidget(
     this.post, {
@@ -35,6 +36,7 @@ class PostWidget extends ConsumerStatefulWidget {
     this.showActions = true,
     this.wide = false,
     this.hideReplyee = false,
+    this.hideAvatar = false,
   }) : super(key: key);
 
   @override
@@ -92,7 +94,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!widget.wide)
+          if (!widget.wide && !widget.hideAvatar)
             Padding(
               padding: const EdgeInsets.all(8),
               child: AvatarWidget(
@@ -109,7 +111,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                 children: [
                   MetaBar(
                     post: _post,
-                    showAvatar: widget.wide,
+                    showAvatar: !widget.hideAvatar && widget.wide,
                   ),
                   if (widget.showParentPost && _post.replyToPostId != null)
                     ReplyBar(post: _post),
