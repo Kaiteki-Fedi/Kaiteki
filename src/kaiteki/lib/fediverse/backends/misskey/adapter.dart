@@ -265,4 +265,16 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   MisskeyCapabilities get capabilities => const MisskeyCapabilities();
+
+  @override
+  Future<Post?> repeatPost(String id) async {
+    final note = await client.createRenote(id);
+    return toPost(note);
+  }
+
+  @override
+  Future<Post?> unfavoritePost(String id) => throw UnimplementedError();
+
+  @override
+  Future<Post?> unrepeatPost(String id) => throw UnimplementedError();
 }

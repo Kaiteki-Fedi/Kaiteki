@@ -29,7 +29,7 @@ class CountButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final callback = active ? () {} : (disabled ? null : onTap);
+    final callback = active ? (onTap ?? () {}) : (disabled ? null : onTap);
     final color = _getColor(context);
     final currentIcon = active ? (activeIcon ?? icon) : icon;
     final count = this.count;
@@ -45,7 +45,11 @@ class CountButton extends StatelessWidget {
           focusNode: focusNode,
           splashRadius: 18,
         ),
-        if (hasNumber) Text(count.toString()),
+        if (hasNumber)
+          Text(
+            count.toString(),
+            style: TextStyle(color: color),
+          ),
       ],
     );
 
@@ -72,6 +76,7 @@ class CountButton extends StatelessWidget {
   }
 
   Color _getColor(BuildContext context) {
+    if (disabled || onTap == null) return Theme.of(context).disabledColor;
     final inactiveColor = color ?? Theme.of(context).colorScheme.onBackground;
     if (active) return activeColor ?? inactiveColor;
     return inactiveColor;

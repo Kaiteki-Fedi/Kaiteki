@@ -18,15 +18,15 @@ import 'package:kaiteki/utils/extensions.dart';
 
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 
-class PostWidget extends ConsumerWidget {
-  final Post _post;
+class PostWidget extends ConsumerStatefulWidget {
+  final Post post;
   final bool showParentPost;
   final bool showActions;
   final bool wide;
   final bool hideReplyee;
 
   const PostWidget(
-    this._post, {
+    this.post, {
     Key? key,
     this.showParentPost = true,
     this.showActions = true,
@@ -35,7 +35,20 @@ class PostWidget extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PostWidget> createState() => _PostWidgetState();
+}
+
+class _PostWidgetState extends ConsumerState<PostWidget> {
+  late Post _post;
+
+  @override
+  void initState() {
+    super.initState();
+    _post = widget.post;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = context.getL10n();
 
     if (_post.repeatOf != null) {
@@ -49,8 +62,8 @@ class PostWidget extends ConsumerWidget {
           ),
           PostWidget(
             _post.repeatOf!,
-            showActions: showActions,
-            wide: wide,
+            showActions: widget.showActions,
+            wide: widget.wide,
           ),
         ],
       );
@@ -74,7 +87,7 @@ class PostWidget extends ConsumerWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!wide)
+          if (!widget.wide)
             Padding(
               padding: const EdgeInsets.all(8),
               child: AvatarWidget(
@@ -91,11 +104,12 @@ class PostWidget extends ConsumerWidget {
                 children: [
                   MetaBar(
                     post: _post,
-                    showAvatar: wide,
+                    showAvatar: widget.wide,
                   ),
-                  if (showParentPost && _post.replyToPostId != null)
+                  if (widget.showParentPost && _post.replyToPostId != null)
                     ReplyBar(post: _post),
-                  PostContentWidget(post: _post, hideReplyee: hideReplyee),
+                  PostContentWidget(
+                      post: _post, hideReplyee: widget.hideReplyee),
                   if (_post.quotedPost != null)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -110,7 +124,46 @@ class PostWidget extends ConsumerWidget {
                     ),
                   if (_post.reactions.isNotEmpty)
                     ReactionRow(_post, _post.reactions),
-                  if (showActions) InteractionBar(post: _post),
+                  if (widget.showActions)
+                    InteractionBar(
+                      post: _post,
+                      onReply: () => context.showPostDialog(replyTo: _post),
+                      onFavorite: () async {
+                        final adapter = ref.read(adapterProvider);
+                        try {
+                          final newPost = _post.liked
+                              ? await adapter.unfavoritePost(_post.id)
+                              : await adapter.favoritePost(_post.id);
+
+                          setState(() => _post = newPost!);
+                        } catch (e, s) {
+                          context.showErrorSnackbar(
+                            text: const Text("Failed to favorite post"),
+                            stackTrace: s,
+                            error: e,
+                          );
+                        }
+                      },
+                      onRepeat: () async {
+                        final adapter = ref.read(adapterProvider);
+                        try {
+                          final newPost = _post.repeated
+                              ? await adapter.unrepeatPost(_post.id)
+                              : (await adapter.repeatPost(_post.id))!.repeatOf!;
+
+                          setState(() => _post = newPost!);
+                        } catch (e, s) {
+                          context.showErrorSnackbar(
+                            text: const Text("Failed to repeat post"),
+                            stackTrace: s,
+                            error: e,
+                          );
+                        }
+                      },
+                      favorited: _post.liked,
+                      repeated: _post.repeated,
+                      reacted: false,
+                    ),
                 ],
               ),
             ),

@@ -66,6 +66,16 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
+  Future<misskey.Note> createRenote(String renoteId) async {
+    // FIXME: Properly parse Misskey create note response
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/notes/create",
+      misskey.Note.fromJson,
+      body: <String, dynamic>{"renoteId": renoteId},
+    );
+  }
+
   Future<MisskeyGenerateSessionResponse> generateSession(
     String appSecret,
   ) async {

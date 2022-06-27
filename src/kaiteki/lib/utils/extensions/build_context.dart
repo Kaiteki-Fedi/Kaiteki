@@ -47,4 +47,33 @@ extension BuildContextExtensions on BuildContext {
       return false;
     }
   }
+
+  void showErrorSnackbar({
+    required Widget text,
+    required dynamic error,
+    dynamic stackTrace,
+  }) {
+    // final l10n = getL10n();
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Builder(
+              builder: (context) => Icon(
+                Icons.error_rounded,
+                color: DefaultTextStyle.of(context).style.color,
+              ),
+            ),
+            const SizedBox(width: 8),
+            text,
+          ],
+        ),
+        // TODO(Craftplacer): Implement error screen for snackbar
+        // action: SnackBarAction(
+        //   label: l10n.whyButtonLabel,
+        //   onPressed: () {},
+        // ),
+      ),
+    );
+  }
 }

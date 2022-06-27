@@ -10,10 +10,27 @@ class InteractionBar extends StatelessWidget {
   const InteractionBar({
     Key? key,
     required Post post,
+    this.onReply,
+    this.onFavorite,
+    this.onRepeat,
+    this.onReact,
+    this.favorited,
+    this.repeated,
+    this.reacted,
   })  : _post = post,
         super(key: key);
 
   final Post _post;
+
+  final VoidCallback? onReply;
+  final VoidCallback? onFavorite;
+  final bool? favorited;
+
+  final VoidCallback? onRepeat;
+  final bool? repeated;
+
+  final VoidCallback? onReact;
+  final bool? reacted;
 
   @override
   Widget build(BuildContext context) {
@@ -25,29 +42,34 @@ class InteractionBar extends StatelessWidget {
       CountButton(
         icon: const Icon(Icons.reply_rounded),
         count: _post.replyCount,
-        onTap: () => context.showPostDialog(replyTo: _post),
+        onTap: onReply,
         focusNode: FocusNode(skipTraversal: true),
       ),
-      CountButton(
-        icon: const Icon(Icons.repeat_rounded),
-        count: _post.repeatCount,
-        active: _post.repeated,
-        activeColor: kTheme.repeatColor,
-        focusNode: FocusNode(skipTraversal: true),
-      ),
-      CountButton(
-        icon: const Icon(Icons.star_border_rounded),
-        count: _post.likeCount,
-        active: _post.liked,
-        activeColor: kTheme.favoriteColor,
-        activeIcon: const Icon(Icons.star_rounded),
-        focusNode: FocusNode(skipTraversal: true),
-      ),
-      IconButton(
-        icon: const Icon(Icons.mood_rounded),
-        onPressed: null,
-        focusNode: FocusNode(skipTraversal: true),
-      ),
+      if (repeated != null)
+        CountButton(
+          icon: const Icon(Icons.repeat_rounded),
+          count: _post.repeatCount,
+          active: _post.repeated,
+          onTap: onRepeat,
+          activeColor: kTheme.repeatColor,
+          focusNode: FocusNode(skipTraversal: true),
+        ),
+      if (favorited != null)
+        CountButton(
+          icon: const Icon(Icons.star_border_rounded),
+          count: _post.likeCount,
+          active: _post.liked,
+          onTap: onFavorite,
+          activeColor: kTheme.favoriteColor,
+          activeIcon: const Icon(Icons.star_rounded),
+          focusNode: FocusNode(skipTraversal: true),
+        ),
+      if (reacted != null)
+        CountButton(
+          icon: const Icon(Icons.mood_rounded),
+          onTap: onReact,
+          focusNode: FocusNode(skipTraversal: true),
+        ),
       PopupMenuButton<VoidCallback>(
         icon: const Icon(Icons.more_horiz),
         onSelected: (callback) => callback.call(),

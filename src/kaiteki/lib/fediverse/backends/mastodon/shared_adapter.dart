@@ -242,14 +242,10 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Instance> getInstance() {
-    throw UnimplementedError();
-  }
+  Future<Instance> getInstance() => throw UnimplementedError();
 
   @override
-  Future<Instance?> probeInstance() {
-    throw UnimplementedError();
-  }
+  Future<Instance?> probeInstance() => throw UnimplementedError();
 
   @override
   Future<Post> getPostById(String id) async {
@@ -276,4 +272,22 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   AdapterCapabilities get capabilities => const MastodonCapabilities();
+
+  @override
+  Future<Post?> repeatPost(String id) async {
+    final status = await client.reblogStatus(id);
+    return toPost(status);
+  }
+
+  @override
+  Future<Post?> unfavoritePost(String id) async {
+    final status = await client.unfavouriteStatus(id);
+    return toPost(status);
+  }
+
+  @override
+  Future<Post?> unrepeatPost(String id) async {
+    final status = await client.unreblogStatus(id);
+    return toPost(status);
+  }
 }

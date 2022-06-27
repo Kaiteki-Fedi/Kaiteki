@@ -230,6 +230,22 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
+  Future<mastodon.Status> reblogStatus(String id) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/reblog",
+      mastodon.Status.fromJson,
+    );
+  }
+
+  Future<mastodon.Status> unreblogStatus(String id) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/unreblog",
+      mastodon.Status.fromJson,
+    );
+  }
+
   @override
   Future<void> checkResponse(Response response) async {}
 
