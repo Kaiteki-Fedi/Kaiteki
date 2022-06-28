@@ -267,6 +267,8 @@ class PostFormState extends ConsumerState<PostForm> {
 
     Navigator.of(context).pop();
 
+    late ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+        snackBarController;
     final snackBar = SnackBar(
       duration: const Duration(days: 1),
       content: FutureBuilder<Post>(
@@ -280,7 +282,7 @@ class PostFormState extends ConsumerState<PostForm> {
             case AsyncSnapshotState.errored:
               Future.delayed(
                 const Duration(seconds: 4),
-                messenger.hideCurrentSnackBar,
+                snackBarController.close,
               );
               return AsyncSnackBarContent(
                 key: contentKey,
@@ -304,7 +306,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
           Future.delayed(
             const Duration(seconds: 4),
-            messenger.hideCurrentSnackBar,
+            snackBarController.close,
           );
 
           return AsyncSnackBarContent(
@@ -315,10 +317,8 @@ class PostFormState extends ConsumerState<PostForm> {
             trailing: Consumer(
               builder: (context, ref, child) {
                 return TextButton(
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.secondary,
-                    ),
+                  style: TextButton.styleFrom(
+                    primary: Theme.of(context).colorScheme.secondary,
                     visualDensity: VisualDensity.comfortable,
                   ),
                   onPressed: () {
@@ -338,7 +338,7 @@ class PostFormState extends ConsumerState<PostForm> {
       ),
     );
 
-    messenger.showSnackBar(snackBar);
+    snackBarController = messenger.showSnackBar(snackBar);
   }
 
   void openEmojiPicker(BuildContext context, AccountManager container) {
