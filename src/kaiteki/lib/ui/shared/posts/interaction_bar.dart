@@ -71,6 +71,7 @@ class InteractionBar extends StatelessWidget {
         icon: const Icon(Icons.more_horiz),
         itemBuilder: buildActions,
         onSelected: (callback) => (callback as VoidCallback).call(),
+        splashRadius: 18,
       ),
     ];
 

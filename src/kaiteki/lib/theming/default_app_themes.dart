@@ -69,6 +69,15 @@ extension _ThemeDataExtensions on ThemeData {
           fontWeight: FontWeight.w600,
         ),
       ),
+      checkboxTheme: CheckboxThemeData(
+        checkColor: MaterialStateProperty.all(colorScheme.surface),
+        fillColor: MaterialStateProperty.resolveWith(
+          (s) => s.contains(MaterialState.selected)
+              ? colorScheme.secondary
+              : colorScheme.onBackground.withOpacity(.87),
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+      ),
     );
   }
 }

@@ -31,6 +31,7 @@ class AccountListDialog extends ConsumerWidget {
                   AccountListTile(
                     compound: compound,
                     selected: manager.currentAccount == compound,
+                    onTap: () => Navigator.of(context).pop(),
                   ),
                 const Divider(),
                 ListTile(
@@ -58,11 +59,13 @@ class AccountListDialog extends ConsumerWidget {
 class AccountListTile extends ConsumerWidget {
   final AccountCompound compound;
   final bool selected;
+  final VoidCallback? onTap;
 
   const AccountListTile({
     Key? key,
     required this.compound,
     this.selected = false,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -86,6 +89,7 @@ class AccountListTile extends ConsumerWidget {
 
   Future<void> _onSelect(WidgetRef ref) async {
     await ref.read(accountProvider).changeAccount(compound);
+    onTap?.call();
   }
 
   Future<void> _onRemove(BuildContext context, WidgetRef ref) async {

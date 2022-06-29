@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/instance_prober.dart';
 import 'package:kaiteki/fediverse/instances.dart';
-import 'package:kaiteki/ui/auth/discover_instances/adapter_features_expansion_tile.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
 import 'package:kaiteki/ui/auth/discover_instances/fediverse_convenant_chip.dart';
 import 'package:kaiteki/ui/auth/discover_instances/mastodon_convenant_chip.dart';
 import 'package:kaiteki/ui/auth/discover_instances/rule_list_tile.dart';
+import 'package:kaiteki/ui/shared/dialogs/capabilities_dialog.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class DiscoverInstanceDetailsScreen extends ConsumerWidget {
@@ -124,7 +124,16 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-              AdapterFeaturesExpansionTile(data.type),
+              ListTile(
+                title: Text("Features mutually supported"),
+                subtitle: Text(
+                  "See what features you can use with Kaiteki on this instance",
+                ),
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (context) => CapabilitiesDialog(type: data.type),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Wrap(
