@@ -6,7 +6,6 @@ import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:kaiteki/fediverse/interfaces/report_support.dart';
 import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 
 class CapabilitiesDialog extends StatelessWidget {
