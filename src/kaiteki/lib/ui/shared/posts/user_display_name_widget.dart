@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
-class UserDisplayNameWidget extends StatelessWidget {
+class UserDisplayNameWidget extends ConsumerWidget {
   final User user;
   final Axis orientation;
 
@@ -13,7 +14,7 @@ class UserDisplayNameWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textSpacing =
         orientation == Axis.vertical || _equalUserName(user) ? 0.0 : 6.0;
 
@@ -27,7 +28,7 @@ class UserDisplayNameWidget extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text.rich(
-          user.renderDisplayName(context),
+          user.renderDisplayName(context, ref),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         if (secondaryText != null)

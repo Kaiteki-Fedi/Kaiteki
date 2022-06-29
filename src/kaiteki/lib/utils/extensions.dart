@@ -7,7 +7,9 @@ import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
+import 'package:tuple/tuple.dart';
 
 export 'package:kaiteki/utils/extensions/build_context.dart';
 export 'package:kaiteki/utils/extensions/duration.dart';
@@ -82,15 +84,15 @@ extension AsyncSnapshotExtensions on AsyncSnapshot {
 enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
-  InlineSpan renderDisplayName(BuildContext context) {
-    return renderText(context, displayName);
+  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, displayName);
   }
 
-  InlineSpan renderDescription(BuildContext context) {
-    return renderText(context, description!);
+  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, description!);
   }
 
-  InlineSpan renderText(BuildContext context, String text) {
+  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
     return const TextRenderer().render(
       context,
       text,
@@ -98,6 +100,7 @@ extension UserExtensions on User {
         users: [],
         emojis: emojis?.toList(growable: false),
       ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
   }
 
@@ -111,7 +114,11 @@ extension UserExtensions on User {
 }
 
 extension PostExtensions on Post {
-  InlineSpan renderContent(BuildContext context, {bool hideReplyee = false}) {
+  InlineSpan renderContent(
+    BuildContext context,
+    WidgetRef ref, {
+    bool hideReplyee = false,
+  }) {
     return const TextRenderer().render(
       context,
       content!,
@@ -126,6 +133,7 @@ extension PostExtensions on Post {
             )
         ],
       ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
   }
 
@@ -203,5 +211,15 @@ extension QueryExtension on Map<String, String> {
       pairs.add("$key=$value");
     }
     return "?${pairs.join("&")}";
+  }
+}
+
+extension UriExtensions on Uri {
+  Tuple2<String, String> get fediverseHandle {
+    var username = pathSegments.last;
+    if (username[0] == '@') {
+      username = username.substring(1);
+    }
+    return Tuple2(host, username);
   }
 }

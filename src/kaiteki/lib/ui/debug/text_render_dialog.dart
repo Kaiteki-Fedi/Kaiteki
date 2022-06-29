@@ -141,7 +141,7 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
       ),
       padding: const EdgeInsets.all(8.0),
       child: Text.rich(
-        widget.post.renderContent(context),
+        widget.post.renderContent(context, ref),
       ),
     );
   }

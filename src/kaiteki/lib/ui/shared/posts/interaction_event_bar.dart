@@ -38,7 +38,7 @@ class InteractionEventBar extends ConsumerWidget {
           Text.rich(
             TextSpan(
               children: [
-                TextSpan(children: [user.renderDisplayName(context)]),
+                TextSpan(children: [user.renderDisplayName(context, ref)]),
                 const TextSpan(text: " "),
                 WidgetSpan(
                   child: Icon(

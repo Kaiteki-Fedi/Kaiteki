@@ -29,7 +29,7 @@ class ReplyBar extends ConsumerWidget {
         future: UserReference(_getUserId()).resolve(adapter),
         builder: (context, snapshot) {
           final span = snapshot.hasData
-              ? snapshot.data!.renderDisplayName(context)
+              ? snapshot.data!.renderDisplayName(context, ref)
               : TextSpan(
                   text: _getText(),
                   style: context.getKaitekiTheme()!.linkTextStyle,

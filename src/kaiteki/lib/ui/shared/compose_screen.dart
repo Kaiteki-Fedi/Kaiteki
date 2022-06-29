@@ -45,7 +45,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
           if (replyTo != null) {
             replyTextSpan = TextSpan(
               text: l10n.composeDialogTitleReply,
-              children: [replyTo.author.renderDisplayName(context)],
+              children: [replyTo.author.renderDisplayName(context, ref)],
             );
           }
 

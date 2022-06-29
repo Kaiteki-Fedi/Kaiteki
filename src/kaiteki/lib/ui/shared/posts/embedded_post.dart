@@ -34,7 +34,7 @@ class EmbeddedPostWidget extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              Text.rich(post.renderContent(context)),
+              Text.rich(post.renderContent(context, ref)),
               if (post.attachments?.isNotEmpty == true)
                 AttachmentRow(post: post),
             ],

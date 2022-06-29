@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -28,7 +29,7 @@ class UserInfoWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text.rich(
-          user.renderDisplayName(context),
+          user.renderDisplayName(context, ref),
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 8),
@@ -38,7 +39,7 @@ class UserInfoWidget extends ConsumerWidget {
         ),
         if (user.description != null) const SizedBox(height: 12.0),
         if (user.description != null)
-          Text.rich(user.renderDescription(context)),
+          Text.rich(user.renderDescription(context, ref)),
         const SizedBox(height: 12.0),
         if (fields != null) _buildUserFieldsColumn(context, fields),
         if (location != null && location.isNotEmpty)
@@ -126,13 +127,13 @@ class UserInfoWidget extends ConsumerWidget {
   }
 }
 
-class _UserInfoFieldRow extends StatelessWidget {
+class _UserInfoFieldRow extends ConsumerWidget {
   final MapEntry<String, String> field;
 
   const _UserInfoFieldRow(this.field);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -145,6 +146,11 @@ class _UserInfoFieldRow extends StatelessWidget {
           const TextRenderer().render(
             context,
             field.value,
+            onUserClick: (reference) => resolveAndOpenUser(
+              reference,
+              context,
+              ref,
+            ),
           ),
         ),
       ],

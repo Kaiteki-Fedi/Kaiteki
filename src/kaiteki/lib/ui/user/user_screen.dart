@@ -243,7 +243,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     bool showCountBadges,
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
-    final displayName = snapshot.data?.renderDisplayName(context);
+    final displayName = snapshot.data?.renderDisplayName(context, ref);
 
     return AppBar(
       actions: buildActions(context, user: snapshot.data),
