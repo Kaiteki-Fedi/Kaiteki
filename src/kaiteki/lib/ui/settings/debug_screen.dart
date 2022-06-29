@@ -51,7 +51,7 @@ class _DebugScreenState extends State<DebugScreen> {
           ListTile(
             leading: const Icon(Icons.key_rounded),
             title: const Text("Run OAuth Server"),
-            onTap: () => runOAuthServer(launchUrl),
+            onTap: () => runOAuthServer((u, _) => launchUrl(u)),
           ),
           ListTile(
             leading: const Icon(Icons.waving_hand_rounded),

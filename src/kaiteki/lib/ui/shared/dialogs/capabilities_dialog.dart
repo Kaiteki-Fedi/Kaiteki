@@ -18,6 +18,7 @@ class CapabilitiesDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final adapter = type.createAdapter();
     final l10n = context.getL10n();
+    final otherCapabilities = _buildOtherCapabilities(context);
     return ConstrainedBox(
       constraints: dialogConstraints,
       child: AlertDialog(
@@ -59,20 +60,13 @@ class CapabilitiesDialog extends StatelessWidget {
                   l10n.bookmarkSupport,
                   l10n.bookmarkSupportDescription,
                 ),
-              ExpansionTile(
-                title: const Text("Other features"),
-                tilePadding: EdgeInsets.zero,
-                childrenPadding: EdgeInsets.zero,
-                children: [
-                  if (adapter is ReportSupport)
-                    _buildFeatureListTile(
-                      context,
-                      const Icon(Icons.flag_rounded),
-                      l10n.reportSupport,
-                      l10n.reportSupportDescription,
-                    ),
-                ],
-              ),
+              if (otherCapabilities.isNotEmpty)
+                ExpansionTile(
+                  title: const Text("Other features"),
+                  tilePadding: EdgeInsets.zero,
+                  childrenPadding: EdgeInsets.zero,
+                  children: otherCapabilities,
+                ),
             ],
           ),
         ),
@@ -84,6 +78,18 @@ class CapabilitiesDialog extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  List<Widget> _buildOtherCapabilities(BuildContext context) {
+    return [
+      //if (adapter is ReportSupport)
+      //  _buildFeatureListTile(
+      //    context,
+      //    const Icon(Icons.flag_rounded),
+      //    l10n.reportSupport,
+      //    l10n.reportSupportDescription,
+      //  ),
+    ];
   }
 
   Widget _buildFeatureListTile(
