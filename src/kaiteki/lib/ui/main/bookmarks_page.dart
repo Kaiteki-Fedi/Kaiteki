@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 
 class BookmarksPage extends ConsumerStatefulWidget {
@@ -25,7 +26,11 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
         final adapter = ref.watch(accountProvider).adapter as BookmarkSupport;
         final posts = await adapter.getBookmarks(sinceId: id);
 
-        _pagingController.appendPage(posts.toList(), posts.last.id);
+        if (posts.isEmpty) {
+          _pagingController.appendLastPage(posts.toList());
+        } else {
+          _pagingController.appendPage(posts.toList(), posts.last.id);
+        }
       } catch (e) {
         _pagingController.error = e;
       }
@@ -51,6 +56,10 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Post>(
             itemBuilder: _buildPost,
+            noItemsFoundIndicatorBuilder: (_) => const IconLandingWidget(
+              icon: Icon(Icons.bookmark_outline_rounded),
+              text: Text("No bookmarks"),
+            ),
           ),
           separatorBuilder: _buildSeparator,
         );

@@ -34,10 +34,20 @@ class TimelineState extends ConsumerState<Timeline> {
       final adapter = ref.watch(accountProvider).adapter;
       final posts = await adapter.getTimeline(TimelineType.home, untilId: id);
 
-      _pagingController.appendPage(posts.toList(), posts.last.id);
+      if (posts.isEmpty) {
+        _pagingController.appendLastPage(posts.toList());
+      } else {
+        _pagingController.appendPage(posts.toList(), posts.last.id);
+      }
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
   @override
