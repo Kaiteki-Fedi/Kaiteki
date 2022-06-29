@@ -25,11 +25,8 @@ part 'adapter.c.dart';
 // TODO(Craftplacer): add missing implementations
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     implements ChatSupport, ReactionSupport, CustomEmojiSupport {
-  factory MisskeyAdapter({MisskeyClient? client}) {
-    return MisskeyAdapter._(client ?? MisskeyClient());
-  }
-
-  MisskeyAdapter._(MisskeyClient client) : super(client);
+  factory MisskeyAdapter() => MisskeyAdapter.custom(MisskeyClient());
+  MisskeyAdapter.custom(MisskeyClient client) : super(client);
 
   @override
   Future<User> getUser(String username, [String? instance]) async {
