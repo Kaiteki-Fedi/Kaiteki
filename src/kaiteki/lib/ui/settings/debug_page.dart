@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kaiteki/auth/login_functions.dart';
+import 'package:kaiteki/ui/onboarding/onboarding_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class DebugPage extends StatefulWidget {
+  const DebugPage({Key? key}) : super(key: key);
+
+  @override
+  State<DebugPage> createState() => _DebugPageState();
+}
+
+class _DebugPageState extends State<DebugPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Material(
+          elevation: 6,
+          color: Colors.amberAccent,
+          child: ListTile(
+            leading: Icon(Icons.warning_rounded, color: Colors.black),
+            title: Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Text(
+                "Proceed with caution",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            subtitle: Padding(
+              padding: EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                "Some settings might delete your user settings or have unintended behavior.",
+                style: TextStyle(color: Colors.black54),
+              ),
+            ),
+            dense: true,
+          ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.palette_rounded),
+          title: const Text("Show theme"),
+          onTap: () => context.push("/settings/debug/theme"),
+        ),
+        ListTile(
+          leading: const Icon(Icons.key_rounded),
+          title: const Text("Run OAuth Server"),
+          onTap: () => runOAuthServer((url, cancel) => launchUrl(url)),
+        ),
+        ListTile(
+          leading: const Icon(Icons.waving_hand_rounded),
+          title: const Text("Open onboarding"),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const OnboardingScreen(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

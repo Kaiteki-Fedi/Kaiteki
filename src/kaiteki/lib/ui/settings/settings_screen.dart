@@ -1,125 +1,121 @@
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/separator_text.dart';
+import 'package:kaiteki/ui/settings/customization/customization_basic_page.dart';
+import 'package:kaiteki/ui/settings/debug_page.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+enum SettingsCategory {
+  customization(icon: Icons.palette_rounded),
+  tabs(icon: Icons.tab_rounded),
+  debug(icon: Icons.bug_report_rounded);
 
-  List<_Section> _getItems(BuildContext context) {
-    final l10n = context.getL10n();
-    return <_Section>[
-      _Section(
-        items: [
-          _SettingsItem(
-            icon: Icons.build_rounded,
-            title: l10n.settingsGeneral,
-          ),
-          _SettingsItem(
-            icon: Icons.person_rounded,
-            title: l10n.settingsProfile,
-          ),
-          _SettingsItem(
-            icon: Icons.lock_rounded,
-            title: l10n.settingsSecurity,
-          ),
-          _SettingsItem(
-            icon: Icons.filter_alt_rounded,
-            title: l10n.settingsFiltering,
-            onTap: (context) => context.push("/settings/filtering"),
-          ),
-          _SettingsItem(
-            icon: Icons.notifications_rounded,
-            title: l10n.settingsNotifications,
-          ),
-          _SettingsItem(
-            icon: Icons.import_export_rounded,
-            title: l10n.settingsImportExport,
-          ),
-          _SettingsItem(
-            icon: Icons.visibility_off_rounded,
-            title: l10n.settingsMutesBlocks,
-          ),
-        ],
-      ),
-      _Section(
-        title: l10n.settingsKaiteki,
-        items: [
-          _SettingsItem(
-            icon: Icons.palette_rounded,
-            title: l10n.settingsCustomization,
-            onTap: (context) => context.push("/settings/customization"),
-          ),
-          _SettingsItem(icon: Icons.tab_rounded, title: l10n.settingsTabs),
-        ],
-      ),
-      _Section(
-        items: [
-          _SettingsItem(
-            icon: Icons.bug_report_rounded,
-            title: l10n.settingsDebugMaintenance,
-            onTap: (context) => context.push("/settings/debug"),
-          )
-        ],
-      ),
-    ];
-  }
+  final IconData icon;
 
-  // GridView for desktop impl.
-  List<Widget> _getListItems(BuildContext context, List<_Section> sections) {
-    final widgets = <Widget>[];
+  const SettingsCategory({
+    required this.icon,
+  });
 
-    for (var i = 0; i < sections.length; i++) {
-      if (i > 0) widgets.add(const Divider());
-
-      final section = sections[i];
-
-      if (section.hasTitleHeader) {
-        widgets.add(SeparatorText(section.title!));
-      }
-
-      for (final item in section.items) {
-        widgets.add(
-          ListTile(
-            leading: Icon(item.icon),
-            title: Text(item.title),
-            enabled: item.isEnabled,
-            onTap: item.isEnabled ? () => item.onTap!.call(context) : null,
-          ),
-        );
-      }
+  String getTitle(AppLocalizations l10n) {
+    switch (this) {
+      case SettingsCategory.customization:
+        return l10n.settingsCustomization;
+      case SettingsCategory.tabs:
+        return l10n.settingsTabs;
+      case SettingsCategory.debug:
+        return l10n.settingsDebugMaintenance;
     }
-
-    return widgets;
   }
+
+  Widget build(BuildContext context) {
+    switch (this) {
+      case SettingsCategory.customization:
+        return const CustomizationBasicPage();
+      case SettingsCategory.tabs:
+        return const CustomizationBasicPage();
+      case SettingsCategory.debug:
+        return const DebugPage();
+    }
+  }
+}
+
+class SettingsScreen extends StatefulWidget {
+  final SettingsCategory? category;
+
+  const SettingsScreen({Key? key, this.category}) : super(key: key);
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    final items = _getItems(context);
+    super.build(context);
+
     final l10n = context.getL10n();
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.settings)),
-      body: ListView(children: _getListItems(context, items)),
+    return BreakpointBuilder(
+      builder: (context, breakpoint) {
+        final isMobile = breakpoint.window <= WindowSize.xsmall;
+        final category = widget.category;
+        final isListVisible = !isMobile || category == null;
+        return WillPopScope(
+          onWillPop: () async {
+            return true;
+            // if (isListVisible) return true;
+            // //setState(() => category = null);
+            // context.go("/settings");
+            // return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(
+                isListVisible ? l10n.settings : category.getTitle(l10n),
+              ),
+            ),
+            body: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isListVisible)
+                  isMobile
+                      ? Flexible(child: _buildList(isMobile))
+                      : SizedBox(width: 256, child: _buildList(isMobile)),
+                if (!isMobile) const VerticalDivider(width: 1),
+                if (category != null || !isMobile)
+                  Expanded(
+                    child: category == null //
+                        ? const SizedBox()
+                        : SingleChildScrollView(child: category.build(context)),
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
-}
 
-class _Section {
-  final String? title;
-  final List<_SettingsItem> items;
-
-  bool get hasTitleHeader => title != null;
-
-  const _Section({this.title, required this.items});
-}
-
-class _SettingsItem {
-  final IconData icon;
-  final String title;
-  final Function(BuildContext context)? onTap;
-
-  bool get isEnabled => onTap != null;
-
-  const _SettingsItem({required this.icon, required this.title, this.onTap});
+  Widget _buildList(bool isMobile) {
+    final l10n = context.getL10n();
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        final category = SettingsCategory.values[index];
+        return ListTile(
+          leading: Icon(category.icon),
+          title: Text(category.getTitle(l10n)),
+          onTap: () {
+            if (!isMobile) context.go("/settings/${category.name}");
+          },
+          selected: category == widget.category,
+        );
+      },
+      itemCount: SettingsCategory.values.length,
+    );
+  }
 }
