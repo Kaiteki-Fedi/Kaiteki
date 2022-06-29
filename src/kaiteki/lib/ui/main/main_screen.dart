@@ -229,9 +229,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 useIndicator: consts.useM3,
                 selectedIndex: _currentPage,
                 onDestinationSelected: _changePage,
-                labelType: extendNavRail
-                    ? NavigationRailLabelType.none
-                    : NavigationRailLabelType.selected,
                 extended: extendNavRail,
                 // groupAlignment: consts.useM3 ? 0 : null,
                 minWidth: consts.useM3 ? null : 56,
