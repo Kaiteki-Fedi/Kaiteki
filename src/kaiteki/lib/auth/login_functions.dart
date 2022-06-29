@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/constants.dart' as consts;
@@ -60,7 +61,7 @@ Future<ClientSecret> createClientSecret(
   return clientSecret;
 }
 
-Future<Map<String, String>> runOAuthServer(
+Future<Map<String, String>?> runOAuthServer(
   OAuthUrlCreatedCallback ready,
 ) async {
   final requestStream = StreamController<Map<String, String>>();
@@ -80,8 +81,12 @@ Future<Map<String, String>> runOAuthServer(
     // Start server, close & return when new request comes in
     const port = 8080;
     server = await serve(handler, "localhost", port, shared: true);
-    ready(Uri.http('localhost:$port', '/'));
-    return await requestStream.stream.first;
+    final operation = CancelableOperation.fromFuture(
+      requestStream.stream.first,
+    );
+
+    ready(Uri.http('localhost:$port', '/'), operation.cancel);
+    return await operation.valueOrCancellation();
   } finally {
     server?.close();
     requestStream.close();

@@ -31,7 +31,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Instance? _instance;
   String? background;
   ApiType? _type;
-  bool _showOAuthPage = false;
+  Function()? _oAuth;
 
   final _loginFormKey = GlobalKey<LoginFormState>();
 
@@ -83,7 +83,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         transitionBuilder: _buildTransition,
                         duration: const Duration(milliseconds: 750),
                         // reverse: !showAuthentication,
-                        child: _showOAuthPage
+                        child: _oAuth != null
                             ? _buildOAuthPage()
                             : _buildLoginForm(),
                       ),
@@ -314,21 +314,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> runAsync() async {}
 
   Widget _buildOAuthPage() {
-    return const IconLandingWidget(
-      icon: Icon(Icons.key_rounded),
-      text: Text("Waiting for OAuth..."),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const IconLandingWidget(
+          icon: Icon(Icons.key_rounded),
+          text: Text("Waiting for OAuth..."),
+        ),
+        const SizedBox(height: 16),
+        OutlinedButton(onPressed: _oAuth, child: const Text("Cancel")),
+      ],
     );
   }
 
-  Future<Map<String, String>> handleOAuth(
+  Future<Map<String, String>?> handleOAuth(
     GenerateOAuthUrlCallback generateUrl,
   ) async {
-    setState(() => _showOAuthPage = true);
-    final response = await runOAuthServer((localUrl) async {
+    final response = await runOAuthServer((localUrl, cancel) async {
       // TODO(Craftplacer): Show WebView inside login screen when possible
-      await launchUrl(await generateUrl(localUrl));
+      try {
+        final generatedUrl = await generateUrl(localUrl);
+        await launchUrl(generatedUrl);
+        setState(() => _oAuth = cancel);
+      } catch (_) {
+        // TODO(Craftplacer): log error
+        cancel();
+      }
     });
-    setState(() => _showOAuthPage = false);
+    setState(() => _oAuth = null);
     return response;
   }
 }

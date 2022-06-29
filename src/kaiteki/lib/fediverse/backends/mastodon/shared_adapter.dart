@@ -88,6 +88,8 @@ class SharedMastodonAdapter<T extends MastodonClient>
         });
       });
 
+      if (response == null) return LoginResult.aborted();
+
       final code = response["code"]!;
       final loginResponse = await client.getToken(
         "authorization_code",
