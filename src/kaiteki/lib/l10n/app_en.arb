@@ -34,9 +34,12 @@
   },
   "reactionSupport": "Reactions",
   "@reactionSupport": {},
+  "reactionSupportDescription": "Add reactions to posts",
   "chatSupport": "Chats",
+  "chatSupportDescription": "Send instant messages to other users",
   "@chatSupport": {},
   "previewSupport": "Post previews",
+  "previewSupportDescription": "See a preview of your post before sending it",
   "@previewSupport": {},
   "discoverInstancesButtonLabel": "Discover instances",
   "@discoverInstancesButtonLabel": {},
@@ -434,5 +437,12 @@
   "postRepeatFailed": "Failed to un-/repeat post",
   "postRemoveFromBookmarks": "Unbookmark",
   "postAddToBookmarks": "Bookmark",
-  "bookmarksTab": "Bookmarks"
+  "bookmarksTab": "Bookmarks",
+  "reportLabel": "Report",
+  "reportsTitle": "Submitted Reports",
+  "accountSettingsTitle": "Account Settings",
+  "reportSupport": "Abuse reports",
+  "reportSupportDescription": "Report users or posts to the moderation team.",
+  "bookmarkSupport": "Bookmarks",
+  "bookmarkSupportDescription": "Bookmark posts and see them in the bookmarks tab."
 }
