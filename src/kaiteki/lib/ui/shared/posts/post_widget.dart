@@ -312,6 +312,7 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
     if (post.content != null) {
       renderedContent = post.renderContent(
         context,
+        ref,
         hideReplyee: widget.hideReplyee,
       );
     }
