@@ -28,7 +28,7 @@ const List<String> defaultScopes = [
   "write",
   "follow",
   "push",
-  "admin",
+  // "admin",
 ];
 
 const List<String> defaultMisskeyPermissions = [
