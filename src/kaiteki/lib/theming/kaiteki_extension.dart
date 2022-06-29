@@ -14,7 +14,9 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
   final Color repeatColor;
   final double chatMessageRounding;
   final double emojiScale;
+  final TextStyle hashtagTextStyle;
   final TextStyle linkTextStyle;
+  final TextStyle mentionTextStyle;
   final ToggleButtonTheme reactionButtonTheme;
 
   const KaitekiExtension({
@@ -25,13 +27,16 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
     required this.chatMessageRounding,
     required this.emojiScale,
     required this.favoriteColor,
+    required this.hashtagTextStyle,
     required this.linkTextStyle,
+    required this.mentionTextStyle,
     required this.reactionButtonTheme,
     required this.repeatColor,
   });
 
   factory KaitekiExtension.material(ThemeData theme) {
     final chatMessageTheme = ChatMessageTheme.from(theme);
+    final accentTextStyle = TextStyle(color: theme.colorScheme.secondary);
     return KaitekiExtension(
       bookmarkColor: Colors.pink.harmonizeWith(theme.colorScheme.primary),
       borderColor: theme.dividerColor,
@@ -40,9 +45,11 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
       chatMessageRounding: 8,
       emojiScale: 1.5,
       favoriteColor: Colors.orange.harmonizeWith(theme.colorScheme.primary),
-      linkTextStyle: TextStyle(color: theme.colorScheme.secondary),
+      linkTextStyle: accentTextStyle,
       reactionButtonTheme: ToggleButtonTheme.from(theme),
       repeatColor: Colors.green.harmonizeWith(theme.colorScheme.primary),
+      hashtagTextStyle: accentTextStyle,
+      mentionTextStyle: accentTextStyle,
     );
   }
 
@@ -57,7 +64,9 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
     Color? textColor,
     double? chatMessageRounding,
     double? emojiScale,
+    TextStyle? hashtagTextStyle,
     TextStyle? linkTextStyle,
+    TextStyle? mentionTextStyle,
     ToggleButtonTheme? reactionButtonTheme,
   }) {
     return KaitekiExtension(
@@ -71,6 +80,8 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
       linkTextStyle: linkTextStyle ?? this.linkTextStyle,
       reactionButtonTheme: reactionButtonTheme ?? this.reactionButtonTheme,
       repeatColor: repeatColor ?? this.repeatColor,
+      hashtagTextStyle: hashtagTextStyle ?? this.hashtagTextStyle,
+      mentionTextStyle: mentionTextStyle ?? this.mentionTextStyle,
     );
   }
 
@@ -93,9 +104,19 @@ class KaitekiExtension extends ThemeExtension<KaitekiExtension> {
         chatMessageRounding: chatMessageRounding,
         emojiScale: lerpDouble(emojiScale, ext.emojiScale, t)!,
         favoriteColor: Color.lerp(favoriteColor, ext.favoriteColor, t)!,
-        linkTextStyle: linkTextStyle,
+        linkTextStyle: TextStyle.lerp(linkTextStyle, ext.linkTextStyle, t)!,
         reactionButtonTheme: reactionButtonTheme,
         repeatColor: Color.lerp(repeatColor, ext.repeatColor, t)!,
+        hashtagTextStyle: TextStyle.lerp(
+          hashtagTextStyle,
+          ext.hashtagTextStyle,
+          t,
+        )!,
+        mentionTextStyle: TextStyle.lerp(
+          mentionTextStyle,
+          ext.mentionTextStyle,
+          t,
+        )!,
       );
     } else {
       return this;
