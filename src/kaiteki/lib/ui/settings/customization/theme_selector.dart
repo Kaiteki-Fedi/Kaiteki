@@ -1,7 +1,7 @@
 // TODO(Craftplacer): Clean up and refactor these widgets to be more flexible
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/theming/default_app_themes.dart';
+import 'package:kaiteki/theming/default/themes.dart';
 import 'package:kaiteki/ui/settings/customization/theme_preview.dart';
 
 class ThemeSelector extends StatelessWidget {
