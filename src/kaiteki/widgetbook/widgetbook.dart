@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/theming/default_app_themes.dart';
+import 'package:kaiteki/theming/default/themes.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 import 'categories/dialogs.dart';

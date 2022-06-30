@@ -11,7 +11,7 @@ import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:kaiteki/repositories/account_secret_repository.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/repositories/secret_storages/shared_preferences_secret_storage.dart';
-import 'package:kaiteki/theming/default_app_themes.dart';
+import 'package:kaiteki/theming/default/themes.dart';
 import 'package:kaiteki/theming/theme_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
