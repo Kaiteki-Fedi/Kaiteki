@@ -3,10 +3,10 @@ import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/constants.dart' as consts;
+import 'package:kaiteki/exceptions/authentication_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
-import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
@@ -20,6 +20,7 @@ import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
+import 'package:tuple/tuple.dart';
 
 part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 
@@ -88,7 +89,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
         });
       });
 
-      if (response == null) return LoginResult.aborted();
+      if (response == null) return const LoginResult.aborted();
 
       final code = response["code"]!;
       final loginResponse = await client.getToken(
@@ -111,13 +112,15 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
       if (loginResponse.error.isNotNullOrEmpty) {
         if (loginResponse.error != "mfa_required") {
-          return LoginResult.failed(loginResponse.error);
+          return LoginResult.failed(
+            Tuple2(AuthenticationException(loginResponse.error!), null),
+          );
         }
 
         final code = await requestMfa.call();
 
         if (code == null) {
-          return LoginResult.aborted();
+          return const LoginResult.aborted();
         }
 
         // TODO(Craftplacer): add error-able TOTP screens
@@ -128,7 +131,9 @@ class SharedMastodonAdapter<T extends MastodonClient>
         );
 
         if (mfaResponse.error.isNotNullOrEmpty) {
-          return LoginResult.failed(mfaResponse.error);
+          return LoginResult.failed(
+            Tuple2(AuthenticationException(mfaResponse.error!), null),
+          );
         } else {
           accessToken = mfaResponse.accessToken!;
         }
@@ -147,7 +152,9 @@ class SharedMastodonAdapter<T extends MastodonClient>
     try {
       account = await client.verifyCredentials();
     } catch (e) {
-      return LoginResult.failed("Failed to verify credentials");
+      return const LoginResult.failed(
+        Tuple2(AuthenticationException("Failed to verify credentials"), null),
+      );
     }
 
     final compound = AccountCompound(
@@ -159,7 +166,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     );
     await accounts.addCurrentAccount(compound);
 
-    return LoginResult.successful();
+    return const LoginResult.successful();
   }
 
   @override
@@ -276,7 +283,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  AdapterCapabilities get capabilities => const MastodonCapabilities();
+  MastodonCapabilities get capabilities => const MastodonCapabilities();
 
   @override
   Future<Post?> repeatPost(String id) async {

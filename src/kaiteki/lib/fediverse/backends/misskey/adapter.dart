@@ -2,6 +2,7 @@ import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:intl/intl.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/constants.dart' as consts;
+import 'package:kaiteki/exceptions/authentication_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/backends/misskey/capabilties.dart';
 import 'package:kaiteki/fediverse/backends/misskey/client.dart';
@@ -18,6 +19,7 @@ import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
+import 'package:tuple/tuple.dart';
 import 'package:uuid/uuid.dart';
 
 part 'adapter.c.dart';
@@ -88,7 +90,9 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       // Check whether secrets work, and if we can get an account back
       final user = await client.showUser(id);
       if (user == null) {
-        return LoginResult.failed("Failed to retrieve user info");
+        return const LoginResult.failed(
+          Tuple2(AuthenticationException("Failed to retrieve user info"), null),
+        );
       }
     }
 
@@ -101,7 +105,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     );
     await accounts.addCurrentAccount(compound);
 
-    return LoginResult.successful();
+    return const LoginResult.successful();
   }
 
   @override

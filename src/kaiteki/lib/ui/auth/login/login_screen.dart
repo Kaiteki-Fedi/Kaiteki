@@ -16,6 +16,7 @@ import 'package:kaiteki/ui/shared/async_block_widget.dart';
 import 'package:kaiteki/ui/shared/form_widget.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -27,7 +28,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _loading = false;
-  String? _error;
+  Tuple2<dynamic, StackTrace?>? _error;
   Instance? _instance;
   String? background;
   ApiType? _type;
@@ -160,15 +161,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _loading = true;
     });
 
-    return future.catchError((e) {
-      setState(() {
-        _error = e.toString();
-      });
-    }).whenComplete(() {
-      setState(() {
-        _loading = false;
-      });
-    });
+    return future.catchError((e, s) {
+      setState(() => _error = Tuple2(e, s));
+    }).whenComplete(() => setState(() => _loading = false));
   }
 
   Future<Instance?> fetchInstance(String instanceHost) async {
@@ -307,7 +302,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (result.successful) {
       navigator.pop();
     } else {
-      setState(() => _error = result.reason);
+      setState(() => _error = result.error);
     }
   }
 

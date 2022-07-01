@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/onboarding/onboarding_screen.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DebugScreen extends StatefulWidget {
@@ -61,6 +62,17 @@ class _DebugScreenState extends State<DebugScreen> {
                 builder: (_) => const OnboardingScreen(),
               ),
             ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.feedback_rounded),
+            title: const Text("Open exception dialog"),
+            onTap: () async {
+              try {
+                throw Exception("Test exception");
+              } catch (e, s) {
+                await context.showExceptionDialog(e, s);
+              }
+            },
           ),
         ],
       ),

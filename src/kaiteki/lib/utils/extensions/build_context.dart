@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/auth/login/api_web_compatibility_dialog.dart';
 import 'package:kaiteki/ui/shared/compose_screen.dart';
+import 'package:kaiteki/ui/shared/dialogs/exception_dialog.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -53,7 +54,7 @@ extension BuildContextExtensions on BuildContext {
     required dynamic error,
     dynamic stackTrace,
   }) {
-    // final l10n = getL10n();
+    final l10n = getL10n();
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Row(
@@ -68,11 +69,23 @@ extension BuildContextExtensions on BuildContext {
             text,
           ],
         ),
-        // TODO(Craftplacer): Implement error screen for snackbar
-        // action: SnackBarAction(
-        //   label: l10n.whyButtonLabel,
-        //   onPressed: () {},
-        // ),
+        action: SnackBarAction(
+          label: l10n.whyButtonLabel,
+          onPressed: () => showExceptionDialog(error, stackTrace),
+        ),
+      ),
+    );
+  }
+
+  Future<void> showExceptionDialog(
+    dynamic exception,
+    StackTrace? stackTrace,
+  ) async {
+    await showDialog(
+      context: this,
+      builder: (_) => ExceptionDialog(
+        exception: exception,
+        stackTrace: stackTrace,
       ),
     );
   }

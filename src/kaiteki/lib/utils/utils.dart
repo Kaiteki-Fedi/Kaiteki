@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:tuple/tuple.dart';
 
 bool compareCaseInsensitive(String a, String b) =>
     a.toLowerCase() == b.toLowerCase();
@@ -115,4 +116,18 @@ TextStyle? getDefaultSnackBarTextStyle(BuildContext context) {
   }
 
   return snackBarTheme.contentTextStyle;
+}
+
+List<Tuple2<Type, StackTrace>> collectStackTraces(dynamic error) {
+  final list = <Tuple2<Type, StackTrace>>[
+    if (error.stackTrace is StackTrace)
+      Tuple2(error.runtimeType, error.stackTrace),
+  ];
+
+  if (error.innerError != null) {
+    final children = collectStackTraces(error.innerError);
+    list.addAll(children);
+  }
+
+  return list;
 }

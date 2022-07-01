@@ -10,7 +10,9 @@ import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/lower_case_text_formatter.dart';
+import 'package:tuple/tuple.dart';
 
 typedef CredentialsCallback = void Function(
   String instance,
@@ -52,7 +54,7 @@ class LoginForm extends StatefulWidget {
 
   final CredentialsCallback onLogin;
 
-  final String? currentError;
+  final Tuple2<dynamic, StackTrace?>? currentError;
 
   @override
   LoginFormState createState() => LoginFormState();
@@ -69,6 +71,8 @@ class LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final currentError = widget.currentError;
+    final errorColor = Theme.of(context).errorColor;
     return Column(
       children: [
         SingleChildScrollView(
@@ -85,12 +89,32 @@ class LoginFormState extends State<LoginForm> {
             child: _buildPage(),
           ),
         ),
-        if (widget.currentError != null)
+        if (currentError != null)
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.currentError!,
-              style: TextStyle(color: Theme.of(context).errorColor),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    currentError.item1.toString(),
+                    style: TextStyle(color: errorColor),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.info_outline,
+                    color: errorColor,
+                  ),
+                  splashRadius: 18,
+                  tooltip: "View error details",
+                  onPressed: () => context.showExceptionDialog(
+                    currentError.item1,
+                    currentError.item2,
+                  ),
+                )
+              ],
             ),
           ),
       ],
