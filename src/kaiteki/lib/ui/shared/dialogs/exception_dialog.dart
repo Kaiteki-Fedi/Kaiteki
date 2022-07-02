@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/exceptions/json_deserialization_error.dart';
-import 'package:kaiteki/utils/utils.dart';
-import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExceptionDialog extends StatelessWidget {
@@ -25,8 +22,6 @@ class ExceptionDialog extends StatelessWidget {
 
   Map<String, String> get longDetails {
     return {
-      if (exception is JsonDeserializationError)
-        "JSON": (exception as JsonDeserializationError).json,
       if (stackTrace != null) "Stack Trace": stackTrace.toString(),
     };
   }
