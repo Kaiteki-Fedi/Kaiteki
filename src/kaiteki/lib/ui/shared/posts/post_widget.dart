@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
+import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
@@ -143,7 +144,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                           ? _post.liked
                           : null,
                       repeated: _post.repeated,
-                      reacted: false,
+                      reacted: adapter is ReactionSupport ? false : null,
                       buildActions: _buildActions,
                     ),
                 ],
