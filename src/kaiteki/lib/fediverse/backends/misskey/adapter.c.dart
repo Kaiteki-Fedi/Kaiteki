@@ -95,6 +95,12 @@ User toUserFromLite(misskey.UserLite source) {
     id: source.id,
     source: source,
     username: source.username,
+    flags: UserFlags(
+      isAdministrator: source.isAdmin ?? false,
+      isModerator: source.isModerator ?? false,
+      isApprovingFollowers: false,
+      isBot: source.isBot ?? false,
+    ),
   );
 }
 

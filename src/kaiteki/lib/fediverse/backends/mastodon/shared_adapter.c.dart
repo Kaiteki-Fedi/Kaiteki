@@ -127,6 +127,12 @@ User toUser(mastodon.Account source) {
     host: getHost(source.acct),
     details: UserDetails(fields: _parseFields(source.fields)),
     url: source.url,
+    flags: UserFlags(
+      isBot: source.bot ?? false,
+      isModerator: source.pleroma?.isModerator ?? false,
+      isAdministrator: source.pleroma?.isAdmin ?? false,
+      isApprovingFollowers: source.locked,
+    ),
   );
 }
 

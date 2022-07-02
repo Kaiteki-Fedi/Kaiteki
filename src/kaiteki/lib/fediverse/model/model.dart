@@ -13,5 +13,6 @@ export 'reaction.dart';
 export 'role.dart';
 export 'timeline_type.dart';
 export 'user.dart';
+export 'user_flags.dart';
 export 'user_reference.dart';
 export 'visibility.dart';

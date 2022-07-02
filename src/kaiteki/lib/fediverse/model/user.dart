@@ -1,5 +1,6 @@
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/user_flags.dart';
 
 /// A class representing an user or account.
 class User<T> {
@@ -40,6 +41,8 @@ class User<T> {
   /// External URL to the profile of this [User].
   final String? url;
 
+  final UserFlags? flags;
+
   const User({
     required this.id,
     required this.source,
@@ -56,6 +59,7 @@ class User<T> {
     this.followerCount,
     this.followingCount,
     this.url,
+    this.flags,
   });
 
   factory User.example() {
