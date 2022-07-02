@@ -133,7 +133,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
 
   Uri _getUri(String endpoint) {
     final endpointUrl = Uri.tryParse(endpoint);
-    if (endpointUrl?.hasAbsolutePath == true) return endpointUrl!;
+    if (endpointUrl?.host.isNotEmpty == true) return endpointUrl!;
     return Uri.parse("$baseUrl/$endpoint");
   }
 
