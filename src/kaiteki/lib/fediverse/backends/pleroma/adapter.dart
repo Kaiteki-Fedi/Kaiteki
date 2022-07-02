@@ -2,10 +2,12 @@ import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/client.dart';
+import 'package:kaiteki/fediverse/backends/pleroma/model/report.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/report.dart';
 
 part 'adapter.c.dart';
 
@@ -111,4 +113,23 @@ class PleromaAdapter //
 
   @override
   PleromaCapabilities get capabilities => const PleromaCapabilities();
+
+  @override
+  Future<List<Report>> getReports() async {
+    final response = await client.getReports();
+    return response.reports
+        .map(
+          (report) => Report(
+            createdAt: report.createdAt,
+            userId: report.actor.username,
+            comment: report.content,
+            state: const {
+              PleromaReportState.closed: ReportState.closed,
+              PleromaReportState.open: ReportState.open,
+              PleromaReportState.resolved: ReportState.resolved,
+            }[report.state]!,
+          ),
+        )
+        .toList(growable: false);
+  }
 }

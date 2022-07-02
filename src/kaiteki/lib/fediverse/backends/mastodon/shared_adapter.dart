@@ -10,7 +10,9 @@ import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
+import 'package:kaiteki/fediverse/interfaces/report_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/report.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -28,7 +30,11 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 /// to use pre-existing code.
 class SharedMastodonAdapter<T extends MastodonClient>
     extends FediverseAdapter<T>
-    implements CustomEmojiSupport, FavoriteSupport, BookmarkSupport {
+    implements
+        CustomEmojiSupport,
+        FavoriteSupport,
+        BookmarkSupport,
+        ReportSupport {
   SharedMastodonAdapter(T client) : super(client);
 
   @override
@@ -328,4 +334,19 @@ class SharedMastodonAdapter<T extends MastodonClient>
     final status = await client.unbookmarkStatus(id);
     return toPost(status);
   }
+
+  @override
+  Future<void> report(
+    String userId,
+    String comment, {
+    List<String>? statusIds,
+  }) {
+    // TODO: implement report
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Report>> getReports() => throw UnsupportedError(
+        "Mastodon does not support fetching reports as a user",
+      );
 }

@@ -2,6 +2,7 @@ import 'package:fediverse_objects/pleroma.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/responses/emoji_packs_response.dart';
+import 'package:kaiteki/fediverse/backends/pleroma/responses/report.dart';
 import 'package:kaiteki/model/http_method.dart';
 
 class PleromaClient extends MastodonClient {
@@ -60,6 +61,14 @@ class PleromaClient extends MastodonClient {
       HttpMethod.get,
       "/api/pleroma/frontend_configurations",
       FrontendConfiguration.fromJson,
+    );
+  }
+
+  Future<PleromaReportResponse> getReports() async {
+    return sendJsonRequest(
+      HttpMethod.get,
+      "/api/v0/pleroma/reports",
+      PleromaReportResponse.fromJson,
     );
   }
 }

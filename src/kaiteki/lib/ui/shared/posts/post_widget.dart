@@ -6,6 +6,7 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/intents.dart';
+import 'package:kaiteki/ui/shared/dialogs/report_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/posts/card_widget.dart';
@@ -191,6 +192,22 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           enabled: openInBrowserAvailable,
         ),
         value: () => context.launchUrl(_post.externalUrl!),
+      ),
+      const PopupMenuDivider(),
+      PopupMenuItem(
+        child: ListTile(
+          title: Text(l10n.reportLabel),
+          leading: const Icon(Icons.flag_rounded),
+          contentPadding: EdgeInsets.zero,
+        ),
+        value: () async => showDialog(
+          context: context,
+          builder: (context) => ReportDialog(
+            user: _post.author,
+            posts: [_post],
+          ),
+          barrierDismissible: true,
+        ),
       ),
       if (_post.content != null)
         PopupMenuItem(

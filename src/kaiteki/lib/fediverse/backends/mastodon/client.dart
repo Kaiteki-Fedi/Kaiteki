@@ -315,4 +315,22 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       files: [await file.toMultipartFile("file")],
     );
   }
+
+  Future<void> submitReport(
+    String accountId, {
+    List<String>? statusIds,
+    bool? forward,
+    String? comment,
+  }) async {
+    await sendJsonRequestWithoutResponse(
+      HttpMethod.post,
+      "/api/v1/reports",
+      body: {
+        "account_id": accountId,
+        "status_ids": statusIds,
+        "forward": forward?.toString(),
+        "comment": comment,
+      },
+    );
+  }
 }

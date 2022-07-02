@@ -11,6 +11,7 @@ import 'package:kaiteki/ui/account_required_screen.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
 import 'package:kaiteki/ui/auth/login/login_screen.dart';
 import 'package:kaiteki/ui/main/main_screen.dart';
+import 'package:kaiteki/ui/reports/submitted_reports_screen.dart';
 import 'package:kaiteki/ui/settings/about/about_screen.dart';
 import 'package:kaiteki/ui/settings/credits_screen.dart';
 import 'package:kaiteki/ui/settings/customization/customization_settings_screen.dart';
@@ -86,6 +87,10 @@ class KaitekiApp extends ConsumerWidget {
               return ConversationScreen(state.extra! as Post);
             },
           ),
+          GoRoute(
+            path: "reports",
+            builder: (_, __) => const SubmittedReportsScreen(),
+          )
         ],
       ),
     ],
