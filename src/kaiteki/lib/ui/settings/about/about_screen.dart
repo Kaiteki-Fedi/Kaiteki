@@ -86,45 +86,7 @@ class AboutScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Card(
-                        child: Column(
-                          children: [
-                            ListTile(title: Text(l10n.creditsFriends)),
-                            ListTile(
-                              leading: const FlutterLogo(),
-                              title: const Text("Flutter"),
-                              onTap: () =>
-                                  context.launchUrl("https://flutter.dev"),
-                              trailing: const Icon(Icons.open_in_new_rounded),
-                            ),
-                            const Divider(),
-                            ListTile(
-                              leading: Image.asset(
-                                "assets/icons/pleroma.png",
-                                width: 24,
-                                height: 24,
-                              ),
-                              title: const Text("Pleroma"),
-                              subtitle: Text(l10n.creditsPleromaDescription),
-                              onTap: () =>
-                                  context.launchUrl("https://pleroma.social/"),
-                              trailing: const Icon(Icons.open_in_new_rounded),
-                            ),
-                            ListTile(
-                              leading: Image.asset(
-                                "assets/icons/husky.png",
-                                width: 24,
-                                height: 24,
-                              ),
-                              title: const Text("Husky"),
-                              subtitle: Text(l10n.creditsHuskyDescription),
-                              onTap: () =>
-                                  context.launchUrl("https://husky.adol.pw/"),
-                              trailing: const Icon(Icons.open_in_new_rounded),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const SizedBox(height: 12.0),
                       IconTheme(
                         data: IconThemeData(
                           color: Theme.of(context).disabledColor,
