@@ -14,6 +14,7 @@ import 'package:kaiteki/ui/main/fab_data.dart';
 import 'package:kaiteki/ui/main/tab.dart';
 import 'package:kaiteki/ui/main/timeline_page.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
+import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -267,6 +268,22 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         icon: const Icon(Icons.refresh_rounded),
         onPressed: null,
         tooltip: l10n.refreshTimelineButtonLabel,
+      ),
+      PopupMenuButton<Function()>(
+        onSelected: (v) => v.call(),
+        itemBuilder: (_) {
+          return [
+            PopupMenuItem(
+              child: const Text("Keyboard Shortcuts"),
+              value: () async {
+                await showDialog(
+                  context: context,
+                  builder: (_) => const KeyboardShortcutsDialog(),
+                );
+              },
+            ),
+          ];
+        },
       ),
       const AccountSwitcherWidget(size: 40),
     ];

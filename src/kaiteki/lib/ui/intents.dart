@@ -8,6 +8,8 @@ class RepeatIntent extends Intent {}
 
 class FavoriteIntent extends Intent {}
 
+class BookmarkIntent extends Intent {}
+
 class ReactIntent extends Intent {}
 
 class MenuIntent extends Intent {}

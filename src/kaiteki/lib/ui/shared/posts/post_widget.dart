@@ -82,6 +82,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         replyKeySet: ReplyIntent(),
         repeatKeySet: RepeatIntent(),
         favoriteKeySet: FavoriteIntent(),
+        bookmarkKeySet: BookmarkIntent(),
         // ShortcutKeys.reactKeySet: ReactIntent(),
         menuKeySet: MenuIntent(),
       },
@@ -91,6 +92,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             return context.showPostDialog(replyTo: _post);
           },
         ),
+        FavoriteIntent: CallbackAction(onInvoke: (_) => _onFavorite()),
+        RepeatIntent: CallbackAction(onInvoke: (_) => _onRepeat()),
+        BookmarkIntent: CallbackAction(onInvoke: (_) => _onBookmark()),
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
