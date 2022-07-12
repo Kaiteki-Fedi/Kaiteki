@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/app_colors.dart';
+import 'package:kaiteki/theming/default/colors.dart';
 
 final lightColorScheme = ColorScheme.light(
   background: kaitekiLightBackground.shade100,
