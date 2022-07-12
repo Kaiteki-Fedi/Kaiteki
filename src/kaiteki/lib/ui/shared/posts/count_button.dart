@@ -12,6 +12,7 @@ class CountButton extends StatelessWidget {
   final Widget? activeIcon;
 
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final FocusNode? focusNode;
 
   const CountButton({
@@ -25,6 +26,7 @@ class CountButton extends StatelessWidget {
     this.onTap,
     this.disabled = false,
     this.focusNode,
+    this.onLongPress,
   }) : super(key: key);
 
   @override
@@ -37,13 +39,16 @@ class CountButton extends StatelessWidget {
 
     return Row(
       children: [
-        IconButton(
-          icon: currentIcon,
-          color: color,
-          onPressed: callback,
-          enableFeedback: !disabled,
-          focusNode: focusNode,
-          splashRadius: 18,
+        GestureDetector(
+          onLongPress: onLongPress,
+          child: IconButton(
+            icon: currentIcon,
+            color: color,
+            onPressed: callback,
+            enableFeedback: !disabled,
+            focusNode: focusNode,
+            splashRadius: 18,
+          ),
         ),
         if (hasNumber)
           Text(
