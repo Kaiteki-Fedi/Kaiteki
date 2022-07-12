@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:async/async.dart';
+import 'package:flutter/material.dart' show ColorScheme;
 import 'package:flutter/services.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/constants.dart' as consts;
@@ -63,17 +64,17 @@ Future<ClientSecret> createClientSecret(
 
 Future<Map<String, String>?> runOAuthServer(
   OAuthUrlCreatedCallback ready,
+  String successPage,
 ) async {
   final requestStream = StreamController<Map<String, String>>();
   HttpServer? server;
 
   try {
-    final sucessPage = await rootBundle.loadString('assets/oauth-success.html');
     final handler = const Pipeline().addHandler((request) {
       requestStream.add(request.url.queryParameters);
       return Response(
         200,
-        body: sucessPage,
+        body: successPage,
         headers: {"Content-Type": "text/html; charset=UTF-8"},
       );
     });
@@ -91,4 +92,29 @@ Future<Map<String, String>?> runOAuthServer(
     server?.close();
     requestStream.close();
   }
+}
+
+/// Fetches the OAuth landing page as well as injects the app's current theme.
+Future<String> generateOAuthLandingPage(ColorScheme? colorScheme) async {
+  final html = await rootBundle.loadString('assets/oauth-success.html');
+  const cssPlaceholder = "/* INSERT */";
+
+  if (colorScheme == null) return html.replaceAll(cssPlaceholder, "");
+
+  final cssBuffer = StringBuffer(":root{")
+    ..writeAll(
+      {
+        "background": colorScheme.background,
+        "foreground": colorScheme.onBackground,
+        "primary-container": colorScheme.primaryContainer,
+        "on-primary-container": colorScheme.onPrimaryContainer,
+      }.entries.map((kv) {
+        final hex = kv.value.value.toRadixString(16).substring(2);
+        return "--${kv.key}: #$hex";
+      }),
+      ";",
+    )
+    ..write("}");
+
+  return html.replaceAll(cssPlaceholder, cssBuffer.toString());
 }
