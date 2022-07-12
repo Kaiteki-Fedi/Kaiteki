@@ -325,18 +325,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<Map<String, String>?> handleOAuth(
     GenerateOAuthUrlCallback generateUrl,
   ) async {
-    final response = await runOAuthServer((localUrl, cancel) async {
-      // TODO(Craftplacer): Show WebView inside login screen when possible
-      try {
-        final generatedUrl = await generateUrl(localUrl);
-        await launchUrl(generatedUrl);
-        setState(() => _oAuth = cancel);
-      } catch (_) {
-        // TODO(Craftplacer): log error
-        cancel();
-      }
-    });
-    setState(() => _oAuth = null);
-    return response;
+    final successPage = await generateOAuthLandingPage(
+      Theme.of(context).colorScheme,
+    );
+
+    try {
+      return await runOAuthServer(
+        (localUrl, cancel) async {
+          // TODO(Craftplacer): Show WebView inside login screen when possible
+          try {
+            final generatedUrl = await generateUrl(localUrl);
+            await launchUrl(generatedUrl);
+            setState(() => _oAuth = cancel);
+          } catch (_) {
+            // TODO(Craftplacer): log error
+            cancel();
+          }
+        },
+        successPage,
+      );
+    } finally {
+      setState(() => _oAuth = null);
+    }
   }
 }
