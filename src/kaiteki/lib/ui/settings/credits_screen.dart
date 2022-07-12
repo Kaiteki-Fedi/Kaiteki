@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 part 'credits_screen.g.dart';
@@ -35,11 +35,8 @@ class _CreditsScreenState extends State<CreditsScreen> {
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(
-              child: IconLandingWidget(
-                icon: Icon(Icons.error),
-                text: Text("Failed fetching credits"),
-              ),
+            return Center(
+              child: ErrorLandingWidget.fromAsyncSnapshot(snapshot),
             );
           } else if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());

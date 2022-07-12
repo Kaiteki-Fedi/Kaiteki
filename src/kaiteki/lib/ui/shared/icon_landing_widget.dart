@@ -15,7 +15,7 @@ class IconLandingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = theme.dividerColor;
+    final color = theme.disabledColor;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

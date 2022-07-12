@@ -15,7 +15,7 @@ import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/compose/attachment_tray.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/ui/shortcut_keys.dart';
@@ -224,10 +224,7 @@ class PostFormState extends ConsumerState<PostForm> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: IconLandingWidget(
-                icon: const Icon(Mdi.close),
-                text: Text(snapshot.error.toString()),
-              ),
+              child: ErrorLandingWidget.fromAsyncSnapshot(snapshot),
             ),
           );
         } else {

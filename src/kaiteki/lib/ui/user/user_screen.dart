@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/shared/breakpoint_container.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
 import 'package:kaiteki/ui/user/desktop_user_header.dart';
@@ -149,10 +149,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     final Widget body;
 
     if (snapshot.hasError) {
-      body = const IconLandingWidget(
-        icon: Icon(Icons.error_rounded),
-        text: Text("Failed retrieving account"),
-      );
+      body = ErrorLandingWidget.fromAsyncSnapshot(snapshot);
     } else if (!snapshot.hasData) {
       body = const Center(child: CircularProgressIndicator());
     } else {

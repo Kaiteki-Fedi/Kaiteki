@@ -5,6 +5,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_type.dart';
 import 'package:kaiteki/model/post_filters/post_filter.dart';
+import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 
 class Timeline extends ConsumerStatefulWidget {
@@ -61,6 +62,11 @@ class TimelineState extends ConsumerState<Timeline> {
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Post>(
             itemBuilder: _buildPost,
+            firstPageErrorIndicatorBuilder: (context) {
+              return ErrorLandingWidget(
+                error: _controller.error,
+              );
+            },
           ),
           separatorBuilder: _buildSeparator,
         );
