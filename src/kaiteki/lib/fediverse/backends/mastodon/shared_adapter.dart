@@ -328,4 +328,16 @@ class SharedMastodonAdapter<T extends MastodonClient>
     final status = await client.unbookmarkStatus(id);
     return toPost(status);
   }
+
+  @override
+  Future<List<User>> getFavoritees(String id) async {
+    final users = await client.getFavouritedBy(id);
+    return users.map(toUser).toList();
+  }
+
+  @override
+  Future<List<User>> getRepeatees(String id) async {
+    final users = await client.getBoostedBy(id);
+    return users.map(toUser).toList();
+  }
 }

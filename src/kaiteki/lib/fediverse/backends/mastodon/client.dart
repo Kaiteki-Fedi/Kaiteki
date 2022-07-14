@@ -315,4 +315,22 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       files: [await file.toMultipartFile("file")],
     );
   }
+
+  Future<List<mastodon.Account>> getFavouritedBy(String statusId) async {
+    final users = await sendJsonRequestMultiple(
+      HttpMethod.get,
+      "api/v1/statuses/$statusId/favourited_by",
+      mastodon.Account.fromJson,
+    );
+    return users.toList();
+  }
+
+  Future<List<mastodon.Account>> getBoostedBy(String statusId) async {
+    final users = await sendJsonRequestMultiple(
+      HttpMethod.get,
+      "api/v1/statuses/$statusId/reblogged_by",
+      mastodon.Account.fromJson,
+    );
+    return users.toList();
+  }
 }

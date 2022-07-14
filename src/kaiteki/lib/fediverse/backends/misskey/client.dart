@@ -330,4 +330,13 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       body: {},
     );
   }
+
+  Future<Iterable<misskey.Note>> getRenotes(String id) async {
+    return sendJsonRequestMultiple(
+      HttpMethod.post,
+      "api/notes/renotes",
+      misskey.Note.fromJson,
+      body: {"noteId": id},
+    );
+  }
 }

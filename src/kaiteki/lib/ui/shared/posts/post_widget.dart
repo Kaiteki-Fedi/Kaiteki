@@ -6,7 +6,6 @@ import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
-import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/posts/card_widget.dart';
@@ -17,7 +16,9 @@ import 'package:kaiteki/ui/shared/posts/meta_bar.dart';
 import 'package:kaiteki/ui/shared/posts/reaction_row.dart';
 import 'package:kaiteki/ui/shared/posts/reply_bar.dart';
 import 'package:kaiteki/ui/shared/posts/subject_bar.dart';
-import 'package:kaiteki/ui/shortcut_keys.dart';
+import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
+import 'package:kaiteki/ui/shortcuts/activators.dart';
+import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
@@ -78,13 +79,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final adapter = ref.watch(adapterProvider);
 
     return FocusableActionDetector(
-      shortcuts: {
-        replyKeySet: ReplyIntent(),
-        repeatKeySet: RepeatIntent(),
-        favoriteKeySet: FavoriteIntent(),
-        bookmarkKeySet: BookmarkIntent(),
-        // ShortcutKeys.reactKeySet: ReactIntent(),
-        menuKeySet: MenuIntent(),
+      shortcuts: const {
+        reply: ReplyIntent(),
+        repeat: RepeatIntent(),
+        favorite: FavoriteIntent(),
+        bookmark: BookmarkIntent(),
+        // react: ReactIntent(),
+        menu: MenuIntent(),
       },
       actions: {
         ReplyIntent: CallbackAction(
@@ -147,6 +148,37 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                       favorited: adapter is FavoriteSupport //
                           ? _post.liked
                           : null,
+                      onShowFavoritees: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => UserListDialog(
+                            title: const Text("Favorited by"),
+                            fetchUsers: () async {
+                              final users = await (adapter as FavoriteSupport)
+                                  .getFavoritees(_post.id);
+                              return users;
+                            }(),
+                            emptyIcon: const Icon(Icons.star_outline_rounded),
+                            emptyTitle: const Text("No favorites"),
+                          ),
+                        );
+                      },
+                      onShowRepeatees: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => UserListDialog(
+                            title: const Text("Repeated by"),
+                            fetchUsers: () async {
+                              final users = await adapter.getRepeatees(
+                                _post.id,
+                              );
+                              return users;
+                            }(),
+                            emptyIcon: const Icon(Icons.repeat_rounded),
+                            emptyTitle: const Text("No repeats"),
+                          ),
+                        );
+                      },
                       repeated: _post.repeated,
                       reacted: adapter is ReactionSupport ? false : null,
                       buildActions: _buildActions,
