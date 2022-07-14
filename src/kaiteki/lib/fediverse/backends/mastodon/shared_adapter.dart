@@ -218,11 +218,36 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<Iterable<Post>> getTimeline(
-    TimelineType type, {
+    TimelineKind type, {
     String? sinceId,
     String? untilId,
   }) async {
-    final posts = await client.getTimeline(minId: sinceId, maxId: untilId);
+    final Iterable<mastodon.Status> posts;
+
+    switch (type) {
+      case TimelineKind.home:
+        posts = await client.getHomeTimeline(minId: sinceId, maxId: untilId);
+        break;
+
+      case TimelineKind.public:
+        posts = await client.getPublicTimeline(
+          minId: sinceId,
+          maxId: untilId,
+          local: true,
+        );
+        break;
+
+      case TimelineKind.federated:
+        posts = await client.getPublicTimeline(
+          minId: sinceId,
+          maxId: untilId,
+        );
+        break;
+
+      default:
+        throw UnimplementedError();
+    }
+
     return posts.map(toPost);
   }
 
