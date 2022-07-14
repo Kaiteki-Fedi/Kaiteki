@@ -9,6 +9,7 @@ Future<void> resolveAndOpenUser(
   WidgetRef ref,
 ) async {
   final handle = user.toString();
+  final l10n = context.getL10n();
   final messenger = ScaffoldMessenger.of(context);
   final lookupSnackbar = messenger.showSnackBar(
     SnackBar(content: Text("Looking up $handle...")),
@@ -18,10 +19,16 @@ Future<void> resolveAndOpenUser(
     // lookupSnackbar.close();
     if (user == null) throw Exception("User not found");
     await context.showUser(user, ref);
-  }).catchError((error) {
+  }).catchError((error, stackTrace) {
     // lookupSnackbar.close();
     messenger.showSnackBar(
-      SnackBar(content: Text("Failed to resolve $handle")),
+      SnackBar(
+        content: Text("Failed to resolve $handle"),
+        action: SnackBarAction(
+          label: l10n.whyButtonLabel,
+          onPressed: () => context.showExceptionDialog(error, stackTrace),
+        ),
+      ),
     );
   });
 }
