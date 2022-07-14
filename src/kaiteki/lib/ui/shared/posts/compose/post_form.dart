@@ -11,14 +11,14 @@ import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/compose/attachment_tray.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/ui/shortcut_keys.dart';
+import 'package:kaiteki/ui/shortcuts/activators.dart';
+import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
@@ -112,7 +112,7 @@ class PostFormState extends ConsumerState<PostForm> {
     final l10n = context.getL10n();
 
     return FocusableActionDetector(
-      shortcuts: {commitKeySet: SendIntent()},
+      shortcuts: const {commit: SendIntent()},
       actions: {
         SendIntent: CallbackAction(
           onInvoke: (_) => post(context, manager.adapter),
