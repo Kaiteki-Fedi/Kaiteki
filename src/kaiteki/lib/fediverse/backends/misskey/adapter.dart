@@ -28,6 +28,7 @@ part 'adapter.c.dart';
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     implements ChatSupport, ReactionSupport, CustomEmojiSupport {
   factory MisskeyAdapter() => MisskeyAdapter.custom(MisskeyClient());
+
   MisskeyAdapter.custom(MisskeyClient client) : super(client);
 
   @override
@@ -142,7 +143,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Iterable<Post>> getTimeline(
-    TimelineType type, {
+    TimelineKind type, {
     String? sinceId,
     String? untilId,
   }) async {
@@ -151,7 +152,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     final request = MisskeyTimelineRequest(sinceId: sinceId, untilId: untilId);
 
     switch (type) {
-      case TimelineType.home:
+      case TimelineKind.home:
         notes = await client.getTimeline(request);
         break;
 

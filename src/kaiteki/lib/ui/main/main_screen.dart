@@ -6,17 +6,19 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/intents.dart';
 import 'package:kaiteki/ui/main/bookmarks_page.dart';
 import 'package:kaiteki/ui/main/compose_fab.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
+import 'package:kaiteki/ui/main/placeholder_page.dart';
 import 'package:kaiteki/ui/main/tab.dart';
+import 'package:kaiteki/ui/main/tab_kind.dart';
+import 'package:kaiteki/ui/main/timeline_bottom_sheet.dart';
 import 'package:kaiteki/ui/main/timeline_page.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/ui/shortcut_keys.dart';
+import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -27,35 +29,20 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class _MainScreenState extends ConsumerState<MainScreen> {
-  final _timelineKey = UniqueKey();
-  List<Widget>? _pages;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _timelineKey = GlobalKey<TimelinePageState>();
+  TimelineKind _timelineKind = TimelineKind.home;
   List<MainScreenTab>? _tabs;
-  int _currentPage = 0;
+  TabKind _currentTab = TabKind.timeline;
 
-  // TODO(Craftplacer): abstract this tab system a bit more and use enums to declare tab positioning, this allows us to later
-  List<Widget> getPages(AppLocalizations l10n) {
-    return [
-      TimelinePage(key: _timelineKey),
-      Center(
-        child: IconLandingWidget(
-          icon: const Icon(Icons.more_horiz_rounded),
-          text: Text(l10n.niy),
-        ),
-      ),
-      Center(
-        child: IconLandingWidget(
-          icon: const Icon(Icons.more_horiz_rounded),
-          text: Text(l10n.niy),
-        ),
-      ),
-      const BookmarksPage(),
-    ];
+  int get _currentIndex {
+    return _tabs!.indexWhere((tab) => tab.kind == _currentTab);
   }
 
   List<MainScreenTab> getTabs(AppLocalizations l10n) {
     return [
       MainScreenTab(
-        index: 0,
+        kind: TabKind.timeline,
         selectedIcon: Icons.home,
         icon: Icons.home_outlined,
         text: l10n.timelineTab,
@@ -68,19 +55,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         hideFabWhenDesktop: true,
       ),
       MainScreenTab(
-        index: 1,
+        kind: TabKind.notifications,
         selectedIcon: Icons.notifications_rounded,
         icon: Icons.notifications_none,
         text: l10n.notificationsTab,
       ),
       MainScreenTab(
-        index: 2,
+        kind: TabKind.chats,
         selectedIcon: Icons.forum,
         icon: Icons.forum_outlined,
         text: l10n.chatsTab,
       ),
       MainScreenTab(
-        index: 3,
+        kind: TabKind.bookmarks,
         selectedIcon: Icons.bookmark_rounded,
         icon: Icons.bookmark_border_rounded,
         text: l10n.bookmarksTab,
@@ -99,7 +86,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
     _tabs ??= getTabs(l10n);
-    _pages ??= getPages(l10n);
 
     return FocusableActionDetector(
       shortcuts: {newPostKeySet: NewPostIntent()},
@@ -112,24 +98,29 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         builder: (_, breakpoint) {
           final isMobile = breakpoint.window == WindowSize.xsmall;
           final outsideColor = getOutsideColor(context);
+          final tab = _tabs![_currentIndex];
+          final fab = tab.fab;
 
           if (breakpoint.window == WindowSize.xsmall) {
             return Scaffold(
+              key: _scaffoldKey,
               backgroundColor: outsideColor,
               appBar: buildAppBar(outsideColor, context),
               body: _getPage(),
               bottomNavigationBar: _getNavigationBar(),
-              floatingActionButton: _getFab(context, _currentPage, true),
+              floatingActionButton:
+                  fab != null ? _buildFab(context, fab, true) : null,
               drawer: _buildDrawer(context),
             );
           } else {
-            final showFab = !_tabs![_currentPage].hideFabWhenDesktop;
             return Scaffold(
+              key: _scaffoldKey,
               backgroundColor: outsideColor,
               appBar: buildAppBar(outsideColor, context),
               body: _buildDesktopView(breakpoint.window >= WindowSize.medium),
-              floatingActionButton:
-                  showFab ? _getFab(context, _currentPage, isMobile) : null,
+              floatingActionButton: !tab.hideFabWhenDesktop && fab != null
+                  ? _buildFab(context, fab, isMobile)
+                  : null,
               drawer: _buildDrawer(context),
             );
           }
@@ -186,16 +177,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget _buildDrawerTab(BuildContext context, MainScreenTab tab) {
+    final selected = _currentTab == tab.kind;
     return ListTile(
-      leading: _currentPage == tab.index //
+      leading: selected //
           ? Icon(tab.selectedIcon)
           : Icon(tab.icon),
       title: Text(tab.text),
-      selected: _currentPage == tab.index,
+      selected: selected,
       onTap: () {
-        setState(() {
-          _currentPage = tab.index;
-        });
+        setState(() => _currentTab = tab.kind);
         Navigator.pop(context);
       },
     );
@@ -228,8 +218,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               child: NavigationRail(
                 backgroundColor: outsideColor,
                 useIndicator: consts.useM3,
-                selectedIndex: _currentPage,
-                onDestinationSelected: _changePage,
+                selectedIndex: _currentIndex,
+                onDestinationSelected: _changeIndex,
                 extended: extendNavRail,
                 // groupAlignment: consts.useM3 ? 0 : null,
                 minWidth: consts.useM3 ? null : 56,
@@ -260,13 +250,21 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
+  Function()? get _refresh {
+    if (_currentTab == TabKind.timeline) {
+      return () => _timelineKey.currentState?.refresh();
+    }
+
+    return null;
+  }
+
   List<Widget> _buildAppBarActions(BuildContext context) {
     final l10n = context.getL10n();
 
     return [
       IconButton(
         icon: const Icon(Icons.refresh_rounded),
-        onPressed: null,
+        onPressed: _refresh,
         tooltip: l10n.refreshTimelineButtonLabel,
       ),
       PopupMenuButton<Function()>(
@@ -274,13 +272,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         itemBuilder: (_) {
           return [
             PopupMenuItem(
+              value: _showKeyboardShortcuts,
               child: const Text("Keyboard Shortcuts"),
-              value: () async {
-                await showDialog(
-                  context: context,
-                  builder: (_) => const KeyboardShortcutsDialog(),
-                );
-              },
             ),
           ];
         },
@@ -289,10 +282,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ];
   }
 
+  Future<void> _showKeyboardShortcuts() async {
+    await showDialog(
+      context: context,
+      builder: (_) => const KeyboardShortcutsDialog(),
+    );
+  }
+
   Widget _getPage() {
+    final pages = [
+      TimelinePage(_timelineKind, key: _timelineKey),
+      const PlaceholderPage(),
+      const PlaceholderPage(),
+      const BookmarksPage(),
+    ];
+
     return PageTransitionSwitcher(
       transitionBuilder: animations.fadeThrough,
-      child: _pages![_currentPage],
+      child: pages[_currentIndex],
     );
   }
 
@@ -312,8 +319,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
     if (consts.useM3) {
       return NavigationBar(
-        onDestinationSelected: _changePage,
-        selectedIndex: _currentPage,
+        onDestinationSelected: _changeIndex,
+        selectedIndex: _currentIndex,
         destinations: [
           for (var tab in _tabs!)
             NavigationDestination(
@@ -325,8 +332,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       );
     } else {
       return BottomNavigationBar(
-        onTap: _changePage,
-        currentIndex: _currentPage,
+        onTap: _changeIndex,
+        currentIndex: _currentIndex,
         items: [
           for (var tab in _tabs!)
             BottomNavigationBarItem(
@@ -339,28 +346,64 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
-  void _changePage(int index) => setState(() => _currentPage = index);
+  Future<void> _changeIndex(int index) async {
+    await _changePage(_tabs![index].kind);
+  }
 
-  Widget? _getFab(BuildContext context, int index, bool mobile) {
-    final tab = _tabs![_currentPage];
-    final fab = tab.fab;
+  Future<void> _changePage(TabKind tab) async {
+    final isSamePage = _currentTab == tab;
 
-    if (fab == null) {
-      return null;
+    if (isSamePage && _currentTab == TabKind.timeline) {
+      final timelineType = await showModalBottomSheet<TimelineKind?>(
+        context: context,
+        constraints: consts.bottomSheetConstraints,
+        builder: (context) => TimelineBottomSheet(_timelineKind),
+      );
+
+      if (timelineType != null) {
+        setState(() => _timelineKind = timelineType);
+      }
+      return;
     }
 
+    setState(() => _currentTab = tab);
+  }
+
+  Widget? _buildFab(
+    BuildContext context,
+    FloatingActionButtonData data,
+    bool mobile,
+  ) {
     if (mobile) {
       return FloatingActionButton(
-        tooltip: fab.tooltip,
-        onPressed: fab.onTap,
-        child: Icon(fab.icon),
+        tooltip: data.tooltip,
+        onPressed: data.onTap,
+        child: Icon(data.icon),
       );
     } else {
       return FloatingActionButton.extended(
-        label: Text(fab.text),
-        icon: Icon(fab.icon),
-        onPressed: fab.onTap,
+        label: Text(data.text),
+        icon: Icon(data.icon),
+        onPressed: data.onTap,
       );
     }
+  }
+
+  dynamic _changeLocation(GoToAppLocationIntent i) {
+    switch (i.location) {
+      case AppLocation.home:
+        _changePage(TabKind.timeline);
+        break;
+      case AppLocation.notifications:
+        _changePage(TabKind.notifications);
+        break;
+      case AppLocation.bookmarks:
+        _changePage(TabKind.bookmarks);
+        break;
+      case AppLocation.settings:
+        context.push("/settings");
+        break;
+    }
+    return null;
   }
 }
