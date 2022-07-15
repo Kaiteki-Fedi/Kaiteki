@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/constants.dart' show bottomSheetConstraints;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
@@ -341,6 +342,7 @@ class PostFormState extends ConsumerState<PostForm> {
   void openEmojiPicker(BuildContext context, AccountManager container) {
     showModalBottomSheet(
       context: context,
+      constraints: bottomSheetConstraints,
       builder: (context) {
         return SizedBox(
           height: 250,
@@ -382,6 +384,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
   void openAttachDrawer() {
     showModalBottomSheet(
+      constraints: bottomSheetConstraints,
       context: context,
       builder: (context) {
         return LayoutBuilder(
