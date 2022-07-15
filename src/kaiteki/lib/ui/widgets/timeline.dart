@@ -83,7 +83,7 @@ class TimelineState extends ConsumerState<Timeline> {
             itemBuilder: _buildPost,
             firstPageErrorIndicatorBuilder: (context) {
               return ErrorLandingWidget(
-                error: _pagingController.error,
+                error: _controller.error,
               );
             },
           ),
