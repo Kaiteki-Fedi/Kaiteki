@@ -1,9 +1,7 @@
-# Kaiteki
+# ![Kaiteki](assets/readme-banner.svg)
 
 [![Build status](https://img.shields.io/github/workflow/status/Kaiteki-Fedi/Kaiteki/Build%20&%20Deploy)](https://github.com/Kaiteki-Fedi/Kaiteki/actions/workflows/ci.yml) [![CodeFactor](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki/badge)](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki)
 [![Translation status](https://wl.craftplacer.moe/widgets/kaiteki/-/app/svg-badge.svg)](https://wl.craftplacer.moe/engage/kaiteki/)
-
-<img align="right" src="assets/icons/windows/kaiteki.png" width=100>
 
 A [快適 (kaiteki)](http://takoboto.jp/?w=1200120) Fediverse client for microblogging instances, made with [Flutter](https://flutter.dev/) and [Dart](https://dart.dev/).
 
