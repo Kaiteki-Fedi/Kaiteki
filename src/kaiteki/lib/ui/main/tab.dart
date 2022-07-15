@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
+import 'package:kaiteki/ui/main/tab_kind.dart';
 
 class MainScreenTab {
   final String text;
@@ -7,10 +8,10 @@ class MainScreenTab {
   final IconData icon;
   final FloatingActionButtonData? fab;
   final bool hideFabWhenDesktop;
-  final int index;
+  final TabKind kind;
 
   const MainScreenTab({
-    required this.index,
+    required this.kind,
     required this.selectedIcon,
     required this.text,
     required this.icon,
