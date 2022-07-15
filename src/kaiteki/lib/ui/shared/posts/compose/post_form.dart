@@ -287,10 +287,14 @@ class PostFormState extends ConsumerState<PostForm> {
                 done: true,
                 icon: const Icon(Mdi.close),
                 text: Text(l10n.postSubmissionFailed),
-                trailing: TextButton(
-                  child: Text(l10n.whyButtonLabel),
-                  onPressed: () {},
-                ),
+                // FIXME(Craftplacer): Theme inheritance is broken here
+                // trailing: TextButton(
+                //   child: Text(l10n.whyButtonLabel),
+                //   onPressed: () => context.showExceptionDialog(
+                //     snapshot.error,
+                //     snapshot.stackTrace,
+                //   ),
+                // ),
               );
 
             case AsyncSnapshotState.loading:
@@ -313,23 +317,17 @@ class PostFormState extends ConsumerState<PostForm> {
             icon: const Icon(Mdi.check),
             text: Text(l10n.postSubmissionSent),
             trailing: Consumer(
-              builder: (context, ref, child) {
-                return TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.secondary,
-                    visualDensity: VisualDensity.comfortable,
-                  ),
-                  onPressed: () {
-                    final post = snapshot.data!;
-                    context.push(
-                      "/${ref.getCurrentAccountHandle()}/posts/${post.id}",
-                      extra: post,
-                    );
-                    messenger.hideCurrentSnackBar();
-                  },
-                  child: Text(l10n.viewPostButtonLabel),
-                );
-              },
+              builder: (context, ref, child) => TextButton(
+                onPressed: () {
+                  final post = snapshot.data!;
+                  context.push(
+                    "/${ref.getCurrentAccountHandle()}/posts/${post.id}",
+                    extra: post,
+                  );
+                  messenger.hideCurrentSnackBar();
+                },
+                child: Text(l10n.viewPostButtonLabel),
+              ),
             ),
           );
         },
@@ -337,6 +335,8 @@ class PostFormState extends ConsumerState<PostForm> {
     );
 
     snackBarController = messenger.showSnackBar(snackBar);
+
+    Navigator.of(context).pop();
   }
 
   void openEmojiPicker(BuildContext context, AccountManager container) {
