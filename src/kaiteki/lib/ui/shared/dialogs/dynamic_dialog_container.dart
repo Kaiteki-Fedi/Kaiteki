@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:kaiteki/constants.dart';
 
 const double _maxDialogSize = 560.0;
 
@@ -57,13 +56,11 @@ class DynamicDialogContainer extends StatelessWidget {
   }
 
   BoxConstraints getConstraints(BoxConstraints constraints, bool fullscreen) {
-    final maxHeight = constraints.maxHeight - (48 * 2);
+    if (fullscreen) return constraints;
 
-    return BoxConstraints(
-      minWidth: min(constraints.maxWidth, _maxDialogSize),
-      maxWidth: fullscreen ? constraints.maxWidth : _maxDialogSize,
-      minHeight: fullscreen ? constraints.maxHeight : 0,
-      maxHeight: fullscreen ? constraints.maxHeight : maxHeight,
+    const margin = 32 * 2;
+    return dialogConstraints.copyWith(
+      maxHeight: constraints.maxHeight - margin,
     );
   }
 }
