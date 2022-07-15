@@ -18,6 +18,7 @@ import 'package:kaiteki/ui/main/timeline_bottom_sheet.dart';
 import 'package:kaiteki/ui/main/timeline_page.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
+import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -88,10 +89,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     _tabs ??= getTabs(l10n);
 
     return FocusableActionDetector(
-      shortcuts: {newPostKeySet: NewPostIntent()},
       actions: {
         NewPostIntent: CallbackAction(
-          onInvoke: (e) => context.showPostDialog(),
+          onInvoke: (_) => context.showPostDialog(),
+        ),
+        RefreshIntent: CallbackAction(
+          onInvoke: (_) => _refresh?.call(),
+        ),
+        GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
+          onInvoke: _changeLocation,
+        ),
+        ShortcutsHelpIntent: CallbackAction(
+          onInvoke: (_) => _showKeyboardShortcuts(),
         ),
       },
       child: BreakpointBuilder(
