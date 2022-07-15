@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/timeline_type.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/model/post_filters/post_filter.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
@@ -12,12 +12,14 @@ class Timeline extends ConsumerStatefulWidget {
   final List<PostFilter>? filters;
   final double? maxWidth;
   final bool wide;
+  final TimelineKind kind;
 
   const Timeline({
     Key? key,
     this.filters,
     this.maxWidth,
     this.wide = false,
+    this.kind = TimelineKind.home,
   }) : super(key: key);
 
   @override
@@ -25,20 +27,26 @@ class Timeline extends ConsumerStatefulWidget {
 }
 
 class TimelineState extends ConsumerState<Timeline> {
-  final PagingController<String?, Post> _pagingController = PagingController(
+  final PagingController<String?, Post> _controller = PagingController(
     firstPageKey: null,
   );
 
   @override
   void initState() {
-    _pagingController.addPageRequestListener((id) async {
-      final adapter = ref.watch(accountProvider).adapter;
-      final posts = await adapter.getTimeline(TimelineType.home, untilId: id);
+    _controller.addPageRequestListener((id) async {
+      try {
+        final adapter = ref.watch(accountProvider).adapter;
+        final posts = await adapter.getTimeline(widget.kind, untilId: id);
 
-      if (posts.isEmpty) {
-        _pagingController.appendLastPage(posts.toList());
-      } else {
-        _pagingController.appendPage(posts.toList(), posts.last.id);
+        if (mounted) {
+          if (posts.isEmpty) {
+            _controller.appendLastPage(posts.toList());
+          } else {
+            _controller.appendPage(posts.toList(), posts.last.id);
+          }
+        }
+      } catch (e) {
+        if (mounted) _controller.error = e;
       }
     });
 
@@ -46,10 +54,21 @@ class TimelineState extends ConsumerState<Timeline> {
   }
 
   @override
+  void didUpdateWidget(covariant Timeline oldWidget) {
+    if (widget.kind != oldWidget.kind) {
+      _controller.refresh();
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void dispose() {
-    _pagingController.dispose();
+    _controller.dispose();
     super.dispose();
   }
+
+  void refresh() => _controller.refresh();
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +76,9 @@ class TimelineState extends ConsumerState<Timeline> {
       builder: (context, constraints) {
         return PagedListView<String?, Post>.separated(
           padding: EdgeInsets.symmetric(
-            horizontal: getPadding(constraints.maxWidth),
+            horizontal: _getPadding(constraints.maxWidth),
           ),
-          pagingController: _pagingController,
+          pagingController: _controller,
           builderDelegate: PagedChildBuilderDelegate<Post>(
             itemBuilder: _buildPost,
             firstPageErrorIndicatorBuilder: (context) {
@@ -74,7 +93,7 @@ class TimelineState extends ConsumerState<Timeline> {
     );
   }
 
-  double getPadding(double width) {
+  double _getPadding(double width) {
     final maxWidth = widget.maxWidth;
     if (maxWidth == null || width <= maxWidth) {
       return 0;

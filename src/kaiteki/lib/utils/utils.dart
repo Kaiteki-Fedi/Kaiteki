@@ -18,7 +18,11 @@ String withQueries(
 
   if (queryParameters.isEmpty) return baseUrl;
 
-  final query = Uri(queryParameters: queryParameters).query;
+  final query = Uri(
+    queryParameters: queryParameters.map((k, v) {
+      return MapEntry(k, v.toString());
+    }),
+  ).query;
   return '$baseUrl?$query';
 }
 

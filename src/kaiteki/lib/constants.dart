@@ -16,6 +16,7 @@ const String exampleAvatar = "https://craftplacer.keybase.pub/cute.jpg";
 const double defaultFormWidth = 448;
 const double defaultFormHeight = 592;
 const dialogConstraints = BoxConstraints(minWidth: 280, maxWidth: 560);
+const bottomSheetConstraints = BoxConstraints(maxWidth: 560);
 
 /// Debug flag for Material 3
 bool get useM3 => false;

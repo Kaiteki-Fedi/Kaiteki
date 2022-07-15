@@ -8,7 +8,7 @@ import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/timeline_type.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
@@ -49,7 +49,7 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<Iterable<Post>> getThread(Post reply);
 
   Future<Iterable<Post>> getTimeline(
-    TimelineType type, {
+    TimelineKind type, {
     String? sinceId,
     String? untilId,
   });

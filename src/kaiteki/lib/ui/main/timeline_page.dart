@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/model/post_filters/sensitive_post_filter.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/ui/widgets/timeline.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
-  const TimelinePage({Key? key}) : super(key: key);
+  final TimelineKind kind;
+
+  const TimelinePage(this.kind, {Key? key}) : super(key: key);
 
   @override
-  ConsumerState<TimelinePage> createState() => _TimelinePageState();
+  ConsumerState<TimelinePage> createState() => TimelinePageState();
 }
 
-class _TimelinePageState extends ConsumerState<TimelinePage> {
+class TimelinePageState extends ConsumerState<TimelinePage> {
+  final _timelineKey = GlobalKey<TimelineState>();
+
+  @override
+  void didUpdateWidget(covariant TimelinePage oldWidget) {
+    if (widget.kind != oldWidget.kind) refresh();
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final adapter = ref.watch(adapterProvider);
-    final timelineKey = ValueKey(adapter.client.hashCode);
-
     return Timeline(
-      key: timelineKey,
-      filters: [SensitivePostFilter()],
+      key: _timelineKey,
+      kind: widget.kind,
       maxWidth: 800,
     );
   }
+
+  void refresh() => _timelineKey.currentState!.refresh();
 }

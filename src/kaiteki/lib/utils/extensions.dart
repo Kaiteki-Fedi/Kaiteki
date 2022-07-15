@@ -223,3 +223,14 @@ extension UriExtensions on Uri {
     return Tuple2(host, username);
   }
 }
+
+extension ListExtensions<T> on List<T> {
+  List<T> joinNonString(T separator) {
+    if (length <= 1) return this;
+
+    return List<T>.generate(
+      length * 2 - 1,
+      (i) => i % 2 == 0 ? this[i ~/ 2] : separator,
+    );
+  }
+}

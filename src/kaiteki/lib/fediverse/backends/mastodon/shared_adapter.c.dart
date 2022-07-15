@@ -84,7 +84,7 @@ Attachment toAttachment(
     source: attachment,
     description: attachment.description,
     url: attachment.url,
-    previewUrl: attachment.previewUrl,
+    previewUrl: attachment.previewUrl!,
     type: toAttachmentType(attachment.type),
     isSensitive: status?.sensitive ?? false,
   );

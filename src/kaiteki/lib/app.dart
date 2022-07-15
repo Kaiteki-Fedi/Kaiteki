@@ -20,6 +20,8 @@ import 'package:kaiteki/ui/settings/filtering/filtering_screen.dart';
 import 'package:kaiteki/ui/settings/filtering/sensitive_post_filtering_screen.dart';
 import 'package:kaiteki/ui/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shared/conversation_screen.dart';
+import 'package:kaiteki/ui/shortcuts/activators.dart';
+import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/ui/user/user_screen.dart';
 
 class KaitekiApp extends ConsumerWidget {
@@ -139,6 +141,19 @@ class KaitekiApp extends ConsumerWidget {
       theme: lightThemeData,
       themeMode: preferences.get().theme,
       title: consts.appName,
+      shortcuts: <ShortcutActivator, Intent>{
+        ...WidgetsApp.defaultShortcuts,
+        newPost: const NewPostIntent(),
+        refresh: const RefreshIntent(),
+        refresh2: const RefreshIntent(),
+        refresh3: const RefreshIntent(),
+        shortcutsHelp: const ShortcutsHelpIntent(),
+        gotoHome: const GoToAppLocationIntent(AppLocation.home),
+        gotoSettings: const GoToAppLocationIntent(AppLocation.settings),
+        gotoBookmarks: const GoToAppLocationIntent(AppLocation.bookmarks),
+        gotoNotifications:
+            const GoToAppLocationIntent(AppLocation.notifications),
+      },
     );
   }
 
