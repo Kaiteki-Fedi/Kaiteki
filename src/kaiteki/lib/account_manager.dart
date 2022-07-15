@@ -1,9 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
-import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/fediverse/api/definitions/definitions.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
@@ -57,7 +53,7 @@ class AccountManager extends ChangeNotifier {
   }
 
   bool contains(AccountCompound account) {
-    for (var otherAccount in _accounts) {
+    for (final otherAccount in _accounts) {
       if (otherAccount == account) return true;
     }
 
@@ -75,22 +71,34 @@ class AccountManager extends ChangeNotifier {
   Future<void> loadAllAccounts() async {
     _accounts.clear();
 
-    var secrets = _accountSecrets.getAll();
+    final secrets = _accountSecrets.getAll();
     await Future.forEach(secrets, _restoreSession);
 
     if (_accounts.isNotEmpty) {
-      // TODO: Store which account the user last used
+      // TODO(Craftplacer): Store which account the user last used
       await changeAccount(_accounts.first);
     }
   }
 
   Future<void> _restoreSession(AccountSecret accountSecret) async {
-    var instance = accountSecret.instance;
-    var clientSecret = _clientSecrets.get(instance)!;
+    final instance = accountSecret.instance;
+    final clientSecret = _clientSecrets.get(instance);
 
-    _logger.d('Trying to recover a ${clientSecret.apiType} account');
+    if (clientSecret == null) {
+      _logger.w("Couldn't find a matching client secret for account");
+      return;
+    }
 
-    var adapter = ApiDefinitions.byType(clientSecret.apiType!).createAdapter();
+    final apiType = clientSecret.apiType;
+
+    if (apiType == null) {
+      _logger.d("Client secret didn't have contain API type.");
+      return;
+    }
+
+    _logger.d('Trying to recover a ${apiType.displayName} account');
+
+    final adapter = apiType.createAdapter();
     await adapter.client.setClientAuthentication(clientSecret);
     await adapter.client.setAccountAuthentication(accountSecret);
 
@@ -107,7 +115,7 @@ class AccountManager extends ChangeNotifier {
       return;
     }
 
-    var compound = AccountCompound(
+    final compound = AccountCompound(
       container: this,
       adapter: adapter,
       account: user,
@@ -122,58 +130,6 @@ class AccountManager extends ChangeNotifier {
     );
   }
 
-  Future<InstanceProbeResult> probeInstance(String instance) async {
-    final isInstanceAvailable = await _checkInstanceAvailability(instance);
-    if (!isInstanceAvailable) {
-      throw InstanceUnreachableException();
-    }
-
-    for (final definition in ApiDefinitions.definitions) {
-      try {
-        final adapter = definition.createAdapter();
-        adapter.client.instance = instance;
-
-        _logger.d('Probing for ${definition.name} on $instance...');
-
-        final result = await adapter.probeInstance();
-
-        if (result != null) {
-          _logger.d('Detected ${definition.name} on $instance');
-          return InstanceProbeResult.successful(definition, result);
-        }
-      } catch (_) {
-        continue;
-      }
-    }
-
-    _logger.d("Couldn't detect backend on on $instance");
-    return const InstanceProbeResult.failed();
-  }
-
-  Future<bool> _checkInstanceAvailability(String instance) async {
-    final uri = Uri.https(instance, '');
-
-    try {
-      final response = await http.get(uri);
-      return response.statusCode == 200;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  //TODO: HACK, This should not exist, please refactor.
-  getClientRepo() => _clientSecrets;
-}
-
-class InstanceProbeResult {
-  final ApiDefinition? definition;
-  final Instance? instance;
-  final bool successful;
-
-  const InstanceProbeResult.successful(this.definition, this.instance)
-      : successful = true;
-  const InstanceProbeResult.failed()
-      : successful = false,
-        definition = null,
-        instance = null;
+  // HACK(Craftplacer): This should not exist, please refactor.
+  ClientSecretRepository getClientRepo() => _clientSecrets;
 }

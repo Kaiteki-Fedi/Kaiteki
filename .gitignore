@@ -27,3 +27,4 @@ doc/api/
 **/flutter/generated_config.cmake
 GeneratedPluginRegistrant.*
 generated_plugin_registrant.*
+src/kaiteki/lib/fediverse/backends/twitter/keys.dart

@@ -1,15 +1,21 @@
+import 'package:tuple/tuple.dart';
+
 class LoginResult {
-  String? reason;
-  bool successful = true;
-  bool aborted = false;
+  final Tuple2<dynamic, StackTrace?>? error;
+  final bool successful;
+  final bool aborted;
 
-  LoginResult.successful();
+  const LoginResult.successful()
+      : successful = true,
+        aborted = false,
+        error = null;
 
-  LoginResult.failed(this.reason) {
-    successful = false;
-  }
+  const LoginResult.failed(this.error)
+      : successful = false,
+        aborted = false;
 
-  LoginResult.aborted() {
-    aborted = true;
-  }
+  const LoginResult.aborted()
+      : successful = false,
+        error = null,
+        aborted = true;
 }

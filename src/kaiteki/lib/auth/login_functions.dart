@@ -1,47 +1,120 @@
-import 'package:kaiteki/fediverse/api/clients/mastodon_client.dart';
-import 'package:kaiteki/constants.dart';
+import 'dart:async';
+import 'dart:io';
+
+import 'package:async/async.dart';
+import 'package:flutter/material.dart' show ColorScheme;
+import 'package:flutter/services.dart';
+import 'package:kaiteki/auth/login_typedefs.dart';
+import 'package:kaiteki/constants.dart' as consts;
+import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/repositories/client_secret_repository.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart';
 
-/// A class that holds login routines for each instance type, for the time being.
-class LoginFunctions {
-  static final _logger = getLogger("LoginFunctions");
+final _logger = getLogger("LoginFunctions");
 
-  static Future<ClientSecret> getClientSecret(MastodonClient client,
-      String instance, ClientSecretRepository repository) async {
-    var clientSecret = repository.get(instance);
+Future<ClientSecret> getClientSecret(
+  MastodonClient client,
+  String instance,
+  ClientSecretRepository repository, [
+  String? redirectUri,
+]) async {
+  return repository.get(instance) ??
+      await createClientSecret(
+        client,
+        instance,
+        repository,
+        redirectUri,
+      );
+}
 
-    clientSecret ??= await createClientSecret(client, instance, repository);
+Future<ClientSecret> createClientSecret(
+  MastodonClient client,
+  String instance,
+  ClientSecretRepository repository, [
+  String? redirectUri,
+]) async {
+  _logger.v("Creating new application on $instance");
 
-    return clientSecret;
+  final application = await client.createApplication(
+    instance,
+    consts.appName,
+    consts.appWebsite,
+    redirectUri ?? "urn:ietf:wg:oauth:2.0:oob",
+    consts.defaultScopes,
+  );
+
+  final clientSecret = ClientSecret(
+    instance,
+    application.clientId!,
+    application.clientSecret!,
+    apiType: client.type,
+  );
+
+  try {
+    await repository.insert(clientSecret);
+  } catch (e) {
+    _logger.e("Failed to insert client secret", e);
   }
 
-  static Future<ClientSecret> createClientSecret(MastodonClient client,
-      String instance, ClientSecretRepository repository) async {
-    _logger.v("creating new application on $instance");
+  return clientSecret;
+}
 
-    var application = await client.createApplication(
-      instance,
-      Constants.appName,
-      Constants.appWebsite,
-      "urn:ietf:wg:oauth:2.0:oob",
-      Constants.defaultScopes,
+Future<Map<String, String>?> runOAuthServer(
+  OAuthUrlCreatedCallback ready,
+  String successPage,
+) async {
+  final requestStream = StreamController<Map<String, String>>();
+  HttpServer? server;
+
+  try {
+    final handler = const Pipeline().addHandler((request) {
+      requestStream.add(request.url.queryParameters);
+      return Response(
+        200,
+        body: successPage,
+        headers: {"Content-Type": "text/html; charset=UTF-8"},
+      );
+    });
+
+    // Start server, close & return when new request comes in
+    const port = 8080;
+    server = await serve(handler, "localhost", port, shared: true);
+    final operation = CancelableOperation.fromFuture(
+      requestStream.stream.first,
     );
 
-    var clientSecret = ClientSecret(
-      instance,
-      application.clientId!,
-      application.clientSecret!,
-      apiType: client.type,
-    );
-
-    try {
-      await repository.insert(clientSecret);
-    } catch (e) {
-      _logger.e("Failed to insert client secret", e);
-    }
-
-    return clientSecret;
+    ready(Uri.http('localhost:$port', '/'), operation.cancel);
+    return await operation.valueOrCancellation();
+  } finally {
+    server?.close();
+    requestStream.close();
   }
+}
+
+/// Fetches the OAuth landing page as well as injects the app's current theme.
+Future<String> generateOAuthLandingPage(ColorScheme? colorScheme) async {
+  final html = await rootBundle.loadString('assets/oauth-success.html');
+  const cssPlaceholder = "/* INSERT */";
+
+  if (colorScheme == null) return html.replaceAll(cssPlaceholder, "");
+
+  final cssBuffer = StringBuffer(":root{")
+    ..writeAll(
+      {
+        "background": colorScheme.background,
+        "foreground": colorScheme.onBackground,
+        "primary-container": colorScheme.primaryContainer,
+        "on-primary-container": colorScheme.onPrimaryContainer,
+      }.entries.map((kv) {
+        final hex = kv.value.value.toRadixString(16).substring(2);
+        return "--${kv.key}: #$hex";
+      }),
+      ";",
+    )
+    ..write("}");
+
+  return html.replaceAll(cssPlaceholder, cssBuffer.toString());
 }

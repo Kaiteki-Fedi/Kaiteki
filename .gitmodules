@@ -1,3 +1,0 @@
-[submodule "src/fediverse_objects"]
-	path = src/fediverse_objects
-	url = https://github.com/Kaiteki-Fedi/fediverse_objects.git

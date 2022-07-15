@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/api/api_type.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
 
 part 'client_secret.g.dart';
 
@@ -13,7 +13,7 @@ class ClientSecret {
 
   final String instance;
 
-  @JsonKey(name: "type")
+  @JsonKey(name: "type", unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
   final ApiType? apiType;
 
   const ClientSecret(

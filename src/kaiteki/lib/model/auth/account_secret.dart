@@ -1,8 +1,10 @@
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 
 part 'account_secret.g.dart';
 
+@immutable
 @JsonSerializable()
 class AccountSecret {
   final String instance;
@@ -29,4 +31,8 @@ class AccountSecret {
       return false;
     }
   }
+
+  @override
+  int get hashCode =>
+      instance.hashCode ^ username.hashCode ^ accessToken.hashCode;
 }

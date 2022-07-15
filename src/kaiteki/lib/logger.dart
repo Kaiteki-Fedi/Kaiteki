@@ -11,8 +11,8 @@ class KaitekiLogPrinter extends LogPrinter {
 
   @override
   List<String> log(LogEvent event) {
-    var lines = <String>[];
-    var color = PrettyPrinter.levelColors[event.level];
+    final lines = <String>[];
+    final color = PrettyPrinter.levelColors[event.level];
 
     if (event.error != null) {
       lines.add('=====');

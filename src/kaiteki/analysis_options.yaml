@@ -1,1 +1,64 @@
 include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - 'lib/**/*.g.dart'
+  errors:
+    missing_enum_constant_in_switch: ignore
+    # Ignoring TODO comments since they're obnoxious
+    # to see within the problem list and can be easily
+    # viewed with the todo lists within the IDE.
+    todo: ignore
+    fixme: ignore
+    hack: ignore
+
+linter:
+  rules:
+    - avoid_type_to_string
+
+    # Unnecessary code
+    - avoid_redundant_argument_values
+    - avoid_types_on_closure_parameters
+    - noop_primitive_operations
+    - unnecessary_await_in_return
+    - unnecessary_lambdas
+    - unnecessary_null_aware_assignments
+    - unnecessary_null_checks
+    - unnecessary_parenthesis
+    - unnecessary_statements
+    - omit_local_variable_types
+
+    # Code style
+    - always_declare_return_types
+    - avoid_void_async
+    - invariant_booleans
+    - join_return_with_assignment
+    - only_throw_errors
+    - prefer_constructors_over_static_methods
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - require_trailing_commas
+    - use_named_constants
+    - use_setters_to_change_properties
+    - use_string_buffers
+    - use_test_throws_matchers
+
+    # Dart features
+    - avoid_classes_with_only_static_members
+    - avoid_returning_this
+    - cascade_invocations
+    - prefer_asserts_in_initializer_lists
+    - prefer_if_elements_to_conditional_expressions
+
+    # Sorting
+    - directives_ordering
+    - sort_pub_dependencies
+    - sort_unnamed_constructors_first
+
+    # Naming conventions
+    - flutter_style_todos
+    - use_to_and_as_if_applicable
+    
+    # Flutter
+    - sized_box_shrink_expand
+    - use_decorated_box

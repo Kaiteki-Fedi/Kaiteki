@@ -8,7 +8,7 @@ import 'package:kaiteki/utils/extensions/string.dart';
 class ClientSecretRepository extends ChangeNotifier
     implements Repository<ClientSecret> {
   late final List<ClientSecret> _secrets;
-  final SecretStorage _storage;
+  final ClientSecretStorage _storage;
 
   ClientSecretRepository(this._storage);
 
@@ -18,7 +18,7 @@ class ClientSecretRepository extends ChangeNotifier
       throw Exception("Client secret is already present in repository");
     }
 
-    await _storage.saveClientSecret(secret);
+    await _storage.save(secret);
     notifyListeners();
   }
 
@@ -28,7 +28,7 @@ class ClientSecretRepository extends ChangeNotifier
       throw Exception("Client secret doesn't exist in repository");
     }
 
-    await _storage.deleteClientSecret(secret);
+    await _storage.delete(secret);
     notifyListeners();
   }
 
@@ -45,18 +45,18 @@ class ClientSecretRepository extends ChangeNotifier
 
   @override
   void removeAll() {
-    // TODO implement removeAll
+    // TODO(Craftplacer): implement removeAll
     throw UnimplementedError();
   }
 
   @override
   Future<void> initialize() async {
-    final clientSecrets = await _storage.fetchClientSecrets();
+    final clientSecrets = await _storage.values;
     _secrets = clientSecrets.toList();
   }
 
   @override
-  Future<bool> contains(ClientSecret secret) async {
-    return await _storage.hasClientSecret(secret);
+  Future<bool> contains(ClientSecret secret) {
+    return _storage.has(secret.instance);
   }
 }

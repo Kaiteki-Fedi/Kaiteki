@@ -1,0 +1,46 @@
+[
+    {
+        "name": "Craftplacer",
+        "url": "https://craftplacer.moe/",
+        "roles": [
+            "Maintainer",
+            "Translator (German)"
+        ]
+    },
+    {
+        "name": "Odyssey98",
+        "url": "https://mstdn.social/@odyssey98",
+        "roles": [
+            "Icon design"
+        ]
+    },
+    {
+        "name": "NaiJi",
+        "url": "https://udongein.xyz/users/NaiJi",
+        "roles": [
+            "Translator (Russian)"
+        ]
+    },
+    {
+        "name": "sfr",
+        "url": "https://github.com/solfisher",
+        "roles": [
+            "Translator (Hebrew)"
+        ]
+    },
+    {
+        "name": "ThatOneCalculator",
+        "url": "https://t1c.dev/",
+        "roles": [
+            "Bug Reporting",
+            "Contributor"
+        ]
+    },
+    {
+        "name": "futchitwo",
+        "url": "https://github.com/futchitwo",
+        "roles": [
+            "Bug Reporting"
+        ]
+    }
+]

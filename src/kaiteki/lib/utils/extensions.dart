@@ -1,8 +1,21 @@
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:html/dom.dart';
+import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/utils/helpers.dart';
+import 'package:kaiteki/utils/text/text_renderer.dart';
+import 'package:tuple/tuple.dart';
 
 export 'package:kaiteki/utils/extensions/build_context.dart';
 export 'package:kaiteki/utils/extensions/duration.dart';
+export 'package:kaiteki/utils/extensions/enum.dart';
 export 'package:kaiteki/utils/extensions/iterable.dart';
+export 'package:kaiteki/utils/extensions/m3.dart';
 export 'package:kaiteki/utils/extensions/string.dart';
 
 extension ObjectExtensions<T> on Object? {
@@ -15,10 +28,43 @@ extension ObjectExtensions<T> on Object? {
 
 extension BrightnessExtensions on Brightness {
   Brightness get inverted {
-    if (this == Brightness.light) {
-      return Brightness.dark;
-    } else {
-      return Brightness.dark;
+    switch (this) {
+      case Brightness.dark:
+        return Brightness.light;
+      case Brightness.light:
+        return Brightness.dark;
+    }
+  }
+
+  SystemUiOverlayStyle get systemUiOverlayStyle {
+    switch (this) {
+      case Brightness.dark:
+        return SystemUiOverlayStyle.dark;
+      case Brightness.light:
+        return SystemUiOverlayStyle.light;
+    }
+  }
+
+  Color getColor({
+    Color dark = const Color(0xFF000000),
+    Color light = const Color(0xFFFFFFFF),
+  }) {
+    switch (this) {
+      case Brightness.dark:
+        return dark;
+      case Brightness.light:
+        return light;
+    }
+  }
+}
+
+extension TextDirectionExtensions on TextDirection {
+  TextDirection get inverted {
+    switch (this) {
+      case TextDirection.ltr:
+        return TextDirection.rtl;
+      case TextDirection.rtl:
+        return TextDirection.ltr;
     }
   }
 }
@@ -36,3 +82,155 @@ extension AsyncSnapshotExtensions on AsyncSnapshot {
 }
 
 enum AsyncSnapshotState { errored, loading, done }
+
+extension UserExtensions on User {
+  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, displayName);
+  }
+
+  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, description!);
+  }
+
+  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
+    return const TextRenderer().render(
+      context,
+      text,
+      textContext: TextContext(
+        users: [],
+        emojis: emojis?.toList(growable: false),
+      ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
+    );
+  }
+
+  String get handle {
+    if (host == null) {
+      return '@$username';
+    } else {
+      return '@$username@$host';
+    }
+  }
+}
+
+extension PostExtensions on Post {
+  InlineSpan renderContent(
+    BuildContext context,
+    WidgetRef ref, {
+    bool hideReplyee = false,
+  }) {
+    return const TextRenderer().render(
+      context,
+      content!,
+      textContext: TextContext(
+        emojis: emojis?.toList(growable: false),
+        users: mentionedUsers,
+        excludedUsers: [
+          if (hideReplyee && replyToUser != null)
+            UserReference.handle(
+              replyToUser!.username,
+              replyToUser!.host,
+            )
+        ],
+      ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
+    );
+  }
+
+  Post getRoot() => _getRoot(this);
+
+  Post _getRoot(Post post) {
+    final repeatChild = post.repeatOf;
+    return repeatChild == null ? post : _getRoot(repeatChild);
+  }
+}
+
+extension VectorExtensions<T> on Iterable<Iterable<T>> {
+  List<T> concat() {
+    final list = <T>[];
+    for (final childList in this) {
+      list.addAll(childList);
+    }
+    return list;
+  }
+}
+
+extension HtmlNodeExtensions on Node {
+  bool hasClass(String className) {
+    return attributes["class"]?.split(" ").contains(className) == true;
+  }
+}
+
+extension UserReferenceExtensions on UserReference {
+  Future<User?> resolve(FediverseAdapter adapter) async {
+    if (id != null) {
+      return adapter.getUserById(id!);
+    }
+
+    // if (reference.username != null) {
+    //   return await manager.adapter.getUser(reference.username!, reference.host);
+    // }
+
+    return null;
+  }
+}
+
+extension WidgetRefExtensions on WidgetRef {
+  String getCurrentAccountHandle() {
+    final account = read(accountProvider).currentAccount.accountSecret;
+    return "@${account.username}@${account.instance}";
+  }
+}
+
+extension BreakpointExtensions on Breakpoint {
+  double? get margin {
+    if (window == WindowSize.xsmall) return 16;
+    if (window == WindowSize.small && columns == 8) return 32;
+    if (window == WindowSize.small && columns == 12) return null;
+    if (window == WindowSize.medium) return 200;
+    return null;
+  }
+
+  double? get body {
+    if (window == WindowSize.xsmall) return null;
+    if (window == WindowSize.small && columns == 8) return null;
+    if (window == WindowSize.small && columns == 12) return 840;
+    if (window == WindowSize.medium) return null;
+    return 1040;
+  }
+}
+
+extension QueryExtension on Map<String, String> {
+  String toQueryString() {
+    if (isEmpty) return "";
+
+    final pairs = <String>[];
+    for (final kv in entries) {
+      final key = Uri.encodeQueryComponent(kv.key);
+      final value = Uri.encodeQueryComponent(kv.value);
+      pairs.add("$key=$value");
+    }
+    return "?${pairs.join("&")}";
+  }
+}
+
+extension UriExtensions on Uri {
+  Tuple2<String, String> get fediverseHandle {
+    var username = pathSegments.last;
+    if (username[0] == '@') {
+      username = username.substring(1);
+    }
+    return Tuple2(host, username);
+  }
+}
+
+extension ListExtensions<T> on List<T> {
+  List<T> joinNonString(T separator) {
+    if (length <= 1) return this;
+
+    return List<T>.generate(
+      length * 2 - 1,
+      (i) => i % 2 == 0 ? this[i ~/ 2] : separator,
+    );
+  }
+}

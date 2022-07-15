@@ -1,19 +1,18 @@
-import 'package:flutter/widgets.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/model/post_filters/post_filter.dart';
-import 'package:kaiteki/preferences/preference_container.dart';
-import 'package:provider/provider.dart';
 
 /// Craftplacer's internal version of the horny jail.
 class SensitivePostFilter extends PostFilter {
   @override
-  PostFilterResult checkPost(BuildContext context, Post post) {
-    var container = Provider.of<PreferenceContainer>(context);
-    var prefs = container.get();
+  PostFilterResult checkPost(WidgetRef ref, Post post) {
+    final container = ref.watch(preferenceProvider);
+    final prefs = container.get();
+    final filterSettings = prefs.sensitivePostFilter;
 
-    if (prefs.sensitivePostFilter.enabled) {
-      var matchMarked = prefs.sensitivePostFilter.filterPostsMarkedAsSensitive;
-      var matchSubject = prefs.sensitivePostFilter.filterPostsWithSubject;
+    if (filterSettings.enabled) {
+      final matchMarked = filterSettings.filterPostsMarkedAsSensitive;
+      final matchSubject = filterSettings.filterPostsWithSubject;
 
       if ((matchMarked && post.nsfw) ||
           (matchSubject && post.subject?.isNotEmpty == true)) {

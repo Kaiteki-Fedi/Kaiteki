@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class ToggleButtonTheme {
   final Color activeBackground;

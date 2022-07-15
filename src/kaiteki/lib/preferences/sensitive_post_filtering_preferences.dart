@@ -14,9 +14,12 @@ class SensitivePostFilteringPreferences {
   });
 
   factory SensitivePostFilteringPreferences.fromJson(
-          Map<String, dynamic> json) =>
-      _$SensitivePostFilteringPreferencesFromJson(json);
+    Map<String, dynamic> json,
+  ) {
+    return _$SensitivePostFilteringPreferencesFromJson(json);
+  }
 
-  Map<String, dynamic> toJson() =>
-      _$SensitivePostFilteringPreferencesToJson(this);
+  Map<String, dynamic> toJson() {
+    return _$SensitivePostFilteringPreferencesToJson(this);
+  }
 }

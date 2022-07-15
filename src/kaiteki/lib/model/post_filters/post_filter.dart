@@ -1,21 +1,19 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 
 abstract class PostFilter {
-  PostFilterResult checkPost(BuildContext context, Post post) {
+  PostFilterResult checkPost(WidgetRef ref, Post post) {
     return PostFilterResult.show;
   }
 
   static PostFilterResult runMultipleFilters(
-    BuildContext context,
+    WidgetRef ref,
     Post post,
     Iterable<PostFilter> filters,
   ) {
-    var result = PostFilterResult.show;
-
-    for (var filter in filters) {
+    for (final filter in filters) {
       try {
-        var filterResult = filter.checkPost(context, post);
+        var filterResult = filter.checkPost(ref, post);
 
         if (filterResult == PostFilterResult.hide) {
           // We won't get any higher value/punishment, so we end here
@@ -24,11 +22,11 @@ abstract class PostFilter {
           filterResult = PostFilterResult.collapse;
         }
       } catch (e) {
-        // TODO: Add log message
+        // TODO(Craftplacer): Add log message
       }
     }
 
-    return result;
+    return PostFilterResult.show;
   }
 }
 

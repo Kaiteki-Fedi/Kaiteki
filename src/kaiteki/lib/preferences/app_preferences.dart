@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/preferences/sensitive_post_filtering_preferences.dart';
 part 'app_preferences.g.dart';
 
-// TODO: Make AppPreferences immutable, use copyWith(...) pattern.
+// TODO(Craftplacer): Make AppPreferences immutable, use copyWith(...) pattern.
 @JsonSerializable(includeIfNull: false, createFactory: true, createToJson: true)
 class AppPreferences {
   ThemeMode theme = ThemeMode.system;

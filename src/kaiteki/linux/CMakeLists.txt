@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
 set(BINARY_NAME "kaiteki")
-set(APPLICATION_ID "craftplacer.kaiteki")
+set(APPLICATION_ID "moe.craftplacer.kaiteki")
 
 cmake_policy(SET CMP0063 NEW)
 
@@ -45,6 +45,7 @@ apply_standard_settings(${BINARY_NAME})
 target_link_libraries(${BINARY_NAME} PRIVATE flutter)
 target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK)
 add_dependencies(${BINARY_NAME} flutter_assemble)
+set_target_properties(${BINARY_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/tmp)
 
 # Generated plugin build rules, which manage building the plugins and adding
 # them to the application.

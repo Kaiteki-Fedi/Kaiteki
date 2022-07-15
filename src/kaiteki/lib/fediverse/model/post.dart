@@ -4,6 +4,7 @@ import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/preview_card.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 
 /// A class representing a post.
@@ -16,7 +17,7 @@ class Post<T> {
   final DateTime postedAt;
   final User author;
   final bool nsfw;
-  final Visibility visibility;
+  final Visibility? visibility;
 
   // ENGAGEMENT
   /// Whether the user has liked (favorited) this post
@@ -33,6 +34,8 @@ class Post<T> {
 
   /// How many users have replied to this post
   final int replyCount;
+
+  final bool bookmarked;
 
   /// What reactions this post has
   final Iterable<Reaction> reactions;
@@ -51,17 +54,20 @@ class Post<T> {
   final User? replyToUser;
 
   final Post? repeatOf;
+  final Post? quotedPost;
   final PreviewCard? previewCard;
+
+  final List<UserReference>? mentionedUsers;
 
   final String? externalUrl;
 
-  const Post({
+  Post({
     required this.source,
     required this.postedAt,
     required this.author,
     required this.id,
-    required this.reactions,
-    required this.visibility,
+    Iterable<Reaction>? reactions,
+    this.visibility,
     this.content,
     this.subject,
     this.nsfw = false,
@@ -80,7 +86,11 @@ class Post<T> {
     this.replyToPostId,
     this.externalUrl,
     this.replyToUser,
-  });
+    this.quotedPost,
+    List<UserReference>? mentionedUsers,
+    this.bookmarked = false,
+  })  : reactions = reactions ?? [],
+        mentionedUsers = mentionedUsers ?? [];
 
   factory Post.example() {
     return Post(
