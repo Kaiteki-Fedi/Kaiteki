@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/chat_target.dart';
+import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/chats/chat_target_tile.dart';
-import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
 
 class ChatTargetList extends StatelessWidget {
@@ -33,7 +33,7 @@ class ChatTargetList extends StatelessWidget {
         );
       },
       itemCount: chats.length,
-      // TODO: HACK: should be exposed instead
+      // TODO(Craftplacer): HACK: should be exposed instead
       padding: const EdgeInsets.only(
         bottom: (kFloatingActionButtonMargin * 2) + 52,
       ),

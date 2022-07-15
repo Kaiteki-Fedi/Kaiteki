@@ -1,27 +1,29 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/chat_target.dart';
-import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
+import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
+import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
 import 'package:mdi/mdi.dart';
 
 typedef ChatSelectedCallback = void Function(ChatTarget chat);
 
-class ChatTargetTile extends StatelessWidget {
+class ChatTargetTile extends ConsumerWidget {
   const ChatTargetTile({
-    Key? key,
+    super.key,
     required this.chat,
     this.selected = false,
     this.onChatSelected,
-  }) : super(key: key);
+  });
 
   final ChatTarget chat;
   final bool selected;
   final ChatSelectedCallback? onChatSelected;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
     return ListTileTheme(
@@ -32,15 +34,15 @@ class ChatTargetTile extends StatelessWidget {
         selectedTileColor: Colors.red,
         selected: selected,
         leading: _buildChatTargetAvatar(chat),
-        title: Text.rich(_getChatTitle(context, chat)),
-        subtitle: _buildPreview(context),
+        title: Text.rich(_getChatTitle(context, ref, chat)),
+        subtitle: _buildPreview(context, ref),
         trailing: _buildBadge(context),
         onTap: () => onChatSelected?.call(chat),
       ),
     );
   }
 
-  Widget? _buildPreview(BuildContext context) {
+  Widget? _buildPreview(BuildContext context, WidgetRef ref) {
     final lastMessage = chat.lastMessage;
 
     if (lastMessage == null) {
@@ -49,14 +51,18 @@ class ChatTargetTile extends StatelessWidget {
 
     final content = lastMessage.content;
     if (content != null) {
-      final rendererTheme = TextRendererTheme.fromContext(context);
-      final renderer = TextRenderer(
-        emojis: lastMessage.emojis,
-        theme: rendererTheme,
+      final renderedContent = const TextRenderer().render(
+        context,
+        content,
+        textContext: TextContext(
+          users: [],
+          emojis: lastMessage.emojis.toList(growable: false),
+        ),
+        onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       );
 
       return Text.rich(
-        renderer.renderFromHtml(context, content),
+        renderedContent,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       );
@@ -101,15 +107,12 @@ class ChatTargetTile extends StatelessWidget {
     );
   }
 
-  InlineSpan _getChatTitle(BuildContext context, ChatTarget chat) {
+  InlineSpan _getChatTitle(
+      BuildContext context, WidgetRef ref, ChatTarget chat) {
     if (chat is DirectChat) {
-      final renderer = TextRenderer(
-        emojis: chat.recipient.emojis ?? [],
-        theme: TextRendererTheme.fromContext(context),
-      );
-      return renderer.renderText(chat.recipient.displayName);
+      return chat.recipient.renderDisplayName(context, ref);
     } else if (chat is GroupChat) {
-      // TODO
+      // TODO(Craftplacer): Display chat group title
       return const TextSpan(text: "Group Title");
     } else {
       throw UnimplementedError();
@@ -118,11 +121,7 @@ class ChatTargetTile extends StatelessWidget {
 
   Widget _buildChatTargetAvatar(ChatTarget chat) {
     if (chat is DirectChat) {
-      return AvatarWidget(
-        chat.recipient,
-        openOnTap: false,
-        size: 40,
-      );
+      return AvatarWidget(chat.recipient, size: 40);
     } else if (chat is GroupChat) {
       return const CircleAvatar(child: Icon(Mdi.accountMultiple));
     } else {

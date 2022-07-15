@@ -1,11 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
-import 'package:kaiteki/ui/widgets/attachments.dart';
-import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
-import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
+import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 class ChatMessageClip extends CustomClipper<Path> {
   final ChatMessageNipPosition nipPosition;
@@ -83,9 +82,9 @@ class ChatMessageClip extends CustomClipper<Path> {
   }
 
   EdgeInsets getPadding({bool withRounding = true}) {
-    double left = 0.0;
-    double right = 0.0;
-    double all = 0.0;
+    var left = 0.0;
+    var right = 0.0;
+    var all = 0.0;
 
     if (nipPosition == ChatMessageNipPosition.left) {
       left += nipSize;
@@ -112,7 +111,7 @@ class ChatMessageClip extends CustomClipper<Path> {
 
 enum ChatMessageNipPosition { left, right }
 
-class ChatMessageWidget extends StatelessWidget {
+class ChatMessageWidget extends ConsumerWidget {
   final ChatMessage message;
 
   final bool received;
@@ -123,19 +122,14 @@ class ChatMessageWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final messageColor =
         received ? theme.hoverColor : theme.colorScheme.primary;
     final textColor =
         received ? theme.colorScheme.onSurface : theme.colorScheme.onPrimary;
 
-    final renderer = TextRenderer(
-      emojis: message.emojis,
-      theme: TextRendererTheme.fromContext(context),
-    );
-
-    // TODO: Copy Telegram Desktop's adaptive message alignment
+    // TODO(Craftplacer): Copy Telegram Desktop's adaptive message alignment
     final reverse = !received;
     final mainAxisAlignment =
         reverse ? MainAxisAlignment.end : MainAxisAlignment.start;
@@ -168,14 +162,12 @@ class ChatMessageWidget extends StatelessWidget {
                 children: [
                   if (message.content != null)
                     Text.rich(
-                      renderer.renderFromHtml(
-                        context,
-                        message.content!,
-                      ),
+                      message.renderContent(context, ref),
                       style: TextStyle(color: textColor),
                     ),
-                  if (message.attachments.isNotEmpty == true)
-                    getAttachmentWidget(message.attachments.first),
+                  // FIXME(Craftplacer): Attachment display changes are not compatible
+                  // if (message.attachments.isNotEmpty == true)
+                  //   getAttachmentWidget(message.attachments.first),
                 ],
               ),
             ),

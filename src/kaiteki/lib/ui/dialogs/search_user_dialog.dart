@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
+import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/src/provider.dart';
 
-class SearchUserDialog extends StatefulWidget {
-  SearchUserDialog({Key? key}) : super(key: key);
+class SearchUserDialog extends ConsumerStatefulWidget {
+  const SearchUserDialog({Key? key}) : super(key: key);
 
   @override
-  State<SearchUserDialog> createState() => _SearchUserDialogState();
+  ConsumerState<SearchUserDialog> createState() => _SearchUserDialogState();
 }
 
-class _SearchUserDialogState extends State<SearchUserDialog> {
+class _SearchUserDialogState extends ConsumerState<SearchUserDialog> {
   Future<Iterable<User>>? _future;
 
   @override
   Widget build(BuildContext context) {
-    final manager = context.watch<AccountManager>();
-    final adapter = manager.adapter;
+    final manager = ref.watch(accountProvider);
+    // final adapter = manager.adapter;
 
     return AlertDialog(
       title: const Text("Search user"),
@@ -41,9 +40,9 @@ class _SearchUserDialogState extends State<SearchUserDialog> {
               width: 380,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 200),
-                child: FutureBuilder(
+                child: FutureBuilder<Iterable<User>>(
                   future: _future,
-                  builder: (context, AsyncSnapshot<Iterable<User>> snapshot) {
+                  builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
                     }
@@ -88,12 +87,7 @@ class _UserListTile extends StatelessWidget {
       leading: AvatarWidget(user, size: 32),
       title: Text(user.displayName),
       subtitle: Text(user.host ?? user.username),
-      onTap: () => _onTap(context),
+      onTap: () => Navigator.of(context).pop(user),
     );
-  }
-
-  void _onTap(context) {
-    final navigator = Navigator.of(context);
-    navigator.pop(user);
   }
 }

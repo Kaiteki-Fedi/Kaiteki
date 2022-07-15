@@ -34,9 +34,7 @@ class ComposeMessageBar extends StatelessWidget {
               hintText: "Write a message...",
               border: InputBorder.none,
             ),
-            onSubmitted: (String input) {
-              onSendMessage.call(input, []);
-            },
+            onSubmitted: (input) => onSendMessage.call(input, []),
             maxLines: null,
           ),
         ),

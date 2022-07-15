@@ -6,6 +6,7 @@ import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 part 'adapter.c.dart';
 
@@ -21,7 +22,7 @@ class PleromaAdapter //
     ChatTarget chat,
     ChatMessage message,
   ) async {
-    // TODO implement missing data, pleroma chat.
+    // TODO(Craftplacer): implement missing data, pleroma chat.
     final currentAccount = toUser(await client.verifyCredentials());
 
     final sentMessage = await client.postChatMessage(
@@ -37,12 +38,6 @@ class PleromaAdapter //
   Future<User> getUser(String username, [String? instance]) {
     throw UnimplementedError();
   }
-
-  @override
-  bool supportsCustomEmoji = false;
-
-  @override
-  bool supportsUnicodeEmoji = true;
 
   @override
   Future<Iterable<ChatMessage>> getChatMessages(ChatTarget chat) async {

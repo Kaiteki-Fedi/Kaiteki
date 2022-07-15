@@ -304,10 +304,10 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     int limit = 10,
     bool group = true,
   }) async {
-    return await sendJsonRequestMultiple(
+    return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/messaging/history",
-      (json) => misskey.MessagingMessage.fromJson(json),
+      misskey.MessagingMessage.fromJson,
       body: {limit, group},
     );
   }
@@ -318,10 +318,10 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     required String? userId,
     required String? groupId,
   }) async {
-    return await sendJsonRequestMultiple(
+    return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/messaging/messages",
-      (json) => misskey.MessagingMessage.fromJson(json),
+      misskey.MessagingMessage.fromJson,
       body: {
         if (userId != null) userId,
         if (groupId != null) groupId,

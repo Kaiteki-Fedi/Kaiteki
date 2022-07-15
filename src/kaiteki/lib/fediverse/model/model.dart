@@ -1,7 +1,6 @@
 export 'attachment.dart';
-export 'chat.dart';
 export 'chat_message.dart';
-export 'chat_recipient.dart';
+export 'chat_target.dart';
 export 'emoji.dart';
 export 'emoji_category.dart';
 export 'formatting.dart';

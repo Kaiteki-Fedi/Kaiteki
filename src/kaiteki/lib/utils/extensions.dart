@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:html/dom.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/model/chat_message.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
@@ -142,6 +143,19 @@ extension PostExtensions on Post {
   Post _getRoot(Post post) {
     final repeatChild = post.repeatOf;
     return repeatChild == null ? post : _getRoot(repeatChild);
+  }
+}
+
+extension ChatMessageExtensions on ChatMessage {
+  InlineSpan renderContent(BuildContext context, WidgetRef ref) {
+    return const TextRenderer().render(
+      context,
+      content!,
+      textContext: TextContext(
+        emojis: emojis.toList(growable: false),
+      ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
+    );
   }
 }
 

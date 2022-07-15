@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/fediverse/api/adapters/interfaces/chat_support.dart';
+import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
 import 'package:kaiteki/fediverse/model/chat_target.dart';
 import 'package:kaiteki/ui/dialogs/search_user_dialog.dart';
+import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/widgets/chats/chat_message.dart';
 import 'package:kaiteki/ui/widgets/chats/chat_target_list.dart';
 import 'package:kaiteki/ui/widgets/chats/compose_message_bar.dart';
-import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
-class ChatsPage extends StatefulWidget {
+class ChatsPage extends ConsumerStatefulWidget {
   const ChatsPage({Key? key}) : super(key: key);
 
   @override
-  State<ChatsPage> createState() => _ChatsPageState();
+  ConsumerState<ChatsPage> createState() => _ChatsPageState();
 }
 
-class _ChatsPageState extends State<ChatsPage> {
+class _ChatsPageState extends ConsumerState<ChatsPage> {
   ChatTarget? selectedChat;
   bool _readNotice = false;
 
   @override
   Widget build(BuildContext context) {
-    final manager = context.read<AccountManager>();
-    final adapter = manager.adapter as ChatSupport;
+    final adapter = ref.read(adapterProvider) as ChatSupport;
 
     return Row(
       children: [
@@ -56,11 +54,11 @@ class _ChatsPageState extends State<ChatsPage> {
                   ],
                 ),
               Expanded(
-                child: FutureBuilder(
+                child: FutureBuilder<Iterable<ChatTarget>>(
                   future: adapter.getChats(),
                   builder: (
-                    BuildContext context,
-                    AsyncSnapshot<Iterable<ChatTarget>> snapshot,
+                    context,
+                    snapshot,
                   ) {
                     if (!snapshot.hasData) {
                       return const Center(child: CircularProgressIndicator());
@@ -84,11 +82,11 @@ class _ChatsPageState extends State<ChatsPage> {
                             onPressed: () async {
                               await showDialog(
                                 context: context,
-                                builder: (_) => SearchUserDialog(),
+                                builder: (_) => const SearchUserDialog(),
                               );
                             },
-                            child: const Icon(Mdi.plus),
                             tooltip: "Start a new chat",
+                            child: const Icon(Mdi.plus),
                           ),
                         ),
                       ],
@@ -113,7 +111,7 @@ class _ChatsPageState extends State<ChatsPage> {
                 )
               : ChatView(
                   chat: selectedChat!,
-                  key: ValueKey(selectedChat?.id.toString()),
+                  key: ValueKey(selectedChat?.id),
                 ),
         ),
       ],
@@ -121,7 +119,7 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 }
 
-class ChatView extends StatelessWidget {
+class ChatView extends ConsumerWidget {
   const ChatView({
     Key? key,
     required this.chat,
@@ -130,8 +128,8 @@ class ChatView extends StatelessWidget {
   final ChatTarget chat;
 
   @override
-  Widget build(BuildContext context) {
-    final manager = context.watch<AccountManager>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final manager = ref.read(accountProvider);
     final adapter = manager.adapter as ChatSupport;
     final currentAccount = manager.currentAccount.account;
 
@@ -139,8 +137,8 @@ class ChatView extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text("Chat recipient"),
-            Spacer(),
+            const Text("Chat recipient"),
+            const Spacer(),
             PopupMenuButton(
               itemBuilder: (context) {
                 return List.generate(5, (index) {
@@ -155,9 +153,9 @@ class ChatView extends StatelessWidget {
         ),
         const Divider(height: 1),
         Expanded(
-          child: FutureBuilder(
+          child: FutureBuilder<Iterable<ChatMessage>>(
             future: adapter.getChatMessages(chat),
-            builder: (context, AsyncSnapshot<Iterable<ChatMessage>> snapshot) {
+            builder: (context, snapshot) {
               if (snapshot.data == null) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -192,7 +190,7 @@ class ChatView extends StatelessWidget {
         ),
         const Divider(height: 1),
         ComposeMessageBar(
-          onSendMessage: (String content, List<dynamic> attachments) {},
+          onSendMessage: (content, attachments) {},
         ),
       ],
     );

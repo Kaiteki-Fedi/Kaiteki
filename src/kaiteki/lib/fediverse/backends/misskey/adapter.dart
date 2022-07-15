@@ -137,7 +137,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Iterable<Chat>> getChats() {
+  Future<Iterable<ChatTarget>> getChats() {
     throw UnimplementedError();
   }
 
@@ -167,7 +167,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Iterable<ChatMessage>> getChatMessages(Chat chat) {
+  Future<Iterable<ChatMessage>> getChatMessages(ChatTarget chat) {
     throw UnimplementedError();
   }
 
@@ -184,7 +184,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) {
+  Future<ChatMessage> postChatMessage(ChatTarget chat, ChatMessage message) {
     throw UnimplementedError();
   }
 
