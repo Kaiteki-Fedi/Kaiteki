@@ -263,8 +263,6 @@ class PostFormState extends ConsumerState<PostForm> {
     final contentKey = UniqueKey();
     final l10n = context.getL10n();
 
-    Navigator.of(context).pop();
-
     late ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
         snackBarController;
     final snackBar = SnackBar(
