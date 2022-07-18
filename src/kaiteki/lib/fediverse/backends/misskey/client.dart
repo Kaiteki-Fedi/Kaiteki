@@ -1,7 +1,7 @@
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:http/http.dart' show MultipartFile;
+import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
@@ -205,24 +205,13 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   @override
   Future<void> checkResponse(Response response) async {
     if (!response.isSuccessful) {
-      misskey.Error? mkErr;
-
-      try {
-        final json = await response.getContentJson();
-        mkErr = misskey.Error.fromJson(json["error"]);
-      } catch (ex) {
-        _logger.e(
-          "Failed to gather misskey.Misskey error object from erroneous response.",
-          ex,
-        );
-      }
-
-      if (mkErr != null) {
-        throw MisskeyException(
-          response.statusCode,
-          mkErr,
-        );
-      }
+      // HACK(Craftplacer): I threw out the usual JSON deserialization pattern from Kaiteki because adding more error-prone code (that is Misskey's fucked API schemas) to error handling is just plain stupid.
+      final json = await response.getContentJson();
+      final error = json["error"];
+      throw ApiException(
+        response.statusCode,
+        reasonPhrase: "${error["message"]} (${error["code"]})",
+      );
     }
 
     super.checkResponse(response);
