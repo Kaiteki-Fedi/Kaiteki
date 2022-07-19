@@ -130,16 +130,17 @@ class KaitekiApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO(Craftplacer): (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
-    final preferences = ref.watch(preferenceProvider);
+    final themePreferences = ref.watch(themeProvider);
+    final m3 =
+        themePreferences.useMaterial3 ?? themePreferences.material3Default;
     return MaterialApp.router(
-      darkTheme: darkThemeData,
+      darkTheme: getTheme(Brightness.dark, m3),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: lightThemeData,
-      themeMode: preferences.get().theme,
+      theme: getTheme(Brightness.light, m3),
+      themeMode: themePreferences.mode,
       title: consts.appName,
       shortcuts: <ShortcutActivator, Intent>{
         ...WidgetsApp.defaultShortcuts,

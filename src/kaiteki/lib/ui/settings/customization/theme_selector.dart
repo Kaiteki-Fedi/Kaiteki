@@ -25,7 +25,7 @@ class ThemeSelector extends StatelessWidget {
           icon: const Icon(Icons.auto_fix_high_rounded),
         ),
         Theme(
-          data: lightThemeData,
+          data: getTheme(Brightness.light, Theme.of(context).useMaterial3),
           child: ThemePreview(
             name: _themeToString(context, ThemeMode.light),
             selected: theme == ThemeMode.light,
@@ -33,7 +33,7 @@ class ThemeSelector extends StatelessWidget {
           ),
         ),
         Theme(
-          data: darkThemeData,
+          data: getTheme(Brightness.dark, Theme.of(context).useMaterial3),
           child: ThemePreview(
             name: _themeToString(context, ThemeMode.dark),
             selected: theme == ThemeMode.dark,

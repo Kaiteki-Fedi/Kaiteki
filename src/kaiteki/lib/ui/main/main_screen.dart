@@ -76,7 +76,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   static Color? getOutsideColor(BuildContext context) {
-    if (consts.useM3) {
+    if (Theme.of(context).useMaterial3) {
       return Theme.of(context).colorScheme.surfaceVariant;
     }
     return null;
@@ -211,13 +211,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         consts.appName,
         style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
       ),
-      elevation: consts.useM3 ? 0.0 : null,
+      elevation: Theme.of(context).useMaterial3 ? 0.0 : null,
       actions: _buildAppBarActions(context),
     );
   }
 
   Widget _buildDesktopView(bool extendNavRail) {
     final outsideColor = getOutsideColor(context);
+    final m3 = Theme.of(context).useMaterial3;
     return Row(
       children: [
         Column(
@@ -225,17 +226,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             Flexible(
               child: NavigationRail(
                 backgroundColor: outsideColor,
-                useIndicator: consts.useM3,
+                useIndicator: Theme.of(context).useMaterial3,
                 selectedIndex: _currentIndex,
                 onDestinationSelected: _changeIndex,
                 extended: extendNavRail,
                 // groupAlignment: consts.useM3 ? 0 : null,
-                minWidth: consts.useM3 ? null : 56,
+                minWidth: m3 ? null : 56,
                 leading: ComposeFloatingActionButton(
                   type: extendNavRail
                       ? ComposeFloatingActionButtonType.extended
                       : ComposeFloatingActionButtonType.small,
-                  elevate: !consts.useM3,
+                  elevate: !m3,
                 ),
                 destinations: [
                   for (var tab in _tabs!)
@@ -250,9 +251,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             // if (consts.useM3) SizedBox(height: extendNavRail ? 96 : 72),
           ],
         ),
-        if (!consts.useM3) const VerticalDivider(thickness: 1, width: 1),
+        if (!m3) const VerticalDivider(thickness: 1, width: 1),
         Expanded(
-          child: _roundWidgetM3(_getPage()),
+          child: _roundWidgetM3(context, _getPage()),
         ),
       ],
     );
@@ -311,8 +312,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  static Widget _roundWidgetM3(Widget widget) {
-    if (!consts.useM3) return widget;
+  static Widget _roundWidgetM3(BuildContext context, Widget widget) {
+    if (!Theme.of(context).useMaterial3) return widget;
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(topLeft: Radius.circular(16.0)),
@@ -325,7 +326,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       return null;
     }
 
-    if (consts.useM3) {
+    if (Theme.of(context).useMaterial3) {
       return NavigationBar(
         onDestinationSelected: _changeIndex,
         selectedIndex: _currentIndex,

@@ -36,8 +36,14 @@ class HotReload extends StatelessWidget {
         ),
       ],
       themes: [
-        WidgetbookTheme(name: "Light", data: lightThemeData),
-        WidgetbookTheme(name: "Dark", data: darkThemeData),
+        WidgetbookTheme(
+          name: "Light",
+          data: getTheme(Brightness.light, true),
+        ),
+        WidgetbookTheme(
+          name: "Dark",
+          data: getTheme(Brightness.dark, true),
+        ),
       ],
       devices: getDevices(),
       appInfo: AppInfo(name: consts.appName),

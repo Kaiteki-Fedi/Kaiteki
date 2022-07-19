@@ -18,9 +18,6 @@ const double defaultFormHeight = 592;
 const dialogConstraints = BoxConstraints(minWidth: 280, maxWidth: 560);
 const bottomSheetConstraints = BoxConstraints(maxWidth: 560);
 
-/// Debug flag for Material 3
-bool get useM3 => false;
-
 /// Whether to use frontend login endpoints or oauth ones.
 bool get useOAuth => !kIsWeb;
 
