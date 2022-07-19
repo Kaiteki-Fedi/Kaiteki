@@ -4,6 +4,7 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/theming/default/themes.dart';
 import 'package:widgetbook/widgetbook.dart';
 
+import 'categories/buttons.dart' as buttons;
 import 'categories/dialogs.dart';
 import 'categories/posts.dart';
 import 'categories/user.dart';
@@ -28,6 +29,10 @@ class HotReload extends StatelessWidget {
         WidgetbookCategory(
           name: "Users",
           widgets: buildUserComponents(),
+        ),
+        WidgetbookCategory(
+          name: "Buttons",
+          widgets: buttons.buildComponents(),
         ),
       ],
       themes: [
