@@ -11,7 +11,6 @@ import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/userkey.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/http/response.dart';
-import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
@@ -20,8 +19,6 @@ import 'package:kaiteki/model/http_method.dart';
 class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   @override
   ApiType get type => ApiType.misskey;
-
-  static final _logger = getLogger("misskey.MisskeyClient");
 
   Future<MisskeyCreateAppResponse> createApp(
     String name,
