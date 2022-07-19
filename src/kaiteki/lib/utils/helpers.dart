@@ -10,9 +10,9 @@ Future<void> resolveAndOpenUser(
 ) async {
   final handle = user.toString();
   final messenger = ScaffoldMessenger.of(context);
-  final lookupSnackbar = messenger.showSnackBar(
-    SnackBar(content: Text("Looking up $handle...")),
-  );
+  // final lookupSnackbar = messenger.showSnackBar(
+  //   SnackBar(content: Text("Looking up $handle...")),
+  // );
   final adapter = ref.read(adapterProvider);
   user.resolve(adapter).then((user) async {
     // lookupSnackbar.close();
