@@ -32,14 +32,34 @@ const List<String> defaultScopes = [
   // "admin",
 ];
 
+// TODO(Craftplacer): Consider adding additional permissions based on version like Milktea, https://github.com/pantasystem/Milktea/blob/develop/features/auth/src/main/java/net/pantasystem/milktea/auth/viewmodel/Permissions.kt
 const List<String> defaultMisskeyPermissions = [
+  "write:user-groups",
+  "read:user-groups",
+  "read:page-likes",
+  "write:page-likes",
+  "write:pages",
+  "read:pages",
+  "write:votes",
+  "write:reactions",
+  "read:reactions",
+  "write:notifications",
+  "read:notifications",
+  "write:notes",
+  "write:mutes",
+  "read:mutes",
   "read:account",
   "write:account",
-  "read:pages",
-  "read:notifications",
-  "write:notifications",
+  "read:blocks",
+  "write:blocks",
+  "read:drive",
+  "write:drive",
   "read:favorites",
   "write:favorites",
+  "read:following",
+  "write:following",
+  "read:messaging",
+  "write:messaging",
 ];
 
 const double defaultSplashRadius = 24.0;
