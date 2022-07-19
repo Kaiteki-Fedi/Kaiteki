@@ -1,7 +1,7 @@
 name: Backend report
 description: Request a new backend to be added to Kaiteki
 title: "Backend request"
-labels: [ enhancement, api:missing ]
+labels: [ "enhancement", "api:missing" ]
 body:
 - type: textarea
   id: name
