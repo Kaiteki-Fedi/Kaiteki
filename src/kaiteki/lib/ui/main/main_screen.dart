@@ -342,6 +342,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       return BottomNavigationBar(
         onTap: _changeIndex,
         currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
         items: [
           for (var tab in _tabs!)
             BottomNavigationBarItem(
