@@ -62,9 +62,11 @@ class UserListDialog extends StatelessWidget {
   }
 
   Widget _buildEmptyState() {
-    return IconLandingWidget(
-      icon: emptyIcon,
-      text: emptyTitle,
+    return Center(
+      child: IconLandingWidget(
+        icon: emptyIcon,
+        text: emptyTitle,
+      ),
     );
   }
 }
