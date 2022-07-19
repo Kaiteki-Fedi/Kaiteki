@@ -3,13 +3,13 @@ description: Request a new backend to be added to Kaiteki
 title: "Backend request"
 labels: [ "enhancement", "api:missing" ]
 body:
-- type: textarea
+- type: input
   id: name
   attributes:
     label: Name
   validations:
     required: true
-- type: textarea
+- type: input
   id: link
   attributes:
     label: Link
@@ -17,7 +17,7 @@ body:
     placeholder: https://example.com/
   validations:
     required: true
-- type: textarea
+- type: input
   id: api-docs
   attributes:
     label: API Docs Link
