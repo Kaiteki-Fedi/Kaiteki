@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const kModeKey = "themeMode";
@@ -23,13 +24,7 @@ class ThemePreferences extends ChangeNotifier {
 
   set useMaterial3(bool? value) {
     if (useMaterial3 == value) return;
-
-    if (value != null) {
-      _preferences.setBool(kUseMaterial3Key, value);
-    } else if (_preferences.containsKey(kUseMaterial3Key)) {
-      _preferences.remove(kUseMaterial3Key);
-    }
-
+    _preferences.setTristateBool(kUseMaterial3Key, value);
     notifyListeners();
   }
 
