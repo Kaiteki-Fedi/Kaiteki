@@ -16,6 +16,7 @@ import 'package:kaiteki/ui/shared/posts/meta_bar.dart';
 import 'package:kaiteki/ui/shared/posts/reaction_row.dart';
 import 'package:kaiteki/ui/shared/posts/reply_bar.dart';
 import 'package:kaiteki/ui/shared/posts/subject_bar.dart';
+import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -245,12 +246,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           SnackBar(
             content: Row(
               children: [
-                Builder(
-                  builder: (context) => Icon(
-                    Icons.check_rounded,
-                    color: DefaultTextStyle.of(context).style.color,
-                  ),
-                ),
+                const TextInheritedIconTheme(child: Icon(Icons.check_rounded)),
                 const SizedBox(width: 8),
                 Text(
                   _post.bookmarked
