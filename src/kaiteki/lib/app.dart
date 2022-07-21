@@ -144,7 +144,6 @@ class KaitekiApp extends ConsumerWidget {
       title: consts.appName,
       shortcuts: <ShortcutActivator, Intent>{
         ...WidgetsApp.defaultShortcuts,
-        newPost: const NewPostIntent(),
         refresh: const RefreshIntent(),
         refresh2: const RefreshIntent(),
         refresh3: const RefreshIntent(),
@@ -154,6 +153,7 @@ class KaitekiApp extends ConsumerWidget {
         gotoBookmarks: const GoToAppLocationIntent(AppLocation.bookmarks),
         gotoNotifications:
             const GoToAppLocationIntent(AppLocation.notifications),
+        newPost: const NewPostIntent(),
       },
     );
   }
