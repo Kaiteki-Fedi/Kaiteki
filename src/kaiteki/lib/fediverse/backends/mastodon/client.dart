@@ -13,6 +13,8 @@ import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
+  MastodonClient(super.instance);
+
   @override
   ApiType get type => ApiType.mastodon;
 
@@ -304,7 +306,6 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   @override
   Future<void> setClientAuthentication(ClientSecret secret) {
-    instance = secret.instance;
     authenticationData = MastodonAuthenticationData(
       secret.clientId,
       secret.clientSecret,
@@ -314,7 +315,6 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   @override
   Future<void> setAccountAuthentication(AccountSecret secret) {
-    instance = secret.instance;
     authenticationData!.accessToken = secret.accessToken;
     return Future.value();
   }

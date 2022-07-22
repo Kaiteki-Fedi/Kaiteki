@@ -178,8 +178,8 @@ extension UserReferenceExtensions on UserReference {
 
 extension WidgetRefExtensions on WidgetRef {
   String getCurrentAccountHandle() {
-    final account = read(accountProvider).currentAccount.accountSecret;
-    return "@${account.username}@${account.instance}";
+    final account = read(accountProvider).currentAccount;
+    return "@${account.key.username}@${account.key.host}";
   }
 }
 

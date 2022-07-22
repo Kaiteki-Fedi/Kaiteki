@@ -18,7 +18,8 @@ NodeInfo _$NodeInfoFromJson(Map<String, dynamic> json) => NodeInfo(
 Map<String, dynamic> _$NodeInfoToJson(NodeInfo instance) => <String, dynamic>{
       'version': instance.version,
       'software': instance.software,
-      'protocols': instance.protocols.map((e) => _$ProtocolEnumMap[e]).toList(),
+      'protocols':
+          instance.protocols.map((e) => _$ProtocolEnumMap[e]!).toList(),
       'metadata': instance.metadata,
     };
 

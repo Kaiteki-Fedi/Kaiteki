@@ -1,35 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'client_secret.dart';
+part of 'account_key.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ClientSecretAdapter extends TypeAdapter<ClientSecret> {
+class AccountKeyAdapter extends TypeAdapter<AccountKey> {
   @override
-  final int typeId = 2;
+  final int typeId = 0;
 
   @override
-  ClientSecret read(BinaryReader reader) {
+  AccountKey read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ClientSecret(
+    return AccountKey(
+      fields[0] as ApiType?,
       fields[1] as String,
       fields[2] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, ClientSecret obj) {
+  void write(BinaryWriter writer, AccountKey obj) {
     writer
+      ..writeByte(3)
       ..writeByte(2)
+      ..write(obj.username)
       ..writeByte(1)
-      ..write(obj.clientId)
-      ..writeByte(2)
-      ..write(obj.clientSecret);
+      ..write(obj.host)
+      ..writeByte(0)
+      ..write(obj.type);
   }
 
   @override
@@ -38,7 +41,7 @@ class ClientSecretAdapter extends TypeAdapter<ClientSecret> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ClientSecretAdapter &&
+      other is AccountKeyAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -47,13 +50,22 @@ class ClientSecretAdapter extends TypeAdapter<ClientSecret> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-ClientSecret _$ClientSecretFromJson(Map<String, dynamic> json) => ClientSecret(
-      json['id'] as String,
-      json['secret'] as String,
+AccountKey _$AccountKeyFromJson(Map<String, dynamic> json) => AccountKey(
+      $enumDecodeNullable(_$ApiTypeEnumMap, json['type'],
+          unknownValue: JsonKey.nullForUndefinedEnumValue),
+      json['host'] as String,
+      json['username'] as String,
     );
 
-Map<String, dynamic> _$ClientSecretToJson(ClientSecret instance) =>
+Map<String, dynamic> _$AccountKeyToJson(AccountKey instance) =>
     <String, dynamic>{
-      'id': instance.clientId,
-      'secret': instance.clientSecret,
+      'username': instance.username,
+      'host': instance.host,
+      'type': _$ApiTypeEnumMap[instance.type],
     };
+
+const _$ApiTypeEnumMap = {
+  ApiType.mastodon: 'mastodon',
+  ApiType.pleroma: 'pleroma',
+  ApiType.misskey: 'misskey',
+};

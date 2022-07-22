@@ -29,7 +29,7 @@ class AccountListDialog extends ConsumerWidget {
               children: [
                 for (final compound in manager.accounts)
                   AccountListTile(
-                    compound: compound,
+                    account: compound,
                     selected: manager.currentAccount == compound,
                     onTap: () => Navigator.of(context).pop(),
                   ),
@@ -57,13 +57,13 @@ class AccountListDialog extends ConsumerWidget {
 }
 
 class AccountListTile extends ConsumerWidget {
-  final AccountCompound compound;
+  final Account account;
   final bool selected;
   final VoidCallback? onTap;
 
   const AccountListTile({
     Key? key,
-    required this.compound,
+    required this.account,
     this.selected = false,
     this.onTap,
   }) : super(key: key);
@@ -73,11 +73,11 @@ class AccountListTile extends ConsumerWidget {
     return ListTile(
       selected: selected,
       leading: AvatarWidget(
-        compound.account,
+        account.user,
         size: 44,
       ),
-      title: Text(compound.accountSecret.username),
-      subtitle: Text(compound.instance),
+      title: Text(account.key.username),
+      subtitle: Text(account.key.host),
       onTap: () => _onSelect(ref),
       trailing: IconButton(
         icon: const Icon(Icons.close_rounded),
@@ -88,7 +88,7 @@ class AccountListTile extends ConsumerWidget {
   }
 
   Future<void> _onSelect(WidgetRef ref) async {
-    await ref.read(accountProvider).changeAccount(compound);
+    ref.read(accountProvider).currentAccount = account;
     onTap?.call();
   }
 
@@ -99,7 +99,7 @@ class AccountListTile extends ConsumerWidget {
     );
 
     if (result == true) {
-      ref.read(accountProvider).remove(compound);
+      ref.read(accountProvider).remove(account);
     }
   }
 }

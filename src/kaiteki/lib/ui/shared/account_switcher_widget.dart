@@ -32,7 +32,7 @@ class AccountSwitcherWidget extends ConsumerWidget {
     }
 
     return AvatarWidget(
-      container.currentAccount.account,
+      container.currentAccount.user,
       size: size ?? 24,
     );
   }

@@ -17,7 +17,7 @@ class AccountSetupPage extends ConsumerWidget {
             itemCount: manager.accounts.length,
             itemBuilder: (context, index) {
               final compound = manager.accounts.elementAt(index);
-              return AccountListTile(compound: compound);
+              return AccountListTile(account: compound);
             },
           ),
         ),

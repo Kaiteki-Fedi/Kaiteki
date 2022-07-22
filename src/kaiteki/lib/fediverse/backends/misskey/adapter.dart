@@ -1,9 +1,9 @@
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:intl/intl.dart';
-import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/authentication_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/misskey/capabilties.dart';
 import 'package:kaiteki/fediverse/backends/misskey/client.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
@@ -12,6 +12,7 @@ import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/model/account_key.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -27,7 +28,9 @@ part 'adapter.c.dart';
 // TODO(Craftplacer): add missing implementations
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     implements ChatSupport, ReactionSupport, CustomEmojiSupport {
-  factory MisskeyAdapter() => MisskeyAdapter.custom(MisskeyClient());
+  factory MisskeyAdapter(String instance) {
+    return MisskeyAdapter.custom(MisskeyClient(instance));
+  }
 
   MisskeyAdapter.custom(MisskeyClient client) : super(client);
 
@@ -44,15 +47,12 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<LoginResult> login(
-    String instance,
+    ClientSecret? clientSecret,
     String username,
     String password,
     requestMfa,
     requestOAuth,
-    AccountManager accounts,
   ) async {
-    client.instance = instance;
-
     final session = const Uuid().v4();
     late final misskey.User user;
     late final String token;
@@ -84,7 +84,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     }
 
     // Create and set account secret
-    final accountSecret = AccountSecret(instance, username, token);
+    final accountSecret = AccountSecret(token);
     client.authenticationData = MisskeyAuthenticationData(token);
 
     if (!consts.useOAuth) {
@@ -97,16 +97,19 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       }
     }
 
-    final compound = AccountCompound(
-      container: accounts,
+    final account = Account(
       adapter: this,
-      account: toUser(user),
-      clientSecret: ClientSecret(instance, "", "", apiType: client.type),
+      user: toUser(user),
+      key: AccountKey(
+        ApiType.misskey,
+        instance,
+        username,
+      ),
+      clientSecret: null,
       accountSecret: accountSecret,
     );
-    await accounts.addCurrentAccount(compound);
 
-    return const LoginResult.successful();
+    return LoginResult.successful(account);
   }
 
   @override

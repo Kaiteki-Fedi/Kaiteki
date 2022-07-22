@@ -108,10 +108,9 @@ class TimelineState extends ConsumerState<Timeline> {
         return Material(
           child: InkWell(
             onTap: () {
-              final account =
-                  ref.read(accountProvider).currentAccount.accountSecret;
+              final account = ref.read(accountProvider).currentAccount;
               context.push(
-                "/@${account.username}@${account.instance}/posts/${item.id}",
+                "/@${account.key.username}@${account.key.host}/posts/${item.id}",
                 extra: item,
               );
             },

@@ -17,6 +17,8 @@ import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/http_method.dart';
 
 class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
+  MisskeyClient(super.instance);
+
   @override
   ApiType get type => ApiType.misskey;
 
@@ -275,13 +277,11 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
 
   @override
   Future<void> setClientAuthentication(ClientSecret secret) {
-    instance = secret.instance;
     return Future.value();
   }
 
   @override
   Future<void> setAccountAuthentication(AccountSecret secret) {
-    instance = secret.instance;
     authenticationData = MisskeyAuthenticationData(secret.accessToken);
     return Future.value();
   }

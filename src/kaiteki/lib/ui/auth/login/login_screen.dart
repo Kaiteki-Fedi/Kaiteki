@@ -190,8 +190,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         return null;
       }
 
-      final adapter = type.createAdapter();
-      adapter.client.instance = instanceHost;
+      final adapter = type.createAdapter(instanceHost);
       instance = await adapter.getInstance();
     }
 
@@ -262,9 +261,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     final accounts = ref.read(accountProvider);
     if (accounts.accounts.any(
-      (compound) =>
-          compound.instance == instance &&
-          compound.accountSecret.username == username,
+      (account) =>
+          account.key.host == instance && account.key.username == username,
     )) {
       return l10n.authDuplicate;
     }
@@ -289,17 +287,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   ) async {
     final navigator = Navigator.of(context);
     final accounts = ref.read(accountProvider);
-    final adapter = _type!.createAdapter();
+    final type = _type!;
+    final adapter = type.createAdapter(instance);
     final result = await adapter.login(
-      instance,
+      await accounts.getClientSecret(instance),
       username,
       password,
       requestMfa,
       handleOAuth,
-      accounts,
     );
 
     if (result.successful) {
+      final account = result.account!;
+      await accounts.add(account);
+      accounts.currentAccount = account;
       navigator.pop();
     } else {
       setState(() => _error = result.error);

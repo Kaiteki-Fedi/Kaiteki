@@ -104,11 +104,15 @@ class KaitekiApp extends ConsumerWidget {
 
         if (user != null && host != null) {
           adapter = ref.watch(
-            accountProvider.select((value) {
-              return value.accounts.firstWhere((a) {
-                return a.matchesHandle("@$user@$host");
-              }).adapter;
-            }),
+            accountProvider.select(
+              (manager) => manager.accounts
+                  .firstWhere(
+                    (account) =>
+                        account.key.username == user &&
+                        account.key.host == host,
+                  )
+                  .adapter,
+            ),
           );
         } else {
           final accountManager = ref.watch(accountProvider);

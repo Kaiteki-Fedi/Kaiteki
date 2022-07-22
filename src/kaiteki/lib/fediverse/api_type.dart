@@ -10,7 +10,7 @@ enum ApiType {
   misskey(createAdapter: MisskeyAdapter.new, theme: misskeyTheme);
 
   final String? _displayName;
-  final FediverseAdapter Function() createAdapter;
+  final FediverseAdapter Function(String instance) createAdapter;
   final ApiTheme theme;
   final List<String>? hosts;
 

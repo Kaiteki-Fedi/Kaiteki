@@ -82,10 +82,12 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
         return Material(
           child: InkWell(
             onTap: () {
-              final account =
-                  ref.read(accountProvider).currentAccount.accountSecret;
+              final account = ref.read(accountProvider).currentAccount;
+              final username = account.key.username;
+              final instance = account.key.host;
+
               context.push(
-                "/@${account.username}@${account.instance}/posts/${item.id}",
+                "/@$username@$instance/posts/${item.id}",
                 extra: item,
               );
             },

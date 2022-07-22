@@ -5,6 +5,8 @@ import 'package:kaiteki/fediverse/backends/pleroma/responses/emoji_packs_respons
 import 'package:kaiteki/model/http_method.dart';
 
 class PleromaClient extends MastodonClient {
+  PleromaClient(super.instance);
+
   @override
   ApiType get type => ApiType.pleroma;
 
