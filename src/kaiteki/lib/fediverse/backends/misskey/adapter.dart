@@ -1,3 +1,4 @@
+import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:intl/intl.dart';
 import 'package:kaiteki/constants.dart' as consts;
@@ -58,19 +59,45 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     late final String token;
     late final String id;
 
-    if (consts.useOAuth) {
-      await requestOAuth((oauthUrl) async {
-        return Uri.https(instance, "/miauth/$session", {
-          "name": consts.appName,
-          "icon": consts.appRemoteIcon,
-          "callback": oauthUrl.toString(),
-          "permission": consts.defaultMisskeyPermissions.join(","),
-        });
-      });
+    const useMiAuth = false;
 
-      final details = await client.checkSession(session);
-      user = details.user;
-      token = details.token;
+    if (consts.useOAuth) {
+      // ignore: dead_code
+      if (useMiAuth) {
+        await requestOAuth((oauthUrl) async {
+          return Uri.https(instance, "/miauth/$session", {
+            "name": consts.appName,
+            "icon": consts.appRemoteIcon,
+            "callback": oauthUrl.toString(),
+            "permission": consts.defaultMisskeyPermissions.join(","),
+          });
+        });
+
+        final details = await client.checkSession(session);
+        user = details.user;
+        token = details.token;
+      } else {
+        late final String appSecret, sessionToken;
+        await requestOAuth((oauthUrl) async {
+          final app = await client.createApp(
+            consts.appName,
+            consts.appDescription,
+            consts.defaultMisskeyPermissions,
+            callbackUrl: oauthUrl.toString(),
+          );
+          appSecret = app.secret;
+
+          final session = await client.generateSession(app.secret);
+          sessionToken = session.token;
+
+          return Uri.parse(session.url);
+        });
+
+        final userkeyResponse = await client.userkey(appSecret, sessionToken);
+        user = userkeyResponse.user!;
+        final concat = userkeyResponse.accessToken + appSecret;
+        token = sha256.convert(concat.codeUnits).toString();
+      }
     } else {
       final authResponse = await client.signIn(
         MisskeySignInRequest(
