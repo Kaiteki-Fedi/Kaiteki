@@ -10,7 +10,7 @@ import 'package:kaiteki/utils/extensions.dart';
 class ComposeScreen extends ConsumerStatefulWidget {
   final Post? replyTo;
 
-  const ComposeScreen({Key? key, this.replyTo}) : super(key: key);
+  const ComposeScreen({super.key, this.replyTo});
 
   @override
   ConsumerState<ComposeScreen> createState() => _PostScreenState();
@@ -94,10 +94,10 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
 
 class ToggleSubjectButton extends StatelessWidget {
   const ToggleSubjectButton({
-    Key? key,
+    super.key,
     required this.value,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   final bool value;
   final VoidCallback? onChanged;

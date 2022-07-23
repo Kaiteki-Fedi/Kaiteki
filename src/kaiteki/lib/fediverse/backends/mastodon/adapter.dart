@@ -7,7 +7,7 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
     return MastodonAdapter.custom(MastodonClient(instance));
   }
 
-  MastodonAdapter.custom(MastodonClient client) : super(client);
+  MastodonAdapter.custom(super.client);
 
   @override
   Future<Instance?> probeInstance() async {

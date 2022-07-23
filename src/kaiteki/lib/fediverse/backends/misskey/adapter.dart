@@ -32,7 +32,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     return MisskeyAdapter.custom(MisskeyClient(instance));
   }
 
-  MisskeyAdapter.custom(MisskeyClient client) : super(client);
+  MisskeyAdapter.custom(super.client);
 
   @override
   Future<User> getUser(String username, [String? instance]) async {

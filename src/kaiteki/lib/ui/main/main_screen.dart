@@ -22,7 +22,7 @@ import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   ConsumerState<MainScreen> createState() => _MainScreenState();
@@ -315,8 +315,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   static Widget _roundWidgetM3(BuildContext context, Widget widget) {
     if (!Theme.of(context).useMaterial3) return widget;
 
+    const radius = Radius.circular(16.0);
     return ClipRRect(
-      borderRadius: const BorderRadius.only(topLeft: Radius.circular(16.0)),
+      borderRadius: const BorderRadius.only(
+        topLeft: radius,
+        topRight: radius,
+      ),
       child: widget,
     );
   }

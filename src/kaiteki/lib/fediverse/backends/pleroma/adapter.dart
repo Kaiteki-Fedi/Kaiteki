@@ -17,7 +17,7 @@ class PleromaAdapter //
     return PleromaAdapter.custom(PleromaClient(instance));
   }
 
-  PleromaAdapter.custom(PleromaClient client) : super(client);
+  PleromaAdapter.custom(super.client);
 
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {

@@ -8,7 +8,7 @@ import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 
 class BookmarksPage extends ConsumerStatefulWidget {
-  const BookmarksPage({Key? key}) : super(key: key);
+  const BookmarksPage({super.key});
 
   @override
   ConsumerState<BookmarksPage> createState() => _BookmarkPageState();

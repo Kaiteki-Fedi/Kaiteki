@@ -12,7 +12,7 @@ import 'package:kaiteki/utils/threader.dart';
 class ConversationScreen extends ConsumerStatefulWidget {
   final Post post;
 
-  const ConversationScreen(this.post, {Key? key}) : super(key: key);
+  const ConversationScreen(this.post, {super.key});
 
   @override
   ConsumerState<ConversationScreen> createState() => _ConversationScreenState();

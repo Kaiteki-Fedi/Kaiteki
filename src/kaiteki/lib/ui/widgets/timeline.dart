@@ -15,12 +15,12 @@ class Timeline extends ConsumerStatefulWidget {
   final TimelineKind kind;
 
   const Timeline({
-    Key? key,
+    super.key,
     this.filters,
     this.maxWidth,
     this.wide = false,
     this.kind = TimelineKind.home,
-  }) : super(key: key);
+  });
 
   @override
   TimelineState createState() => TimelineState();

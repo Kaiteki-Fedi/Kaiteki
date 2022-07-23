@@ -7,10 +7,10 @@ class ComposeFloatingActionButton extends StatelessWidget {
   final bool elevate;
 
   const ComposeFloatingActionButton({
-    Key? key,
+    super.key,
     required this.type,
     this.elevate = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

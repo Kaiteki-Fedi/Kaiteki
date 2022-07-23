@@ -29,7 +29,7 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 abstract class SharedMastodonAdapter<T extends MastodonClient>
     extends FediverseAdapter<T>
     implements CustomEmojiSupport, FavoriteSupport, BookmarkSupport {
-  SharedMastodonAdapter(T client) : super(client);
+  SharedMastodonAdapter(super.client);
 
   @override
   Future<User> getUserById(String id) async {

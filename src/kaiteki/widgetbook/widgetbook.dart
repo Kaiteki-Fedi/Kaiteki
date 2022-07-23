@@ -10,7 +10,7 @@ import 'categories/posts.dart';
 import 'categories/user.dart';
 
 class HotReload extends StatelessWidget {
-  const HotReload({Key? key}) : super(key: key);
+  const HotReload({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 
 class AccountListDialog extends ConsumerWidget {
-  const AccountListDialog({Key? key}) : super(key: key);
+  const AccountListDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,11 +62,11 @@ class AccountListTile extends ConsumerWidget {
   final VoidCallback? onTap;
 
   const AccountListTile({
-    Key? key,
+    super.key,
     required this.account,
     this.selected = false,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

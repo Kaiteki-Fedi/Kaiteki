@@ -13,9 +13,9 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
   final InstanceData data;
 
   const DiscoverInstanceDetailsScreen({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

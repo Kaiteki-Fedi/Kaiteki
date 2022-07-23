@@ -4,7 +4,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
 
 class AccountSetupPage extends ConsumerWidget {
-  const AccountSetupPage({Key? key}) : super(key: key);
+  const AccountSetupPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

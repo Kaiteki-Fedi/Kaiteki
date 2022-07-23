@@ -10,7 +10,7 @@ import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({Key? key}) : super(key: key);
+  const AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

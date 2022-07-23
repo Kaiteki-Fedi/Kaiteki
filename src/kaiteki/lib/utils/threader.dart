@@ -61,8 +61,8 @@ class ThreadPostContainer extends StatelessWidget {
   const ThreadPostContainer(
     this.post, {
     this.threadLayer = 0,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

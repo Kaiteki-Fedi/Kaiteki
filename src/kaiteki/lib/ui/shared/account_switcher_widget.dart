@@ -6,7 +6,7 @@ import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 class AccountSwitcherWidget extends ConsumerWidget {
   final double? size;
 
-  const AccountSwitcherWidget({Key? key, this.size}) : super(key: key);
+  const AccountSwitcherWidget({super.key, this.size});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

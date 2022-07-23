@@ -130,7 +130,7 @@ class KaitekiApp extends ConsumerWidget {
     );
   }
 
-  KaitekiApp({Key? key}) : super(key: key);
+  KaitekiApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

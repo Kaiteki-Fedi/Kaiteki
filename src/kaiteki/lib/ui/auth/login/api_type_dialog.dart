@@ -6,7 +6,7 @@ import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 
 class ApiTypeDialog extends StatefulWidget {
-  const ApiTypeDialog({Key? key}) : super(key: key);
+  const ApiTypeDialog({super.key});
 
   @override
   State<ApiTypeDialog> createState() => _ApiTypeDialogState();

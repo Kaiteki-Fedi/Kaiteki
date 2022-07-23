@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class ThemeScreen extends StatelessWidget {
-  const ThemeScreen({Key? key}) : super(key: key);
+  const ThemeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

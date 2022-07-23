@@ -5,7 +5,7 @@ import 'package:kaiteki/ui/settings/about/app_badge_kind.dart';
 class AppNameBadge extends StatelessWidget {
   final AppBadgeKind kind;
 
-  const AppNameBadge(this.kind, {Key? key}) : super(key: key);
+  const AppNameBadge(this.kind, {super.key});
 
   @override
   Widget build(BuildContext context) {

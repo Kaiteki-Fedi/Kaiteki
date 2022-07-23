@@ -8,12 +8,12 @@ class ThemePreview extends StatelessWidget {
   final String name;
 
   const ThemePreview({
-    Key? key,
+    super.key,
     this.selected = false,
     required this.onTap,
     this.icon,
     required this.name,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

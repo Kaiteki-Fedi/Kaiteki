@@ -6,10 +6,10 @@ import 'package:kaiteki/ui/user/user_screen.dart';
 
 class PostsPage extends StatelessWidget {
   const PostsPage({
-    Key? key,
+    super.key,
     required this.container,
     required this.widget,
-  }) : super(key: key);
+  });
 
   final AccountManager container;
   final UserScreen widget;

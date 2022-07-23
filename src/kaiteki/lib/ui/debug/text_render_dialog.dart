@@ -10,7 +10,7 @@ import 'package:kaiteki/utils/text/parsers.dart';
 class TextRenderDialog extends ConsumerStatefulWidget {
   final Post post;
 
-  const TextRenderDialog(this.post, {Key? key}) : super(key: key);
+  const TextRenderDialog(this.post, {super.key});
 
   @override
   ConsumerState<TextRenderDialog> createState() => _TextRenderDialogState();

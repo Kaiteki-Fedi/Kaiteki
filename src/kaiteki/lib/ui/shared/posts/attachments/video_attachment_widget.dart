@@ -6,8 +6,8 @@ import 'package:video_player/video_player.dart';
 class VideoAttachmentWidget extends StatefulWidget {
   const VideoAttachmentWidget({
     required this.attachment,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Attachment attachment;
 

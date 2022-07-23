@@ -17,8 +17,8 @@ class InteractionEventBar extends ConsumerWidget {
     required this.icon,
     required this.text,
     required this.user,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

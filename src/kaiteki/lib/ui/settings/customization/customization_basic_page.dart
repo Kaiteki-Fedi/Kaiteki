@@ -5,7 +5,7 @@ import 'package:kaiteki/ui/settings/customization/theme_selector.dart';
 import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 
 class CustomizationBasicPage extends ConsumerStatefulWidget {
-  const CustomizationBasicPage({Key? key}) : super(key: key);
+  const CustomizationBasicPage({super.key});
 
   @override
   ConsumerState<CustomizationBasicPage> createState() =>
@@ -58,7 +58,7 @@ class _CustomizationBasicPageState
 }
 
 class _SystemSettingsDisclaimer extends StatelessWidget {
-  const _SystemSettingsDisclaimer({Key? key}) : super(key: key);
+  const _SystemSettingsDisclaimer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -114,9 +114,9 @@ class _SystemSettingsDisclaimer extends StatelessWidget {
 
 class ColorCircle extends StatelessWidget {
   const ColorCircle({
-    Key? key,
+    super.key,
     required this.color,
-  }) : super(key: key);
+  });
 
   final Color color;
 

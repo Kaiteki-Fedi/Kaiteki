@@ -9,10 +9,10 @@ class EmojiSelector extends StatefulWidget {
   final Iterable<EmojiCategory> categories;
 
   const EmojiSelector({
-    Key? key,
+    super.key,
     required this.categories,
     required this.onEmojiSelected,
-  }) : super(key: key);
+  });
 
   @override
   State<EmojiSelector> createState() => _EmojiSelectorState();

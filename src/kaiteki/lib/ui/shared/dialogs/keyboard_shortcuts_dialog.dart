@@ -8,7 +8,7 @@ import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class KeyboardShortcutsDialog extends StatelessWidget {
-  const KeyboardShortcutsDialog({Key? key}) : super(key: key);
+  const KeyboardShortcutsDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

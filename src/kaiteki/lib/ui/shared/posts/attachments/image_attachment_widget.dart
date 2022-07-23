@@ -12,8 +12,8 @@ class ImageAttachmentWidget extends StatelessWidget {
     required this.attachment,
     required this.index,
     required this.post,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import 'package:kaiteki/ui/shared/posts/count_button.dart';
 
 class InteractionBar extends StatelessWidget {
   const InteractionBar({
-    Key? key,
+    super.key,
     required Post post,
     this.onReply,
     this.onFavorite,
@@ -15,8 +15,7 @@ class InteractionBar extends StatelessWidget {
     this.repeated,
     this.reacted,
     required this.buildActions,
-  })  : _post = post,
-        super(key: key);
+  })  : _post = post;
 
   final Post _post;
 

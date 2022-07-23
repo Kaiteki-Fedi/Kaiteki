@@ -31,11 +31,11 @@ class PostForm extends ConsumerStatefulWidget {
   final bool expands;
 
   const PostForm({
-    Key? key,
+    super.key,
     this.replyTo,
     this.enableSubject = true,
     this.expands = false,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<PostForm> createState() => PostFormState();

@@ -6,7 +6,7 @@ import 'package:kaiteki/utils/extensions/string.dart';
 class ApplicationWidget extends StatelessWidget {
   final Application application;
 
-  const ApplicationWidget(this.application, {Key? key}) : super(key: key);
+  const ApplicationWidget(this.application, {super.key});
 
   @override
   Widget build(BuildContext context) {

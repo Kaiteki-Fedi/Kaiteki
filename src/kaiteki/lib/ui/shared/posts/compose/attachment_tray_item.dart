@@ -5,10 +5,10 @@ class AttachmentTrayItem extends StatelessWidget {
   final VoidCallback? onRemove;
 
   const AttachmentTrayItem({
-    Key? key,
+    super.key,
     required this.attachment,
     this.onRemove,
-  }) : super(key: key);
+  });
 
   final Future<Attachment> attachment;
 

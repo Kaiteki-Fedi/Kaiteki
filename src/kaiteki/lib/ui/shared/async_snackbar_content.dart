@@ -8,12 +8,12 @@ class AsyncSnackBarContent extends StatelessWidget {
   final Widget? trailing;
 
   const AsyncSnackBarContent({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
     required this.done,
     this.trailing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

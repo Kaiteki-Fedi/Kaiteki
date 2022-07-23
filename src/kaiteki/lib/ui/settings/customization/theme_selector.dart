@@ -9,10 +9,10 @@ class ThemeSelector extends StatelessWidget {
   final Function(ThemeMode mode) onSelected;
 
   const ThemeSelector({
-    Key? key,
+    super.key,
     required this.theme,
     required this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ class FediverseCovenantChip extends StatelessWidget {
   static const String _url =
       "https://github.com/pixeldesu/fediverse-friendly-moderation-covenant/blob/master/README.md";
 
-  const FediverseCovenantChip({Key? key}) : super(key: key);
+  const FediverseCovenantChip({super.key});
 
   @override
   Widget build(BuildContext context) {

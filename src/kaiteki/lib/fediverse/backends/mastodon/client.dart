@@ -1,5 +1,6 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:kaiteki/constants.dart' as consts;
+import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';

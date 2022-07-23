@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/di.dart';
 
 class MfaDialog extends StatefulWidget {
-  const MfaDialog({Key? key}) : super(key: key);
+  const MfaDialog({super.key});
 
   @override
   State<MfaDialog> createState() => _MfaDialogState();

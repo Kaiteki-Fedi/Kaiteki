@@ -7,7 +7,7 @@ import 'package:mdi/mdi.dart';
 class MastodonCovenantChip extends StatelessWidget {
   static const String _url = "https://joinmastodon.org/covenant";
 
-  const MastodonCovenantChip({Key? key}) : super(key: key);
+  const MastodonCovenantChip({super.key});
 
   @override
   Widget build(BuildContext context) {

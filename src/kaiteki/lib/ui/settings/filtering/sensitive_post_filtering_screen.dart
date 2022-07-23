@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 
 class SensitivePostFilteringScreen extends ConsumerStatefulWidget {
-  const SensitivePostFilteringScreen({Key? key}) : super(key: key);
+  const SensitivePostFilteringScreen({super.key});
 
   @override
   ConsumerState<SensitivePostFilteringScreen> createState() =>

@@ -7,11 +7,10 @@ import 'package:kaiteki/utils/extensions.dart';
 
 class MetaBar extends StatelessWidget {
   const MetaBar({
-    Key? key,
+    super.key,
     required Post post,
     this.showAvatar = false,
-  })  : _post = post,
-        super(key: key);
+  })  : _post = post;
 
   final Post _post;
   final bool showAvatar;

@@ -13,10 +13,10 @@ class ReactionWidget extends ConsumerStatefulWidget {
   final Reaction reaction;
 
   const ReactionWidget({
-    Key? key,
+    super.key,
     required this.parentPost,
     required this.reaction,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<ReactionWidget> createState() => _ReactionWidgetState();

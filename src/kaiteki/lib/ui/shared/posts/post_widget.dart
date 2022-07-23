@@ -33,13 +33,13 @@ class PostWidget extends ConsumerStatefulWidget {
 
   const PostWidget(
     this.post, {
-    Key? key,
+    super.key,
     this.showParentPost = true,
     this.showActions = true,
     this.wide = false,
     this.hideReplyee = false,
     this.hideAvatar = false,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<PostWidget> createState() => _PostWidgetState();
@@ -293,10 +293,10 @@ class PostContentWidget extends ConsumerStatefulWidget {
   final bool hideReplyee;
 
   const PostContentWidget({
-    Key? key,
+    super.key,
     required this.post,
     required this.hideReplyee,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<PostContentWidget> createState() => _PostContentWidgetState();

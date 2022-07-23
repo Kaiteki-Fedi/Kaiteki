@@ -9,8 +9,7 @@ import 'package:kaiteki/utils/extensions.dart';
 class ApiWebCompatibilityDialog extends StatelessWidget {
   final ApiType type;
 
-  const ApiWebCompatibilityDialog({Key? key, required this.type})
-      : super(key: key);
+  const ApiWebCompatibilityDialog({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {

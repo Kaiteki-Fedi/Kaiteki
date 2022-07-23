@@ -5,7 +5,7 @@ import 'package:kaiteki/utils/extensions.dart';
 class TimelineBottomSheet extends StatelessWidget {
   final TimelineKind selectedKind;
 
-  const TimelineBottomSheet(this.selectedKind, {Key? key}) : super(key: key);
+  const TimelineBottomSheet(this.selectedKind, {super.key});
 
   @override
   Widget build(BuildContext context) {
