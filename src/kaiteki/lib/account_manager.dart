@@ -46,7 +46,11 @@ class AccountManager extends ChangeNotifier {
     }
 
     _accounts.remove(account);
-    if (_currentAccount == account) _currentAccount = null;
+    if (_currentAccount == account) {
+      _currentAccount = _accounts.isEmpty //
+          ? null
+          : _accounts.first;
+    }
 
     notifyListeners();
   }
