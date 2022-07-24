@@ -8,7 +8,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/account_key.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
@@ -17,8 +16,6 @@ import 'package:kaiteki/preferences/preference_container.dart';
 import 'package:kaiteki/preferences/theme_preferences.dart';
 import 'package:kaiteki/repositories/hive_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-final logger = getLogger('Kaiteki');
 
 Future<bool> get _useMaterial3ByDefault async {
   if (!Platform.isAndroid) return false;

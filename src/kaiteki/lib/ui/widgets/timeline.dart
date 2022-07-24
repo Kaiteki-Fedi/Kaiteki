@@ -4,20 +4,17 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/model/post_filters/post_filter.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:tuple/tuple.dart';
 
 class Timeline extends ConsumerStatefulWidget {
-  final List<PostFilter>? filters;
   final double? maxWidth;
   final bool wide;
   final TimelineKind kind;
 
   const Timeline({
     super.key,
-    this.filters,
     this.maxWidth,
     this.wide = false,
     this.kind = TimelineKind.home,
