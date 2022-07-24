@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/link_constants.dart' show federationCovenantUrl;
 import 'package:kaiteki/utils/extensions.dart';
 
 class FediverseCovenantChip extends StatelessWidget {
-  static const String _url =
-      "https://github.com/pixeldesu/fediverse-friendly-moderation-covenant/blob/master/README.md";
-
   const FediverseCovenantChip({super.key});
 
   @override
@@ -29,6 +27,6 @@ class FediverseCovenantChip extends StatelessWidget {
   }
 
   Future<void> _onPressed(BuildContext context) async {
-    await context.launchUrl(_url);
+    await context.launchUrl(federationCovenantUrl);
   }
 }

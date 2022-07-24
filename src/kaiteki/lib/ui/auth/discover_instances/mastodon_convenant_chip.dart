@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/link_constants.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
 class MastodonCovenantChip extends StatelessWidget {
-  static const String _url = "https://joinmastodon.org/covenant";
-
   const MastodonCovenantChip({super.key});
 
   @override
@@ -29,6 +28,6 @@ class MastodonCovenantChip extends StatelessWidget {
   }
 
   Future<void> _onPressed(BuildContext context) async {
-    await context.launchUrl(_url);
+    await context.launchUrl(mastodonCovenantUrl);
   }
 }
