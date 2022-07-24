@@ -1,6 +1,5 @@
 name: Error report
 description: Report an error that occured in Kaiteki 
-title: "[Bug] "
 labels: ["bug", "needs-triage"]
 body:
   - type: dropdown
@@ -8,10 +7,10 @@ body:
     attributes:
       label: Platform
       options:
-        - Web
-        - Windows
-        - Android
-        - Linux
+        web: Web
+        windows: Windows
+        android: Android
+        linux: Linux
     validations:
       required: true
       
