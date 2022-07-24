@@ -1,0 +1,40 @@
+name: Error report
+description: Report an error that occured in Kaiteki 
+title: "[Bug] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Web
+        - Windows
+        - Android
+        - Linux
+    validations:
+      required: true
+      
+  - type: input
+    id: message
+    attributes:
+      label: "Error Message"
+  
+  - type: textarea
+    id: stack
+    attributes:
+      label: "Stack Trace"
+      render: "plain"
+      placeholder: |
+        #0      _DebugScreenState.build.<anonymous closure> (package:kaiteki/ui/settings/debug_screen.dart:74:17)
+        #1      _DebugScreenState.build.<anonymous closure> (package:kaiteki/ui/settings/debug_screen.dart:72:20)
+        #2      _InkResponseState._handleTap (package:flutter/src/material/ink_well.dart:1005:21)
+        #3      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:198:24)
+        #4      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:613:11)
+        ...
+  - type: textarea
+    id: extra
+    attributes:
+      label: "Additional information"
+      description: "Tell us more about where and when this error appeared"
+      placeholder: "I was trying to sign in to an instance ..."
