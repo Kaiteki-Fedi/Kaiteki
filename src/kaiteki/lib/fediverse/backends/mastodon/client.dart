@@ -303,7 +303,15 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   }
 
   @override
-  Future<void> checkResponse(Response response) async {}
+  Future<void> checkResponse(Response response) async {
+    if (!response.isSuccessful) {
+      final json = await response.getContentJson();
+      throw ApiException(
+        response.statusCode,
+        reasonPhrase: json["error"] as String,
+      );
+    }
+  }
 
   @override
   Future<void> setClientAuthentication(ClientSecret secret) {
