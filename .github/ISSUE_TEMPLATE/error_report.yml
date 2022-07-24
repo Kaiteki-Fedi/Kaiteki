@@ -16,10 +16,18 @@ body:
       required: true
       
   - type: input
+    id: type
+    attributes:
+      label: "Error Type"
+      description: "The runtime type of the exception"
+      placeholder: InstanceUnreachableException
+      
+  - type: input
     id: message
     attributes:
       label: "Error Message"
-  
+      placeholder: "The instance entered is currently unreachable"
+      
   - type: textarea
     id: stack
     attributes:
