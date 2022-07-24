@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/model/post_filters/post_filter.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
+import 'package:tuple/tuple.dart';
 
 class Timeline extends ConsumerStatefulWidget {
   final List<PostFilter>? filters;
@@ -45,8 +46,8 @@ class TimelineState extends ConsumerState<Timeline> {
             _controller.appendPage(posts.toList(), posts.last.id);
           }
         }
-      } catch (e) {
-        if (mounted) _controller.error = e;
+      } catch (e, s) {
+        if (mounted) _controller.error = Tuple2(e, s);
       }
     });
 
@@ -82,8 +83,10 @@ class TimelineState extends ConsumerState<Timeline> {
           builderDelegate: PagedChildBuilderDelegate<Post>(
             itemBuilder: _buildPost,
             firstPageErrorIndicatorBuilder: (context) {
+              final t = _controller.error as Tuple2<dynamic, StackTrace>;
               return ErrorLandingWidget(
-                error: _controller.error,
+                error: t.item1,
+                stackTrace: t.item2,
               );
             },
           ),
