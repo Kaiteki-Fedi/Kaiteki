@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
@@ -15,10 +18,12 @@ class ExceptionDialog extends StatelessWidget {
 
   Map<String, String> get details {
     return {
-      "Runtime Type": exception.runtimeType.toString(),
+      "Runtime Type": exceptionRuntimeType,
       "Text": exception.toString(),
     };
   }
+
+  String get exceptionRuntimeType => exception.runtimeType.toString();
 
   Map<String, String> get longDetails {
     return {
@@ -70,6 +75,13 @@ class ExceptionDialog extends StatelessWidget {
   }
 
   Future<void> onReportIssue() async {
+    await launchUrl(
+      generateIssueUrlForm(),
+      mode: LaunchMode.externalApplication,
+    );
+  }
+
+  Uri generateIssueUrlPlain() {
     final detailsBody = details.entries
         .map((kv) => "**${kv.key}:** `${kv.value}`") //
         .join("\n");
@@ -88,18 +100,48 @@ ${detail.value}
       );
     }
 
-    await launchUrl(
-      Uri.https(
-        "github.com",
-        "/Kaiteki-Fedi/Kaiteki/issues/new",
-        {
-          "title": _tryGetTitle() ?? "Exception in Kaiteki",
-          "body": bodyBuffer.toString(),
-          "labels": "bug",
-        },
-      ),
-      mode: LaunchMode.externalApplication,
+    return Uri.https(
+      "github.com",
+      "/Kaiteki-Fedi/Kaiteki/issues/new",
+      {
+        "title": _tryGetTitle() ?? "Exception in Kaiteki",
+        "body": bodyBuffer.toString(),
+        "labels": "bug",
+      },
     );
+  }
+
+  Uri generateIssueUrlForm() {
+    final bodyBuffer = StringBuffer() //
+      ..writeln(
+        "**Platform:** $_platform (`${Platform.operatingSystemVersion}`)",
+      )
+      ..writeln();
+
+    return Uri.https(
+      "github.com",
+      "/Kaiteki-Fedi/Kaiteki/issues/new",
+      {
+        "title": _tryGetTitle() ?? "Exception in Kaiteki",
+        "labels": "bug,needs-triage",
+        "template": "error_report.yml",
+        "message": exception.toString(),
+        "type": exceptionRuntimeType,
+        "stack": stackTrace?.toString(),
+        "extra": bodyBuffer.toString(),
+      },
+    );
+  }
+
+  String get _platform {
+    if (kIsWeb) return "Web";
+    if (Platform.isAndroid) return "Android";
+    if (Platform.isIOS) return "iOS";
+    if (Platform.isMacOS) return "macOS";
+    if (Platform.isLinux) return "Linux";
+    if (Platform.isWindows) return "Windows";
+    if (Platform.isFuchsia) return "Fuchsia";
+    return "Unknown";
   }
 
   String? _tryGetTitle() {
