@@ -232,7 +232,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         posts = await client.getHomeTimeline(minId: sinceId, maxId: untilId);
         break;
 
-      case TimelineKind.public:
+      case TimelineKind.local:
         posts = await client.getPublicTimeline(
           minId: sinceId,
           maxId: untilId,

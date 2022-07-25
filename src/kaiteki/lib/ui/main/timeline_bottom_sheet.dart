@@ -11,7 +11,7 @@ class TimelineBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     const timelines = [
       TimelineKind.home,
-      TimelineKind.public,
+      TimelineKind.local,
       TimelineKind.federated,
     ];
 
@@ -41,14 +41,40 @@ class TimelineBottomSheet extends StatelessWidget {
 
   Widget _buildTimelineItem(BuildContext context, TimelineKind kind) {
     final selected = selectedKind == kind;
-
+    final description = getTimelineKindDescription(kind);
     return ListTile(
       leading: Icon(
         selected ? kind.icon.item2 : kind.icon.item1,
       ),
       title: Text(kind.displayName),
+      subtitle: description == null ? null : Text(description),
       selected: selected,
+      // trailing: kind == TimelineKind.federated
+      //     ? Row(
+      //         mainAxisSize: MainAxisSize.min,
+      //         children: [
+      //           SizedBox(child: VerticalDivider(), height: 24),
+      //           IconButton(
+      //             icon: Icon(Icons.help_outline_rounded),
+      //             onPressed: () {},
+      //           ),
+      //         ],
+      //       )
+      //     : null,
       onTap: () => Navigator.of(context).pop(kind),
     );
+  }
+
+  String? getTimelineKindDescription(TimelineKind kind) {
+    switch (kind) {
+      case TimelineKind.home:
+        return "Posts from you and the people you follow";
+      case TimelineKind.local:
+        return "Posts from everyone on your instance";
+      case TimelineKind.federated:
+        return "Posts from everyone across the Fediverse";
+      default:
+        return null;
+    }
   }
 }
