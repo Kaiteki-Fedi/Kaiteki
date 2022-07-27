@@ -233,10 +233,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 // groupAlignment: consts.useM3 ? 0 : null,
                 minWidth: m3 ? null : 56,
                 leading: ComposeFloatingActionButton(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
+                  foregroundColor:
+                      Theme.of(context).colorScheme.onTertiaryContainer,
                   type: extendNavRail
                       ? ComposeFloatingActionButtonType.extended
                       : ComposeFloatingActionButtonType.small,
-                  elevate: !m3,
                 ),
                 destinations: [
                   for (var tab in _tabs!)
