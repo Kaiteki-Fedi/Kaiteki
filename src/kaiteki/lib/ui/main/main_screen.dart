@@ -203,21 +203,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildDrawerTab(BuildContext context, MainScreenTab tab) {
-    final selected = _currentTab == tab.kind;
-    return ListTile(
-      leading: selected //
-          ? Icon(tab.selectedIcon)
-          : Icon(tab.icon),
-      title: Text(tab.text),
-      selected: selected,
-      onTap: () {
-        setState(() => _currentTab = tab.kind);
-        Navigator.pop(context);
-      },
-    );
-  }
-
   AppBar buildAppBar(Color? outsideColor, BuildContext context) {
     return AppBar(
       backgroundColor: outsideColor,
