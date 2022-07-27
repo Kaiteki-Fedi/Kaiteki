@@ -73,14 +73,15 @@ class UserListDialog extends StatelessWidget {
 
 class UserListTile extends ConsumerWidget {
   const UserListTile({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   final User user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final description = user.description?.trim();
     return InkWell(
       onTap: () => context.showUser(user, ref),
       child: Padding(
@@ -101,15 +102,12 @@ class UserListTile extends ConsumerWidget {
                       child: UserDisplayNameWidget(user),
                     ),
                   ),
-                  if (user.description != null)
+                  if (description != null && description.isNotEmpty)
                     Column(
                       children: [
                         const SizedBox(height: 8),
                         Text.rich(
-                          user.renderDescription(
-                            context,
-                            ref,
-                          ),
+                          user.renderText(context, ref, description),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
