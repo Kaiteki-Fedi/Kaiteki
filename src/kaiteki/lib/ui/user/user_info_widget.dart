@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -121,7 +122,10 @@ class UserInfoWidget extends ConsumerWidget {
         for (final field in fields.entries)
           Padding(
             padding: const EdgeInsets.only(bottom: 12.0),
-            child: _UserInfoFieldRow(field),
+            child: _UserInfoFieldRow(
+              field,
+              emojis: user.emojis?.toList(growable: false) ?? [],
+            ),
           ),
       ],
     );
@@ -130,8 +134,9 @@ class UserInfoWidget extends ConsumerWidget {
 
 class _UserInfoFieldRow extends ConsumerWidget {
   final MapEntry<String, String> field;
+  final List<Emoji> emojis;
 
-  const _UserInfoFieldRow(this.field);
+  const _UserInfoFieldRow(this.field, {this.emojis = const []});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -147,6 +152,7 @@ class _UserInfoFieldRow extends ConsumerWidget {
           const TextRenderer().render(
             context,
             field.value,
+            textContext: TextContext(emojis: emojis),
             onUserClick: (reference) => resolveAndOpenUser(
               reference,
               context,

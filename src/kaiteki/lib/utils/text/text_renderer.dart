@@ -66,21 +66,24 @@ class TextRenderer {
 
     if (element is TextElement) {
       return renderText(context, element, childrenSpans);
-    } else if (element is LinkElement) {
+    }
+    if (element is LinkElement) {
       return renderLink(
         context,
         element,
         childrenSpans,
         style: theme?.linkTextStyle,
       );
-    } else if (element is HashtagElement) {
+    }
+    if (element is HashtagElement) {
       return renderHashtag(
         context,
         textContext,
         element,
         style: theme?.hashtagTextStyle,
       );
-    } else if (element is MentionElement) {
+    }
+    if (element is MentionElement) {
       return renderMention(
         context,
         textContext,
@@ -88,14 +91,19 @@ class TextRenderer {
         onUserClick: onUserClick,
         style: theme?.mentionTextStyle,
       );
-    } else if (element is EmojiElement) {
+    }
+    if (element is EmojiElement) {
       return renderEmoji(textContext, element, scale: theme?.emojiScale);
     }
 
-    if (element.children?.isNotEmpty == true) {
+    if (childrenSpans.isNotEmpty == true) {
       return TextSpan(children: childrenSpans);
     }
 
+    return renderFallbackSpan(element);
+  }
+
+  InlineSpan renderFallbackSpan(Element element) {
     return TextSpan(
       text: "[NIY ${element.runtimeType}]",
       style: const TextStyle(
@@ -109,7 +117,7 @@ class TextRenderer {
     BuildContext context,
     List<Element>? children,
     TextContext textContext,
-    KaitekiExtension? theme, {
+    KaitekiTextTheme? theme, {
     required Function(UserReference reference) onUserClick,
   }) {
     final spans = <InlineSpan>[];
@@ -234,13 +242,16 @@ class TextRenderer {
     EmojiElement element, {
     double? scale,
   }) {
-    final emoji = textContext.emojis!.firstOrDefault((e) {
+    assert(
+      textContext.emojis != null,
+      "An emoji is about to be rendered, but no emojis were provided.",
+    );
+
+    final emoji = textContext.emojis?.firstOrDefault((e) {
       return e.name == element.name;
     });
 
-    if (emoji == null) {
-      return TextSpan(text: element.name);
-    }
+    if (emoji == null) return TextSpan(text: ":${element.name}:");
 
     // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
     return WidgetSpan(
