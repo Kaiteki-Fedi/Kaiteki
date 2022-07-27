@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/shared/posts/count_button.dart';
 
 class InteractionBar extends StatelessWidget {
@@ -37,8 +37,6 @@ class InteractionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final kTheme = context.kaitekiExtension!;
-
     final buttons = [
       CountButton(
         count: _post.replyCount,
@@ -49,7 +47,7 @@ class InteractionBar extends StatelessWidget {
       if (repeated != null)
         CountButton(
           active: _post.repeated,
-          activeColor: kTheme.repeatColor,
+          activeColor: Theme.of(context).ktkColors?.repeatColor,
           count: _post.repeatCount,
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.repeat_rounded),
@@ -59,7 +57,7 @@ class InteractionBar extends StatelessWidget {
       if (favorited != null)
         CountButton(
           active: _post.liked,
-          activeColor: kTheme.favoriteColor,
+          activeColor: Theme.of(context).ktkColors?.favoriteColor,
           activeIcon: const Icon(Icons.star_rounded),
           count: _post.likeCount,
           focusNode: FocusNode(skipTraversal: true),

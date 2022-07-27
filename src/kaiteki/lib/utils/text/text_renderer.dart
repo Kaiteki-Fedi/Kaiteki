@@ -6,7 +6,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -43,7 +43,7 @@ class TextRenderer {
       context,
       parser.parse(text).parseWith(const SocialTextParser()),
       textContext ?? TextContext(),
-      context.getKaitekiTheme(),
+      Theme.of(context).ktkTextTheme,
       onUserClick: onUserClick,
     );
     return TextSpan(children: renderedElements.toList(growable: false));
@@ -53,7 +53,7 @@ class TextRenderer {
     BuildContext context,
     Element element,
     TextContext textContext,
-    KaitekiExtension? theme, {
+    KaitekiTextTheme? theme, {
     required Function(UserReference) onUserClick,
   }) {
     final childrenSpans = renderChildren(

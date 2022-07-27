@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/theming/default/constants.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/theming/kaiteki/colors.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/theming/kaiteki/theme.dart';
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyGeneralChanges() {
@@ -13,7 +15,11 @@ extension ThemeDataExtensions on ThemeData {
       dialogTheme: const DialogTheme(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
-      extensions: [KaitekiExtension.material(this)],
+      extensions: [
+        KaitekiTextTheme.fromMaterialTheme(this),
+        KaitekiColors.fromMaterialTheme(this),
+        KaitekiTheme.fromMaterialTheme(this),
+      ],
       textTheme: createKaitekiTextTheme(textTheme),
       checkboxTheme: CheckboxThemeData(
         checkColor: MaterialStateProperty.all(colorScheme.surface),

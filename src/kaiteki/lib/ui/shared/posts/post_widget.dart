@@ -1,10 +1,11 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
@@ -65,7 +66,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           InteractionEventBar(
             icon: Icons.repeat_rounded,
             text: l10n.postRepeated,
-            color: context.kaitekiExtension!.repeatColor,
+            color: Theme.of(context).ktkColors!.repeatColor,
             user: _post.author,
           ),
           PostWidget(
@@ -212,9 +213,10 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
               _post.bookmarked
                   ? Icons.bookmark_rounded
                   : Icons.bookmark_border_rounded,
-              color: _post.bookmarked //
-                  ? context.kaitekiExtension!.bookmarkColor
-                  : null,
+              color: Theme.of(context).ktkColors?.favoriteColor ??
+                  Colors.pink.harmonizeWith(
+                    Theme.of(context).colorScheme.primary,
+                  ),
             ),
             contentPadding: EdgeInsets.zero,
           ),

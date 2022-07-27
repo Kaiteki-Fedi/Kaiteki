@@ -3,8 +3,8 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
+import 'package:kaiteki/theming/kaiteki/theme.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
 
 // TODO(Craftplacer): maybe make this UI-only and remove interaction between adapters and
 //      models?
@@ -29,7 +29,7 @@ class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
     const emojiSize = 24.0;
 
     final reacted = widget.reaction.includesMe;
-    final theme = context.getKaitekiTheme()!.reactionButtonTheme;
+    final theme = Theme.of(context).ktkTheme!.reactionButtonTheme;
     final backgroundColor = reacted //
         ? theme.activeBackground
         : theme.inactiveBackground;

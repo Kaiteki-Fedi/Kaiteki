@@ -4,7 +4,6 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/auth/login/api_web_compatibility_dialog.dart';
 import 'package:kaiteki/ui/shared/compose_screen.dart';
 import 'package:kaiteki/ui/shared/dialogs/exception_dialog.dart';
@@ -20,10 +19,6 @@ extension BuildContextExtensions on BuildContext {
       builder: (context) => ComposeScreen(key: key, replyTo: replyTo),
       barrierDismissible: true,
     );
-  }
-
-  KaitekiExtension? getKaitekiTheme() {
-    return Theme.of(this).extension<KaitekiExtension>();
   }
 
   Future<bool> showWebCompatibilityDialog(ApiType type) async {
