@@ -15,15 +15,20 @@ class InteractionBar extends StatelessWidget {
     this.repeated,
     this.reacted,
     required this.buildActions,
-  })  : _post = post;
+    this.onShowFavoritees,
+    this.onShowRepeatees,
+  }) : _post = post;
 
   final Post _post;
 
   final VoidCallback? onReply;
   final VoidCallback? onFavorite;
+  final VoidCallback? onShowFavoritees;
   final bool? favorited;
 
   final VoidCallback? onRepeat;
+  final VoidCallback? onShowRepeatees;
+
   final bool? repeated;
 
   final VoidCallback? onReact;
@@ -49,6 +54,7 @@ class InteractionBar extends StatelessWidget {
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.repeat_rounded),
           onTap: onRepeat,
+          onLongPress: onShowRepeatees,
         ),
       if (favorited != null)
         CountButton(
@@ -59,6 +65,7 @@ class InteractionBar extends StatelessWidget {
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.star_border_rounded),
           onTap: onFavorite,
+          onLongPress: onShowFavoritees,
         ),
       if (reacted != null)
         CountButton(

@@ -300,4 +300,10 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<Post?> unrepeatPost(String id) => throw UnimplementedError();
+
+  @override
+  Future<List<User>> getRepeatees(String id) async {
+    final notes = await client.getRenotes(id);
+    return notes.map((n) => n.user).map(toUserFromLite).toList();
+  }
 }
