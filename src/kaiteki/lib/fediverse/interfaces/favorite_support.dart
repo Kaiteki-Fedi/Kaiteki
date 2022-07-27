@@ -1,4 +1,5 @@
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/user.dart';
 
 abstract class FavoriteSupport {
   /// Favorites a post.
@@ -10,4 +11,7 @@ abstract class FavoriteSupport {
   ///
   /// This method *may* return the [Post] that was unfavorited.
   Future<Post?> unfavoritePost(String id);
+
+  /// Returns a list of users that have favorited this post.
+  Future<List<User>> getFavoritees(String id);
 }

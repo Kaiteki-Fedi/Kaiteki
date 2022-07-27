@@ -82,4 +82,6 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<User?> followUser(String id);
 
   Future<Attachment> uploadAttachment(File file, String? description);
+
+  Future<List<User>> getRepeatees(String id);
 }
