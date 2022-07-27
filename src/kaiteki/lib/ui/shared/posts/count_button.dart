@@ -16,7 +16,7 @@ class CountButton extends StatelessWidget {
   final FocusNode? focusNode;
 
   const CountButton({
-    Key? key,
+    super.key,
     this.active = false,
     this.count = 0,
     this.color,
@@ -27,7 +27,7 @@ class CountButton extends StatelessWidget {
     this.disabled = false,
     this.focusNode,
     this.onLongPress,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

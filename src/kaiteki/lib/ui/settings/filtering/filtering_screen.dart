@@ -4,7 +4,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/preferences/sensitive_post_filtering_preferences.dart';
 
 class FilteringScreen extends ConsumerWidget {
-  const FilteringScreen({Key? key}) : super(key: key);
+  const FilteringScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

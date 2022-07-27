@@ -8,21 +8,21 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/main/bookmarks_page.dart';
 import 'package:kaiteki/ui/main/compose_fab.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
-import 'package:kaiteki/ui/main/placeholder_page.dart';
+import 'package:kaiteki/ui/main/pages/bookmarks.dart';
+import 'package:kaiteki/ui/main/pages/placeholder.dart';
+import 'package:kaiteki/ui/main/pages/timeline.dart';
 import 'package:kaiteki/ui/main/tab.dart';
 import 'package:kaiteki/ui/main/tab_kind.dart';
 import 'package:kaiteki/ui/main/timeline_bottom_sheet.dart';
-import 'package:kaiteki/ui/main/timeline_page.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   ConsumerState<MainScreen> createState() => _MainScreenState();
@@ -76,7 +76,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   static Color? getOutsideColor(BuildContext context) {
-    if (consts.useM3) {
+    if (Theme.of(context).useMaterial3) {
       return Theme.of(context).colorScheme.surfaceVariant;
     }
     return null;
@@ -211,13 +211,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         consts.appName,
         style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
       ),
-      elevation: consts.useM3 ? 0.0 : null,
+      elevation: Theme.of(context).useMaterial3 ? 0.0 : null,
       actions: _buildAppBarActions(context),
     );
   }
 
   Widget _buildDesktopView(bool extendNavRail) {
     final outsideColor = getOutsideColor(context);
+    final m3 = Theme.of(context).useMaterial3;
     return Row(
       children: [
         Column(
@@ -225,17 +226,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             Flexible(
               child: NavigationRail(
                 backgroundColor: outsideColor,
-                useIndicator: consts.useM3,
+                useIndicator: Theme.of(context).useMaterial3,
                 selectedIndex: _currentIndex,
                 onDestinationSelected: _changeIndex,
                 extended: extendNavRail,
                 // groupAlignment: consts.useM3 ? 0 : null,
-                minWidth: consts.useM3 ? null : 56,
+                minWidth: m3 ? null : 56,
                 leading: ComposeFloatingActionButton(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.tertiaryContainer,
+                  foregroundColor:
+                      Theme.of(context).colorScheme.onTertiaryContainer,
                   type: extendNavRail
                       ? ComposeFloatingActionButtonType.extended
                       : ComposeFloatingActionButtonType.small,
-                  elevate: !consts.useM3,
                 ),
                 destinations: [
                   for (var tab in _tabs!)
@@ -250,9 +254,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             // if (consts.useM3) SizedBox(height: extendNavRail ? 96 : 72),
           ],
         ),
-        if (!consts.useM3) const VerticalDivider(thickness: 1, width: 1),
+        if (!m3) const VerticalDivider(thickness: 1, width: 1),
         Expanded(
-          child: _roundWidgetM3(_getPage()),
+          child: _roundWidgetM3(context, _getPage()),
         ),
       ],
     );
@@ -311,11 +315,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  static Widget _roundWidgetM3(Widget widget) {
-    if (!consts.useM3) return widget;
+  static Widget _roundWidgetM3(BuildContext context, Widget widget) {
+    if (!Theme.of(context).useMaterial3) return widget;
 
+    const radius = Radius.circular(16.0);
     return ClipRRect(
-      borderRadius: const BorderRadius.only(topLeft: Radius.circular(16.0)),
+      borderRadius: const BorderRadius.only(
+        topLeft: radius,
+        topRight: radius,
+      ),
       child: widget,
     );
   }
@@ -325,7 +333,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       return null;
     }
 
-    if (consts.useM3) {
+    if (Theme.of(context).useMaterial3) {
       return NavigationBar(
         onDestinationSelected: _changeIndex,
         selectedIndex: _currentIndex,
@@ -342,6 +350,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       return BottomNavigationBar(
         onTap: _changeIndex,
         currentIndex: _currentIndex,
+        type: BottomNavigationBarType.fixed,
         items: [
           for (var tab in _tabs!)
             BottomNavigationBarItem(

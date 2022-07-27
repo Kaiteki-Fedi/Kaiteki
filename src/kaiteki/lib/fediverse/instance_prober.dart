@@ -35,7 +35,7 @@ Future<InstanceProbeResult> probeInstance(String host) async {
     }
 
     if (result.instance == null) {
-      final adapter = type.createAdapter()..client.instance = host;
+      final adapter = type.createAdapter(host);
       result = result.copyWith(instance: await adapter.getInstance());
     }
 
@@ -153,10 +153,9 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
 Future<InstanceProbeResult?> _probeEndpoints(String host) async {
   for (final apiType in ApiType.values) {
     try {
-      final adapter = apiType.createAdapter();
+      final adapter = apiType.createAdapter(host);
       _logger.d('Probing for ${apiType.displayName} on $host...');
 
-      adapter.client.instance = host;
       final result = await adapter.probeInstance();
 
       if (result != null) {

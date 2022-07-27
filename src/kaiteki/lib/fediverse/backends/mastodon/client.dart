@@ -1,5 +1,6 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:kaiteki/constants.dart' as consts;
+import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
@@ -13,6 +14,8 @@ import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
+  MastodonClient(super.instance);
+
   @override
   ApiType get type => ApiType.mastodon;
 
@@ -300,11 +303,18 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   }
 
   @override
-  Future<void> checkResponse(Response response) async {}
+  Future<void> checkResponse(Response response) async {
+    if (!response.isSuccessful) {
+      final json = await response.getContentJson();
+      throw ApiException(
+        response.statusCode,
+        reasonPhrase: json["error"] as String,
+      );
+    }
+  }
 
   @override
   Future<void> setClientAuthentication(ClientSecret secret) {
-    instance = secret.instance;
     authenticationData = MastodonAuthenticationData(
       secret.clientId,
       secret.clientSecret,
@@ -314,7 +324,6 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   @override
   Future<void> setAccountAuthentication(AccountSecret secret) {
-    instance = secret.instance;
     authenticationData!.accessToken = secret.accessToken;
     return Future.value();
   }

@@ -9,10 +9,10 @@ import 'package:kaiteki/utils/utils.dart';
 
 class ReplyBar extends ConsumerWidget {
   const ReplyBar({
-    Key? key,
+    super.key,
     this.textStyle,
     required this.post,
-  }) : super(key: key);
+  });
 
   final TextStyle? textStyle;
   final Post post;

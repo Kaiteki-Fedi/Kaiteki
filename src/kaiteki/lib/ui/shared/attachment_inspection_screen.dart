@@ -13,10 +13,10 @@ class AttachmentInspectionScreen extends StatefulWidget {
   final int index;
 
   const AttachmentInspectionScreen({
-    Key? key,
+    super.key,
     required this.attachments,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   State<AttachmentInspectionScreen> createState() =>

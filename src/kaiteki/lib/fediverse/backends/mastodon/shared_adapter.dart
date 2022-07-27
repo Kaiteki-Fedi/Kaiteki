@@ -1,7 +1,5 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
-import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/authentication_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
@@ -13,13 +11,13 @@ import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 // ignore: unnecessary_import, Dart Analyzer is fucking with me
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/model/account_key.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/repositories/client_secret_repository.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:tuple/tuple.dart';
@@ -28,10 +26,10 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
-class SharedMastodonAdapter<T extends MastodonClient>
+abstract class SharedMastodonAdapter<T extends MastodonClient>
     extends FediverseAdapter<T>
     implements CustomEmojiSupport, FavoriteSupport, BookmarkSupport {
-  SharedMastodonAdapter(T client) : super(client);
+  SharedMastodonAdapter(super.client);
 
   @override
   Future<User> getUserById(String id) async {
@@ -39,15 +37,22 @@ class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   Future<ClientSecret> _makeClientSecret(
-    String instance,
-    ClientSecretRepository clientRepo, [
+    String instance, [
     String? redirectUri,
   ]) async {
-    final clientSecret = await getClientSecret(
-      client,
+    // _logger.v("Creating new application on $instance");
+
+    final application = await client.createApplication(
       instance,
-      clientRepo,
-      redirectUri,
+      consts.appName,
+      consts.appWebsite,
+      redirectUri ?? "urn:ietf:wg:oauth:2.0:oob",
+      consts.defaultScopes,
+    );
+
+    final clientSecret = ClientSecret(
+      application.clientId!,
+      application.clientSecret!,
     );
 
     client.authenticationData = MastodonAuthenticationData(
@@ -60,17 +65,14 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<LoginResult> login(
-    String instance,
+    ClientSecret? clientSecret,
     String username,
     String password,
     requestMfa,
     requestOAuth,
-    AccountManager accounts,
   ) async {
     late final ClientSecret clientSecret;
     late final String accessToken;
-
-    client.instance = instance;
 
     if (consts.useOAuth) {
       // if (Platform.isAndroid | Platform.isIOS) {}
@@ -79,7 +81,6 @@ class SharedMastodonAdapter<T extends MastodonClient>
       final response = await requestOAuth((oauthUrl) async {
         clientSecret = await _makeClientSecret(
           instance,
-          accounts.getClientRepo(),
           url = oauthUrl.toString(),
         );
 
@@ -105,10 +106,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
 
       accessToken = loginResponse.accessToken!;
     } else {
-      clientSecret = await _makeClientSecret(
-        instance,
-        accounts.getClientRepo(),
-      );
+      clientSecret = await _makeClientSecret(instance);
 
       final loginResponse = await client.login(username, password);
 
@@ -145,7 +143,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
     }
 
     // Create and set account secret
-    final accountSecret = AccountSecret(instance, username, accessToken);
+    final accountSecret = AccountSecret(accessToken);
     client.authenticationData!.accessToken = accountSecret.accessToken;
 
     // Check whether secrets work, and if we can get an account back
@@ -159,16 +157,19 @@ class SharedMastodonAdapter<T extends MastodonClient>
       );
     }
 
-    final compound = AccountCompound(
-      container: accounts,
+    final ktkAccount = Account(
       adapter: this,
-      account: toUser(account),
+      user: toUser(account),
       clientSecret: clientSecret,
       accountSecret: accountSecret,
+      key: AccountKey(
+        client.type,
+        instance,
+        username,
+      ),
     );
-    await accounts.addCurrentAccount(compound);
 
-    return const LoginResult.successful();
+    return LoginResult.successful(ktkAccount);
   }
 
   @override
@@ -231,7 +232,7 @@ class SharedMastodonAdapter<T extends MastodonClient>
         posts = await client.getHomeTimeline(minId: sinceId, maxId: untilId);
         break;
 
-      case TimelineKind.public:
+      case TimelineKind.local:
         posts = await client.getPublicTimeline(
           minId: sinceId,
           maxId: untilId,

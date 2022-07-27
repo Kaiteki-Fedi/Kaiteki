@@ -8,6 +8,7 @@ import 'package:kaiteki/theming/kaiteki_extension.dart';
 import 'package:kaiteki/ui/auth/login/api_web_compatibility_dialog.dart';
 import 'package:kaiteki/ui/shared/compose_screen.dart';
 import 'package:kaiteki/ui/shared/dialogs/exception_dialog.dart';
+import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -59,11 +60,8 @@ extension BuildContextExtensions on BuildContext {
       SnackBar(
         content: Row(
           children: [
-            Builder(
-              builder: (context) => Icon(
-                Icons.error_rounded,
-                color: DefaultTextStyle.of(context).style.color,
-              ),
+            const TextInheritedIconTheme(
+              child: Icon(Icons.error_rounded),
             ),
             const SizedBox(width: 8),
             text,

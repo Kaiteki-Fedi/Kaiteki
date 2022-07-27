@@ -7,11 +7,11 @@ class SubjectBar extends StatelessWidget {
   final VoidCallback? onTap;
 
   const SubjectBar({
-    Key? key,
+    super.key,
     required this.subject,
     required this.collapsed,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

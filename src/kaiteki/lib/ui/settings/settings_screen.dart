@@ -4,7 +4,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/separator_text.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({super.key});
 
   List<_Section> _getItems(BuildContext context) {
     final l10n = context.getL10n();

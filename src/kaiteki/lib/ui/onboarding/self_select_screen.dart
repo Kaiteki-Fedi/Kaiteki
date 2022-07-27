@@ -10,7 +10,7 @@ import 'package:kaiteki/utils/extensions.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 
 class SelfSelectScreen extends StatefulWidget {
-  const SelfSelectScreen({Key? key}) : super(key: key);
+  const SelfSelectScreen({super.key});
 
   @override
   State<SelfSelectScreen> createState() => _SelfSelectScreenState();

@@ -18,15 +18,13 @@ class UserScreen extends ConsumerStatefulWidget {
 
   const UserScreen.fromId(
     this.id, {
-    Key? key,
-  })  : initialUser = null,
-        super(key: key);
+    super.key,
+  }) : initialUser = null;
 
   UserScreen.fromUser(
     User this.initialUser, {
-    Key? key,
-  })  : id = initialUser.id,
-        super(key: key);
+    super.key,
+  }) : id = initialUser.id;
 
   @override
   ConsumerState<UserScreen> createState() => _UserScreenState();

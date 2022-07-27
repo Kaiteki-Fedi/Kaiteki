@@ -1,6 +1,6 @@
 enum TimelineKind {
   home,
-  public,
+  local,
   federated,
   directMessages,
   bookmarks,

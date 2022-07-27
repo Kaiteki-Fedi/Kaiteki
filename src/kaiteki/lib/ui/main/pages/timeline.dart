@@ -6,7 +6,7 @@ import 'package:kaiteki/ui/widgets/timeline.dart';
 class TimelinePage extends ConsumerStatefulWidget {
   final TimelineKind kind;
 
-  const TimelinePage(this.kind, {Key? key}) : super(key: key);
+  const TimelinePage(this.kind, {super.key});
 
   @override
   ConsumerState<TimelinePage> createState() => TimelinePageState();

@@ -9,6 +9,7 @@ import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 
 export 'package:kaiteki/utils/extensions/build_context.dart';
@@ -177,8 +178,8 @@ extension UserReferenceExtensions on UserReference {
 
 extension WidgetRefExtensions on WidgetRef {
   String getCurrentAccountHandle() {
-    final account = read(accountProvider).currentAccount.accountSecret;
-    return "@${account.username}@${account.instance}";
+    final account = read(accountProvider).currentAccount;
+    return "@${account.key.username}@${account.key.host}";
   }
 }
 
@@ -232,5 +233,13 @@ extension ListExtensions<T> on List<T> {
       length * 2 - 1,
       (i) => i % 2 == 0 ? this[i ~/ 2] : separator,
     );
+  }
+}
+
+extension SharedPreferencesExtensions on SharedPreferences {
+  Future<bool> setTristateBool(key, value) async {
+    if (value != null) return setBool(key, value);
+    if (containsKey(key)) return remove(key);
+    return true;
   }
 }

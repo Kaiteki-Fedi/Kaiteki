@@ -7,10 +7,10 @@ class EmojiWidget extends StatelessWidget {
   final double size;
 
   const EmojiWidget({
-    Key? key,
+    super.key,
     required this.emoji,
     required this.size,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class EmojiWidget extends StatelessWidget {
 class PlaceholderEmoji extends StatelessWidget {
   final double size;
 
-  const PlaceholderEmoji({Key? key, required this.size}) : super(key: key);
+  const PlaceholderEmoji({super.key, required this.size});
 
   @override
   Widget build(BuildContext context) {

@@ -13,8 +13,11 @@ part 'adapter.c.dart';
 class PleromaAdapter //
     extends SharedMastodonAdapter<PleromaClient>
     implements ChatSupport, ReactionSupport, PreviewSupport {
-  factory PleromaAdapter() => PleromaAdapter.custom(PleromaClient());
-  PleromaAdapter.custom(PleromaClient client) : super(client);
+  factory PleromaAdapter(String instance) {
+    return PleromaAdapter.custom(PleromaClient(instance));
+  }
+
+  PleromaAdapter.custom(super.client);
 
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {

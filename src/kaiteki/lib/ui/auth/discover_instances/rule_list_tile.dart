@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class RuleListTile extends StatelessWidget {
   const RuleListTile({
-    Key? key,
+    super.key,
     required this.number,
     required this.rule,
-  }) : super(key: key);
+  });
 
   final int number;
   final String rule;

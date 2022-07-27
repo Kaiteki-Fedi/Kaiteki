@@ -9,9 +9,9 @@ class UserDisplayNameWidget extends ConsumerWidget {
 
   const UserDisplayNameWidget(
     this.user, {
-    Key? key,
+    super.key,
     this.orientation = Axis.horizontal,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -3,20 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/link_constants.dart' show corsHelpArticleUrl;
 import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class ApiWebCompatibilityDialog extends StatelessWidget {
   final ApiType type;
 
-  const ApiWebCompatibilityDialog({Key? key, required this.type})
-      : super(key: key);
+  const ApiWebCompatibilityDialog({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
-    const helpArticle =
-        "https://github.com/Craftplacer/Kaiteki/wiki/Unable-to-login-using-Kaiteki-Web";
-
     final l10n = context.getL10n();
     return ConstrainedBox(
       constraints: consts.dialogConstraints,
@@ -30,13 +27,13 @@ class ApiWebCompatibilityDialog extends StatelessWidget {
             text: l10n.unsupportedInstanceDescriptionCORS(type.displayName),
             children: [
               TextSpan(
-                text: helpArticle,
+                text: corsHelpArticleUrl,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    await context.launchUrl(helpArticle);
+                    await context.launchUrl(corsHelpArticleUrl);
                   },
               ),
             ],

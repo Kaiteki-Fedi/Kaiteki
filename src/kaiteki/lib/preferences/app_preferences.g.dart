@@ -15,7 +15,7 @@ AppPreferences _$AppPreferencesFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$AppPreferencesToJson(AppPreferences instance) =>
     <String, dynamic>{
-      'theme': _$ThemeModeEnumMap[instance.theme],
+      'theme': _$ThemeModeEnumMap[instance.theme]!,
       'sensitivePostFilter': instance.sensitivePostFilter,
     };
 

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/preferences/preference_container.dart';
-import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/preferences/theme_preferences.dart';
 
 export 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,7 +20,7 @@ final adapterProvider = Provider<FediverseAdapter>((_) {
   throw UnimplementedError();
 });
 
-final themeProvider = ChangeNotifierProvider<ThemeContainer>((_) {
+final themeProvider = ChangeNotifierProvider<ThemePreferences>((_) {
   throw UnimplementedError();
 });
 

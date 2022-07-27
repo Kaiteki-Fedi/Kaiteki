@@ -14,11 +14,11 @@ class AttachmentWidget extends StatefulWidget {
   final int? attachmentIndex;
 
   const AttachmentWidget({
-    Key? key,
+    super.key,
     required this.attachment,
     this.parentPost,
     this.attachmentIndex,
-  }) : super(key: key);
+  });
 
   @override
   State<AttachmentWidget> createState() => _AttachmentWidgetState();

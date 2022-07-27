@@ -10,9 +10,9 @@ typedef DynamicDialogContainerBuilder = Widget Function(
 
 class DynamicDialogContainer extends StatelessWidget {
   const DynamicDialogContainer({
-    Key? key,
+    super.key,
     required this.builder,
-  }) : super(key: key);
+  });
 
   final DynamicDialogContainerBuilder builder;
 

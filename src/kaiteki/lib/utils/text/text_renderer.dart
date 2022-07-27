@@ -282,10 +282,10 @@ class UserChip extends ConsumerWidget {
   final User? user;
 
   const UserChip({
-    Key? key,
+    super.key,
     required this.reference,
     this.user,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

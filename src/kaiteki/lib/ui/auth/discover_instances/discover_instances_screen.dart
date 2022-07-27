@@ -6,7 +6,7 @@ import 'package:kaiteki/ui/auth/discover_instances/instance_card.dart';
 import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 
 class DiscoverInstancesScreen extends StatefulWidget {
-  const DiscoverInstancesScreen({Key? key}) : super(key: key);
+  const DiscoverInstancesScreen({super.key});
 
   @override
   State<DiscoverInstancesScreen> createState() =>

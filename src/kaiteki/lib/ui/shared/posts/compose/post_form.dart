@@ -31,11 +31,11 @@ class PostForm extends ConsumerStatefulWidget {
   final bool expands;
 
   const PostForm({
-    Key? key,
+    super.key,
     this.replyTo,
     this.enableSubject = true,
     this.expands = false,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<PostForm> createState() => PostFormState();
@@ -262,8 +262,6 @@ class PostFormState extends ConsumerState<PostForm> {
     final messenger = ScaffoldMessenger.of(context);
     final contentKey = UniqueKey();
     final l10n = context.getL10n();
-
-    Navigator.of(context).pop();
 
     late ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
         snackBarController;

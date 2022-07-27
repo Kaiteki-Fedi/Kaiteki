@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DialogCloseButton extends StatelessWidget {
   final String? tooltip;
 
-  const DialogCloseButton({Key? key, this.tooltip}) : super(key: key);
+  const DialogCloseButton({super.key, this.tooltip});
 
   @override
   Widget build(BuildContext context) {

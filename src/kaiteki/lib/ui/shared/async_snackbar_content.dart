@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 
 class AsyncSnackBarContent extends StatelessWidget {
   final Icon icon;
@@ -7,12 +8,12 @@ class AsyncSnackBarContent extends StatelessWidget {
   final Widget? trailing;
 
   const AsyncSnackBarContent({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
     required this.done,
     this.trailing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +28,7 @@ class AsyncSnackBarContent extends StatelessWidget {
               ),
               Positioned.fill(
                 child: Align(
-                  child: IconTheme(
-                    data: IconThemeData(
-                      color: DefaultTextStyle.of(context).style.color,
-                    ),
-                    child: icon,
-                  ),
+                  child: TextInheritedIconTheme(child: icon),
                 ),
               ),
             ],

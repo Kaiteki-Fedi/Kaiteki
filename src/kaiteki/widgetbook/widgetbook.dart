@@ -4,12 +4,13 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/theming/default/themes.dart';
 import 'package:widgetbook/widgetbook.dart';
 
+import 'categories/buttons.dart' as buttons;
 import 'categories/dialogs.dart';
 import 'categories/posts.dart';
 import 'categories/user.dart';
 
 class HotReload extends StatelessWidget {
-  const HotReload({Key? key}) : super(key: key);
+  const HotReload({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +30,20 @@ class HotReload extends StatelessWidget {
           name: "Users",
           widgets: buildUserComponents(),
         ),
+        WidgetbookCategory(
+          name: "Buttons",
+          widgets: buttons.buildComponents(),
+        ),
       ],
       themes: [
-        WidgetbookTheme(name: "Light", data: lightThemeData),
-        WidgetbookTheme(name: "Dark", data: darkThemeData),
+        WidgetbookTheme(
+          name: "Light",
+          data: getTheme(Brightness.light, true),
+        ),
+        WidgetbookTheme(
+          name: "Dark",
+          data: getTheme(Brightness.dark, true),
+        ),
       ],
       devices: getDevices(),
       appInfo: AppInfo(name: consts.appName),

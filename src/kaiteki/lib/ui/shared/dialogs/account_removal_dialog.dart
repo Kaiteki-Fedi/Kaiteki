@@ -4,7 +4,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 
 class AccountRemovalDialog extends StatelessWidget {
-  const AccountRemovalDialog({Key? key}) : super(key: key);
+  const AccountRemovalDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

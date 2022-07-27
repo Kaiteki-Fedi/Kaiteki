@@ -3,7 +3,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/settings/customization/theme_selector.dart';
 
 class ThemeSetupPage extends ConsumerWidget {
-  const ThemeSetupPage({Key? key}) : super(key: key);
+  const ThemeSetupPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

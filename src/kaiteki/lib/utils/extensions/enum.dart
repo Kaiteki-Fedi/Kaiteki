@@ -43,7 +43,7 @@ extension TimelineKindExtensions on TimelineKind {
         return const Tuple2(Icons.public_rounded, Icons.public_rounded);
       case TimelineKind.home:
         return const Tuple2(Icons.home_outlined, Icons.home_rounded);
-      case TimelineKind.public:
+      case TimelineKind.local:
         return const Tuple2(Icons.people_outline_rounded, Icons.people_rounded);
       case TimelineKind.directMessages:
         return const Tuple2(Icons.mail_outline_rounded, Icons.mail_rounded);
@@ -61,8 +61,8 @@ extension TimelineKindExtensions on TimelineKind {
         return "Federated";
       case TimelineKind.home:
         return "Home";
-      case TimelineKind.public:
-        return "Public";
+      case TimelineKind.local:
+        return "Local";
       case TimelineKind.directMessages:
         return "Direct Messages";
       case TimelineKind.bookmarks:

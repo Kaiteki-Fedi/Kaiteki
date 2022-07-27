@@ -5,7 +5,7 @@ import 'package:kaiteki/di.dart';
 import '../../dialogs/dialog_title_with_hero.dart';
 
 class DiscardPostDialog extends StatelessWidget {
-  const DiscardPostDialog({Key? key}) : super(key: key);
+  const DiscardPostDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,7 @@ const transitionDuration = Duration(milliseconds: 800);
 const pageDuration = Duration(seconds: 5);
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -196,7 +196,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class AlphaDisclaimer extends StatelessWidget {
-  const AlphaDisclaimer({Key? key}) : super(key: key);
+  const AlphaDisclaimer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -246,10 +246,10 @@ class _UserBenefitText extends StatelessWidget {
   final bool center;
 
   const _UserBenefitText({
-    Key? key,
+    super.key,
     required this.benefit,
     this.center = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

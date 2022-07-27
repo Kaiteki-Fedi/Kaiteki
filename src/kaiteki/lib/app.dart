@@ -104,11 +104,15 @@ class KaitekiApp extends ConsumerWidget {
 
         if (user != null && host != null) {
           adapter = ref.watch(
-            accountProvider.select((value) {
-              return value.accounts.firstWhere((a) {
-                return a.matchesHandle("@$user@$host");
-              }).adapter;
-            }),
+            accountProvider.select(
+              (manager) => manager.accounts
+                  .firstWhere(
+                    (account) =>
+                        account.key.username == user &&
+                        account.key.host == host,
+                  )
+                  .adapter,
+            ),
           );
         } else {
           final accountManager = ref.watch(accountProvider);
@@ -126,24 +130,24 @@ class KaitekiApp extends ConsumerWidget {
     );
   }
 
-  KaitekiApp({Key? key}) : super(key: key);
+  KaitekiApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO(Craftplacer): (code quality) listen to only a subset of preferences, to reduce unnecessary root rebuilds.
-    final preferences = ref.watch(preferenceProvider);
+    final themePreferences = ref.watch(themeProvider);
+    final m3 =
+        themePreferences.useMaterial3 ?? themePreferences.material3Default;
     return MaterialApp.router(
-      darkTheme: darkThemeData,
+      darkTheme: getTheme(Brightness.dark, m3),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: lightThemeData,
-      themeMode: preferences.get().theme,
+      theme: getTheme(Brightness.light, m3),
+      themeMode: themePreferences.mode,
       title: consts.appName,
       shortcuts: <ShortcutActivator, Intent>{
         ...WidgetsApp.defaultShortcuts,
-        newPost: const NewPostIntent(),
         refresh: const RefreshIntent(),
         refresh2: const RefreshIntent(),
         refresh3: const RefreshIntent(),
@@ -153,6 +157,7 @@ class KaitekiApp extends ConsumerWidget {
         gotoBookmarks: const GoToAppLocationIntent(AppLocation.bookmarks),
         gotoNotifications:
             const GoToAppLocationIntent(AppLocation.notifications),
+        newPost: const NewPostIntent(),
       },
     );
   }

@@ -3,11 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' show dialogConstraints;
 import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
+import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class KeyboardShortcutsDialog extends StatelessWidget {
-  const KeyboardShortcutsDialog({Key? key}) : super(key: key);
+  const KeyboardShortcutsDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -216,21 +217,14 @@ class KeyboardKey extends StatelessWidget {
           horizontal: 8,
           vertical: 4,
         ),
-        child: Builder(
-          builder: (context) => IconTheme(
-            data: IconThemeData(
-              size: DefaultTextStyle.of(context).style.fontSize! * 1.5,
-            ),
-            child: _getKeyWidget(),
-          ),
-        ),
+        child: _getKeyWidget(),
       ),
     );
   }
 
   Widget _getKeyWidget() {
     if (icon != null) {
-      return icon!;
+      return TextInheritedIconTheme(child: icon!);
     }
 
     if (text != null) {

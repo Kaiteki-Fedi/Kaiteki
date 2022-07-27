@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class ThemeScreen extends StatelessWidget {
-  const ThemeScreen({Key? key}) : super(key: key);
+  const ThemeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const padding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
+    const padding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0);
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(title: const Text("Theme")),
@@ -15,111 +15,150 @@ class ThemeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const ListTile(title: Text("Material colors")),
-            Padding(
-              padding: padding,
-              child: Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
+            Card(
+              margin: padding,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Chip(
-                    backgroundColor: colorScheme.background,
-                    label: Text(
-                      "Background",
-                      style: TextStyle(color: colorScheme.onBackground),
-                    ),
+                  _ColorPatch(
+                    "Background",
+                    colorScheme.background,
+                    colorScheme.onBackground,
                   ),
-                  Chip(
-                    backgroundColor: colorScheme.surface,
-                    label: Text(
-                      "Surface",
-                      style: TextStyle(color: colorScheme.onSurface),
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ColorPatch(
+                          "Surface",
+                          colorScheme.surface,
+                          colorScheme.onSurface,
+                        ),
+                      ),
+                      Expanded(
+                        child: _ColorPatch(
+                          "Variant",
+                          colorScheme.surfaceVariant,
+                          colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
-                  Chip(
-                    backgroundColor: colorScheme.surfaceVariant,
-                    label: Text(
-                      "Surface Variant",
-                      style: TextStyle(color: colorScheme.onSurfaceVariant),
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ColorPatch(
+                          "Primary",
+                          colorScheme.primary,
+                          colorScheme.onPrimary,
+                        ),
+                      ),
+                      Expanded(
+                        child: _ColorPatch(
+                          "Container",
+                          colorScheme.primaryContainer,
+                          colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                    ],
                   ),
-                  Chip(
-                    backgroundColor: colorScheme.primary,
-                    label: Text(
-                      "Primary",
-                      style: TextStyle(color: colorScheme.onPrimary),
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ColorPatch(
+                          "Secondary",
+                          colorScheme.secondary,
+                          colorScheme.onSecondary,
+                        ),
+                      ),
+                      Expanded(
+                        child: _ColorPatch(
+                          "Container",
+                          colorScheme.secondaryContainer,
+                          colorScheme.onSecondaryContainer,
+                        ),
+                      ),
+                    ],
                   ),
-                  Chip(
-                    backgroundColor: colorScheme.primaryContainer,
-                    label: Text(
-                      "Primary Container",
-                      style: TextStyle(color: colorScheme.onPrimaryContainer),
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ColorPatch(
+                          "Tertiary",
+                          colorScheme.tertiary,
+                          colorScheme.onTertiary,
+                        ),
+                      ),
+                      Expanded(
+                        child: _ColorPatch(
+                          "Container",
+                          colorScheme.tertiaryContainer,
+                          colorScheme.onTertiaryContainer,
+                        ),
+                      ),
+                    ],
                   ),
-                  Chip(
-                    backgroundColor: colorScheme.secondary,
-                    label: Text(
-                      "Secondary",
-                      style: TextStyle(color: colorScheme.onSecondary),
-                    ),
-                  ),
-                  Chip(
-                    backgroundColor: colorScheme.secondaryContainer,
-                    label: Text(
-                      "Secondary Container",
-                      style: TextStyle(color: colorScheme.onSecondaryContainer),
-                    ),
-                  ),
-                  Chip(
-                    backgroundColor: colorScheme.tertiary,
-                    label: Text(
-                      "Teritary",
-                      style: TextStyle(color: colorScheme.onTertiary),
-                    ),
-                  ),
-                  Chip(
-                    backgroundColor: colorScheme.tertiaryContainer,
-                    label: Text(
-                      "Teritary Container",
-                      style: TextStyle(color: colorScheme.onTertiaryContainer),
-                    ),
-                  ),
-                  Chip(
-                    backgroundColor: colorScheme.error,
-                    label: Text(
-                      "Error",
-                      style: TextStyle(color: colorScheme.onError),
-                    ),
-                  ),
-                  Chip(
-                    backgroundColor: colorScheme.errorContainer,
-                    label: Text(
-                      "Error Container",
-                      style: TextStyle(color: colorScheme.onErrorContainer),
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ColorPatch(
+                          "Error",
+                          colorScheme.error,
+                          colorScheme.onError,
+                        ),
+                      ),
+                      Expanded(
+                        child: _ColorPatch(
+                          "Container",
+                          colorScheme.errorContainer,
+                          colorScheme.onErrorContainer,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
             const ListTile(title: Text("Custom Kaiteki colors")),
-            Padding(
-              padding: padding,
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.star_rounded,
-                    color: context.getKaitekiTheme()?.favoriteColor,
-                    size: 32,
-                  ),
-                  Icon(
-                    Icons.repeat_rounded,
-                    color: context.getKaitekiTheme()?.repeatColor,
-                    size: 32,
-                  ),
-                ],
+            ListTile(
+              leading: Icon(
+                Icons.star_rounded,
+                color: context.getKaitekiTheme()?.favoriteColor,
+                size: 24,
               ),
-            )
+              title: const Text("Favorite"),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.repeat_rounded,
+                color: context.getKaitekiTheme()?.repeatColor,
+                size: 24,
+              ),
+              title: const Text("Repeat"),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ColorPatch extends StatelessWidget {
+  final Color background;
+  final Color foreground;
+  final String label;
+
+  const _ColorPatch(this.label, this.background, this.foreground);
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: background,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        child: Text(
+          label,
+          style: TextStyle(color: foreground),
         ),
       ),
     );

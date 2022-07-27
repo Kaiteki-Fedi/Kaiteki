@@ -33,7 +33,7 @@ const fieldPadding = EdgeInsets.all(8.0);
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
-    Key? key,
+    super.key,
     required this.onValidateInstance,
     required this.onValidateUsername,
     required this.onValidatePassword,
@@ -42,7 +42,7 @@ class LoginForm extends StatefulWidget {
     this.currentError,
     required this.onFetchInstance,
     this.onResetInstance,
-  }) : super(key: key);
+  });
 
   final bool enabled;
 
@@ -200,11 +200,11 @@ class _InstancePage extends StatefulWidget {
   final VoidCallback onNext;
 
   const _InstancePage({
-    Key? key,
+    super.key,
     required this.instanceController,
     required this.validator,
     required this.onNext,
-  }) : super(key: key);
+  });
 
   @override
   __InstancePageState createState() => __InstancePageState();
@@ -355,7 +355,7 @@ class _UserPage extends StatefulWidget {
   final VoidCallback? onNext;
 
   const _UserPage({
-    Key? key,
+    super.key,
     this.usernameController,
     this.passwordController,
     this.usernameValidator,
@@ -363,7 +363,7 @@ class _UserPage extends StatefulWidget {
     this.image,
     this.onBack,
     this.onNext,
-  }) : super(key: key);
+  });
 
   @override
   __UserPageState createState() => __UserPageState();

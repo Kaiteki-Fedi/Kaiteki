@@ -13,12 +13,12 @@ class DesktopUserHeader extends StatelessWidget {
   final Color? color;
 
   const DesktopUserHeader({
-    Key? key,
+    super.key,
     required this.tabController,
     required this.tabs,
     this.user,
     required this.color,
-  }) : super(key: key);
+  });
 
   Color getAppBarBackgroundColor(ThemeData theme) {
     if (theme.appBarTheme.backgroundColor != null) {

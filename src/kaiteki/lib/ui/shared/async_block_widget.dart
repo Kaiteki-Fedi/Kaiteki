@@ -16,13 +16,13 @@ class AsyncBlockWidget extends StatelessWidget {
   final Duration duration;
 
   const AsyncBlockWidget({
-    Key? key,
+    super.key,
     required this.child,
     required this.duration,
     this.blocking = false,
     this.opacity = .125,
     this.secondChild,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

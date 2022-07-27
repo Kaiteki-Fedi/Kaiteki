@@ -3,7 +3,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/settings/customization/customization_basic_page.dart';
 
 class CustomizationSettingsScreen extends StatefulWidget {
-  const CustomizationSettingsScreen({Key? key}) : super(key: key);
+  const CustomizationSettingsScreen({super.key});
 
   @override
   State<CustomizationSettingsScreen> createState() =>

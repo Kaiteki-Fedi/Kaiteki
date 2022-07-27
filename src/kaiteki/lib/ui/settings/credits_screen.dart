@@ -10,7 +10,7 @@ import 'package:kaiteki/utils/extensions.dart';
 part 'credits_screen.g.dart';
 
 class CreditsScreen extends StatefulWidget {
-  const CreditsScreen({Key? key}) : super(key: key);
+  const CreditsScreen({super.key});
 
   @override
   State<CreditsScreen> createState() => _CreditsScreenState();
@@ -63,9 +63,9 @@ class _CreditsScreenState extends State<CreditsScreen> {
 
 class CreditsItemWidget extends StatelessWidget {
   const CreditsItemWidget({
-    Key? key,
+    super.key,
     required this.item,
-  }) : super(key: key);
+  });
 
   final CreditsItem item;
 

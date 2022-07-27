@@ -11,9 +11,9 @@ import 'package:url_launcher/url_launcher_string.dart';
 /// A vertical list describing the provided user.
 class UserInfoWidget extends ConsumerWidget {
   const UserInfoWidget({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   final User user;
 
@@ -163,10 +163,10 @@ class _UserInfoRow extends StatelessWidget {
   final Widget body;
 
   const _UserInfoRow({
-    Key? key,
+    super.key,
     required this.leading,
     required this.body,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -9,11 +9,11 @@ class AvatarWidget extends StatelessWidget {
 
   const AvatarWidget(
     this.user, {
-    Key? key,
+    super.key,
     this.size = 48,
     this.onTap,
     this.radius,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +69,8 @@ class AvatarWidget extends StatelessWidget {
 
 class FallbackAvatar extends StatelessWidget {
   const FallbackAvatar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

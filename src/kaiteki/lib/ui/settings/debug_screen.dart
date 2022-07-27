@@ -7,7 +7,7 @@ import 'package:kaiteki/utils/extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DebugScreen extends StatefulWidget {
-  const DebugScreen({Key? key}) : super(key: key);
+  const DebugScreen({super.key});
 
   @override
   State<DebugScreen> createState() => _DebugScreenState();

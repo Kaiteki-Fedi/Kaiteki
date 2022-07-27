@@ -17,8 +17,8 @@ class TextElement extends Element {
   const TextElement(
     this.text, {
     this.style,
-    List<Element>? children,
-  }) : super(children: children);
+    super.children,
+  });
 
   List<Element> cut(int index, int length, ReplacementElementBuilder builder) {
     final text = this.text;
@@ -98,8 +98,8 @@ class LinkElement extends Element {
 
   const LinkElement(
     this.destination, {
-    List<Element>? children,
-  }) : super(children: children);
+    super.children,
+  });
 
   @override
   String toString() {

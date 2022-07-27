@@ -14,7 +14,7 @@ class FormWidget extends StatelessWidget {
   final EdgeInsets padding;
 
   const FormWidget({
-    Key? key,
+    super.key,
     required this.builder,
     this.contentWidth = consts.defaultFormWidth,
     this.contentHeight = consts.defaultFormHeight,
@@ -22,7 +22,7 @@ class FormWidget extends StatelessWidget {
       horizontal: 24.0,
       vertical: 64.0,
     ),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
