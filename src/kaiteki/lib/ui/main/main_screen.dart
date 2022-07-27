@@ -138,8 +138,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget _buildDrawer(BuildContext context) {
-    final handle = ref.getCurrentAccountHandle();
     final l10n = context.getL10n();
+    final account = ref.watch(accountProvider).currentAccount;
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -176,7 +176,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               enabled: false,
             ),
             const Divider(),
-            ListTile(title: Text(handle), enabled: false),
+            ListTile(
+              title: Text("@${account.key.username}@${account.key.host}"),
+              enabled: false,
+            ),
             ListTile(
               leading: const Icon(Icons.manage_accounts_rounded),
               title: Text(l10n.accountSettingsTitle),
