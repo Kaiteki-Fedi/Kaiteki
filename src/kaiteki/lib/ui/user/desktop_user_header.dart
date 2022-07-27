@@ -80,22 +80,20 @@ class DesktopUserHeader extends StatelessWidget {
                   breakpoint: breakpoint,
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Flexible(
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: user == null
-                                  ? const SizedBox()
-                                  : _buildAvatar(context, avatarBorderRadius),
-                            ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Flexible(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: user == null
+                                ? const SizedBox()
+                                : _buildAvatar(context, avatarBorderRadius),
                           ),
-                          const SizedBox(width: gutter), // Gutter
-                          const Flexible(flex: 3, child: SizedBox()),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: gutter), // Gutter
+                        const Flexible(flex: 3, child: SizedBox()),
+                      ],
                     ),
                   ),
                 ),
