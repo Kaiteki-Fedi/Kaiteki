@@ -32,7 +32,7 @@ Future<Map<String, String>?> runOAuthServer(
       requestStream.stream.first,
     );
 
-    ready(Uri.http('localhost:$port', '/'), operation.cancel);
+    await ready(Uri.http('localhost:$port', '/'), operation.cancel);
     return await operation.valueOrCancellation();
   } finally {
     server?.close();

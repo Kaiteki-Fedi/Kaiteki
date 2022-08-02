@@ -334,14 +334,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return await runOAuthServer(
         (localUrl, cancel) async {
           // TODO(Craftplacer): Show WebView inside login screen when possible
-          try {
-            final generatedUrl = await generateUrl(localUrl);
-            await launchUrl(generatedUrl);
-            setState(() => _oAuth = cancel);
-          } catch (_) {
-            // TODO(Craftplacer): log error
-            cancel();
-          }
+          final generatedUrl = await generateUrl(localUrl);
+          await launchUrl(generatedUrl);
+          setState(() => _oAuth = cancel);
         },
         successPage,
       );
