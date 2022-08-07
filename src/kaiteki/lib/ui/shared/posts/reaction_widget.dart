@@ -25,7 +25,6 @@ class ReactionWidget extends ConsumerStatefulWidget {
 class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
   @override
   Widget build(BuildContext context) {
-    const textPadding = EdgeInsets.only(top: 4, bottom: 4, left: 6, right: 2);
     const emojiSize = 24.0;
 
     final reacted = widget.reaction.includesMe;
@@ -35,51 +34,68 @@ class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
         : theme.inactiveBackground;
     final textStyle = reacted ? theme.activeTextStyle : theme.inactiveTextStyle;
 
-    return Card(
-      color: backgroundColor,
-      child: DefaultTextStyle(
-        style: textStyle,
-        child: InkWell(
-          onTap: () async {
-            final adapter = ref.watch(accountProvider).adapter;
-            if (adapter is ReactionSupport) {
-              await (adapter as ReactionSupport).addReaction(
-                widget.parentPost,
-                widget.reaction.emoji,
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Your instance does not support reactions."),
-                ),
-              );
-            }
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: textPadding,
-                child: SizedBox(
-                  width: emojiSize,
-                  height: emojiSize,
-                  child: EmojiWidget(
-                    emoji: widget.reaction.emoji,
-                    size: emojiSize,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: textPadding.flipped,
-                child: Opacity(
-                  opacity: 0.75,
-                  child: Text(widget.reaction.count.toString()),
-                ),
-              ),
-            ],
+    return Tooltip(
+      richMessage: TextSpan(
+        children: [
+          TextSpan(
+            text: widget.reaction.count.toString(),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
+          TextSpan(
+            text: widget.reaction.count == 1 //
+                ? " person reacted with "
+                : " people reacted with ",
+          ),
+          TextSpan(
+            text: widget.reaction.emoji.toString(),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+      child: OutlinedButton.icon(
+        style: OutlinedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          // HACK(Craftplacer): We're changing padding based on the M3 flag, but the better approach would be analyzing the button shape
+          padding: Theme.of(context).useMaterial3
+              ? const EdgeInsets.symmetric(horizontal: 12.0)
+              : const EdgeInsets.symmetric(horizontal: 6.0),
         ),
+        icon: EmojiWidget(
+          emoji: widget.reaction.emoji,
+          size: emojiSize,
+        ),
+        label: Text(
+          widget.reaction.count.toString(),
+          style: textStyle,
+        ),
+        onPressed: _onPressed,
       ),
     );
+  }
+
+  Future<void> _onPressed() async {
+    final adapter = ref.watch(accountProvider).adapter;
+    if (adapter is! ReactionSupport) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Your instance does not support reactions."),
+        ),
+      );
+      return;
+    }
+
+    final reactionAdapter = adapter as ReactionSupport;
+
+    if (widget.reaction.includesMe) {
+      await reactionAdapter.removeReaction(
+        widget.parentPost,
+        widget.reaction.emoji,
+      );
+    } else {
+      await reactionAdapter.addReaction(
+        widget.parentPost,
+        widget.reaction.emoji,
+      );
+    }
   }
 }

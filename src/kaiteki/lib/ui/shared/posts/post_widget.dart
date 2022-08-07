@@ -1,5 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
@@ -7,6 +8,7 @@ import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
+import 'package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/posts/card_widget.dart';
@@ -147,6 +149,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                       onReply: () => context.showPostDialog(replyTo: _post),
                       onFavorite: _onFavorite,
                       onRepeat: _onRepeat,
+                      onReact: _onReact,
                       favorited: adapter is FavoriteSupport //
                           ? _post.liked
                           : null,
@@ -184,7 +187,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                       repeated: _post.repeated,
                       reacted: adapter is ReactionSupport ? false : null,
                       buildActions: _buildActions,
-                    ),
+                    )
                 ],
               ),
             ),
@@ -319,6 +322,30 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         error: e,
       );
     }
+  }
+
+  Future<void> _onReact() async {
+    final adapter = ref.read(adapterProvider) as ReactionSupport;
+    final emoji = await showModalBottomSheet(
+      context: context,
+      constraints: bottomSheetConstraints,
+      builder: (_) => EmojiSelectorBottomSheet(
+        showCustomEmojis: adapter.capabilities.supportsCustomEmojiReactions,
+        showUnicodeEmojis: adapter.capabilities.supportsUnicodeEmojiReactions,
+      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(12.0),
+        ),
+      ),
+      elevation: 16.0,
+      clipBehavior: Clip.antiAlias,
+    );
+
+    if (emoji == null) return;
+
+    final newPost = await adapter.addReaction(_post, emoji);
+    setState(() => _post = newPost);
   }
 }
 

@@ -45,12 +45,12 @@ class PleromaAdapter //
   }
 
   @override
-  Future<void> addReaction(Post post, Emoji emoji) {
+  Future<Post> addReaction(Post post, Emoji emoji) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> removeReaction(Post post, Emoji emoji) {
+  Future<Post> removeReaction(Post post, Emoji emoji) {
     throw UnimplementedError();
   }
 

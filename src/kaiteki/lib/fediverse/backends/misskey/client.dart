@@ -65,6 +65,14 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
+  Future<misskey.Note> showNote(String noteId) async {
+    return await sendJsonRequest(
+      HttpMethod.get,
+      "api/notes/show/$noteId",
+      misskey.Note.fromJson,
+    );
+  }
+
   Future<misskey.Note> createRenote(String renoteId) async {
     // FIXME: Properly parse Misskey create note response
     return sendJsonRequest(
@@ -227,11 +235,10 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   /// Reacts to the specified note.
-  Future<misskey.User> createReaction(String noteId, String reaction) async {
-    return sendJsonRequest(
+  Future<void> createReaction(String noteId, String reaction) async {
+    return await sendJsonRequestWithoutResponse(
       HttpMethod.post,
       "api/notes/reactions/create",
-      misskey.User.fromJson,
       body: {
         "noteId": noteId,
         "reaction": reaction,

@@ -42,7 +42,7 @@ Reaction toReaction(pleroma.EmojiReaction reaction) {
   return Reaction(
     includesMe: reaction.me,
     count: reaction.count,
-    emoji: UnicodeEmoji(reaction.name, ""),
+    emoji: UnicodeEmoji(name: reaction.name),
     users: reaction.accounts?.map(toUser) ?? [],
   );
 }
@@ -103,7 +103,6 @@ AttachmentType toAttachmentType(String type) {
 
 CustomEmoji toEmoji(mastodon.Emoji emoji) {
   return CustomEmoji(
-    source: emoji,
     url: emoji.staticUrl,
     name: emoji.shortcode,
     aliases: emoji.tags ?? [],

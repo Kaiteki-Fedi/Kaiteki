@@ -9,15 +9,14 @@ Post toPost(misskey.Note source) {
     author: toUserFromLite(source.user),
     content: source.text,
     emojis: mappedEmoji,
-    // FIXME(Craftplacer): I give up
-    // reactions: source.reactions.map((mkr) {
-    //   return Reaction(
-    //     count: mkr.value,
-    //     includesMe: mkr.key == source.myReaction,
-    //     users: [],
-    //     emoji: getEmojiFromString(mkr.key, mappedEmoji),
-    //   );
-    // }),
+    reactions: source.reactions.entries.map((mkr) {
+      return Reaction(
+        count: mkr.value,
+        includesMe: mkr.key == source.myReaction,
+        users: [],
+        emoji: getEmojiFromString(mkr.key, mappedEmoji),
+      );
+    }),
     replyTo: source.reply == null ? null : toPost(source.reply!),
     replyToPostId: source.replyId,
     repeatOf: source.renote == null ? null : toPost(source.renote!),
@@ -26,6 +25,20 @@ Post toPost(misskey.Note source) {
     attachments: source.files?.map(toAttachment) ?? [],
     externalUrl: source.url,
   );
+}
+
+Emoji getEmojiFromString(String key, Iterable<CustomEmoji> mappedEmoji) {
+  final emoji = mappedEmoji.firstOrDefault(
+    (e) {
+      if (key.length < 3) return false;
+      final emojiName = key.substring(1, key.length - 1);
+      return e.name == emojiName;
+    },
+  );
+
+  if (emoji == null) return UnicodeEmoji(name: key);
+
+  return emoji;
 }
 
 Visibility toVisibility(String visibility) {
@@ -57,7 +70,6 @@ Attachment toAttachment(misskey.DriveFile file) {
 
 CustomEmoji toEmoji(misskey.Emoji emoji) {
   return CustomEmoji(
-    source: emoji,
     name: emoji.name,
     url: emoji.url,
     aliases: emoji.aliases,

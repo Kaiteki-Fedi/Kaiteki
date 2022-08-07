@@ -250,29 +250,35 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<void> addReaction(Post post, Emoji emoji) async {
-    final note = post.source as misskey.Note;
-
+  Future<Post> addReaction(Post post, Emoji emoji) async {
     String emojiName;
 
     if (emoji is CustomEmoji) {
       emojiName = ':${emoji.name}:';
     } else if (emoji is UnicodeEmoji) {
-      emojiName = emoji.source!;
+      emojiName = emoji.name;
     } else {
-      return;
+      throw UnimplementedError(
+        "Emoji type ${emoji.runtimeType} is not supported yet.",
+      );
     }
 
-    await client.createReaction(note.id, emojiName);
+    await client.createReaction(post.id, emojiName);
+
+    // HACK(Craftplacer): We don't get the updated note back from the API, so we have to fetch it again.
+    final note = await client.showNote(post.id);
+    return toPost(note);
   }
 
   @override
-  Future<void> removeReaction(Post post, Emoji emoji) async {
-    final note = post.source as misskey.Note;
-
+  Future<Post> removeReaction(Post post, Emoji emoji) async {
     // The "emoji" parameter is ignored,
     // because in Misskey you can only react once.
-    await client.deleteReaction(note.id);
+    await client.deleteReaction(post.id);
+
+    // HACK(Craftplacer): We don't get the updated note back from the API, so we have to fetch it again.
+    final note = await client.showNote(post.id);
+    return toPost(note);
   }
 
   @override

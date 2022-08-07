@@ -16,6 +16,7 @@ class ReactionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
+      spacing: 8.0,
       children: [
         for (var reaction in _reactions)
           ReactionWidget(parentPost: _parentPost, reaction: reaction),

@@ -1,46 +1,43 @@
-abstract class Emoji<T> {
-  final T? source;
+import 'package:emojis/emoji.dart' as unicode_emoji;
 
-  /// The name of the emoji, usually the text between the two colons.
+abstract class Emoji {
   final String name;
-
-  /// The aliases of the emoji.
   final Iterable<String>? aliases;
 
-  /// Whether the emoji will be added to the user's emoji selector.
-  final bool visibleInPicker;
-
   const Emoji({
-    required this.source,
     required this.name,
     this.aliases,
-    this.visibleInPicker = false,
   });
 }
 
-class UnicodeEmoji extends Emoji<String> {
-  const UnicodeEmoji(
-    String emoji,
-    String name, {
+class UnicodeEmoji extends Emoji {
+  const UnicodeEmoji({
+    required super.name,
     super.aliases,
-  }) : super(
-          source: emoji,
-          name: name,
-          visibleInPicker: true,
-        );
+  });
+
+  factory UnicodeEmoji.fromEmoji(unicode_emoji.Emoji emoji) {
+    return UnicodeEmoji(
+      name: emoji.char,
+      aliases: emoji.keywords,
+    );
+  }
+
+  @override
+  String toString() => name;
 }
 
-class CustomEmoji<T> extends Emoji<T> {
-  /// The URL of the image that represents this emoji.
+class CustomEmoji extends Emoji {
   final String url;
+  final String? instance;
 
   const CustomEmoji({
-    super.source,
     required super.name,
+    this.instance,
     super.aliases,
     required this.url,
   });
 
   @override
-  String toString() => ":$name:";
+  String toString() => ":$name@$instance:";
 }
