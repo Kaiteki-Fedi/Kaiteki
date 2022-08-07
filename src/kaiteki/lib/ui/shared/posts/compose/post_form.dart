@@ -13,7 +13,7 @@ import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
+import 'package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/compose/attachment_tray.dart';
@@ -337,19 +337,11 @@ class PostFormState extends ConsumerState<PostForm> {
     Navigator.of(context).pop();
   }
 
-  void openEmojiPicker(BuildContext context, AccountManager container) {
-    showModalBottomSheet(
+  Future<void> openEmojiPicker() async {
+    final emoji = await showModalBottomSheet(
       context: context,
       constraints: bottomSheetConstraints,
-      builder: (context) {
-        return SizedBox(
-          height: 250,
-          child: FutureBuilder(
-            future: (container.adapter as CustomEmojiSupport).getEmojis(),
-            builder: buildEmojiSelector,
-          ),
-        );
-      },
+      builder: (_) => const EmojiSelectorBottomSheet(),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(12.0),
@@ -358,26 +350,10 @@ class PostFormState extends ConsumerState<PostForm> {
       elevation: 16.0,
       clipBehavior: Clip.antiAlias,
     );
-  }
 
-  Widget buildEmojiSelector(
-    BuildContext context,
-    AsyncSnapshot<Iterable<EmojiCategory>> s,
-  ) {
-    final l10n = context.getL10n();
+    if (emoji == null) return;
 
-    if (s.hasError) {
-      return Center(child: Text(l10n.emojiRetrievalFailed));
-    }
-
-    if (!s.hasData) return const Center(child: CircularProgressIndicator());
-
-    return EmojiSelector(
-      categories: s.data!,
-      onEmojiSelected: (emoji) {
-        _bodyController.text = _bodyController.text += emoji.toString();
-      },
-    );
+    _bodyController.text = _bodyController.text += emoji.toString();
   }
 
   void openAttachDrawer() {
@@ -456,10 +432,10 @@ class PostFormState extends ConsumerState<PostForm> {
       ),
       if (manager.adapter is CustomEmojiSupport)
         IconButton(
-          onPressed: () => openEmojiPicker(context, manager),
           icon: const Icon(Icons.mood_rounded),
           splashRadius: splashRadius,
           tooltip: l10n.emojiButtonTooltip,
+          onPressed: openEmojiPicker,
         ),
       const SizedBox(height: 24, child: VerticalDivider()),
       if (manager.adapter.capabilities.supportsScopes)
