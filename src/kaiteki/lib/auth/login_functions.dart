@@ -27,7 +27,7 @@ Future<Map<String, String>?> runOAuthServer(
 
     // Start server, close & return when new request comes in
     const port = 8080;
-    server = await serve(handler, "localhost", port, shared: true);
+    server = await serve(handler, "127.0.0.1", port, shared: true);
     final operation = CancelableOperation.fromFuture(
       requestStream.stream.first,
     );
