@@ -1,6 +1,7 @@
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/shared/breakpoint_container.dart';
@@ -219,7 +220,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
         ),
       );
     } else {
-      final countLabel = shortenNumber(count);
+      final countLabel = _shortenNumber(context, count);
       return Tab(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -290,18 +291,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     );
   }
 
-  String shortenNumber(int count) {
-    var text = count.toString();
-
-    if (count / 1000 >= 1) {
-      text = '${(count / 1000).toStringAsFixed(2)}k';
-    }
-
-    return text;
-  }
-
   Widget buildBadge(BuildContext context, int count) {
-    final text = shortenNumber(count);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3.0),
@@ -310,15 +300,21 @@ class _UserScreenState extends ConsumerState<UserScreen>
       margin: const EdgeInsets.only(left: 6.0),
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
       child: Text(
-        text,
         style: GoogleFonts.robotoMono(
           color: Colors.black,
           fontWeight: FontWeight.w600,
+          _shortenNumber(context, count),
         ),
         textScaleFactor: 0.9,
         overflow: TextOverflow.fade,
       ),
     );
+  }
+
+  String _shortenNumber(BuildContext context, num value) {
+    final locale = Localizations.localeOf(context);
+    final numberFormat = NumberFormat.compact(locale: locale.languageCode);
+    return numberFormat.format(value);
   }
 
   List<Widget> buildActions(BuildContext context, {User? user}) {
