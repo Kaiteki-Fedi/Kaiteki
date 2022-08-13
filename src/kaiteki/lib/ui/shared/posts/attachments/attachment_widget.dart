@@ -41,8 +41,8 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
     final supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
 
     if (widget.attachment.type == AttachmentType.image) {
-      // HACK: missing case when null
       return ImageAttachmentWidget(
+      // HACK(Craftplacer): missing case when null
         attachment: widget.attachment,
         index: widget.attachmentIndex!,
         post: widget.parentPost!,
