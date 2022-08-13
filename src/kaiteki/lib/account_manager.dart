@@ -122,7 +122,7 @@ class AccountManager extends ChangeNotifier {
       user = await adapter.getMyself();
     } catch (ex) {
       _logger.e('Failed to verify credentials', ex);
-      rethrow;
+      return;
     }
 
     final account = Account(
