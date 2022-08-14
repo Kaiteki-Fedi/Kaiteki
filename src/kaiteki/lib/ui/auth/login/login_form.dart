@@ -7,7 +7,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/theming/default/colors.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -507,7 +506,7 @@ class __UserPageState extends State<_UserPage> {
     return Container(
       width: size,
       height: size,
-      color: kaitekiDarkBackground.shade500,
+      color: Theme.of(context).colorScheme.surface,
       child: const Icon(
         Icons.public,
         size: 64.0,

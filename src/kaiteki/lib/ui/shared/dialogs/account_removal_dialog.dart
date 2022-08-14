@@ -20,15 +20,15 @@ class AccountRemovalDialog extends StatelessWidget {
         content: Text(l10n.accountRemovalConfirmationDescription),
         actions: <Widget>[
           TextButton(
-            style: TextButton.styleFrom(
-              primary: Theme.of(context).errorColor,
-            ),
             onPressed: () => Navigator.of(context).pop(),
             child: Text(l10n.cancelButtonLabel),
           ),
           TextButton(
-            child: Text(l10n.removeButtonLabel),
+            style: TextButton.styleFrom(
+              primary: Theme.of(context).errorColor,
+            ),
             onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.removeButtonLabel),
           )
         ],
       ),

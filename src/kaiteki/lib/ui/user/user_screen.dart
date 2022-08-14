@@ -79,62 +79,71 @@ class _UserScreenState extends ConsumerState<UserScreen>
   ) {
     final user = snapshot.data;
 
-    return Material(
-      child: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              actions: buildActions(context, user: user),
-              expandedHeight: user?.bannerUrl != null ? 450.0 : null,
-              pinned: true,
-              forceElevated: true,
-              flexibleSpace: DesktopUserHeader(
-                tabController: _tabController,
-                tabs: buildTabs(context, user, true, Axis.horizontal),
-                user: user,
-                color: null,
-              ),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(
+              backgroundColor: Theme.of(context).useMaterial3
+                  ? Theme.of(context).colorScheme.surfaceVariant
+                  : null,
+              scrolledUnderElevation: 0,
             ),
-          ];
-        },
-        body: BreakpointContainer(
-          breakpoint: breakpoint,
-          child: Row(
-            children: [
-              Flexible(
-                child: Column(
-                  children: [
-                    if (user != null)
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(columnPadding),
-                            child: UserInfoWidget(user: user),
-                          ),
-                        ),
-                      ),
-                  ],
+      ),
+      child: Material(
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                actions: buildActions(context, user: user),
+                expandedHeight: user?.bannerUrl != null ? 450.0 : null,
+                pinned: true,
+                forceElevated: true,
+                flexibleSpace: DesktopUserHeader(
+                  tabController: _tabController,
+                  tabs: buildTabs(context, user, true, Axis.horizontal),
+                  user: user,
                 ),
               ),
-              SizedBox(width: breakpoint.gutters),
-              Flexible(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(columnPadding),
-                  child: TabBarView(
-                    controller: _tabController,
+            ];
+          },
+          body: BreakpointContainer(
+            breakpoint: breakpoint,
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
                     children: [
-                      PostsPage(
-                        container: ref.watch(accountProvider),
-                        widget: widget,
-                      ),
-                      Container(),
-                      Container(),
+                      if (user != null)
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(columnPadding),
+                              child: UserInfoWidget(user: user),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                SizedBox(width: breakpoint.gutters),
+                Flexible(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(columnPadding),
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        PostsPage(
+                          container: ref.watch(accountProvider),
+                          widget: widget,
+                        ),
+                        Container(),
+                        Container(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -172,6 +181,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
       appBar: snapshot.hasData //
           ? _buildAppBar(
               !(tooSmall || isLoading),
+              tooSmall,
               snapshot,
             )
           : AppBar(),
@@ -237,12 +247,13 @@ class _UserScreenState extends ConsumerState<UserScreen>
 
   AppBar _buildAppBar(
     bool showCountBadges,
+    bool isMobile,
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
     final displayName = snapshot.data?.renderDisplayName(context, ref);
 
     return AppBar(
-      actions: buildActions(context, user: snapshot.data),
+      actions: [...buildActions(context, user: snapshot.data)],
       bottom: TabBar(
         tabs: buildTabs(
           context,
