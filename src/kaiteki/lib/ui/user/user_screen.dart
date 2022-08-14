@@ -1,9 +1,9 @@
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
@@ -299,14 +299,14 @@ class _UserScreenState extends ConsumerState<UserScreen>
       ),
       margin: const EdgeInsets.only(left: 6.0),
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-      child: Text(
-        style: GoogleFonts.robotoMono(
-          color: Colors.black,
-          fontWeight: FontWeight.w600,
+      child: DefaultTextStyle.merge(
+        style: const TextStyle(color: Colors.black),
+        child: Text(
           _shortenNumber(context, count),
+          style: Theme.of(context).ktkTextTheme?.countTextStyle.copyWith(),
+          textScaleFactor: 0.9,
+          overflow: TextOverflow.fade,
         ),
-        textScaleFactor: 0.9,
-        overflow: TextOverflow.fade,
       ),
     );
   }

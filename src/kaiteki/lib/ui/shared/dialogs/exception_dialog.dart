@@ -2,8 +2,8 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExceptionDialog extends StatelessWidget {
@@ -52,7 +52,7 @@ class ExceptionDialog extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     child: SelectableText(
                       detail.value,
-                      style: GoogleFonts.robotoMono(),
+                      style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
                     ),
                   ),
                 ],
@@ -169,7 +169,12 @@ class _DataRow extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(width: 8.0),
-        Flexible(child: SelectableText(value, style: GoogleFonts.robotoMono())),
+        Flexible(
+          child: SelectableText(
+            value,
+            style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
+          ),
+        ),
       ],
     );
   }

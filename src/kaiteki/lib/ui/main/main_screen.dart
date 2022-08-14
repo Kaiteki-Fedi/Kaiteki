@@ -3,10 +3,10 @@ import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/main/compose_fab.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
@@ -140,6 +140,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget _buildDrawer(BuildContext context) {
     final l10n = context.getL10n();
     final account = ref.watch(accountProvider).currentAccount;
+    final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -151,8 +152,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 vertical: 16.0,
               ),
               child: Text(
-                "Kaiteki",
-                style: Theme.of(context).textTheme.headline6,
+                consts.appName,
+                style: Theme.of(context) //
+                    .ktkTextTheme
+                    ?.kaitekiTextStyle
+                    .copyWith(fontSize: fontSize),
               ),
             ),
             const ListTile(
@@ -213,7 +217,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           : null,
       title: Text(
         consts.appName,
-        style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
+        style: Theme.of(context).ktkTextTheme?.kaitekiTextStyle,
       ),
       elevation: Theme.of(context).useMaterial3 ? 0.0 : null,
       actions: _buildAppBarActions(context),

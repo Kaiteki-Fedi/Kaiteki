@@ -7,7 +7,12 @@ import 'package:kaiteki/theming/kaiteki/theme.dart';
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyGeneralChanges() {
+    final ktkTextTheme = KaitekiTextTheme.fromMaterialTheme(this);
+
     return copyWith(
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: colorScheme.secondaryContainer,
+      ),
       snackBarTheme: const SnackBarThemeData(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         behavior: SnackBarBehavior.floating,
@@ -16,11 +21,11 @@ extension ThemeDataExtensions on ThemeData {
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
       extensions: [
-        KaitekiTextTheme.fromMaterialTheme(this),
+        ktkTextTheme,
         KaitekiColors.fromMaterialTheme(this),
         KaitekiTheme.fromMaterialTheme(this),
       ],
-      textTheme: createKaitekiTextTheme(textTheme),
+      textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
       checkboxTheme: CheckboxThemeData(
         checkColor: MaterialStateProperty.all(colorScheme.surface),
         fillColor: MaterialStateProperty.resolveWith(
@@ -34,11 +39,15 @@ extension ThemeDataExtensions on ThemeData {
   }
 }
 
-TextTheme createKaitekiTextTheme(TextTheme original) {
-  return GoogleFonts.robotoTextTheme(original).copyWith(
-    titleLarge: GoogleFonts.quicksand(
-      textStyle: original.titleLarge,
-      fontWeight: FontWeight.w600,
+TextTheme _createKaitekiTextTheme(
+  TextTheme original,
+  KaitekiTextTheme ktkTextTheme,
+) {
+  final baseTextTheme = GoogleFonts.robotoTextTheme(original);
+  return baseTextTheme.copyWith(
+    titleLarge: ktkTextTheme.kaitekiTextStyle.copyWith(
+      fontSize: baseTextTheme.titleLarge?.fontSize,
+      color: baseTextTheme.titleLarge?.color,
     ),
   );
 }
