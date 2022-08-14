@@ -39,7 +39,7 @@ android {
     defaultConfig {
         applicationId "moe.craftplacer.kaiteki"
         minSdkVersion 18
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true

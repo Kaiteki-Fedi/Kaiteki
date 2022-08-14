@@ -153,37 +153,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                       favorited: adapter is FavoriteSupport //
                           ? _post.liked
                           : null,
-                      onShowFavoritees: () {
-                        showDialog(
-                          context: context,
-                          builder: (_) => UserListDialog(
-                            title: const Text("Favorited by"),
-                            fetchUsers: () async {
-                              final users = await (adapter as FavoriteSupport)
-                                  .getFavoritees(_post.id);
-                              return users;
-                            }(),
-                            emptyIcon: const Icon(Icons.star_outline_rounded),
-                            emptyTitle: const Text("No favorites"),
-                          ),
-                        );
-                      },
-                      onShowRepeatees: () {
-                        showDialog(
-                          context: context,
-                          builder: (_) => UserListDialog(
-                            title: const Text("Repeated by"),
-                            fetchUsers: () async {
-                              final users = await adapter.getRepeatees(
-                                _post.id,
-                              );
-                              return users;
-                            }(),
-                            emptyIcon: const Icon(Icons.repeat_rounded),
-                            emptyTitle: const Text("No repeats"),
-                          ),
-                        );
-                      },
+                      onShowFavoritees: _showFavoritees,
+                      onShowRepeatees: _showRepeatees,
                       repeated: _post.repeated,
                       reacted: adapter is ReactionSupport ? false : null,
                       buildActions: _buildActions,
@@ -193,6 +164,49 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Future<void> _showFavoritees() async {
+    await showDialog(
+      context: context,
+      builder: (_) => Consumer(
+        builder: (_, ref, __) {
+          final adapter = ref.watch(adapterProvider);
+          return UserListDialog(
+            title: const Text("Favorited by"),
+            fetchUsers: () async {
+              final users =
+                  await (adapter as FavoriteSupport).getFavoritees(_post.id);
+              return users;
+            }(),
+            emptyIcon: const Icon(Icons.star_outline_rounded),
+            emptyTitle: const Text("No favorites"),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _showRepeatees() async {
+    showDialog(
+      context: context,
+      builder: (_) => Consumer(
+        builder: (_, ref, __) {
+          final adapter = ref.watch(adapterProvider);
+          return UserListDialog(
+            title: const Text("Repeated by"),
+            fetchUsers: () async {
+              final users = await adapter.getRepeatees(
+                _post.id,
+              );
+              return users;
+            }(),
+            emptyIcon: const Icon(Icons.repeat_rounded),
+            emptyTitle: const Text("No repeats"),
+          );
+        },
       ),
     );
   }
@@ -216,9 +230,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
               _post.bookmarked
                   ? Icons.bookmark_rounded
                   : Icons.bookmark_border_rounded,
-              color: Theme.of(context).ktkColors?.favoriteColor ??
+              color: Theme.of(context).ktkColors?.bookmarkColor ??
                   Colors.pink.harmonizeWith(
-                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.onSurface,
                   ),
             ),
             contentPadding: EdgeInsets.zero,

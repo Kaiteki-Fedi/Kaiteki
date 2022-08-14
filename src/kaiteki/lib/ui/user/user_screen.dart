@@ -1,8 +1,9 @@
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
@@ -78,62 +79,71 @@ class _UserScreenState extends ConsumerState<UserScreen>
   ) {
     final user = snapshot.data;
 
-    return Material(
-      child: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              actions: buildActions(context, user: user),
-              expandedHeight: user?.bannerUrl != null ? 450.0 : null,
-              pinned: true,
-              forceElevated: true,
-              flexibleSpace: DesktopUserHeader(
-                tabController: _tabController,
-                tabs: buildTabs(context, user, true, Axis.horizontal),
-                user: user,
-                color: null,
-              ),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(
+              backgroundColor: Theme.of(context).useMaterial3
+                  ? Theme.of(context).colorScheme.surfaceVariant
+                  : null,
+              scrolledUnderElevation: 0,
             ),
-          ];
-        },
-        body: BreakpointContainer(
-          breakpoint: breakpoint,
-          child: Row(
-            children: [
-              Flexible(
-                child: Column(
-                  children: [
-                    if (user != null)
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(columnPadding),
-                            child: UserInfoWidget(user: user),
-                          ),
-                        ),
-                      ),
-                  ],
+      ),
+      child: Material(
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                actions: buildActions(context, user: user),
+                expandedHeight: user?.bannerUrl != null ? 450.0 : null,
+                pinned: true,
+                forceElevated: true,
+                flexibleSpace: DesktopUserHeader(
+                  tabController: _tabController,
+                  tabs: buildTabs(context, user, true, Axis.horizontal),
+                  user: user,
                 ),
               ),
-              SizedBox(width: breakpoint.gutters),
-              Flexible(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(columnPadding),
-                  child: TabBarView(
-                    controller: _tabController,
+            ];
+          },
+          body: BreakpointContainer(
+            breakpoint: breakpoint,
+            child: Row(
+              children: [
+                Flexible(
+                  child: Column(
                     children: [
-                      PostsPage(
-                        container: ref.watch(accountProvider),
-                        widget: widget,
-                      ),
-                      Container(),
-                      Container(),
+                      if (user != null)
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: const EdgeInsets.all(columnPadding),
+                              child: UserInfoWidget(user: user),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                SizedBox(width: breakpoint.gutters),
+                Flexible(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(columnPadding),
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        PostsPage(
+                          container: ref.watch(accountProvider),
+                          widget: widget,
+                        ),
+                        Container(),
+                        Container(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -171,6 +181,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
       appBar: snapshot.hasData //
           ? _buildAppBar(
               !(tooSmall || isLoading),
+              tooSmall,
               snapshot,
             )
           : AppBar(),
@@ -219,7 +230,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
         ),
       );
     } else {
-      final countLabel = shortenNumber(count);
+      final countLabel = _shortenNumber(context, count);
       return Tab(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -236,12 +247,13 @@ class _UserScreenState extends ConsumerState<UserScreen>
 
   AppBar _buildAppBar(
     bool showCountBadges,
+    bool isMobile,
     AsyncSnapshot<User<dynamic>> snapshot,
   ) {
     final displayName = snapshot.data?.renderDisplayName(context, ref);
 
     return AppBar(
-      actions: buildActions(context, user: snapshot.data),
+      actions: [...buildActions(context, user: snapshot.data)],
       bottom: TabBar(
         tabs: buildTabs(
           context,
@@ -290,18 +302,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
     );
   }
 
-  String shortenNumber(int count) {
-    var text = count.toString();
-
-    if (count / 1000 >= 1) {
-      text = '${(count / 1000).toStringAsFixed(2)}k';
-    }
-
-    return text;
-  }
-
   Widget buildBadge(BuildContext context, int count) {
-    final text = shortenNumber(count);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3.0),
@@ -309,16 +310,22 @@ class _UserScreenState extends ConsumerState<UserScreen>
       ),
       margin: const EdgeInsets.only(left: 6.0),
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-      child: Text(
-        text,
-        style: GoogleFonts.robotoMono(
-          color: Colors.black,
-          fontWeight: FontWeight.w600,
+      child: DefaultTextStyle.merge(
+        style: const TextStyle(color: Colors.black),
+        child: Text(
+          _shortenNumber(context, count),
+          style: Theme.of(context).ktkTextTheme?.countTextStyle.copyWith(),
+          textScaleFactor: 0.9,
+          overflow: TextOverflow.fade,
         ),
-        textScaleFactor: 0.9,
-        overflow: TextOverflow.fade,
       ),
     );
+  }
+
+  String _shortenNumber(BuildContext context, num value) {
+    final locale = Localizations.localeOf(context);
+    final numberFormat = NumberFormat.compact(locale: locale.languageCode);
+    return numberFormat.format(value);
   }
 
   List<Widget> buildActions(BuildContext context, {User? user}) {

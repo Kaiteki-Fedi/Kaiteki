@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/separator_text.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -10,40 +9,6 @@ class SettingsScreen extends StatelessWidget {
     final l10n = context.getL10n();
     return <_Section>[
       _Section(
-        items: [
-          _SettingsItem(
-            icon: Icons.build_rounded,
-            title: l10n.settingsGeneral,
-          ),
-          _SettingsItem(
-            icon: Icons.person_rounded,
-            title: l10n.settingsProfile,
-          ),
-          _SettingsItem(
-            icon: Icons.lock_rounded,
-            title: l10n.settingsSecurity,
-          ),
-          _SettingsItem(
-            icon: Icons.filter_alt_rounded,
-            title: l10n.settingsFiltering,
-            onTap: (context) => context.push("/settings/filtering"),
-          ),
-          _SettingsItem(
-            icon: Icons.notifications_rounded,
-            title: l10n.settingsNotifications,
-          ),
-          _SettingsItem(
-            icon: Icons.import_export_rounded,
-            title: l10n.settingsImportExport,
-          ),
-          _SettingsItem(
-            icon: Icons.visibility_off_rounded,
-            title: l10n.settingsMutesBlocks,
-          ),
-        ],
-      ),
-      _Section(
-        title: l10n.settingsKaiteki,
         items: [
           _SettingsItem(
             icon: Icons.palette_rounded,
@@ -75,7 +40,9 @@ class SettingsScreen extends StatelessWidget {
       final section = sections[i];
 
       if (section.hasTitleHeader) {
-        widgets.add(SeparatorText(section.title!));
+        widgets.add(
+          ListTile(title: Text(section.title!), enabled: false),
+        );
       }
 
       for (final item in section.items) {

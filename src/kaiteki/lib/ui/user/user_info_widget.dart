@@ -170,7 +170,6 @@ class _UserInfoRow extends StatelessWidget {
   final Widget body;
 
   const _UserInfoRow({
-    super.key,
     required this.leading,
     required this.body,
   });

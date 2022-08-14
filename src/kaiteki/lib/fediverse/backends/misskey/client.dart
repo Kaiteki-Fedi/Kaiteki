@@ -49,7 +49,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     String? replyId,
     List<String>? fileIds = const [],
   }) async {
-    // FIXME: Properly parse Misskey create note response
+    // FIXME(Craftplacer): Properly parse Misskey create note response
     return sendJsonRequest(
       HttpMethod.post,
       "api/notes/create",
@@ -74,7 +74,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   Future<misskey.Note> createRenote(String renoteId) async {
-    // FIXME: Properly parse Misskey create note response
+    // FIXME(Craftplacer): Properly parse Misskey create note response
     return sendJsonRequest(
       HttpMethod.post,
       "api/notes/create",

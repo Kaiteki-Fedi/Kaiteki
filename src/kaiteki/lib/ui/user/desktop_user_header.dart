@@ -10,32 +10,28 @@ class DesktopUserHeader extends StatelessWidget {
   final TabController tabController;
   final List<Tab> tabs;
   final User? user;
-  final Color? color;
 
   const DesktopUserHeader({
     super.key,
     required this.tabController,
     required this.tabs,
     this.user,
-    required this.color,
   });
 
-  Color getAppBarBackgroundColor(ThemeData theme) {
-    if (theme.appBarTheme.backgroundColor != null) {
-      return theme.appBarTheme.backgroundColor!;
-    }
-    return theme.primaryColor;
-    //return theme.colorScheme.brightness == Brightness.dark
-    //    ? theme.colorScheme.surface
-    //    : theme.colorScheme.primary;
+  Color getAppBarBackgroundColor(BuildContext context) {
+    final inheritedColor = AppBarTheme.of(context).backgroundColor;
+
+    if (inheritedColor != null) return inheritedColor;
+
+    return Theme.of(context).colorScheme.primary;
   }
 
   @override
   Widget build(BuildContext context) {
     final avatarBorderRadius = BorderRadius.circular(8.0);
-    final foregroundColor = color.nullTransform(
-      (c) => ThemeData.estimateBrightnessForColor(c).inverted.getColor(),
-    );
+    final foregroundColor = Theme.of(context).useMaterial3
+        ? Theme.of(context).colorScheme.onSurface
+        : Theme.of(context).colorScheme.onPrimary;
 
     return BreakpointBuilder(
       builder: (context, breakpoint) {
@@ -113,7 +109,7 @@ class DesktopUserHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: ElevationOverlay.applyOverlay(
           context,
-          color ?? getAppBarBackgroundColor(Theme.of(context)),
+          getAppBarBackgroundColor(context),
           4.0,
         ),
         borderRadius: borderRadius * 2,

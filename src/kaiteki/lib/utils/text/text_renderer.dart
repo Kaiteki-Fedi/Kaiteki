@@ -225,7 +225,7 @@ class TextRenderer {
     List<InlineSpan> children, {
     TextStyle? style,
   }) {
-    // FIXME: We should be passing down the "click-ability" to the children.
+    // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
 
     final recognizer = TapGestureRecognizer()
       ..onTap = () => context.launchUrl(link.destination.toString());

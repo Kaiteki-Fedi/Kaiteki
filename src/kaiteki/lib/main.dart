@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -18,7 +19,7 @@ import 'package:kaiteki/repositories/hive_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> get _useMaterial3ByDefault async {
-  if (!Platform.isAndroid) return false;
+  if (kIsWeb || !Platform.isAndroid) return false;
   final androidInfo = await DeviceInfoPlugin().androidInfo;
   return (androidInfo.version.sdkInt ?? 0) >= 12;
 }
@@ -47,7 +48,7 @@ Future<void> main() async {
       preferenceProvider.overrideWithValue(appPreferences),
       accountProvider.overrideWithValue(accountManager),
     ],
-    child: KaitekiApp(),
+    child: const KaitekiApp(),
   );
 
   runApp(app);
