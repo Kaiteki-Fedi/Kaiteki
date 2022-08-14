@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/compose/post_form.dart';
+import 'package:kaiteki/ui/shared/toggle_icon_button.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class ComposeScreen extends ConsumerStatefulWidget {
@@ -18,6 +20,7 @@ class ComposeScreen extends ConsumerStatefulWidget {
 
 class _PostScreenState extends ConsumerState<ComposeScreen> {
   bool enableSubject = false;
+  bool showPreview = false;
   final key = GlobalKey<PostFormState>();
 
   @override
@@ -54,6 +57,12 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
             children: [
               AppBar(
                 actions: [
+                  if (manager.adapter is PreviewSupport)
+                    ToggleIconButton(
+                      selected: showPreview,
+                      onPressed: togglePreview,
+                      icon: const Icon(Icons.preview_rounded),
+                    ),
                   if (manager.adapter.capabilities.supportsSubjects)
                     ToggleSubjectButton(
                       value: enableSubject,
@@ -78,6 +87,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
                 child: PostForm(
                   key: key,
                   enableSubject: enableSubject,
+                  showPreview: showPreview,
                   expands: fullscreen,
                   replyTo: widget.replyTo,
                 ),
@@ -90,6 +100,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
   }
 
   void toggleSubject() => setState(() => enableSubject = !enableSubject);
+  void togglePreview() => setState(() => showPreview = !showPreview);
 }
 
 class ToggleSubjectButton extends StatelessWidget {

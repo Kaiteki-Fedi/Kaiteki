@@ -28,12 +28,14 @@ const double splashRadius = 20.0;
 class PostForm extends ConsumerStatefulWidget {
   final Post? replyTo;
   final bool enableSubject;
+  final bool showPreview;
   final bool expands;
 
   const PostForm({
     super.key,
     this.replyTo,
     this.enableSubject = true,
+    this.showPreview = false,
     this.expands = false,
   });
 
@@ -122,16 +124,13 @@ class PostFormState extends ConsumerState<PostForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (manager.adapter is PreviewSupport)
-            ExpansionTile(
-              title: Text(l10n.postPreviewTitle),
-              children: [
-                FutureBuilder(
-                  future: getPreviewFuture(manager),
-                  builder: buildPreview,
-                ),
-              ],
+          if (widget.showPreview && manager.adapter is PreviewSupport) ...[
+            FutureBuilder(
+              future: getPreviewFuture(manager),
+              builder: buildPreview,
             ),
+            const Divider(height: 15),
+          ],
           Flexible(
             flex: flex,
             child: Padding(
