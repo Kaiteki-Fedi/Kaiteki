@@ -48,7 +48,7 @@ Future<void> main() async {
       preferenceProvider.overrideWithValue(appPreferences),
       accountProvider.overrideWithValue(accountManager),
     ],
-    child: KaitekiApp(),
+    child: const KaitekiApp(),
   );
 
   runApp(app);
