@@ -25,7 +25,6 @@ import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
-import 'package:logger/logger.dart';
 import 'package:tuple/tuple.dart';
 import 'package:uuid/uuid.dart';
 
