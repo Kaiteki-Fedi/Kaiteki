@@ -1,37 +1,5 @@
 import 'package:flutter/material.dart';
 
-const MaterialColor kaitekiLightBackground = MaterialColor(
-  0xFF9c9eb5,
-  {
-    50: Color(0xFFf7f9ff),
-    100: Color(0xFFf2f4ff),
-    200: Color(0xFFebedff),
-    300: Color(0xFFdee0f8),
-    400: Color(0xFFbbbdd5),
-    500: Color(0xFF9c9eb5),
-    600: Color(0xFF73758b),
-    700: Color(0xFF5f6176),
-    800: Color(0xFF404256),
-    900: Color(0xFF1e2133),
-  },
-);
-
-const MaterialColor kaitekiDarkBackground = MaterialColor(
-  0xFF1e2133,
-  {
-    50: Color(0xFF424453),
-    100: Color(0xFF3F4251),
-    200: Color(0xFF3D404F),
-    300: Color(0xFF393B4B),
-    400: Color(0xFF363949),
-    500: Color(0xFF323545),
-    600: Color(0xFF2F3243),
-    700: Color(0xFF2D3041),
-    800: Color(0xFF292C3D),
-    900: Color(0xFF1e2133),
-  },
-);
-
 const MaterialColor kaitekiPink = MaterialColor(
   0xFFFF7890,
   {
