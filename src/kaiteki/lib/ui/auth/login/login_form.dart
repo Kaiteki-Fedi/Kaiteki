@@ -200,7 +200,6 @@ class _InstancePage extends StatefulWidget {
   final VoidCallback onNext;
 
   const _InstancePage({
-    super.key,
     required this.instanceController,
     required this.validator,
     required this.onNext,
@@ -355,7 +354,6 @@ class _UserPage extends StatefulWidget {
   final VoidCallback? onNext;
 
   const _UserPage({
-    super.key,
     this.usernameController,
     this.passwordController,
     this.usernameValidator,

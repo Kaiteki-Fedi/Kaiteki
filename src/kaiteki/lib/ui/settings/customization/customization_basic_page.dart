@@ -58,7 +58,7 @@ class _CustomizationBasicPageState
 }
 
 class _SystemSettingsDisclaimer extends StatelessWidget {
-  const _SystemSettingsDisclaimer({super.key});
+  const _SystemSettingsDisclaimer();
 
   @override
   Widget build(BuildContext context) {
