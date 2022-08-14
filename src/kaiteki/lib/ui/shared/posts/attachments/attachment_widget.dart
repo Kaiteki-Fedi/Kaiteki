@@ -32,26 +32,58 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
     if (widget.attachment.isSensitive && !revealed) {
       return Center(
         child: OutlinedButton(
-          onPressed: () => setState(() => revealed = true),
-          child: const Text("Reveal sensitive content"),
+          onPressed: reveal,
+          child: const Text("Show sensitive content"),
         ),
       );
     }
 
     final supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
 
+    Widget attachmentWidget;
+
     if (widget.attachment.type == AttachmentType.image) {
-      return ImageAttachmentWidget(
       // HACK(Craftplacer): missing case when null
+      attachmentWidget = ImageAttachmentWidget(
         attachment: widget.attachment,
         index: widget.attachmentIndex!,
         post: widget.parentPost!,
       );
     } else if (widget.attachment.type == AttachmentType.video &&
         supportsVideoPlayer) {
-      return VideoAttachmentWidget(attachment: widget.attachment);
+      attachmentWidget = VideoAttachmentWidget(attachment: widget.attachment);
     } else {
-      return FallbackAttachmentWidget(attachment: widget.attachment);
+      attachmentWidget =
+          FallbackAttachmentWidget(attachment: widget.attachment);
     }
+
+    return Stack(
+      children: [
+        attachmentWidget,
+        if (widget.attachment.isSensitive)
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Material(
+              clipBehavior: Clip.antiAlias,
+              shape: const StadiumBorder(),
+              color: Theme.of(context)
+                  .colorScheme
+                  .secondaryContainer
+                  .withOpacity(.85),
+              child: IconButton(
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                icon: const Icon(Icons.visibility_off_rounded),
+                onPressed: unreveal,
+                splashRadius: 24,
+                tooltip: "Hide sensitive content",
+              ),
+            ),
+          ),
+      ],
+    );
   }
+
+  void reveal() => setState(() => revealed = true);
+  void unreveal() => setState(() => revealed = false);
 }
