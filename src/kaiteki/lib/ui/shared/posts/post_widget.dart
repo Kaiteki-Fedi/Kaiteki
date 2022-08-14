@@ -227,9 +227,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
               _post.bookmarked
                   ? Icons.bookmark_rounded
                   : Icons.bookmark_border_rounded,
-              color: Theme.of(context).ktkColors?.favoriteColor ??
+              color: Theme.of(context).ktkColors?.bookmarkColor ??
                   Colors.pink.harmonizeWith(
-                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.onSurface,
                   ),
             ),
             contentPadding: EdgeInsets.zero,
