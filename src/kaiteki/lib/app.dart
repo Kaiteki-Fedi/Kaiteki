@@ -16,8 +16,6 @@ import 'package:kaiteki/ui/settings/credits_screen.dart';
 import 'package:kaiteki/ui/settings/customization/customization_settings_screen.dart';
 import 'package:kaiteki/ui/settings/debug/theme_screen.dart';
 import 'package:kaiteki/ui/settings/debug_screen.dart';
-import 'package:kaiteki/ui/settings/filtering/filtering_screen.dart';
-import 'package:kaiteki/ui/settings/filtering/sensitive_post_filtering_screen.dart';
 import 'package:kaiteki/ui/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shared/conversation_screen.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
@@ -37,16 +35,6 @@ class KaitekiApp extends ConsumerWidget {
           GoRoute(
             path: "customization",
             builder: (_, __) => const CustomizationSettingsScreen(),
-          ),
-          GoRoute(
-            path: "filtering",
-            builder: (_, __) => const FilteringScreen(),
-            routes: [
-              GoRoute(
-                path: "sensitivePosts",
-                builder: (_, __) => const SensitivePostFilteringScreen(),
-              ),
-            ],
           ),
           GoRoute(
             path: "debug",
