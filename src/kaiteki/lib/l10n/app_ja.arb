@@ -1,0 +1,442 @@
+{
+    "apiTypeDialog_title": "インスタンスタイプを検出できませんでした",
+    "@apiTypeDialog_title": {},
+    "apiTypeDialog_description": ":インスタンスタイプを検出できませんでした。Kaitekiはインスタンスがどのソフトウェアを実行しているかを見つけようとしましたが、不明でした。正しいインスタンスバックエンドを下記から選択してください。",
+    "@apiTypeDialog_description": {},
+    "apiTypeDialog_missing": "何かが足りないかもしれません",
+    "@apiTypeDialog_missing": {},
+    "mfaTitle": "二要素認証",
+    "@mfaTitle": {},
+    "mfaNoCode": "コードを入力してください",
+    "@mfaNoCode": {},
+    "okButtonLabel": "OK",
+    "@okButtonLabel": {},
+    "cancelButtonLabel": "キャンセル",
+    "@cancelButtonLabel": {},
+    "verifyButtonLabel": "確認",
+    "@verifyButtonLabel": {},
+    "removeButtonLabel": "削除",
+    "@removeButtonLabel": {},
+    "viewPostButtonLabel": "投稿を見る",
+    "@viewPostButtonLabel": {},
+    "continueAnywayButtonLabel": "とにかく続行する",
+    "@continueAnywayButtonLabel": {},
+    "abortButtonLabel": "中止",
+    "@abortButtonLabel": {},
+    "sharedBackendFunctionality": "これらは{api}とKaitekiの両方がサポートする機能です:",
+    "@sharedBackendFunctionality": {
+      "placeholders": {
+        "api": {
+          "description": "Name of the instance backend software",
+          "example": "Pleroma"
+        }
+      }
+    },
+    "reactionSupport": "リアクション",
+    "@reactionSupport": {},
+    "reactionSupportDescription": "投稿にリアクションする",
+    "chatSupport": "チャット",
+    "chatSupportDescription": "他のユーザーにチャットする",
+    "@chatSupport": {},
+    "previewSupport": "投稿のプレビュー",
+    "previewSupportDescription": "投稿を投稿する前にプレビューを見る",
+    "@previewSupport": {},
+    "discoverInstancesButtonLabel": "インスタンスを見つける",
+    "@discoverInstancesButtonLabel": {},
+    "discoverInstancesTitle": "インスタンスを見つける",
+    "@discoverInstancesTitle": {},
+    "discoverInstancesDisclaimer": "これは、Kaitekiの開発者が推奨する、サポートされている全インスタンスの一覧です。",
+    "@discoverInstancesDisclaimer": {},
+    "chooseButtonLabel": "選ぶ",
+    "@chooseButtonLabel": {},
+    "runsOn": "{api}で動作します",
+    "@runsOn": {
+      "placeholders": {
+        "api": {
+          "description": "Name of the instance backend software",
+          "example": "Pleroma"
+        }
+      }
+    },
+    "usesFediverseCovenant": "Fediverse-Friendly Moderation Covenantを使用する",
+    "@usesFediverseCovenant": {},
+    "usesMastodonCovenant": "マストドンサーバー規約を使用する",
+    "@usesMastodonCovenant": {},
+    "visibilityButtonTooltip": "投稿の公開範囲を変更",
+    "@visibilityButtonTooltip": {},
+    "attachButtonTooltip": "ファイルを添付する",
+    "@attachButtonTooltip": {},
+    "emojiButtonTooltip": "絵文字を挿入する",
+    "@emojiButtonTooltip": {},
+    "formattingButtonTooltip": "フォーマットを変更する",
+    "@formattingButtonTooltip": {},
+    "aboutInstanceTitle": "{instance} について",
+    "@aboutInstanceTitle": {
+      "placeholders": {
+        "instance": {
+          "description": "Domain/hostname of the instance",
+          "example": "fedi.absturztau.be"
+        }
+      }
+    },
+    "aboutBackendTitle": "{api}について",
+    "@aboutBackendTitle": {
+      "placeholders": {
+        "api": {
+          "description": "Name of the instance backend software",
+          "example": "Pleroma"
+        }
+      }
+    },
+    "loginButtonLabel": "ログイン",
+    "@loginButtonLabel": {},
+    "featureSupported": "{feature} がサポートされています",
+    "@featureSupported": {
+      "placeholders": {
+        "feature": {
+          "description": "Feature name, always in plural.",
+          "example": "Post previews"
+        }
+      }
+    },
+    "featureUnsupported": "{feature} はサポートされていません",
+    "@featureUnsupported": {
+      "placeholders": {
+        "feature": {
+          "description": "Feature name, always in plural.",
+          "example": "Post previews"
+        }
+      }
+    },
+    "rules": "ルール",
+    "@rules": {},
+    "rulesLearnMore": "ルールについてもっと知る",
+    "@rulesLearnMore": {},
+    "postPreviewTitle": "プレビュー",
+    "@postPreviewTitle": {},
+    "postPreviewWaiting": "投稿を書きましょう！",
+    "@postPreviewWaiting": {},
+    "composeBodyHint": "あなたが書くのを待っています…",
+    "@composeBodyHint": {},
+    "composeSubjectHint": "件名(オプション)",
+    "@composeSubjectHint": {},
+    "postSubmissionFailed": "投稿に失敗しました",
+    "@postSubmissionFailed": {},
+    "postSubmissionSending": "投稿しています…",
+    "@postSubmissionSending": {},
+    "postSubmissionSent": "投稿できました",
+    "@postSubmissionSent": {},
+    "submitButtonTooltip": "投稿",
+    "@submitButtonTooltip": {},
+    "empty": "投稿が入力されていません",
+    "@empty": {},
+    "postsTab": "投稿",
+    "@postsTab": {},
+    "followersTab": "フォロワー",
+    "@followersTab": {},
+    "followingTab": "フォロー中",
+    "@followingTab": {},
+    "timelineTab": "タイムライン",
+    "@timelineTab": {},
+    "notificationsTab": "通知",
+    "@notificationsTab": {},
+    "chatsTab": "チャット",
+    "@chatsTab": {},
+    "niy": "未実装です",
+    "@niy": {},
+    "settings": "設定",
+    "@settings": {},
+    "welcome": "Kaitekiにようこそ!",
+    "@welcome": {},
+    "accountRequiredToContinue": "続けるには、少なくとも1つのインスタンスにログインしてください。",
+    "@accountRequiredToContinue": {},
+    "settingsHideSensitivePosts": "センシティブな投稿を隠す",
+    "@settingsHideSensitivePosts": {},
+    "settingsSensitivePosts": "センシティブな投稿",
+    "@settingsSensitivePosts": {},
+    "settingsSubjectPosts": "件名のある投稿",
+    "@settingsSubjectPosts": {},
+    "settingsDisabled": "無効",
+    "@settingsDisabled": {},
+    "creditsTitle": "クレジット",
+    "@creditsTitle": {},
+    "failedToLaunchUrl": "URLが開けませんでした",
+    "@failedToLaunchUrl": {},
+    "settingsAbout": "Kaitekiについて",
+    "@settingsAbout": {},
+    "settingsGeneral": "総合的な設定",
+    "@settingsGeneral": {},
+    "settingsProfile": "プロフィール",
+    "@settingsProfile": {},
+    "settingsSecurity": "セキュリティ",
+    "@settingsSecurity": {},
+    "settingsFiltering": "フィルタリング",
+    "@settingsFiltering": {},
+    "settingsNotifications": "通知",
+    "@settingsNotifications": {},
+    "settingsImportExport": "データのインポート/エクスポート",
+    "@settingsImportExport": {},
+    "settingsMutesBlocks": "ミュートとブロック",
+    "@settingsMutesBlocks": {},
+    "settingsKaiteki": "Kaiteki設定",
+    "@settingsKaiteki": {},
+    "settingsCustomization": "カスタマイズ",
+    "@settingsCustomization": {},
+    "settingsTabs": "タブ",
+    "@settingsTabs": {},
+    "settingsDebugMaintenance": "デバッグとメンテナンス",
+    "@settingsDebugMaintenance": {},
+    "authNoInstance": "インスタンスを入力してください",
+    "@authNoInstance": {},
+    "authNoPassword": "パスワードを入力してください",
+    "@authNoPassword": {},
+    "authNoUsername": "ユーザー名を入力してください",
+    "@authNoUsername": {},
+    "authDuplicate": "同じインスタンスに同じユーザー名を持つアカウントが既に存在します",
+    "@authDuplicate": {},
+    "authNoUrlAllowed": "ドメイン名のみを指定してください",
+    "@authNoUrlAllowed": {},
+    "loginTitle": "インスタンスにログイン",
+    "@loginTitle": {},
+    "loginTitleInstance": "{instance} にログインします",
+    "@loginTitleInstance": {
+      "placeholders": {
+        "instance": {
+          "description": "Instance name",
+          "example": "'the wired' or as fallback 'letsalllovela.in'"
+        }
+      }
+    },
+    "nextButtonLabel": "次",
+    "@nextButtonLabel": {},
+    "backButtonLabel": "戻る",
+    "@backButtonLabel": {},
+    "instanceFieldHint": "インスタンス",
+    "@instanceFieldHint": {},
+    "usernameFieldHint": "ユーザーネーム",
+    "@usernameFieldHint": {},
+    "passwordFieldHint": "パスワード",
+    "@passwordFieldHint": {},
+    "emailFieldHint": "メールアドレス",
+    "@emailFieldHint": {},
+    "repeatPasswordFieldHint": "パスワードを再度入力",
+    "@repeatPasswordFieldHint": {},
+    "authPasswordNoMatch": "パスワードが一致していません",
+    "@authPasswordNoMatch": {},
+    "forgotPasswordButtonLabel": "パスワードを忘れた",
+    "@forgotPasswordButtonLabel": {},
+    "createAccountButtonLabel": "アカウント新規作成",
+    "@createAccountButtonLabel": {},
+    "existingAccountButtonLabel": "既存のアカウントでログイン",
+    "@existingAccountButtonLabel": {},
+    "registerButtonLabel": "登録",
+    "@registerButtonLabel": {},
+    "unsupportedInstanceTitle": "このインスタンスは現在サポート対象外です",
+    "@unsupportedInstanceTitle": {},
+    "unsupportedInstanceDescriptionCORS": "Kaiteki Webは現在{api}をサポートしていません。これは、あなたのブラウザが他のWebサイトからのオリジンを持つインスタンスへのリクエストをブロックしているためです。詳細については、以下をご覧ください。",
+    "@unsupportedInstanceDescriptionCORS": {
+      "placeholders": {
+        "api": {
+          "description": "Name of the instance backend software",
+          "example": "Pleroma"
+        }
+      }
+    },
+    "addAccountButtonLabel": "アカウントを追加",
+    "@addAccountButtonLabel": {},
+    "emojiRetrievalFailed": "絵文字の取得に失敗しました",
+    "@emojiRetrievalFailed": {},
+    "threadRetrievalFailed": "スレッドの取得に失敗しました",
+    "@threadRetrievalFailed": {},
+    "conversationTitle": "会話",
+    "@conversationTitle": {
+      "description": "Title used for conversation/thread page"
+    },
+    "emptyAccounts": "アカウントがありません",
+    "@emptyAccounts": {
+      "description": "Placeholder text used if user doesn't have any accounts"
+    },
+    "manageAccountsTitle": "アカウントを管理する",
+    "@manageAccountsTitle": {},
+    "accountRemovalConfirmationTitle": "アカウントをKaitekiから削除しますか？",
+    "@accountRemovalConfirmationTitle": {},
+    "accountRemovalConfirmationDescription": "アカウントを削除しますか？このアカウントを削除すると、再度使用するために後でサインインする必要があります。",
+    "@accountRemovalConfirmationDescription": {},
+    "switchListTileTextOn": "ON",
+    "@switchListTileTextOn": {},
+    "switchListTileTextOff": "OFF",
+    "@switchListTileTextOff": {},
+    "filteringIncludeSensitive": "センシティブと設定された投稿を含める",
+    "@filteringIncludeSensitive": {},
+    "filteringIncludeSubject": "投稿に件名を含める",
+    "@filteringIncludeSubject": {},
+    "filteringSensitiveTitle": "センシティブな投稿フィルタリング",
+    "@filteringSensitiveTitle": {},
+    "composeButtonLabel": "作成",
+    "@composeButtonLabel": {},
+    "composeDialogTitle": "新しい投稿を作成",
+    "@composeDialogTitle": {},
+    "composeDialogTitleReply": "返信先 ",
+    "@composeDialogTitleReply": {
+      "description": "Title used when compose dialog is shown for writing a reply. Gets appended with replyee's display name"
+    },
+    "discardButtonTooltip": "削除",
+    "@discardButtonTooltip": {},
+    "theme": "テーマ",
+    "@theme": {},
+    "selectThemeTitle": "テーマを選択",
+    "@selectThemeTitle": {},
+    "themeLight": "Light",
+    "@themeLight": {},
+    "themeDark": "Dark",
+    "@themeDark": {},
+    "themeSystem": "システムのデフォルト",
+    "@themeSystem": {},
+    "creditsLicenses": "オープンソースライセンス",
+    "@creditsLicenses": {},
+    "creditsGithubRepo": "GitHubリポジトリ",
+    "@creditsGithubRepo": {},
+    "creditsWebsite": "Webサイト",
+    "@creditsWebsite": {},
+    "attachmentUnsupported": "サポートされていない添付ファイルです",
+    "@attachmentUnsupported": {},
+    "viewOnlineButtonLabel": "Webブラウザで見る",
+    "@viewOnlineButtonLabel": {
+      "description": "Button label used when certain content can't be displayed in Kaiteki but might able to in a web browser instead (e.g. videos)."
+    },
+    "timeDifferenceMinutes": "{minutes}分",
+    "@timeDifferenceMinutes": {
+      "description": "Text used to display how many minutes have passed since a certain event",
+      "placeholders": {
+        "minutes": {
+          "description": "Amount of minutes",
+          "example": "2"
+        }
+      }
+    },
+    "timeDifferenceHours": "{hours}時間",
+    "@timeDifferenceHours": {
+      "description": "Text used to display how many hours have passed since a certain event",
+      "placeholders": {
+        "hours": {
+          "description": "Amount of hours",
+          "example": "2"
+        }
+      }
+    },
+    "timeDifferenceDays": "{days}日",
+    "@timeDifferenceDays": {
+      "description": "Text used to display how many days have passed since a certain event",
+      "placeholders": {
+        "days": {
+          "description": "Amount of days",
+          "example": "2"
+        }
+      }
+    },
+    "timeDifferenceWeeks": "{weeks}週",
+    "@timeDifferenceWeeks": {
+      "description": "Text used to display how many weeks have passed since a certain event",
+      "placeholders": {
+        "weeks": {
+          "description": "Amount of weeks",
+          "example": "2"
+        }
+      }
+    },
+    "timeDifferenceYears": "{years}年",
+    "@timeDifferenceYears": {
+      "description": "Text used to display how many years have passed since a certain event",
+      "placeholders": {
+        "years": {
+          "description": "Amount of years",
+          "example": "2"
+        }
+      }
+    },
+    "timeDifferenceSeconds": "{seconds}秒",
+    "@timeDifferenceSeconds": {
+      "description": "Text used to display how many seconds have passed since a certain event",
+      "placeholders": {
+        "seconds": {
+          "description": "Amount of seconds",
+          "example": "2"
+        }
+      }
+    },
+    "timeDifferenceNow": "今",
+    "@timeDifferenceNow": {
+      "description": "Text used to display an event that just happened"
+    },
+    "replyTo": "返信先",
+    "@replyTo": {
+      "description": "Gets appended with replyee's display name"
+    },
+    "postRepeated": "拡散",
+    "@postRepeated": {
+      "description": "Gets prepended with repeater's display name"
+    },
+    "openInBrowserLabel": "ブラウザで開く",
+    "@openInBrowserLabel": {},
+    "visibilityDirect": "ダイレクト",
+    "@visibilityDirect": {},
+    "visibilityFollowersOnly": "フォロワーのみ",
+    "@visibilityFollowersOnly": {},
+    "visibilityUnlisted": "未掲載(原文:Unlisted)",
+    "@visibilityUnlisted": {},
+    "visibilityPublic": "公開",
+    "@visibilityPublic": {},
+    "formattingPlain": "プレーンテキスト",
+    "@formattingPlain": {},
+    "formattingMfm": "Misskey-flavored Markdown",
+    "@formattingMfm": {},
+    "attachFilesButtonLabel": "ファイルを添付",
+    "@attachFilesButtonLabel": {},
+    "takePictureButtonLabel": "写真を撮る",
+    "@takePictureButtonLabel": {},
+    "createPollButtonLabel": "アンケートを作成",
+    "@createPollButtonLabel": {},
+    "recordVoiceButtonLabel": "録音する",
+    "@recordVoiceButtonLabel": {},
+    "subjectButtonLabelEnable": "件名を有効化",
+    "@subjectButtonLabelEnable": {},
+    "subjectButtonLabelDisable": "件名を無効化",
+    "@subjectButtonLabelDisable": {},
+    "timelineRetrievalFailed": "タイムラインの取得に失敗しました",
+    "refresh": "更新",
+    "attachmentNoDescription": "説明がありません",
+    "attachmentDownloadButtonLabel": "添付ファイルをダウンロード",
+    "attachmentDownloadInProgress": "添付ファイルをダウンロード中…",
+    "attachmentDownloadSuccessful": "{fileName} をダウンロード完了",
+    "@attachmentDownloadSuccessful": {
+      "placeholders": {
+        "fileName": {
+          "description": "The name of the file that the user has downloaded",
+          "example": "image.jpg"
+        }
+      }
+    },
+    "attachmentDownloadDialogTitle": "添付ファイルのダウンロードの確認",
+    "creditsTelegramChannel": "Telegramチャンネル",
+    "discardDraftDialogTitle": "下書きの破棄の確認",
+    "discardDraftDialogDescription": "この下書きを破棄してもいいですか？",
+    "discardButtonLabel": "破棄",
+    "keepWritingButtonLabel": "執筆を続ける",
+    "whyButtonLabel": "なぜ？",
+    "refreshTimelineButtonLabel": "更新",
+    "postBookmarkAdded": "ブックマークが追加されました",
+    "postBookmarkRemoved": "ブックマークから削除されました",
+    "postBookmarkFailed": "投稿をブックマークに追加/削除できませんでした",
+    "postFavoriteFailed": "お気に入り解除に失敗しました。",
+    "postRepeatFailed": "投稿の拡散に失敗しました",
+    "postRemoveFromBookmarks": "ブックマークから削除",
+    "postAddToBookmarks": "ブックマークに追加",
+    "bookmarksTab": "ブックマーク",
+    "reportLabel": "報告",
+    "reportsTitle": "報告する",
+    "accountSettingsTitle": "アカウント設定",
+    "reportSupport": "違反を報告",
+    "reportSupportDescription": "ユーザーもしくは投稿を報告する",
+    "bookmarkSupport": "ブックマーク",
+    "bookmarkSupportDescription": "投稿をブックマークしてブックマークタブから閲覧できます"
+    }
