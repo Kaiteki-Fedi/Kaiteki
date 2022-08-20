@@ -213,7 +213,7 @@
     "@backButtonLabel": {},
     "instanceFieldHint": "インスタンス",
     "@instanceFieldHint": {},
-    "usernameFieldHint": "ユーザーネーム",
+    "usernameFieldHint": "ユーザーネーム/ID",
     "@usernameFieldHint": {},
     "passwordFieldHint": "パスワード",
     "@passwordFieldHint": {},
