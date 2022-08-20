@@ -19,11 +19,11 @@
     "@removeButtonLabel": {},
     "viewPostButtonLabel": "投稿を見る",
     "@viewPostButtonLabel": {},
-    "continueAnywayButtonLabel": "とにかく続行する",
+    "continueAnywayButtonLabel": "とにかく続行",
     "@continueAnywayButtonLabel": {},
     "abortButtonLabel": "中止",
     "@abortButtonLabel": {},
-    "sharedBackendFunctionality": "これらは{api}とKaitekiの両方がサポートする機能です:",
+    "sharedBackendFunctionality": "これらは {api} とKaitekiの両方がサポートする機能です:",
     "@sharedBackendFunctionality": {
       "placeholders": {
         "api": {
@@ -34,9 +34,9 @@
     },
     "reactionSupport": "リアクション",
     "@reactionSupport": {},
-    "reactionSupportDescription": "投稿にリアクションする",
+    "reactionSupportDescription": "投稿にリアクション",
     "chatSupport": "チャット",
-    "chatSupportDescription": "他のユーザーにチャットする",
+    "chatSupportDescription": "他のユーザーとチャット",
     "@chatSupport": {},
     "previewSupport": "投稿のプレビュー",
     "previewSupportDescription": "投稿を投稿する前にプレビューを見る",
@@ -49,7 +49,7 @@
     "@discoverInstancesDisclaimer": {},
     "chooseButtonLabel": "選ぶ",
     "@chooseButtonLabel": {},
-    "runsOn": "{api}で動作します",
+    "runsOn": "{api} で動作します",
     "@runsOn": {
       "placeholders": {
         "api": {
@@ -58,17 +58,17 @@
         }
       }
     },
-    "usesFediverseCovenant": "Fediverse-Friendly Moderation Covenantを使用する",
+    "usesFediverseCovenant": "Fediverse-Friendly Moderation Covenantを使用",
     "@usesFediverseCovenant": {},
-    "usesMastodonCovenant": "マストドンサーバー規約を使用する",
+    "usesMastodonCovenant": "マストドンサーバー規約を使用",
     "@usesMastodonCovenant": {},
     "visibilityButtonTooltip": "投稿の公開範囲を変更",
     "@visibilityButtonTooltip": {},
-    "attachButtonTooltip": "ファイルを添付する",
+    "attachButtonTooltip": "ファイルを添付",
     "@attachButtonTooltip": {},
-    "emojiButtonTooltip": "絵文字を挿入する",
+    "emojiButtonTooltip": "絵文字を挿入",
     "@emojiButtonTooltip": {},
-    "formattingButtonTooltip": "フォーマットを変更する",
+    "formattingButtonTooltip": "フォーマットを変更",
     "@formattingButtonTooltip": {},
     "aboutInstanceTitle": "{instance} について",
     "@aboutInstanceTitle": {
@@ -79,7 +79,7 @@
         }
       }
     },
-    "aboutBackendTitle": "{api}について",
+    "aboutBackendTitle": "{api} について",
     "@aboutBackendTitle": {
       "placeholders": {
         "api": {
@@ -192,7 +192,7 @@
     "@authNoPassword": {},
     "authNoUsername": "ユーザー名を入力してください",
     "@authNoUsername": {},
-    "authDuplicate": "同じインスタンスに同じユーザー名を持つアカウントが既に存在します",
+    "authDuplicate": "同インスタンスにユーザー名が同一なアカウントが既に存在します",
     "@authDuplicate": {},
     "authNoUrlAllowed": "ドメイン名のみを指定してください",
     "@authNoUrlAllowed": {},
@@ -233,7 +233,7 @@
     "@registerButtonLabel": {},
     "unsupportedInstanceTitle": "このインスタンスは現在サポート対象外です",
     "@unsupportedInstanceTitle": {},
-    "unsupportedInstanceDescriptionCORS": "Kaiteki Webは現在{api}をサポートしていません。これは、あなたのブラウザが他のWebサイトからのオリジンを持つインスタンスへのリクエストをブロックしているためです。詳細については、以下をご覧ください。",
+    "unsupportedInstanceDescriptionCORS": "Kaiteki Webは現在 {api} をサポートしていません。これは、あなたのブラウザが他のWebサイトからのオリジンを持つインスタンスへのリクエストをブロックしているためです。詳細については、以下をご覧ください。",
     "@unsupportedInstanceDescriptionCORS": {
       "placeholders": {
         "api": {
@@ -256,11 +256,11 @@
     "@emptyAccounts": {
       "description": "Placeholder text used if user doesn't have any accounts"
     },
-    "manageAccountsTitle": "アカウントを管理する",
+    "manageAccountsTitle": "アカウントを管理",
     "@manageAccountsTitle": {},
     "accountRemovalConfirmationTitle": "アカウントをKaitekiから削除しますか？",
     "@accountRemovalConfirmationTitle": {},
-    "accountRemovalConfirmationDescription": "アカウントを削除しますか？このアカウントを削除すると、再度使用するために後でサインインする必要があります。",
+    "accountRemovalConfirmationDescription": "アカウントを削除しますか？このアカウントを削除すると、次回使用する際にサインインし直す必要があります。",
     "@accountRemovalConfirmationDescription": {},
     "switchListTileTextOn": "ON",
     "@switchListTileTextOn": {},
@@ -298,7 +298,7 @@
     "@creditsGithubRepo": {},
     "creditsWebsite": "Webサイト",
     "@creditsWebsite": {},
-    "attachmentUnsupported": "サポートされていない添付ファイルです",
+    "attachmentUnsupported": "添付ファイルの形式が未サポートです",
     "@attachmentUnsupported": {},
     "viewOnlineButtonLabel": "Webブラウザで見る",
     "@viewOnlineButtonLabel": {
@@ -380,9 +380,9 @@
     "@openInBrowserLabel": {},
     "visibilityDirect": "ダイレクト",
     "@visibilityDirect": {},
-    "visibilityFollowersOnly": "フォロワーのみ",
+    "visibilityFollowersOnly": "フォロワー限定",
     "@visibilityFollowersOnly": {},
-    "visibilityUnlisted": "未掲載(原文:Unlisted)",
+    "visibilityUnlisted": "ホーム限定/Unlisted",
     "@visibilityUnlisted": {},
     "visibilityPublic": "公開",
     "@visibilityPublic": {},
