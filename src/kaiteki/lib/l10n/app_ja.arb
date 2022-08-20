@@ -382,7 +382,7 @@
     "@visibilityDirect": {},
     "visibilityFollowersOnly": "フォロワー限定",
     "@visibilityFollowersOnly": {},
-    "visibilityUnlisted": "ホーム限定/Unlisted",
+    "visibilityUnlisted": "未収載",
     "@visibilityUnlisted": {},
     "visibilityPublic": "公開",
     "@visibilityPublic": {},
