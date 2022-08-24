@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart' show BoxConstraints;
 
 const String appName = "Kaiteki";
@@ -17,7 +18,7 @@ const dialogConstraints = BoxConstraints(minWidth: 280, maxWidth: 560);
 const bottomSheetConstraints = BoxConstraints(maxWidth: 560);
 
 /// Whether to use frontend login endpoints or oauth ones.
-bool get useOAuth => false;
+bool get useOAuth => !kIsWeb;
 
 const List<String> defaultScopes = ["read", "write", "follow", "push"];
 
