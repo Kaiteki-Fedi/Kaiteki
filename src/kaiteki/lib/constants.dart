@@ -1,5 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/rendering.dart' show BoxConstraints;
 
 const String appName = "Kaiteki";
 const String appWebsite = "https://craftplacer.moe/projects/kaiteki";
@@ -18,7 +17,7 @@ const dialogConstraints = BoxConstraints(minWidth: 280, maxWidth: 560);
 const bottomSheetConstraints = BoxConstraints(maxWidth: 560);
 
 /// Whether to use frontend login endpoints or oauth ones.
-bool get useOAuth => !kIsWeb;
+bool get useOAuth => false;
 
 const List<String> defaultScopes = ["read", "write", "follow", "push"];
 

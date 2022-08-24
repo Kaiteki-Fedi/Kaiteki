@@ -4,7 +4,6 @@ import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
-import 'package:kaiteki/utils/extensions.dart';
 
 class DesktopUserHeader extends StatelessWidget {
   final TabController tabController;

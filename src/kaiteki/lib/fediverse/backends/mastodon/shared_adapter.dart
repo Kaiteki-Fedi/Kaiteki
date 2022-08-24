@@ -5,6 +5,7 @@ import 'package:kaiteki/exceptions/authentication_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
+import 'package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
@@ -19,7 +20,6 @@ import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
-import 'package:kaiteki/utils/extensions/string.dart';
 import 'package:tuple/tuple.dart';
 
 part 'shared_adapter.c.dart'; // That file contains toEntity() methods
@@ -66,8 +66,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<LoginResult> login(
     ClientSecret? clientSecret,
-    String username,
-    String password,
+    requestCredentials,
     requestMfa,
     requestOAuth,
   ) async {
@@ -108,35 +107,37 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     } else {
       clientSecret = await _makeClientSecret(instance);
 
-      final loginResponse = await client.login(username, password);
+      String? mfaToken;
 
-      if (loginResponse.error.isNotNullOrEmpty) {
-        if (loginResponse.error != "mfa_required") {
-          return LoginResult.failed(
-            Tuple2(AuthenticationException(loginResponse.error!), null),
-          );
-        }
+      final loginResponse = await requestCredentials(
+        (credentials) async {
+          if (credentials == null) return null;
 
-        final code = await requestMfa.call();
+          try {
+            return await client.login(
+              credentials.username,
+              credentials.password,
+            );
+          } on MfaRequiredException catch (e) {
+            mfaToken = e.mfaToken;
+            return null;
+          }
+        },
+      );
 
-        if (code == null) {
-          return const LoginResult.aborted();
-        }
-
-        // TODO(Craftplacer): add error-able TOTP screens
-        // TODO(Craftplacer): make use of a while loop to make this more efficient
-        final mfaResponse = await client.respondMfa(
-          loginResponse.mfaToken!,
-          int.parse(code),
+      if (mfaToken != null) {
+        final mfaResponse = await requestMfa.call(
+          (code) => client.respondMfa(
+            mfaToken!,
+            int.parse(code),
+          ),
         );
 
-        if (mfaResponse.error.isNotNullOrEmpty) {
-          return LoginResult.failed(
-            Tuple2(AuthenticationException(mfaResponse.error!), null),
-          );
-        } else {
-          accessToken = mfaResponse.accessToken!;
-        }
+        if (mfaResponse == null) return const LoginResult.aborted();
+
+        accessToken = mfaResponse.accessToken!;
+      } else if (loginResponse == null) {
+        return const LoginResult.aborted();
       } else {
         accessToken = loginResponse.accessToken!;
       }
@@ -165,7 +166,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       key: AccountKey(
         client.type,
         instance,
-        username,
+        account.username,
       ),
     );
 

@@ -309,6 +309,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       throw ApiException(
         response.statusCode,
         reasonPhrase: json["error"] as String,
+        data: json,
       );
     }
   }

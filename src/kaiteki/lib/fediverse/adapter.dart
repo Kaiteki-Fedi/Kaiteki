@@ -32,8 +32,7 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// the user, if required.
   Future<LoginResult> login(
     ClientSecret? clientSecret,
-    String username,
-    String password,
+    CredentialsCallback requestCredentials,
     MfaCallback requestMfa,
     OAuthCallback requestOAuth,
   );

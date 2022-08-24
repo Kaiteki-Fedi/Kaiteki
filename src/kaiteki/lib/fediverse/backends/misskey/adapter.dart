@@ -52,11 +52,11 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     return toUser((await client.showUser(id))!);
   }
 
-  Future<MisskeyCheckSessionResponse> loginMiAuth(
+  Future<MisskeyCheckSessionResponse?> loginMiAuth(
     String session,
     OAuthCallback requestOAuth,
   ) async {
-    await requestOAuth((oauthUrl) async {
+    final result = await requestOAuth((oauthUrl) async {
       return Uri.https(instance, "/miauth/$session", {
         "name": consts.appName,
         "icon": consts.appRemoteIcon,
@@ -65,14 +65,16 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       });
     });
 
+    if (result == null) return null;
+
     return client.checkSession(session);
   }
 
-  Future<Tuple2<misskey.User, String>> loginAlt(
+  Future<Tuple2<misskey.User, String>?> loginAlt(
     OAuthCallback requestOAuth,
   ) async {
     late final String appSecret, sessionToken;
-    await requestOAuth((oauthUrl) async {
+    final result = await requestOAuth((oauthUrl) async {
       final app = await client.createApp(
         consts.appName,
         consts.appDescription,
@@ -87,6 +89,8 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
       return Uri.parse(session.url);
     });
+
+    if (result == null) return null;
 
     final userkeyResponse = await client.userkey(appSecret, sessionToken);
     final concat = userkeyResponse.accessToken + appSecret;
@@ -105,53 +109,75 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     );
   }
 
-  @override
-  Future<LoginResult> login(
-    ClientSecret? clientSecret,
-    String username,
-    String password,
-    requestMfa,
-    requestOAuth,
+  Future<Tuple3<String, String?, misskey.User?>?> authenticate(
+    CredentialsCallback requestCredentials,
+    OAuthCallback requestOAuth,
   ) async {
-    final session = const Uuid().v4();
-    late final String token;
-    late final String id;
-    misskey.User? user;
-
     try {
       final tuple = await loginAlt(requestOAuth);
-      user = tuple.item1;
-      token = tuple.item2;
+      if (tuple == null) return null;
+      return Tuple3(tuple.item2, null, tuple.item1);
     } catch (e, s) {
       _logger.w(
         "Failed to login using the conventional method. Trying MiAuth instead...",
         e,
         s,
       );
-
-      try {
-        final response = await loginMiAuth(session, requestOAuth);
-        user = response.user;
-        token = response.token;
-      } catch (e, s) {
-        _logger.w(
-          "Failed to login using MiAuth. Trying private endpoints instead...",
-          e,
-          s,
-        );
-
-        final signInResponse = await loginPrivate(username, password);
-        token = signInResponse.i;
-        id = signInResponse.id;
-      }
     }
 
+    try {
+      final session = const Uuid().v4();
+      final response = await loginMiAuth(session, requestOAuth);
+      if (response == null) return null;
+      return Tuple3(response.token, null, response.user);
+    } catch (e, s) {
+      _logger.w(
+        "Failed to login using MiAuth. Trying private endpoints instead...",
+        e,
+        s,
+      );
+    }
+
+    final signInResponse = await requestCredentials(
+      (creds) async {
+        if (creds == null) return null;
+
+        final signInResponse = await loginPrivate(
+          creds.username,
+          creds.password,
+        );
+
+        return signInResponse;
+      },
+    );
+
+    if (signInResponse == null) return null;
+
+    return Tuple3(signInResponse.i, signInResponse.id, null);
+  }
+
+  @override
+  Future<LoginResult> login(
+    ClientSecret? clientSecret,
+    requestCredentials,
+    requestMfa,
+    requestOAuth,
+  ) async {
+    final credentials = await authenticate(requestCredentials, requestOAuth);
+
+    if (credentials == null) return const LoginResult.aborted();
+
     // Create and set account secret
-    final accountSecret = AccountSecret(token);
-    client.authenticationData = MisskeyAuthenticationData(token);
+    final accountSecret = AccountSecret(credentials.item1);
+    client.authenticationData = MisskeyAuthenticationData(credentials.item1);
 
     // Check whether secrets work, and if we can get an account back
-    user ??= await client.showUser(id);
+    assert(
+      !(credentials.item3 == null && credentials.item2 == null),
+      "Both user and id are null",
+    );
+    final user = credentials.item3 ?? await client.showUser(credentials.item2!);
+
     if (user == null) {
       return const LoginResult.failed(
         Tuple2(AuthenticationException("Failed to retrieve user info"), null),
@@ -161,7 +187,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     final account = Account(
       adapter: this,
       user: toUser(user),
-      key: AccountKey(ApiType.misskey, instance, username),
+      key: AccountKey(ApiType.misskey, instance, user.username),
       clientSecret: null,
       accountSecret: accountSecret,
     );
