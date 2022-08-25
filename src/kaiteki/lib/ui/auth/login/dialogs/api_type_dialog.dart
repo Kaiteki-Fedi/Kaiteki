@@ -38,9 +38,8 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
             TextButton(
               child: Text(l10n.apiTypeDialog_missing),
               onPressed: () async {
-                if (await context.launchUrl(requestBackendUrl)) {
-                  Navigator.pop(context);
-                }
+                await context.launchUrl(requestBackendUrl);
+                if (mounted) Navigator.pop(context);
               },
             )
           ],

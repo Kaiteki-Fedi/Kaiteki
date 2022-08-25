@@ -9,7 +9,7 @@ import 'package:kaiteki/ui/shared/compose_screen.dart';
 import 'package:kaiteki/ui/shared/dialogs/exception_dialog.dart';
 import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 extension BuildContextExtensions on BuildContext {
   Future<void> showPostDialog({Post? replyTo}) async {
@@ -18,6 +18,7 @@ extension BuildContextExtensions on BuildContext {
       context: this,
       builder: (context) => ComposeScreen(key: key, replyTo: replyTo),
       barrierDismissible: true,
+      useSafeArea: false,
     );
   }
 
@@ -33,16 +34,12 @@ extension BuildContextExtensions on BuildContext {
     push("/${ref.getCurrentAccountHandle()}/users/${user.id}", extra: user);
   }
 
-  Future<bool> launchUrl(String url) async {
-    if (await canLaunchUrlString(url)) {
-      await launchUrlString(url, mode: LaunchMode.externalApplication);
-      return true;
-    } else {
-      ScaffoldMessenger.of(this).showSnackBar(
-        SnackBar(content: Text(getL10n().failedToLaunchUrl)),
-      );
-      return false;
-    }
+  Future<void> launchUrl(String url) async {
+    final uri = Uri.parse(url);
+    await url_launcher.launchUrl(
+      uri,
+      mode: url_launcher.LaunchMode.externalApplication,
+    );
   }
 
   void showErrorSnackbar({
