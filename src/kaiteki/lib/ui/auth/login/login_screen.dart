@@ -34,10 +34,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               duration: const Duration(milliseconds: 500),
               child: instanceBackgroundUrl == null
                   ? Container()
-                  : Image.network(
-                      instanceBackgroundUrl,
-                      fit: BoxFit.cover,
-                    ),
+                  : Image.network(instanceBackgroundUrl, fit: BoxFit.cover),
             ),
           ),
           Scaffold(
@@ -100,25 +97,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   String? validatePassword(String? password) {
     final l10n = context.getL10n();
-
-    if (password.isNullOrEmpty) {
-      return l10n.authNoPassword;
-    }
-
-    return null;
+    return password.isNullOrEmpty ? l10n.authNoPassword : null;
   }
 
   String? validateUsername(String? instance, String? username) {
     final l10n = context.getL10n();
 
-    if (username.isNullOrEmpty) {
-      return l10n.authNoUsername;
-    }
+    if (username.isNullOrEmpty) return l10n.authNoUsername;
 
-    final accounts = ref.read(accountProvider);
-    if (accounts.accounts.any(
-      (account) =>
-          account.key.host == instance && account.key.username == username,
+    final manager = ref.read(accountProvider);
+    if (manager.accounts.any(
+      (account) {
+        return account.key.host == instance && account.key.username == username;
+      },
     )) {
       return l10n.authDuplicate;
     }

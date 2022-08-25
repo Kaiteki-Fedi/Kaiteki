@@ -9,7 +9,7 @@ import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/instance_prober.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/ui/auth/login/api_type_dialog.dart';
+import 'package:kaiteki/ui/auth/login/dialogs/api_type_dialog.dart';
 import 'package:kaiteki/ui/auth/login/pages/instance_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/mfa_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/oauth_page.dart';

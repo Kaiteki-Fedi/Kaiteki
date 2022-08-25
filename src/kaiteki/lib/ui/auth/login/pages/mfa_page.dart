@@ -83,6 +83,7 @@ class _MfaPageState extends State<MfaPage> {
                           elevation:
                               Theme.of(context).useMaterial3 ? 0.0 : null,
                           tooltip: "Submit",
+                          heroTag: null,
                           child: const Icon(Icons.arrow_forward_rounded),
                         ),
                       ),
