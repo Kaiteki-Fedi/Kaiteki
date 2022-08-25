@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 
 class OAuthPage extends StatelessWidget {
@@ -8,19 +9,20 @@ class OAuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.getL10n();
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const IconLandingWidget(
-            icon: Icon(Icons.key_rounded),
-            text: Text("Waiting for OAuth to finish..."),
+          IconLandingWidget(
+            icon: const Icon(Icons.key_rounded),
+            text: Text(l10n.authOAuthPending),
           ),
           if (onCancel != null) ...[
             const SizedBox(height: 16),
             OutlinedButton(
               onPressed: onCancel,
-              child: const Text("Cancel"),
+              child: Text(l10n.cancelButtonLabel),
             ),
           ],
         ],

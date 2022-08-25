@@ -196,6 +196,10 @@
   "@authDuplicate": {},
   "authNoUrlAllowed": "Please only provide the domain name",
   "@authNoUrlAllowed": {},
+  "authOAuthPending": "Waiting for OAuth to finish...",
+  "@authOAuthPending": {
+    "description": "Kaiteki is waiting for an external website to confirm an authorization request"
+  },
   "loginTitle": "Log into an instance",
   "@loginTitle": {},
   "loginTitleInstance": "Log into {instance}",
