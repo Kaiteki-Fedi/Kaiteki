@@ -460,5 +460,21 @@
   "timelineHomeDescription": "Posts from you and the people you follow",
   "timelineLocalDescription": "Posts from everyone on your instance",
   "timelineDirectMessagesDescription": "Posts sent directly to others",
-  "timelineBookmarksDescription": "Posts that you have bookmarked"
+  "timelineBookmarksDescription": "Posts that you have bookmarked",
+  "keyboardShortcuts": "Keyboard Shortcuts",
+  "keyboardShortcutsOpenDialog": "Show keyboard shortcuts",
+  "keyboardShortcutsReplyToPost": "Reply to post",
+  "keyboardShortcutsFavoritePost": "Favorite post",
+  "keyboardShortcutsRepeatPost": "Repeat post",
+  "keyboardShortcutsBookmarkPost": "Bookmark post",
+  "keyboardShortcutsSubmitPost": "Submit post",
+  "keyboardShortcutsRefreshView": "Refresh view",
+  "keyboardShortcutsGoToSettings": "Go to settings",
+  "keyboardShortcutsGoToNotifications": "Go to notifications",
+  "keyboardShortcutsGoToBookmarks": "Go to bookmarks",
+  "keyboardShortcutsGoToHome": "Go to home",
+  "keyboardShortcutsPostShortcuts": "Post shortcuts",
+  "keyboardShortcutsNavigation": "Navigation",
+  "keyboardShortcutsComposePost": "Compose a new post",
+  "closeButtonLabel": "Close"
 }

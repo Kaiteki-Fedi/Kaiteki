@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -40,13 +41,14 @@ class TimelineBottomSheet extends StatelessWidget {
   }
 
   Widget _buildTimelineItem(BuildContext context, TimelineKind kind) {
+    final l10n = context.getL10n();
     final selected = selectedKind == kind;
     final description = getTimelineKindDescription(kind);
     return ListTile(
       leading: Icon(
         selected ? kind.icon.item2 : kind.icon.item1,
       ),
-      title: Text(kind.displayName),
+      title: Text(kind.getDisplayName(l10n)),
       subtitle: description == null ? null : Text(description),
       selected: selected,
       // trailing: kind == TimelineKind.federated
