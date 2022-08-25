@@ -378,7 +378,7 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
         if (renderedContent != null && !collapsed)
           Padding(
             padding: kPostPadding,
-            child: Text.rich(renderedContent!),
+            child: SelectableText.rich(TextSpan(children: [renderedContent!])),
           ),
       ],
     );
