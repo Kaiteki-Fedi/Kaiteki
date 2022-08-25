@@ -469,7 +469,8 @@ class PostFormState extends ConsumerState<PostForm> {
           values: Visibility.values,
           splashRadius: splashRadius,
           iconBuilder: (_, value) => Icon(value.toIconData()),
-          textBuilder: (_, value) => Text(value.toDisplayString()),
+          textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
+          subtitleBuilder: (_, value) => Text(value.toDescription()),
         ),
       if (formattingList.length >= 2)
         EnumIconButton<Formatting>(

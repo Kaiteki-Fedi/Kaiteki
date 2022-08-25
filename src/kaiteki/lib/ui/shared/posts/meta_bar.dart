@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
@@ -10,7 +11,7 @@ class MetaBar extends StatelessWidget {
     super.key,
     required Post post,
     this.showAvatar = false,
-  })  : _post = post;
+  }) : _post = post;
 
   final Post _post;
   final bool showAvatar;
@@ -20,6 +21,7 @@ class MetaBar extends StatelessWidget {
     final visibility = _post.visibility;
     final secondaryColor = Theme.of(context).disabledColor;
     final secondaryTextTheme = TextStyle(color: secondaryColor);
+    final l10n = context.getL10n();
 
     return Padding(
       padding: kPostPadding.copyWith(top: 0),
@@ -44,7 +46,7 @@ class MetaBar extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Tooltip(
-                message: visibility.toDisplayString(),
+                message: visibility.toDisplayString(l10n),
                 child: Icon(
                   visibility.toIconData(),
                   size: 20,

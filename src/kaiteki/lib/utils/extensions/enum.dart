@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Visibility;
 import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mdi/mdi.dart';
 import 'package:tuple/tuple.dart';
 
@@ -22,16 +23,29 @@ extension VisibilityExtensions on Visibility {
     }
   }
 
-  String toDisplayString() {
+  String toDisplayString(AppLocalizations l10n) {
     switch (this) {
       case Visibility.direct:
-        return 'Direct';
+        return l10n.visibilityDirect;
       case Visibility.followersOnly:
-        return 'Followers only';
+        return l10n.visibilityFollowersOnly;
       case Visibility.unlisted:
-        return 'Unlisted';
+        return l10n.visibilityUnlisted;
       case Visibility.public:
-        return 'Public';
+        return l10n.visibilityPublic;
+    }
+  }
+
+  String toDescription(AppLocalizations l10n) {
+    switch (this) {
+      case Visibility.direct:
+        return l10n.visibilityDirectDescription;
+      case Visibility.followersOnly:
+        return l10n.visibilityFollowersOnlyDescription;
+      case Visibility.unlisted:
+        return l10n.visibilityUnlistedDescription;
+      case Visibility.public:
+        return l10n.visibilityPublicDescription;
     }
   }
 }
@@ -55,18 +69,33 @@ extension TimelineKindExtensions on TimelineKind {
     }
   }
 
-  String get displayName {
+  String getDisplayName(AppLocalizations l10n) {
     switch (this) {
       case TimelineKind.federated:
-        return "Federated";
+        return l10n.timelineFederated;
       case TimelineKind.home:
-        return "Home";
+        return l10n.timelineHome;
       case TimelineKind.local:
-        return "Local";
+        return l10n.timelineLocal;
       case TimelineKind.directMessages:
-        return "Direct Messages";
+        return l10n.timelineDirectMessages;
       case TimelineKind.bookmarks:
-        return "Bookmarks";
+        return l10n.timelineBookmarks;
+    }
+  }
+
+  String getDescription(AppLocalizations l10n) {
+    switch (this) {
+      case TimelineKind.federated:
+        return l10n.timelineFederatedDescription;
+      case TimelineKind.home:
+        return l10n.timelineHomeDescription;
+      case TimelineKind.local:
+        return l10n.timelineLocalDescription;
+      case TimelineKind.directMessages:
+        return l10n.timelineDirectMessagesDescription;
+      case TimelineKind.bookmarks:
+        return l10n.timelineBookmarksDescription;
     }
   }
 }
@@ -87,10 +116,10 @@ extension FormattingExtensions on Formatting {
     }
   }
 
-  String toDisplayString() {
+  String toDisplayString(AppLocalizations l10n) {
     switch (this) {
       case Formatting.plainText:
-        return "Plain text";
+        return l10n.formattingPlain;
       case Formatting.markdown:
         return "Markdown";
       case Formatting.html:
@@ -98,7 +127,7 @@ extension FormattingExtensions on Formatting {
       case Formatting.bbCode:
         return "BBCode";
       case Formatting.misskeyMarkdown:
-        return "Misskey-flavored Markdown (MFM)";
+        return l10n.formattingMfm;
     }
   }
 }
