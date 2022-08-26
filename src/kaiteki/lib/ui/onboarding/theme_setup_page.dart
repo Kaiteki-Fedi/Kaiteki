@@ -7,10 +7,10 @@ class ThemeSetupPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final prefs = ref.watch(preferenceProvider);
+    final prefs = ref.watch(themeProvider);
     return ThemeSelector(
-      theme: prefs.get().theme,
-      onSelected: (mode) => prefs.update((p) => p..theme = mode),
+      theme: prefs.mode,
+      onSelected: (mode) => prefs.mode = mode,
     );
   }
 }
