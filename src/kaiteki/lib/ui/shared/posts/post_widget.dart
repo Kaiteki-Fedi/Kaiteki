@@ -169,17 +169,18 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     await showDialog(
       context: context,
       builder: (_) => Consumer(
-        builder: (_, ref, __) {
+        builder: (context, ref, __) {
+          final l10n = context.getL10n();
           final adapter = ref.watch(adapterProvider);
           return UserListDialog(
-            title: const Text("Favorited by"),
+            title: Text(l10n.favoriteesTitle),
             fetchUsers: () async {
               final users =
                   await (adapter as FavoriteSupport).getFavoritees(_post.id);
               return users;
             }(),
             emptyIcon: const Icon(Icons.star_outline_rounded),
-            emptyTitle: const Text("No favorites"),
+            emptyTitle: Text(l10n.favoritesEmpty),
           );
         },
       ),
@@ -190,10 +191,11 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     showDialog(
       context: context,
       builder: (_) => Consumer(
-        builder: (_, ref, __) {
+        builder: (context, ref, __) {
+          final l10n = context.getL10n();
           final adapter = ref.watch(adapterProvider);
           return UserListDialog(
-            title: const Text("Repeated by"),
+            title: Text(l10n.repeateesTitle),
             fetchUsers: () async {
               final users = await adapter.getRepeatees(
                 _post.id,
@@ -201,7 +203,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
               return users;
             }(),
             emptyIcon: const Icon(Icons.repeat_rounded),
-            emptyTitle: const Text("No repeats"),
+            emptyTitle: Text(l10n.repeatsEmpty),
           );
         },
       ),

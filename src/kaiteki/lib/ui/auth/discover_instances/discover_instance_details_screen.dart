@@ -125,10 +125,8 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
                   ),
                 ),
               ListTile(
-                title: const Text("Features mutually supported"),
-                subtitle: const Text(
-                  "See what features you can use with Kaiteki on this instance",
-                ),
+                title: Text(l10n.featureSupportListTileTitle),
+                subtitle: Text(l10n.featureSupportListTileSubtitle),
                 onTap: () => showDialog(
                   context: context,
                   builder: (context) => CapabilitiesDialog(type: data.type),

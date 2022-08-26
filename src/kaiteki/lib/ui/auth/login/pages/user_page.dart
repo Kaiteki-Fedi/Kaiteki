@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/auth/login/constants.dart';
 import 'package:kaiteki/ui/auth/login/login_form.dart';
-import 'package:kaiteki/ui/shared/async_block_widget.dart';
+import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
 import 'package:kaiteki/ui/shared/error_message.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -80,7 +80,7 @@ class _UserPageState extends State<UserPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Tooltip(
-                          message: "Not implemented yet",
+                          message: l10n.niy,
                           child: TextButton(
                             onPressed: null,
                             child: Text(l10n.forgotPasswordButtonLabel),
@@ -147,12 +147,12 @@ class _UserPageState extends State<UserPage> {
 
   String? _validatePassword(String? value) {
     if (value?.trim().isNotEmpty == true) return null;
-    return "Password is required";
+    return context.getL10n().authNoPassword;
   }
 
   String? _validateUsername(String? value) {
     if (value?.trim().isNotEmpty == true) return null;
-    return "Username is required";
+    return context.getL10n().authNoUsername;
   }
 
   Future<void> _onLogin() async {

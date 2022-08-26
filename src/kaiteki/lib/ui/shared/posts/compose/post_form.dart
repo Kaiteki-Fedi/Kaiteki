@@ -12,7 +12,7 @@ import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
+import 'package:kaiteki/ui/shared/async/async_snackbar_content.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';

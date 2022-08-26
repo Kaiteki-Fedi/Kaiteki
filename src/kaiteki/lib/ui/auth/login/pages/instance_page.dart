@@ -96,11 +96,9 @@ class _InstancePageState extends State<InstancePage> {
                   child: Text(l10n.discoverInstancesButtonLabel),
                 ),
                 const SizedBox(height: 24.0),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    "To add an account, type in the address of the website you want to use.",
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(l10n.authInstructions),
                 ),
                 const SizedBox(height: 24.0),
                 Row(
@@ -190,8 +188,9 @@ class _InstancePageState extends State<InstancePage> {
   }
 
   String? _validateInstance(String? value) {
-    if (value == null || value.isEmpty) return "Please enter an instance";
-    if (!value.contains(".")) return "Please enter a valid instance";
+    if (value == null || value.isEmpty || !value.contains(".")) {
+      return context.getL10n().authNoInstance;
+    }
 
     return null;
   }

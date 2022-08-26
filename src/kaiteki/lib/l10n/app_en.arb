@@ -476,5 +476,18 @@
   "keyboardShortcutsPostShortcuts": "Post shortcuts",
   "keyboardShortcutsNavigation": "Navigation",
   "keyboardShortcutsComposePost": "Compose a new post",
-  "closeButtonLabel": "Close"
+  "closeButtonLabel": "Close",
+  "authInstructions": "To add an account, type in the address of the website you want to use.",
+  "featureSupportListTileTitle": "Features mutually supported",
+  "featureSupportListTileSubtitle": "See what features you can use with Kaiteki on this instance",
+  "mfaInstructions": "This account uses Multi-Factor Authentication, please enter the code below:",
+  "directMessagesTitle": "Direct Messages",
+  "listsTitle": "Lists",
+  "trendsTitle": "Trends",
+  "bookmarksEmpty": "No bookmarks",
+  "favoritesEmpty": "No favorites",
+  "repeatsEmpty": "No repeats",
+  "repeateesTitle": "Repeated by",
+  "favoriteesTitle": "Favorited by",
+  "useMaterialYou": "Use Material You"
 }

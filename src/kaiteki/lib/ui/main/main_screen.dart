@@ -224,7 +224,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           return [
             PopupMenuItem(
               value: _showKeyboardShortcuts,
-              child: const Text("Keyboard Shortcuts"),
+              child: Text(l10n.keyboardShortcuts),
             ),
           ];
         },

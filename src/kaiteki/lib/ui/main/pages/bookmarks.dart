@@ -47,6 +47,7 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.getL10n();
     return LayoutBuilder(
       builder: (context, constraints) {
         return PagedListView<String?, Post>.separated(
@@ -56,9 +57,9 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Post>(
             itemBuilder: _buildPost,
-            noItemsFoundIndicatorBuilder: (_) => const IconLandingWidget(
-              icon: Icon(Icons.bookmark_outline_rounded),
-              text: Text("No bookmarks"),
+            noItemsFoundIndicatorBuilder: (_) => IconLandingWidget(
+              icon: const Icon(Icons.bookmark_outline_rounded),
+              text: Text(l10n.bookmarksEmpty),
             ),
           ),
           separatorBuilder: _buildSeparator,

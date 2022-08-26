@@ -43,13 +43,13 @@ class TimelineBottomSheet extends StatelessWidget {
   Widget _buildTimelineItem(BuildContext context, TimelineKind kind) {
     final l10n = context.getL10n();
     final selected = selectedKind == kind;
-    final description = getTimelineKindDescription(kind);
+    final description = kind.getDescription(l10n);
     return ListTile(
       leading: Icon(
         selected ? kind.icon.item2 : kind.icon.item1,
       ),
       title: Text(kind.getDisplayName(l10n)),
-      subtitle: description == null ? null : Text(description),
+      subtitle: Text(description),
       selected: selected,
       // trailing: kind == TimelineKind.federated
       //     ? Row(
@@ -65,18 +65,5 @@ class TimelineBottomSheet extends StatelessWidget {
       //     : null,
       onTap: () => Navigator.of(context).pop(kind),
     );
-  }
-
-  String? getTimelineKindDescription(TimelineKind kind) {
-    switch (kind) {
-      case TimelineKind.home:
-        return "Posts from you and the people you follow";
-      case TimelineKind.local:
-        return "Posts from everyone on your instance";
-      case TimelineKind.federated:
-        return "Posts from everyone across the Fediverse";
-      default:
-        return null;
-    }
   }
 }

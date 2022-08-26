@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/shared/async_button.dart';
+import 'package:kaiteki/ui/shared/async/async_button.dart';
 import 'package:widgetbook/widgetbook.dart';
 
 List<WidgetbookComponent> buildComponents() {

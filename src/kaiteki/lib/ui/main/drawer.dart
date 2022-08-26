@@ -31,19 +31,19 @@ class MainScreenDrawer extends ConsumerWidget {
                       .copyWith(fontSize: fontSize),
                 ),
               ),
-              const ListTile(
-                leading: Icon(Icons.mail_rounded),
-                title: Text("Direct Messages"),
+              ListTile(
+                leading: const Icon(Icons.mail_rounded),
+                title: Text(l10n.directMessagesTitle),
                 enabled: false,
               ),
-              const ListTile(
-                leading: Icon(Icons.article_rounded),
-                title: Text("Lists"),
+              ListTile(
+                leading: const Icon(Icons.article_rounded),
+                title: Text(l10n.listsTitle),
                 enabled: false,
               ),
-              const ListTile(
-                leading: Icon(Icons.trending_up_rounded),
-                title: Text("Trends"),
+              ListTile(
+                leading: const Icon(Icons.trending_up_rounded),
+                title: Text(l10n.trendsTitle),
                 enabled: false,
               ),
               ListTile(

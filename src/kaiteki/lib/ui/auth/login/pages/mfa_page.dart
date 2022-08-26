@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/auth/login/constants.dart';
-import 'package:kaiteki/ui/shared/async_block_widget.dart';
+import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
 import 'package:kaiteki/ui/shared/error_message.dart';
 
 class MfaPage extends StatefulWidget {
@@ -38,9 +38,7 @@ class _MfaPageState extends State<MfaPage> {
               key: _formKey,
               child: Column(
                 children: [
-                  const Text(
-                    "This account uses Multi-Factor Authentication, please enter the code below:",
-                  ),
+                  Text(l10n.mfaInstructions),
                   const SizedBox(height: 24),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +80,7 @@ class _MfaPageState extends State<MfaPage> {
                           onPressed: () => _submit(_textController.text),
                           elevation:
                               Theme.of(context).useMaterial3 ? 0.0 : null,
-                          tooltip: "Submit",
+                          tooltip: l10n.submitButtonTooltip,
                           heroTag: null,
                           child: const Icon(Icons.arrow_forward_rounded),
                         ),
