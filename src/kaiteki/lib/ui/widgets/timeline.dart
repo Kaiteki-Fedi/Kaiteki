@@ -70,26 +70,29 @@ class TimelineState extends ConsumerState<Timeline> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return PagedListView<String?, Post>.separated(
-          padding: EdgeInsets.symmetric(
-            horizontal: _getPadding(constraints.maxWidth),
-          ),
-          pagingController: _controller,
-          builderDelegate: PagedChildBuilderDelegate<Post>(
-            itemBuilder: _buildPost,
-            firstPageErrorIndicatorBuilder: (context) {
-              final t = _controller.error as Tuple2<dynamic, StackTrace>;
-              return ErrorLandingWidget(
-                error: t.item1,
-                stackTrace: t.item2,
-              );
-            },
-          ),
-          separatorBuilder: _buildSeparator,
-        );
-      },
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(_controller.refresh),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return PagedListView<String?, Post>.separated(
+            padding: EdgeInsets.symmetric(
+              horizontal: _getPadding(constraints.maxWidth),
+            ),
+            pagingController: _controller,
+            builderDelegate: PagedChildBuilderDelegate<Post>(
+              itemBuilder: _buildPost,
+              firstPageErrorIndicatorBuilder: (context) {
+                final t = _controller.error as Tuple2<dynamic, StackTrace>;
+                return ErrorLandingWidget(
+                  error: t.item1,
+                  stackTrace: t.item2,
+                );
+              },
+            ),
+            separatorBuilder: _buildSeparator,
+          );
+        },
+      ),
     );
   }
 
