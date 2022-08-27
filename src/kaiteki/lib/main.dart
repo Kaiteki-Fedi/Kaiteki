@@ -40,8 +40,12 @@ Future<void> main() async {
   // construct app & run
   final app = ProviderScope(
     overrides: [
-      themeProvider.overrideWithValue(themePreferences),
-      accountProvider.overrideWithValue(accountManager),
+      themeProvider.overrideWithProvider(
+        ChangeNotifierProvider((_) => themePreferences),
+      ),
+      accountProvider.overrideWithProvider(
+        ChangeNotifierProvider((_) => accountManager),
+      ),
     ],
     child: const KaitekiApp(),
   );
