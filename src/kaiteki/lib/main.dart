@@ -11,6 +11,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/model/account_key.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/preferences/app_preferences.dart';
 import 'package:kaiteki/preferences/theme_preferences.dart';
 import 'package:kaiteki/repositories/hive_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,12 +37,16 @@ Future<void> main() async {
     sharedPrefs,
     await _useMaterial3ByDefault,
   );
+  final appPreferences = AppPreferences(sharedPrefs);
 
   // construct app & run
   final app = ProviderScope(
     overrides: [
       themeProvider.overrideWithProvider(
         ChangeNotifierProvider((_) => themePreferences),
+      ),
+      preferencesProvider.overrideWithProvider(
+        ChangeNotifierProvider((_) => appPreferences),
       ),
       accountProvider.overrideWithProvider(
         ChangeNotifierProvider((_) => accountManager),

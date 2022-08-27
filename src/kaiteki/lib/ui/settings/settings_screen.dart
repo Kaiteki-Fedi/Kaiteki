@@ -14,6 +14,7 @@ class SettingsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            LocaleListTile(),
             ListTile(
               leading: const Icon(Icons.palette_rounded),
               title: Text(l10n.settingsCustomization),

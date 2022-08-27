@@ -489,5 +489,9 @@
   "repeatsEmpty": "No repeats",
   "repeateesTitle": "Repeated by",
   "favoriteesTitle": "Favorited by",
-  "useMaterialYou": "Use Material You"
+  "useMaterialYou": "Use Material You",
+  "settingsLocale": "Locale",
+  "selectLocaleTitle": "Select locale",
+  "languageName": "English (US)",
+  "localeSystem": "System default"
 }
