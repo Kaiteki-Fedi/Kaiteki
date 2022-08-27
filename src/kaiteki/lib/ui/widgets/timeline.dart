@@ -70,6 +70,8 @@ class TimelineState extends ConsumerState<Timeline> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(accountProvider, (_, __) => _controller.refresh());
+
     return RefreshIndicator(
       onRefresh: () => Future.sync(_controller.refresh),
       child: LayoutBuilder(
