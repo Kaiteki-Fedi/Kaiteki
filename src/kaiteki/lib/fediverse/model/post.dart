@@ -18,6 +18,7 @@ class Post<T> {
   final User author;
   final bool nsfw;
   final Visibility? visibility;
+  final bool pinned;
 
   // ENGAGEMENT
   /// Whether the user has liked (favorited) this post
@@ -74,6 +75,7 @@ class Post<T> {
     this.formatting = Formatting.plainText,
     this.liked = false,
     this.repeated = false,
+    this.pinned = false,
     this.attachments,
     this.emojis,
     this.repeatOf,

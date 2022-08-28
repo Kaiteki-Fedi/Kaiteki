@@ -493,5 +493,6 @@
   "settingsLocale": "Locale",
   "selectLocaleTitle": "Select locale",
   "languageName": "English (US)",
-  "localeSystem": "System default"
+  "localeSystem": "System default",
+  "postPinned": "Pinned"
 }

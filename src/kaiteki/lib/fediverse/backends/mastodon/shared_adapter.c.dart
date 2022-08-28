@@ -17,6 +17,7 @@ Post toPost(mastodon.Status source) {
     attachments: source.mediaAttachments.map(
       (a) => toAttachment(a, status: source),
     ),
+    pinned: source.pinned ?? false,
     likeCount: source.favouritesCount,
     repeatCount: source.reblogsCount,
     replyCount: source.repliesCount,
