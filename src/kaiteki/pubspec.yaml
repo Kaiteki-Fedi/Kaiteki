@@ -38,6 +38,7 @@ dependencies:
   flutter_local_notifications: ^9.2.0
   flutter_localizations:
     sdk: flutter
+  flutter_native_splash: ^2.2.8
   flutter_riverpod: ^1.0.3
   flutter_simple_treeview: ^3.0.1
   flutter_svg: ^1.0.1
@@ -122,3 +123,7 @@ msix_config:
   icons_background_color: '#1e2133'
   architecture: x64
   capabilities: 'internetClient'
+
+flutter_native_splash:
+  color: "#140c0d"
+  image: "assets/kaiteki-splash.png"
