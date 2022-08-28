@@ -35,10 +35,18 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<mastodon.Status>> getStatuses(String id) async {
+  Future<Iterable<mastodon.Status>> getStatuses(
+    String id, {
+    String? minId,
+    String? maxId,
+  }) async {
+    final queryParams = {
+      if (minId != null) "min_id": minId,
+      if (maxId != null) "max_id": maxId,
+    };
     return sendJsonRequestMultiple(
       HttpMethod.get,
-      "api/v1/accounts/$id/statuses",
+      withQueries("api/v1/accounts/$id/statuses", queryParams),
       mastodon.Status.fromJson,
     );
   }

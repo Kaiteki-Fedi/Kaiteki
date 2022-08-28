@@ -132,10 +132,12 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   Future<Iterable<misskey.Note>> showUserNotes(
-    String userId,
-    bool excludeNsfw,
-    Iterable<String> fileTypes,
-  ) async {
+    String userId, {
+    required bool excludeNsfw,
+    required Iterable<String> fileTypes,
+    String? sinceId,
+    String? untilId,
+  }) async {
     return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/users/notes",
@@ -143,6 +145,8 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       body: {
         "userId": userId,
         "fileType": fileTypes,
+        if (sinceId != null) "sinceId": sinceId,
+        if (untilId != null) "untilId": untilId,
         "excludeNsfw": excludeNsfw,
       },
     );

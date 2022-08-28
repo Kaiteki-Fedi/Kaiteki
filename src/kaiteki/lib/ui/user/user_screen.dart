@@ -9,8 +9,8 @@ import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
 import 'package:kaiteki/ui/user/desktop_user_header.dart';
-import 'package:kaiteki/ui/user/posts_page.dart';
 import 'package:kaiteki/ui/user/user_info_widget.dart';
+import 'package:kaiteki/ui/widgets/timeline.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
@@ -132,10 +132,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
                     child: TabBarView(
                       controller: _tabController,
                       children: [
-                        PostsPage(
-                          container: ref.watch(accountProvider),
-                          widget: widget,
-                        ),
+                        Timeline.user(userId: widget.id),
                         Container(),
                         Container(),
                       ],
@@ -164,10 +161,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
       body = TabBarView(
         controller: _tabController,
         children: [
-          PostsPage(
-            container: ref.watch(accountProvider),
-            widget: widget,
-          ),
+          Timeline.user(userId: widget.id),
           Container(),
           Container(),
         ],

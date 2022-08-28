@@ -8,6 +8,7 @@ import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
@@ -51,11 +52,13 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
 
   Future<Iterable<Post>> getTimeline(
     TimelineKind type, {
-    String? sinceId,
-    String? untilId,
+    TimelineQuery<String>? query,
   });
 
-  Future<Iterable<Post>> getStatusesOfUserById(String id);
+  Future<Iterable<Post>> getStatusesOfUserById(
+    String id, {
+    TimelineQuery<String>? query,
+  });
 
   Future<Instance> getInstance();
 

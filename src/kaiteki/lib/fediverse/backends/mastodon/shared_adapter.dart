@@ -12,6 +12,7 @@ import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 // ignore: unnecessary_import, Dart Analyzer is fucking with me
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/model/account_key.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
@@ -216,35 +217,32 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(String id) async {
-    return (await client.getStatuses(id)).map(toPost);
-  }
-
-  @override
   Future<Iterable<Post>> getTimeline(
     TimelineKind type, {
-    String? sinceId,
-    String? untilId,
+    TimelineQuery<String>? query,
   }) async {
     final Iterable<mastodon.Status> posts;
 
     switch (type) {
       case TimelineKind.home:
-        posts = await client.getHomeTimeline(minId: sinceId, maxId: untilId);
+        posts = await client.getHomeTimeline(
+          minId: query?.sinceId,
+          maxId: query?.untilId,
+        );
         break;
 
       case TimelineKind.local:
         posts = await client.getPublicTimeline(
-          minId: sinceId,
-          maxId: untilId,
+          minId: query?.sinceId,
+          maxId: query?.untilId,
           local: true,
         );
         break;
 
       case TimelineKind.federated:
         posts = await client.getPublicTimeline(
-          minId: sinceId,
-          maxId: untilId,
+          minId: query?.sinceId,
+          maxId: query?.untilId,
         );
         break;
 
@@ -368,5 +366,18 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   Future<List<User>> getRepeatees(String id) async {
     final users = await client.getBoostedBy(id);
     return users.map(toUser).toList();
+  }
+
+  @override
+  Future<Iterable<Post>> getStatusesOfUserById(
+    String id, {
+    TimelineQuery<String>? query,
+  }) async {
+    final statuses = await client.getStatuses(
+      id,
+      minId: query?.sinceId,
+      maxId: query?.untilId,
+    );
+    return statuses.map(toPost);
   }
 }

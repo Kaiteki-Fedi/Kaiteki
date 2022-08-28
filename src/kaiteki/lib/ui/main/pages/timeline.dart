@@ -23,7 +23,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Timeline(
+    return Timeline.kind(
       key: _timelineKey,
       kind: widget.kind,
       maxWidth: 800,

@@ -16,6 +16,7 @@ import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/account_key.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
@@ -230,12 +231,14 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<Iterable<Post>> getTimeline(
     TimelineKind type, {
-    String? sinceId,
-    String? untilId,
+    TimelineQuery<String>? query,
   }) async {
     Iterable<misskey.Note> notes;
 
-    final request = MisskeyTimelineRequest(sinceId: sinceId, untilId: untilId);
+    final request = MisskeyTimelineRequest(
+      sinceId: query?.sinceId,
+      untilId: query?.untilId,
+    );
 
     switch (type) {
       case TimelineKind.home:
@@ -258,14 +261,23 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(String id) async {
-    final notes = await client.showUserNotes(id, true, [
-      "image/jpeg",
-      "image/png",
-      "image/gif",
-      "image/apng",
-      "image/vnd.mozilla.apng"
-    ]);
+  Future<Iterable<Post>> getStatusesOfUserById(
+    String id, {
+    TimelineQuery<String>? query,
+  }) async {
+    final notes = await client.showUserNotes(
+      id,
+      excludeNsfw: false,
+      fileTypes: [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/apng",
+        "image/vnd.mozilla.apng"
+      ],
+      sinceId: query?.sinceId,
+      untilId: query?.untilId,
+    );
     return notes.map(toPost);
   }
 

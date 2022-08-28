@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:tuple/tuple.dart';
@@ -11,14 +12,22 @@ import 'package:tuple/tuple.dart';
 class Timeline extends ConsumerStatefulWidget {
   final double? maxWidth;
   final bool wide;
-  final TimelineKind kind;
+  final TimelineKind? kind;
+  final String? userId;
 
-  const Timeline({
+  const Timeline.kind({
     super.key,
     this.maxWidth,
     this.wide = false,
     this.kind = TimelineKind.home,
-  });
+  }) : userId = null;
+
+  const Timeline.user({
+    super.key,
+    this.maxWidth,
+    this.wide = false,
+    required String this.userId,
+  }) : kind = null;
 
   @override
   TimelineState createState() => TimelineState();
@@ -34,7 +43,19 @@ class TimelineState extends ConsumerState<Timeline> {
     _controller.addPageRequestListener((id) async {
       try {
         final adapter = ref.watch(accountProvider).adapter;
-        final posts = await adapter.getTimeline(widget.kind, untilId: id);
+        final Iterable<Post> posts;
+        final query = TimelineQuery(untilId: id);
+
+        if (widget.kind != null) {
+          posts = await adapter.getTimeline(widget.kind!, query: query);
+        } else if (widget.userId != null) {
+          posts = await adapter.getStatusesOfUserById(
+            widget.userId!,
+            query: query,
+          );
+        } else {
+          throw StateError("Cannot fetch timeline with no post source set.");
+        }
 
         if (mounted) {
           if (posts.isEmpty) {
