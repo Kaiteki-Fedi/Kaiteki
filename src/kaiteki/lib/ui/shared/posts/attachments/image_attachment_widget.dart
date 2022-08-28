@@ -42,7 +42,13 @@ class ImageAttachmentWidget extends StatelessWidget {
             );
           },
           errorBuilder: (_, w, c) {
-            return const Center(child: Icon(Icons.hide_image_rounded));
+            return Center(
+              child: Icon(
+                Icons.hide_image_rounded,
+                size: 72,
+                color: Theme.of(context).disabledColor,
+              ),
+            );
           },
           //width: 100,
           fit: BoxFit.contain,

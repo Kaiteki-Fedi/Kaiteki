@@ -72,7 +72,7 @@ class CapabilitiesDialog extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Close"),
+            child: Text(l10n.closeButtonLabel),
           ),
         ],
       ),

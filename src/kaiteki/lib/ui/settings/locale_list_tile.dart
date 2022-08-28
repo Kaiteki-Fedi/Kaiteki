@@ -21,7 +21,7 @@ class LocaleListTile extends ConsumerWidget {
   Future<void> _onTap(BuildContext context, WidgetRef ref) async {
     final locale = await showDialog<LocaleChoice?>(
       context: context,
-      builder: (_) => SelectLocaleDialog(),
+      builder: (_) => const SelectLocaleDialog(),
     );
 
     if (locale == null) return;
@@ -33,6 +33,8 @@ class LocaleListTile extends ConsumerWidget {
 }
 
 class SelectLocaleDialog extends StatelessWidget {
+  const SelectLocaleDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
