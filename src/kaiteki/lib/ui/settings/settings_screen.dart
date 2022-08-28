@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/ui/settings/locale_list_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -14,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            LocaleListTile(),
+            const LocaleListTile(),
             ListTile(
               leading: const Icon(Icons.palette_rounded),
               title: Text(l10n.settingsCustomization),
