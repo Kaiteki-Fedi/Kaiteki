@@ -494,5 +494,6 @@
   "selectLocaleTitle": "Select locale",
   "languageName": "English (US)",
   "localeSystem": "System default",
-  "postPinned": "Pinned"
+  "postPinned": "Pinned",
+  "noMorePosts": "You have reached the end"
 }

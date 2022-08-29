@@ -111,6 +111,18 @@ class TimelineState extends ConsumerState<Timeline> {
                   stackTrace: t.item2,
                 );
               },
+              noMoreItemsIndicatorBuilder: (context) {
+                final l10n = context.getL10n();
+                return Align(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Text(
+                      l10n.noMorePosts,
+                      style: TextStyle(color: Theme.of(context).disabledColor),
+                    ),
+                  ),
+                );
+              },
             ),
             separatorBuilder: _buildSeparator,
           );
