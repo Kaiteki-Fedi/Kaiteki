@@ -29,6 +29,8 @@ class ErrorLandingWidget extends StatelessWidget {
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         const IconLandingWidget(
           icon: Icon(Icons.error_rounded),
