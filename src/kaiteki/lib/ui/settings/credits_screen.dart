@@ -46,7 +46,7 @@ class _CreditsScreenState extends State<CreditsScreen> {
             return ListView.separated(
               itemBuilder: (_, i) => CreditsItemWidget(item: items[i]),
               itemCount: items.length,
-              separatorBuilder: (_, __) => Divider(),
+              separatorBuilder: (_, __) => const Divider(),
             );
           }
         },
@@ -120,27 +120,27 @@ class CreditsItemWidget extends StatelessWidget {
 
       case CreditsRole.contributor:
         icon = const Icon(Icons.code_rounded);
-        text = Text("Contributor");
+        text = const Text("Contributor");
         break;
 
       case CreditsRole.iconDesign:
         icon = const Icon(Icons.brush_rounded);
-        text = Text("Icon Design");
+        text = const Text("Icon Design");
         break;
 
       case CreditsRole.qa:
         icon = const Icon(Icons.done_all_rounded);
-        text = Text("Contributor");
+        text = const Text("Contributor");
         break;
 
       case CreditsRole.reporter:
         icon = const Icon(Icons.bug_report_rounded);
-        text = Text("Issue Reporting");
+        text = const Text("Issue Reporting");
         break;
 
       case CreditsRole.maintainer:
         icon = const Icon(Icons.favorite_rounded);
-        text = Text("Maintainer");
+        text = const Text("Maintainer");
         break;
 
       default:
