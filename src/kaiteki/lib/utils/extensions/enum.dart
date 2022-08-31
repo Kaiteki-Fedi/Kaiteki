@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:mdi/mdi.dart';
-import 'package:tuple/tuple.dart';
 
 extension VisibilityExtensions on Visibility {
   IconData toIconData() {
@@ -46,56 +44,6 @@ extension VisibilityExtensions on Visibility {
         return l10n.visibilityUnlistedDescription;
       case Visibility.public:
         return l10n.visibilityPublicDescription;
-    }
-  }
-}
-
-extension TimelineKindExtensions on TimelineKind {
-  Tuple2<IconData, IconData> get icon {
-    switch (this) {
-      case TimelineKind.federated:
-        return const Tuple2(Icons.public_rounded, Icons.public_rounded);
-      case TimelineKind.home:
-        return const Tuple2(Icons.home_outlined, Icons.home_rounded);
-      case TimelineKind.local:
-        return const Tuple2(Icons.people_outline_rounded, Icons.people_rounded);
-      case TimelineKind.directMessages:
-        return const Tuple2(Icons.mail_outline_rounded, Icons.mail_rounded);
-      case TimelineKind.bookmarks:
-        return const Tuple2(
-          Icons.bookmark_border_rounded,
-          Icons.bookmark_rounded,
-        );
-    }
-  }
-
-  String getDisplayName(AppLocalizations l10n) {
-    switch (this) {
-      case TimelineKind.federated:
-        return l10n.timelineFederated;
-      case TimelineKind.home:
-        return l10n.timelineHome;
-      case TimelineKind.local:
-        return l10n.timelineLocal;
-      case TimelineKind.directMessages:
-        return l10n.timelineDirectMessages;
-      case TimelineKind.bookmarks:
-        return l10n.timelineBookmarks;
-    }
-  }
-
-  String getDescription(AppLocalizations l10n) {
-    switch (this) {
-      case TimelineKind.federated:
-        return l10n.timelineFederatedDescription;
-      case TimelineKind.home:
-        return l10n.timelineHomeDescription;
-      case TimelineKind.local:
-        return l10n.timelineLocalDescription;
-      case TimelineKind.directMessages:
-        return l10n.timelineDirectMessagesDescription;
-      case TimelineKind.bookmarks:
-        return l10n.timelineBookmarksDescription;
     }
   }
 }

@@ -495,5 +495,7 @@
   "languageName": "English (US)",
   "localeSystem": "System default",
   "postPinned": "Pinned",
-  "noMorePosts": "You have reached the end"
+  "noMorePosts": "You have reached the end",
+  "timelineBubble": "Bubble",
+  "timelineBubbleDescription": "Posts from neighbored instances"
 }

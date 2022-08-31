@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/main/compose_fab.dart';
@@ -16,7 +15,6 @@ import 'package:kaiteki/ui/main/pages/placeholder.dart';
 import 'package:kaiteki/ui/main/pages/timeline.dart';
 import 'package:kaiteki/ui/main/tab.dart';
 import 'package:kaiteki/ui/main/tab_kind.dart';
-import 'package:kaiteki/ui/main/timeline_bottom_sheet.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
@@ -32,7 +30,6 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _timelineKey = GlobalKey<TimelinePageState>();
-  TimelineKind _timelineKind = TimelineKind.home;
   List<MainScreenTab>? _tabs;
   TabKind _currentTab = TabKind.timeline;
 
@@ -115,7 +112,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               key: _scaffoldKey,
               backgroundColor: outsideColor,
               appBar: buildAppBar(outsideColor, context),
-              body: _getPage(),
+              body: _buildPage(),
               bottomNavigationBar: _getNavigationBar(),
               floatingActionButton:
                   fab != null ? _buildFab(context, fab, true) : null,
@@ -139,18 +136,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   AppBar buildAppBar(Color? outsideColor, BuildContext context) {
+    Color? foregroundColor;
+
+    if (outsideColor != null) {
+      foregroundColor = ThemeData.estimateBrightnessForColor(outsideColor)
+          .inverted
+          .getColor();
+    }
+
     return AppBar(
       backgroundColor: outsideColor,
-      foregroundColor: outsideColor != null
-          ? ThemeData.estimateBrightnessForColor(outsideColor)
-              .inverted
-              .getColor()
-          : null,
+      foregroundColor: foregroundColor,
       title: Text(
         consts.appName,
         style: Theme.of(context).ktkTextTheme?.kaitekiTextStyle,
       ),
       elevation: Theme.of(context).useMaterial3 ? 0.0 : null,
+      surfaceTintColor:
+          Theme.of(context).useMaterial3 ? Colors.transparent : null,
       actions: _buildAppBarActions(context),
     );
   }
@@ -195,7 +198,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         ),
         if (!m3) const VerticalDivider(thickness: 1, width: 1),
         Expanded(
-          child: _roundWidgetM3(context, _getPage()),
+          child: _roundWidgetM3(context, _buildPage()),
         ),
       ],
     );
@@ -203,7 +206,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   Function()? get _refresh {
     if (_currentTab == TabKind.timeline) {
-      return () => _timelineKey.currentState?.refresh();
+      return () => _timelineKey.currentState?.refresh;
     }
 
     return null;
@@ -240,9 +243,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _getPage() {
+  Widget _buildPage() {
     final pages = [
-      TimelinePage(_timelineKind, key: _timelineKey),
+      TimelinePage(key: _timelineKey),
       const PlaceholderPage(),
       const PlaceholderPage(),
       const BookmarksPage(),
@@ -276,6 +279,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       return NavigationBar(
         onDestinationSelected: _changeIndex,
         selectedIndex: _currentIndex,
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         destinations: [
           for (var tab in _tabs!)
             NavigationDestination(
@@ -302,28 +306,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
-  Future<void> _changeIndex(int index) async {
-    await _changePage(_tabs![index].kind);
-  }
+  void _changeIndex(int index) => _changePage(_tabs![index].kind);
 
-  Future<void> _changePage(TabKind tab) async {
-    final isSamePage = _currentTab == tab;
-
-    if (isSamePage && _currentTab == TabKind.timeline) {
-      final timelineType = await showModalBottomSheet<TimelineKind?>(
-        context: context,
-        constraints: consts.bottomSheetConstraints,
-        builder: (context) => TimelineBottomSheet(_timelineKind),
-      );
-
-      if (timelineType != null) {
-        setState(() => _timelineKind = timelineType);
-      }
-      return;
-    }
-
-    setState(() => _currentTab = tab);
-  }
+  void _changePage(TabKind tab) => setState(() => _currentTab = tab);
 
   Widget? _buildFab(
     BuildContext context,

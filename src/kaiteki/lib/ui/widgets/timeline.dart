@@ -98,17 +98,20 @@ class TimelineState extends ConsumerState<Timeline> {
       child: LayoutBuilder(
         builder: (context, constraints) {
           return PagedListView<String?, Post>.separated(
+            pagingController: _controller,
             padding: EdgeInsets.symmetric(
               horizontal: _getPadding(constraints.maxWidth),
             ),
-            pagingController: _controller,
             builderDelegate: PagedChildBuilderDelegate<Post>(
               itemBuilder: _buildPost,
+              animateTransitions: true,
               firstPageErrorIndicatorBuilder: (context) {
                 final t = _controller.error as Tuple2<dynamic, StackTrace>;
-                return ErrorLandingWidget(
-                  error: t.item1,
-                  stackTrace: t.item2,
+                return Center(
+                  child: ErrorLandingWidget(
+                    error: t.item1,
+                    stackTrace: t.item2,
+                  ),
                 );
               },
               noMoreItemsIndicatorBuilder: (context) {
