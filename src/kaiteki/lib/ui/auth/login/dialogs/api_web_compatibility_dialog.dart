@@ -4,7 +4,6 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/link_constants.dart' show corsHelpArticleUrl;
-import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class ApiWebCompatibilityDialog extends StatelessWidget {
@@ -18,10 +17,8 @@ class ApiWebCompatibilityDialog extends StatelessWidget {
     return ConstrainedBox(
       constraints: consts.dialogConstraints,
       child: AlertDialog(
-        title: DialogTitleWithHero(
-          icon: const Icon(Icons.error),
-          title: Text(l10n.unsupportedInstanceTitle),
-        ),
+        icon: const Icon(Icons.error),
+        title: Text(l10n.unsupportedInstanceTitle),
         content: Text.rich(
           TextSpan(
             text: l10n.unsupportedInstanceDescriptionCORS(type.displayName),

@@ -6,7 +6,6 @@ import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 
 class CapabilitiesDialog extends StatelessWidget {
   final ApiType type;
@@ -21,10 +20,8 @@ class CapabilitiesDialog extends StatelessWidget {
     return ConstrainedBox(
       constraints: dialogConstraints,
       child: AlertDialog(
-        title: const DialogTitleWithHero(
-          icon: Icon(Icons.check_circle_rounded),
-          title: Text("Supported features"),
-        ),
+        icon: const Icon(Icons.check_circle_rounded),
+        title: const Text("Supported features"),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,

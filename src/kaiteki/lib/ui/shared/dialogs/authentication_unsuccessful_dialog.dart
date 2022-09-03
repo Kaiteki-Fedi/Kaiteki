@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 import 'package:kaiteki/ui/shared/dialogs/exception_dialog.dart';
 import 'package:tuple/tuple.dart';
 
@@ -15,10 +14,8 @@ class AuthenticationUnsuccessfulDialog extends StatelessWidget {
     return ConstrainedBox(
       constraints: dialogConstraints,
       child: AlertDialog(
-        title: const DialogTitleWithHero(
-          icon: Icon(Icons.error_rounded),
-          title: Text("Login failed"),
-        ),
+        icon: const Icon(Icons.error_rounded),
+        title: const Text("Login failed"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

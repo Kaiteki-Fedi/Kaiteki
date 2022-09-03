@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' show dialogConstraints;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -20,10 +19,8 @@ class KeyboardShortcutsDialog extends StatelessWidget {
     return ConstrainedBox(
       constraints: dialogConstraints,
       child: AlertDialog(
-        title: DialogTitleWithHero(
-          icon: const Icon(Icons.keyboard_rounded),
-          title: Text(l10n.keyboardShortcuts),
-        ),
+        icon: const Icon(Icons.keyboard_rounded),
+        title: Text(l10n.keyboardShortcuts),
         scrollable: true,
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
