@@ -21,7 +21,7 @@ class DiscardPostDialog extends StatelessWidget {
         actions: [
           TextButton(
             style: TextButton.styleFrom(
-              primary: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.error,
             ),
             onPressed: () => Navigator.pop(context, true),
             child: Text(l10n.discardButtonLabel),
