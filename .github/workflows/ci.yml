@@ -20,7 +20,8 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -44,7 +45,8 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -119,7 +121,8 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -162,7 +165,8 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -192,7 +196,8 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
