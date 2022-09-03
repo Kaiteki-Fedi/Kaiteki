@@ -6,7 +6,6 @@ import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/compose/post_form.dart';
-import 'package:kaiteki/ui/shared/toggle_icon_button.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class ComposeScreen extends ConsumerStatefulWidget {
@@ -58,8 +57,8 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
               AppBar(
                 actions: [
                   if (manager.adapter is PreviewSupport)
-                    ToggleIconButton(
-                      selected: showPreview,
+                    IconButton(
+                      isSelected: showPreview,
                       onPressed: togglePreview,
                       icon: const Icon(Icons.preview_rounded),
                     ),
@@ -115,14 +114,11 @@ class ToggleSubjectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final color = value ? theme.colorScheme.primary : null;
-
     return IconButton(
       onPressed: onChanged,
+      isSelected: value,
       icon: const Icon(Icons.short_text_rounded),
       tooltip: _getTooltip(),
-      color: color,
     );
   }
 

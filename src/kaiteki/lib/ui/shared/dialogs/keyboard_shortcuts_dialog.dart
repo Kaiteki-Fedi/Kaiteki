@@ -22,6 +22,9 @@ class KeyboardShortcutsDialog extends StatelessWidget {
         icon: const Icon(Icons.keyboard_rounded),
         title: Text(l10n.keyboardShortcuts),
         scrollable: true,
+        actionsPadding: Theme.of(context).useMaterial3
+            ? const EdgeInsets.fromLTRB(24, 24, 16, 24)
+            : null,
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -92,9 +95,6 @@ class KeyboardShortcutsDialog extends StatelessWidget {
             ),
           ],
         ),
-        actionsPadding: Theme.of(context).useMaterial3 //
-            ? const EdgeInsets.only(right: -12)
-            : EdgeInsets.zero,
         actions: [
           TextButton(
             child: Row(
