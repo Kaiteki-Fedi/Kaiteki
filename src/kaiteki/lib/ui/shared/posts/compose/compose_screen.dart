@@ -114,15 +114,14 @@ class ToggleSubjectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.getL10n();
     return IconButton(
       onPressed: onChanged,
       isSelected: value,
       icon: const Icon(Icons.short_text_rounded),
-      tooltip: _getTooltip(),
+      tooltip: value
+          ? l10n.subjectButtonLabelDisable
+          : l10n.subjectButtonLabelEnable,
     );
-  }
-
-  String _getTooltip() {
-    return "${value ? "Disable" : "Enable"} Subject";
   }
 }
