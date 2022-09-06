@@ -54,6 +54,9 @@ android {
         release {
             signingConfig signingConfigs.release
         }
+        debug {
+            applicationIdSuffix ".dev"
+        }
     }
     lint {
         disable 'InvalidPackage'
