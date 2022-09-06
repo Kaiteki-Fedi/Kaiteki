@@ -32,14 +32,10 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
     defaultConfig {
         applicationId "moe.craftplacer.kaiteki"
         minSdkVersion 18
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -58,6 +54,9 @@ android {
         release {
             signingConfig signingConfigs.release
         }
+    }
+    lint {
+        disable 'InvalidPackage'
     }
 }
 
