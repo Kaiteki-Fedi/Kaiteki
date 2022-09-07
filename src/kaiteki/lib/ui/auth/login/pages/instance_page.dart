@@ -166,7 +166,15 @@ class _InstancePageState extends State<InstancePage> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      widget.onNext.call(_instanceController.text);
+      var host = _instanceController.text;
+
+      // Extract host from URL, if necessary
+      final uri = Uri.tryParse(host);
+      if (uri != null && uri.host.isNotEmpty) {
+        host = uri.host;
+      }
+
+      widget.onNext.call(host);
     }
   }
 
