@@ -61,7 +61,7 @@ class PleromaAdapter //
       contentType: getContentType(draft.formatting),
       pleromaPreview: true,
     );
-    return toPost(status);
+    return toPost(status, client.instance);
   }
 
   @override

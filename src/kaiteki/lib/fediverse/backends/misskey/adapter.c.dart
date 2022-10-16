@@ -1,12 +1,12 @@
 part of 'adapter.dart';
 
-Post toPost(misskey.Note source) {
+Post toPost(misskey.Note source, String localHost) {
   final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji);
 
   return Post(
     source: source,
     postedAt: source.createdAt,
-    author: toUserFromLite(source.user),
+    author: toUserFromLite(source.user, localHost),
     content: source.text,
     emojis: mappedEmoji,
     // FIXME(Craftplacer): I give up
@@ -18,9 +18,9 @@ Post toPost(misskey.Note source) {
     //     emoji: getEmojiFromString(mkr.key, mappedEmoji),
     //   );
     // }),
-    replyTo: source.reply == null ? null : toPost(source.reply!),
+    replyTo: source.reply == null ? null : toPost(source.reply!, localHost),
     replyToPostId: source.replyId,
-    repeatOf: source.renote == null ? null : toPost(source.renote!),
+    repeatOf: source.renote == null ? null : toPost(source.renote!, localHost),
     id: source.id,
     visibility: toVisibility(source.visibility),
     attachments: source.files?.map(toAttachment) ?? [],
@@ -64,15 +64,14 @@ CustomEmoji toEmoji(misskey.Emoji emoji) {
   );
 }
 
-User toUser(misskey.User source) {
+User toUser(misskey.User source, String localHost) {
   return User(
     avatarUrl: source.avatarUrl,
     bannerUrl: source.bannerUrl,
     description: source.description,
-    // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
-    displayName: source.name ?? source.username,
+    displayName: source.name,
     emojis: source.emojis.map(toEmoji),
-    host: source.host,
+    host: source.host ?? localHost,
     id: source.id,
     joinDate: source.createdAt,
     source: source,
@@ -85,13 +84,13 @@ User toUser(misskey.User source) {
   );
 }
 
-User toUserFromLite(misskey.UserLite source) {
+User toUserFromLite(misskey.UserLite source, String localHost) {
   return User(
     avatarUrl: source.avatarUrl,
     // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
     displayName: source.name ?? source.username,
     emojis: source.emojis.map(toEmoji),
-    host: source.host,
+    host: source.host ?? localHost,
     id: source.id,
     source: source,
     username: source.username,

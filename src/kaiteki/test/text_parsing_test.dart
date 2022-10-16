@@ -3,10 +3,6 @@ import 'package:kaiteki/utils/text/parsers.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('text parsing', textParsing);
-}
-
-void textParsing() {
   test('parse link', () {
     const html = '<a href="https://craftplacer.moe/">look a cool site</a>';
     final expectedUri = Uri(

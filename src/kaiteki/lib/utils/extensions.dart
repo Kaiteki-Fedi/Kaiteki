@@ -86,7 +86,7 @@ enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
   InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
-    return renderText(context, ref, displayName);
+    return renderText(context, ref, displayName!);
   }
 
   InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
@@ -105,13 +105,7 @@ extension UserExtensions on User {
     );
   }
 
-  String get handle {
-    if (host == null) {
-      return '@$username';
-    } else {
-      return '@$username@$host';
-    }
-  }
+  String get handle => '@$username@$host';
 }
 
 extension PostExtensions on Post {

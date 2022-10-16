@@ -34,7 +34,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<User> getUserById(String id) async {
-    return toUser(await client.getAccount(id));
+    return toUser(await client.getAccount(id), client.instance);
   }
 
   Future<ClientSecret> _makeClientSecret(
@@ -161,7 +161,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
     final ktkAccount = Account(
       adapter: this,
-      user: toUser(account),
+      user: toUser(account, client.instance),
       clientSecret: clientSecret,
       accountSecret: accountSecret,
       key: AccountKey(
@@ -196,7 +196,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
           .map((a) => (a.source as mastodon.Attachment).id)
           .toList(),
     );
-    return toPost(newPost);
+    return toPost(newPost, client.instance);
   }
 
   String? getContentType(Formatting? formatting) {
@@ -213,7 +213,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<User> getMyself() async {
     final account = await client.verifyCredentials();
-    return toUser(account);
+    return toUser(account, client.instance);
   }
 
   @override
@@ -250,7 +250,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         throw UnimplementedError();
     }
 
-    return posts.map(toPost);
+    return posts.map((p) => toPost(p, client.instance));
   }
 
   @override
@@ -274,9 +274,9 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     final status = reply.source as mastodon.Status;
     final context = await client.getStatusContext(status.id);
     return <Post>[
-      ...context.ancestors.map(toPost),
+      ...context.ancestors.map((s) => toPost(s, client.instance)),
       reply,
-      ...context.descendants.map(toPost),
+      ...context.descendants.map((s) => toPost(s, client.instance)),
     ];
   }
 
@@ -289,12 +289,12 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<Post> getPostById(String id) async {
     final status = await client.getStatus(id);
-    return toPost(status);
+    return toPost(status, client.instance);
   }
 
   @override
   Future<Post?> favoritePost(String id) async {
-    return toPost(await client.favouriteStatus(id));
+    return toPost(await client.favouriteStatus(id), client.instance);
   }
 
   @override
@@ -315,25 +315,25 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<Post?> repeatPost(String id) async {
     final status = await client.reblogStatus(id);
-    return toPost(status);
+    return toPost(status, client.instance);
   }
 
   @override
   Future<Post?> unfavoritePost(String id) async {
     final status = await client.unfavouriteStatus(id);
-    return toPost(status);
+    return toPost(status, client.instance);
   }
 
   @override
   Future<Post?> unrepeatPost(String id) async {
     final status = await client.unreblogStatus(id);
-    return toPost(status);
+    return toPost(status, client.instance);
   }
 
   @override
   Future<Post?> bookmarkPost(String id) async {
     final status = await client.bookmarkStatus(id);
-    return toPost(status);
+    return toPost(status, client.instance);
   }
 
   @override
@@ -347,25 +347,25 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       sinceId: sinceId,
       minId: minId,
     );
-    return statuses.map(toPost).toList();
+    return statuses.map((p) => toPost(p, client.instance)).toList();
   }
 
   @override
   Future<Post?> unbookmarkPost(String id) async {
     final status = await client.unbookmarkStatus(id);
-    return toPost(status);
+    return toPost(status, client.instance);
   }
 
   @override
   Future<List<User>> getFavoritees(String id) async {
     final users = await client.getFavouritedBy(id);
-    return users.map(toUser).toList();
+    return users.map((u) => toUser(u, client.instance)).toList();
   }
 
   @override
   Future<List<User>> getRepeatees(String id) async {
     final users = await client.getBoostedBy(id);
-    return users.map(toUser).toList();
+    return users.map((u) => toUser(u, client.instance)).toList();
   }
 
   @override
@@ -378,6 +378,6 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       minId: query?.sinceId,
       maxId: query?.untilId,
     );
-    return statuses.map(toPost);
+    return statuses.map((p) => toPost(p, client.instance));
   }
 }

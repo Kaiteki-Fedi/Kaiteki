@@ -45,12 +45,12 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<User> getUser(String username, [String? instance]) async {
     final mkUser = await client.showUserByName(username, instance);
-    return toUser(mkUser);
+    return toUser(mkUser, client.instance);
   }
 
   @override
   Future<User> getUserById(String id) async {
-    return toUser((await client.showUser(id))!);
+    return toUser((await client.showUser(id))!, client.instance);
   }
 
   Future<MisskeyCheckSessionResponse?> loginMiAuth(
@@ -187,7 +187,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
     final account = Account(
       adapter: this,
-      user: toUser(user),
+      user: toUser(user, client.instance),
       key: AccountKey(ApiType.misskey, instance, user.username),
       clientSecret: null,
       accountSecret: accountSecret,
@@ -215,12 +215,12 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       }).toList(),
     );
 
-    return toPost(note);
+    return toPost(note, client.instance);
   }
 
   @override
   Future<User> getMyself() async {
-    return toUser(await client.i());
+    return toUser(await client.i(), client.instance);
   }
 
   @override
@@ -252,7 +252,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
         );
     }
 
-    return notes.map(toPost);
+    return notes.map((n) => toPost(n, client.instance));
   }
 
   @override
@@ -278,7 +278,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       sinceId: query?.sinceId,
       untilId: query?.untilId,
     );
-    return notes.map(toPost);
+    return notes.map((n) => toPost(n, client.instance));
   }
 
   @override
@@ -324,7 +324,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<Iterable<Post>> getThread(Post reply) async {
     final notes = await client.getConversation(reply.id);
-    return notes.map(toPost).followedBy([reply]);
+    return notes.map((n) => toPost(n, client.instance)).followedBy([reply]);
   }
 
   @override
@@ -363,7 +363,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<Post?> repeatPost(String id) async {
     final note = await client.createRenote(id);
-    return toPost(note);
+    return toPost(note, client.instance);
   }
 
   @override
@@ -372,6 +372,9 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<List<User>> getRepeatees(String id) async {
     final notes = await client.getRenotes(id);
-    return notes.map((n) => n.user).map(toUserFromLite).toList();
+    return notes
+        .map((n) => n.user)
+        .map((u) => toUserFromLite(u, client.instance))
+        .toList();
   }
 }
