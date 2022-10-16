@@ -1,6 +1,6 @@
 name: Feature request
 description: Suggest an idea for Kaiteki
-title: ""
+title: "Feature request"
 labels: [ enhancement ]
 body:
 - type: textarea

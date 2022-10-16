@@ -6,7 +6,7 @@ import 'package:kaiteki/utils/extensions/string.dart';
 class CardWidget extends StatelessWidget {
   final PreviewCard card;
 
-  const CardWidget({Key? key, required this.card}) : super(key: key);
+  const CardWidget({super.key, required this.card});
 
   @override
   Widget build(BuildContext context) {

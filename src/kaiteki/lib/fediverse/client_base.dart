@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -23,14 +24,16 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
   final _http = http.Client();
 
   AuthData? authenticationData;
-  late String instance;
+  final String instance;
   ApiType get type;
 
-  /// Sets the data used for requests to a server.
-  Future<void> setClientAuthentication(ClientSecret secret);
+  FediverseClientBase(this.instance);
 
   /// Sets the data used for requests to a server.
-  Future<void> setAccountAuthentication(AccountSecret secret);
+  FutureOr<void> setClientAuthentication(ClientSecret secret) {}
+
+  /// Sets the data used for requests to a server.
+  FutureOr<void> setAccountAuthentication(AccountSecret secret);
 
   Future<void> sendJsonRequestWithoutResponse<T>(
     HttpMethod method,
@@ -133,7 +136,7 @@ abstract class FediverseClientBase<AuthData extends AuthenticationData> {
 
   Uri _getUri(String endpoint) {
     final endpointUrl = Uri.tryParse(endpoint);
-    if (endpointUrl?.hasAbsolutePath == true) return endpointUrl!;
+    if (endpointUrl?.host.isNotEmpty == true) return endpointUrl!;
     return Uri.parse("$baseUrl/$endpoint");
   }
 

@@ -42,6 +42,7 @@ linter:
     - use_setters_to_change_properties
     - use_string_buffers
     - use_test_throws_matchers
+    - use_super_parameters
 
     # Dart features
     - avoid_classes_with_only_static_members

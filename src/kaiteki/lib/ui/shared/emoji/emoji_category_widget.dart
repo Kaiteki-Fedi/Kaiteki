@@ -12,11 +12,11 @@ class EmojiCategoryWidget extends StatelessWidget {
   final double emojiSize;
 
   const EmojiCategoryWidget({
-    Key? key,
+    super.key,
     required this.category,
     required this.onEmojiSelected,
     this.emojiSize = 48,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

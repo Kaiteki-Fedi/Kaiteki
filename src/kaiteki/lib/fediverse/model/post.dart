@@ -18,6 +18,7 @@ class Post<T> {
   final User author;
   final bool nsfw;
   final Visibility? visibility;
+  final bool pinned;
 
   // ENGAGEMENT
   /// Whether the user has liked (favorited) this post
@@ -34,6 +35,8 @@ class Post<T> {
 
   /// How many users have replied to this post
   final int replyCount;
+
+  final bool bookmarked;
 
   /// What reactions this post has
   final Iterable<Reaction> reactions;
@@ -72,6 +75,7 @@ class Post<T> {
     this.formatting = Formatting.plainText,
     this.liked = false,
     this.repeated = false,
+    this.pinned = false,
     this.attachments,
     this.emojis,
     this.repeatOf,
@@ -86,6 +90,7 @@ class Post<T> {
     this.replyToUser,
     this.quotedPost,
     List<UserReference>? mentionedUsers,
+    this.bookmarked = false,
   })  : reactions = reactions ?? [],
         mentionedUsers = mentionedUsers ?? [];
 

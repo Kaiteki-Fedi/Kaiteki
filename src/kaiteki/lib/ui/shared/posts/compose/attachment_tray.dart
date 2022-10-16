@@ -6,10 +6,10 @@ class AttachmentTray extends StatelessWidget {
   final Function(int index)? onRemoveAttachment;
 
   const AttachmentTray({
-    Key? key,
+    super.key,
     required this.attachments,
     this.onRemoveAttachment,
-  }) : super(key: key);
+  });
 
   final List<Future<Attachment>> attachments;
 

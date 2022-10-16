@@ -34,7 +34,7 @@ class EmbeddedPostWidget extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              Text.rich(post.renderContent(context)),
+              Text.rich(post.renderContent(context, ref)),
               if (post.attachments?.isNotEmpty == true)
                 AttachmentRow(post: post),
             ],
@@ -45,9 +45,11 @@ class EmbeddedPostWidget extends ConsumerWidget {
   }
 
   void openPost(BuildContext context, WidgetRef ref) {
-    final account = ref.read(accountProvider).currentAccount.accountSecret;
+    final account = ref.read(accountProvider).currentAccount;
+    final instance = account.key.host;
+    final username = account.key.username;
     context.push(
-      "/@${account.username}@${account.instance}/posts/${post.id}",
+      "/@$username@$instance/posts/${post.id}",
       extra: post,
     );
   }

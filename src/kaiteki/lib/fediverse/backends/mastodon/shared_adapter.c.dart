@@ -1,14 +1,15 @@
 part of 'shared_adapter.dart';
 
-Post toPost(mastodon.Status source) {
+Post toPost(mastodon.Status source, String localHost) {
   return Post(
     source: source,
     content: source.content,
     postedAt: source.createdAt,
     nsfw: source.sensitive,
     subject: source.spoilerText,
-    author: toUser(source.account),
-    repeatOf: source.reblog != null ? toPost(source.reblog!) : null,
+    author: toUser(source.account, localHost),
+    bookmarked: source.bookmarked ?? false,
+    repeatOf: source.reblog != null ? toPost(source.reblog!, localHost) : null,
     // shouldn't be null because we currently expect the user to be signed in
     repeated: source.reblogged!,
     liked: source.favourited!,
@@ -16,16 +17,20 @@ Post toPost(mastodon.Status source) {
     attachments: source.mediaAttachments.map(
       (a) => toAttachment(a, status: source),
     ),
+    pinned: source.pinned ?? false,
     likeCount: source.favouritesCount,
     repeatCount: source.reblogsCount,
     replyCount: source.repliesCount,
     visibility: toVisibility(source.visibility),
     replyToUserId: source.inReplyToAccountId,
     replyToPostId: source.inReplyToId,
-    replyToUser: getRepliedUser(source),
+    replyToUser: getRepliedUser(source, localHost),
     id: source.id,
     externalUrl: source.url,
-    reactions: source.pleroma?.emojiReactions?.map(toReaction) ?? [],
+    reactions: source.pleroma?.emojiReactions?.map((r) {
+          return toReaction(r, localHost);
+        }) ??
+        [],
     mentionedUsers: source.mentions.map((e) {
       return UserReference.all(
         username: e.username,
@@ -37,16 +42,16 @@ Post toPost(mastodon.Status source) {
   );
 }
 
-Reaction toReaction(pleroma.EmojiReaction reaction) {
+Reaction toReaction(pleroma.EmojiReaction reaction, String localHost) {
   return Reaction(
     includesMe: reaction.me,
     count: reaction.count,
     emoji: UnicodeEmoji(reaction.name, ""),
-    users: reaction.accounts?.map(toUser) ?? [],
+    users: reaction.accounts?.map((a) => toUser(a, localHost)) ?? [],
   );
 }
 
-User? getRepliedUser(mastodon.Status status) {
+User? getRepliedUser(mastodon.Status status, String localHost) {
   final mention = status.mentions.firstOrDefault((mention) {
     return mention.id == status.inReplyToAccountId;
   });
@@ -56,7 +61,7 @@ User? getRepliedUser(mastodon.Status status) {
   }
 
   return User(
-    host: getHost(mention.account),
+    host: getHost(mention.account) ?? localHost,
     username: mention.username,
     id: mention.id,
     displayName: mention.username,
@@ -83,7 +88,7 @@ Attachment toAttachment(
     source: attachment,
     description: attachment.description,
     url: attachment.url,
-    previewUrl: attachment.previewUrl,
+    previewUrl: attachment.previewUrl!,
     type: toAttachmentType(attachment.type),
     isSensitive: status?.sensitive ?? false,
   );
@@ -109,7 +114,7 @@ CustomEmoji toEmoji(mastodon.Emoji emoji) {
   );
 }
 
-User toUser(mastodon.Account source) {
+User toUser(mastodon.Account source, String localHost) {
   return User(
     source: source,
     displayName: source.displayName,
@@ -123,9 +128,15 @@ User toUser(mastodon.Account source) {
     followerCount: source.followersCount,
     followingCount: source.followingCount,
     postCount: source.statusesCount,
-    host: getHost(source.acct),
+    host: getHost(source.acct) ?? localHost,
     details: UserDetails(fields: _parseFields(source.fields)),
     url: source.url,
+    flags: UserFlags(
+      isBot: source.bot ?? false,
+      isModerator: source.pleroma?.isModerator ?? false,
+      isAdministrator: source.pleroma?.isAdmin ?? false,
+      isApprovingFollowers: source.locked,
+    ),
   );
 }
 

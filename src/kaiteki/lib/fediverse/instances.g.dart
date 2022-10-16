@@ -20,7 +20,7 @@ InstanceData _$InstanceDataFromJson(Map<String, dynamic> json) => InstanceData(
 
 Map<String, dynamic> _$InstanceDataToJson(InstanceData instance) =>
     <String, dynamic>{
-      'type': _$ApiTypeEnumMap[instance.type],
+      'type': _$ApiTypeEnumMap[instance.type]!,
       'name': instance.name,
       'shortDescription': instance.shortDescription,
       'favicon': instance.favicon,

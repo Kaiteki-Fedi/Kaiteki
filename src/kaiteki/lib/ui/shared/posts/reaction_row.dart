@@ -10,8 +10,8 @@ class ReactionRow extends StatelessWidget {
   const ReactionRow(
     this._parentPost,
     this._reactions, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

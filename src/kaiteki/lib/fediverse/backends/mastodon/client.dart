@@ -1,5 +1,6 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:kaiteki/constants.dart' as consts;
+import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
@@ -13,6 +14,8 @@ import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
+  MastodonClient(super.instance);
+
   @override
   ApiType get type => ApiType.mastodon;
 
@@ -32,10 +35,18 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<mastodon.Status>> getStatuses(String id) async {
+  Future<Iterable<mastodon.Status>> getStatuses(
+    String id, {
+    String? minId,
+    String? maxId,
+  }) async {
+    final queryParams = {
+      if (minId != null) "min_id": minId,
+      if (maxId != null) "max_id": maxId,
+    };
     return sendJsonRequestMultiple(
       HttpMethod.get,
-      "api/v1/accounts/$id/statuses",
+      withQueries("api/v1/accounts/$id/statuses", queryParams),
       mastodon.Status.fromJson,
     );
   }
@@ -130,15 +141,7 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<mastodon.Status>> getPublicTimeline() async {
-    return sendJsonRequestMultiple(
-      HttpMethod.get,
-      "api/v1/timelines/public",
-      mastodon.Status.fromJson,
-    );
-  }
-
-  Future<Iterable<mastodon.Status>> getTimeline({
+  Future<Iterable<mastodon.Status>> getHomeTimeline({
     bool? local,
     bool? remote,
     bool? onlyMedia,
@@ -160,6 +163,32 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     return sendJsonRequestMultiple(
       HttpMethod.get,
       withQueries("api/v1/timelines/home", queryParams),
+      mastodon.Status.fromJson,
+    );
+  }
+
+  Future<Iterable<mastodon.Status>> getPublicTimeline({
+    bool? local,
+    bool? remote,
+    bool? onlyMedia,
+    String? maxId,
+    String? sinceId,
+    String? minId,
+    int? limit,
+  }) async {
+    final queryParams = {
+      'local': local,
+      'remote': remote,
+      'only_media': onlyMedia,
+      'max_id': maxId,
+      'since_id': sinceId,
+      'min_id': minId,
+      'limit': limit,
+    };
+
+    return sendJsonRequestMultiple(
+      HttpMethod.get,
+      withQueries("api/v1/timelines/public", queryParams),
       mastodon.Status.fromJson,
     );
   }
@@ -230,12 +259,71 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
+  Future<mastodon.Status> reblogStatus(String id) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/reblog",
+      mastodon.Status.fromJson,
+    );
+  }
+
+  Future<mastodon.Status> unreblogStatus(String id) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/unreblog",
+      mastodon.Status.fromJson,
+    );
+  }
+
+  Future<Iterable<mastodon.Status>> getBookmarkedStatuses({
+    String? maxId,
+    String? sinceId,
+    String? minId,
+    int? limit,
+  }) async {
+    final queryParams = {
+      'max_id': maxId,
+      'since_id': sinceId,
+      'min_id': minId,
+      'limit': limit,
+    };
+    return sendJsonRequestMultiple(
+      HttpMethod.get,
+      withQueries("api/v1/bookmarks", queryParams),
+      mastodon.Status.fromJson,
+    );
+  }
+
+  Future<mastodon.Status> bookmarkStatus(String id) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/bookmark",
+      mastodon.Status.fromJson,
+    );
+  }
+
+  Future<mastodon.Status> unbookmarkStatus(String id) async {
+    return sendJsonRequest(
+      HttpMethod.post,
+      "api/v1/statuses/$id/unbookmark",
+      mastodon.Status.fromJson,
+    );
+  }
+
   @override
-  Future<void> checkResponse(Response response) async {}
+  Future<void> checkResponse(Response response) async {
+    if (!response.isSuccessful) {
+      final json = await response.getContentJson();
+      throw ApiException(
+        response.statusCode,
+        reasonPhrase: json["error"] as String,
+        data: json,
+      );
+    }
+  }
 
   @override
   Future<void> setClientAuthentication(ClientSecret secret) {
-    instance = secret.instance;
     authenticationData = MastodonAuthenticationData(
       secret.clientId,
       secret.clientSecret,
@@ -245,7 +333,6 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
 
   @override
   Future<void> setAccountAuthentication(AccountSecret secret) {
-    instance = secret.instance;
     authenticationData!.accessToken = secret.accessToken;
     return Future.value();
   }
@@ -263,5 +350,23 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       },
       files: [await file.toMultipartFile("file")],
     );
+  }
+
+  Future<List<mastodon.Account>> getFavouritedBy(String statusId) async {
+    final users = await sendJsonRequestMultiple(
+      HttpMethod.get,
+      "api/v1/statuses/$statusId/favourited_by",
+      mastodon.Account.fromJson,
+    );
+    return users.toList();
+  }
+
+  Future<List<mastodon.Account>> getBoostedBy(String statusId) async {
+    final users = await sendJsonRequestMultiple(
+      HttpMethod.get,
+      "api/v1/statuses/$statusId/reblogged_by",
+      mastodon.Account.fromJson,
+    );
+    return users.toList();
   }
 }

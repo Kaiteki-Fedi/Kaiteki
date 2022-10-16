@@ -1,0 +1,130 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
+import 'package:kaiteki/ui/widgets/timeline.dart';
+
+class TimelinePage extends ConsumerStatefulWidget {
+  const TimelinePage({super.key});
+
+  @override
+  ConsumerState<TimelinePage> createState() => TimelinePageState();
+}
+
+class TimelinePageState extends ConsumerState<TimelinePage> {
+  final _timelineKey = GlobalKey<TimelineState>();
+  late TimelineKind _kind;
+
+  List<TimelineKind> get kinds {
+    return [
+      TimelineKind.home,
+      TimelineKind.local,
+      TimelineKind.federated,
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _kind = kinds[0];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: kinds.length,
+      child: Material(
+        child: NestedScrollView(
+          floatHeaderSlivers: true,
+          dragStartBehavior: DragStartBehavior.down,
+          headerSliverBuilder: (context, _) => [
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  TabBar(
+                    indicatorColor: Theme.of(context).colorScheme.primary,
+                    labelColor: Theme.of(context).colorScheme.primary,
+                    unselectedLabelColor: Theme.of(context).disabledColor,
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicator: RoundedUnderlineTabIndicator(
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      radius: const Radius.circular(2),
+                    ),
+                    onTap: _onTabTap,
+                    tabs: [for (var kind in kinds) _buildTab(context, kind)],
+                  ),
+                  const Divider(height: 1),
+                ],
+              ),
+            ),
+          ],
+          body: Timeline.kind(
+            key: _timelineKey,
+            kind: _kind,
+            maxWidth: 800,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void refresh() => _timelineKey.currentState!.refresh();
+
+  Widget _buildTab(BuildContext context, TimelineKind kind) {
+    final l10n = context.getL10n();
+
+    final Widget label;
+    final Widget icon;
+
+    switch (kind) {
+      case TimelineKind.home:
+        icon = const Icon(Icons.home_rounded);
+        label = Text(l10n.timelineHome);
+        break;
+      case TimelineKind.local:
+        icon = const Icon(Icons.people_rounded);
+        label = Text(l10n.timelineLocal);
+        break;
+      case TimelineKind.federated:
+        icon = const Icon(Icons.public_rounded);
+        label = Text(l10n.timelineFederated);
+        break;
+      case TimelineKind.directMessages:
+        icon = const Icon(Icons.mail_rounded);
+        label = Text(l10n.timelineDirectMessages);
+        break;
+      case TimelineKind.bookmarks:
+        icon = const Icon(Icons.bookmark_rounded);
+        label = Text(l10n.timelineBookmarks);
+        break;
+
+      case TimelineKind.bubble:
+        icon = const Icon(Icons.workspaces_rounded);
+        label = Text(l10n.timelineBubble);
+        break;
+    }
+
+    return Tab(
+      icon: Row(
+        children: [
+          icon,
+          const SizedBox(width: 8),
+          label,
+        ],
+      ),
+    );
+  }
+
+  void _onTabTap(int value) {
+    final kind = kinds[value];
+    setState(() {
+      _kind = kind;
+      refresh();
+    });
+  }
+}

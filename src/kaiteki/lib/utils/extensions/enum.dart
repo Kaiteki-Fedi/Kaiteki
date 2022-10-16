@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Visibility;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:mdi/mdi.dart';
@@ -20,16 +21,29 @@ extension VisibilityExtensions on Visibility {
     }
   }
 
-  String toDisplayString() {
+  String toDisplayString(AppLocalizations l10n) {
     switch (this) {
       case Visibility.direct:
-        return 'Direct';
+        return l10n.visibilityDirect;
       case Visibility.followersOnly:
-        return 'Followers only';
+        return l10n.visibilityFollowersOnly;
       case Visibility.unlisted:
-        return 'Unlisted';
+        return l10n.visibilityUnlisted;
       case Visibility.public:
-        return 'Public';
+        return l10n.visibilityPublic;
+    }
+  }
+
+  String toDescription(AppLocalizations l10n) {
+    switch (this) {
+      case Visibility.direct:
+        return l10n.visibilityDirectDescription;
+      case Visibility.followersOnly:
+        return l10n.visibilityFollowersOnlyDescription;
+      case Visibility.unlisted:
+        return l10n.visibilityUnlistedDescription;
+      case Visibility.public:
+        return l10n.visibilityPublicDescription;
     }
   }
 }
@@ -50,10 +64,10 @@ extension FormattingExtensions on Formatting {
     }
   }
 
-  String toDisplayString() {
+  String toDisplayString(AppLocalizations l10n) {
     switch (this) {
       case Formatting.plainText:
-        return "Plain text";
+        return l10n.formattingPlain;
       case Formatting.markdown:
         return "Markdown";
       case Formatting.html:
@@ -61,7 +75,7 @@ extension FormattingExtensions on Formatting {
       case Formatting.bbCode:
         return "BBCode";
       case Formatting.misskeyMarkdown:
-        return "Misskey-flavored Markdown (MFM)";
+        return l10n.formattingMfm;
     }
   }
 }

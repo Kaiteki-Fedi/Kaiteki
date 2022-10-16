@@ -1,10 +1,14 @@
 import 'package:fediverse_objects/pleroma.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
+import 'package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/responses/emoji_packs_response.dart';
+import 'package:kaiteki/http/response.dart';
 import 'package:kaiteki/model/http_method.dart';
 
 class PleromaClient extends MastodonClient {
+  PleromaClient(super.instance);
+
   @override
   ApiType get type => ApiType.pleroma;
 
@@ -61,5 +65,17 @@ class PleromaClient extends MastodonClient {
       "/api/pleroma/frontend_configurations",
       FrontendConfiguration.fromJson,
     );
+  }
+
+  @override
+  Future<void> checkResponse(Response response) async {
+    if (response.statusCode == 403) {
+      final json = await response.getContentJson();
+      if (json["error"] == "mfa_required") {
+        throw MfaRequiredException(json["mfa_token"]);
+      }
+    }
+
+    super.checkResponse(response);
   }
 }

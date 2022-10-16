@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
-class UserCard extends StatelessWidget {
+class UserCard extends ConsumerWidget {
   final User user;
 
   const UserCard({super.key, required this.user});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const size = 48.0;
     const padding = 12.0;
     final textShadow = Shadow(
@@ -52,7 +53,7 @@ class UserCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text.rich(
-                              user.renderDisplayName(context),
+                              user.renderDisplayName(context, ref),
                               overflow: TextOverflow.fade,
                               softWrap: false,
                               style: TextStyle(
@@ -86,7 +87,7 @@ class UserCard extends StatelessWidget {
               children: [
                 if (description != null)
                   Text.rich(
-                    user.renderText(context, description.trim()),
+                    user.renderText(context, ref, description.trim()),
                     maxLines: 5,
                     overflow: TextOverflow.ellipsis,
                   ),

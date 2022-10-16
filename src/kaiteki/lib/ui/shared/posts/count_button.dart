@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/utils/utils.dart';
 
 class CountButton extends StatelessWidget {
   final bool active;
   final bool disabled;
-  final bool buttonOnly;
 
   final int? count;
   final Color? activeColor;
@@ -14,10 +12,11 @@ class CountButton extends StatelessWidget {
   final Widget? activeIcon;
 
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final FocusNode? focusNode;
 
   const CountButton({
-    Key? key,
+    super.key,
     this.active = false,
     this.count = 0,
     this.color,
@@ -26,50 +25,65 @@ class CountButton extends StatelessWidget {
     this.activeIcon,
     this.onTap,
     this.disabled = false,
-    this.buttonOnly = false,
     this.focusNode,
-  }) : super(key: key);
+    this.onLongPress,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final callback = active ? () {} : (disabled ? null : onTap);
-    final iconColor = _getIconColor(context);
+    final callback = active ? (onTap ?? () {}) : (disabled ? null : onTap);
+    final color = _getColor(context);
     final currentIcon = active ? (activeIcon ?? icon) : icon;
+    final count = this.count;
+    final hasNumber = count == null || count >= 1;
 
-    if (count == null || count! < 1) {
-      return IconButton(
-        icon: currentIcon,
-        color: iconColor,
-        onPressed: callback,
-        enableFeedback: !disabled,
-        focusNode: focusNode,
-        splashRadius: 18,
-      );
-    } else {
-      return TextButton.icon(
-        icon: currentIcon,
-        onPressed: callback,
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(iconColor),
+    return Row(
+      children: [
+        GestureDetector(
+          onLongPress: onLongPress,
+          child: IconButton(
+            icon: currentIcon,
+            color: color,
+            onPressed: callback,
+            enableFeedback: !disabled,
+            focusNode: focusNode,
+            splashRadius: 18,
+          ),
         ),
-        label: Text(count.toString()),
-        focusNode: focusNode,
-      );
-    }
+        if (hasNumber)
+          Text(
+            count.toString(),
+            style: TextStyle(color: color),
+          ),
+      ],
+    );
+
+    // if (hasNumber) {
+    //   return IconButton(
+    //     icon: currentIcon,
+    //     color: iconColor,
+    //     onPressed: callback,
+    //     enableFeedback: !disabled,
+    //     focusNode: focusNode,
+    //     splashRadius: 18,
+    //   );
+    // } else {
+    //   return TextButton.icon(
+    //     icon: currentIcon,
+    //     onPressed: callback,
+    //     style: ButtonStyle(
+    //       foregroundColor: MaterialStateProperty.all<Color>(iconColor),
+    //     ),
+    //     label: Text(count.toString()),
+    //     focusNode: focusNode,
+    //   );
+    // }
   }
 
-  Color _getIconColor(BuildContext context) {
-    var inactiveColor = color;
-    final theme = Theme.of(context);
-
-    inactiveColor ??= theme.disabledColor;
-
-    if (buttonOnly) {
-      return getLocalTextColor(context);
-    } else if (active) {
-      return activeColor ?? inactiveColor;
-    } else {
-      return inactiveColor;
-    }
+  Color _getColor(BuildContext context) {
+    if (disabled || onTap == null) return Theme.of(context).disabledColor;
+    final inactiveColor = color ?? Theme.of(context).colorScheme.onBackground;
+    if (active) return activeColor ?? inactiveColor;
+    return inactiveColor;
   }
 }

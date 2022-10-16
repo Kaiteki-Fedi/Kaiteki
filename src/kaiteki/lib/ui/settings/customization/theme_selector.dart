@@ -1,7 +1,7 @@
 // TODO(Craftplacer): Clean up and refactor these widgets to be more flexible
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/theming/default_app_themes.dart';
+import 'package:kaiteki/theming/default/themes.dart';
 import 'package:kaiteki/ui/settings/customization/theme_preview.dart';
 
 class ThemeSelector extends StatelessWidget {
@@ -9,10 +9,10 @@ class ThemeSelector extends StatelessWidget {
   final Function(ThemeMode mode) onSelected;
 
   const ThemeSelector({
-    Key? key,
+    super.key,
     required this.theme,
     required this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class ThemeSelector extends StatelessWidget {
           icon: const Icon(Icons.auto_fix_high_rounded),
         ),
         Theme(
-          data: lightThemeData,
+          data: getTheme(Brightness.light, Theme.of(context).useMaterial3),
           child: ThemePreview(
             name: _themeToString(context, ThemeMode.light),
             selected: theme == ThemeMode.light,
@@ -33,7 +33,7 @@ class ThemeSelector extends StatelessWidget {
           ),
         ),
         Theme(
-          data: darkThemeData,
+          data: getTheme(Brightness.dark, Theme.of(context).useMaterial3),
           child: ThemePreview(
             name: _themeToString(context, ThemeMode.dark),
             selected: theme == ThemeMode.dark,

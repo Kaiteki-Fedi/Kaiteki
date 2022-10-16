@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 
 class PreferencesSetupPage extends StatefulWidget {
-  const PreferencesSetupPage({Key? key}) : super(key: key);
+  const PreferencesSetupPage({super.key});
 
   @override
   State<PreferencesSetupPage> createState() => _PreferencesSetupPageState();

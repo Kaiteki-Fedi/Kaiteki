@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:kaiteki/utils/extensions.dart';
-
-bool compareCaseInsensitive(String a, String b) =>
-    a.toLowerCase() == b.toLowerCase();
-
-String sanitizeInstance(String instance) {
-  return instance.toLowerCase();
-}
+import 'package:http/http.dart' show Response;
+import 'package:tuple/tuple.dart';
 
 String withQueries(
   String baseUrl,
@@ -17,7 +10,12 @@ String withQueries(
 
   if (queryParameters.isEmpty) return baseUrl;
 
-  return '$baseUrl?${Uri(queryParameters: queryParameters).query}';
+  final query = Uri(
+    queryParameters: queryParameters.map((k, v) {
+      return MapEntry(k, v.toString());
+    }),
+  ).query;
+  return '$baseUrl?$query';
 }
 
 void checkResponse(Response response) {
@@ -27,34 +25,12 @@ void checkResponse(Response response) {
   );
 }
 
-Color parseRgb(String input) {
-  final startIndex = input.indexOf("(");
-  final endIndex = input.indexOf(")");
-  final values = input //
-      .substring(startIndex, endIndex)
-      .split(",")
-      .map(int.parse);
-
-  return Color.fromARGB(
-    255,
-    values.elementAt(0),
-    values.elementAt(1),
-    values.elementAt(2),
-  );
-}
-
 bool isLightBackground(Color background) {
   final bgDelta = (background.red * 0.299) +
       (background.green * 0.587) +
       (background.blue * 0.114);
 
   return 255 - bgDelta < 105;
-}
-
-Color getReadableForeground(Color background) {
-  return isLightBackground(background)
-      ? const Color(0xFF000000)
-      : const Color(0xFFFFFFFF);
 }
 
 double getLocalFontSize(BuildContext context) {
@@ -104,14 +80,16 @@ SnackBar generateAsyncSnackBar({
   );
 }
 
-TextStyle? getDefaultSnackBarTextStyle(BuildContext context) {
-  final theme = Theme.of(context);
-  final snackBarTheme = theme.snackBarTheme;
+List<Tuple2<Type, StackTrace>> collectStackTraces(dynamic error) {
+  final list = <Tuple2<Type, StackTrace>>[
+    if (error.stackTrace is StackTrace)
+      Tuple2(error.runtimeType, error.stackTrace),
+  ];
 
-  if (snackBarTheme.contentTextStyle == null) {
-    final themeData = ThemeData(brightness: theme.brightness.inverted);
-    return themeData.textTheme.subtitle1;
+  if (error.innerError != null) {
+    final children = collectStackTraces(error.innerError);
+    list.addAll(children);
   }
 
-  return snackBarTheme.contentTextStyle;
+  return list;
 }

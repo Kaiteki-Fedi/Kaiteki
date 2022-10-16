@@ -6,7 +6,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -37,12 +37,14 @@ class TextRenderer {
     BuildContext context,
     String text, {
     TextContext? textContext,
+    required Function(UserReference reference) onUserClick,
   }) {
     final renderedElements = renderChildren(
       context,
       parser.parse(text).parseWith(const SocialTextParser()),
       textContext ?? TextContext(),
-      context.getKaitekiTheme(),
+      Theme.of(context).ktkTextTheme,
+      onUserClick: onUserClick,
     );
     return TextSpan(children: renderedElements.toList(growable: false));
   }
@@ -51,36 +53,57 @@ class TextRenderer {
     BuildContext context,
     Element element,
     TextContext textContext,
-    KaitekiExtension? theme,
-  ) {
+    KaitekiTextTheme? theme, {
+    required Function(UserReference) onUserClick,
+  }) {
     final childrenSpans = renderChildren(
       context,
       element.children,
       textContext,
       theme,
+      onUserClick: onUserClick,
     );
 
     if (element is TextElement) {
       return renderText(context, element, childrenSpans);
-    } else if (element is LinkElement) {
+    }
+    if (element is LinkElement) {
       return renderLink(
         context,
         element,
         childrenSpans,
         style: theme?.linkTextStyle,
       );
-    } else if (element is HashtagElement) {
-      return renderHashtag(context, textContext, element);
-    } else if (element is MentionElement) {
-      return renderMention(textContext, element);
-    } else if (element is EmojiElement) {
+    }
+    if (element is HashtagElement) {
+      return renderHashtag(
+        context,
+        textContext,
+        element,
+        style: theme?.hashtagTextStyle,
+      );
+    }
+    if (element is MentionElement) {
+      return renderMention(
+        context,
+        textContext,
+        element,
+        onUserClick: onUserClick,
+        style: theme?.mentionTextStyle,
+      );
+    }
+    if (element is EmojiElement) {
       return renderEmoji(textContext, element, scale: theme?.emojiScale);
     }
 
-    if (element.children?.isNotEmpty == true) {
+    if (childrenSpans.isNotEmpty == true) {
       return TextSpan(children: childrenSpans);
     }
 
+    return renderFallbackSpan(element);
+  }
+
+  InlineSpan renderFallbackSpan(Element element) {
     return TextSpan(
       text: "[NIY ${element.runtimeType}]",
       style: const TextStyle(
@@ -94,13 +117,20 @@ class TextRenderer {
     BuildContext context,
     List<Element>? children,
     TextContext textContext,
-    KaitekiExtension? theme,
-  ) {
+    KaitekiTextTheme? theme, {
+    required Function(UserReference reference) onUserClick,
+  }) {
     final spans = <InlineSpan>[];
 
     if (children != null) {
       for (final child in children) {
-        final element = _renderElement(context, child, textContext, theme);
+        final element = _renderElement(
+          context,
+          child,
+          textContext,
+          theme,
+          onUserClick: onUserClick,
+        );
 
         if (element != null) {
           spans.add(element);
@@ -137,7 +167,13 @@ class TextRenderer {
     return span;
   }
 
-  WidgetSpan? renderMention(TextContext textContext, MentionElement element) {
+  InlineSpan? renderMention(
+    BuildContext buildContext,
+    TextContext textContext,
+    MentionElement element, {
+    required Function(UserReference reference) onUserClick,
+    TextStyle? style,
+  }) {
     final i = textContext.users?.indexWhere(element.reference.matches) ?? -1;
     final reference = i == -1 ? element.reference : textContext.users![i];
 
@@ -147,20 +183,35 @@ class TextRenderer {
       return null;
     }
 
-    return WidgetSpan(
-      child: UserChip(reference: reference),
-      baseline: TextBaseline.alphabetic,
-      alignment: PlaceholderAlignment.middle,
-    );
+    const useUserChip = false;
+
+    // ignore: dead_code
+    if (useUserChip) {
+      return WidgetSpan(
+        child: UserChip(reference: reference),
+        baseline: TextBaseline.alphabetic,
+        alignment: PlaceholderAlignment.middle,
+      );
+    } else {
+      return TextSpan(
+        recognizer: TapGestureRecognizer()
+          ..onTap = () => onUserClick(reference),
+        text: reference.toString(),
+        style: style,
+      );
+    }
   }
 
   TextSpan renderHashtag(
     BuildContext context,
     TextContext textContext,
-    HashtagElement element,
-  ) {
-    final color = DefaultTextStyle.of(context).style.color!.withOpacity(.35);
+    HashtagElement element, {
+    TextStyle? style,
+  }) {
+    final inheritedTextStyle = style ?? DefaultTextStyle.of(context).style;
+    final color = inheritedTextStyle.color!.withOpacity(.35);
     return TextSpan(
+      style: style,
       children: [
         TextSpan(text: '#', style: TextStyle(color: color)),
         TextSpan(text: element.name),
@@ -174,7 +225,7 @@ class TextRenderer {
     List<InlineSpan> children, {
     TextStyle? style,
   }) {
-    // FIXME: We should be passing down the "click-ability" to the children.
+    // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
 
     final recognizer = TapGestureRecognizer()
       ..onTap = () => context.launchUrl(link.destination.toString());
@@ -191,13 +242,16 @@ class TextRenderer {
     EmojiElement element, {
     double? scale,
   }) {
-    final emoji = textContext.emojis!.firstOrDefault((e) {
+    assert(
+      textContext.emojis != null,
+      "An emoji is about to be rendered, but no emojis were provided.",
+    );
+
+    final emoji = textContext.emojis?.firstOrDefault((e) {
       return e.name == element.name;
     });
 
-    if (emoji == null) {
-      return TextSpan(text: element.name);
-    }
+    if (emoji == null) return TextSpan(text: ":${element.name}:");
 
     // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
     return WidgetSpan(
@@ -239,10 +293,10 @@ class UserChip extends ConsumerWidget {
   final User? user;
 
   const UserChip({
-    Key? key,
+    super.key,
     required this.reference,
     this.user,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -258,7 +312,7 @@ class UserChip extends ConsumerWidget {
             message: user.handle,
             child: ActionChip(
               avatar: AvatarWidget(user, size: 24),
-              label: Text.rich(user.renderDisplayName(context)),
+              label: Text.rich(user.renderDisplayName(context, ref)),
               onPressed: () => context.showUser(user, ref),
             ),
           );

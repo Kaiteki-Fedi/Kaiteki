@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/settings/about/app_badge_kind.dart';
 import 'package:kaiteki/ui/shared/dfp.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({Key? key}) : super(key: key);
+  const AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +42,9 @@ class AboutScreen extends StatelessWidget {
                           Text(
                             consts.appName,
                             textScaleFactor: 2,
-                            style: GoogleFonts.quicksand(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: Theme.of(context)
+                                .ktkTextTheme
+                                ?.kaitekiTextStyle,
                           ),
                           if (badge != null)
                             Padding(
@@ -86,45 +86,7 @@ class AboutScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Card(
-                        child: Column(
-                          children: [
-                            ListTile(title: Text(l10n.creditsFriends)),
-                            ListTile(
-                              leading: const FlutterLogo(),
-                              title: const Text("Flutter"),
-                              onTap: () =>
-                                  context.launchUrl("https://flutter.dev"),
-                              trailing: const Icon(Icons.open_in_new_rounded),
-                            ),
-                            const Divider(),
-                            ListTile(
-                              leading: Image.asset(
-                                "assets/icons/pleroma.png",
-                                width: 24,
-                                height: 24,
-                              ),
-                              title: const Text("Pleroma"),
-                              subtitle: Text(l10n.creditsPleromaDescription),
-                              onTap: () =>
-                                  context.launchUrl("https://pleroma.social/"),
-                              trailing: const Icon(Icons.open_in_new_rounded),
-                            ),
-                            ListTile(
-                              leading: Image.asset(
-                                "assets/icons/husky.png",
-                                width: 24,
-                                height: 24,
-                              ),
-                              title: const Text("Husky"),
-                              subtitle: Text(l10n.creditsHuskyDescription),
-                              onTap: () =>
-                                  context.launchUrl("https://husky.adol.pw/"),
-                              trailing: const Icon(Icons.open_in_new_rounded),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const SizedBox(height: 12.0),
                       IconTheme(
                         data: IconThemeData(
                           color: Theme.of(context).disabledColor,

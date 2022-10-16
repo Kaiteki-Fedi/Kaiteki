@@ -13,10 +13,10 @@ class AttachmentInspectionScreen extends StatefulWidget {
   final int index;
 
   const AttachmentInspectionScreen({
-    Key? key,
+    super.key,
     required this.attachments,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   State<AttachmentInspectionScreen> createState() =>
@@ -74,45 +74,55 @@ class _AttachmentInspectionScreenState
             nextPage();
           }
         },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (!singleAttachment)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FloatingActionButton(
-                  backgroundColor: Colors.white,
-                  mini: true,
-                  onPressed: canNavigateBackwards ? previousPage : null,
-                  child: Opacity(
-                    opacity: canNavigateBackwards ? 1 : .25,
-                    child: const Icon(Icons.chevron_left_rounded),
-                  ),
-                ),
-              ),
-            Expanded(
-              child: PageView(
-                controller: controller,
-                children: [
-                  for (var attachment in widget.attachments)
-                    _getAttachmentWidget(attachment),
-                ],
-              ),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              backgroundColor: Theme.of(context).colorScheme.inverseSurface,
+              foregroundColor: Theme.of(context).colorScheme.onInverseSurface,
             ),
-            if (!singleAttachment)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FloatingActionButton(
-                  backgroundColor: Colors.white,
-                  mini: true,
-                  onPressed: canNavigateForwards ? nextPage : null,
-                  child: Opacity(
-                    opacity: canNavigateForwards ? 1 : .25,
-                    child: const Icon(Icons.chevron_right_rounded),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (!singleAttachment)
+                Align(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FloatingActionButton(
+                      mini: true,
+                      onPressed: canNavigateBackwards ? previousPage : null,
+                      child: Opacity(
+                        opacity: canNavigateBackwards ? 1 : .25,
+                        child: const Icon(Icons.chevron_left_rounded),
+                      ),
+                    ),
                   ),
                 ),
+              Expanded(
+                child: PageView(
+                  controller: controller,
+                  children: [
+                    for (var attachment in widget.attachments)
+                      _getAttachmentWidget(attachment),
+                  ],
+                ),
               ),
-          ],
+              if (!singleAttachment)
+                Align(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FloatingActionButton(
+                      mini: true,
+                      onPressed: canNavigateForwards ? nextPage : null,
+                      child: Opacity(
+                        opacity: canNavigateForwards ? 1 : .25,
+                        child: const Icon(Icons.chevron_right_rounded),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -3,14 +3,14 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/settings/customization/theme_selector.dart';
 
 class ThemeSetupPage extends ConsumerWidget {
-  const ThemeSetupPage({Key? key}) : super(key: key);
+  const ThemeSetupPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final prefs = ref.watch(preferenceProvider);
+    final prefs = ref.watch(themeProvider);
     return ThemeSelector(
-      theme: prefs.get().theme,
-      onSelected: (mode) => prefs.update((p) => p..theme = mode),
+      theme: prefs.mode,
+      onSelected: (mode) => prefs.mode = mode,
     );
   }
 }

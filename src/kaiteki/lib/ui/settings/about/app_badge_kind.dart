@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/app_colors.dart' show kaitekiPink;
+import 'package:kaiteki/theming/default/colors.dart' show kaitekiPink;
 import 'package:kaiteki/ui/settings/about/app_name_badge.dart';
 
 enum AppBadgeKind {

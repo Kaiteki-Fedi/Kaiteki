@@ -7,8 +7,8 @@ import 'package:mdi/mdi.dart';
 class FallbackAttachmentWidget extends StatelessWidget {
   const FallbackAttachmentWidget({
     required this.attachment,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Attachment attachment;
 

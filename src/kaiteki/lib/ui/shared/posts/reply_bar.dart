@@ -3,16 +3,17 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class ReplyBar extends ConsumerWidget {
   const ReplyBar({
-    Key? key,
+    super.key,
     this.textStyle,
     required this.post,
-  }) : super(key: key);
+  });
 
   final TextStyle? textStyle;
   final Post post;
@@ -29,10 +30,10 @@ class ReplyBar extends ConsumerWidget {
         future: UserReference(_getUserId()).resolve(adapter),
         builder: (context, snapshot) {
           final span = snapshot.hasData
-              ? snapshot.data!.renderDisplayName(context)
+              ? snapshot.data!.renderDisplayName(context, ref)
               : TextSpan(
                   text: _getText(),
-                  style: context.getKaitekiTheme()!.linkTextStyle,
+                  style: Theme.of(context).ktkTextTheme!.linkTextStyle,
                 );
 
           return Text.rich(

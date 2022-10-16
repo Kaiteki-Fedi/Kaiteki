@@ -3,10 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/onboarding/onboarding_screen.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DebugScreen extends StatefulWidget {
-  const DebugScreen({Key? key}) : super(key: key);
+  const DebugScreen({super.key});
 
   @override
   State<DebugScreen> createState() => _DebugScreenState();
@@ -51,7 +52,10 @@ class _DebugScreenState extends State<DebugScreen> {
           ListTile(
             leading: const Icon(Icons.key_rounded),
             title: const Text("Run OAuth Server"),
-            onTap: () => runOAuthServer(launchUrl),
+            onTap: () async => runOAuthServer(
+              (u, _) => launchUrl(u),
+              await generateOAuthLandingPage(Theme.of(context).colorScheme),
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.waving_hand_rounded),
@@ -61,6 +65,17 @@ class _DebugScreenState extends State<DebugScreen> {
                 builder: (_) => const OnboardingScreen(),
               ),
             ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.feedback_rounded),
+            title: const Text("Open exception dialog"),
+            onTap: () async {
+              try {
+                throw Exception("Test exception");
+              } catch (e, s) {
+                await context.showExceptionDialog(e, s);
+              }
+            },
           ),
         ],
       ),

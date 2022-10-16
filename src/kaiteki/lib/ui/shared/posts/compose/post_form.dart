@@ -5,20 +5,21 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/constants.dart' show bottomSheetConstraints;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/ui/intents.dart';
-import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
+import 'package:kaiteki/ui/shared/async/async_snackbar_content.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/compose/attachment_tray.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/ui/shortcut_keys.dart';
+import 'package:kaiteki/ui/shortcuts/activators.dart';
+import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
@@ -27,14 +28,16 @@ const double splashRadius = 20.0;
 class PostForm extends ConsumerStatefulWidget {
   final Post? replyTo;
   final bool enableSubject;
+  final bool showPreview;
   final bool expands;
 
   const PostForm({
-    Key? key,
+    super.key,
     this.replyTo,
     this.enableSubject = true,
+    this.showPreview = false,
     this.expands = false,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<PostForm> createState() => PostFormState();
@@ -112,7 +115,7 @@ class PostFormState extends ConsumerState<PostForm> {
     final l10n = context.getL10n();
 
     return FocusableActionDetector(
-      shortcuts: {commitKeySet: SendIntent()},
+      shortcuts: const {commit: SendIntent()},
       actions: {
         SendIntent: CallbackAction(
           onInvoke: (_) => post(context, manager.adapter),
@@ -121,16 +124,13 @@ class PostFormState extends ConsumerState<PostForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (manager.adapter is PreviewSupport)
-            ExpansionTile(
-              title: Text(l10n.postPreviewTitle),
-              children: [
-                FutureBuilder(
-                  future: getPreviewFuture(manager),
-                  builder: buildPreview,
-                ),
-              ],
+          if (widget.showPreview && manager.adapter is PreviewSupport) ...[
+            FutureBuilder(
+              future: getPreviewFuture(manager),
+              builder: buildPreview,
             ),
+            const Divider(height: 15),
+          ],
           Flexible(
             flex: flex,
             child: Padding(
@@ -224,10 +224,7 @@ class PostFormState extends ConsumerState<PostForm> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: IconLandingWidget(
-                icon: const Icon(Mdi.close),
-                text: Text(snapshot.error.toString()),
-              ),
+              child: ErrorLandingWidget.fromAsyncSnapshot(snapshot),
             ),
           );
         } else {
@@ -265,8 +262,8 @@ class PostFormState extends ConsumerState<PostForm> {
     final contentKey = UniqueKey();
     final l10n = context.getL10n();
 
-    Navigator.of(context).pop();
-
+    late ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+        snackBarController;
     final snackBar = SnackBar(
       duration: const Duration(days: 1),
       content: FutureBuilder<Post>(
@@ -280,17 +277,21 @@ class PostFormState extends ConsumerState<PostForm> {
             case AsyncSnapshotState.errored:
               Future.delayed(
                 const Duration(seconds: 4),
-                messenger.hideCurrentSnackBar,
+                snackBarController.close,
               );
               return AsyncSnackBarContent(
                 key: contentKey,
                 done: true,
                 icon: const Icon(Mdi.close),
                 text: Text(l10n.postSubmissionFailed),
-                trailing: TextButton(
-                  child: Text(l10n.whyButtonLabel),
-                  onPressed: () {},
-                ),
+                // FIXME(Craftplacer): Theme inheritance is broken here
+                // trailing: TextButton(
+                //   child: Text(l10n.whyButtonLabel),
+                //   onPressed: () => context.showExceptionDialog(
+                //     snapshot.error,
+                //     snapshot.stackTrace,
+                //   ),
+                // ),
               );
 
             case AsyncSnapshotState.loading:
@@ -304,7 +305,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
           Future.delayed(
             const Duration(seconds: 4),
-            messenger.hideCurrentSnackBar,
+            snackBarController.close,
           );
 
           return AsyncSnackBarContent(
@@ -313,37 +314,32 @@ class PostFormState extends ConsumerState<PostForm> {
             icon: const Icon(Mdi.check),
             text: Text(l10n.postSubmissionSent),
             trailing: Consumer(
-              builder: (context, ref, child) {
-                return TextButton(
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.secondary,
-                    ),
-                    visualDensity: VisualDensity.comfortable,
-                  ),
-                  onPressed: () {
-                    final post = snapshot.data!;
-                    context.push(
-                      "/${ref.getCurrentAccountHandle()}/posts/${post.id}",
-                      extra: post,
-                    );
-                    messenger.hideCurrentSnackBar();
-                  },
-                  child: Text(l10n.viewPostButtonLabel),
-                );
-              },
+              builder: (context, ref, child) => TextButton(
+                onPressed: () {
+                  final post = snapshot.data!;
+                  context.push(
+                    "/${ref.getCurrentAccountHandle()}/posts/${post.id}",
+                    extra: post,
+                  );
+                  messenger.hideCurrentSnackBar();
+                },
+                child: Text(l10n.viewPostButtonLabel),
+              ),
             ),
           );
         },
       ),
     );
 
-    messenger.showSnackBar(snackBar);
+    snackBarController = messenger.showSnackBar(snackBar);
+
+    Navigator.of(context).pop();
   }
 
   void openEmojiPicker(BuildContext context, AccountManager container) {
     showModalBottomSheet(
       context: context,
+      constraints: bottomSheetConstraints,
       builder: (context) {
         return SizedBox(
           height: 250,
@@ -385,6 +381,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
   void openAttachDrawer() {
     showModalBottomSheet(
+      constraints: bottomSheetConstraints,
       context: context,
       builder: (context) {
         return LayoutBuilder(
@@ -472,7 +469,8 @@ class PostFormState extends ConsumerState<PostForm> {
           values: Visibility.values,
           splashRadius: splashRadius,
           iconBuilder: (_, value) => Icon(value.toIconData()),
-          textBuilder: (_, value) => Text(value.toDisplayString()),
+          textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
+          subtitleBuilder: (_, value) => Text(value.toDescription(l10n)),
         ),
       if (formattingList.length >= 2)
         EnumIconButton<Formatting>(
@@ -482,7 +480,7 @@ class PostFormState extends ConsumerState<PostForm> {
           values: formattingList,
           splashRadius: splashRadius,
           iconBuilder: (_, value) => Icon(value.toIconData()),
-          textBuilder: (_, value) => Text(value.toDisplayString()),
+          textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
         ),
     ];
   }

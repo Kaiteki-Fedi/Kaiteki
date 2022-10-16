@@ -2,17 +2,20 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 /// A vertical list describing the provided user.
 class UserInfoWidget extends ConsumerWidget {
   const UserInfoWidget({
-    Key? key,
+    super.key,
     required this.user,
-  }) : super(key: key);
+  });
 
   final User user;
 
@@ -28,7 +31,7 @@ class UserInfoWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text.rich(
-          user.renderDisplayName(context),
+          user.renderDisplayName(context, ref),
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(height: 8),
@@ -38,12 +41,9 @@ class UserInfoWidget extends ConsumerWidget {
         ),
         if (user.description != null) const SizedBox(height: 12.0),
         if (user.description != null)
-          Text.rich(user.renderDescription(context)),
+          Text.rich(user.renderDescription(context, ref)),
         const SizedBox(height: 12.0),
-        if (fields != null)
-          false
-              ? _buildUserFieldsTable(context, fields)
-              : _buildUserFieldsColumn(context, fields),
+        if (fields != null) _buildUserFieldsColumn(context, fields),
         if (location != null && location.isNotEmpty)
           _UserInfoRow(
             leading: const Icon(Icons.place_rounded),
@@ -55,7 +55,7 @@ class UserInfoWidget extends ConsumerWidget {
             body: Text.rich(
               TextSpan(
                 text: website,
-                style: context.getKaitekiTheme()!.linkTextStyle,
+                style: Theme.of(context).ktkTextTheme!.linkTextStyle,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => launchUrlString(website),
               ),
@@ -79,39 +79,39 @@ class UserInfoWidget extends ConsumerWidget {
     );
   }
 
-  Table _buildUserFieldsTable(
-    BuildContext context,
-    Map<String, String> fields,
-  ) {
-    final textStyle = TextStyle(color: Theme.of(context).disabledColor);
-    return Table(
-      columnWidths: const {
-        0: IntrinsicColumnWidth(),
-        1: FlexColumnWidth(),
-      },
-      children: [
-        for (final field in fields.entries)
-          TableRow(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
-                child: Text.rich(
-                  user.renderText(context, field.key),
-                  style: textStyle,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text.rich(
-                  user.renderText(context, field.value),
-                  style: textStyle,
-                ),
-              ),
-            ],
-          ),
-      ],
-    );
-  }
+  // Table _buildUserFieldsTable(
+  //   BuildContext context,
+  //   Map<String, String> fields,
+  // ) {
+  //   final textStyle = TextStyle(color: Theme.of(context).disabledColor);
+  //   return Table(
+  //     columnWidths: const {
+  //       0: IntrinsicColumnWidth(),
+  //       1: FlexColumnWidth(),
+  //     },
+  //     children: [
+  //       for (final field in fields.entries)
+  //         TableRow(
+  //           children: [
+  //             Padding(
+  //               padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+  //               child: Text.rich(
+  //                 user.renderText(context, field.key),
+  //                 style: textStyle,
+  //               ),
+  //             ),
+  //             Padding(
+  //               padding: const EdgeInsets.only(bottom: 8.0),
+  //               child: Text.rich(
+  //                 user.renderText(context, field.value),
+  //                 style: textStyle,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildUserFieldsColumn(
     BuildContext context,
@@ -122,20 +122,24 @@ class UserInfoWidget extends ConsumerWidget {
         for (final field in fields.entries)
           Padding(
             padding: const EdgeInsets.only(bottom: 12.0),
-            child: _UserInfoFieldRow(field),
+            child: _UserInfoFieldRow(
+              field,
+              emojis: user.emojis?.toList(growable: false) ?? [],
+            ),
           ),
       ],
     );
   }
 }
 
-class _UserInfoFieldRow extends StatelessWidget {
+class _UserInfoFieldRow extends ConsumerWidget {
   final MapEntry<String, String> field;
+  final List<Emoji> emojis;
 
-  const _UserInfoFieldRow(this.field);
+  const _UserInfoFieldRow(this.field, {this.emojis = const []});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -148,6 +152,12 @@ class _UserInfoFieldRow extends StatelessWidget {
           const TextRenderer().render(
             context,
             field.value,
+            textContext: TextContext(emojis: emojis),
+            onUserClick: (reference) => resolveAndOpenUser(
+              reference,
+              context,
+              ref,
+            ),
           ),
         ),
       ],
@@ -160,10 +170,9 @@ class _UserInfoRow extends StatelessWidget {
   final Widget body;
 
   const _UserInfoRow({
-    Key? key,
     required this.leading,
     required this.body,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

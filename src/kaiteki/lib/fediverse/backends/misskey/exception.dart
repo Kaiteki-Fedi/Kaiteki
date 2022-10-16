@@ -4,7 +4,7 @@ import 'package:kaiteki/exceptions/api_exception.dart';
 class MisskeyException extends ApiException {
   final Error error;
 
-  MisskeyException(int statusCode, this.error) : super(statusCode);
+  MisskeyException(super.statusCode, this.error);
 
   @override
   // FIXME(Craftplacer): Wrong fields have been generated for Error

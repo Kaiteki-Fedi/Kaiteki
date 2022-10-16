@@ -1,19 +1,18 @@
+import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/utils/extensions/string.dart';
 
 part 'account_secret.g.dart';
 
+@immutable
 @JsonSerializable()
+@HiveType(typeId: 1)
 class AccountSecret {
-  final String instance;
-
-  @JsonKey(name: "user")
-  final String username;
-
   @JsonKey(name: "token")
+  @HiveField(1)
   final String accessToken;
 
-  const AccountSecret(this.instance, this.username, this.accessToken);
+  const AccountSecret(this.accessToken);
 
   factory AccountSecret.fromJson(Map<String, dynamic> json) =>
       _$AccountSecretFromJson(json);
@@ -21,16 +20,10 @@ class AccountSecret {
   Map<String, dynamic> toJson() => _$AccountSecretToJson(this);
 
   @override
-  bool operator ==(other) {
-    if (other is AccountSecret) {
-      return other.instance.equalsIgnoreCase(instance) &&
-          other.username.equalsIgnoreCase(username);
-    } else {
-      return false;
-    }
+  bool operator ==(Object other) {
+    return other is AccountSecret && accessToken == other.accessToken;
   }
 
   @override
-  int get hashCode =>
-      instance.hashCode ^ username.hashCode ^ accessToken.hashCode;
+  int get hashCode => accessToken.hashCode;
 }

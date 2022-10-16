@@ -7,7 +7,10 @@ import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tuple/tuple.dart';
 
 export 'package:kaiteki/utils/extensions/build_context.dart';
 export 'package:kaiteki/utils/extensions/duration.dart';
@@ -82,15 +85,15 @@ extension AsyncSnapshotExtensions on AsyncSnapshot {
 enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
-  InlineSpan renderDisplayName(BuildContext context) {
-    return renderText(context, displayName);
+  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, displayName!);
   }
 
-  InlineSpan renderDescription(BuildContext context) {
-    return renderText(context, description!);
+  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, description!);
   }
 
-  InlineSpan renderText(BuildContext context, String text) {
+  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
     return const TextRenderer().render(
       context,
       text,
@@ -98,20 +101,19 @@ extension UserExtensions on User {
         users: [],
         emojis: emojis?.toList(growable: false),
       ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
   }
 
-  String get handle {
-    if (host == null) {
-      return '@$username';
-    } else {
-      return '@$username@$host';
-    }
-  }
+  String get handle => '@$username@$host';
 }
 
 extension PostExtensions on Post {
-  InlineSpan renderContent(BuildContext context, {bool hideReplyee = false}) {
+  InlineSpan renderContent(
+    BuildContext context,
+    WidgetRef ref, {
+    bool hideReplyee = false,
+  }) {
     return const TextRenderer().render(
       context,
       content!,
@@ -126,6 +128,7 @@ extension PostExtensions on Post {
             )
         ],
       ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
   }
 
@@ -169,8 +172,8 @@ extension UserReferenceExtensions on UserReference {
 
 extension WidgetRefExtensions on WidgetRef {
   String getCurrentAccountHandle() {
-    final account = read(accountProvider).currentAccount.accountSecret;
-    return "@${account.username}@${account.instance}";
+    final account = read(accountProvider).currentAccount;
+    return "@${account.key.username}@${account.key.host}";
   }
 }
 
@@ -203,5 +206,34 @@ extension QueryExtension on Map<String, String> {
       pairs.add("$key=$value");
     }
     return "?${pairs.join("&")}";
+  }
+}
+
+extension UriExtensions on Uri {
+  Tuple2<String, String> get fediverseHandle {
+    var username = pathSegments.last;
+    if (username[0] == '@') {
+      username = username.substring(1);
+    }
+    return Tuple2(host, username);
+  }
+}
+
+extension ListExtensions<T> on List<T> {
+  List<T> joinNonString(T separator) {
+    if (length <= 1) return this;
+
+    return List<T>.generate(
+      length * 2 - 1,
+      (i) => i % 2 == 0 ? this[i ~/ 2] : separator,
+    );
+  }
+}
+
+extension SharedPreferencesExtensions on SharedPreferences {
+  Future<bool> setTristateBool(key, value) async {
+    if (value != null) return setBool(key, value);
+    if (containsKey(key)) return remove(key);
+    return true;
   }
 }

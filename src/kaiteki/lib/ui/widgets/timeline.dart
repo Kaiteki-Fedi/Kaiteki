@@ -3,62 +3,138 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/timeline_type.dart';
-import 'package:kaiteki/model/post_filters/post_filter.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
+import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
+import 'package:tuple/tuple.dart';
 
 class Timeline extends ConsumerStatefulWidget {
-  final List<PostFilter>? filters;
   final double? maxWidth;
   final bool wide;
+  final TimelineKind? kind;
+  final String? userId;
 
-  const Timeline({
-    Key? key,
-    this.filters,
+  const Timeline.kind({
+    super.key,
     this.maxWidth,
     this.wide = false,
-  }) : super(key: key);
+    this.kind = TimelineKind.home,
+  }) : userId = null;
+
+  const Timeline.user({
+    super.key,
+    this.maxWidth,
+    this.wide = false,
+    required String this.userId,
+  }) : kind = null;
 
   @override
   TimelineState createState() => TimelineState();
 }
 
 class TimelineState extends ConsumerState<Timeline> {
-  final PagingController<String?, Post> _pagingController = PagingController(
+  final PagingController<String?, Post> _controller = PagingController(
     firstPageKey: null,
   );
 
   @override
   void initState() {
-    _pagingController.addPageRequestListener((id) async {
-      final adapter = ref.watch(accountProvider).adapter;
-      final posts = await adapter.getTimeline(TimelineType.home, untilId: id);
+    _controller.addPageRequestListener((id) async {
+      try {
+        final adapter = ref.watch(accountProvider).adapter;
+        final Iterable<Post> posts;
+        final query = TimelineQuery(untilId: id);
 
-      _pagingController.appendPage(posts.toList(), posts.last.id);
+        if (widget.kind != null) {
+          posts = await adapter.getTimeline(widget.kind!, query: query);
+        } else if (widget.userId != null) {
+          posts = await adapter.getStatusesOfUserById(
+            widget.userId!,
+            query: query,
+          );
+        } else {
+          throw StateError("Cannot fetch timeline with no post source set.");
+        }
+
+        if (mounted) {
+          if (posts.isEmpty) {
+            _controller.appendLastPage(posts.toList());
+          } else {
+            _controller.appendPage(posts.toList(), posts.last.id);
+          }
+        }
+      } catch (e, s) {
+        if (mounted) _controller.error = Tuple2(e, s);
+      }
     });
 
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant Timeline oldWidget) {
+    if (widget.kind != oldWidget.kind) {
+      _controller.refresh();
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void refresh() => _controller.refresh();
+
+  @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return PagedListView<String?, Post>.separated(
-          padding: EdgeInsets.symmetric(
-            horizontal: getPadding(constraints.maxWidth),
-          ),
-          pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<Post>(
-            itemBuilder: _buildPost,
-          ),
-          separatorBuilder: _buildSeparator,
-        );
-      },
+    ref.listen(accountProvider, (_, __) => _controller.refresh());
+
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(_controller.refresh),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return PagedListView<String?, Post>.separated(
+            pagingController: _controller,
+            padding: EdgeInsets.symmetric(
+              horizontal: _getPadding(constraints.maxWidth),
+            ),
+            builderDelegate: PagedChildBuilderDelegate<Post>(
+              itemBuilder: _buildPost,
+              animateTransitions: true,
+              firstPageErrorIndicatorBuilder: (context) {
+                final t = _controller.error as Tuple2<dynamic, StackTrace>;
+                return Center(
+                  child: ErrorLandingWidget(
+                    error: t.item1,
+                    stackTrace: t.item2,
+                  ),
+                );
+              },
+              noMoreItemsIndicatorBuilder: (context) {
+                final l10n = context.getL10n();
+                return Align(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Text(
+                      l10n.noMorePosts,
+                      style: TextStyle(color: Theme.of(context).disabledColor),
+                    ),
+                  ),
+                );
+              },
+            ),
+            separatorBuilder: _buildSeparator,
+          );
+        },
+      ),
     );
   }
 
-  double getPadding(double width) {
+  double _getPadding(double width) {
     final maxWidth = widget.maxWidth;
     if (maxWidth == null || width <= maxWidth) {
       return 0;
@@ -73,10 +149,9 @@ class TimelineState extends ConsumerState<Timeline> {
         return Material(
           child: InkWell(
             onTap: () {
-              final account =
-                  ref.read(accountProvider).currentAccount.accountSecret;
+              final account = ref.read(accountProvider).currentAccount;
               context.push(
-                "/@${account.username}@${account.instance}/posts/${item.id}",
+                "/@${account.key.username}@${account.key.host}/posts/${item.id}",
                 extra: item,
               );
             },

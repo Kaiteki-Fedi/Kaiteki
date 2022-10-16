@@ -6,16 +6,16 @@ class IconLandingWidget extends StatelessWidget {
   final double spacing;
 
   const IconLandingWidget({
-    Key? key,
+    super.key,
     this.spacing = 6.0,
     required this.icon,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = theme.dividerColor;
+    final color = theme.disabledColor;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

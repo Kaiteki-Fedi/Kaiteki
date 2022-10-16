@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
@@ -8,15 +7,19 @@ import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/timeline_type.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
 
 /// An adapter containing a backing Fediverse client that.
 abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// The original client/backend that is being adapted.
-  Client client;
+  final Client client;
+
+  String get instance => client.instance;
 
   AdapterCapabilities get capabilities;
 
@@ -25,15 +28,14 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// Retrieves the profile of the currently authenticated user.
   Future<User> getMyself();
 
-  /// Attempts to sign into an instance. Additionally, mfaCallback can be used
-  /// to request more data from the user, if required.
+  /// Attempts to sign into an instance. Additionally, callback methods
+  /// provided in the parameters can be used to request more data from
+  /// the user, if required.
   Future<LoginResult> login(
-    String instance,
-    String username,
-    String password,
+    ClientSecret? clientSecret,
+    CredentialsCallback requestCredentials,
     MfaCallback requestMfa,
     OAuthCallback requestOAuth,
-    AccountManager accounts,
   );
 
   /// Retrieves an user of another instance
@@ -49,12 +51,14 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<Iterable<Post>> getThread(Post reply);
 
   Future<Iterable<Post>> getTimeline(
-    TimelineType type, {
-    String? sinceId,
-    String? untilId,
+    TimelineKind type, {
+    TimelineQuery<String>? query,
   });
 
-  Future<Iterable<Post>> getStatusesOfUserById(String id);
+  Future<Iterable<Post>> getStatusesOfUserById(
+    String id, {
+    TimelineQuery<String>? query,
+  });
 
   Future<Instance> getInstance();
 
@@ -63,11 +67,15 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// Retrieves a post.
   Future<Post> getPostById(String id);
 
-  /// Favorites a post.
+  /// Repeats a post.
   ///
-  /// This method *may* return a [Post] with updated information depending on
-  /// the adapter implementation.
-  Future<Post?> favoritePost(String id);
+  /// This method *may* return a [Post] containing the repeated post.
+  Future<Post?> repeatPost(String id);
+
+  /// Unrepeats a post.
+  ///
+  /// This method *may* return the [Post] that was unrepeated.
+  Future<Post?> unrepeatPost(String id);
 
   /// Follows an user.
   ///
@@ -76,4 +84,6 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<User?> followUser(String id);
 
   Future<Attachment> uploadAttachment(File file, String? description);
+
+  Future<List<User>> getRepeatees(String id);
 }

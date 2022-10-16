@@ -12,8 +12,8 @@ class ImageAttachmentWidget extends StatelessWidget {
     required this.attachment,
     required this.index,
     required this.post,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,13 @@ class ImageAttachmentWidget extends StatelessWidget {
             );
           },
           errorBuilder: (_, w, c) {
-            return const Center(child: Icon(Icons.hide_image_rounded));
+            return Center(
+              child: Icon(
+                Icons.hide_image_rounded,
+                size: 72,
+                color: Theme.of(context).disabledColor,
+              ),
+            );
           },
           //width: 100,
           fit: BoxFit.contain,
