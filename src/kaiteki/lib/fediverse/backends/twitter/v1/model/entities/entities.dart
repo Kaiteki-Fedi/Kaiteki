@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/entity.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/hashtag.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/media.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/url.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/user_mention.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/hashtag.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/media.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/url.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/user_mention.dart';
 
 part 'entities.g.dart';
 

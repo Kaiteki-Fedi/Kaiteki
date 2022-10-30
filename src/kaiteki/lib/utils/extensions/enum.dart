@@ -18,6 +18,9 @@ extension VisibilityExtensions on Visibility {
 
       case Visibility.public:
         return Icons.public_rounded;
+
+      case Visibility.circle:
+        return Icons.workspaces_rounded;
     }
   }
 
@@ -31,6 +34,8 @@ extension VisibilityExtensions on Visibility {
         return l10n.visibilityUnlisted;
       case Visibility.public:
         return l10n.visibilityPublic;
+      case Visibility.circle:
+        return l10n.visibilityCircle;
     }
   }
 
@@ -44,6 +49,8 @@ extension VisibilityExtensions on Visibility {
         return l10n.visibilityUnlistedDescription;
       case Visibility.public:
         return l10n.visibilityPublicDescription;
+      case Visibility.circle:
+        return l10n.visibilityCircleDescription;
     }
   }
 }

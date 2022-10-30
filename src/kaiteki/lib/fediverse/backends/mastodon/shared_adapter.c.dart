@@ -27,6 +27,7 @@ Post toPost(mastodon.Status source, String localHost) {
     replyToUser: getRepliedUser(source, localHost),
     id: source.id,
     externalUrl: source.url,
+    client: source.application?.name,
     reactions: source.pleroma?.emojiReactions?.map((r) {
           return toReaction(r, localHost);
         }) ??

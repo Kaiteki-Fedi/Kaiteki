@@ -13,9 +13,6 @@ enum TimelineKind {
   /// Timeline that lists all the direct messages that the user sent and received.
   directMessages,
 
-  /// Timeline that lists all the posts that the user has bookmarked.
-  bookmarks,
-
   /// Timeline that has public posts from instances that this instance identifies with.
   ///
   /// Learn more: https://meta.akkoma.dev/t/akkoma-stable-2022-08-the-power-of-friendship-wahaha/46#the-bubble-timeline-3

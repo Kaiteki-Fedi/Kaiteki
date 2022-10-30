@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/entity.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart';
 
 part 'media.g.dart';
 

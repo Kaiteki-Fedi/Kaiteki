@@ -11,7 +11,7 @@ class EnumIconButton<T> extends StatelessWidget {
   final double? splashRadius;
   final String tooltip;
   final T value;
-  final List<T>? values;
+  final Set<T>? values;
   final bool? dense;
   final bool isThreeLine;
 

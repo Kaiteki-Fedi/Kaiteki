@@ -1,8 +1,8 @@
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/auth/oauth_token.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/media_upload.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/tweet.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/user.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/auth/oauth_token.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/media_upload.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/tweet.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/user.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
@@ -11,19 +11,21 @@ import 'package:kaiteki/model/http_method.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 
-class TwitterClient extends FediverseClientBase {
+class OldTwitterClient extends FediverseClientBase {
+  OldTwitterClient(super.instance);
+
   @override
   String get baseUrl => "https://api.twitter.com";
 
   @override
   Future<void> setAccountAuthentication(AccountSecret secret) async {
-    // TODO: implement setAccountAuthentication
+    // TODO(Craftplacer): implement setAccountAuthentication
     // throw UnimplementedError();
   }
 
   @override
   Future<void> setClientAuthentication(ClientSecret secret) async {
-    // TODO: implement setClientAuthentication
+    // TODO(Craftplacer): implement setClientAuthentication
     // throw UnimplementedError();
     // authenticationData = TwitterAuthenticationData();
   }

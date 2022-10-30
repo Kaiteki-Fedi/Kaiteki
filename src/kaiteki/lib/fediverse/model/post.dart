@@ -1,13 +1,17 @@
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
+import 'package:kaiteki/fediverse/model/embed.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/preview_card.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 
+part 'post.g.dart';
+
 /// A class representing a post.
+@CopyWith()
 class Post<T> {
   /// The original object.
   final T? source;
@@ -48,6 +52,11 @@ class Post<T> {
   final Iterable<Attachment>? attachments;
   final Iterable<Emoji>? emojis;
 
+  final List<Embed> embeds;
+
+  /// The client used to make this post.
+  final String? client;
+
   // REPLYING
   final String? replyToPostId;
   final String? replyToUserId;
@@ -56,7 +65,6 @@ class Post<T> {
 
   final Post? repeatOf;
   final Post? quotedPost;
-  final PreviewCard? previewCard;
 
   final List<UserReference>? mentionedUsers;
 
@@ -67,32 +75,32 @@ class Post<T> {
     required this.postedAt,
     required this.author,
     required this.id,
-    Iterable<Reaction>? reactions,
-    this.visibility,
-    this.content,
-    this.subject,
-    this.nsfw = false,
-    this.formatting = Formatting.plainText,
-    this.liked = false,
-    this.repeated = false,
-    this.pinned = false,
+    this.reactions = const [],
+    this.mentionedUsers = const [],
     this.attachments,
-    this.emojis,
-    this.repeatOf,
-    this.replyTo,
-    this.previewCard,
-    this.likeCount = 0,
-    this.repeatCount = 0,
-    this.replyCount = 0,
-    this.replyToUserId,
-    this.replyToPostId,
-    this.externalUrl,
-    this.replyToUser,
-    this.quotedPost,
-    List<UserReference>? mentionedUsers,
     this.bookmarked = false,
-  })  : reactions = reactions ?? [],
-        mentionedUsers = mentionedUsers ?? [];
+    this.content,
+    this.embeds = const [],
+    this.emojis,
+    this.externalUrl,
+    this.formatting = Formatting.plainText,
+    this.likeCount = 0,
+    this.liked = false,
+    this.nsfw = false,
+    this.pinned = false,
+    this.quotedPost,
+    this.repeatCount = 0,
+    this.repeated = false,
+    this.repeatOf,
+    this.replyCount = 0,
+    this.replyTo,
+    this.replyToPostId,
+    this.replyToUser,
+    this.replyToUserId,
+    this.subject,
+    this.visibility,
+    this.client,
+  });
 
   factory Post.example() {
     return Post(

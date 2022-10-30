@@ -110,7 +110,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           if (breakpoint.window == WindowSize.xsmall) {
             return Scaffold(
               key: _scaffoldKey,
-              backgroundColor: outsideColor,
               appBar: buildAppBar(outsideColor, context),
               body: _buildPage(),
               bottomNavigationBar: _getNavigationBar(),
@@ -204,13 +203,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Function()? get _refresh {
-    if (_currentTab == TabKind.timeline) {
-      return () => _timelineKey.currentState?.refresh;
-    }
-
-    return null;
-  }
+  VoidCallback? get _refresh => _currentTab == TabKind.timeline
+      ? _timelineKey.currentState?.refresh
+      : null;
 
   List<Widget> _buildAppBarActions(BuildContext context) {
     final l10n = context.getL10n();

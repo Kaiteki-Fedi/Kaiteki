@@ -1,6 +1,7 @@
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
@@ -28,9 +29,9 @@ class DesktopUserHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatarBorderRadius = BorderRadius.circular(8.0);
-    final foregroundColor = Theme.of(context).useMaterial3
-        ? Theme.of(context).colorScheme.onSurface
-        : Theme.of(context).colorScheme.onPrimary;
+    // final foregroundColor = Theme.of(context).useMaterial3
+    //     ? Theme.of(context).colorScheme.onSurface
+    //     : Theme.of(context).colorScheme.onPrimary;
 
     return BreakpointBuilder(
       builder: (context, breakpoint) {
@@ -57,10 +58,20 @@ class DesktopUserHeader extends StatelessWidget {
                             horizontal: columnPadding,
                           ),
                           child: TabBar(
+                            unselectedLabelColor:
+                                Theme.of(context).disabledColor,
+                            // isScrollable: true,
+                            indicatorSize: TabBarIndicatorSize.label,
+                            indicator: RoundedUnderlineTabIndicator(
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              radius: const Radius.circular(2),
+                            ),
+                            labelColor: Theme.of(context).colorScheme.onSurface,
                             controller: tabController,
                             tabs: tabs,
-                            indicatorColor: foregroundColor,
-                            labelColor: foregroundColor,
                           ),
                         ),
                       ),

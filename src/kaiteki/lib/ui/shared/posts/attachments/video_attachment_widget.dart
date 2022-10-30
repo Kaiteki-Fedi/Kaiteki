@@ -17,12 +17,14 @@ class VideoAttachmentWidget extends StatefulWidget {
 
 class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {
   late VideoPlayerController _videoController;
+  late Future<ChewieController> _chewieControllerFuture;
   ChewieController? _chewieController;
 
   @override
   void initState() {
     super.initState();
     _videoController = VideoPlayerController.network(widget.attachment.url);
+    _chewieControllerFuture = _prepareChewie();
   }
 
   @override
@@ -35,9 +37,13 @@ class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<ChewieController>(
-      future: _prepareChewie(),
+      future: _chewieControllerFuture,
       builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.active) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text("Couldn't load video"),
+          );
+        } else if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         } else {
           return Chewie(controller: snapshot.data!);
@@ -47,8 +53,6 @@ class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {
   }
 
   Future<ChewieController> _prepareChewie() async {
-    if (_chewieController != null) return _chewieController!;
-
     await _videoController.initialize();
 
     return _chewieController = ChewieController(

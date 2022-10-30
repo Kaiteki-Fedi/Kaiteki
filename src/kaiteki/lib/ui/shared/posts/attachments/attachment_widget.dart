@@ -59,7 +59,7 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
 
     return Stack(
       children: [
-        attachmentWidget,
+        Positioned.fill(child: attachmentWidget),
         if (widget.attachment.isSensitive)
           Positioned(
             top: 8,

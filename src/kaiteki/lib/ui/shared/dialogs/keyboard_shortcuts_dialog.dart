@@ -102,7 +102,7 @@ class KeyboardShortcutsDialog extends StatelessWidget {
               children: [
                 Text(l10n.closeButtonLabel),
                 const SizedBox(width: 12.0),
-                KeyboardKey.fromKey(LogicalKeyboardKey.escape),
+                KeyboardKey.fromKey(context, LogicalKeyboardKey.escape),
               ],
             ),
             onPressed: () => Navigator.of(context).pop(),
@@ -148,7 +148,7 @@ class KeyboardShortcut extends StatelessWidget {
           // HACK(Craftplacer): Janky code, looks pretty much inefficient, could be refactored to perform better.
           Row(
             children: shortcuts
-                .map(buildKeyCombination)
+                .map((s) => buildKeyCombination(context, s))
                 .toList()
                 .joinNonString([const Text(" / ")])
                 .expand((e) => e)
@@ -159,7 +159,10 @@ class KeyboardShortcut extends StatelessWidget {
     );
   }
 
-  List<Widget> buildKeyCombination(ShortcutActivator activator) {
+  List<Widget> buildKeyCombination(
+    BuildContext context,
+    ShortcutActivator activator,
+  ) {
     if (activator is CharacterActivator) {
       return [KeyboardKey.text(activator.character)];
     }
@@ -180,7 +183,7 @@ class KeyboardShortcut extends StatelessWidget {
     }
 
     return keys
-        .map<Widget>(KeyboardKey.fromKey)
+        .map<Widget>((k) => KeyboardKey.fromKey(context, k))
         .toList()
         .joinNonString(const Text(" + "));
   }
@@ -194,11 +197,23 @@ class KeyboardKey extends StatelessWidget {
 
   const KeyboardKey.text(this.text, {super.key}) : icon = null;
 
-  factory KeyboardKey.fromKey(LogicalKeyboardKey keyboardKey, {Key? key}) {
+  factory KeyboardKey.fromKey(
+    BuildContext context,
+    LogicalKeyboardKey keyboardKey, {
+    Key? key,
+  }) {
     if (keyboardKey == LogicalKeyboardKey.browserRefresh) {
       return KeyboardKey.icon(const Icon(Icons.refresh_rounded), key: key);
-    } else if (keyboardKey == LogicalKeyboardKey.control) {
-      return KeyboardKey.text("Ctrl", key: key);
+    }
+
+    final mL10n = MaterialLocalizations.of(context);
+    final localizationMappings = {
+      LogicalKeyboardKey.control: mL10n.keyboardKeyControl,
+      LogicalKeyboardKey.escape: mL10n.keyboardKeyEscape,
+    };
+    final keyLabel = localizationMappings[keyboardKey];
+    if (localizationMappings.containsKey(keyboardKey)) {
+      return KeyboardKey.text(keyLabel, key: key);
     }
 
     return KeyboardKey.text(keyboardKey.keyLabel);

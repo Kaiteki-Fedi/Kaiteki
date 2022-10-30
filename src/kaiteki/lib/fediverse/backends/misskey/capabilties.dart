@@ -1,6 +1,8 @@
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/visibility.dart';
 
 class MisskeyCapabilities extends AdapterCapabilities
     implements ReactionSupportCapabilities {
@@ -8,7 +10,14 @@ class MisskeyCapabilities extends AdapterCapabilities
   bool get supportsCustomEmojiReactions => true;
 
   @override
-  bool get supportsScopes => true;
+  Set<Visibility> get supportedScopes {
+    return const {
+      Visibility.public,
+      Visibility.followersOnly,
+      Visibility.unlisted,
+      Visibility.direct,
+    };
+  }
 
   @override
   bool get supportsUnicodeEmojiReactions => true;
@@ -16,10 +25,13 @@ class MisskeyCapabilities extends AdapterCapabilities
   const MisskeyCapabilities();
 
   @override
-  List<Formatting> get supportedFormattings {
-    return List.unmodifiable([Formatting.misskeyMarkdown]);
+  Set<Formatting> get supportedFormattings {
+    return const {Formatting.misskeyMarkdown};
   }
 
   @override
   bool get supportsSubjects => true;
+
+  @override
+  Set<TimelineKind> get supportedTimelines => const {TimelineKind.home};
 }

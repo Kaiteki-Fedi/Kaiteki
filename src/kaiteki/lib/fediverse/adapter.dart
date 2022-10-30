@@ -68,14 +68,10 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<Post> getPostById(String id);
 
   /// Repeats a post.
-  ///
-  /// This method *may* return a [Post] containing the repeated post.
-  Future<Post?> repeatPost(String id);
+  Future<void> repeatPost(String id);
 
   /// Unrepeats a post.
-  ///
-  /// This method *may* return the [Post] that was unrepeated.
-  Future<Post?> unrepeatPost(String id);
+  Future<void> unrepeatPost(String id);
 
   /// Follows an user.
   ///

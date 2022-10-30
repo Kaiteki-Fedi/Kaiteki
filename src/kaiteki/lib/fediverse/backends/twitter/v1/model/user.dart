@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/date_format.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/entities.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/date_format.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart';
 
 part 'user.g.dart';
 

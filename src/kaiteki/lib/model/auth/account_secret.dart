@@ -12,7 +12,15 @@ class AccountSecret {
   @HiveField(1)
   final String accessToken;
 
-  const AccountSecret(this.accessToken);
+  @JsonKey(name: "refreshToken")
+  @HiveField(2)
+  final String? refreshToken;
+
+  @JsonKey(name: "userId")
+  @HiveField(3)
+  final String? userId;
+
+  const AccountSecret(this.accessToken, [this.refreshToken, this.userId]);
 
   factory AccountSecret.fromJson(Map<String, dynamic> json) =>
       _$AccountSecretFromJson(json);
@@ -21,7 +29,10 @@ class AccountSecret {
 
   @override
   bool operator ==(Object other) {
-    return other is AccountSecret && accessToken == other.accessToken;
+    return other is AccountSecret &&
+        accessToken == other.accessToken &&
+        refreshToken == other.refreshToken &&
+        userId == other.userId;
   }
 
   @override

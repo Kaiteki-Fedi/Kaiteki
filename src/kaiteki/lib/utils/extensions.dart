@@ -237,3 +237,20 @@ extension SharedPreferencesExtensions on SharedPreferences {
     return true;
   }
 }
+
+extension NullableObjectExtensions on Object? {}
+
+extension FunctionExtensions<T> on T Function(Map<String, dynamic>) {
+  T Function(Object?) get generic {
+    return (obj) => this(obj as Map<String, dynamic>);
+  }
+
+  List<T>? Function(Object?) get genericList {
+    return (obj) {
+      if (obj == null) return null;
+      final list = obj as List<dynamic>;
+      final castedList = list.cast<Map<String, dynamic>>();
+      return castedList.map(this).toList();
+    };
+  }
+}

@@ -1,14 +1,16 @@
-import 'package:kaiteki/fediverse/model/formatting.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 
 abstract class AdapterCapabilities {
-  /// Specifies whether the adapter supports post scopes (i.e. visibilities).
-  bool get supportsScopes;
+  /// Specifies what the adapter supports post scopes (i.e. visibilities).
+  Set<Visibility> get supportedScopes;
 
   /// Specifies whether the adapter supports submitting posts with subjects
   /// (canonically known as content warnings).
   bool get supportsSubjects;
 
-  List<Formatting> get supportedFormattings;
+  Set<Formatting> get supportedFormattings;
+
+  Set<TimelineKind> get supportedTimelines;
 
   const AdapterCapabilities();
 }

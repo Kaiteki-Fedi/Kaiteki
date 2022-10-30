@@ -60,7 +60,7 @@ User toUser(twitter.User user) {
   final url = user.url;
   return User(
     displayName: user.name,
-    host: null,
+    host: "twitter.com",
     id: user.idStr,
     source: user,
     username: user.screenName,

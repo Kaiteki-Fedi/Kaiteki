@@ -446,6 +446,7 @@ class PostFormState extends ConsumerState<PostForm> {
     final l10n = context.getL10n();
     final manager = ref.watch(accountProvider);
     final formattingList = manager.adapter.capabilities.supportedFormattings;
+    final supportedScopes = manager.adapter.capabilities.supportedScopes;
     return [
       IconButton(
         onPressed: openAttachDrawer,
@@ -461,12 +462,12 @@ class PostFormState extends ConsumerState<PostForm> {
           tooltip: l10n.emojiButtonTooltip,
         ),
       const SizedBox(height: 24, child: VerticalDivider()),
-      if (manager.adapter.capabilities.supportsScopes)
+      if (supportedScopes.length >= 2)
         EnumIconButton<Visibility>(
           tooltip: l10n.visibilityButtonTooltip,
           onChanged: (value) => setState(() => _visibility = value),
           value: _visibility,
-          values: Visibility.values,
+          values: supportedScopes,
           splashRadius: splashRadius,
           iconBuilder: (_, value) => Icon(value.toIconData()),
           textBuilder: (_, value) => Text(value.toDisplayString(l10n)),

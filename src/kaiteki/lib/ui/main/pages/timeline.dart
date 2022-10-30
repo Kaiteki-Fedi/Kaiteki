@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/widgets/timeline.dart';
@@ -14,24 +15,33 @@ class TimelinePage extends ConsumerStatefulWidget {
 
 class TimelinePageState extends ConsumerState<TimelinePage> {
   final _timelineKey = GlobalKey<TimelineState>();
-  late TimelineKind _kind;
+  TimelineKind? _kind;
 
-  List<TimelineKind> get kinds {
-    return [
+  Set<TimelineKind> get _defaultKinds {
+    return const {
       TimelineKind.home,
       TimelineKind.local,
       TimelineKind.federated,
-    ];
+    };
   }
 
   @override
   void initState() {
     super.initState();
-    _kind = kinds[0];
   }
 
   @override
   Widget build(BuildContext context) {
+    final supported =
+        ref.watch(adapterProvider).capabilities.supportedTimelines;
+    final kinds = _defaultKinds.where(supported.contains).toSet();
+
+    ref.listen(adapterProvider, (previous, FediverseAdapter next) {
+      if (!next.capabilities.supportedTimelines.contains(_kind)) {
+        _kind = next.capabilities.supportedTimelines.first;
+      }
+    });
+
     return DefaultTabController(
       length: kinds.length,
       child: Material(
@@ -39,33 +49,36 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
           floatHeaderSlivers: true,
           dragStartBehavior: DragStartBehavior.down,
           headerSliverBuilder: (context, _) => [
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  TabBar(
-                    indicatorColor: Theme.of(context).colorScheme.primary,
-                    labelColor: Theme.of(context).colorScheme.primary,
-                    unselectedLabelColor: Theme.of(context).disabledColor,
-                    isScrollable: true,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicator: RoundedUnderlineTabIndicator(
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
+            if (kinds.length >= 2)
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    TabBar(
+                      indicatorColor: Theme.of(context).colorScheme.primary,
+                      labelColor: Theme.of(context).colorScheme.primary,
+                      unselectedLabelColor: Theme.of(context).disabledColor,
+                      isScrollable: true,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      indicator: RoundedUnderlineTabIndicator(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        radius: const Radius.circular(2),
                       ),
-                      radius: const Radius.circular(2),
+                      onTap: (i) => _onTabTap(i, kinds),
+                      tabs: [
+                        for (final kind in kinds) _buildTab(context, kind)
+                      ],
                     ),
-                    onTap: _onTabTap,
-                    tabs: [for (var kind in kinds) _buildTab(context, kind)],
-                  ),
-                  const Divider(height: 1),
-                ],
+                    const Divider(height: 1),
+                  ],
+                ),
               ),
-            ),
           ],
           body: Timeline.kind(
             key: _timelineKey,
-            kind: _kind,
+            kind: _kind ?? kinds.first,
             maxWidth: 800,
           ),
         ),
@@ -98,10 +111,6 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
         icon = const Icon(Icons.mail_rounded);
         label = Text(l10n.timelineDirectMessages);
         break;
-      case TimelineKind.bookmarks:
-        icon = const Icon(Icons.bookmark_rounded);
-        label = Text(l10n.timelineBookmarks);
-        break;
 
       case TimelineKind.bubble:
         icon = const Icon(Icons.workspaces_rounded);
@@ -120,8 +129,8 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
     );
   }
 
-  void _onTabTap(int value) {
-    final kind = kinds[value];
+  void _onTabTap(int value, Set<TimelineKind> kinds) {
+    final kind = kinds.elementAt(value);
     setState(() {
       _kind = kind;
       refresh();

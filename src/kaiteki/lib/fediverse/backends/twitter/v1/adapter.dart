@@ -1,21 +1,23 @@
-import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/capabilties.dart';
-import 'package:kaiteki/fediverse/backends/twitter/client.dart';
-import 'package:kaiteki/fediverse/backends/twitter/keys.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/entities.dart'
+import 'package:kaiteki/fediverse/backends/twitter/v1/capabilties.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/client.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/keys.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart'
     as twitter;
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/media.dart'
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/media.dart'
     as twitter;
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/media.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/entities/url.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/media_upload.dart';
-import 'package:kaiteki/fediverse/backends/twitter/model/tweet.dart' as twitter;
-import 'package:kaiteki/fediverse/backends/twitter/model/user.dart' as twitter;
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/media.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/url.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/media_upload.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/tweet.dart'
+    as twitter;
+import 'package:kaiteki/fediverse/backends/twitter/v1/model/user.dart'
+    as twitter;
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
+import 'package:kaiteki/model/account_key.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/authentication_data.dart';
@@ -23,26 +25,27 @@ import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:oauth1/oauth1.dart';
+import 'package:tuple/tuple.dart';
 
 part 'adapter.c.dart';
 
-class TwitterAdapter extends FediverseAdapter<TwitterClient> {
-  factory TwitterAdapter({TwitterClient? client}) {
-    return TwitterAdapter._(client ?? TwitterClient());
+class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
+  static const _twtInstance = Instance(name: "Twitter", source: null);
+
+  factory OldTwitterAdapter(String _) {
+    return OldTwitterAdapter.custom(OldTwitterClient(""));
   }
 
-  TwitterAdapter._(TwitterClient client) : super(client);
+  OldTwitterAdapter.custom(super.client);
 
   @override
-  Future<Post?> favoritePost(String id) {
+  Future<void> favoritePost(String id) {
     // TODO(Craftplacer): implement favoritePost, https://github.com/Kaiteki-Fedi/Kaiteki/issues/132
     throw UnimplementedError();
   }
 
   @override
-  Future<Instance> getInstance() async {
-    return Instance(name: "Twitter", source: null, iconUrl: "https://");
-  }
+  Future<Instance> getInstance() async => _twtInstance;
 
   @override
   Future<User> getMyself() async => toUser(await client.verifyCredentials());
@@ -53,7 +56,11 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(String id) async {
+  Future<Iterable<Post>> getStatusesOfUserById(
+    String id, {
+    TimelineQuery? query,
+  }) async {
+    // TODO(Craftplacer): support timeline query
     return (await client.getUserTimeline(userId: id)).map(toPost);
   }
 
@@ -65,15 +72,14 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
 
   @override
   Future<Iterable<Post>> getTimeline(
-    TimelineType type, {
-    String? sinceId,
-    String? untilId,
+    TimelineKind type, {
+    TimelineQuery? query,
   }) async {
     switch (type) {
-      case TimelineType.home:
+      case TimelineKind.home:
         final homeTimeine = await client.getHomeTimeline(
-          sinceId: sinceId,
-          maxId: untilId,
+          sinceId: query?.sinceId,
+          maxId: query?.untilId,
         );
         return homeTimeine.map(toPost);
       default:
@@ -93,12 +99,10 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
 
   @override
   Future<LoginResult> login(
-    String instance,
-    String username,
-    String password,
-    MfaCallback requestMfa,
-    OAuthCallback requestOAuth,
-    AccountManager accounts,
+    ClientSecret? clientSecret,
+    requestCredentials,
+    requestMfa,
+    requestOAuth,
   ) async {
     // client.authenticationData!.accessToken = token;
 
@@ -111,7 +115,6 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
       SignatureMethods.hmacSha1,
     );
     final clientCredentials = ClientCredentials(token, secret);
-    // create Authorization object with client credentials and platform definition
 
     final auth = Authorization(clientCredentials, platform);
 
@@ -123,10 +126,12 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
     // ignore: dead_code
     if (usePin) {
       tempResp = await auth.requestTemporaryCredentials("oob");
-      authResp = await auth.requestTokenCredentials(
-        tempResp.credentials,
-        await requestMfa() ?? "",
-      );
+      await requestMfa((code) async {
+        authResp = await auth.requestTokenCredentials(
+          tempResp.credentials,
+          code,
+        );
+      });
     } else {
       final response = await requestOAuth((oAuthUrl) async {
         tempResp = await auth.requestTemporaryCredentials(oAuthUrl.toString());
@@ -134,6 +139,9 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
           auth.getResourceOwnerAuthorizationURI(tempResp.credentials.token),
         );
       });
+
+      if (response == null) return const LoginResult.aborted();
+
       authResp = await auth.requestTokenCredentials(
         tempResp.credentials,
         response["oauth_verifier"]!,
@@ -150,27 +158,24 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
     try {
       account = await client.verifyCredentials();
       username ??= account.screenName;
-    } catch (e) {
-      return LoginResult.failed("Failed to verify credentials");
+    } catch (e, s) {
+      return LoginResult.failed(Tuple2(e, s));
     }
 
     // Create and set account secret
-    final accountSecret = AccountSecret("twitter.com", username, "");
-    final compound = AccountCompound(
-      container: accounts,
+    final ktkAccount = Account(
       adapter: this,
-      account: toUser(account),
-      clientSecret: ClientSecret(
+      user: toUser(account),
+      key: AccountKey(
+        ApiType.twitter,
         "twitter.com",
         username,
-        "",
-        apiType: ApiType.twitter,
       ),
-      accountSecret: accountSecret,
+      accountSecret: AccountSecret(""),
+      clientSecret: null,
     );
-    await accounts.addCurrentAccount(compound);
 
-    return LoginResult.successful();
+    return LoginResult.successful(ktkAccount);
   }
 
   @override
@@ -187,10 +192,7 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
 
   @override
   Future<Instance?> probeInstance() async {
-    if (client.instance == "twitter.com") {
-      return Instance(name: "Twitter", source: null);
-    }
-    return null;
+    return client.instance == "twitter.com" ? _twtInstance : null;
   }
 
   @override
@@ -205,10 +207,28 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient> {
 
   @override
   Future<User?> followUser(String id) {
-    // TODO: implement followUser
+    // TODO(Craftplacer): implement followUser
     throw UnimplementedError();
   }
 
   @override
   AdapterCapabilities get capabilities => const TwitterCapabilities();
+
+  @override
+  Future<List<User>> getRepeatees(String id) {
+    // TODO(Craftplacer): implement getRepeatees
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> repeatPost(String id) {
+    // TODO(Craftplacer): implement repeatPost
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> unrepeatPost(String id) {
+    // TODO(Craftplacer): implement unrepeatPost
+    throw UnimplementedError();
+  }
 }

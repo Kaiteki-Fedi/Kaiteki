@@ -1,17 +1,34 @@
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/visibility.dart';
 
 class MastodonCapabilities extends AdapterCapabilities {
   const MastodonCapabilities();
 
   @override
-  bool get supportsScopes => true;
+  Set<Visibility> get supportedScopes {
+    return const {
+      Visibility.public,
+      Visibility.followersOnly,
+      Visibility.unlisted,
+      Visibility.direct,
+    };
+  }
 
   @override
   bool get supportsSubjects => true;
 
   @override
-  List<Formatting> get supportedFormattings {
-    return List.unmodifiable([Formatting.plainText]);
+  Set<Formatting> get supportedFormattings => const {Formatting.plainText};
+
+  @override
+  Set<TimelineKind> get supportedTimelines {
+    return const {
+      TimelineKind.home,
+      TimelineKind.local,
+      TimelineKind.federated,
+      TimelineKind.directMessages,
+    };
   }
 }

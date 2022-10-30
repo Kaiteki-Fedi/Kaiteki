@@ -293,8 +293,9 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Post?> favoritePost(String id) async {
-    return toPost(await client.favouriteStatus(id), client.instance);
+  Future<bool> favoritePost(String id) async {
+    final status = await client.favouriteStatus(id);
+    return status.favourited!;
   }
 
   @override
@@ -313,28 +314,16 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   MastodonCapabilities get capabilities => const MastodonCapabilities();
 
   @override
-  Future<Post?> repeatPost(String id) async {
-    final status = await client.reblogStatus(id);
-    return toPost(status, client.instance);
-  }
+  Future<void> repeatPost(String id) async => client.reblogStatus(id);
 
   @override
-  Future<Post?> unfavoritePost(String id) async {
-    final status = await client.unfavouriteStatus(id);
-    return toPost(status, client.instance);
-  }
+  Future<void> unfavoritePost(String id) async => client.unfavouriteStatus(id);
 
   @override
-  Future<Post?> unrepeatPost(String id) async {
-    final status = await client.unreblogStatus(id);
-    return toPost(status, client.instance);
-  }
+  Future<void> unrepeatPost(String id) async => client.unreblogStatus(id);
 
   @override
-  Future<Post?> bookmarkPost(String id) async {
-    final status = await client.bookmarkStatus(id);
-    return toPost(status, client.instance);
-  }
+  Future<void> bookmarkPost(String id) async => client.bookmarkStatus(id);
 
   @override
   Future<List<Post>> getBookmarks({

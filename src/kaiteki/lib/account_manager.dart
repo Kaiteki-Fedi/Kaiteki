@@ -114,14 +114,19 @@ class AccountManager extends ChangeNotifier {
     if (clientSecret != null) {
       await adapter.client.setClientAuthentication(clientSecret);
     }
-    await adapter.client.setAccountAuthentication(accountSecret);
+    try {
+      await adapter.client.setAccountAuthentication(accountSecret);
+    } catch (ex, s) {
+      _logger.e('Failed to set account authentication', ex, s);
+      return;
+    }
 
     User user;
 
     try {
       user = await adapter.getMyself();
-    } catch (ex) {
-      _logger.e('Failed to verify credentials', ex);
+    } catch (ex, s) {
+      _logger.e('Failed to verify credentials', ex, s);
       return;
     }
 

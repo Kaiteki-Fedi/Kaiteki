@@ -9,7 +9,7 @@ import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/shared/posts/card_widget.dart';
+import 'package:kaiteki/ui/shared/posts/embed_widget.dart';
 import 'package:kaiteki/ui/shared/posts/embedded_post.dart';
 import 'package:kaiteki/ui/shared/posts/interaction_bar.dart';
 import 'package:kaiteki/ui/shared/posts/interaction_event_bar.dart';
@@ -32,6 +32,7 @@ class PostWidget extends ConsumerStatefulWidget {
   final bool wide;
   final bool hideReplyee;
   final bool hideAvatar;
+  final bool expand;
 
   const PostWidget(
     this.post, {
@@ -41,6 +42,7 @@ class PostWidget extends ConsumerStatefulWidget {
     this.wide = false,
     this.hideReplyee = false,
     this.hideAvatar = false,
+    this.expand = false,
   });
 
   @override
@@ -63,11 +65,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     if (_post.repeatOf != null) {
       return Column(
         children: [
-          InteractionEventBar(
-            icon: Icons.repeat_rounded,
-            text: l10n.postRepeated,
-            color: Theme.of(context).ktkColors!.repeatColor,
-            user: _post.author,
+          InkWell(
+            onTap: () => context.showUser(_post.author, ref),
+            child: InteractionEventBar(
+              icon: Icons.repeat_rounded,
+              text: l10n.postRepeated,
+              color: Theme.of(context).ktkColors!.repeatColor,
+              user: _post.author,
+            ),
           ),
           PostWidget(
             _post.repeatOf!,
@@ -121,23 +126,30 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                     post: _post,
                     showAvatar: !widget.hideAvatar && widget.wide,
                   ),
-                  if (widget.showParentPost && _post.replyToPostId != null)
+                  if (widget.showParentPost && _post.replyToUserId != null)
                     ReplyBar(post: _post),
                   PostContentWidget(
                     post: _post,
                     hideReplyee: widget.hideReplyee,
                   ),
-                  if (_post.quotedPost != null)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [EmbeddedPostWidget(_post.quotedPost!)],
+                  if (_post.embeds.isNotEmpty)
+                    Card(
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        children: <Widget>[
+                          for (var embed in _post.embeds) EmbedWidget(embed),
+                        ].joinNonString(const Divider(height: 1)),
+                      ),
                     ),
+                  if (_post.quotedPost != null)
+                    EmbeddedPostWidget(_post.quotedPost!),
                   if (_post.attachments?.isNotEmpty == true)
                     AttachmentRow(post: _post),
-                  if (_post.previewCard != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: CardWidget(card: _post.previewCard!),
+                  if (widget.expand && _post.client != null)
+                    Text(
+                      _post.client!,
+                      style: TextStyle(color: Theme.of(context).disabledColor),
                     ),
                   if (_post.reactions.isNotEmpty)
                     ReactionRow(_post, _post.reactions),
@@ -268,11 +280,15 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final l10n = context.getL10n();
     try {
       final f = adapter as FavoriteSupport;
-      final newPost = _post.liked
-          ? await f.unfavoritePost(_post.id)
-          : await f.favoritePost(_post.id);
-
-      setState(() => _post = newPost!);
+      final Post newPost;
+      if (_post.liked) {
+        await f.unfavoritePost(_post.id);
+        newPost = _post.copyWith(liked: false);
+      } else {
+        await f.favoritePost(_post.id);
+        newPost = _post.copyWith(liked: true);
+      }
+      setState(() => _post = newPost);
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postFavoriteFailed),
@@ -287,9 +303,15 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final l10n = context.getL10n();
     try {
       final f = adapter as BookmarkSupport;
-      final newPost = _post.bookmarked
-          ? await f.unbookmarkPost(_post.id)
-          : await f.bookmarkPost(_post.id);
+
+      final Post newPost;
+      if (_post.bookmarked) {
+        await f.unbookmarkPost(_post.id);
+        newPost = _post.copyWith(bookmarked: false);
+      } else {
+        await f.bookmarkPost(_post.id);
+        newPost = _post.copyWith(bookmarked: true);
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -309,7 +331,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         );
       }
 
-      setState(() => _post = newPost!);
+      setState(() => _post = newPost);
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postBookmarkFailed),
@@ -323,11 +345,17 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final adapter = ref.read(adapterProvider);
     final l10n = context.getL10n();
     try {
-      final newPost = _post.repeated
-          ? await adapter.unrepeatPost(_post.id)
-          : (await adapter.repeatPost(_post.id))!.repeatOf!;
+      final Post newPost;
 
-      setState(() => _post = newPost!);
+      if (_post.repeated) {
+        await adapter.unrepeatPost(_post.id);
+        newPost = _post.copyWith(repeated: false);
+      } else {
+        await adapter.repeatPost(_post.id);
+        newPost = _post.copyWith(repeated: true);
+      }
+
+      setState(() => _post = newPost);
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postRepeatFailed),
@@ -377,7 +405,9 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
             collapsed: collapsed,
             onTap: () => setState(() => collapsed = !collapsed),
           ),
-        if (renderedContent != null && !collapsed)
+        if (renderedContent != null &&
+            renderedContent!.toPlainText().trim().isNotEmpty &&
+            !collapsed)
           Padding(
             padding: kPostPadding,
             child: SelectableText.rich(TextSpan(children: [renderedContent!])),

@@ -40,6 +40,8 @@ class TimelineState extends ConsumerState<Timeline> {
 
   @override
   void initState() {
+    super.initState();
+
     _controller.addPageRequestListener((id) async {
       try {
         final adapter = ref.watch(accountProvider).adapter;
@@ -68,8 +70,6 @@ class TimelineState extends ConsumerState<Timeline> {
         if (mounted) _controller.error = Tuple2(e, s);
       }
     });
-
-    super.initState();
   }
 
   @override
@@ -87,7 +87,9 @@ class TimelineState extends ConsumerState<Timeline> {
     super.dispose();
   }
 
-  void refresh() => _controller.refresh();
+  void refresh() {
+    _controller.refresh();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 
@@ -50,18 +50,52 @@ class _AttachmentInspectionScreenState
     final focusNode = FocusNode();
     final l10n = context.getL10n();
 
+    final pageView = PageView(
+      controller: controller,
+      children: [
+        for (var attachment in widget.attachments)
+          _getAttachmentWidget(attachment),
+      ],
+    );
+
+    final previousButton = FloatingActionButton(
+      mini: true,
+      onPressed: canNavigateBackwards ? previousPage : null,
+      tooltip: MaterialLocalizations.of(context).previousPageTooltip,
+      child: Opacity(
+        opacity: canNavigateBackwards ? 1 : .25,
+        child: const Icon(Icons.chevron_left_rounded),
+      ),
+    );
+
+    final nextButton = FloatingActionButton(
+      mini: true,
+      onPressed: canNavigateForwards ? nextPage : null,
+      tooltip: MaterialLocalizations.of(context).nextPageTooltip,
+      child: Opacity(
+        opacity: canNavigateForwards ? 1 : .25,
+        child: const Icon(Icons.chevron_right_rounded),
+      ),
+    );
+
     return Scaffold(
       backgroundColor: background,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: background,
         title: buildTitle(context),
-        centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.subtitles_rounded),
+            onPressed: attachment.description == null ? null : _showAltText,
+            tooltip: context.getL10n().showAltTextTooltip,
+          ),
           IconButton(
             icon: const Icon(Icons.download_rounded),
             onPressed: () => downloadAttachment(context),
             tooltip: l10n.attachmentDownloadButtonLabel,
           ),
+          PopupMenuButton(itemBuilder: _buildPopupMenu),
         ],
       ),
       body: RawKeyboardListener(
@@ -81,51 +115,87 @@ class _AttachmentInspectionScreenState
               foregroundColor: Theme.of(context).colorScheme.onInverseSurface,
             ),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (!singleAttachment)
-                Align(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FloatingActionButton(
-                      mini: true,
-                      onPressed: canNavigateBackwards ? previousPage : null,
-                      child: Opacity(
-                        opacity: canNavigateBackwards ? 1 : .25,
-                        child: const Icon(Icons.chevron_left_rounded),
-                      ),
-                    ),
-                  ),
-                ),
-              Expanded(
-                child: PageView(
-                  controller: controller,
+          child: OrientationBuilder(
+            builder: (context, orientation) {
+              if (orientation == Orientation.portrait) {
+                return Stack(
                   children: [
-                    for (var attachment in widget.attachments)
-                      _getAttachmentWidget(attachment),
+                    pageView,
+                    if (!singleAttachment)
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              previousButton,
+                              const SizedBox(width: 8),
+                              nextButton,
+                            ],
+                          ),
+                        ),
+                      ),
                   ],
-                ),
-              ),
-              if (!singleAttachment)
-                Align(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FloatingActionButton(
-                      mini: true,
-                      onPressed: canNavigateForwards ? nextPage : null,
-                      child: Opacity(
-                        opacity: canNavigateForwards ? 1 : .25,
-                        child: const Icon(Icons.chevron_right_rounded),
+                );
+              }
+
+              return Stack(
+                children: [
+                  pageView,
+                  if (!singleAttachment)
+                    Positioned(
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: previousButton,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-            ],
+                  if (!singleAttachment)
+                    Positioned(
+                      top: 0,
+                      bottom: 0,
+                      right: 0,
+                      child: Align(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: nextButton,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
         ),
       ),
     );
+  }
+
+  List<PopupMenuEntry> _buildPopupMenu(BuildContext context) {
+    final l10n = context.getL10n();
+    return [
+      PopupMenuItem(
+        child: Text(l10n.copyAttachmentUrl),
+        onTap: () async {
+          final uri = Uri.parse(attachment.url);
+          final data = ClipboardData(text: uri.toString());
+          await Clipboard.setData(data);
+          if (mounted) {
+            final snackBar = SnackBar(
+              content: Text(l10n.copiedToClipboard),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        },
+      ),
+    ];
   }
 
   void nextPage() {
@@ -150,48 +220,11 @@ class _AttachmentInspectionScreenState
 
   Widget buildTitle(BuildContext context) {
     final count = widget.attachments.length;
-    final hasDescription = attachment.description?.isNotEmpty == true;
     final l10n = context.getL10n();
 
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(
-        hasDescription ? attachment.description! : l10n.attachmentNoDescription,
-        style: TextStyle(
-          color: Colors.white,
-          fontStyle: hasDescription ? null : FontStyle.italic,
-        ),
-      ),
-      subtitle: Text(
-        "${currentPage + 1}/$count",
-        style: TextStyle(color: Colors.white.withOpacity(.8)),
-      ),
-    );
-
-    //return Wrap(
-    //  crossAxisAlignment: WrapCrossAlignment.center,
-    //  direction: Axis.horizontal,
-    //  children: [
-    //    if (attachment.description != null) Text(attachment.description!),
-    //    buildBadge(context, "${currentPage + 1}/$count"),
-    //  ],
-    //);
-  }
-
-  Widget buildBadge(BuildContext context, String text) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4.0),
-        color: Colors.white,
-      ),
-      margin: const EdgeInsets.only(left: 8.0),
-      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
-      child: Text(
-        text,
-        style: GoogleFonts.robotoMono(color: Colors.black),
-        overflow: TextOverflow.fade,
-        textScaleFactor: .75,
-      ),
+    return Text(
+      l10n.pageViewTitle(currentPage + 1, count),
+      style: TextStyle(color: Colors.white.withOpacity(.8)),
     );
   }
 
@@ -252,5 +285,26 @@ class _AttachmentInspectionScreenState
         ),
       );
     }
+  }
+
+  Future<void> _showAltText() async {
+    final description = attachment.description;
+    if (description == null) return;
+    await showModalBottomSheet(
+      context: context,
+      constraints: bottomSheetConstraints,
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text("Alt text", style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 8),
+            Text(description),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -6,7 +6,7 @@ class Instance<T> {
   final String? mascotUrl;
   final String? backgroundUrl;
 
-  Instance({
+  const Instance({
     required this.name,
     this.iconUrl,
     required this.source,

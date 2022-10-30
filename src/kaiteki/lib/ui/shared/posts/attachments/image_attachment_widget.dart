@@ -17,44 +17,38 @@ class ImageAttachmentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(8);
-
     return GestureDetector(
       onTap: () => enlargeImage(context),
-      child: ClipRRect(
-        borderRadius: borderRadius,
-        child: Image.network(
-          attachment.previewUrl, // ?? attachment.url
-          loadingBuilder: (context, widget, loadingProgress) {
-            if (loadingProgress == null) {
-              return widget;
-            }
+      child: Image.network(
+        attachment.previewUrl, // ?? attachment.url
+        loadingBuilder: (context, widget, loadingProgress) {
+          if (loadingProgress == null) {
+            return widget;
+          }
 
-            double? progress;
+          double? progress;
 
-            if (loadingProgress.expectedTotalBytes != null) {
-              progress = loadingProgress.cumulativeBytesLoaded /
-                  loadingProgress.expectedTotalBytes!;
-            }
+          if (loadingProgress.expectedTotalBytes != null) {
+            progress = loadingProgress.cumulativeBytesLoaded /
+                loadingProgress.expectedTotalBytes!;
+          }
 
-            return Center(
-              child: CircularProgressIndicator(value: progress),
-            );
-          },
-          errorBuilder: (_, w, c) {
-            return Center(
-              child: Icon(
-                Icons.hide_image_rounded,
-                size: 72,
-                color: Theme.of(context).disabledColor,
-              ),
-            );
-          },
-          //width: 100,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.medium,
-          isAntiAlias: true,
-        ),
+          return Center(
+            child: CircularProgressIndicator(value: progress),
+          );
+        },
+        errorBuilder: (_, w, c) {
+          return Center(
+            child: Icon(
+              Icons.hide_image_rounded,
+              size: 72,
+              color: Theme.of(context).disabledColor,
+            ),
+          );
+        },
+        fit: BoxFit.cover,
+        filterQuality: FilterQuality.medium,
+        isAntiAlias: true,
       ),
     );
   }

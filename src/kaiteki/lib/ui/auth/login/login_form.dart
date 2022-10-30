@@ -138,7 +138,11 @@ class LoginFormState extends ConsumerState<LoginForm> {
         (localUrl, cancel) async {
           // TODO(Craftplacer): Show WebView inside login screen when possible
           final generatedUrl = await generateUrl(localUrl);
-          await launchUrl(generatedUrl, mode: LaunchMode.externalApplication);
+
+          final canLaunch = await canLaunchUrl(generatedUrl);
+          if (!canLaunch) throw Exception("Invalid URL");
+
+          await launchUrl(generatedUrl);
           setState(() => _oAuth = cancel);
         },
         successPage,
