@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
@@ -26,40 +27,46 @@ class ReplyBar extends ConsumerWidget {
 
     return Padding(
       padding: kPostPadding,
-      child: FutureBuilder<User?>(
-        future: UserReference(_getUserId()).resolve(adapter),
-        builder: (context, snapshot) {
-          final span = snapshot.hasData
-              ? snapshot.data!.renderDisplayName(context, ref)
-              : TextSpan(
-                  text: _getText(),
-                  style: Theme.of(context).ktkTextTheme!.linkTextStyle,
-                );
+      child: InkWell(
+        onTap: () {
+          final userId = _getUserId();
+          context.push("/${ref.getCurrentAccountHandle()}/users/$userId");
+        },
+        child: FutureBuilder<User?>(
+          future: UserReference(_getUserId()).resolve(adapter),
+          builder: (context, snapshot) {
+            final span = snapshot.hasData
+                ? snapshot.data!.renderDisplayName(context, ref)
+                : TextSpan(
+                    text: _getText(),
+                    style: Theme.of(context).ktkTextTheme!.linkTextStyle,
+                  );
 
-          return Text.rich(
-            TextSpan(
-              style: textStyle,
-              children: [
-                // TODO(Craftplacer): refactor the following widget pattern to a future "IconSpan"
-                WidgetSpan(
-                  child: Directionality(
-                    textDirection: Directionality.of(context).inverted,
-                    child: Icon(
-                      Icons.reply_rounded,
-                      size: getLocalFontSize(context) * 1.25,
-                      color: disabledColor,
+            return Text.rich(
+              TextSpan(
+                style: textStyle,
+                children: [
+                  // TODO(Craftplacer): refactor the following widget pattern to a future "IconSpan"
+                  WidgetSpan(
+                    child: Directionality(
+                      textDirection: Directionality.of(context).inverted,
+                      child: Icon(
+                        Icons.reply_rounded,
+                        size: getLocalFontSize(context) * 1.25,
+                        color: disabledColor,
+                      ),
                     ),
                   ),
-                ),
-                TextSpan(
-                  text: ' ${l10n.replyTo} ',
-                  style: TextStyle(color: disabledColor),
-                ),
-                span,
-              ],
-            ),
-          );
-        },
+                  TextSpan(
+                    text: ' ${l10n.replyTo} ',
+                    style: TextStyle(color: disabledColor),
+                  ),
+                  span,
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
