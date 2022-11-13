@@ -2,18 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Element;
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/ui/screens/account_screen.dart';
-import 'package:kaiteki/ui/widgets/emoji/emoji_widget.dart';
-import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
+import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
-import 'package:provider/provider.dart';
+import 'package:kaiteki/utils/utils.dart';
 
 typedef RegExpMatchElementBuilder = Element Function(
   RegExpMatch match,
@@ -23,58 +22,88 @@ typedef RegExpMatchElementBuilder = Element Function(
 class TextContext {
   final List<UserReference>? users;
   final List<Emoji>? emojis;
+  final List<UserReference>? excludedUsers;
 
-  TextContext({this.users, this.emojis});
+  TextContext({this.users, this.emojis, this.excludedUsers});
 }
 
 class TextRenderer {
-  // TODO: Use appropiate parser on specific instances
-  final TextParser parser = MastodonHtmlTextParser();
-  final TextRendererTheme theme;
+  // TODO(Craftplacer): Use appropiate parser on specific instances
+  final TextParser parser = const MastodonHtmlTextParser();
 
-  TextRenderer({required this.theme});
+  const TextRenderer();
 
   InlineSpan render(
     BuildContext context,
     String text, {
     TextContext? textContext,
+    required Function(UserReference reference) onUserClick,
   }) {
-    textContext ?? TextContext();
-
-    final elements = parser.parse(text).parseWith(SocialTextParser());
-
-    final renderedElements = elements.map((e) {
-      return _renderElement(context, e, textContext!);
-    });
-
+    final renderedElements = renderChildren(
+      context,
+      parser.parse(text).parseWith(const SocialTextParser()),
+      textContext ?? TextContext(),
+      Theme.of(context).ktkTextTheme,
+      onUserClick: onUserClick,
+    );
     return TextSpan(children: renderedElements.toList(growable: false));
   }
 
-  InlineSpan _renderElement(
+  InlineSpan? _renderElement(
     BuildContext context,
     Element element,
     TextContext textContext,
-  ) {
-    final childrenSpans = element.children //
-        ?.map((e) => _renderElement(context, e, textContext))
-        .toList(growable: false);
+    KaitekiTextTheme? theme, {
+    required Function(UserReference) onUserClick,
+  }) {
+    final childrenSpans = renderChildren(
+      context,
+      element.children,
+      textContext,
+      theme,
+      onUserClick: onUserClick,
+    );
 
     if (element is TextElement) {
       return renderText(context, element, childrenSpans);
-    } else if (element is LinkElement) {
-      return renderLink(context, element, childrenSpans!);
-    } else if (element is HashtagElement) {
-      return renderHashtag(context, textContext, element);
-    } else if (element is MentionElement) {
-      return renderMention(textContext, element);
-    } else if (element is EmojiElement) {
-      return renderEmoji(textContext, element);
+    }
+    if (element is LinkElement) {
+      return renderLink(
+        context,
+        element,
+        childrenSpans,
+        style: theme?.linkTextStyle,
+      );
+    }
+    if (element is HashtagElement) {
+      return renderHashtag(
+        context,
+        textContext,
+        element,
+        style: theme?.hashtagTextStyle,
+      );
+    }
+    if (element is MentionElement) {
+      return renderMention(
+        context,
+        textContext,
+        element,
+        onUserClick: onUserClick,
+        style: theme?.mentionTextStyle,
+      );
+    }
+    if (element is EmojiElement) {
+      return renderEmoji(textContext, element, scale: theme?.emojiScale);
     }
 
-    if (element.children?.isNotEmpty == true) {
+    if (childrenSpans.isNotEmpty == true) {
       return TextSpan(children: childrenSpans);
     }
 
+    return renderFallbackSpan(element);
+  }
+
+  InlineSpan renderFallbackSpan(Element element) {
     return TextSpan(
       text: "[NIY ${element.runtimeType}]",
       style: const TextStyle(
@@ -84,12 +113,40 @@ class TextRenderer {
     );
   }
 
+  List<InlineSpan> renderChildren(
+    BuildContext context,
+    List<Element>? children,
+    TextContext textContext,
+    KaitekiTextTheme? theme, {
+    required Function(UserReference reference) onUserClick,
+  }) {
+    final spans = <InlineSpan>[];
+
+    if (children != null) {
+      for (final child in children) {
+        final element = _renderElement(
+          context,
+          child,
+          textContext,
+          theme,
+          onUserClick: onUserClick,
+        );
+
+        if (element != null) {
+          spans.add(element);
+        }
+      }
+    }
+
+    return spans;
+  }
+
   InlineSpan renderText(
     BuildContext context,
     TextElement element,
     List<InlineSpan>? childrenSpans,
   ) {
-    InlineSpan span = TextSpan(
+    final InlineSpan span = TextSpan(
       text: element.text,
       style: element.getFlutterTextStyle(context),
       children: childrenSpans,
@@ -110,27 +167,51 @@ class TextRenderer {
     return span;
   }
 
-  WidgetSpan renderMention(TextContext textContext, MentionElement element) {
-    final i = textContext.users?.indexWhere(
-          (user) => user.matches(element.reference),
-        ) ??
-        -1;
+  InlineSpan? renderMention(
+    BuildContext buildContext,
+    TextContext textContext,
+    MentionElement element, {
+    required Function(UserReference reference) onUserClick,
+    TextStyle? style,
+  }) {
+    final i = textContext.users?.indexWhere(element.reference.matches) ?? -1;
     final reference = i == -1 ? element.reference : textContext.users![i];
 
-    return WidgetSpan(
-      child: UserChip(reference: reference),
-      baseline: TextBaseline.alphabetic,
-      alignment: PlaceholderAlignment.middle,
-    );
+    final isExcluded = textContext.excludedUsers?.any(reference.matches);
+
+    if (isExcluded == true) {
+      return null;
+    }
+
+    const useUserChip = false;
+
+    // ignore: dead_code
+    if (useUserChip) {
+      return WidgetSpan(
+        child: UserChip(reference: reference),
+        baseline: TextBaseline.alphabetic,
+        alignment: PlaceholderAlignment.middle,
+      );
+    } else {
+      return TextSpan(
+        recognizer: TapGestureRecognizer()
+          ..onTap = () => onUserClick(reference),
+        text: reference.toString(),
+        style: style,
+      );
+    }
   }
 
   TextSpan renderHashtag(
     BuildContext context,
     TextContext textContext,
-    HashtagElement element,
-  ) {
-    final color = DefaultTextStyle.of(context).style.color!.withOpacity(.35);
+    HashtagElement element, {
+    TextStyle? style,
+  }) {
+    final inheritedTextStyle = style ?? DefaultTextStyle.of(context).style;
+    final color = inheritedTextStyle.color!.withOpacity(.35);
     return TextSpan(
+      style: style,
       children: [
         TextSpan(text: '#', style: TextStyle(color: color)),
         TextSpan(text: element.name),
@@ -141,15 +222,16 @@ class TextRenderer {
   TextSpan renderLink(
     BuildContext context,
     LinkElement link,
-    List<InlineSpan> children,
-  ) {
-    // FIXME: We should be passing down the "click-ability" to the children.
+    List<InlineSpan> children, {
+    TextStyle? style,
+  }) {
+    // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
 
     final recognizer = TapGestureRecognizer()
       ..onTap = () => context.launchUrl(link.destination.toString());
 
     return TextSpan(
-      style: theme.linkTextStyle,
+      style: style,
       recognizer: recognizer,
       text: link.allText,
     );
@@ -157,18 +239,31 @@ class TextRenderer {
 
   InlineSpan renderEmoji(
     TextContext textContext,
-    EmojiElement element,
-  ) {
-    final emoji = textContext.emojis!.firstOrDefault((e) {
+    EmojiElement element, {
+    double? scale,
+  }) {
+    assert(
+      textContext.emojis != null,
+      "An emoji is about to be rendered, but no emojis were provided.",
+    );
+
+    final emoji = textContext.emojis?.firstOrDefault((e) {
       return e.name == element.name;
     });
 
-    if (emoji == null) {
-      return TextSpan(text: element.name);
-    }
+    if (emoji == null) return TextSpan(text: ":${element.name}:");
 
+    // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
     return WidgetSpan(
-      child: EmojiWidget(emoji: emoji, size: theme.emojiSize),
+      child: Builder(
+        builder: (context) {
+          final inheritedFontSize = getLocalFontSize(context);
+          return EmojiWidget(
+            emoji: emoji,
+            size: inheritedFontSize * (scale ?? 1.0),
+          );
+        },
+      ),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.middle,
     );
@@ -193,42 +288,52 @@ extension TextElementExtension on TextElement {
   }
 }
 
-class UserChip extends StatelessWidget {
+class UserChip extends ConsumerWidget {
   final UserReference reference;
   final User? user;
 
   const UserChip({
-    Key? key,
+    super.key,
     required this.reference,
     this.user,
-  }) : super(key: key);
+  });
 
   @override
-  Widget build(BuildContext context) {
-    final adapter = Provider.of<AccountManager>(context).adapter;
-    return FutureBuilder(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final adapter = ref.watch(accountProvider).adapter;
+    return FutureBuilder<User?>(
       initialData: user,
       future: reference.resolve(adapter),
-      builder: (context, AsyncSnapshot<User?> snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
           final user = snapshot.data!;
 
-          return ActionChip(
-            avatar: AvatarWidget(user, size: 24),
-            label: Text.rich(user.renderDisplayName(context)),
-            onPressed: () {
-              var screen = AccountScreen.fromUser(user);
-              var route = MaterialPageRoute(builder: (_) => screen);
-              Navigator.push(context, route);
-            },
+          return Tooltip(
+            message: user.handle,
+            child: ActionChip(
+              avatar: AvatarWidget(user, size: 24),
+              label: Text.rich(user.renderDisplayName(context, ref)),
+              onPressed: () => context.showUser(user, ref),
+            ),
           );
         } else {
-          return const Chip(
-            avatar: Icon(Icons.help),
-            label: Text("Unknown User"),
-          );
+          return Chip(label: Text(fallbackText));
         }
       },
     );
+  }
+
+  String get fallbackText {
+    if (reference.username != null) {
+      return reference.host != null
+          ? "@${reference.username}@${reference.host}"
+          : "@${reference.username}";
+    }
+
+    if (reference.remoteUrl != null) {
+      return reference.remoteUrl!;
+    }
+
+    return "Unknown User";
   }
 }

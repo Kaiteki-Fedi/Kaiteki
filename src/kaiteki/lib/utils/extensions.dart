@@ -1,15 +1,22 @@
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:html/dom.dart';
-import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
+import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:kaiteki/utils/text/text_renderer_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tuple/tuple.dart';
 
 export 'package:kaiteki/utils/extensions/build_context.dart';
 export 'package:kaiteki/utils/extensions/duration.dart';
+export 'package:kaiteki/utils/extensions/enum.dart';
 export 'package:kaiteki/utils/extensions/iterable.dart';
+export 'package:kaiteki/utils/extensions/m3.dart';
 export 'package:kaiteki/utils/extensions/string.dart';
 
 extension ObjectExtensions<T> on Object? {
@@ -22,10 +29,43 @@ extension ObjectExtensions<T> on Object? {
 
 extension BrightnessExtensions on Brightness {
   Brightness get inverted {
-    if (this == Brightness.light) {
-      return Brightness.dark;
-    } else {
-      return Brightness.dark;
+    switch (this) {
+      case Brightness.dark:
+        return Brightness.light;
+      case Brightness.light:
+        return Brightness.dark;
+    }
+  }
+
+  SystemUiOverlayStyle get systemUiOverlayStyle {
+    switch (this) {
+      case Brightness.dark:
+        return SystemUiOverlayStyle.dark;
+      case Brightness.light:
+        return SystemUiOverlayStyle.light;
+    }
+  }
+
+  Color getColor({
+    Color dark = const Color(0xFF000000),
+    Color light = const Color(0xFFFFFFFF),
+  }) {
+    switch (this) {
+      case Brightness.dark:
+        return dark;
+      case Brightness.light:
+        return light;
+    }
+  }
+}
+
+extension TextDirectionExtensions on TextDirection {
+  TextDirection get inverted {
+    switch (this) {
+      case TextDirection.ltr:
+        return TextDirection.rtl;
+      case TextDirection.rtl:
+        return TextDirection.ltr;
     }
   }
 }
@@ -45,33 +85,58 @@ extension AsyncSnapshotExtensions on AsyncSnapshot {
 enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
-  InlineSpan renderDisplayName(BuildContext context) {
-    final theme = TextRendererTheme.fromContext(context);
-    final renderer = TextRenderer(theme: theme);
+  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, displayName!);
+  }
 
-    return renderer.render(
+  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
+    return renderText(context, ref, description!);
+  }
+
+  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
+    return const TextRenderer().render(
       context,
-      displayName,
+      text,
       textContext: TextContext(
         users: [],
         emojis: emojis?.toList(growable: false),
       ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
   }
+
+  String get handle => '@$username@$host';
 }
 
 extension PostExtensions on Post {
-  InlineSpan renderContent(BuildContext context) {
-    final theme = TextRendererTheme.fromContext(context);
-    final renderer = TextRenderer(theme: theme);
-    return renderer.render(
+  InlineSpan renderContent(
+    BuildContext context,
+    WidgetRef ref, {
+    bool hideReplyee = false,
+  }) {
+    return const TextRenderer().render(
       context,
       content!,
       textContext: TextContext(
         emojis: emojis?.toList(growable: false),
         users: mentionedUsers,
+        excludedUsers: [
+          if (hideReplyee && replyToUser != null)
+            UserReference.handle(
+              replyToUser!.username,
+              replyToUser!.host,
+            )
+        ],
       ),
+      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
+  }
+
+  Post getRoot() => _getRoot(this);
+
+  Post _getRoot(Post post) {
+    final repeatChild = post.repeatOf;
+    return repeatChild == null ? post : _getRoot(repeatChild);
   }
 }
 
@@ -94,7 +159,7 @@ extension HtmlNodeExtensions on Node {
 extension UserReferenceExtensions on UserReference {
   Future<User?> resolve(FediverseAdapter adapter) async {
     if (id != null) {
-      return await adapter.getUserById(id!);
+      return adapter.getUserById(id!);
     }
 
     // if (reference.username != null) {
@@ -102,5 +167,90 @@ extension UserReferenceExtensions on UserReference {
     // }
 
     return null;
+  }
+}
+
+extension WidgetRefExtensions on WidgetRef {
+  String getCurrentAccountHandle() {
+    final account = read(accountProvider).currentAccount;
+    return "@${account.key.username}@${account.key.host}";
+  }
+}
+
+extension BreakpointExtensions on Breakpoint {
+  double? get margin {
+    if (window == WindowSize.xsmall) return 16;
+    if (window == WindowSize.small && columns == 8) return 32;
+    if (window == WindowSize.small && columns == 12) return null;
+    if (window == WindowSize.medium) return 200;
+    return null;
+  }
+
+  double? get body {
+    if (window == WindowSize.xsmall) return null;
+    if (window == WindowSize.small && columns == 8) return null;
+    if (window == WindowSize.small && columns == 12) return 840;
+    if (window == WindowSize.medium) return null;
+    return 1040;
+  }
+}
+
+extension QueryExtension on Map<String, String> {
+  String toQueryString() {
+    if (isEmpty) return "";
+
+    final pairs = <String>[];
+    for (final kv in entries) {
+      final key = Uri.encodeQueryComponent(kv.key);
+      final value = Uri.encodeQueryComponent(kv.value);
+      pairs.add("$key=$value");
+    }
+    return "?${pairs.join("&")}";
+  }
+}
+
+extension UriExtensions on Uri {
+  Tuple2<String, String> get fediverseHandle {
+    var username = pathSegments.last;
+    if (username[0] == '@') {
+      username = username.substring(1);
+    }
+    return Tuple2(host, username);
+  }
+}
+
+extension ListExtensions<T> on List<T> {
+  List<T> joinNonString(T separator) {
+    if (length <= 1) return this;
+
+    return List<T>.generate(
+      length * 2 - 1,
+      (i) => i % 2 == 0 ? this[i ~/ 2] : separator,
+    );
+  }
+}
+
+extension SharedPreferencesExtensions on SharedPreferences {
+  Future<bool> setTristateBool(key, value) async {
+    if (value != null) return setBool(key, value);
+    if (containsKey(key)) return remove(key);
+    return true;
+  }
+}
+
+extension NullableObjectExtensions on Object? {}
+
+extension FunctionExtensions<T> on T Function(Map<String, dynamic>) {
+  T Function(Object?) get generic {
+    return (obj) => this(obj as Map<String, dynamic>);
+  }
+
+  List<T>? Function(Object?) get genericList {
+    return (obj) {
+      if (obj == null) return null;
+      final list = obj as List<dynamic>;
+      final castedList = list.cast<Map<String, dynamic>>();
+      return castedList.map(this).toList();
+    };
   }
 }

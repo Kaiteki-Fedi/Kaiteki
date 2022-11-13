@@ -1,15 +1,17 @@
+import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:tuple/tuple.dart';
+
 class LoginResult {
-  String? reason;
-  bool successful = true;
-  bool aborted = false;
+  final Tuple2<dynamic, StackTrace?>? error;
+  final Account? account;
+  bool get aborted => !successful && error == null;
+  bool get successful => account != null;
 
-  LoginResult.successful();
+  const LoginResult.successful(this.account) : error = null;
 
-  LoginResult.failed(this.reason) {
-    successful = false;
-  }
+  const LoginResult.failed(this.error) : account = null;
 
-  LoginResult.aborted() {
-    aborted = true;
-  }
+  const LoginResult.aborted()
+      : account = null,
+        error = null;
 }

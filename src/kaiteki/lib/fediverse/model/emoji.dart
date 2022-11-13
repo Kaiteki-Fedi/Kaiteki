@@ -22,11 +22,10 @@ class UnicodeEmoji extends Emoji<String> {
   const UnicodeEmoji(
     String emoji,
     String name, {
-    Iterable<String>? aliases,
+    super.aliases,
   }) : super(
           source: emoji,
           name: name,
-          aliases: aliases,
           visibleInPicker: true,
         );
 }
@@ -36,11 +35,11 @@ class CustomEmoji<T> extends Emoji<T> {
   final String url;
 
   const CustomEmoji({
-    T? source,
-    required String name,
-    Iterable<String>? aliases,
+    super.source,
+    required super.name,
+    super.aliases,
     required this.url,
-  }) : super(source: source, name: name, aliases: aliases);
+  });
 
   @override
   String toString() => ":$name:";

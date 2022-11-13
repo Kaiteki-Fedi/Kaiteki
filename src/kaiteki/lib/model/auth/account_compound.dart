@@ -1,38 +1,31 @@
-import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
-import 'package:kaiteki/fediverse/api/api_type.dart';
+import 'package:flutter/foundation.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/model/account_key.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 
-class AccountCompound {
-  final AccountManager container;
+@immutable
+class Account {
+  final AccountKey key;
   final AccountSecret accountSecret;
-  final ClientSecret clientSecret;
+  final ClientSecret? clientSecret;
   final FediverseAdapter adapter;
+  final User user;
 
-  ApiType? get instanceType => clientSecret.apiType;
-
-  User account;
-
-  String get instance => clientSecret.instance;
-
-  AccountCompound({
-    required this.container,
+  const Account({
+    required this.key,
     required this.adapter,
-    required this.account,
+    required this.user,
     required this.clientSecret,
     required this.accountSecret,
   });
 
-  // TODO assert check has been removed, due to compiler errors
-  //: assert(accountSecret.identity.instance.equalsIgnoreCase(clientSecret.instance));
-
-  /// Checks whether the other [AccountCompound] has the same identifying data.
   @override
   bool operator ==(other) {
-    if (other is AccountCompound) {
-      return other.instance == instance && accountSecret == other.accountSecret;
+    if (other is Account) {
+      return clientSecret == other.clientSecret &&
+          accountSecret == other.accountSecret;
     } else {
       return false;
     }
@@ -43,6 +36,6 @@ class AccountCompound {
     return accountSecret.hashCode ^
         clientSecret.hashCode ^
         adapter.hashCode ^
-        instanceType.hashCode;
+        user.hashCode;
   }
 }

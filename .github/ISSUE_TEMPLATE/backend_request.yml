@@ -1,0 +1,27 @@
+name: Backend request
+description: Request a new backend to be added to Kaiteki
+title: "Backend request"
+labels: [ "enhancement", "api:missing" ]
+body:
+- type: input
+  id: name
+  attributes:
+    label: Name
+  validations:
+    required: true
+- type: input
+  id: link
+  attributes:
+    label: Link
+    description: A link to the project page, so we can check it out
+    placeholder: https://example.com/
+  validations:
+    required: true
+- type: input
+  id: api-docs
+  attributes:
+    label: API Docs Link
+    description: "A link to the project's API documentation, without it, we can't support it!"
+    placeholder: https://example.com/api-documentation/
+  validations:
+    required: false

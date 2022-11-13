@@ -26,30 +26,40 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
     defaultConfig {
         applicationId "moe.craftplacer.kaiteki"
         minSdkVersion 18
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("keystore.jks")
+            storePassword = "$System.env.STORE_PASSWORD"
+            keyAlias = "release"
+            keyPassword = "$System.env.KEY_PASSWORD"
+        }
     }
 
     buildTypes {
         release {
-            // TODO Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
+        debug {
+            applicationIdSuffix ".dev"
+        }
+    }
+    lint {
+        disable 'InvalidPackage'
     }
 }
 
@@ -59,4 +69,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
 }

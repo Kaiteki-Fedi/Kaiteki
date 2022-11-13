@@ -1,227 +1,170 @@
-import 'dart:async';
-
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/fediverse/api/adapters/fediverse_adapter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/timeline_type.dart';
-import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/post_filters/post_filter.dart';
-import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/screens/conversation_screen.dart';
-import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
-import 'package:kaiteki/ui/widgets/status_widget.dart';
-import 'package:kaiteki/utils/paged_network_stream.dart';
-import 'package:mdi/mdi.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
+import 'package:kaiteki/ui/shared/error_landing_widget.dart';
+import 'package:kaiteki/ui/shared/posts/post_widget.dart';
+import 'package:tuple/tuple.dart';
 
-class Timeline extends StatefulWidget {
-  final FediverseAdapter adapter;
-  final List<PostFilter>? filters;
+class Timeline extends ConsumerStatefulWidget {
   final double? maxWidth;
   final bool wide;
+  final TimelineKind? kind;
+  final String? userId;
 
-  const Timeline({
-    Key? key,
-    required this.adapter,
-    this.filters,
+  const Timeline.kind({
+    super.key,
     this.maxWidth,
     this.wide = false,
-  }) : super(key: key);
+    this.kind = TimelineKind.home,
+  }) : userId = null;
+
+  const Timeline.user({
+    super.key,
+    this.maxWidth,
+    this.wide = false,
+    required String this.userId,
+  }) : kind = null;
 
   @override
   TimelineState createState() => TimelineState();
 }
 
-class TimelineState extends State<Timeline> {
-  final _scrollContainer = ScrollController();
-  late final TimelineModel _model;
-  static final _logger = getLogger('Timeline');
-  late final BoxConstraints _constraints;
-
-  bool _isLoading = false;
+class TimelineState extends ConsumerState<Timeline> {
+  final PagingController<String?, Post> _controller = PagingController(
+    firstPageKey: null,
+  );
 
   @override
   void initState() {
     super.initState();
 
-    _constraints = BoxConstraints(
-      maxWidth: widget.maxWidth ?? double.infinity,
-    );
-    _model = TimelineModel(widget.adapter);
+    _controller.addPageRequestListener((id) async {
+      try {
+        final adapter = ref.watch(accountProvider).adapter;
+        final Iterable<Post> posts;
+        final query = TimelineQuery(untilId: id);
 
-    _scrollContainer.addListener(() {
-      if (_isLoading) {
-        _logger.d('Already loading more posts');
-        return;
-      }
+        if (widget.kind != null) {
+          posts = await adapter.getTimeline(widget.kind!, query: query);
+        } else if (widget.userId != null) {
+          posts = await adapter.getStatusesOfUserById(
+            widget.userId!,
+            query: query,
+          );
+        } else {
+          throw StateError("Cannot fetch timeline with no post source set.");
+        }
 
-      if (_model.hasReachedEnd) {
-        _logger.d('Reached end of timeline');
-        return;
-      }
-
-      var threshold = (_scrollContainer.position.maxScrollExtent - 300);
-      if (threshold < _scrollContainer.offset) {
-        _isLoading = true;
-
-        _model.loadMore().then((_) {
-          _isLoading = false;
-        }).catchError((e) {
-          _logger.e('Failed to load more posts', e);
-          _isLoading = false;
-        });
+        if (mounted) {
+          if (posts.isEmpty) {
+            _controller.appendLastPage(posts.toList());
+          } else {
+            _controller.appendPage(posts.toList(), posts.last.id);
+          }
+        }
+      } catch (e, s) {
+        if (mounted) _controller.error = Tuple2(e, s);
       }
     });
   }
 
   @override
+  void didUpdateWidget(covariant Timeline oldWidget) {
+    if (widget.kind != oldWidget.kind) {
+      _controller.refresh();
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void refresh() {
+    _controller.refresh();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: _model.stream,
-      builder: (context, AsyncSnapshot<Iterable<Post>> snapshot) {
-        return PageTransitionSwitcher(
-          duration: const Duration(milliseconds: 300),
-          transitionBuilder: animations.fadeThrough,
-          child: _buildStream(context, snapshot),
-        );
-      },
-    );
-  }
+    ref.listen(accountProvider, (_, __) => _controller.refresh());
 
-  Widget _buildStream(
-    BuildContext context,
-    AsyncSnapshot<Iterable<Post>> snapshot,
-  ) {
-    final l10n = AppLocalizations.of(context)!;
-    if (snapshot.connectionState == ConnectionState.active) {
-      if (snapshot.hasError) {
-        return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 40.0),
-              IconLandingWidget(
-                icon: const Icon(Mdi.textBoxRemove),
-                text: Text(l10n.timelineRetrievalFailed),
-              ),
-              const SizedBox(height: 8.0),
-              TextButton(
-                child: Text(l10n.refresh),
-                onPressed: () => _model.refresh(),
-              ),
-            ],
-          ),
-        );
-      }
-
-      late final Map<Post, PostFilterResult> filtered;
-      final filters = widget.filters ?? [];
-
-      if (snapshot.hasData) {
-        filtered = Map.fromEntries(snapshot.data!.map((p) {
-          return MapEntry(
-            p,
-            PostFilter.runMultipleFilters(context, p, filters),
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(_controller.refresh),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return PagedListView<String?, Post>.separated(
+            pagingController: _controller,
+            padding: EdgeInsets.symmetric(
+              horizontal: _getPadding(constraints.maxWidth),
+            ),
+            builderDelegate: PagedChildBuilderDelegate<Post>(
+              itemBuilder: _buildPost,
+              animateTransitions: true,
+              firstPageErrorIndicatorBuilder: (context) {
+                final t = _controller.error as Tuple2<dynamic, StackTrace>;
+                return Center(
+                  child: ErrorLandingWidget(
+                    error: t.item1,
+                    stackTrace: t.item2,
+                  ),
+                );
+              },
+              noMoreItemsIndicatorBuilder: (context) {
+                final l10n = context.getL10n();
+                return Align(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Text(
+                      l10n.noMorePosts,
+                      style: TextStyle(color: Theme.of(context).disabledColor),
+                    ),
+                  ),
+                );
+              },
+            ),
+            separatorBuilder: _buildSeparator,
           );
-        }).where((p) => p.value != PostFilterResult.hide));
-      } else {
-        filtered = <Post, PostFilterResult>{};
-      }
-
-      return RefreshIndicator(
-        onRefresh: refresh,
-        child: Center(
-          child: filtered.isEmpty
-              ? IconLandingWidget(
-                  icon: const Icon(Mdi.textBoxOutline),
-                  text: Text(l10n.empty),
-                )
-              : _buildList(filtered),
-        ),
-      );
-    }
-
-    return const Center(child: CircularProgressIndicator());
-  }
-
-  Widget _buildList(Map<Post, PostFilterResult> filtered) {
-    int itemCount = filtered.length;
-
-    if (!_model.hasReachedEnd) {
-      itemCount++;
-    }
-
-    return ListView.separated(
-      controller: _scrollContainer,
-      itemCount: itemCount,
-      separatorBuilder: (_, __) {
-        if (widget.wide) {
-          return const SizedBox();
-        }
-
-        return Center(
-          child: ConstrainedBox(
-            constraints: _constraints,
-            child: const Divider(thickness: 1),
-          ),
-        );
-      },
-      itemBuilder: (context, i) => _buildItem(context, i, filtered),
+        },
+      ),
     );
   }
 
-  Widget _buildItem(
-    BuildContext context,
-    int i,
-    Map<Post, PostFilterResult> posts,
-  ) {
-    if (i < posts.length) {
-      final post = posts.keys.elementAt(i);
-
-      final widget = InkWell(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ConversationScreen(post),
-          ));
-        },
-        child: StatusWidget(post, wide: this.widget.wide),
-      );
-
-      return Center(
-        child: ConstrainedBox(
-          constraints: _constraints,
-          child: widget,
-        ),
-      );
-    } else if (_isLoading) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 64.0),
-        child: Center(child: CircularProgressIndicator()),
-      );
+  double _getPadding(double width) {
+    final maxWidth = widget.maxWidth;
+    if (maxWidth == null || width <= maxWidth) {
+      return 0;
     } else {
-      return const SizedBox(height: 96.0);
+      return width / 2 - maxWidth / 2;
     }
   }
 
-  Future<void> refresh() async {
-    await _model.refresh();
+  Widget _buildPost(context, item, index) {
+    return Consumer(
+      builder: (context, ref, child) {
+        return Material(
+          child: InkWell(
+            onTap: () {
+              final account = ref.read(accountProvider).currentAccount;
+              context.push(
+                "/@${account.key.username}@${account.key.host}/posts/${item.id}",
+                extra: item,
+              );
+            },
+            child: PostWidget(item, wide: widget.wide),
+          ),
+        );
+      },
+    );
   }
-}
 
-class TimelineModel extends PagedNetworkStream<Post, String> {
-  final FediverseAdapter _adapter;
-  final TimelineType timelineType;
-
-  TimelineModel(this._adapter, {this.timelineType = TimelineType.home});
-
-  @override
-  Future<Iterable<Post>> fetchObjects(String? firstId, String? lastId) async {
-    return await _adapter.getTimeline(timelineType, untilId: lastId);
-  }
-
-  @override
-  String takeId(Post object) {
-    return object.id;
+  Widget _buildSeparator(BuildContext context, int index) {
+    return const Divider(height: 1);
   }
 }

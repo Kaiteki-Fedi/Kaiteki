@@ -1,138 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import 'package:http/http.dart' show Response;
+import 'package:tuple/tuple.dart';
 
-class Utils {
-  // Change the logic of this method in case if unexpected results occur.
-  static bool compareInstance(String instanceA, String instanceB) =>
-      compareCaseInsensitive(instanceA, instanceB);
+String withQueries(
+  String baseUrl,
+  Map<String, dynamic> queryParameters,
+) {
+  queryParameters.removeWhere((_, v) => v == null);
 
-  static bool compareCaseInsensitive(String a, String b) =>
-      a.toLowerCase() == b.toLowerCase();
+  if (queryParameters.isEmpty) return baseUrl;
 
-  static String sanitizeInstance(String instance) {
-    instance = instance.toLowerCase();
-    return instance;
-  }
+  final query = Uri(
+    queryParameters: queryParameters.map((k, v) {
+      return MapEntry(k, v.toString());
+    }),
+  ).query;
+  return '$baseUrl?$query';
+}
 
-  static String withQueries(
-    String baseUrl,
-    Map<String, dynamic> queryParameters,
-  ) {
-    queryParameters.removeWhere((_, v) => v == null);
+void checkResponse(Response response) {
+  assert(
+    200 <= response.statusCode && response.statusCode < 400,
+    "Server returned an unsuccessful response:\n${response.body}",
+  );
+}
 
-    if (queryParameters.isEmpty) return baseUrl;
+bool isLightBackground(Color background) {
+  final bgDelta = (background.red * 0.299) +
+      (background.green * 0.587) +
+      (background.blue * 0.114);
 
-    return baseUrl + '?' + Uri(queryParameters: queryParameters).query;
-  }
+  return 255 - bgDelta < 105;
+}
 
-  static void checkResponse(Response response) {
-    var isSuccessful = 200 <= response.statusCode && response.statusCode < 400;
-    assert(isSuccessful,
-        "Server returned an unsuccessful response:\n${response.body}");
-  }
+double getLocalFontSize(BuildContext context) {
+  return DefaultTextStyle.of(context).style.fontSize!;
+}
 
-  static Color parseRgb(String input) {
-    var startIndex = input.indexOf("(");
-    // var pre = input.substring(0, startIndex);
-    var endIndex = input.indexOf(")");
-    var values = input
-        .substring(startIndex, endIndex)
-        .split(",")
-        .map((v) => int.parse(v));
+Color getLocalTextColor(BuildContext context) {
+  return DefaultTextStyle.of(context).style.color!;
+}
 
-    return Color.fromARGB(
-        255, values.elementAt(0), values.elementAt(1), values.elementAt(2));
-  }
+bool isUnsuccessfulStatusCode(int code) {
+  return 400 <= code && code < 600;
+}
 
-  static bool isLightBackground(Color background) {
-    var bgDelta = (background.red * 0.299) +
-        (background.green * 0.587) +
-        (background.blue * 0.114);
-
-    return 255 - bgDelta < 105;
-  }
-
-  static Color getReadableForeground(Color background) {
-    return isLightBackground(background)
-        ? const Color(0xFF000000)
-        : const Color(0xFFFFFFFF);
-  }
-
-  static double getLocalFontSize(BuildContext context) {
-    return DefaultTextStyle.of(context).style.fontSize!;
-  }
-
-  static Color getLocalTextColor(BuildContext context) {
-    return DefaultTextStyle.of(context).style.color!;
-  }
-
-  static bool isUnsuccessfulStatusCode(int code) {
-    return 400 <= code && code < 600;
-  }
-
-  static TextStyle getLocalTextStyle(BuildContext context, TextStyle? style) {
-    final DefaultTextStyle defaultTextStyle = DefaultTextStyle.of(context);
-    TextStyle? effectiveTextStyle = style;
-
-    if (style == null || style.inherit) {
-      effectiveTextStyle = defaultTextStyle.style.merge(style);
-    }
-
-    if (MediaQuery.boldTextOverride(context)) {
-      effectiveTextStyle = effectiveTextStyle!.merge(
-        const TextStyle(fontWeight: FontWeight.bold),
-      );
-    }
-
-    return effectiveTextStyle!;
-  }
-
-  static SnackBar generateAsyncSnackBar({
-    required BuildContext context,
-    required bool done,
-    required Text text,
-    required Icon icon,
-    required Color? foreColor,
-    SnackBarAction? action,
-  }) {
-    return SnackBar(
-      content: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 18.0),
-            child: Stack(
-              children: [
-                CircularProgressIndicator(value: done ? 1 : null),
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: IconTheme(
-                      child: icon,
-                      data: IconThemeData(color: foreColor),
-                    ),
+SnackBar generateAsyncSnackBar({
+  required BuildContext context,
+  required bool done,
+  required Text text,
+  required Icon icon,
+  required Color? foreColor,
+  SnackBarAction? action,
+}) {
+  return SnackBar(
+    content: Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 18.0),
+          child: Stack(
+            children: [
+              CircularProgressIndicator(value: done ? 1 : null),
+              Positioned.fill(
+                child: Align(
+                  child: IconTheme(
+                    data: IconThemeData(color: foreColor),
+                    child: icon,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          text,
-        ],
-      ),
-      action: action,
-      duration: done ? const Duration(seconds: 4) : const Duration(days: 1),
-    );
+        ),
+        text,
+      ],
+    ),
+    action: action,
+    duration: done ? const Duration(seconds: 4) : const Duration(days: 1),
+  );
+}
+
+List<Tuple2<Type, StackTrace>> collectStackTraces(dynamic error) {
+  final list = <Tuple2<Type, StackTrace>>[
+    if (error.stackTrace is StackTrace)
+      Tuple2(error.runtimeType, error.stackTrace),
+  ];
+
+  if (error.innerError != null) {
+    final children = collectStackTraces(error.innerError);
+    list.addAll(children);
   }
 
-  static TextStyle? getDefaultSnackBarTextStyle(BuildContext context) {
-    final theme = Theme.of(context);
-    final snackBarTheme = theme.snackBarTheme;
-
-    if (snackBarTheme.contentTextStyle == null) {
-      final themeData = ThemeData(brightness: theme.brightness.inverted);
-      return themeData.textTheme.subtitle1;
-    }
-
-    return snackBarTheme.contentTextStyle;
-  }
+  return list;
 }

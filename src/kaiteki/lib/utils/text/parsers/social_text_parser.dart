@@ -8,11 +8,14 @@ class SocialTextParser implements TextParser {
   static final _hashtagPattern = RegExp('#([a-zA-Z0-9_]+)');
   static final _emojiPattern = RegExp(r'(?::([^:\s]+):)');
   static final _urlPattern = RegExp(
-      r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)');
+    r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)',
+  );
+
+  const SocialTextParser();
 
   @override
   List<Element> parse(String text, [List<Element>? children]) {
-    List<Element> elements = [TextElement(text, children: children)];
+    final elements = <Element>[TextElement(text, children: children)];
 
     regex(elements, _urlPattern, (match, _) {
       final url = match.group(0);

@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/preferences/sensitive_post_filtering_preferences.dart';
-part 'app_preferences.g.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// TODO: Make AppPreferences immutable, use copyWith(...) pattern.
-@JsonSerializable(includeIfNull: false, createFactory: true, createToJson: true)
-class AppPreferences {
-  ThemeMode theme = ThemeMode.system;
-  SensitivePostFilteringPreferences sensitivePostFilter =
-      SensitivePostFilteringPreferences();
+const kLocale = "locale";
 
-  AppPreferences({
-    this.theme = ThemeMode.system,
-    sensitivePostFilter,
-  }) {
-    this.sensitivePostFilter =
-        sensitivePostFilter ?? SensitivePostFilteringPreferences();
+class AppPreferences extends ChangeNotifier {
+  final SharedPreferences _preferences;
+
+  String? get locale => _preferences.getString(kLocale);
+
+  set locale(String? locale) {
+    if (this.locale == locale) return;
+
+    if (locale == null) {
+      _preferences.remove(kLocale).then((_) => notifyListeners());
+    } else {
+      _preferences.setString(kLocale, locale).then((_) => notifyListeners());
+    }
   }
 
-  factory AppPreferences.fromJson(Map<String, dynamic> json) =>
-      _$AppPreferencesFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AppPreferencesToJson(this);
+  AppPreferences(this._preferences);
 }

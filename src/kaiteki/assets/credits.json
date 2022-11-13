@@ -1,0 +1,67 @@
+[
+    {
+        "name": "Craftplacer",
+        "url": "https://craftplacer.moe/",
+        "roles": [
+            "maintainer",
+            "translator:de"
+        ]
+    },
+    {
+        "name": "Odyssey98",
+        "url": "https://mstdn.social/@odyssey98",
+        "roles": [
+            "iconDesign"
+        ]
+    },
+    {
+        "name": "NaiJi",
+        "url": "https://udongein.xyz/users/NaiJi",
+        "roles": [
+            "translator:ru"
+        ]
+    },
+    {
+        "name": "sfr",
+        "url": "https://github.com/solfisher",
+        "roles": [
+            "translator:he"
+        ]
+    },
+    {
+        "name": "ThatOneCalculator",
+        "url": "https://t1c.dev/",
+        "roles": [
+            "reporter",
+            "contributor"
+        ]
+    },
+    {
+        "name": "futchitwo",
+        "url": "https://github.com/futchitwo",
+        "roles": [
+            "reporter"
+        ]
+    },
+    {
+        "name": "Hayao0819",
+        "url": "https://github.com/Hayao0819",
+        "roles": [
+            "reporter"
+        ]
+    },
+    {
+        "name": "digitalsp",
+        "url": "https://github.com/digitalsp",
+        "roles": [
+            "translator:ja"
+        ]
+    },
+    {
+        "name": "VeselCraft",
+        "url": "https://veselcraft.ru/",
+        "roles": [
+            "translator:ru"
+        ]
+    }
+]

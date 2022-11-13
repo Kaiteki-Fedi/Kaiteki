@@ -4,5 +4,8 @@
 	],
 	"files.watcherExclude": {
 		"removed/**": true
+	},
+	"files.associations": {
+		"*.arb": "json"
 	}
 }

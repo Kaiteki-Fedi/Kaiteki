@@ -2,21 +2,43 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "Profile",
+            "name": "Kaiteki (debug mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "debug",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 1
+            },
         },
         {
-            "name": "Test",
-            "type": "dart",
+            "name": "Kaiteki (profile mode)",
             "request": "launch",
-            "program": "./test/"
+            "type": "dart",
+            "flutterMode": "profile",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 2
+            }
         },
+        {
+            "name": "Kaiteki (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 3
+            }
+        },
+        {
+            "name": "Widgetbook",
+            "request": "launch",
+            "type": "dart",
+            "program": "widgetbook/main.dart"
+        }
     ]
 }

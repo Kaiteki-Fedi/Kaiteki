@@ -5,9 +5,11 @@ import 'package:kaiteki/utils/text/text_renderer.dart';
 class MfmTextParser implements TextParser {
   static final _mfmPattern = RegExp(r'\$\[(?:(\w+)(?:\.(.*?))?\s(.+?))\]');
 
+  const MfmTextParser();
+
   @override
   List<Element> parse(String text, [List<Element>? children]) {
-    List<Element> elements = [TextElement(text)];
+    var elements = <Element>[TextElement(text)];
 
     regex(elements, _mfmPattern, (match, _) {
       final key = match.group(1);
@@ -17,25 +19,25 @@ class MfmTextParser implements TextParser {
       switch (key!) {
         case "x2":
           return TextElement(
-            content!,
+            content,
             style: const TextElementStyle(scale: 2.0),
             children: children,
           );
         case "x3":
           return TextElement(
-            content!,
+            content,
             style: const TextElementStyle(scale: 3.0),
             children: children,
           );
         case "x4":
           return TextElement(
-            content!,
+            content,
             style: const TextElementStyle(scale: 4.0),
             children: children,
           );
         case "blur":
           return TextElement(
-            content!,
+            content,
             style: const TextElementStyle(blur: true),
             children: children,
           );

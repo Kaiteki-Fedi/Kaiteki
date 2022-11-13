@@ -1,16 +1,16 @@
 extension IterableExtensions<T> on Iterable<T> {
   T? firstOrDefault(bool Function(T element) test) {
-    for (T element in this) {
+    for (final element in this) {
       if (test(element)) return element;
     }
     return null;
   }
 
   Map<K, Iterable<T>> groupBy<K>(K Function(T element) groupingFunction) {
-    var map = <K, List<T>>{};
+    final map = <K, List<T>>{};
 
-    for (T element in this) {
-      var key = groupingFunction(element);
+    for (final element in this) {
+      final key = groupingFunction(element);
 
       if (!map.containsKey(key)) {
         map[key] = <T>[];
@@ -20,5 +20,16 @@ extension IterableExtensions<T> on Iterable<T> {
     }
 
     return map;
+  }
+
+  List<T> distinct([bool Function(T a, T b)? equals]) {
+    final list = <T>[];
+
+    final e = equals ?? (a, b) => a == b;
+    for (final a in this) {
+      if (!list.any((b) => e(a, b))) list.add(a);
+    }
+
+    return list;
   }
 }

@@ -1,3 +1,5 @@
+import 'package:kaiteki/utils/extensions.dart';
+
 class UserReference {
   final String? id;
   final String? remoteUrl;
@@ -34,10 +36,27 @@ class UserReference {
       return remoteUrl == other.remoteUrl;
     }
 
-    if ((username != null && other.username != null)) {
+    if (username != null && other.username != null) {
       return username == other.username && host == other.host;
     }
 
     return false;
+  }
+
+  @override
+  String toString() {
+    if (username != null && host != null) return '@$username@$host';
+    if (username != null) return '@$username';
+
+    if (remoteUrl != null) {
+      final parsedUrl = Uri.tryParse(remoteUrl!);
+      if (parsedUrl == null) return remoteUrl!;
+      final handle = parsedUrl.fediverseHandle;
+      return '@${handle.item2}@${handle.item1}';
+    }
+
+    if (id != null) return id!;
+
+    return '<unknown>';
   }
 }
