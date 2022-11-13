@@ -10,8 +10,6 @@ const String appRemoteIcon =
     "https://craftplacer.moe/projects/kaiteki/img/kaiteki.png";
 const String userAgent = "Kaiteki/1.0 (+$appWebsite)";
 
-const String exampleAvatar = "https://craftplacer.keybase.pub/cute.jpg";
-
 const double defaultFormWidth = 448;
 const double defaultFormHeight = 592;
 const dialogConstraints = BoxConstraints(minWidth: 280, maxWidth: 560);

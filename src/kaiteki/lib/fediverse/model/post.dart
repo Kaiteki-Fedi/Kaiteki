@@ -101,16 +101,4 @@ class Post<T> {
     this.visibility,
     this.client,
   });
-
-  factory Post.example() {
-    return Post(
-      author: User.example(),
-      content: "Hello everyone!",
-      source: null,
-      postedAt: DateTime.now(),
-      reactions: [],
-      id: 'cool-post',
-      visibility: Visibility.public,
-    );
-  }
 }

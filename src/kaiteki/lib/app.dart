@@ -15,6 +15,7 @@ class KaitekiApp extends ConsumerWidget {
     final themePrefs = ref.watch(themeProvider);
     final m3 = themePrefs.useMaterial3 ?? themePrefs.material3Default;
     return MaterialApp.router(
+      useInheritedMediaQuery: true,
       darkTheme: getTheme(Brightness.dark, m3),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       routeInformationParser: router.routeInformationParser,
