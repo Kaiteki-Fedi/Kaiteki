@@ -80,8 +80,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       return compute(toThread, thread.toList(growable: false));
     });
 
-    final l10n = context.getL10n();
-
     return FutureBuilder<ThreadPost>(
       future: _threadedFuture,
       builder: (_, snapshot) {
