@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -14,6 +15,8 @@ import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/preferences/app_preferences.dart';
 import 'package:kaiteki/preferences/theme_preferences.dart';
 import 'package:kaiteki/repositories/hive_repository.dart';
+import 'package:kaiteki/theming/default/themes.dart';
+import 'package:kaiteki/ui/shared/crash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> get _useMaterial3ByDefault async {
@@ -26,36 +29,53 @@ Future<bool> get _useMaterial3ByDefault async {
 Future<void> main() async {
   GoRouter.setUrlPathStrategy(UrlPathStrategy.hash);
 
-  // we need to run this to be able to get access to SharedPreferences
-  WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded(
+    () async {
+      // we need to run this to be able to get access to SharedPreferences
+      WidgetsFlutterBinding.ensureInitialized();
 
-  await initializeHive();
-  final accountManager = await getAccountManager();
+      await initializeHive();
+      final accountManager = await getAccountManager();
 
-  final sharedPrefs = await SharedPreferences.getInstance();
-  final themePreferences = ThemePreferences(
-    sharedPrefs,
-    await _useMaterial3ByDefault,
+      final sharedPrefs = await SharedPreferences.getInstance();
+      final themePreferences = ThemePreferences(
+        sharedPrefs,
+        await _useMaterial3ByDefault,
+      );
+      final appPreferences = AppPreferences(sharedPrefs);
+
+      // construct app & run
+      final app = ProviderScope(
+        overrides: [
+          themeProvider.overrideWithProvider(
+            ChangeNotifierProvider((_) => themePreferences),
+          ),
+          preferencesProvider.overrideWithProvider(
+            ChangeNotifierProvider((_) => appPreferences),
+          ),
+          accountProvider.overrideWithProvider(
+            ChangeNotifierProvider((_) => accountManager),
+          ),
+        ],
+        child: const KaitekiApp(),
+      );
+
+      runApp(app);
+    },
+    handleFatalError,
   );
-  final appPreferences = AppPreferences(sharedPrefs);
+}
 
-  // construct app & run
-  final app = ProviderScope(
-    overrides: [
-      themeProvider.overrideWithProvider(
-        ChangeNotifierProvider((_) => themePreferences),
-      ),
-      preferencesProvider.overrideWithProvider(
-        ChangeNotifierProvider((_) => appPreferences),
-      ),
-      accountProvider.overrideWithProvider(
-        ChangeNotifierProvider((_) => accountManager),
-      ),
-    ],
-    child: const KaitekiApp(),
+void handleFatalError(Object error, StackTrace stackTrace) {
+  final crashScreen = MaterialApp(
+    theme: getTheme(Brightness.light, true),
+    darkTheme: getTheme(Brightness.dark, true),
+    home: CrashScreen(
+      exception: error,
+      stackTrace: stackTrace,
+    ),
   );
-
-  runApp(app);
+  runApp(crashScreen);
 }
 
 Future<void> initializeHive() async {
