@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app.dart';
@@ -22,13 +21,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<bool> get _useMaterial3ByDefault async {
   if (kIsWeb || !Platform.isAndroid) return false;
   final androidInfo = await DeviceInfoPlugin().androidInfo;
-  return (androidInfo.version.sdkInt ?? 0) >= 12;
+  return androidInfo.version.sdkInt >= 12;
 }
 
 /// Main entrypoint.
 Future<void> main() async {
-  GoRouter.setUrlPathStrategy(UrlPathStrategy.hash);
-
   runZonedGuarded(
     () async {
       // we need to run this to be able to get access to SharedPreferences
