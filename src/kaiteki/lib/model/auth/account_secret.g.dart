@@ -18,15 +18,21 @@ class AccountSecretAdapter extends TypeAdapter<AccountSecret> {
     };
     return AccountSecret(
       fields[1] as String,
+      fields[2] as String?,
+      fields[3] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, AccountSecret obj) {
     writer
+      ..writeByte(3)
       ..writeByte(1)
-      ..writeByte(1)
-      ..write(obj.accessToken);
+      ..write(obj.accessToken)
+      ..writeByte(2)
+      ..write(obj.refreshToken)
+      ..writeByte(3)
+      ..write(obj.userId);
   }
 
   @override
@@ -47,9 +53,13 @@ class AccountSecretAdapter extends TypeAdapter<AccountSecret> {
 AccountSecret _$AccountSecretFromJson(Map<String, dynamic> json) =>
     AccountSecret(
       json['token'] as String,
+      json['refreshToken'] as String?,
+      json['userId'] as String?,
     );
 
 Map<String, dynamic> _$AccountSecretToJson(AccountSecret instance) =>
     <String, dynamic>{
       'token': instance.accessToken,
+      'refreshToken': instance.refreshToken,
+      'userId': instance.userId,
     };
