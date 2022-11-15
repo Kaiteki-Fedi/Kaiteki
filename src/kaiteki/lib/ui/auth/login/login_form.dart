@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animations/animations.dart';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
@@ -67,6 +68,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
   InstanceCompound? get instance => _instance;
   set instance(InstanceCompound? instance) {
     if (instance == _instance) return;
+    assert(mounted);
     setState(() => _instance = instance);
     widget.onInstanceChanged?.call(_instance);
   }
@@ -75,7 +77,16 @@ class LoginFormState extends ConsumerState<LoginForm> {
   CallbackRequest<void, MfaSubmitCallback>? _mfaRequest;
   VoidCallback? _oAuth;
 
+  CancelableOperation<InstanceCompound?>? _fetchInstanceFuture;
+
   Future<void>? _loginFuture;
+
+  @override
+  void dispose() {
+    // Avoid setting state when widget becomes unmounted
+    _fetchInstanceFuture?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -254,7 +265,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<void> _showError(dynamic error, StackTrace? stack) async {
-    return showDialog(
+    await showDialog(
       context: context,
       builder: (_) => AuthenticationUnsuccessfulDialog(
         error: Tuple2(error, stack),
@@ -317,10 +328,17 @@ class LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<void> _loginToInstance(String host) async {
-    final instance = await _fetchInstance(host);
-    if (instance == null) return;
+    assert(_fetchInstanceFuture == null);
+    _fetchInstanceFuture = CancelableOperation.fromFuture(_fetchInstance(host));
 
-    this.instance = instance;
-    await _login(instance);
+    try {
+      final instance = await _fetchInstanceFuture!.valueOrCancellation();
+      if (instance == null) return;
+
+      this.instance = instance;
+      await _login(instance);
+    } finally {
+      _fetchInstanceFuture = null;
+    }
   }
 }

@@ -1,5 +1,5 @@
 name: Backend request
-description: Request a new backend to be added to Kaiteki
+description: Request a new backend (e.g. Mastodon) to be added to Kaiteki
 title: "Backend request"
 labels: [ "enhancement", "api:missing" ]
 body:

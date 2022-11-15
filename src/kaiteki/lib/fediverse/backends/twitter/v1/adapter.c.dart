@@ -13,7 +13,7 @@ Post toPost(twitter.Tweet tweet) {
     content: content,
     likeCount: tweet.favoriteCount,
     repeatCount: tweet.retweetCount,
-    attachments: tweet.entities.media?.map(toAttachment),
+    attachments: tweet.entities.media?.map(toAttachment).toList(),
     replyToUserId: tweet.inReplyToUserIdStr,
     replyToPostId: tweet.inReplyToStatusIdStr,
     mentionedUsers: tweet.entities.userMentions?.map((e) {

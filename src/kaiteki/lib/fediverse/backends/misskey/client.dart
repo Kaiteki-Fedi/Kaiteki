@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:http/http.dart' show MultipartFile;
 import 'package:kaiteki/exceptions/api_exception.dart';
@@ -209,12 +211,26 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   Future<void> checkResponse(Response response) async {
     if (!response.isSuccessful) {
       // HACK(Craftplacer): I threw out the usual JSON deserialization pattern from Kaiteki because adding more error-prone code (that is Misskey's fucked API schemas) to error handling is just plain stupid.
-      final json = await response.getContentJson();
-      final error = json["error"];
-      throw ApiException(
-        response.statusCode,
-        reasonPhrase: "${error["message"]} (${error["code"]})",
-      );
+      dynamic error;
+
+      try {
+        final json = await response.getContentJson();
+        error = json["error"];
+      } catch (e, s) {
+        log(
+          "Failed to parse error JSON",
+          error: e,
+          stackTrace: s,
+          name: "MisskeyClient",
+        );
+      }
+
+      if (error != null) {
+        throw ApiException(
+          response.statusCode,
+          reasonPhrase: "${error["message"]} (${error["code"]})",
+        );
+      }
     }
 
     super.checkResponse(response);

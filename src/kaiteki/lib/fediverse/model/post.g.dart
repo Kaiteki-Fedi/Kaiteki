@@ -7,7 +7,7 @@ part of 'post.dart';
 // **************************************************************************
 
 abstract class _$PostCWProxy<T> {
-  Post<T> attachments(Iterable<Attachment<dynamic>>? attachments);
+  Post<T> attachments(List<Attachment<dynamic>>? attachments);
 
   Post<T> author(User<dynamic> author);
 
@@ -19,7 +19,7 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> embeds(List<Embed> embeds);
 
-  Post<T> emojis(Iterable<Emoji<dynamic>>? emojis);
+  Post<T> emojis(List<Emoji<dynamic>>? emojis);
 
   Post<T> externalUrl(String? externalUrl);
 
@@ -41,7 +41,7 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> quotedPost(Post<dynamic>? quotedPost);
 
-  Post<T> reactions(Iterable<Reaction> reactions);
+  Post<T> reactions(List<Reaction> reactions);
 
   Post<T> repeatCount(int repeatCount);
 
@@ -72,13 +72,13 @@ abstract class _$PostCWProxy<T> {
   /// Post<T>(...).copyWith(id: 12, name: "My name")
   /// ````
   Post<T> call({
-    Iterable<Attachment<dynamic>>? attachments,
+    List<Attachment<dynamic>>? attachments,
     User<dynamic>? author,
     bool? bookmarked,
     String? client,
     String? content,
     List<Embed>? embeds,
-    Iterable<Emoji<dynamic>>? emojis,
+    List<Emoji<dynamic>>? emojis,
     String? externalUrl,
     Formatting? formatting,
     String? id,
@@ -89,7 +89,7 @@ abstract class _$PostCWProxy<T> {
     bool? pinned,
     DateTime? postedAt,
     Post<dynamic>? quotedPost,
-    Iterable<Reaction>? reactions,
+    List<Reaction>? reactions,
     int? repeatCount,
     Post<dynamic>? repeatOf,
     bool? repeated,
@@ -111,7 +111,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   const _$PostCWProxyImpl(this._value);
 
   @override
-  Post<T> attachments(Iterable<Attachment<dynamic>>? attachments) =>
+  Post<T> attachments(List<Attachment<dynamic>>? attachments) =>
       this(attachments: attachments);
 
   @override
@@ -130,7 +130,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   Post<T> embeds(List<Embed> embeds) => this(embeds: embeds);
 
   @override
-  Post<T> emojis(Iterable<Emoji<dynamic>>? emojis) => this(emojis: emojis);
+  Post<T> emojis(List<Emoji<dynamic>>? emojis) => this(emojis: emojis);
 
   @override
   Post<T> externalUrl(String? externalUrl) => this(externalUrl: externalUrl);
@@ -164,7 +164,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   Post<T> quotedPost(Post<dynamic>? quotedPost) => this(quotedPost: quotedPost);
 
   @override
-  Post<T> reactions(Iterable<Reaction> reactions) => this(reactions: reactions);
+  Post<T> reactions(List<Reaction> reactions) => this(reactions: reactions);
 
   @override
   Post<T> repeatCount(int repeatCount) => this(repeatCount: repeatCount);
@@ -245,7 +245,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
       attachments: attachments == const $CopyWithPlaceholder()
           ? _value.attachments
           // ignore: cast_nullable_to_non_nullable
-          : attachments as Iterable<Attachment<dynamic>>?,
+          : attachments as List<Attachment<dynamic>>?,
       author: author == const $CopyWithPlaceholder() || author == null
           ? _value.author
           // ignore: cast_nullable_to_non_nullable
@@ -270,7 +270,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
       emojis: emojis == const $CopyWithPlaceholder()
           ? _value.emojis
           // ignore: cast_nullable_to_non_nullable
-          : emojis as Iterable<Emoji<dynamic>>?,
+          : emojis as List<Emoji<dynamic>>?,
       externalUrl: externalUrl == const $CopyWithPlaceholder()
           ? _value.externalUrl
           // ignore: cast_nullable_to_non_nullable
@@ -314,7 +314,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
       reactions: reactions == const $CopyWithPlaceholder() || reactions == null
           ? _value.reactions
           // ignore: cast_nullable_to_non_nullable
-          : reactions as Iterable<Reaction>,
+          : reactions as List<Reaction>,
       repeatCount:
           repeatCount == const $CopyWithPlaceholder() || repeatCount == null
               ? _value.repeatCount

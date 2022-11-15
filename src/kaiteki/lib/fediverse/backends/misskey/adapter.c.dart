@@ -1,7 +1,7 @@
 part of 'adapter.dart';
 
 Post toPost(misskey.Note source, String localHost) {
-  final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji);
+  final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji).toList();
 
   return Post(
     source: source,
@@ -23,7 +23,7 @@ Post toPost(misskey.Note source, String localHost) {
     repeatOf: source.renote == null ? null : toPost(source.renote!, localHost),
     id: source.id,
     visibility: toVisibility(source.visibility),
-    attachments: source.files?.map(toAttachment) ?? [],
+    attachments: source.files?.map(toAttachment).toList(),
     externalUrl: source.url,
   );
 }

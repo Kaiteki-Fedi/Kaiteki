@@ -26,41 +26,43 @@ Future<bool> get _useMaterial3ByDefault async {
 
 /// Main entrypoint.
 Future<void> main() async {
-  runZonedGuarded(
-    () async {
-      // we need to run this to be able to get access to SharedPreferences
-      WidgetsFlutterBinding.ensureInitialized();
+  final Widget app;
 
-      await initializeHive();
-      final accountManager = await getAccountManager();
+  try {
+    // we need to run this to be able to get access to SharedPreferences
+    WidgetsFlutterBinding.ensureInitialized();
 
-      final sharedPrefs = await SharedPreferences.getInstance();
-      final themePreferences = ThemePreferences(
-        sharedPrefs,
-        await _useMaterial3ByDefault,
-      );
-      final appPreferences = AppPreferences(sharedPrefs);
+    await initializeHive();
+    final accountManager = await getAccountManager();
 
-      // construct app & run
-      final app = ProviderScope(
-        overrides: [
-          themeProvider.overrideWithProvider(
-            ChangeNotifierProvider((_) => themePreferences),
-          ),
-          preferencesProvider.overrideWithProvider(
-            ChangeNotifierProvider((_) => appPreferences),
-          ),
-          accountProvider.overrideWithProvider(
-            ChangeNotifierProvider((_) => accountManager),
-          ),
-        ],
-        child: const KaitekiApp(),
-      );
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final themePreferences = ThemePreferences(
+      sharedPrefs,
+      await _useMaterial3ByDefault,
+    );
+    final appPreferences = AppPreferences(sharedPrefs);
 
-      runApp(app);
-    },
-    handleFatalError,
-  );
+    // construct app & run
+    app = ProviderScope(
+      overrides: [
+        themeProvider.overrideWithProvider(
+          ChangeNotifierProvider((_) => themePreferences),
+        ),
+        preferencesProvider.overrideWithProvider(
+          ChangeNotifierProvider((_) => appPreferences),
+        ),
+        accountProvider.overrideWithProvider(
+          ChangeNotifierProvider((_) => accountManager),
+        ),
+      ],
+      child: const KaitekiApp(),
+    );
+  } catch (e, s) {
+    handleFatalError(e, s);
+    return;
+  }
+
+  runApp(app);
 }
 
 void handleFatalError(Object error, StackTrace stackTrace) {
