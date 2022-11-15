@@ -313,21 +313,22 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   @override
   Future<void> checkResponse(Response response) async {
     if (!response.isSuccessful) {
-      final dynamic json;
+      dynamic json;
 
       try {
         json = await response.getContentJson();
-      } catch (_) {
-        // Invalid JSON most likely
-        return;
-      }
+      } catch (_) {}
 
-      throw ApiException(
-        response.statusCode,
-        reasonPhrase: json["error"] as String,
-        data: json,
-      );
+      if (json != null) {
+        throw ApiException(
+          response.statusCode,
+          reasonPhrase: json["error"] as String,
+          data: json,
+        );
+      }
     }
+
+    super.checkResponse(response);
   }
 
   @override
