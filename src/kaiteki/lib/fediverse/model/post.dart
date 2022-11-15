@@ -43,14 +43,14 @@ class Post<T> {
   final bool bookmarked;
 
   /// What reactions this post has
-  final Iterable<Reaction> reactions;
+  final List<Reaction> reactions;
 
   // CONTENT
   final String? subject;
   final String? content;
   final Formatting? formatting;
-  final Iterable<Attachment>? attachments;
-  final Iterable<Emoji>? emojis;
+  final List<Attachment>? attachments;
+  final List<Emoji>? emojis;
 
   final List<Embed> embeds;
 

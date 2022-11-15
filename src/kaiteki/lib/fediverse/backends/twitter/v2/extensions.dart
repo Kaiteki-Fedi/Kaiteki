@@ -75,11 +75,14 @@ extension TweetExtensions on twt.Tweet {
               ?.firstWhereOrNull((t) => t.id == quote.id)
               ?.toKaiteki(includes)
           : null,
-      attachments: media?.where((m) {
-        final hasUrl = m.url != null || m.previewImageUrl != null;
-        if (!hasUrl) log("Media (${m.mediaKey}) has no URL");
-        return hasUrl;
-      }).map((m) => m.toKaiteki()),
+      attachments: media
+          ?.where((m) {
+            final hasUrl = m.url != null || m.previewImageUrl != null;
+            if (!hasUrl) log("Media (${m.mediaKey}) has no URL");
+            return hasUrl;
+          })
+          .map((m) => m.toKaiteki())
+          .toList(),
       replyTo: reply != null
           ? includes.tweets
               ?.firstWhereOrNull((t) => t.id == reply.id)
