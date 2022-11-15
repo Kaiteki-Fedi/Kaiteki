@@ -11,6 +11,7 @@ import 'package:kaiteki/ui/main/compose_fab.dart';
 import 'package:kaiteki/ui/main/drawer.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
 import 'package:kaiteki/ui/main/pages/bookmarks.dart';
+import 'package:kaiteki/ui/main/pages/notifications.dart';
 import 'package:kaiteki/ui/main/pages/placeholder.dart';
 import 'package:kaiteki/ui/main/pages/timeline.dart';
 import 'package:kaiteki/ui/main/tab.dart';
@@ -241,7 +242,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget _buildPage() {
     final pages = [
       TimelinePage(key: _timelineKey),
-      const PlaceholderPage(),
+      const NotificationsPage(),
       const PlaceholderPage(),
       const BookmarksPage(),
     ];

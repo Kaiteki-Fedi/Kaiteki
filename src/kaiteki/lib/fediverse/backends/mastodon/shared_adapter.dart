@@ -9,7 +9,9 @@ import 'package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart'
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
+import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/notification.dart';
 // ignore: unnecessary_import, Dart Analyzer is fucking with me
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
@@ -20,7 +22,7 @@ import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/utils/extensions/iterable.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
 
 part 'shared_adapter.c.dart'; // That file contains toEntity() methods
@@ -29,7 +31,11 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 /// to use pre-existing code.
 abstract class SharedMastodonAdapter<T extends MastodonClient>
     extends FediverseAdapter<T>
-    implements CustomEmojiSupport, FavoriteSupport, BookmarkSupport {
+    implements
+        CustomEmojiSupport,
+        FavoriteSupport,
+        BookmarkSupport,
+        NotificationSupport {
   SharedMastodonAdapter(super.client);
 
   @override
@@ -368,5 +374,13 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       maxId: query?.untilId,
     );
     return statuses.map((p) => toPost(p, client.instance));
+  }
+
+  @override
+  Future<List<Notification>> getNotifications() async {
+    final notifications = await client.getNotifications();
+    return notifications
+        .map((n) => toNotification(n, client.instance))
+        .toList();
   }
 }

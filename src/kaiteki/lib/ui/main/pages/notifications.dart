@@ -1,33 +1,39 @@
 import 'package:animations/animations.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart' hide Notification;
-import 'package:kaiteki/account_manager.dart';
+import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/screens/conversation_screen.dart';
-import 'package:kaiteki/ui/widgets/icon_landing_widget.dart';
-import 'package:kaiteki/ui/widgets/posts/avatar_widget.dart';
+import 'package:kaiteki/ui/shared/conversation_screen.dart';
+import 'package:kaiteki/ui/shared/error_landing_widget.dart';
+import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
-import 'package:provider/provider.dart';
 
-class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+class NotificationsPage extends ConsumerStatefulWidget {
+  const NotificationsPage({super.key});
 
   @override
-  _NotificationPageState createState() => _NotificationPageState();
+  ConsumerState<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
+class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
-    var container = Provider.of<AccountManager>(context);
+    final adapter = ref.watch(adapterProvider);
+
+    if (adapter is! NotificationSupport) {
+      return ErrorLandingWidget(error: UnimplementedError());
+    }
+
+    final nAdapter = adapter as NotificationSupport;
 
     return FutureBuilder<Iterable<Notification>>(
-      future: container.adapter.getNotifications(),
+      future: nAdapter.getNotifications(),
       builder: (context, snapshot) {
         return PageTransitionSwitcher(
-          duration: const Duration(milliseconds: 300),
           transitionBuilder: animations.fadeThrough,
           child: _buildBody(context, snapshot),
         );
@@ -59,7 +65,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 }
 
-class NotificationWidget extends StatelessWidget {
+class NotificationWidget extends ConsumerWidget {
   final Notification notification;
 
   static final _icons = <NotificationType, IconData>{
@@ -78,15 +84,17 @@ class NotificationWidget extends StatelessWidget {
     NotificationType.reacted: Colors.purple,
   };
 
-  const NotificationWidget(this.notification, {Key? key}) : super(key: key);
+  const NotificationWidget(this.notification, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ConversationScreen(notification.post!),
-        ));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ConversationScreen(notification.post!),
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -94,11 +102,11 @@ class NotificationWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Badge(
-              child: AvatarWidget(notification.user!),
               position: BadgePosition.bottomEnd(bottom: 0, end: 0),
               badgeContent: Icon(_icons[notification.type], size: 16),
               badgeColor: _colors[notification.type] ?? Colors.grey,
               padding: const EdgeInsets.all(2.0),
+              child: AvatarWidget(notification.user!),
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -111,7 +119,7 @@ class NotificationWidget extends StatelessWidget {
                       children: [
                         TextSpan(
                           children: [
-                            notification.user!.renderDisplayName(context)
+                            notification.user!.renderDisplayName(context, ref)
                           ],
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
@@ -122,7 +130,7 @@ class NotificationWidget extends StatelessWidget {
                   const SizedBox(height: 8),
                   Flexible(
                     child: Text.rich(
-                      notification.post!.renderContent(context),
+                      notification.post!.renderContent(context, ref),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

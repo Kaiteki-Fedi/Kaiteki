@@ -43,11 +43,14 @@ Post toPost(mastodon.Status source, String localHost) {
   );
 }
 
-Notification toNotification(mastodon.Notification notification) {
+Notification toNotification(
+  mastodon.Notification notification,
+  String localHost,
+) {
   return Notification(
     type: toNotificationType(notification.type),
-    user: notification.account.nullTransform((u) => toUser(u)),
-    post: notification.status.nullTransform((p) => toPost(p)),
+    user: notification.account?.nullTransform((u) => toUser(u, localHost)),
+    post: notification.status?.nullTransform((p) => toPost(p, localHost)),
   );
 }
 
