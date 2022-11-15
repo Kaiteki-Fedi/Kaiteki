@@ -41,11 +41,13 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
         "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
   );
 
-  factory TwitterAdapter(String _) {
-    return TwitterAdapter.custom(TwitterClient());
+  final String? _host;
+
+  factory TwitterAdapter(String? host) {
+    return TwitterAdapter.custom(TwitterClient(), host);
   }
 
-  TwitterAdapter.custom(super.client);
+  TwitterAdapter.custom(super.client, [this._host]);
 
   @override
   AdapterCapabilities get capabilities => const TwitterCapabilities();
@@ -313,11 +315,11 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
   }
 
   @override
-  Future<Instance?> probeInstance() {
-    if (client.instance == "twitter.com") {
-      return Future.value(instanceModel);
+  Future<Instance?> probeInstance() async {
+    if (_host == "twitter.com") {
+      return instanceModel;
     }
-    return Future.value();
+    return null;
   }
 
   @override
