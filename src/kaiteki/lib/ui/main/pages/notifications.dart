@@ -116,7 +116,25 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                   right: kFloatingActionButtonMargin,
                   child: Align(
                     child: FloatingActionButton.extended(
-                      onPressed: service.markAllAsRead,
+                      onPressed: () {
+                        final messenger = ScaffoldMessenger.of(context);
+                        service.markAllAsRead().onError((error, stackTrace) {
+                          messenger.showSnackBar(
+                            SnackBar(
+                              content: const Text(
+                                "Failed to mark notification as read",
+                              ),
+                              action: SnackBarAction(
+                                label: "Show details",
+                                onPressed: () => context.showExceptionDialog(
+                                  error,
+                                  stackTrace,
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                      },
                       label: const Text("Mark all as read"),
                       icon: const Icon(Icons.done_all_rounded),
                     ),
