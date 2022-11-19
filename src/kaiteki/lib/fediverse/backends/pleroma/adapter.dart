@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/capabilities.dart';
@@ -6,6 +7,7 @@ import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/notification.dart';
 
 part 'adapter.c.dart';
 
@@ -114,4 +116,21 @@ class PleromaAdapter //
 
   @override
   PleromaCapabilities get capabilities => const PleromaCapabilities();
+
+  @override
+  Future<void> markAllNotificationsAsRead() async {
+    final notifications = await client.getNotifications();
+    final lastNotification = notifications.firstOrNull;
+    if (lastNotification != null) {
+      await client.markNotificationsAsRead(
+        int.parse(lastNotification.id),
+      );
+    }
+  }
+
+  @override
+  Future<void> markNotificationAsRead(Notification notification) {
+    // TODO: implement markNotificationAsRead
+    throw UnimplementedError();
+  }
 }

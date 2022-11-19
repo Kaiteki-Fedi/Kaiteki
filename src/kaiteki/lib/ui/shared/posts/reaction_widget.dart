@@ -41,7 +41,7 @@ class _ReactionWidgetState extends ConsumerState<ReactionWidget> {
         style: textStyle,
         child: InkWell(
           onTap: () async {
-            final adapter = ref.watch(accountProvider).adapter;
+            final adapter = ref.watch(adapterProvider);
             if (adapter is ReactionSupport) {
               await (adapter as ReactionSupport).addReaction(
                 widget.parentPost,

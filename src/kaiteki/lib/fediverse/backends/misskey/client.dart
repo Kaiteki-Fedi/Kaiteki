@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fediverse_objects/misskey.dart' as misskey;
+import 'package:fediverse_objects/src/misskey/notification.dart' as misskey;
 import 'package:http/http.dart' show MultipartFile;
 import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
@@ -344,5 +345,36 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       misskey.Note.fromJson,
       body: {"noteId": id},
     );
+  }
+
+  Future<void> markAllNotificationsAsRead() async {
+    return sendJsonRequestWithoutResponse(
+      HttpMethod.post,
+      "api/notifications/mark-all-as-read",
+      body: {},
+    );
+  }
+
+  Future<List<misskey.Notification>> getNotifications({
+    int? limit,
+    bool? markAsRead,
+    String? sinceId,
+    String? untilId,
+    bool? unreadOnly,
+    // TODO(Craftplacer): add misskey notification types/filters
+  }) async {
+    final notifications = await sendJsonRequestMultiple(
+      HttpMethod.post,
+      "api/i/notifications",
+      misskey.Notification.fromJson,
+      body: {
+        if (limit != null) "limit": limit,
+        if (markAsRead != null) "markAsRead": markAsRead,
+        if (sinceId != null) "sinceId": sinceId,
+        if (untilId != null) "untilId": untilId,
+        if (unreadOnly != null) "unreadOnly": unreadOnly,
+      },
+    );
+    return notifications.toList();
   }
 }

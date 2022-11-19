@@ -135,3 +135,39 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
     source: instance,
   );
 }
+
+Notification toNotification(
+  misskey.Notification notification,
+  String localHost,
+) {
+  final type = const {
+    misskey.NotificationType.follow: NotificationType.followed,
+    misskey.NotificationType.mention: NotificationType.mentioned,
+    misskey.NotificationType.reply: NotificationType.replied,
+    misskey.NotificationType.renote: NotificationType.repeated,
+    misskey.NotificationType.quote: NotificationType.quoted,
+    misskey.NotificationType.reaction: NotificationType.reacted,
+    misskey.NotificationType.pollEnded: NotificationType.pollEnded,
+    misskey.NotificationType.receiveFollowRequest:
+        NotificationType.followRequest,
+    misskey.NotificationType.followRequestAccepted: NotificationType.followed,
+    misskey.NotificationType.groupInvited: NotificationType.groupInvite,
+  }[notification.type];
+
+  if (type == null) {
+    throw UnsupportedError(
+      "Kaiteki does not support ${notification.type} as notification type",
+    );
+  }
+
+  final note = notification.note;
+  final user = notification.user;
+
+  return Notification(
+    createdAt: notification.createdAt,
+    type: type,
+    user: user == null ? null : toUserFromLite(user, localHost),
+    post: note == null ? null : toPost(note, localHost),
+    unread: !notification.isRead,
+  );
+}

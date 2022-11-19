@@ -1,3 +1,4 @@
+import 'package:fediverse_objects/mastodon.dart' show Notification;
 import 'package:fediverse_objects/pleroma.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
@@ -77,5 +78,24 @@ class PleromaClient extends MastodonClient {
     }
 
     super.checkResponse(response);
+  }
+
+  Future<Notification> markNotificationAsRead(int id) async {
+    return await sendJsonRequest(
+      HttpMethod.post,
+      "/api/v1/pleroma/notifications/read",
+      Notification.fromJson,
+      body: {"id": id},
+    );
+  }
+
+  Future<List<Notification>> markNotificationsAsRead(int maxId) async {
+    final notifications = await sendJsonRequestMultiple(
+      HttpMethod.post,
+      "/api/v1/pleroma/notifications/read",
+      Notification.fromJson,
+      body: {"max_id": maxId},
+    );
+    return notifications.toList();
   }
 }

@@ -25,7 +25,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
-    final manager = ref.watch(accountProvider);
+    final adapter = ref.watch(adapterProvider);
     final replyTo = widget.replyTo;
 
     return WillPopScope(
@@ -56,13 +56,13 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
             children: [
               AppBar(
                 actions: [
-                  if (manager.adapter is PreviewSupport)
+                  if (adapter is PreviewSupport)
                     IconButton(
                       isSelected: showPreview,
                       onPressed: togglePreview,
                       icon: const Icon(Icons.preview_rounded),
                     ),
-                  if (manager.adapter.capabilities.supportsSubjects)
+                  if (adapter.capabilities.supportsSubjects)
                     ToggleSubjectButton(
                       value: enableSubject,
                       onChanged: toggleSubject,

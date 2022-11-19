@@ -23,7 +23,7 @@ class ReplyBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledColor = Theme.of(context).disabledColor;
     final l10n = context.getL10n();
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
 
     return Padding(
       padding: kPostPadding,

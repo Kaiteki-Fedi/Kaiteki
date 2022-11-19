@@ -12,9 +12,9 @@ final accountProvider = ChangeNotifierProvider<AccountManager>((_) {
   throw UnimplementedError();
 });
 
-final adapterProvider = Provider<FediverseAdapter>((_) {
-  throw UnimplementedError();
-});
+final adapterProvider = Provider<FediverseAdapter>(
+  (ref) => ref.watch(accountProvider).current.adapter,
+);
 
 final themeProvider = ChangeNotifierProvider<ThemePreferences>((_) {
   throw UnimplementedError();

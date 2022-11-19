@@ -4,6 +4,7 @@ import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/responses/marker.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/http/response.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
@@ -11,6 +12,7 @@ import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/model/http_method.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
@@ -377,5 +379,14 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       mastodon.Account.fromJson,
     );
     return users.toList();
+  }
+
+  Future<MarkerResponse> getMarkers(Set<MarkerTimeline> timeline) async {
+    // HACK(Craftplacer): query might be wrong
+    return await sendJsonRequest(
+      HttpMethod.get,
+      "api/v1/markers?timeline[]=${timeline.map((t) => t.name).join(",")}",
+      MarkerResponse.fromJson,
+    );
   }
 }

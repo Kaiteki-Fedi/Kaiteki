@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:go_router/go_router.dart';
-import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/constants.dart' show bottomSheetConstraints;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
@@ -113,20 +112,21 @@ class PostFormState extends ConsumerState<PostForm> {
     final manager = ref.watch(accountProvider);
     final flex = widget.expands ? 1 : 0;
     final l10n = context.getL10n();
+    final adapter = manager.current.adapter;
 
     return FocusableActionDetector(
       shortcuts: const {commit: SendIntent()},
       actions: {
         SendIntent: CallbackAction(
-          onInvoke: (_) => post(context, manager.adapter),
+          onInvoke: (_) => post(context, adapter),
         ),
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.showPreview && manager.adapter is PreviewSupport) ...[
+          if (widget.showPreview && adapter is PreviewSupport) ...[
             FutureBuilder(
-              future: getPreviewFuture(manager),
+              future: getPreviewFuture(adapter as PreviewSupport),
               builder: buildPreview,
             ),
             const Divider(height: 15),
@@ -193,7 +193,7 @@ class PostFormState extends ConsumerState<PostForm> {
                 ..._buildActions(context),
                 const Spacer(),
                 FloatingActionButton.small(
-                  onPressed: () => post(context, manager.adapter),
+                  onPressed: () => post(context, adapter),
                   elevation: 2.0,
                   tooltip: l10n.submitButtonTooltip,
                   child: const Icon(Icons.send_rounded),
@@ -238,12 +238,11 @@ class PostFormState extends ConsumerState<PostForm> {
     );
   }
 
-  Future<Post>? getPreviewFuture(AccountManager manager) {
+  Future<Post>? getPreviewFuture(PreviewSupport adapter) {
     if (_bodyController.value.text.isEmpty) return null;
 
     final draft = _getPostDraft([]);
-    final previewAdapter = manager.adapter as PreviewSupport;
-    return previewAdapter.getPreview(draft);
+    return adapter.getPreview(draft);
   }
 
   PostDraft _getPostDraft(List<Attachment> attachments) {
@@ -336,15 +335,16 @@ class PostFormState extends ConsumerState<PostForm> {
     Navigator.of(context).pop();
   }
 
-  void openEmojiPicker(BuildContext context, AccountManager container) {
-    showModalBottomSheet(
+  Future<void> openEmojiPicker(BuildContext context, WidgetRef ref) async {
+    final adapter = ref.read(adapterProvider) as CustomEmojiSupport;
+    await showModalBottomSheet(
       context: context,
       constraints: bottomSheetConstraints,
       builder: (context) {
         return SizedBox(
           height: 250,
           child: FutureBuilder(
-            future: (container.adapter as CustomEmojiSupport).getEmojis(),
+            future: adapter.getEmojis(),
             builder: buildEmojiSelector,
           ),
         );
@@ -436,7 +436,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
     final pickedFile = result.files.first;
     final kaitekiFile = File.path(pickedFile.path!, name: pickedFile.name);
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     setState(
       () => attachments.add(adapter.uploadAttachment(kaitekiFile, null)),
     );
@@ -444,9 +444,9 @@ class PostFormState extends ConsumerState<PostForm> {
 
   List<Widget> _buildActions(BuildContext context) {
     final l10n = context.getL10n();
-    final manager = ref.watch(accountProvider);
-    final formattingList = manager.adapter.capabilities.supportedFormattings;
-    final supportedScopes = manager.adapter.capabilities.supportedScopes;
+    final adapter = ref.watch(adapterProvider);
+    final formattingList = adapter.capabilities.supportedFormattings;
+    final supportedScopes = adapter.capabilities.supportedScopes;
     return [
       IconButton(
         onPressed: openAttachDrawer,
@@ -454,9 +454,9 @@ class PostFormState extends ConsumerState<PostForm> {
         splashRadius: splashRadius,
         tooltip: l10n.attachButtonTooltip,
       ),
-      if (manager.adapter is CustomEmojiSupport)
+      if (adapter is CustomEmojiSupport)
         IconButton(
-          onPressed: () => openEmojiPicker(context, manager),
+          onPressed: () => openEmojiPicker(context, ref),
           icon: const Icon(Icons.mood_rounded),
           splashRadius: splashRadius,
           tooltip: l10n.emojiButtonTooltip,

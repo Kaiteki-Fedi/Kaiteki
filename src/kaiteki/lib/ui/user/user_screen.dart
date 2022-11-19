@@ -55,9 +55,9 @@ class _UserScreenState extends ConsumerState<UserScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final accounts = ref.watch(accountProvider);
+    final adapter = ref.watch(adapterProvider);
     try {
-      _future = accounts.adapter.getUserById(widget.id);
+      _future = adapter.getUserById(widget.id);
     } catch (e, s) {
       _logger.e("Failed to fetch user profile", e, s);
       _future = Future.error(e, s);

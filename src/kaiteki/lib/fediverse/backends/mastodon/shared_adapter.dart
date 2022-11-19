@@ -3,8 +3,10 @@ import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/authentication_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/adapter.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/responses/marker.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
@@ -378,9 +380,24 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<List<Notification>> getNotifications() async {
+    final Marker? marker;
+
+    if (this is MastodonAdapter) {
+      final markers =
+          await client.getMarkers(const {MarkerTimeline.notifications});
+      marker = markers.notifications;
+    } else {
+      marker = null;
+    }
+
     final notifications = await client.getNotifications();
     return notifications
-        .map((n) => toNotification(n, client.instance))
+        .map((n) => toNotification(n, client.instance, marker))
         .toList();
+  }
+
+  @override
+  Future<void> clearAllNotifications() async {
+    // TODO(Craftplacer): implement clearAllNotifications
   }
 }

@@ -1,5 +1,8 @@
 import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
+// FIXME(Craftplacer): Fix exports for Misskey notifications
+// ignore: implementation_imports
+import 'package:fediverse_objects/src/misskey/notification.dart' as misskey;
 import 'package:intl/intl.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/constants.dart' as consts;
@@ -14,8 +17,10 @@ import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart'
 import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
+import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/account_key.dart';
@@ -35,7 +40,11 @@ final _logger = getLogger('MisskeyAdapter');
 
 // TODO(Craftplacer): add missing implementations
 class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
-    implements ChatSupport, ReactionSupport, CustomEmojiSupport {
+    implements
+        ChatSupport,
+        ReactionSupport,
+        CustomEmojiSupport,
+        NotificationSupport {
   factory MisskeyAdapter(String instance) {
     return MisskeyAdapter.custom(MisskeyClient(instance));
   }
@@ -373,5 +382,27 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
         .map((n) => n.user)
         .map((u) => toUserFromLite(u, client.instance))
         .toList();
+  }
+
+  @override
+  Future<void> clearAllNotifications() =>
+      throw UnsupportedError("Misskey does not support clearing notifications");
+
+  @override
+  Future<List<Notification>> getNotifications() async {
+    final notifications = await client.getNotifications();
+    return notifications
+        .map((n) => toNotification(n, client.instance))
+        .toList();
+  }
+
+  @override
+  Future<void> markAllNotificationsAsRead() =>
+      client.markAllNotificationsAsRead();
+
+  @override
+  Future<void> markNotificationAsRead(Notification notification) {
+    throw UnsupportedError(
+        "Misskey does not support marking individual notifications as read");
   }
 }

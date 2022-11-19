@@ -248,7 +248,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
     if (result.successful) {
       final account = result.account!;
       await accounts.add(account);
-      accounts.currentAccount = account;
+      accounts.current = account;
 
       if (mounted) {
         Navigator.of(context).pop();

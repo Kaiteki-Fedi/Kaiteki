@@ -45,12 +45,32 @@ Post toPost(mastodon.Status source, String localHost) {
 
 Notification toNotification(
   mastodon.Notification notification,
-  String localHost,
-) {
+  String localHost, [
+  Marker? marker,
+]) {
+  final bool? unread;
+
+  if (marker != null) {
+    final lastReadId = int.tryParse(marker.lastReadId);
+    final id = int.tryParse(notification.id);
+
+    if (lastReadId == null || id == null) {
+      unread = null;
+    } else {
+      unread = id > lastReadId;
+    }
+  } else if (notification.pleroma != null) {
+    unread = !notification.pleroma!.isSeen;
+  } else {
+    unread = null;
+  }
+
   return Notification(
+    createdAt: notification.createdAt,
     type: toNotificationType(notification.type),
     user: notification.account?.nullTransform((u) => toUser(u, localHost)),
     post: notification.status?.nullTransform((p) => toPost(p, localHost)),
+    unread: unread,
   );
 }
 
@@ -66,8 +86,10 @@ NotificationType toNotificationType(String type) {
       return NotificationType.followed;
     case "mention":
       return NotificationType.mentioned;
+    case "follow_request":
+      return NotificationType.followRequest;
     default:
-      throw "Unknown notification type: $type";
+      throw Exception("Unknown notification type: $type");
   }
 }
 

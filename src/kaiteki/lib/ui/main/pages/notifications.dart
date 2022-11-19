@@ -1,16 +1,19 @@
 import 'package:animations/animations.dart';
 import 'package:badges/badges.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Notification;
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
+import 'package:kaiteki/fediverse/services/notifications.dart';
+import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/shared/conversation_screen.dart';
+import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:mdi/mdi.dart';
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
@@ -22,45 +25,129 @@ class NotificationsPage extends ConsumerStatefulWidget {
 class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
-    final adapter = ref.watch(adapterProvider);
-
-    if (adapter is! NotificationSupport) {
-      return ErrorLandingWidget(error: UnimplementedError());
+    final account = ref.watch(accountProvider).current;
+    if (account.adapter is! NotificationSupport) {
+      return const Center(
+        child: IconLandingWidget(
+          icon: Icon(Icons.notifications_off_rounded),
+          // TODO(Craftplacer): Add name of backend to make it clear that the backend doesn't support it.
+          text: Text("Notifications are not supported"),
+        ),
+      );
     }
 
-    final nAdapter = adapter as NotificationSupport;
+    final notifications = notificationServiceProvider(account.key);
 
-    return FutureBuilder<Iterable<Notification>>(
-      future: nAdapter.getNotifications(),
-      builder: (context, snapshot) {
-        return PageTransitionSwitcher(
+    return DefaultTabController(
+      length: 2,
+      child: NestedScrollView(
+        floatHeaderSlivers: true,
+        dragStartBehavior: DragStartBehavior.down,
+        headerSliverBuilder: (context, _) => [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                TabBar(
+                  indicatorColor: Theme.of(context).colorScheme.primary,
+                  labelColor: Theme.of(context).colorScheme.primary,
+                  unselectedLabelColor: Theme.of(context).disabledColor,
+                  isScrollable: true,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicator: RoundedUnderlineTabIndicator(
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    radius: const Radius.circular(2),
+                  ),
+                  // TODO(Craftplacer): Localize
+                  tabs: const [
+                    Tab(text: "Unread"),
+                    Tab(text: "Read"),
+                  ],
+                ),
+                const Divider(height: 1),
+              ],
+            ),
+          ),
+        ],
+        body: PageTransitionSwitcher(
           transitionBuilder: animations.fadeThrough,
-          child: _buildBody(context, snapshot),
-        );
-      },
+          child: ref.watch(notifications).when(
+                data: (data) =>
+                    _buildBody(data, ref.read(notifications.notifier)),
+                error: (error, stackTrace) => Center(
+                  child: ErrorLandingWidget(
+                    error: error,
+                    stackTrace: stackTrace,
+                  ),
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+              ),
+        ),
+      ),
     );
   }
 
-  Widget _buildBody(
-    BuildContext context,
-    AsyncSnapshot<Iterable<Notification>> snapshot,
-  ) {
-    if (snapshot.hasError) {
-      return const IconLandingWidget(
-        icon: Icon(Mdi.bellCancel),
-        text: Text("Failed to fetch notifications"),
-      );
-    } else if (!snapshot.hasData) {
-      return const Center(child: CircularProgressIndicator());
-    }
+  Widget _buildBody(List<Notification> data, NotificationService service) {
+    final unread = data.where((n) => n.unread != false);
+    final unreadLength = unread.length;
 
+    final read = data.where((n) => n.unread == false);
+    final readLength = read.length;
+
+    return Material(
+      child: TabBarView(
+        children: [
+          if (unreadLength < 1)
+            const Center(
+              child: IconLandingWidget(
+                icon: Icon(Icons.notifications_active_rounded),
+                text: Text("New notifications will appear here"),
+              ),
+            )
+          else
+            Stack(
+              children: [
+                _buildList(unread, true),
+                Positioned(
+                  bottom: kFloatingActionButtonMargin,
+                  left: kFloatingActionButtonMargin,
+                  right: kFloatingActionButtonMargin,
+                  child: Align(
+                    child: FloatingActionButton.extended(
+                      onPressed: service.markAllAsRead,
+                      label: const Text("Mark all as read"),
+                      icon: const Icon(Icons.done_all_rounded),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          if (readLength < 1)
+            const Center(
+              child: IconLandingWidget(
+                icon: Icon(Icons.notifications_none_rounded),
+                text: Text("Read notifications will appear here"),
+              ),
+            )
+          else
+            _buildList(read),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildList(Iterable<Notification> data, [bool addFABPadding = false]) {
+    // TODO(Craftplacer): Make notifications infinitely scrollable
     return ListView.separated(
-      itemBuilder: (context, i) {
-        final notification = snapshot.data!.elementAt(i);
-        return NotificationWidget(notification);
-      },
+      itemBuilder: (context, i) =>
+          Expanded(child: NotificationWidget(data.elementAt(i))),
       separatorBuilder: (context, _) => const Divider(height: 2),
-      itemCount: snapshot.data!.length,
+      itemCount: data.length,
+      padding: addFABPadding
+          ? const EdgeInsets.only(bottom: kFloatingActionButtonMargin * 2 + 56)
+          : null,
     );
   }
 }
@@ -69,72 +156,122 @@ class NotificationWidget extends ConsumerWidget {
   final Notification notification;
 
   static final _icons = <NotificationType, IconData>{
-    NotificationType.liked: Mdi.star,
-    NotificationType.repeated: Mdi.repeat,
-    NotificationType.mentioned: Mdi.at,
-    NotificationType.followed: Mdi.accountPlus,
-    NotificationType.reacted: Mdi.emoticon,
-  };
-
-  static final _colors = <NotificationType, Color>{
-    NotificationType.liked: Colors.amber,
-    NotificationType.repeated: Colors.green,
-    NotificationType.mentioned: Colors.blue,
-    NotificationType.followed: Colors.blue,
-    NotificationType.reacted: Colors.purple,
+    NotificationType.liked: Icons.star_rounded,
+    NotificationType.repeated: Icons.repeat_rounded,
+    NotificationType.mentioned: Icons.alternate_email_rounded,
+    NotificationType.followed: Icons.person_add_rounded,
+    NotificationType.followRequest: Icons.person_add_rounded,
+    NotificationType.reacted: Icons.emoji_emotions_rounded,
   };
 
   const NotificationWidget(this.notification, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final inheritedTextStyle = DefaultTextStyle.of(context).style;
+    final color = _getColor(context);
+    final icon = _icons[notification.type];
+    final post = notification.post;
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => ConversationScreen(notification.post!),
-          ),
-        );
-      },
+      onTap: () => _onTap(context, ref),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(12.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Badge(
               position: BadgePosition.bottomEnd(bottom: 0, end: 0),
-              badgeContent: Icon(_icons[notification.type], size: 16),
-              badgeColor: _colors[notification.type] ?? Colors.grey,
-              padding: const EdgeInsets.all(2.0),
-              child: AvatarWidget(notification.user!),
+              badgeContent: Icon(
+                icon ?? Icons.notifications_rounded,
+                size: 12,
+                color: ThemeData.estimateBrightnessForColor(color)
+                    .inverted
+                    .getColor(),
+              ),
+              badgeColor: color,
+              padding: const EdgeInsets.all(3.0),
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.background,
+                width: 2,
+                strokeAlign: StrokeAlign.outside,
+              ),
+              showBadge: icon != null,
+              toAnimate: false,
+              child: AvatarWidget(
+                notification.user!,
+                size: 40,
+              ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          children: [
-                            notification.user!.renderDisplayName(context, ref)
-                          ],
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                children: [
+                                  notification.user!
+                                      .renderDisplayName(context, ref)
+                                ],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(
+                                  text: _getTitle(context, notification.type)),
+                            ],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
                         ),
-                        TextSpan(text: _getTitle(context, notification.type)),
+                      ),
+                      Tooltip(
+                        message: notification.createdAt.toString(),
+                        child: Text(
+                          DateTime.now()
+                              .difference(notification.createdAt)
+                              .toStringHuman(context: context),
+                          style: TextStyle(
+                            color: Theme.of(context).disabledColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  if (post != null && post.content != null)
+                    Flexible(
+                      child: Text.rich(
+                        post.renderContent(context, ref),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: inheritedTextStyle.copyWith(
+                          color: inheritedTextStyle.color?.withOpacity(.5),
+                        ),
+                      ),
+                    ),
+                  if (notification.type == NotificationType.followRequest)
+                    Row(
+                      children: [
+                        // TODO(Craftplacer): add following implementation
+                        OutlinedButton.icon(
+                          onPressed: null,
+                          icon: const Icon(Icons.check_rounded),
+                          label: const Text("Accept"),
+                        ),
+                        const SizedBox(width: 6),
+                        TextButton.icon(
+                          onPressed: null,
+                          icon: const Icon(Icons.close_rounded),
+                          label: const Text("Reject"),
+                        ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Flexible(
-                    child: Text.rich(
-                      notification.post!.renderContent(context, ref),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -142,6 +279,19 @@ class NotificationWidget extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Color _getColor(BuildContext context) {
+    final colors = Theme.of(context).ktkColors;
+
+    switch (notification.type) {
+      case NotificationType.liked:
+        return colors!.favoriteColor;
+      case NotificationType.repeated:
+        return colors!.repeatColor;
+      default:
+        return Colors.blue.shade400;
+    }
   }
 
   String _getTitle(BuildContext context, NotificationType type) {
@@ -156,6 +306,44 @@ class NotificationWidget extends ConsumerWidget {
         return " followed you";
       case NotificationType.mentioned:
         return " mentioned you";
+      case NotificationType.followRequest:
+        return " wants to follow you";
+
+      case NotificationType.groupInvite:
+        return " invited you to a group";
+      case NotificationType.pollEnded:
+        return "Poll has ended";
+      case NotificationType.quoted:
+        return " quoted you";
+      case NotificationType.replied:
+        return " replied to you";
+    }
+  }
+
+  void _onTap(BuildContext context, WidgetRef ref) {
+    switch (notification.type) {
+      case NotificationType.liked:
+      case NotificationType.repeated:
+      case NotificationType.reacted:
+      case NotificationType.mentioned:
+        assert(
+          notification.post != null,
+          "Tried to open a notification without a post attached to it",
+        );
+        final account = ref.read(accountProvider).current;
+        context.push(
+          "/@${account.key.username}@${account.key.host}/posts/${notification.post!.id}",
+          extra: notification.post,
+        );
+        break;
+      case NotificationType.followed:
+      case NotificationType.followRequest:
+        assert(
+          notification.user != null,
+          "Tried to open a follow notification without a user attached to it",
+        );
+        context.showUser(notification.user!, ref);
+        break;
     }
   }
 }

@@ -44,7 +44,7 @@ class TimelineState extends ConsumerState<Timeline> {
 
     _controller.addPageRequestListener((id) async {
       try {
-        final adapter = ref.watch(accountProvider).adapter;
+        final adapter = ref.watch(adapterProvider);
         final Iterable<Post> posts;
         final query = TimelineQuery(untilId: id);
 
@@ -151,7 +151,7 @@ class TimelineState extends ConsumerState<Timeline> {
         return Material(
           child: InkWell(
             onTap: () {
-              final account = ref.read(accountProvider).currentAccount;
+              final account = ref.read(accountProvider).current;
               context.push(
                 "/@${account.key.username}@${account.key.host}/posts/${item.id}",
                 extra: item,

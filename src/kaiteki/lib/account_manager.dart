@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/account_key.dart';
@@ -14,15 +13,14 @@ class AccountManager extends ChangeNotifier {
   static final _logger = getLogger('AccountContainer');
 
   Account? _currentAccount;
-  Account get currentAccount => _currentAccount!;
-  set currentAccount(Account account) {
+  Account get current => _currentAccount!;
+  set current(Account account) {
     assert(_accounts.contains(account));
     _currentAccount = account;
     notifyListeners();
   }
 
-  String get instance => currentAccount.key.host;
-  FediverseAdapter get adapter => currentAccount.adapter;
+  String get instance => current.key.host;
   bool get loggedIn => _currentAccount != null;
 
   final Repository<AccountSecret, AccountKey> _accountSecrets;
@@ -67,6 +65,7 @@ class AccountManager extends ChangeNotifier {
     }
 
     _accounts.add(account);
+
     _currentAccount ??= account;
 
     notifyListeners();
@@ -85,7 +84,7 @@ class AccountManager extends ChangeNotifier {
 
     if (_accounts.isNotEmpty) {
       // TODO(Craftplacer): Store which account the user last used
-      currentAccount = _accounts.first;
+      current = _accounts.first;
     }
   }
 

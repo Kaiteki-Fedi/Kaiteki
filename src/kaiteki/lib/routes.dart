@@ -111,7 +111,9 @@ Widget _authenticatedBuilder(context, state, child) {
         );
       } else {
         final accountManager = ref.watch(accountProvider);
-        adapter = accountManager.loggedIn ? accountManager.adapter : null;
+        adapter = accountManager.loggedIn //
+            ? accountManager.current.adapter
+            : null;
       }
       if (adapter != null) {
         return ProviderScope(

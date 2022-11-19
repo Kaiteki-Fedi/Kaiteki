@@ -27,7 +27,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     try {
       _threadFetchFuture = adapter.getThread(widget.post.getRoot());
     } on UnimplementedError {

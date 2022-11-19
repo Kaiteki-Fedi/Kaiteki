@@ -1,10 +1,13 @@
 import 'package:animations/animations.dart';
+import 'package:badges/badges.dart';
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
+import 'package:kaiteki/fediverse/services/notifications.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/main/compose_fab.dart';
@@ -58,6 +61,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         selectedIcon: Icons.notifications_rounded,
         icon: Icons.notifications_none,
         text: l10n.notificationsTab,
+        fetchUnreadCount: () {
+          final account = ref.watch(accountProvider).current;
+
+          if (account.adapter is! NotificationSupport) return null;
+
+          final notifications = ref.watch(
+            notificationServiceProvider(account.key),
+          );
+
+          return notifications.valueOrNull
+              ?.where((n) => n.unread != false)
+              .length;
+        },
       ),
       MainScreenTab(
         kind: TabKind.chats,
@@ -183,14 +199,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       ? ComposeFloatingActionButtonType.extended
                       : ComposeFloatingActionButtonType.small,
                 ),
-                destinations: [
-                  for (var tab in _tabs!)
-                    NavigationRailDestination(
-                      icon: Icon(tab.icon),
-                      selectedIcon: Icon(tab.selectedIcon),
-                      label: Text(tab.text),
-                    ),
-                ],
+                destinations: _navigationRailDestinations,
               ),
             ),
             // if (consts.useM3) SizedBox(height: extendNavRail ? 96 : 72),
@@ -204,9 +213,34 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  VoidCallback? get _refresh => _currentTab == TabKind.timeline
-      ? _timelineKey.currentState?.refresh
-      : null;
+  List<NavigationRailDestination> get _navigationRailDestinations {
+    final destinations = <NavigationRailDestination>[];
+    for (final tab in _tabs!) {
+      final unreadCount = tab.fetchUnreadCount?.call();
+      destinations.add(
+        NavigationRailDestination(
+          icon: _wrapInBadge(Icon(tab.icon), unreadCount),
+          selectedIcon: Icon(tab.selectedIcon),
+          label: Text(tab.text),
+        ),
+      );
+    }
+    return destinations;
+  }
+
+  VoidCallback? get _refresh {
+    switch (_currentTab) {
+      case TabKind.timeline:
+        return _timelineKey.currentState?.refresh;
+
+      case TabKind.notifications:
+        final account = ref.watch(accountProvider).current.key;
+        return ref.read(notificationServiceProvider(account).notifier).refresh;
+
+      default:
+        return null;
+    }
+  }
 
   List<Widget> _buildAppBarActions(BuildContext context) {
     final l10n = context.getL10n();
@@ -276,30 +310,68 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         onDestinationSelected: _changeIndex,
         selectedIndex: _currentIndex,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        destinations: [
-          for (var tab in _tabs!)
-            NavigationDestination(
-              icon: Icon(tab.icon),
-              selectedIcon: Icon(tab.selectedIcon),
-              label: tab.text,
-            ),
-        ],
+        destinations: _navigationDestinations,
       );
     } else {
       return BottomNavigationBar(
         onTap: _changeIndex,
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        items: [
-          for (var tab in _tabs!)
-            BottomNavigationBarItem(
-              icon: Icon(tab.icon),
-              activeIcon: Icon(tab.selectedIcon),
-              label: tab.text,
-            ),
-        ],
+        items: _bottomNavigationBarItems,
       );
     }
+  }
+
+  Widget _wrapInBadge(Widget child, int? number) {
+    // HACK(Craftplacer): These are not the new Material You badges
+    final labelSmall = Theme.of(context).textTheme.labelSmall;
+    return Badge(
+      showBadge: (number ?? 0) > 0,
+      padding: EdgeInsets.zero,
+      badgeContent: SizedBox.square(
+        dimension: 16,
+        child: Text(
+          number?.toString() ?? "0",
+          style: labelSmall?.copyWith(
+            color: Theme.of(context).colorScheme.onError,
+            height: (labelSmall.fontSize ?? 0) / 7,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      badgeColor: Theme.of(context).colorScheme.error,
+      child: child,
+    );
+  }
+
+  List<BottomNavigationBarItem> get _bottomNavigationBarItems {
+    final bottomNavigationBarItems = <BottomNavigationBarItem>[];
+    for (final tab in _tabs!) {
+      final unreadCount = tab.fetchUnreadCount?.call();
+      bottomNavigationBarItems.add(
+        BottomNavigationBarItem(
+          icon: _wrapInBadge(Icon(tab.icon), unreadCount),
+          activeIcon: _wrapInBadge(Icon(tab.selectedIcon), unreadCount),
+          label: tab.text,
+        ),
+      );
+    }
+    return bottomNavigationBarItems;
+  }
+
+  List<Widget> get _navigationDestinations {
+    final navigationDestinations = <NavigationDestination>[];
+    for (final tab in _tabs!) {
+      final unreadCount = tab.fetchUnreadCount?.call();
+      navigationDestinations.add(
+        NavigationDestination(
+          icon: _wrapInBadge(Icon(tab.icon), unreadCount),
+          selectedIcon: _wrapInBadge(Icon(tab.selectedIcon), unreadCount),
+          label: tab.text,
+        ),
+      );
+    }
+    return navigationDestinations;
   }
 
   void _changeIndex(int index) => _changePage(_tabs![index].kind);

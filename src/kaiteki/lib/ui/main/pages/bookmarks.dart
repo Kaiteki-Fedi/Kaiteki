@@ -23,7 +23,7 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
   void initState() {
     _pagingController.addPageRequestListener((id) async {
       try {
-        final adapter = ref.watch(accountProvider).adapter as BookmarkSupport;
+        final adapter = ref.watch(adapterProvider) as BookmarkSupport;
         final posts = await adapter.getBookmarks(sinceId: id);
 
         if (posts.isEmpty) {
@@ -83,7 +83,7 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
         return Material(
           child: InkWell(
             onTap: () {
-              final account = ref.read(accountProvider).currentAccount;
+              final account = ref.read(accountProvider).current;
               final username = account.key.username;
               final instance = account.key.host;
 
