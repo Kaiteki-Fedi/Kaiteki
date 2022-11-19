@@ -159,8 +159,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   Widget _buildList(Iterable<Notification> data, [bool addFABPadding = false]) {
     // TODO(Craftplacer): Make notifications infinitely scrollable
     return ListView.separated(
-      itemBuilder: (context, i) =>
-          Expanded(child: NotificationWidget(data.elementAt(i))),
+      itemBuilder: (context, i) => NotificationWidget(data.elementAt(i)),
       separatorBuilder: (context, _) => const Divider(height: 2),
       itemCount: data.length,
       padding: addFABPadding
@@ -263,14 +262,12 @@ class NotificationWidget extends ConsumerWidget {
                   ),
                   const SizedBox(height: 3),
                   if (post != null && post.content != null)
-                    Flexible(
-                      child: Text.rich(
-                        post.renderContent(context, ref),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: inheritedTextStyle.copyWith(
-                          color: inheritedTextStyle.color?.withOpacity(.5),
-                        ),
+                    Text.rich(
+                      post.renderContent(context, ref),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: inheritedTextStyle.copyWith(
+                        color: inheritedTextStyle.color?.withOpacity(.5),
                       ),
                     ),
                   if (notification.type == NotificationType.followRequest)
