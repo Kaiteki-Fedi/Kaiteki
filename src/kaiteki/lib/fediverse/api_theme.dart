@@ -32,3 +32,10 @@ const pleromaTheme = ApiTheme(
   Color(0xFFF6A358),
   iconAssetLocation: 'assets/icons/pleroma.png',
 );
+
+/// API theme for Twitter.
+const twitterTheme = ApiTheme(
+  Color(0xFFF6A358),
+  Color(0xFFF6A358),
+  iconAssetLocation: 'assets/icons/twitter.png',
+);

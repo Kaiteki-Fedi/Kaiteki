@@ -18,9 +18,7 @@ import 'package:kaiteki/ui/shared/conversation_screen.dart';
 import 'package:kaiteki/ui/user/user_screen.dart';
 
 final GoRouter router = GoRouter(
-  navigatorBuilder: _buildNavigator,
   routes: [
-    GoRoute(path: "/", builder: _buildMainRoute),
     GoRoute(path: "/about", builder: (_, __) => const AboutScreen()),
     GoRoute(
       path: "/settings",
@@ -48,27 +46,33 @@ final GoRouter router = GoRouter(
       path: "/discover-instances",
       builder: (_, __) => const DiscoverInstancesScreen(),
     ),
-    GoRoute(
-      name: "authenticated",
-      path: "/@:accountUsername@:accountHost",
-      builder: (_, __) => const MainScreen(),
+    ShellRoute(
+      builder: _authenticatedBuilder,
       routes: [
-        GoRoute(path: "home", builder: (_, __) => const MainScreen()),
+        GoRoute(path: "/", builder: _buildMainRoute),
         GoRoute(
-          path: "users/:id",
-          builder: (context, state) {
-            if (state.extra == null) {
-              return UserScreen.fromId(state.params["id"]!);
-            } else {
-              return UserScreen.fromUser(state.extra! as User);
-            }
-          },
-        ),
-        GoRoute(
-          path: "posts/:id",
-          builder: (context, state) {
-            return ConversationScreen(state.extra! as Post);
-          },
+          name: "authenticated",
+          path: "/@:accountUsername@:accountHost",
+          builder: (_, __) => const MainScreen(),
+          routes: [
+            GoRoute(path: "home", builder: (_, __) => const MainScreen()),
+            GoRoute(
+              path: "users/:id",
+              builder: (context, state) {
+                if (state.extra == null) {
+                  return UserScreen.fromId(state.params["id"]!);
+                } else {
+                  return UserScreen.fromUser(state.extra! as User);
+                }
+              },
+            ),
+            GoRoute(
+              path: "posts/:id",
+              builder: (context, state) {
+                return ConversationScreen(state.extra! as Post);
+              },
+            ),
+          ],
         ),
       ],
     ),
@@ -85,7 +89,7 @@ Widget _buildMainRoute(BuildContext context, state) {
   );
 }
 
-Widget _buildNavigator(context, state, child) {
+Widget _authenticatedBuilder(context, state, child) {
   return Consumer(
     child: child,
     builder: (context, ref, child) {
@@ -107,7 +111,9 @@ Widget _buildNavigator(context, state, child) {
         );
       } else {
         final accountManager = ref.watch(accountProvider);
-        adapter = accountManager.loggedIn ? accountManager.adapter : null;
+        adapter = accountManager.loggedIn //
+            ? accountManager.current.adapter
+            : null;
       }
       if (adapter != null) {
         return ProviderScope(

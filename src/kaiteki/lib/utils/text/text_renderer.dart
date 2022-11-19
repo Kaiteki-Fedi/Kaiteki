@@ -300,7 +300,7 @@ class UserChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     return FutureBuilder<User?>(
       initialData: user,
       future: reference.resolve(adapter),

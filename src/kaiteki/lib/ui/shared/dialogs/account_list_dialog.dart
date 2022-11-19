@@ -31,7 +31,7 @@ class AccountListDialog extends ConsumerWidget {
                 for (final compound in manager.accounts)
                   AccountListTile(
                     account: compound,
-                    selected: manager.currentAccount == compound,
+                    selected: manager.current == compound,
                     onTap: () => Navigator.of(context).pop(),
                     showInstanceIcon: true,
                     enableSignOut: true,
@@ -133,7 +133,7 @@ class AccountListTile extends ConsumerWidget {
   }
 
   Future<void> _onSelect(WidgetRef ref) async {
-    ref.read(accountProvider).currentAccount = account;
+    ref.read(accountProvider).current = account;
     onTap?.call();
   }
 

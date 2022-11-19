@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/shared/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
 import 'package:kaiteki/ui/user/desktop_user_header.dart';
-import 'package:kaiteki/ui/user/posts_page.dart';
 import 'package:kaiteki/ui/user/user_info_widget.dart';
+import 'package:kaiteki/ui/widgets/timeline.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
@@ -37,6 +39,8 @@ class _UserScreenState extends ConsumerState<UserScreen>
   late Future<User> _future;
   ImageProvider? _bannerProvider;
 
+  static final _logger = getLogger('_UserScreenState');
+
   @override
   void initState() {
     super.initState();
@@ -51,8 +55,13 @@ class _UserScreenState extends ConsumerState<UserScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final accounts = ref.watch(accountProvider);
-    _future = accounts.adapter.getUserById(widget.id);
+    final adapter = ref.watch(adapterProvider);
+    try {
+      _future = adapter.getUserById(widget.id);
+    } catch (e, s) {
+      _logger.e("Failed to fetch user profile", e, s);
+      _future = Future.error(e, s);
+    }
   }
 
   @override
@@ -132,10 +141,7 @@ class _UserScreenState extends ConsumerState<UserScreen>
                     child: TabBarView(
                       controller: _tabController,
                       children: [
-                        PostsPage(
-                          container: ref.watch(accountProvider),
-                          widget: widget,
-                        ),
+                        Timeline.user(userId: widget.id),
                         Container(),
                         Container(),
                       ],
@@ -157,17 +163,14 @@ class _UserScreenState extends ConsumerState<UserScreen>
     final Widget body;
 
     if (snapshot.hasError) {
-      body = ErrorLandingWidget.fromAsyncSnapshot(snapshot);
+      body = Center(child: ErrorLandingWidget.fromAsyncSnapshot(snapshot));
     } else if (!snapshot.hasData) {
       body = const Center(child: CircularProgressIndicator());
     } else {
       body = TabBarView(
         controller: _tabController,
         children: [
-          PostsPage(
-            container: ref.watch(accountProvider),
-            widget: widget,
-          ),
+          Timeline.user(userId: widget.id),
           Container(),
           Container(),
         ],
@@ -218,27 +221,32 @@ class _UserScreenState extends ConsumerState<UserScreen>
     ];
   }
 
-  Tab buildTab(String text, int count, bool showCountBadges, Axis direction) {
+  Tab buildTab(String text, int? count, bool showCountBadges, Axis direction) {
     if (direction == Axis.horizontal) {
       return Tab(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(text),
-            if (showCountBadges) buildBadge(context, count),
+            if (showCountBadges && count != null) ...[
+              const SizedBox(width: 8),
+              buildBadge(context, count),
+            ],
           ],
         ),
       );
     } else {
-      final countLabel = _shortenNumber(context, count);
+      final countLabel = count == null ? null : _shortenNumber(context, count);
       return Tab(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(text),
             const SizedBox(height: 4.0),
-            Text(countLabel),
-            const SizedBox(height: 4.0),
+            if (countLabel != null) ...[
+              Text(countLabel),
+              const SizedBox(height: 4.0),
+            ],
           ],
         ),
       );
@@ -255,6 +263,18 @@ class _UserScreenState extends ConsumerState<UserScreen>
     return AppBar(
       actions: [...buildActions(context, user: snapshot.data)],
       bottom: TabBar(
+        indicatorColor: Theme.of(context).colorScheme.primary,
+        labelColor: Theme.of(context).colorScheme.primary,
+        unselectedLabelColor: Theme.of(context).disabledColor,
+        isScrollable: true,
+        indicatorSize: TabBarIndicatorSize.label,
+        indicator: RoundedUnderlineTabIndicator(
+          borderSide: BorderSide(
+            width: 2,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          radius: const Radius.circular(2),
+        ),
         tabs: buildTabs(
           context,
           snapshot.data,
@@ -303,20 +323,34 @@ class _UserScreenState extends ConsumerState<UserScreen>
   }
 
   Widget buildBadge(BuildContext context, int count) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3.0),
-        color: Colors.white,
+    final textStyle = Theme.of(context).ktkTextTheme?.countTextStyle;
+    final fontSize = Theme.of(context).textTheme.labelSmall?.fontSize;
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        shape: const StadiumBorder(),
+        color: Theme.of(context).colorScheme.inverseSurface,
       ),
-      margin: const EdgeInsets.only(left: 6.0),
-      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-      child: DefaultTextStyle.merge(
-        style: const TextStyle(color: Colors.black),
-        child: Text(
-          _shortenNumber(context, count),
-          style: Theme.of(context).ktkTextTheme?.countTextStyle.copyWith(),
-          textScaleFactor: 0.9,
-          overflow: TextOverflow.fade,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 16,
+          minHeight: 16,
+          maxHeight: 16,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 4.0,
+          ),
+          child: Center(
+            child: Text(
+              _shortenNumber(context, count),
+              style: textStyle?.copyWith(
+                color: Theme.of(context).colorScheme.onInverseSurface,
+                fontSize: fontSize,
+                height: (fontSize ?? 0) / 16,
+              ),
+              maxLines: 1,
+            ),
+          ),
         ),
       ),
     );

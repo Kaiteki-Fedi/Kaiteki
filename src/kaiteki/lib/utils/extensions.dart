@@ -86,7 +86,7 @@ enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
   InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
-    return renderText(context, ref, displayName);
+    return renderText(context, ref, displayName!);
   }
 
   InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
@@ -105,13 +105,7 @@ extension UserExtensions on User {
     );
   }
 
-  String get handle {
-    if (host == null) {
-      return '@$username';
-    } else {
-      return '@$username@$host';
-    }
-  }
+  String get handle => '@$username@$host';
 }
 
 extension PostExtensions on Post {
@@ -178,7 +172,7 @@ extension UserReferenceExtensions on UserReference {
 
 extension WidgetRefExtensions on WidgetRef {
   String getCurrentAccountHandle() {
-    final account = read(accountProvider).currentAccount;
+    final account = read(accountProvider).current;
     return "@${account.key.username}@${account.key.host}";
   }
 }
@@ -241,5 +235,22 @@ extension SharedPreferencesExtensions on SharedPreferences {
     if (value != null) return setBool(key, value);
     if (containsKey(key)) return remove(key);
     return true;
+  }
+}
+
+extension NullableObjectExtensions on Object? {}
+
+extension FunctionExtensions<T> on T Function(Map<String, dynamic>) {
+  T Function(Object?) get generic {
+    return (obj) => this(obj as Map<String, dynamic>);
+  }
+
+  List<T>? Function(Object?) get genericList {
+    return (obj) {
+      if (obj == null) return null;
+      final list = obj as List<dynamic>;
+      final castedList = list.cast<Map<String, dynamic>>();
+      return castedList.map(this).toList();
+    };
   }
 }

@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
+import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
+import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
@@ -17,75 +21,79 @@ class TextRenderDialog extends ConsumerStatefulWidget {
 }
 
 class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
-  TextRenderDialogView _view = TextRenderDialogView.raw;
-
   @override
   Widget build(BuildContext context) {
-    final Widget content;
-
-    switch (_view) {
-      case TextRenderDialogView.raw:
-        content = _buildRaw();
-        break;
-      case TextRenderDialogView.parsed:
-        content = _buildParsed();
-        break;
-      case TextRenderDialogView.rendered:
-        content = _buildRendered();
-        break;
-    }
-
-    return AlertDialog(
-      title: const Text("Text rendering"),
-      content: SizedBox(
-        width: 800,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Wrap(
-              spacing: 8,
+    return DynamicDialogContainer(
+      builder: (context, fullscreen) {
+        final closeButton = DialogCloseButton(
+          tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+        );
+        return DefaultTabController(
+          length: 3,
+          child: SizedBox(
+            width: 800,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                FilterChip(
-                  label: const Text("Raw"),
-                  selected: _view == TextRenderDialogView.raw,
-                  onSelected: (_) => setState(() {
-                    _view = TextRenderDialogView.raw;
-                  }),
+                AppBar(
+                  automaticallyImplyLeading: false,
+                  title: const Text("Text rendering"),
+                  actions: [if (!fullscreen) closeButton],
+                  leading: fullscreen ? closeButton : null,
+                  elevation: 0,
+                  backgroundColor: Theme.of(context).colorScheme.background,
                 ),
-                FilterChip(
-                  label: const Text("Parsed"),
-                  selected: _view == TextRenderDialogView.parsed,
-                  onSelected: (_) => setState(() {
-                    _view = TextRenderDialogView.parsed;
-                  }),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: TabBar(
+                    indicatorColor: Theme.of(context).colorScheme.primary,
+                    labelColor: Theme.of(context).colorScheme.primary,
+                    unselectedLabelColor: Theme.of(context).disabledColor,
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicator: RoundedUnderlineTabIndicator(
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      radius: const Radius.circular(2),
+                    ),
+                    tabs: const [
+                      Tab(text: "Raw"),
+                      Tab(text: "Parsed"),
+                      Tab(text: "Rendered"),
+                    ],
+                  ),
                 ),
-                FilterChip(
-                  label: const Text("Rendered"),
-                  selected: _view == TextRenderDialogView.rendered,
-                  onSelected: (_) => setState(() {
-                    _view = TextRenderDialogView.rendered;
-                  }),
+                const Divider(height: 1),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 12.0,
+                    ),
+                    child: TabBarView(
+                      children: [
+                        _buildRaw(),
+                        _buildParsed(),
+                        _buildRendered(),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 7),
-            Flexible(child: content),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildRaw() {
-    return TextField(
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-      ),
+    return SelectableText(
+      widget.post.content ?? "",
       style: GoogleFonts.robotoMono(),
-      controller: TextEditingController(text: widget.post.content),
-      readOnly: true,
-      maxLines: null,
     );
   }
 
@@ -110,9 +118,20 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              color: Theme.of(context).colorScheme.primary,
-              _getElementIcon(element),
+            Column(
+              children: [
+                Icon(
+                  color: Theme.of(context).colorScheme.primary,
+                  _getElementIcon(element),
+                ),
+                if (element is TextElement &&
+                    element.style?.font == TextElementFont.monospace)
+                  Text(
+                    "mono",
+                    style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
+                    textScaleFactor: 0.75,
+                  ),
+              ],
             ),
             const SizedBox(width: 8),
             Flexible(child: Text(element.toString())),
@@ -132,17 +151,8 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
   }
 
   Widget _buildRendered() {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).disabledColor,
-        ),
-        borderRadius: BorderRadius.circular(6.0),
-      ),
-      padding: const EdgeInsets.all(8.0),
-      child: Text.rich(
-        widget.post.renderContent(context, ref),
-      ),
+    return Text.rich(
+      widget.post.renderContent(context, ref),
     );
   }
 }

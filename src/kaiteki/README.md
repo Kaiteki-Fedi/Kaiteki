@@ -16,37 +16,7 @@ Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple M
 
 ## Platforms & Releases
 
-If you want to try out Kaiteki, there are automatic builds available for use.
-
-<table>
-    <tr>
-        <th></th>
-        <th>Web<br>(recommended)</th>
-        <th>Windows</th>
-        <th>Linux</th>
-        <th>Android</th>
-        <th>macOS</th>
-        <th>iOS</th>
-    </tr>
-    <tr>
-        <th>Binaries</th>
-        <td rowspan=2><a href="https://kaiteki.craftplacer.moe/">Visit web version</a></td>
-        <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/windows/master/windows.zip">Download latest binaries</a></td>
-        <td><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/linux/master/linux.zip">Download latest binaries</a></td>
-        <td rowspan=2><a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/android/master/android.zip">Download latest APK</a></td>
-        <td colspan=2 rowspan=2>Not supported.</td>
-    </tr>
-    <tr>
-        <th>Packages / Installers</th>
-        <td>No reliable packaging yet.<br><a href="https://github.com/Kaiteki-Fedi/Kaiteki/issues/63">Help us!</a></td>
-        <td>
-            <a href="https://nightly.link/Kaiteki-Fedi/Kaiteki/workflows/linux/master/appimage.zip">AppImage</a>
-            <br><br>
-            <a href="https://github.com/Kaiteki-Fedi/Kaiteki/issues/62">Help us package for more platforms!</a>
-        </td>
-    </tr>
-</table>
-
+Kaiteki is available for Web, Windows, Linux and Android. Check out [the releases page](https://github.com/Kaiteki-Fedi/Kaiteki/releases) for automatic builds.
 
 ## What's working, what's missing?
 

@@ -8,6 +8,7 @@ import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
@@ -32,8 +33,7 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// the user, if required.
   Future<LoginResult> login(
     ClientSecret? clientSecret,
-    String username,
-    String password,
+    CredentialsCallback requestCredentials,
     MfaCallback requestMfa,
     OAuthCallback requestOAuth,
   );
@@ -52,11 +52,13 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
 
   Future<Iterable<Post>> getTimeline(
     TimelineKind type, {
-    String? sinceId,
-    String? untilId,
+    TimelineQuery<String>? query,
   });
 
-  Future<Iterable<Post>> getStatusesOfUserById(String id);
+  Future<Iterable<Post>> getStatusesOfUserById(
+    String id, {
+    TimelineQuery<String>? query,
+  });
 
   Future<Instance> getInstance();
 
@@ -66,14 +68,10 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<Post> getPostById(String id);
 
   /// Repeats a post.
-  ///
-  /// This method *may* return a [Post] containing the repeated post.
-  Future<Post?> repeatPost(String id);
+  Future<void> repeatPost(String id);
 
   /// Unrepeats a post.
-  ///
-  /// This method *may* return the [Post] that was unrepeated.
-  Future<Post?> unrepeatPost(String id);
+  Future<void> unrepeatPost(String id);
 
   /// Follows an user.
   ///

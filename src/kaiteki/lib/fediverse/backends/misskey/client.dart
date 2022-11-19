@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:fediverse_objects/misskey.dart' as misskey;
+import 'package:fediverse_objects/src/misskey/notification.dart' as misskey;
 import 'package:http/http.dart' show MultipartFile;
 import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
@@ -140,10 +143,12 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   }
 
   Future<Iterable<misskey.Note>> showUserNotes(
-    String userId,
-    bool excludeNsfw,
-    Iterable<String> fileTypes,
-  ) async {
+    String userId, {
+    required bool excludeNsfw,
+    required Iterable<String> fileTypes,
+    String? sinceId,
+    String? untilId,
+  }) async {
     return sendJsonRequestMultiple(
       HttpMethod.post,
       "api/users/notes",
@@ -151,6 +156,8 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       body: {
         "userId": userId,
         "fileType": fileTypes,
+        if (sinceId != null) "sinceId": sinceId,
+        if (untilId != null) "untilId": untilId,
         "excludeNsfw": excludeNsfw,
       },
     );
@@ -213,12 +220,26 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
   Future<void> checkResponse(Response response) async {
     if (!response.isSuccessful) {
       // HACK(Craftplacer): I threw out the usual JSON deserialization pattern from Kaiteki because adding more error-prone code (that is Misskey's fucked API schemas) to error handling is just plain stupid.
-      final json = await response.getContentJson();
-      final error = json["error"];
-      throw ApiException(
-        response.statusCode,
-        reasonPhrase: "${error["message"]} (${error["code"]})",
-      );
+      dynamic error;
+
+      try {
+        final json = await response.getContentJson();
+        error = json["error"];
+      } catch (e, s) {
+        log(
+          "Failed to parse error JSON",
+          error: e,
+          stackTrace: s,
+          name: "MisskeyClient",
+        );
+      }
+
+      if (error != null) {
+        throw ApiException(
+          response.statusCode,
+          reasonPhrase: "${error["message"]} (${error["code"]})",
+        );
+      }
     }
 
     super.checkResponse(response);
@@ -331,5 +352,36 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       misskey.Note.fromJson,
       body: {"noteId": id},
     );
+  }
+
+  Future<void> markAllNotificationsAsRead() async {
+    return sendJsonRequestWithoutResponse(
+      HttpMethod.post,
+      "api/notifications/mark-all-as-read",
+      body: {},
+    );
+  }
+
+  Future<List<misskey.Notification>> getNotifications({
+    int? limit,
+    bool? markAsRead,
+    String? sinceId,
+    String? untilId,
+    bool? unreadOnly,
+    // TODO(Craftplacer): add misskey notification types/filters
+  }) async {
+    final notifications = await sendJsonRequestMultiple(
+      HttpMethod.post,
+      "api/i/notifications",
+      misskey.Notification.fromJson,
+      body: {
+        if (limit != null) "limit": limit,
+        if (markAsRead != null) "markAsRead": markAsRead,
+        if (sinceId != null) "sinceId": sinceId,
+        if (untilId != null) "untilId": untilId,
+        if (unreadOnly != null) "unreadOnly": unreadOnly,
+      },
+    );
+    return notifications.toList();
   }
 }

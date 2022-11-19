@@ -10,8 +10,6 @@ class LoginResponse {
   final String? refreshToken;
   final String? scope;
   final String? tokenType;
-  final String? error;
-  final String? mfaToken;
 
   const LoginResponse(
     this.accessToken,
@@ -20,8 +18,6 @@ class LoginResponse {
     this.refreshToken,
     this.scope,
     this.tokenType,
-    this.error,
-    this.mfaToken,
   );
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) =>

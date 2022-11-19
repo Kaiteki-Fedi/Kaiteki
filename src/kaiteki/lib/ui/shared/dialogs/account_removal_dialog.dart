@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart' show dialogConstraints;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -18,10 +17,8 @@ class AccountRemovalDialog extends StatelessWidget {
     return ConstrainedBox(
       constraints: dialogConstraints,
       child: AlertDialog(
-        title: DialogTitleWithHero(
-          icon: const Icon(Icons.logout_rounded),
-          title: Text(l10n.accountRemovalConfirmationTitle),
-        ),
+        icon: const Icon(Icons.logout_rounded),
+        title: Text(l10n.accountRemovalConfirmationTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -51,7 +48,7 @@ class AccountRemovalDialog extends StatelessWidget {
           ),
           TextButton(
             style: TextButton.styleFrom(
-              primary: Theme.of(context).errorColor,
+              foregroundColor: Theme.of(context).errorColor,
             ),
             onPressed: () => Navigator.of(context).pop(true),
             child: Text(l10n.removeButtonLabel),

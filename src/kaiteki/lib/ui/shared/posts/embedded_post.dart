@@ -16,6 +16,7 @@ class EmbeddedPostWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => openPost(context, ref),
         child: Padding(
@@ -30,7 +31,7 @@ class EmbeddedPostWidget extends ConsumerWidget {
                     size: 24,
                   ),
                   const SizedBox(width: 8),
-                  UserDisplayNameWidget(post.author),
+                  Expanded(child: UserDisplayNameWidget(post.author)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -45,7 +46,7 @@ class EmbeddedPostWidget extends ConsumerWidget {
   }
 
   void openPost(BuildContext context, WidgetRef ref) {
-    final account = ref.read(accountProvider).currentAccount;
+    final account = ref.read(accountProvider).current;
     final instance = account.key.host;
     final username = account.key.username;
     context.push(

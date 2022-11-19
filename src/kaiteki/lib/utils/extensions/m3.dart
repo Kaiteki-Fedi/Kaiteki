@@ -6,8 +6,8 @@ extension ThemeDataExtensions on ThemeData {
 
     final colorScheme = this.colorScheme;
     return ElevatedButton.styleFrom(
-      onPrimary: colorScheme.onPrimary,
-      primary: colorScheme.primary,
+      foregroundColor: colorScheme.onPrimary,
+      backgroundColor: colorScheme.primary,
     ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
   }
 
@@ -16,8 +16,8 @@ extension ThemeDataExtensions on ThemeData {
 
     final colorScheme = this.colorScheme;
     return ElevatedButton.styleFrom(
-      onPrimary: colorScheme.onSecondaryContainer,
-      primary: colorScheme.secondaryContainer,
+      foregroundColor: colorScheme.onSecondaryContainer,
+      backgroundColor: colorScheme.secondaryContainer,
     ).copyWith(elevation: ButtonStyleButton.allOrNull(0.0));
   }
 }

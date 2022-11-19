@@ -1,12 +1,12 @@
 part of 'adapter.dart';
 
-Post toPost(misskey.Note source) {
-  final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji);
+Post toPost(misskey.Note source, String localHost) {
+  final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji).toList();
 
   return Post(
     source: source,
     postedAt: source.createdAt,
-    author: toUserFromLite(source.user),
+    author: toUserFromLite(source.user, localHost),
     content: source.text,
     emojis: mappedEmoji,
     reactions: source.reactions.entries.map((mkr) {
@@ -16,13 +16,13 @@ Post toPost(misskey.Note source) {
         users: [],
         emoji: getEmojiFromString(mkr.key, mappedEmoji),
       );
-    }),
-    replyTo: source.reply == null ? null : toPost(source.reply!),
+    }).toList(),
+    replyTo: source.reply == null ? null : toPost(source.reply!, localHost),
     replyToPostId: source.replyId,
-    repeatOf: source.renote == null ? null : toPost(source.renote!),
+    repeatOf: source.renote == null ? null : toPost(source.renote!, localHost),
     id: source.id,
     visibility: toVisibility(source.visibility),
-    attachments: source.files?.map(toAttachment) ?? [],
+    attachments: source.files?.map(toAttachment).toList(),
     externalUrl: source.url,
   );
 }
@@ -76,15 +76,14 @@ CustomEmoji toEmoji(misskey.Emoji emoji) {
   );
 }
 
-User toUser(misskey.User source) {
+User toUser(misskey.User source, String localHost) {
   return User(
     avatarUrl: source.avatarUrl,
     bannerUrl: source.bannerUrl,
     description: source.description,
-    // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
-    displayName: source.name ?? source.username,
+    displayName: source.name,
     emojis: source.emojis.map(toEmoji),
-    host: source.host,
+    host: source.host ?? localHost,
     id: source.id,
     joinDate: source.createdAt,
     source: source,
@@ -97,13 +96,13 @@ User toUser(misskey.User source) {
   );
 }
 
-User toUserFromLite(misskey.UserLite source) {
+User toUserFromLite(misskey.UserLite source, String localHost) {
   return User(
     avatarUrl: source.avatarUrl,
     // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
     displayName: source.name ?? source.username,
     emojis: source.emojis.map(toEmoji),
-    host: source.host,
+    host: source.host ?? localHost,
     id: source.id,
     source: source,
     username: source.username,
@@ -146,5 +145,41 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
     mascotUrl: instanceUri.resolve(instance.mascotImageUrl).toString(),
     backgroundUrl: instance.bannerUrl,
     source: instance,
+  );
+}
+
+Notification toNotification(
+  misskey.Notification notification,
+  String localHost,
+) {
+  final type = const {
+    misskey.NotificationType.follow: NotificationType.followed,
+    misskey.NotificationType.mention: NotificationType.mentioned,
+    misskey.NotificationType.reply: NotificationType.replied,
+    misskey.NotificationType.renote: NotificationType.repeated,
+    misskey.NotificationType.quote: NotificationType.quoted,
+    misskey.NotificationType.reaction: NotificationType.reacted,
+    misskey.NotificationType.pollEnded: NotificationType.pollEnded,
+    misskey.NotificationType.receiveFollowRequest:
+        NotificationType.followRequest,
+    misskey.NotificationType.followRequestAccepted: NotificationType.followed,
+    misskey.NotificationType.groupInvited: NotificationType.groupInvite,
+  }[notification.type];
+
+  if (type == null) {
+    throw UnsupportedError(
+      "Kaiteki does not support ${notification.type} as notification type",
+    );
+  }
+
+  final note = notification.note;
+  final user = notification.user;
+
+  return Notification(
+    createdAt: notification.createdAt,
+    type: type,
+    user: user == null ? null : toUserFromLite(user, localHost),
+    post: note == null ? null : toPost(note, localHost),
+    unread: !notification.isRead,
   );
 }

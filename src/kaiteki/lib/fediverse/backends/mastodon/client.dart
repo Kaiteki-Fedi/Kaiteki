@@ -4,6 +4,7 @@ import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/responses/marker.dart';
 import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/http/response.dart';
 import 'package:kaiteki/model/auth/account_secret.dart';
@@ -11,6 +12,7 @@ import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/model/http_method.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
@@ -35,10 +37,18 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     );
   }
 
-  Future<Iterable<mastodon.Status>> getStatuses(String id) async {
+  Future<Iterable<mastodon.Status>> getStatuses(
+    String id, {
+    String? minId,
+    String? maxId,
+  }) async {
+    final queryParams = {
+      if (minId != null) "min_id": minId,
+      if (maxId != null) "max_id": maxId,
+    };
     return sendJsonRequestMultiple(
       HttpMethod.get,
-      "api/v1/accounts/$id/statuses",
+      withQueries("api/v1/accounts/$id/statuses", queryParams),
       mastodon.Status.fromJson,
     );
   }
@@ -305,12 +315,22 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
   @override
   Future<void> checkResponse(Response response) async {
     if (!response.isSuccessful) {
-      final json = await response.getContentJson();
-      throw ApiException(
-        response.statusCode,
-        reasonPhrase: json["error"] as String,
-      );
+      dynamic json;
+
+      try {
+        json = await response.getContentJson();
+      } catch (_) {}
+
+      if (json != null) {
+        throw ApiException(
+          response.statusCode,
+          reasonPhrase: json["error"] as String,
+          data: json,
+        );
+      }
     }
+
+    super.checkResponse(response);
   }
 
   @override
@@ -359,5 +379,14 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
       mastodon.Account.fromJson,
     );
     return users.toList();
+  }
+
+  Future<MarkerResponse> getMarkers(Set<MarkerTimeline> timeline) async {
+    // HACK(Craftplacer): query might be wrong
+    return await sendJsonRequest(
+      HttpMethod.get,
+      "api/v1/markers?timeline[]=${timeline.map((t) => t.name).join(",")}",
+      MarkerResponse.fromJson,
+    );
   }
 }

@@ -1,32 +1,37 @@
 part of 'shared_adapter.dart';
 
-Post toPost(mastodon.Status source) {
+Post toPost(mastodon.Status source, String localHost) {
   return Post(
     source: source,
     content: source.content,
     postedAt: source.createdAt,
     nsfw: source.sensitive,
     subject: source.spoilerText,
-    author: toUser(source.account),
+    author: toUser(source.account, localHost),
     bookmarked: source.bookmarked ?? false,
-    repeatOf: source.reblog != null ? toPost(source.reblog!) : null,
+    repeatOf: source.reblog != null ? toPost(source.reblog!, localHost) : null,
     // shouldn't be null because we currently expect the user to be signed in
     repeated: source.reblogged!,
     liked: source.favourited!,
-    emojis: source.emojis.map(toEmoji),
-    attachments: source.mediaAttachments.map(
-      (a) => toAttachment(a, status: source),
-    ),
+    emojis: source.emojis.map(toEmoji).toList(),
+    attachments: source.mediaAttachments
+        .map((a) => toAttachment(a, status: source))
+        .toList(),
+    pinned: source.pinned ?? false,
     likeCount: source.favouritesCount,
     repeatCount: source.reblogsCount,
     replyCount: source.repliesCount,
     visibility: toVisibility(source.visibility),
     replyToUserId: source.inReplyToAccountId,
     replyToPostId: source.inReplyToId,
-    replyToUser: getRepliedUser(source),
+    replyToUser: getRepliedUser(source, localHost),
     id: source.id,
     externalUrl: source.url,
-    reactions: source.pleroma?.emojiReactions?.map(toReaction) ?? [],
+    client: source.application?.name,
+    reactions: source.pleroma?.emojiReactions
+            ?.map((r) => toReaction(r, localHost))
+            .toList() ??
+        [],
     mentionedUsers: source.mentions.map((e) {
       return UserReference.all(
         username: e.username,
@@ -38,16 +43,66 @@ Post toPost(mastodon.Status source) {
   );
 }
 
-Reaction toReaction(pleroma.EmojiReaction reaction) {
+Notification toNotification(
+  mastodon.Notification notification,
+  String localHost, [
+  Marker? marker,
+]) {
+  final bool? unread;
+
+  if (marker != null) {
+    final lastReadId = int.tryParse(marker.lastReadId);
+    final id = int.tryParse(notification.id);
+
+    if (lastReadId == null || id == null) {
+      unread = null;
+    } else {
+      unread = id > lastReadId;
+    }
+  } else if (notification.pleroma != null) {
+    unread = !notification.pleroma!.isSeen;
+  } else {
+    unread = null;
+  }
+
+  return Notification(
+    createdAt: notification.createdAt,
+    type: toNotificationType(notification.type),
+    user: notification.account?.nullTransform((u) => toUser(u, localHost)),
+    post: notification.status?.nullTransform((p) => toPost(p, localHost)),
+    unread: unread,
+  );
+}
+
+NotificationType toNotificationType(String type) {
+  switch (type) {
+    case "favourite":
+      return NotificationType.liked;
+    case "reblog":
+      return NotificationType.repeated;
+    case "pleroma:emoji_reaction":
+      return NotificationType.reacted;
+    case "follow":
+      return NotificationType.followed;
+    case "mention":
+      return NotificationType.mentioned;
+    case "follow_request":
+      return NotificationType.followRequest;
+    default:
+      throw Exception("Unknown notification type: $type");
+  }
+}
+
+Reaction toReaction(pleroma.EmojiReaction reaction, String localHost) {
   return Reaction(
     includesMe: reaction.me,
     count: reaction.count,
     emoji: UnicodeEmoji(name: reaction.name),
-    users: reaction.accounts?.map(toUser) ?? [],
+    users: reaction.accounts?.map((a) => toUser(a, localHost)) ?? [],
   );
 }
 
-User? getRepliedUser(mastodon.Status status) {
+User? getRepliedUser(mastodon.Status status, String localHost) {
   final mention = status.mentions.firstOrDefault((mention) {
     return mention.id == status.inReplyToAccountId;
   });
@@ -57,7 +112,7 @@ User? getRepliedUser(mastodon.Status status) {
   }
 
   return User(
-    host: getHost(mention.account),
+    host: getHost(mention.account) ?? localHost,
     username: mention.username,
     id: mention.id,
     displayName: mention.username,
@@ -109,7 +164,7 @@ CustomEmoji toEmoji(mastodon.Emoji emoji) {
   );
 }
 
-User toUser(mastodon.Account source) {
+User toUser(mastodon.Account source, String localHost) {
   return User(
     source: source,
     displayName: source.displayName,
@@ -123,7 +178,7 @@ User toUser(mastodon.Account source) {
     followerCount: source.followersCount,
     followingCount: source.followingCount,
     postCount: source.statusesCount,
-    host: getHost(source.acct),
+    host: getHost(source.acct) ?? localHost,
     details: UserDetails(fields: _parseFields(source.fields)),
     url: source.url,
     flags: UserFlags(

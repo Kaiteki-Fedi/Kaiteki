@@ -34,4 +34,6 @@ const _$ApiTypeEnumMap = {
   ApiType.mastodon: 'mastodon',
   ApiType.pleroma: 'pleroma',
   ApiType.misskey: 'misskey',
+  ApiType.twitter: 'twitter',
+  ApiType.twitterV1: 'twitterV1',
 };

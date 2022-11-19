@@ -18,32 +18,36 @@ class DynamicDialogContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      maintainBottomViewPadding: true,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final fullscreen = constraints.maxWidth < _maxDialogSize ||
-              constraints.maxHeight < _maxDialogSize;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final fullscreen = constraints.maxWidth < _maxDialogSize ||
+            constraints.maxHeight < _maxDialogSize;
 
-          final borderRadius = getBorderRadius(fullscreen);
-          const duration = Duration(milliseconds: 125);
+        final borderRadius = getBorderRadius(fullscreen);
+        const duration = Duration(milliseconds: 125);
 
-          return Center(
+        return SafeArea(
+          child: Center(
             child: AnimatedContainer(
-              constraints: getConstraints(constraints, fullscreen),
+              constraints: getConstraints(context, constraints, fullscreen),
               duration: duration,
               curve: Curves.easeOutQuad,
-              child: Material(
-                borderRadius: borderRadius,
-                animationDuration: duration,
-                clipBehavior: Clip.antiAlias,
-                elevation: 8.0,
-                child: builder.call(context, fullscreen),
+              child: Padding(
+                padding: fullscreen
+                    ? MediaQuery.of(context).viewInsets
+                    : EdgeInsets.zero,
+                child: Material(
+                  borderRadius: borderRadius,
+                  animationDuration: duration,
+                  clipBehavior: Clip.antiAlias,
+                  elevation: 8.0,
+                  child: builder.call(context, fullscreen),
+                ),
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -55,8 +59,14 @@ class DynamicDialogContainer extends StatelessWidget {
     }
   }
 
-  BoxConstraints getConstraints(BoxConstraints constraints, bool fullscreen) {
-    if (fullscreen) return constraints;
+  BoxConstraints getConstraints(
+    BuildContext context,
+    BoxConstraints constraints,
+    bool fullscreen,
+  ) {
+    if (fullscreen) {
+      return constraints;
+    }
 
     const margin = 32 * 2;
     return dialogConstraints.copyWith(

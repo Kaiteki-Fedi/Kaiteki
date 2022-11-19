@@ -116,9 +116,8 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
         (e as dynamic).message == "Invalid media type: expected no more input.";
     if (isHttpBug) {
       _logger.w(
-        "Enforcing UTF-8 for nodeinfo response\n"
-        "Dart's `http` package still doesn't gracefully handle edge-case `Content-Type`s\n"
-        "Give them greetings from me over at https://github.com/dart-lang/http/issues/180",
+        "Enforcing UTF-8 for nodeinfo response - "
+        "see https://github.com/dart-lang/http/issues/180",
       );
 
       nodeInfoBody = utf8.decode(nodeInfoResponse.bodyBytes);

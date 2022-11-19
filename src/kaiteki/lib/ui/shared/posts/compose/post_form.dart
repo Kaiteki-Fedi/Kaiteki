@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:go_router/go_router.dart';
-import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/constants.dart' show bottomSheetConstraints;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
@@ -12,7 +11,7 @@ import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/ui/shared/async_snackbar_content.dart';
+import 'package:kaiteki/ui/shared/async/async_snackbar_content.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
@@ -113,20 +112,21 @@ class PostFormState extends ConsumerState<PostForm> {
     final manager = ref.watch(accountProvider);
     final flex = widget.expands ? 1 : 0;
     final l10n = context.getL10n();
+    final adapter = manager.current.adapter;
 
     return FocusableActionDetector(
       shortcuts: const {commit: SendIntent()},
       actions: {
         SendIntent: CallbackAction(
-          onInvoke: (_) => post(context, manager.adapter),
+          onInvoke: (_) => post(context, adapter),
         ),
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.showPreview && manager.adapter is PreviewSupport) ...[
+          if (widget.showPreview && adapter is PreviewSupport) ...[
             FutureBuilder(
-              future: getPreviewFuture(manager),
+              future: getPreviewFuture(adapter as PreviewSupport),
               builder: buildPreview,
             ),
             const Divider(height: 15),
@@ -193,7 +193,7 @@ class PostFormState extends ConsumerState<PostForm> {
                 ..._buildActions(context),
                 const Spacer(),
                 FloatingActionButton.small(
-                  onPressed: () => post(context, manager.adapter),
+                  onPressed: () => post(context, adapter),
                   elevation: 2.0,
                   tooltip: l10n.submitButtonTooltip,
                   child: const Icon(Icons.send_rounded),
@@ -238,12 +238,11 @@ class PostFormState extends ConsumerState<PostForm> {
     );
   }
 
-  Future<Post>? getPreviewFuture(AccountManager manager) {
+  Future<Post>? getPreviewFuture(PreviewSupport adapter) {
     if (_bodyController.value.text.isEmpty) return null;
 
     final draft = _getPostDraft([]);
-    final previewAdapter = manager.adapter as PreviewSupport;
-    return previewAdapter.getPreview(draft);
+    return adapter.getPreview(draft);
   }
 
   PostDraft _getPostDraft(List<Attachment> attachments) {
@@ -412,7 +411,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
     final pickedFile = result.files.first;
     final kaitekiFile = File.path(pickedFile.path!, name: pickedFile.name);
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     setState(
       () => attachments.add(adapter.uploadAttachment(kaitekiFile, null)),
     );
@@ -420,8 +419,9 @@ class PostFormState extends ConsumerState<PostForm> {
 
   List<Widget> _buildActions(BuildContext context) {
     final l10n = context.getL10n();
-    final manager = ref.watch(accountProvider);
-    final formattingList = manager.adapter.capabilities.supportedFormattings;
+    final adapter = ref.watch(adapterProvider);
+    final formattingList = adapter.capabilities.supportedFormattings;
+    final supportedScopes = adapter.capabilities.supportedScopes;
     return [
       IconButton(
         onPressed: openAttachDrawer,
@@ -429,7 +429,7 @@ class PostFormState extends ConsumerState<PostForm> {
         splashRadius: splashRadius,
         tooltip: l10n.attachButtonTooltip,
       ),
-      if (manager.adapter is CustomEmojiSupport)
+      if (adapter is CustomEmojiSupport)
         IconButton(
           icon: const Icon(Icons.mood_rounded),
           splashRadius: splashRadius,
@@ -437,15 +437,16 @@ class PostFormState extends ConsumerState<PostForm> {
           onPressed: openEmojiPicker,
         ),
       const SizedBox(height: 24, child: VerticalDivider()),
-      if (manager.adapter.capabilities.supportsScopes)
+      if (supportedScopes.length >= 2)
         EnumIconButton<Visibility>(
           tooltip: l10n.visibilityButtonTooltip,
           onChanged: (value) => setState(() => _visibility = value),
           value: _visibility,
-          values: Visibility.values,
+          values: supportedScopes,
           splashRadius: splashRadius,
           iconBuilder: (_, value) => Icon(value.toIconData()),
-          textBuilder: (_, value) => Text(value.toDisplayString()),
+          textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
+          subtitleBuilder: (_, value) => Text(value.toDescription(l10n)),
         ),
       if (formattingList.length >= 2)
         EnumIconButton<Formatting>(
@@ -455,7 +456,7 @@ class PostFormState extends ConsumerState<PostForm> {
           values: formattingList,
           splashRadius: splashRadius,
           iconBuilder: (_, value) => Icon(value.toIconData()),
-          textBuilder: (_, value) => Text(value.toDisplayString()),
+          textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
         ),
     ];
   }

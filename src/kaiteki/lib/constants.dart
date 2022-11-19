@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/rendering.dart' show BoxConstraints;
 
 const String appName = "Kaiteki";
 const String appWebsite = "https://craftplacer.moe/projects/kaiteki";
@@ -15,7 +15,8 @@ const String exampleAvatar = "https://craftplacer.keybase.pub/cute.jpg";
 const double defaultFormWidth = 448;
 const double defaultFormHeight = 592;
 const dialogConstraints = BoxConstraints(minWidth: 280, maxWidth: 560);
-const bottomSheetConstraints = BoxConstraints(maxWidth: 560);
+// https://m3.material.io/components/bottom-sheets/specs#e69f3dfb-e443-46ba-b4a8-aabc718cf335
+const bottomSheetConstraints = BoxConstraints(maxWidth: 640);
 
 /// Whether to use frontend login endpoints or oauth ones.
 bool get useOAuth => !kIsWeb;

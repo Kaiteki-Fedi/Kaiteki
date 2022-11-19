@@ -23,7 +23,7 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
   void initState() {
     _pagingController.addPageRequestListener((id) async {
       try {
-        final adapter = ref.watch(accountProvider).adapter as BookmarkSupport;
+        final adapter = ref.watch(adapterProvider) as BookmarkSupport;
         final posts = await adapter.getBookmarks(sinceId: id);
 
         if (posts.isEmpty) {
@@ -47,6 +47,7 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.getL10n();
     return LayoutBuilder(
       builder: (context, constraints) {
         return PagedListView<String?, Post>.separated(
@@ -56,9 +57,9 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Post>(
             itemBuilder: _buildPost,
-            noItemsFoundIndicatorBuilder: (_) => const IconLandingWidget(
-              icon: Icon(Icons.bookmark_outline_rounded),
-              text: Text("No bookmarks"),
+            noItemsFoundIndicatorBuilder: (_) => IconLandingWidget(
+              icon: const Icon(Icons.bookmark_outline_rounded),
+              text: Text(l10n.bookmarksEmpty),
             ),
           ),
           separatorBuilder: _buildSeparator,
@@ -82,7 +83,7 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
         return Material(
           child: InkWell(
             onTap: () {
-              final account = ref.read(accountProvider).currentAccount;
+              final account = ref.read(accountProvider).current;
               final username = account.key.username;
               final instance = account.key.host;
 

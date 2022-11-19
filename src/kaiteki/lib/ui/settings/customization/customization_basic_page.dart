@@ -46,7 +46,7 @@ class _CustomizationBasicPageState
           ),
           CheckboxListTile(
             value: prefs.useMaterial3,
-            title: const Text("Use Material You"),
+            title: Text(l10n.useMaterialYou),
             controlAffinity: ListTileControlAffinity.leading,
             tristate: true,
             onChanged: (value) => setState(() => prefs.useMaterial3 = value),

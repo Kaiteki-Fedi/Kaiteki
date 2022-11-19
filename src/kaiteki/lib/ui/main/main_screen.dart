@@ -1,21 +1,24 @@
 import 'package:animations/animations.dart';
+import 'package:badges/badges.dart';
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
+import 'package:kaiteki/fediverse/services/notifications.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
 import 'package:kaiteki/ui/main/compose_fab.dart';
+import 'package:kaiteki/ui/main/drawer.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
 import 'package:kaiteki/ui/main/pages/bookmarks.dart';
+import 'package:kaiteki/ui/main/pages/notifications.dart';
 import 'package:kaiteki/ui/main/pages/placeholder.dart';
 import 'package:kaiteki/ui/main/pages/timeline.dart';
 import 'package:kaiteki/ui/main/tab.dart';
 import 'package:kaiteki/ui/main/tab_kind.dart';
-import 'package:kaiteki/ui/main/timeline_bottom_sheet.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
@@ -31,7 +34,6 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _timelineKey = GlobalKey<TimelinePageState>();
-  TimelineKind _timelineKind = TimelineKind.home;
   List<MainScreenTab>? _tabs;
   TabKind _currentTab = TabKind.timeline;
 
@@ -59,6 +61,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         selectedIcon: Icons.notifications_rounded,
         icon: Icons.notifications_none,
         text: l10n.notificationsTab,
+        fetchUnreadCount: () {
+          final account = ref.watch(accountProvider).current;
+
+          if (account.adapter is! NotificationSupport) return null;
+
+          final notifications = ref.watch(
+            notificationServiceProvider(account.key),
+          );
+
+          return notifications.valueOrNull
+              ?.where((n) => n.unread != false)
+              .length;
+        },
       ),
       MainScreenTab(
         kind: TabKind.chats,
@@ -112,13 +127,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           if (breakpoint.window == WindowSize.xsmall) {
             return Scaffold(
               key: _scaffoldKey,
-              backgroundColor: outsideColor,
               appBar: buildAppBar(outsideColor, context),
-              body: _getPage(),
+              body: _buildPage(),
               bottomNavigationBar: _getNavigationBar(),
               floatingActionButton:
                   fab != null ? _buildFab(context, fab, true) : null,
-              drawer: _buildDrawer(context),
+              drawer: const MainScreenDrawer(),
             );
           } else {
             return Scaffold(
@@ -129,7 +143,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               floatingActionButton: !tab.hideFabWhenDesktop && fab != null
                   ? _buildFab(context, fab, isMobile)
                   : null,
-              drawer: _buildDrawer(context),
+              drawer: const MainScreenDrawer(),
             );
           }
         },
@@ -137,89 +151,25 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
-    final l10n = context.getL10n();
-    final account = ref.watch(accountProvider).currentAccount;
-    final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
-    return Drawer(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18.0,
-                vertical: 16.0,
-              ),
-              child: Text(
-                consts.appName,
-                style: Theme.of(context) //
-                    .ktkTextTheme
-                    ?.kaitekiTextStyle
-                    .copyWith(fontSize: fontSize),
-              ),
-            ),
-            const ListTile(
-              leading: Icon(Icons.mail_rounded),
-              title: Text("Direct Messages"),
-              enabled: false,
-            ),
-            const ListTile(
-              leading: Icon(Icons.article_rounded),
-              title: Text("Lists"),
-              enabled: false,
-            ),
-            const ListTile(
-              leading: Icon(Icons.trending_up_rounded),
-              title: Text("Trends"),
-              enabled: false,
-            ),
-            ListTile(
-              leading: const Icon(Icons.flag_rounded),
-              title: Text(l10n.reportsTitle),
-              enabled: false,
-            ),
-            const Divider(),
-            ListTile(
-              title: Text("@${account.key.username}@${account.key.host}"),
-              enabled: false,
-            ),
-            ListTile(
-              leading: const Icon(Icons.manage_accounts_rounded),
-              title: Text(l10n.accountSettingsTitle),
-              // onTap: () => context.push("/$handle/settings"),
-              enabled: false,
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.settings_rounded),
-              title: Text(l10n.settings),
-              onTap: () => context.push("/settings"),
-            ),
-            ListTile(
-              leading: const Icon(Icons.info_outline_rounded),
-              title: Text(l10n.settingsAbout),
-              onTap: () => context.push("/about"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   AppBar buildAppBar(Color? outsideColor, BuildContext context) {
+    Color? foregroundColor;
+
+    if (outsideColor != null) {
+      foregroundColor = ThemeData.estimateBrightnessForColor(outsideColor)
+          .inverted
+          .getColor();
+    }
+
     return AppBar(
       backgroundColor: outsideColor,
-      foregroundColor: outsideColor != null
-          ? ThemeData.estimateBrightnessForColor(outsideColor)
-              .inverted
-              .getColor()
-          : null,
+      foregroundColor: foregroundColor,
       title: Text(
         consts.appName,
         style: Theme.of(context).ktkTextTheme?.kaitekiTextStyle,
       ),
       elevation: Theme.of(context).useMaterial3 ? 0.0 : null,
+      surfaceTintColor:
+          Theme.of(context).useMaterial3 ? Colors.transparent : null,
       actions: _buildAppBarActions(context),
     );
   }
@@ -249,14 +199,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       ? ComposeFloatingActionButtonType.extended
                       : ComposeFloatingActionButtonType.small,
                 ),
-                destinations: [
-                  for (var tab in _tabs!)
-                    NavigationRailDestination(
-                      icon: Icon(tab.icon),
-                      selectedIcon: Icon(tab.selectedIcon),
-                      label: Text(tab.text),
-                    ),
-                ],
+                destinations: _navigationRailDestinations,
               ),
             ),
             // if (consts.useM3) SizedBox(height: extendNavRail ? 96 : 72),
@@ -264,18 +207,39 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         ),
         if (!m3) const VerticalDivider(thickness: 1, width: 1),
         Expanded(
-          child: _roundWidgetM3(context, _getPage()),
+          child: _roundWidgetM3(context, _buildPage()),
         ),
       ],
     );
   }
 
-  Function()? get _refresh {
-    if (_currentTab == TabKind.timeline) {
-      return () => _timelineKey.currentState?.refresh();
+  List<NavigationRailDestination> get _navigationRailDestinations {
+    final destinations = <NavigationRailDestination>[];
+    for (final tab in _tabs!) {
+      final unreadCount = tab.fetchUnreadCount?.call();
+      destinations.add(
+        NavigationRailDestination(
+          icon: _wrapInBadge(Icon(tab.icon), unreadCount),
+          selectedIcon: Icon(tab.selectedIcon),
+          label: Text(tab.text),
+        ),
+      );
     }
+    return destinations;
+  }
 
-    return null;
+  VoidCallback? get _refresh {
+    switch (_currentTab) {
+      case TabKind.timeline:
+        return _timelineKey.currentState?.refresh;
+
+      case TabKind.notifications:
+        final account = ref.watch(accountProvider).current.key;
+        return ref.read(notificationServiceProvider(account).notifier).refresh;
+
+      default:
+        return null;
+    }
   }
 
   List<Widget> _buildAppBarActions(BuildContext context) {
@@ -293,7 +257,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           return [
             PopupMenuItem(
               value: _showKeyboardShortcuts,
-              child: const Text("Keyboard Shortcuts"),
+              child: Text(l10n.keyboardShortcuts),
             ),
           ];
         },
@@ -309,10 +273,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _getPage() {
+  Widget _buildPage() {
     final pages = [
-      TimelinePage(_timelineKind, key: _timelineKey),
-      const PlaceholderPage(),
+      TimelinePage(key: _timelineKey),
+      const NotificationsPage(),
       const PlaceholderPage(),
       const BookmarksPage(),
     ];
@@ -345,54 +309,74 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       return NavigationBar(
         onDestinationSelected: _changeIndex,
         selectedIndex: _currentIndex,
-        destinations: [
-          for (var tab in _tabs!)
-            NavigationDestination(
-              icon: Icon(tab.icon),
-              selectedIcon: Icon(tab.selectedIcon),
-              label: tab.text,
-            ),
-        ],
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        destinations: _navigationDestinations,
       );
     } else {
       return BottomNavigationBar(
         onTap: _changeIndex,
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        items: [
-          for (var tab in _tabs!)
-            BottomNavigationBarItem(
-              icon: Icon(tab.icon),
-              activeIcon: Icon(tab.selectedIcon),
-              label: tab.text,
-            ),
-        ],
+        items: _bottomNavigationBarItems,
       );
     }
   }
 
-  Future<void> _changeIndex(int index) async {
-    await _changePage(_tabs![index].kind);
+  Widget _wrapInBadge(Widget child, int? number) {
+    // HACK(Craftplacer): These are not the new Material You badges
+    final labelSmall = Theme.of(context).textTheme.labelSmall;
+    return Badge(
+      showBadge: (number ?? 0) > 0,
+      padding: EdgeInsets.zero,
+      badgeContent: SizedBox.square(
+        dimension: 16,
+        child: Text(
+          number?.toString() ?? "0",
+          style: labelSmall?.copyWith(
+            color: Theme.of(context).colorScheme.onError,
+            height: (labelSmall.fontSize ?? 0) / 7,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      badgeColor: Theme.of(context).colorScheme.error,
+      child: child,
+    );
   }
 
-  Future<void> _changePage(TabKind tab) async {
-    final isSamePage = _currentTab == tab;
-
-    if (isSamePage && _currentTab == TabKind.timeline) {
-      final timelineType = await showModalBottomSheet<TimelineKind?>(
-        context: context,
-        constraints: consts.bottomSheetConstraints,
-        builder: (context) => TimelineBottomSheet(_timelineKind),
+  List<BottomNavigationBarItem> get _bottomNavigationBarItems {
+    final bottomNavigationBarItems = <BottomNavigationBarItem>[];
+    for (final tab in _tabs!) {
+      final unreadCount = tab.fetchUnreadCount?.call();
+      bottomNavigationBarItems.add(
+        BottomNavigationBarItem(
+          icon: _wrapInBadge(Icon(tab.icon), unreadCount),
+          activeIcon: _wrapInBadge(Icon(tab.selectedIcon), unreadCount),
+          label: tab.text,
+        ),
       );
-
-      if (timelineType != null) {
-        setState(() => _timelineKind = timelineType);
-      }
-      return;
     }
-
-    setState(() => _currentTab = tab);
+    return bottomNavigationBarItems;
   }
+
+  List<Widget> get _navigationDestinations {
+    final navigationDestinations = <NavigationDestination>[];
+    for (final tab in _tabs!) {
+      final unreadCount = tab.fetchUnreadCount?.call();
+      navigationDestinations.add(
+        NavigationDestination(
+          icon: _wrapInBadge(Icon(tab.icon), unreadCount),
+          selectedIcon: _wrapInBadge(Icon(tab.selectedIcon), unreadCount),
+          label: tab.text,
+        ),
+      );
+    }
+    return navigationDestinations;
+  }
+
+  void _changeIndex(int index) => _changePage(_tabs![index].kind);
+
+  void _changePage(TabKind tab) => setState(() => _currentTab = tab);
 
   Widget? _buildFab(
     BuildContext context,

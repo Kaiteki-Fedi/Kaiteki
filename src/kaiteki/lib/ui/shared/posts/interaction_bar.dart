@@ -81,16 +81,11 @@ class InteractionBar extends StatelessWidget {
 
     // Added Material for fixing bork with Hero *shrug*
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 450),
-      child: Flex(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        direction: Axis.horizontal,
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          for (var button in buttons)
-            Flexible(
-              fit: FlexFit.tight,
-              child: Row(children: [button]),
-            ),
+          for (final button in buttons) Flexible(child: button),
         ],
       ),
     );

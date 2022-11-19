@@ -128,7 +128,7 @@ class _SelfSelectScreenState extends State<SelfSelectScreen> {
                             style: isLastPage
                                 ? buttonStyle.merge(
                                     TextButton.styleFrom(
-                                      primary: Theme.of(context)
+                                      foregroundColor: Theme.of(context)
                                           .colorScheme
                                           .tertiary,
                                     ),

@@ -45,7 +45,8 @@ class UserReference {
 
   @override
   String toString() {
-    if (username != null) return '@$username@$host';
+    if (username != null && host != null) return '@$username@$host';
+    if (username != null) return '@$username';
 
     if (remoteUrl != null) {
       final parsedUrl = Uri.tryParse(remoteUrl!);

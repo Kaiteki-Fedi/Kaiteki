@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -21,13 +22,15 @@ class ErrorLandingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (error is UnimplementedError) {
-      return const IconLandingWidget(
-        icon: Icon(Icons.assignment_late_rounded),
-        text: Text("Not implemented yet"),
+      return IconLandingWidget(
+        icon: const Icon(Icons.assignment_late_rounded),
+        text: Text(context.getL10n().niy),
       );
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         const IconLandingWidget(
           icon: Icon(Icons.error_rounded),
