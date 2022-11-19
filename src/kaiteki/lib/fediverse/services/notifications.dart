@@ -21,8 +21,11 @@ class NotificationService extends _$NotificationService
 
   Future<void> markAllAsRead() async {
     state = const AsyncLoading();
-    await _backend.markAllNotificationsAsRead();
-    state = await AsyncValue.guard(_backend.getNotifications);
+    try {
+      await _backend.markAllNotificationsAsRead();
+    } finally {
+      state = await AsyncValue.guard(_backend.getNotifications);
+    }
   }
 
   @override
