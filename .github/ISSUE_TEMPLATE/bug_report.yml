@@ -30,10 +30,10 @@ body:
   attributes:
     label: What platform are you seeing the issue on?
     options:
-    - label: Android
-    - label: Windows
-    - label: Linux
-    - label: Web
+    - Android
+    - Windows
+    - Linux
+    - Web
 - type: textarea
   id: context
   attributes:
