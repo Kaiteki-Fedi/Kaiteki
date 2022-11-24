@@ -268,13 +268,19 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Iterable<EmojiCategory>> getEmojis() async {
+  Future<List<EmojiCategory>> getEmojis() async {
     final emojis = await client.getCustomEmojis();
     final categories = emojis.groupBy((emoji) => emoji.category);
 
     return categories.entries.map((kv) {
-      return EmojiCategory(kv.key, kv.value.map(toEmoji));
-    });
+      return EmojiCategory(
+        kv.key,
+        kv.value
+            .map(toEmoji)
+            .map(EmojiCategoryItem.new)
+            .toList(growable: false),
+      );
+    }).toList();
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:fediverse_objects/src/misskey/notification.dart' as misskey;
 import 'package:http/http.dart' show MultipartFile;
 import 'package:kaiteki/exceptions/api_exception.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
@@ -235,9 +236,9 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
       }
 
       if (error != null) {
-        throw ApiException(
+        throw MisskeyException(
           response.statusCode,
-          reasonPhrase: "${error["message"]} (${error["code"]})",
+          error as Map<String, dynamic>,
         );
       }
     }

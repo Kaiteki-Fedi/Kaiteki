@@ -32,11 +32,11 @@ Emoji getEmojiFromString(String key, Iterable<CustomEmoji> mappedEmoji) {
     (e) {
       if (key.length < 3) return false;
       final emojiName = key.substring(1, key.length - 1);
-      return e.name == emojiName;
+      return e.short == emojiName;
     },
   );
 
-  if (emoji == null) return UnicodeEmoji(name: key);
+  if (emoji == null) return UnicodeEmoji(key);
 
   return emoji;
 }
@@ -70,7 +70,7 @@ Attachment toAttachment(misskey.DriveFile file) {
 
 CustomEmoji toEmoji(misskey.Emoji emoji) {
   return CustomEmoji(
-    name: emoji.name,
+    short: emoji.name,
     url: emoji.url,
     aliases: emoji.aliases,
   );

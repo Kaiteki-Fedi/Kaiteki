@@ -47,13 +47,13 @@ class PleromaAdapter //
   }
 
   @override
-  Future<Post> addReaction(Post post, Emoji emoji) {
-    throw UnimplementedError();
+  Future<void> addReaction(Post post, covariant UnicodeEmoji emoji) async {
+    await client.react(post.id, emoji.emoji);
   }
 
   @override
-  Future<Post> removeReaction(Post post, Emoji emoji) {
-    throw UnimplementedError();
+  Future<void> removeReaction(Post post, covariant UnicodeEmoji emoji) async {
+    await client.removeReaction(post.id, emoji.emoji);
   }
 
   @override

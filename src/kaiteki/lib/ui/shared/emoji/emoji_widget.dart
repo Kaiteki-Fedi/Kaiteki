@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 /// A widget that displays an emoji.
 class EmojiWidget extends StatelessWidget {
@@ -30,7 +30,7 @@ class EmojiWidget extends StatelessWidget {
       height: size,
       fit: BoxFit.contain,
       // cacheHeight: size.toInt(),
-      semanticLabel: "Emoji ${emoji.name}",
+      semanticLabel: "Emoji ${emoji.toString()}",
       loadingBuilder: (_, widget, event) => event == null //
           ? widget
           : PlaceholderEmoji(size: size),
@@ -49,7 +49,7 @@ class EmojiWidget extends StatelessWidget {
       height: size,
       child: FittedBox(
         child: Text(
-          unicodeEmoji.name,
+          unicodeEmoji.short,
           style: textStyle,
         ),
       ),

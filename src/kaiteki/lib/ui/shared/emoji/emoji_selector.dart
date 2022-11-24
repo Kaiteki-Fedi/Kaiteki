@@ -2,21 +2,27 @@ import 'dart:math' as math;
 
 import 'package:anchor_scroll_controller/anchor_scroll_controller.dart';
 import 'package:collection/collection.dart';
-import 'package:emojis/emoji.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_category_widget.dart';
+import 'package:kaiteki/constants.dart';
+import 'package:kaiteki/fediverse/model/emoji/category.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
+import 'package:kaiteki/ui/shared/emoji/emoji_button.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
 import 'package:kaiteki/ui/shared/emoji/search_bar.dart';
+import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+
+const _emojiSize = 32.0;
 
 class EmojiSelector extends StatefulWidget {
-  final EmojiSelected onEmojiSelected;
-  final Iterable<EmojiCategory> categories;
+  final Function(Emoji emoji) onEmojiSelected;
+  final List<EmojiCategory> categories;
+  final bool showSearch;
 
   const EmojiSelector({
     super.key,
     required this.categories,
     required this.onEmojiSelected,
+    this.showSearch = true,
   });
 
   @override
@@ -27,13 +33,10 @@ class _EmojiSelectorState extends State<EmojiSelector>
     with TickerProviderStateMixin {
   TabController? _tabController;
   late final AnchorScrollController _scrollController;
-  late final int _emojiCount;
+  late final int _itemCount;
   final _searchTextController = TextEditingController();
 
-  late Iterable<EmojiCategory> _categories;
-
-  // /// Someone likes hoarding emojis
-  // late final bool _insanelyLongEmojiList;
+  late List<EmojiCategory> _categories;
 
   @override
   void initState() {
@@ -41,11 +44,9 @@ class _EmojiSelectorState extends State<EmojiSelector>
 
     _categories = widget.categories;
 
-    _emojiCount = _categories //
-        .map((category) => category.emojis.length)
+    _itemCount = _categories //
+        .map((category) => category.items.length)
         .sum;
-
-    // _insanelyLongEmojiList = _emojiCount >= 1000;
 
     _searchTextController.addListener(() {
       _categories = applySearch(widget.categories);
@@ -71,10 +72,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
 
   void _updateTabController(int length) {
     _tabController?.dispose();
-    _tabController = TabController(
-      vsync: this,
-      length: length,
-    );
+    _tabController = TabController(vsync: this, length: length);
   }
 
   @override
@@ -100,7 +98,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
           controller: _tabController,
           onTap: (i) => _scrollController.scrollToIndex(
             index: i,
-            scrollSpeed: math.log(_emojiCount),
+            scrollSpeed: math.log(_itemCount),
           ),
         ),
         const Divider(height: 2),
@@ -109,14 +107,25 @@ class _EmojiSelectorState extends State<EmojiSelector>
             child: CustomScrollView(
               controller: _scrollController,
               slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SearchBar(controller: _searchTextController),
+                if (widget.showSearch)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SearchBar(controller: _searchTextController),
+                    ),
                   ),
-                ),
-                for (var i = 0; i < _categories.length; i++)
-                  ..._buildCategorySlivers(_categories.elementAt(i), i),
+                if (_categories.isEmpty &&
+                    _searchTextController.text.isNotEmpty)
+                  const SliverFillRemaining(
+                    child: IconLandingWidget(
+                      icon: Icon(Icons.search_off_rounded),
+                      // TODO(Craftplacer): Unlocalized string
+                      text: Text("No emojis found"),
+                    ),
+                  )
+                else
+                  for (var i = 0; i < _categories.length; i++)
+                    ..._buildCategorySlivers(_categories[i], i),
               ],
             ),
           ),
@@ -126,7 +135,6 @@ class _EmojiSelectorState extends State<EmojiSelector>
   }
 
   List<Widget> _buildCategorySlivers(EmojiCategory category, int index) {
-    const emojiSize = 32.0;
     final widgets = <Widget>[
       if (category.name?.isNotEmpty == true)
         SliverToBoxAdapter(
@@ -137,19 +145,11 @@ class _EmojiSelectorState extends State<EmojiSelector>
         ),
       SliverGrid(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 16 + emojiSize,
+          maxCrossAxisExtent: 16 + _emojiSize,
         ),
         delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final emoji = category.emojis.elementAt(index);
-            return IconButton(
-              onPressed: () => widget.onEmojiSelected(emoji),
-              icon: EmojiWidget(emoji: emoji, size: emojiSize),
-              splashRadius: 24,
-              tooltip: emoji.name,
-            );
-          },
-          childCount: category.emojis.length,
+          (context, index) => _buildItem(context, category.items, index),
+          childCount: category.items.length,
         ),
       ),
     ];
@@ -163,63 +163,127 @@ class _EmojiSelectorState extends State<EmojiSelector>
     return widgets;
   }
 
+  Widget _buildItem(
+    BuildContext context,
+    List<EmojiCategoryItem> items,
+    int index,
+  ) {
+    final item = items[index];
+    final tooltip = _getTooltip(item.emoji);
+    Widget child = GestureDetector(
+      onLongPress: () async {
+        if (item.variants.isEmpty) return;
+        final variant = await showModalBottomSheet<Emoji?>(
+          context: context,
+          constraints: bottomSheetConstraints,
+          builder: (context) {
+            return GridView.builder(
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 6,
+              ),
+              itemCount: item.variants.length,
+              itemBuilder: (context, index) {
+                final variant = item.variants[index];
+                return EmojiButton(
+                  variant,
+                  size: _emojiSize * 2,
+                  onTap: () => Navigator.of(context).pop(variant),
+                );
+              },
+            );
+          },
+        );
+        if (variant != null) widget.onEmojiSelected(variant);
+      },
+      child: EmojiButton(
+        item.emoji,
+        size: _emojiSize,
+        onTap: () => widget.onEmojiSelected(item.emoji),
+      ),
+    );
+
+    if (tooltip != null) {
+      return Tooltip(
+        message: tooltip,
+        child: child,
+      );
+    }
+
+    if (item.variants.isNotEmpty) {
+      child = Stack(
+        children: [
+          Positioned(
+            bottom: -8,
+            right: 0,
+            child: Icon(
+              Icons.more_horiz,
+              color: Theme.of(context).disabledColor,
+            ),
+          ),
+          Positioned.fill(child: child),
+        ],
+      );
+    }
+
+    return child;
+  }
+
+  String? _getTooltip(Emoji emoji) =>
+      emoji is CustomEmoji ? ":${emoji.short}:" : null;
+
   Widget _buildCategoryIcon(BuildContext context, EmojiCategory category) {
     if (category is UnicodeEmojiCategory) {
       return Icon(
         const {
-              EmojiGroup.animalsNature: Icons.emoji_nature_rounded,
-              EmojiGroup.symbols: Icons.emoji_symbols_rounded,
-              EmojiGroup.flags: Icons.emoji_flags_rounded,
-              EmojiGroup.smileysEmotion: Icons.emoji_emotions_rounded,
-              EmojiGroup.objects: Icons.emoji_objects_rounded,
-              EmojiGroup.travelPlaces: Icons.emoji_transportation_rounded,
-              EmojiGroup.activities: Icons.emoji_events_rounded,
-              EmojiGroup.foodDrink: Icons.emoji_food_beverage_rounded,
-              EmojiGroup.peopleBody: Icons.emoji_people_rounded,
-            }[category.emojiGroup] ??
+              UnicodeEmojiGroup.animalsNature: Icons.emoji_nature_rounded,
+              UnicodeEmojiGroup.symbols: Icons.emoji_symbols_rounded,
+              UnicodeEmojiGroup.flags: Icons.emoji_flags_rounded,
+              UnicodeEmojiGroup.smileysEmotion: Icons.emoji_emotions_rounded,
+              UnicodeEmojiGroup.objects: Icons.emoji_objects_rounded,
+              UnicodeEmojiGroup.travelPlaces:
+                  Icons.emoji_transportation_rounded,
+              UnicodeEmojiGroup.activities: Icons.emoji_events_rounded,
+              UnicodeEmojiGroup.foodDrink: Icons.emoji_food_beverage_rounded,
+              UnicodeEmojiGroup.peopleBody: Icons.emoji_people_rounded,
+            }[category.type] ??
             Icons.circle_rounded,
         size: 24,
       );
     }
 
-    assert(category.emojis.isNotEmpty, "Cannot display empty emoji category");
+    assert(category.items.isNotEmpty, "Cannot display empty emoji category");
 
     return EmojiWidget(
-      emoji: category.emojis.elementAt(0),
+      emoji: category.items[0].emoji,
       size: 24,
     );
   }
 
-  Iterable<EmojiCategory> applySearch(Iterable<EmojiCategory> categories) {
+  List<EmojiCategory> applySearch(List<EmojiCategory> categories) {
     final query = _searchTextController.text;
     if (query.isEmpty) return categories;
 
-    EmojiCategory _filterCategory(EmojiCategory category) {
-      if (category is UnicodeEmojiCategory) {
-        return UnicodeEmojiCategory(
-          category.emojiGroup,
-          filter: (emoji) => <String>[
-            emoji.name,
-            emoji.shortName,
-            ...emoji.keywords,
-          ].any((w) => w.contains(query)),
-          skinTone: category.skinTone,
-        );
-      }
-
+    EmojiCategory filterCategory(EmojiCategory category) {
       return EmojiCategory(
         category.name,
-        category.emojis.where(
-          (emoji) => <String>[
-            emoji.name,
-            ...?emoji.aliases,
-          ].any((w) => w.contains(query)),
-        ),
+        category.items.where(
+          (i) {
+            final keywords = i.emojis.expand(
+              (i) => <String>[
+                i.short,
+                ...?i.aliases,
+              ],
+            );
+            return keywords.any((w) => w.contains(query));
+          },
+        ).toList(growable: false),
       );
     }
 
     return categories
-        .map(_filterCategory)
-        .where((category) => category.emojis.isNotEmpty);
+        .map(filterCategory)
+        .where((category) => category.items.isNotEmpty)
+        .toList(growable: false);
   }
 }

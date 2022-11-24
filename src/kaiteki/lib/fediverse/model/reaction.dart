@@ -1,8 +1,12 @@
-import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 
+part 'reaction.g.dart';
+
+@CopyWith()
 class Reaction {
-  final Iterable<User>? users;
+  final List<User>? users;
   final bool includesMe;
   final Emoji emoji;
   final int count;

@@ -336,7 +336,7 @@ class PostFormState extends ConsumerState<PostForm> {
   }
 
   Future<void> openEmojiPicker() async {
-    final emoji = await showModalBottomSheet(
+    final emoji = await showModalBottomSheet<Emoji?>(
       context: context,
       constraints: bottomSheetConstraints,
       builder: (_) => const EmojiSelectorBottomSheet(),
@@ -351,7 +351,17 @@ class PostFormState extends ConsumerState<PostForm> {
 
     if (emoji == null) return;
 
-    _bodyController.text = _bodyController.text += emoji.toString();
+    final text;
+
+    if (emoji is UnicodeEmoji) {
+      text = emoji.emoji;
+    } else if (emoji is CustomEmoji) {
+      text = ":${emoji.short}:";
+    } else {
+      throw UnimplementedError();
+    }
+
+    _bodyController.text = _bodyController.text += text;
   }
 
   void openAttachDrawer() {

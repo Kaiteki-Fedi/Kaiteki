@@ -1,7 +1,8 @@
+import 'package:collection/collection.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/embed.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
@@ -112,5 +113,63 @@ class Post<T> {
       id: 'cool-post',
       visibility: Visibility.public,
     );
+  }
+
+  Post addOrCreateReaction(
+    Emoji emoji,
+    User? user, [
+    bool replaceExisting = false,
+  ]) {
+    final List<Reaction> reactions;
+
+    if (replaceExisting && this.reactions.any((r) => r.includesMe)) {
+      reactions = removeOrDeleteReaction(emoji, user).reactions;
+    } else {
+      reactions = this.reactions;
+    }
+
+    final i = reactions.indexWhere((r) => r.emoji == emoji);
+
+    if (i == -1) {
+      reactions.add(Reaction(emoji: emoji, includesMe: true, count: 1));
+    } else {
+      final reaction = reactions[i];
+
+      if (reaction.includesMe) return this; // noop
+
+      reactions[i] = reaction.copyWith(
+        includesMe: true,
+        count: reaction.count + 1,
+        users: reaction.users == null ? null : [...reaction.users!, user!],
+      );
+    }
+
+    return copyWith.reactions(reactions);
+  }
+
+  Post removeOrDeleteReaction(Emoji emoji, User? user) {
+    final reactions = this.reactions;
+
+    final i = reactions.indexWhere((r) => r.emoji == emoji);
+
+    if (i == -1) {
+      throw Exception("Emoji not found");
+    } else {
+      final reaction = reactions[i];
+
+      if (!reaction.includesMe) return this; // noop
+
+      if (reaction.count == 1) {
+        reactions.removeAt(i);
+      } else {
+        reactions[i] = reaction.copyWith(
+          includesMe: false,
+          count: reaction.count - 1,
+          users: reaction.users?.whereNot((u) => u == user).toList(),
+        );
+      }
+    }
+
+    return copyWith.reactions(reactions);
   }
 }

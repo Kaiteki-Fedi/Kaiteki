@@ -97,8 +97,8 @@ Reaction toReaction(pleroma.EmojiReaction reaction, String localHost) {
   return Reaction(
     includesMe: reaction.me,
     count: reaction.count,
-    emoji: UnicodeEmoji(name: reaction.name),
-    users: reaction.accounts?.map((a) => toUser(a, localHost)) ?? [],
+    emoji: UnicodeEmoji(reaction.name),
+    users: reaction.accounts?.map((a) => toUser(a, localHost)).toList() ?? [],
   );
 }
 
@@ -159,8 +159,8 @@ AttachmentType toAttachmentType(String type) {
 CustomEmoji toEmoji(mastodon.Emoji emoji) {
   return CustomEmoji(
     url: emoji.staticUrl,
-    name: emoji.shortcode,
-    aliases: emoji.tags ?? [],
+    short: emoji.shortcode,
+    aliases: emoji.tags?.toList(),
   );
 }
 

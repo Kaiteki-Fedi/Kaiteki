@@ -5,6 +5,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
@@ -105,6 +106,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         FavoriteIntent: CallbackAction(onInvoke: (_) => _onFavorite()),
         RepeatIntent: CallbackAction(onInvoke: (_) => _onRepeat()),
         BookmarkIntent: CallbackAction(onInvoke: (_) => _onBookmark()),
+        ReactIntent: CallbackAction(onInvoke: (_) => _onReact()),
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +156,10 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                       style: TextStyle(color: Theme.of(context).disabledColor),
                     ),
                   if (_post.reactions.isNotEmpty)
-                    ReactionRow(_post, _post.reactions),
+                    ReactionRow(
+                      _post.reactions,
+                      (r) => _onChangeReaction(r.emoji),
+                    ),
                   if (widget.showActions)
                     InteractionBar(
                       post: _post,
@@ -368,9 +373,53 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     }
   }
 
+  Future<void> _onChangeReaction(Emoji emoji) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final manager = ref.read(accountProvider);
+    final adapter = manager.current.adapter as ReactionSupport;
+
+    try {
+      final hasReacted = _post.reactions.any(
+        (r) => r.includesMe && r.emoji == emoji,
+      );
+
+      final Post newPost;
+
+      // TODO(Craftplacer): Make reaction methods return Post? and prefer server responses rather than client-side post mutations
+      if (hasReacted) {
+        await adapter.removeReaction(_post, emoji);
+        newPost = _post.removeOrDeleteReaction(
+          emoji,
+          manager.current.user,
+        );
+      } else {
+        await adapter.addReaction(_post, emoji);
+        newPost = _post.addOrCreateReaction(
+          emoji,
+          manager.current.user,
+          !adapter.capabilities.supportsMultipleReactions,
+        );
+      }
+
+      setState(() => _post = newPost);
+    } catch (e, s) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: const Text("Failed to react to post"),
+          action: SnackBarAction(
+            label: "Show details",
+            onPressed: () {
+              context.showExceptionDialog(e, s);
+            },
+          ),
+        ),
+      );
+    }
+  }
+
   Future<void> _onReact() async {
     final adapter = ref.read(adapterProvider) as ReactionSupport;
-    final emoji = await showModalBottomSheet(
+    final emoji = await showModalBottomSheet<Emoji?>(
       context: context,
       constraints: bottomSheetConstraints,
       builder: (_) => EmojiSelectorBottomSheet(
@@ -388,8 +437,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
     if (emoji == null) return;
 
-    final newPost = await adapter.addReaction(_post, emoji);
-    setState(() => _post = newPost);
+    _onChangeReaction(emoji);
   }
 }
 

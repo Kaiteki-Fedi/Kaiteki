@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'notifications.dart';
+part of 'emoji.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,29 +29,28 @@ class _SystemHash {
   }
 }
 
-String $NotificationServiceHash() =>
-    r'3e44f0d8b1a67fcc30da5fa4fd528719b461ae5b';
+String $EmojiServiceHash() => r'3ea5bc1f1b85e9c508fb71154a50ddeaeba57399';
 
-/// See also [NotificationService].
-class NotificationServiceProvider
-    extends AsyncNotifierProviderImpl<NotificationService, List<Notification>> {
-  NotificationServiceProvider(
+/// See also [EmojiService].
+class EmojiServiceProvider
+    extends AsyncNotifierProviderImpl<EmojiService, List<EmojiCategory>> {
+  EmojiServiceProvider(
     this.key,
   ) : super(
-          () => NotificationService()..key = key,
-          from: notificationServiceProvider,
-          name: r'notificationServiceProvider',
+          () => EmojiService()..key = key,
+          from: emojiServiceProvider,
+          name: r'emojiServiceProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $NotificationServiceHash,
+                  : $EmojiServiceHash,
         );
 
   final AccountKey key;
 
   @override
   bool operator ==(Object other) {
-    return other is NotificationServiceProvider && other.key == key;
+    return other is EmojiServiceProvider && other.key == key;
   }
 
   @override
@@ -63,8 +62,8 @@ class NotificationServiceProvider
   }
 
   @override
-  FutureOr<List<Notification>> runNotifierBuild(
-    covariant _$NotificationService notifier,
+  FutureOr<List<EmojiCategory>> runNotifierBuild(
+    covariant _$EmojiService notifier,
   ) {
     return notifier.build(
       key,
@@ -72,26 +71,26 @@ class NotificationServiceProvider
   }
 }
 
-typedef NotificationServiceRef = AsyncNotifierProviderRef<List<Notification>>;
+typedef EmojiServiceRef = AsyncNotifierProviderRef<List<EmojiCategory>>;
 
-/// See also [NotificationService].
-final notificationServiceProvider = NotificationServiceFamily();
+/// See also [EmojiService].
+final emojiServiceProvider = EmojiServiceFamily();
 
-class NotificationServiceFamily extends Family<AsyncValue<List<Notification>>> {
-  NotificationServiceFamily();
+class EmojiServiceFamily extends Family<AsyncValue<List<EmojiCategory>>> {
+  EmojiServiceFamily();
 
-  NotificationServiceProvider call(
+  EmojiServiceProvider call(
     AccountKey key,
   ) {
-    return NotificationServiceProvider(
+    return EmojiServiceProvider(
       key,
     );
   }
 
   @override
-  AsyncNotifierProviderImpl<NotificationService, List<Notification>>
+  AsyncNotifierProviderImpl<EmojiService, List<EmojiCategory>>
       getProviderOverride(
-    covariant NotificationServiceProvider provider,
+    covariant EmojiServiceProvider provider,
   ) {
     return call(
       provider.key,
@@ -105,14 +104,14 @@ class NotificationServiceFamily extends Family<AsyncValue<List<Notification>>> {
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'notificationServiceProvider';
+  String? get name => r'emojiServiceProvider';
 }
 
-abstract class _$NotificationService
-    extends BuildlessAsyncNotifier<List<Notification>> {
+abstract class _$EmojiService
+    extends BuildlessAsyncNotifier<List<EmojiCategory>> {
   late final AccountKey key;
 
-  FutureOr<List<Notification>> build(
+  FutureOr<List<EmojiCategory>> build(
     AccountKey key,
   );
 }

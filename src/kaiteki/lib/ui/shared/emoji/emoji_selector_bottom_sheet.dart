@@ -1,15 +1,9 @@
-import 'dart:async';
-
-import 'package:emojis/emoji.dart' as unicode_emoji;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
+import 'package:kaiteki/fediverse/model/emoji/category.dart';
+import 'package:kaiteki/fediverse/services/emoji.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
-import 'package:kaiteki/ui/shared/enum_icon_button.dart';
-import 'package:kaiteki/ui/shared/toggle_icon_button.dart';
 import 'package:mdi/mdi.dart';
 
 class EmojiSelectorBottomSheet extends ConsumerStatefulWidget {
@@ -31,49 +25,28 @@ class EmojiSelectorBottomSheet extends ConsumerStatefulWidget {
 
 class _EmojiSelectorBottomSheetState
     extends ConsumerState<EmojiSelectorBottomSheet> {
-  var skinColor = unicode_emoji.fitzpatrick.None;
-
-  late Future<List<UnicodeEmojiCategory>> _unicodeEmojis;
-  Future<Iterable<EmojiCategory>>? _customEmojis;
+  List<UnicodeEmojiCategory>? _unicodeEmojis;
 
   _EmojiKindTab? _tabField;
-  _EmojiKindTab get _tab {
-    return _tabField ??
-        (widget.showCustomEmojis
-            ? _EmojiKindTab.custom
-            : _EmojiKindTab.unicode);
-  }
-
-  set _tab(_EmojiKindTab tab) {
-    setState(() => _tabField = tab);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.showUnicodeEmojis) {
-      _unicodeEmojis = compute(_getUnicodeCategories, null);
-    }
-
-    if (widget.showCustomEmojis) {
-      final adapter = ref.read(adapterProvider) as CustomEmojiSupport;
-      _customEmojis ??= adapter.getEmojis();
-    }
-  }
+  _EmojiKindTab? get _tab => _tabField;
+  set _tab(_EmojiKindTab? tab) => setState(() => _tabField = tab);
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<FediverseAdapter>(
-      adapterProvider,
-      (_, adapter) {
-        setState(() {
-          if (adapter is CustomEmojiSupport) {
-            _customEmojis = (adapter as CustomEmojiSupport).getEmojis();
-          }
-        });
-      },
-    );
+    final account = ref.watch(accountProvider).current;
+
+    // "Basic" error checking whether tab can disappear between rebuilds
+    final availableTabs = [
+      if (widget.showCustomEmojis && account.adapter is CustomEmojiSupport)
+        _EmojiKindTab.custom,
+      if (widget.showUnicodeEmojis) _EmojiKindTab.unicode,
+    ];
+
+    final _EmojiKindTab tab;
+    if (_tab == null || !availableTabs.contains(_tab)) {
+      _tab = availableTabs.first;
+    }
+    tab = _tab!;
 
     return Column(
       children: [
@@ -85,76 +58,80 @@ class _EmojiSelectorBottomSheetState
           ),
           title: widget.title ?? const Text('Select an emoji'),
           contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              EnumIconButton<unicode_emoji.fitzpatrick>(
-                tooltip: "Change skin color",
-                iconBuilder: (context, _) => const SizedBox(),
-                textBuilder: (context, v) => Text(v.name),
-                value: skinColor,
-                onChanged: (v) => setState(() => skinColor = v),
-                values: unicode_emoji.fitzpatrick.values,
-              ),
-            ],
-          ),
         ),
-        Expanded(
-          child: FutureBuilder<Iterable<EmojiCategory>>(
-            future:
-                _tab == _EmojiKindTab.unicode ? _unicodeEmojis : _customEmojis,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                final l10n = context.getL10n();
-                return Center(child: Text(l10n.emojiRetrievalFailed));
-              }
-
-              if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              return _buildSelector(context, snapshot.data!);
-            },
-          ),
-        ),
+        Expanded(child: _buildBody(context, tab)),
         const Divider(height: 1),
         if (widget.showUnicodeEmojis && widget.showCustomEmojis)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ToggleIconButton(
-                tooltip: "Custom Emojis",
-                icon: const Icon(Mdi.emoticon),
-                onPressed: () => _tab = _EmojiKindTab.custom,
-                selected: _tab == _EmojiKindTab.custom,
-              ),
-              ToggleIconButton(
-                tooltip: "Unicode Emojis",
-                icon: const Icon(Mdi.unicode),
-                onPressed: () => _tab = _EmojiKindTab.unicode,
-                selected: _tab == _EmojiKindTab.unicode,
-              ),
+              if (availableTabs.contains(_EmojiKindTab.custom))
+                IconButton(
+                  tooltip: "Custom Emojis",
+                  icon: const Icon(Mdi.emoticon),
+                  onPressed: () => _tab = _EmojiKindTab.custom,
+                  isSelected: _tab == _EmojiKindTab.custom,
+                ),
+              if (availableTabs.contains(_EmojiKindTab.unicode))
+                IconButton(
+                  tooltip: "Unicode Emojis",
+                  icon: const Icon(Mdi.unicode),
+                  onPressed: () => _tab = _EmojiKindTab.unicode,
+                  isSelected: _tab == _EmojiKindTab.unicode,
+                ),
             ],
           ),
       ],
     );
   }
 
-  static FutureOr<List<UnicodeEmojiCategory>> _getUnicodeCategories(void a) {
-    return unicode_emoji.EmojiGroup.values
-        .where((g) => g != unicode_emoji.EmojiGroup.component)
-        .map(UnicodeEmojiCategory.new)
+  static List<UnicodeEmojiCategory> _getUnicodeCategories(
+    BuildContext context,
+  ) {
+    final l10n = context.getL10n();
+
+    return UnicodeEmojiGroup.values
+        .map(
+          (g) => UnicodeEmojiCategory(
+            g.getDisplayName(l10n),
+            g,
+          ),
+        )
         .toList(growable: false);
   }
 
   Widget _buildSelector(
     BuildContext context,
-    Iterable<EmojiCategory> categories,
-  ) {
+    List<EmojiCategory> categories, [
+    bool showSearch = true,
+  ]) {
     return EmojiSelector(
       categories: categories,
       onEmojiSelected: (emoji) => Navigator.of(context).pop(emoji),
+      showSearch: showSearch,
     );
+  }
+
+  Widget _buildBody(BuildContext context, _EmojiKindTab tab) {
+    final l10n = context.getL10n();
+
+    switch (tab) {
+      case _EmojiKindTab.custom:
+        final account = ref.read(accountProvider).current;
+        final customEmojis = emojiServiceProvider(account.key);
+        return ref
+            .watch(customEmojis) //
+            .when(
+              data: (emojis) => _buildSelector(context, emojis),
+              // TODO(Craftplacer): Add ability to see error details for failure on fetching custom emojis
+              error: (_, __) => Center(child: Text(l10n.emojiRetrievalFailed)),
+              loading: () => const Center(child: CircularProgressIndicator()),
+            );
+      case _EmojiKindTab.unicode:
+        _unicodeEmojis ??= _getUnicodeCategories(context);
+        // FIXME(Craftplacer): Can't search unicode emojis because we don't have a list of aliases
+        return _buildSelector(context, _unicodeEmojis!, false);
+    }
   }
 }
 

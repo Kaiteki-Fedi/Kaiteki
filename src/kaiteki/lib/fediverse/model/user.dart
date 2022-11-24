@@ -1,5 +1,5 @@
 import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/user_flags.dart';
 
 /// A class representing an user or account.

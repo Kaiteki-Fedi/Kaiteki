@@ -1,19 +1,13 @@
-import 'package:fediverse_objects/misskey.dart';
 import 'package:kaiteki/exceptions/api_exception.dart';
 
 class MisskeyException extends ApiException {
-  final Error error;
+  final Map<String, dynamic> _error;
 
-  MisskeyException(super.statusCode, this.error);
+  String get code => _error["code"];
+  String get message => _error["message"];
+
+  MisskeyException(super.statusCode, this._error);
 
   @override
-  // FIXME(Craftplacer): Wrong fields have been generated for Error
-  // ignore: unnecessary_overrides
-  String toString() {
-    // if (error.error["message"] != null) {
-    //   return error.error["message"];
-    // }
-
-    return super.toString();
-  }
+  String toString() => "$code: $message";
 }

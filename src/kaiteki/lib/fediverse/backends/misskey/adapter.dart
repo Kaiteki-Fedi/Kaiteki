@@ -11,6 +11,7 @@ import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/misskey/capabilties.dart';
 import 'package:kaiteki/fediverse/backends/misskey/client.dart';
+import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
@@ -296,13 +297,13 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   }
 
   @override
-  Future<Post> addReaction(Post post, Emoji emoji) async {
+  Future<void> addReaction(Post post, Emoji emoji) async {
     String emojiName;
 
     if (emoji is CustomEmoji) {
-      emojiName = ':${emoji.name}:';
+      emojiName = ':${emoji.short}:';
     } else if (emoji is UnicodeEmoji) {
-      emojiName = emoji.name;
+      emojiName = emoji.emoji;
     } else {
       throw UnimplementedError(
         "Emoji type ${emoji.runtimeType} is not supported yet.",
@@ -310,30 +311,31 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     }
 
     await client.createReaction(post.id, emojiName);
-
-    // HACK(Craftplacer): We don't get the updated note back from the API, so we have to fetch it again.
-    final note = await client.showNote(post.id);
-    return toPost(note);
   }
 
   @override
-  Future<Post> removeReaction(Post post, Emoji emoji) async {
-    // The "emoji" parameter is ignored,
-    // because in Misskey you can only react once.
-    await client.deleteReaction(post.id);
-
-    // HACK(Craftplacer): We don't get the updated note back from the API, so we have to fetch it again.
-    final note = await client.showNote(post.id);
-    return toPost(note);
+  Future<void> removeReaction(Post post, Emoji emoji) async {
+    // The "emoji" parameter is ignored, because in Misskey you can only react
+    // once.
+    try {
+      await client.deleteReaction(post.id);
+    } on MisskeyException catch (e) {
+      if (e.code != "NOT_REACTED") rethrow;
+    }
   }
 
   @override
-  Future<Iterable<EmojiCategory>> getEmojis() async {
+  Future<List<EmojiCategory>> getEmojis() async {
     final instanceMeta = await client.getInstanceMeta();
     final emojiCategories = instanceMeta.emojis.groupBy((e) => e.category);
-    return emojiCategories.entries.map(
-      (kv) => EmojiCategory(kv.key, kv.value.map(toEmoji)),
-    );
+    return emojiCategories.entries
+        .map(
+          (kv) => EmojiCategory(
+            kv.key,
+            kv.value.map(toEmoji).map(EmojiCategoryItem.new).toList(),
+          ),
+        )
+        .toList(growable: false);
   }
 
   @override

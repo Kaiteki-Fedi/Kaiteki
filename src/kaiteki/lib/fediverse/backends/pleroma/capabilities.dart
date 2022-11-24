@@ -21,4 +21,7 @@ class PleromaCapabilities extends MastodonCapabilities
       Formatting.bbCode,
     };
   }
+
+  @override
+  bool get supportsMultipleReactions => true;
 }

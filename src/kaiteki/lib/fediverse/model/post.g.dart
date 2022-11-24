@@ -19,7 +19,7 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> embeds(List<Embed> embeds);
 
-  Post<T> emojis(List<Emoji<dynamic>>? emojis);
+  Post<T> emojis(List<Emoji>? emojis);
 
   Post<T> externalUrl(String? externalUrl);
 
@@ -78,7 +78,7 @@ abstract class _$PostCWProxy<T> {
     String? client,
     String? content,
     List<Embed>? embeds,
-    List<Emoji<dynamic>>? emojis,
+    List<Emoji>? emojis,
     String? externalUrl,
     Formatting? formatting,
     String? id,
@@ -130,7 +130,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   Post<T> embeds(List<Embed> embeds) => this(embeds: embeds);
 
   @override
-  Post<T> emojis(List<Emoji<dynamic>>? emojis) => this(emojis: emojis);
+  Post<T> emojis(List<Emoji>? emojis) => this(emojis: emojis);
 
   @override
   Post<T> externalUrl(String? externalUrl) => this(externalUrl: externalUrl);
@@ -270,7 +270,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
       emojis: emojis == const $CopyWithPlaceholder()
           ? _value.emojis
           // ignore: cast_nullable_to_non_nullable
-          : emojis as List<Emoji<dynamic>>?,
+          : emojis as List<Emoji>?,
       externalUrl: externalUrl == const $CopyWithPlaceholder()
           ? _value.externalUrl
           // ignore: cast_nullable_to_non_nullable

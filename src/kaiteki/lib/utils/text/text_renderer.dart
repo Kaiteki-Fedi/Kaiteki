@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Element;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
@@ -248,7 +248,7 @@ class TextRenderer {
     );
 
     final emoji = textContext.emojis?.firstOrDefault((e) {
-      return e.name == element.name;
+      return e.short == element.name;
     });
 
     if (emoji == null) return TextSpan(text: ":${element.name}:");

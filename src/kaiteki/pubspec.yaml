@@ -31,7 +31,6 @@ dependencies:
   crypto: ^3.0.1
   device_info_plus: ^8.0.0
   dynamic_color: ^1.5.4
-  emojis: ^0.9.9
   fediverse_objects:
     git: https://github.com/Kaiteki-Fedi/fediverse_objects.git
   file_picker: ^5.0.0
