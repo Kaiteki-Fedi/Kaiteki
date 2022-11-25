@@ -237,10 +237,12 @@ class NotificationWidget extends ConsumerWidget {
                                       .renderDisplayName(context, ref)
                                 ],
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               TextSpan(
-                                  text: _getTitle(context, notification.type)),
+                                text: _getTitle(context, notification.type),
+                              ),
                             ],
                           ),
                           maxLines: 1,

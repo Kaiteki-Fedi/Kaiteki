@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
 import 'package:kaiteki/ui/main/tab_kind.dart';

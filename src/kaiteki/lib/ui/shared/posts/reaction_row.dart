@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/ui/shared/posts/reaction_button.dart';
 

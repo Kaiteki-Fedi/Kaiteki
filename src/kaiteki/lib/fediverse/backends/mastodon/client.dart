@@ -12,7 +12,6 @@ import 'package:kaiteki/model/auth/authentication_data.dart';
 import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/model/http_method.dart';
-import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {

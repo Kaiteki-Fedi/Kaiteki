@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/ui/auth/login/login_form.dart';
-import 'package:kaiteki/ui/shared/form_widget.dart';
+import 'package:kaiteki/ui/shared/layout/form_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {

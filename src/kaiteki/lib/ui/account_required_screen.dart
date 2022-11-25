@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/form_widget.dart';
+import 'package:kaiteki/ui/shared/layout/form_widget.dart';
 import 'package:kaiteki/utils/extensions/m3.dart';
 
 class AccountRequiredScreen extends StatelessWidget {

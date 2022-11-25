@@ -411,6 +411,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<void> markNotificationAsRead(Notification notification) {
     throw UnsupportedError(
-        "Misskey does not support marking individual notifications as read");
+      "Misskey does not support marking individual notifications as read",
+    );
   }
 }
