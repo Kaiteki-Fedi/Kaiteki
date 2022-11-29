@@ -96,63 +96,78 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     final read = data.where((n) => n.unread == false);
     final readLength = read.length;
 
-    return Material(
-      child: TabBarView(
-        children: [
-          if (unreadLength < 1)
-            const Center(
-              child: IconLandingWidget(
-                icon: Icon(Icons.notifications_active_rounded),
-                text: Text("New notifications will appear here"),
-              ),
-            )
-          else
-            Stack(
+    return Column(
+      children: [
+        // TextButton(
+        //   onPressed: () async {
+        //     await NativeNotificationPoster().sendNotification(data.first);
+        //   },
+        //   child: const Text("Send native notification"),
+        // ),
+        Expanded(
+          child: Material(
+            child: TabBarView(
               children: [
-                _buildList(unread, true),
-                Positioned(
-                  bottom: kFloatingActionButtonMargin,
-                  left: kFloatingActionButtonMargin,
-                  right: kFloatingActionButtonMargin,
-                  child: Align(
-                    child: FloatingActionButton.extended(
-                      onPressed: () {
-                        final messenger = ScaffoldMessenger.of(context);
-                        service.markAllAsRead().onError((error, stackTrace) {
-                          messenger.showSnackBar(
-                            SnackBar(
-                              content: const Text(
-                                "Failed to mark notification as read",
-                              ),
-                              action: SnackBarAction(
-                                label: "Show details",
-                                onPressed: () => context.showExceptionDialog(
-                                  error,
-                                  stackTrace,
-                                ),
-                              ),
-                            ),
-                          );
-                        });
-                      },
-                      label: const Text("Mark all as read"),
-                      icon: const Icon(Icons.done_all_rounded),
+                if (unreadLength < 1)
+                  const Center(
+                    child: IconLandingWidget(
+                      icon: Icon(Icons.notifications_active_rounded),
+                      text: Text("New notifications will appear here"),
                     ),
+                  )
+                else
+                  Stack(
+                    children: [
+                      _buildList(unread, true),
+                      Positioned(
+                        bottom: kFloatingActionButtonMargin,
+                        left: kFloatingActionButtonMargin,
+                        right: kFloatingActionButtonMargin,
+                        child: Align(
+                          child: FloatingActionButton.extended(
+                            onPressed: () {
+                              final messenger = ScaffoldMessenger.of(context);
+                              service
+                                  .markAllAsRead()
+                                  .onError((error, stackTrace) {
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: const Text(
+                                      "Failed to mark notification as read",
+                                    ),
+                                    action: SnackBarAction(
+                                      label: "Show details",
+                                      onPressed: () =>
+                                          context.showExceptionDialog(
+                                        error,
+                                        stackTrace,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              });
+                            },
+                            label: const Text("Mark all as read"),
+                            icon: const Icon(Icons.done_all_rounded),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                if (readLength < 1)
+                  const Center(
+                    child: IconLandingWidget(
+                      icon: Icon(Icons.notifications_none_rounded),
+                      text: Text("Read notifications will appear here"),
+                    ),
+                  )
+                else
+                  _buildList(read),
               ],
             ),
-          if (readLength < 1)
-            const Center(
-              child: IconLandingWidget(
-                icon: Icon(Icons.notifications_none_rounded),
-                text: Text("Read notifications will appear here"),
-              ),
-            )
-          else
-            _buildList(read),
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 

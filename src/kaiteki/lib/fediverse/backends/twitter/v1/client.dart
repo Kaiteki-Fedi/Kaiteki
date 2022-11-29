@@ -171,7 +171,7 @@ class OldTwitterClient extends FediverseClientBase {
   }
 
   Future<MediaUpload> uploadMedia(File file) async {
-    return await sendJsonMultiPartRequest(
+    return sendJsonMultiPartRequest(
       HttpMethod.post,
       "https://upload.twitter.com/1.1/media/upload.json?media_category=tweet_image",
       MediaUpload.fromJson,
