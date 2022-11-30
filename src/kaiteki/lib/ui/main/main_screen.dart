@@ -107,6 +107,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         NewPostIntent: CallbackAction(
           onInvoke: (_) => context.showPostDialog(),
         ),
+        SearchIntent: CallbackAction(
+          onInvoke: (_) => _search?.call(),
+        ),
         RefreshIntent: CallbackAction(
           onInvoke: (_) => _refresh?.call(),
         ),
@@ -228,6 +231,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return destinations;
   }
 
+  VoidCallback? get _search {
+    throw UnimplementedError();
+  }
+
   VoidCallback? get _refresh {
     switch (_currentTab) {
       case TabKind.timeline:
@@ -246,6 +253,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final l10n = context.getL10n();
 
     return [
+      IconButton(
+        icon: const Icon(Icons.search_rounded),
+        onPressed: _search,
+        tooltip: l10n.searchTimelineButtonLabel,
+      ),
       IconButton(
         icon: const Icon(Icons.refresh_rounded),
         onPressed: _refresh,
