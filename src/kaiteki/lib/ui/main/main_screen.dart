@@ -107,9 +107,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         NewPostIntent: CallbackAction(
           onInvoke: (_) => context.showPostDialog(),
         ),
-        SearchIntent: CallbackAction(
-          onInvoke: (_) => _search?.call(),
-        ),
+        // SearchIntent: CallbackAction(
+        //   onInvoke: (_) => _search?.call(),
+        // ),
         RefreshIntent: CallbackAction(
           onInvoke: (_) => _refresh?.call(),
         ),
