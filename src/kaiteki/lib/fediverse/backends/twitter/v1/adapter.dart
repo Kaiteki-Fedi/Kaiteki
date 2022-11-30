@@ -83,19 +83,6 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
         );
         return homeTimeine.map(toPost);
 
-      case TimelineKind.local:
-        final homeTimeine = await client.getLocalTimeline(
-          sinceId: query?.sinceId,
-          maxId: query?.untilId,
-        );
-        return homeTimeine.map(toPost);
-
-      case TimelineKind.federated:
-        final homeTimeine = await client.getGlobalTimeline(
-          sinceId: query?.sinceId,
-          maxId: query?.untilId,
-        );
-        return homeTimeine.map(toPost);
       default:
         throw UnimplementedError();
     }

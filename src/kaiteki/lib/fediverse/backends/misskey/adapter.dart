@@ -255,6 +255,27 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
         notes = await client.getTimeline(request);
         break;
 
+      case TimelineKind.local:
+        final homeTimeine = await client.getLocalTimeline(
+          sinceId: query?.sinceId,
+          maxId: query?.untilId,
+        );
+        return homeTimeine.map(toPost);
+
+      case TimelineKind.hybrid:
+        final homeTimeine = await client.getHybridTimeline(
+          sinceId: query?.sinceId,
+          maxId: query?.untilId,
+        );
+        return homeTimeine.map(toPost);
+
+      case TimelineKind.federated:
+        final homeTimeine = await client.getGlobalTimeline(
+          sinceId: query?.sinceId,
+          maxId: query?.untilId,
+        );
+        return homeTimeine.map(toPost);
+
       // ignore: no_default_cases
       default:
         throw UnimplementedError(
