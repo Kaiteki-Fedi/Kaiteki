@@ -263,6 +263,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         onPressed: _refresh,
         tooltip: l10n.refreshTimelineButtonLabel,
       ),
+
+      //TODO(Craftplacer): Hide if on Android
       PopupMenuButton<Function()>(
         onSelected: (v) => v.call(),
         itemBuilder: (_) {
