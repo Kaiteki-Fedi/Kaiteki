@@ -5,4822 +5,294 @@ import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 final peopleBody = <EmojiCategoryItem<UnicodeEmoji>>[
   const EmojiCategoryItem(
-    const UnicodeEmoji("👋"), [
-      const UnicodeEmoji("👋🏻"),
-      const UnicodeEmoji("👋🏼"),
-      const UnicodeEmoji("👋🏽"),
-      const UnicodeEmoji("👋🏾"),
-      const UnicodeEmoji("👋🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤚"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤚🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤚🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤚🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤚🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤚🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🖐️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🖐🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🖐🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🖐🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🖐🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🖐🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✋"), [
-      const UnicodeEmoji("✋🏻"),
-      const UnicodeEmoji("✋🏼"),
-      const UnicodeEmoji("✋🏽"),
-      const UnicodeEmoji("✋🏾"),
-      const UnicodeEmoji("✋🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🖖"), [
-      const UnicodeEmoji("🖖🏻"),
-      const UnicodeEmoji("🖖🏼"),
-      const UnicodeEmoji("🖖🏽"),
-      const UnicodeEmoji("🖖🏾"),
-      const UnicodeEmoji("🖖🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫲🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫲🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫲🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫲🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫲🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫳🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫳🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫳🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫳🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫳🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫴"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫴🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫴🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫴🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫴🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫴🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫷"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫷🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫷🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫷🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫷🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫷🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫸"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫸🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫸🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫸🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫸🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫸🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👌"), [
-      const UnicodeEmoji("👌🏻"),
-      const UnicodeEmoji("👌🏼"),
-      const UnicodeEmoji("👌🏽"),
-      const UnicodeEmoji("👌🏾"),
-      const UnicodeEmoji("👌🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤌"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤌🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤌🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤌🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤌🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤌🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤏"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤏🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤏🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤏🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤏🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤏🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✌️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✌🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✌🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✌🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✌🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✌🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤞"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤞🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤞🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤞🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤞🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤞🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫰🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫰🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫰🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫰🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫰🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤟"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤟🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤟🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤟🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤟🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤟🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤘"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤘🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤘🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤘🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤘🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤘🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤙"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤙🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤙🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤙🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤙🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤙🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👈"), [
-      const UnicodeEmoji("👈🏻"),
-      const UnicodeEmoji("👈🏼"),
-      const UnicodeEmoji("👈🏽"),
-      const UnicodeEmoji("👈🏾"),
-      const UnicodeEmoji("👈🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👉"), [
-      const UnicodeEmoji("👉🏻"),
-      const UnicodeEmoji("👉🏼"),
-      const UnicodeEmoji("👉🏽"),
-      const UnicodeEmoji("👉🏾"),
-      const UnicodeEmoji("👉🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👆"), [
-      const UnicodeEmoji("👆🏻"),
-      const UnicodeEmoji("👆🏼"),
-      const UnicodeEmoji("👆🏽"),
-      const UnicodeEmoji("👆🏾"),
-      const UnicodeEmoji("👆🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🖕"), [
-      const UnicodeEmoji("🖕🏻"),
-      const UnicodeEmoji("🖕🏼"),
-      const UnicodeEmoji("🖕🏽"),
-      const UnicodeEmoji("🖕🏾"),
-      const UnicodeEmoji("🖕🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👇"), [
-      const UnicodeEmoji("👇🏻"),
-      const UnicodeEmoji("👇🏼"),
-      const UnicodeEmoji("👇🏽"),
-      const UnicodeEmoji("👇🏾"),
-      const UnicodeEmoji("👇🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☝️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☝🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☝🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☝🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☝🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☝🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫵"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫵🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫵🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫵🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫵🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫵🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👍"), [
-      const UnicodeEmoji("👍🏻"),
-      const UnicodeEmoji("👍🏼"),
-      const UnicodeEmoji("👍🏽"),
-      const UnicodeEmoji("👍🏾"),
-      const UnicodeEmoji("👍🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👎"), [
-      const UnicodeEmoji("👎🏻"),
-      const UnicodeEmoji("👎🏼"),
-      const UnicodeEmoji("👎🏽"),
-      const UnicodeEmoji("👎🏾"),
-      const UnicodeEmoji("👎🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✊"), [
-      const UnicodeEmoji("✊🏻"),
-      const UnicodeEmoji("✊🏼"),
-      const UnicodeEmoji("✊🏽"),
-      const UnicodeEmoji("✊🏾"),
-      const UnicodeEmoji("✊🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👊"), [
-      const UnicodeEmoji("👊🏻"),
-      const UnicodeEmoji("👊🏼"),
-      const UnicodeEmoji("👊🏽"),
-      const UnicodeEmoji("👊🏾"),
-      const UnicodeEmoji("👊🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤛"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤛🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤛🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤛🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤛🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤛🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤜"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤜🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤜🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤜🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤜🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤜🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👏"), [
-      const UnicodeEmoji("👏🏻"),
-      const UnicodeEmoji("👏🏼"),
-      const UnicodeEmoji("👏🏽"),
-      const UnicodeEmoji("👏🏾"),
-      const UnicodeEmoji("👏🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙌"), [
-      const UnicodeEmoji("🙌🏻"),
-      const UnicodeEmoji("🙌🏼"),
-      const UnicodeEmoji("🙌🏽"),
-      const UnicodeEmoji("🙌🏾"),
-      const UnicodeEmoji("🙌🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫶"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫶🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫶🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫶🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫶🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫶🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👐"), [
-      const UnicodeEmoji("👐🏻"),
-      const UnicodeEmoji("👐🏼"),
-      const UnicodeEmoji("👐🏽"),
-      const UnicodeEmoji("👐🏾"),
-      const UnicodeEmoji("👐🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤲🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤲🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤲🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤲🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤲🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤝"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤝🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤝🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤝🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤝🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤝🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏻‍🫲🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏻‍🫲🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏻‍🫲🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏻‍🫲🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏼‍🫲🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏼‍🫲🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏼‍🫲🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏼‍🫲🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏽‍🫲🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏽‍🫲🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏽‍🫲🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏽‍🫲🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏾‍🫲🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏾‍🫲🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏾‍🫲🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏾‍🫲🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏿‍🫲🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏿‍🫲🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏿‍🫲🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫱🏿‍🫲🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙏"), [
-      const UnicodeEmoji("🙏🏻"),
-      const UnicodeEmoji("🙏🏼"),
-      const UnicodeEmoji("🙏🏽"),
-      const UnicodeEmoji("🙏🏾"),
-      const UnicodeEmoji("🙏🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✍️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✍🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✍🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✍🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✍🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✍🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💅"), [
-      const UnicodeEmoji("💅🏻"),
-      const UnicodeEmoji("💅🏼"),
-      const UnicodeEmoji("💅🏽"),
-      const UnicodeEmoji("💅🏾"),
-      const UnicodeEmoji("💅🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤳🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤳🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤳🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤳🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤳🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💪"), [
-      const UnicodeEmoji("💪🏻"),
-      const UnicodeEmoji("💪🏼"),
-      const UnicodeEmoji("💪🏽"),
-      const UnicodeEmoji("💪🏾"),
-      const UnicodeEmoji("💪🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦵"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦵🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦵🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦵🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦵🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦵🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦶"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦶🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦶🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦶🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦶🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦶🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👂"), [
-      const UnicodeEmoji("👂🏻"),
-      const UnicodeEmoji("👂🏼"),
-      const UnicodeEmoji("👂🏽"),
-      const UnicodeEmoji("👂🏾"),
-      const UnicodeEmoji("👂🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦻🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦻🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦻🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦻🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦻🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👃"), [
-      const UnicodeEmoji("👃🏻"),
-      const UnicodeEmoji("👃🏼"),
-      const UnicodeEmoji("👃🏽"),
-      const UnicodeEmoji("👃🏾"),
-      const UnicodeEmoji("👃🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧠"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫁"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦷"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦴"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👁️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👅"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👶"), [
-      const UnicodeEmoji("👶🏻"),
-      const UnicodeEmoji("👶🏼"),
-      const UnicodeEmoji("👶🏽"),
-      const UnicodeEmoji("👶🏾"),
-      const UnicodeEmoji("👶🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧒🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧒🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧒🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧒🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧒🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👦"), [
-      const UnicodeEmoji("👦🏻"),
-      const UnicodeEmoji("👦🏼"),
-      const UnicodeEmoji("👦🏽"),
-      const UnicodeEmoji("👦🏾"),
-      const UnicodeEmoji("👦🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👧"), [
-      const UnicodeEmoji("👧🏻"),
-      const UnicodeEmoji("👧🏼"),
-      const UnicodeEmoji("👧🏽"),
-      const UnicodeEmoji("👧🏾"),
-      const UnicodeEmoji("👧🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱"), [
-      const UnicodeEmoji("👱🏻"),
-      const UnicodeEmoji("👱🏼"),
-      const UnicodeEmoji("👱🏽"),
-      const UnicodeEmoji("👱🏾"),
-      const UnicodeEmoji("👱🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨"), [
-      const UnicodeEmoji("👨🏻"),
-      const UnicodeEmoji("👨🏼"),
-      const UnicodeEmoji("👨🏽"),
-      const UnicodeEmoji("👨🏾"),
-      const UnicodeEmoji("👨🏿"),
-      const UnicodeEmoji("👨‍🦰"),
-      const UnicodeEmoji("👨🏻‍🦰"),
-      const UnicodeEmoji("👨🏼‍🦰"),
-      const UnicodeEmoji("👨🏽‍🦰"),
-      const UnicodeEmoji("👨🏾‍🦰"),
-      const UnicodeEmoji("👨🏿‍🦰"),
-      const UnicodeEmoji("👨‍🦱"),
-      const UnicodeEmoji("👨🏻‍🦱"),
-      const UnicodeEmoji("👨🏼‍🦱"),
-      const UnicodeEmoji("👨🏽‍🦱"),
-      const UnicodeEmoji("👨🏾‍🦱"),
-      const UnicodeEmoji("👨🏿‍🦱"),
-      const UnicodeEmoji("👨‍🦳"),
-      const UnicodeEmoji("👨🏻‍🦳"),
-      const UnicodeEmoji("👨🏼‍🦳"),
-      const UnicodeEmoji("👨🏽‍🦳"),
-      const UnicodeEmoji("👨🏾‍🦳"),
-      const UnicodeEmoji("👨🏿‍🦳"),
-      const UnicodeEmoji("👨‍🦲"),
-      const UnicodeEmoji("👨🏻‍🦲"),
-      const UnicodeEmoji("👨🏼‍🦲"),
-      const UnicodeEmoji("👨🏽‍🦲"),
-      const UnicodeEmoji("👨🏾‍🦲"),
-      const UnicodeEmoji("👨🏿‍🦲"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧔🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩"), [
-      const UnicodeEmoji("👩🏻"),
-      const UnicodeEmoji("👩🏼"),
-      const UnicodeEmoji("👩🏽"),
-      const UnicodeEmoji("👩🏾"),
-      const UnicodeEmoji("👩🏿"),
-      const UnicodeEmoji("👩‍🦰"),
-      const UnicodeEmoji("👩🏻‍🦰"),
-      const UnicodeEmoji("👩🏼‍🦰"),
-      const UnicodeEmoji("👩🏽‍🦰"),
-      const UnicodeEmoji("👩🏾‍🦰"),
-      const UnicodeEmoji("👩🏿‍🦰"),
-      const UnicodeEmoji("👩‍🦱"),
-      const UnicodeEmoji("👩🏻‍🦱"),
-      const UnicodeEmoji("👩🏼‍🦱"),
-      const UnicodeEmoji("👩🏽‍🦱"),
-      const UnicodeEmoji("👩🏾‍🦱"),
-      const UnicodeEmoji("👩🏿‍🦱"),
-      const UnicodeEmoji("👩‍🦳"),
-      const UnicodeEmoji("👩🏻‍🦳"),
-      const UnicodeEmoji("👩🏼‍🦳"),
-      const UnicodeEmoji("👩🏽‍🦳"),
-      const UnicodeEmoji("👩🏾‍🦳"),
-      const UnicodeEmoji("👩🏿‍🦳"),
-      const UnicodeEmoji("👩‍🦲"),
-      const UnicodeEmoji("👩🏻‍🦲"),
-      const UnicodeEmoji("👩🏼‍🦲"),
-      const UnicodeEmoji("👩🏽‍🦲"),
-      const UnicodeEmoji("👩🏾‍🦲"),
-      const UnicodeEmoji("👩🏿‍🦲"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🦰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🦰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🦰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🦰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🦰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🦰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🦱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🦱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🦱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🦱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🦱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🦱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🦳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🦳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🦳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🦳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🦳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🦳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🦲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🦲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🦲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🦲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🦲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🦲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👱🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧓🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧓🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧓🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧓🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧓🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👴"), [
-      const UnicodeEmoji("👴🏻"),
-      const UnicodeEmoji("👴🏼"),
-      const UnicodeEmoji("👴🏽"),
-      const UnicodeEmoji("👴🏾"),
-      const UnicodeEmoji("👴🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👵"), [
-      const UnicodeEmoji("👵🏻"),
-      const UnicodeEmoji("👵🏼"),
-      const UnicodeEmoji("👵🏽"),
-      const UnicodeEmoji("👵🏾"),
-      const UnicodeEmoji("👵🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍"), [
-      const UnicodeEmoji("🙍🏻"),
-      const UnicodeEmoji("🙍🏼"),
-      const UnicodeEmoji("🙍🏽"),
-      const UnicodeEmoji("🙍🏾"),
-      const UnicodeEmoji("🙍🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙍🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎"), [
-      const UnicodeEmoji("🙎🏻"),
-      const UnicodeEmoji("🙎🏼"),
-      const UnicodeEmoji("🙎🏽"),
-      const UnicodeEmoji("🙎🏾"),
-      const UnicodeEmoji("🙎🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙎🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅"), [
-      const UnicodeEmoji("🙅🏻"),
-      const UnicodeEmoji("🙅🏼"),
-      const UnicodeEmoji("🙅🏽"),
-      const UnicodeEmoji("🙅🏾"),
-      const UnicodeEmoji("🙅🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙅🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆"), [
-      const UnicodeEmoji("🙆🏻"),
-      const UnicodeEmoji("🙆🏼"),
-      const UnicodeEmoji("🙆🏽"),
-      const UnicodeEmoji("🙆🏾"),
-      const UnicodeEmoji("🙆🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙆🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁"), [
-      const UnicodeEmoji("💁🏻"),
-      const UnicodeEmoji("💁🏼"),
-      const UnicodeEmoji("💁🏽"),
-      const UnicodeEmoji("💁🏾"),
-      const UnicodeEmoji("💁🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💁🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋"), [
-      const UnicodeEmoji("🙋🏻"),
-      const UnicodeEmoji("🙋🏼"),
-      const UnicodeEmoji("🙋🏽"),
-      const UnicodeEmoji("🙋🏾"),
-      const UnicodeEmoji("🙋🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙋🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧏🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
     const UnicodeEmoji("🙇"), [
+      const UnicodeEmoji("🙇"),
       const UnicodeEmoji("🙇🏻"),
       const UnicodeEmoji("🙇🏼"),
       const UnicodeEmoji("🙇🏽"),
       const UnicodeEmoji("🙇🏾"),
       const UnicodeEmoji("🙇🏿"),
+      const UnicodeEmoji("🙇‍♀️"),
+      const UnicodeEmoji("🙇🏻‍♀️"),
+      const UnicodeEmoji("🙇🏼‍♀️"),
+      const UnicodeEmoji("🙇🏽‍♀️"),
+      const UnicodeEmoji("🙇🏾‍♀️"),
+      const UnicodeEmoji("🙇🏿‍♀️"),
+      const UnicodeEmoji("🙇‍♂️"),
+      const UnicodeEmoji("🙇🏻‍♂️"),
+      const UnicodeEmoji("🙇🏼‍♂️"),
+      const UnicodeEmoji("🙇🏽‍♂️"),
+      const UnicodeEmoji("🙇🏾‍♂️"),
+      const UnicodeEmoji("🙇🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🙇‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🙇🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤦🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤷🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍⚕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🎓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍⚖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🌾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🍳"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🔧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍💼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🔬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍💻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🎤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🎨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🚀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮"), [
-      const UnicodeEmoji("👮🏻"),
-      const UnicodeEmoji("👮🏼"),
-      const UnicodeEmoji("👮🏽"),
-      const UnicodeEmoji("👮🏾"),
-      const UnicodeEmoji("👮🏿"),
+    const UnicodeEmoji("🙋"), [
+      const UnicodeEmoji("🙋"),
+      const UnicodeEmoji("🙋🏻"),
+      const UnicodeEmoji("🙋🏼"),
+      const UnicodeEmoji("🙋🏽"),
+      const UnicodeEmoji("🙋🏾"),
+      const UnicodeEmoji("🙋🏿"),
+      const UnicodeEmoji("🙋‍♀️"),
+      const UnicodeEmoji("🙋🏻‍♀️"),
+      const UnicodeEmoji("🙋🏼‍♀️"),
+      const UnicodeEmoji("🙋🏽‍♀️"),
+      const UnicodeEmoji("🙋🏾‍♀️"),
+      const UnicodeEmoji("🙋🏿‍♀️"),
+      const UnicodeEmoji("🙋‍♂️"),
+      const UnicodeEmoji("🙋🏻‍♂️"),
+      const UnicodeEmoji("🙋🏼‍♂️"),
+      const UnicodeEmoji("🙋🏽‍♂️"),
+      const UnicodeEmoji("🙋🏾‍♂️"),
+      const UnicodeEmoji("🙋🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👮‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👮🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵️‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵️‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕵🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂"), [
-      const UnicodeEmoji("💂🏻"),
-      const UnicodeEmoji("💂🏼"),
-      const UnicodeEmoji("💂🏽"),
-      const UnicodeEmoji("💂🏾"),
-      const UnicodeEmoji("💂🏿"),
+    const UnicodeEmoji("💁"), [
+      const UnicodeEmoji("💁"),
+      const UnicodeEmoji("💁🏻"),
+      const UnicodeEmoji("💁🏼"),
+      const UnicodeEmoji("💁🏽"),
+      const UnicodeEmoji("💁🏾"),
+      const UnicodeEmoji("💁🏿"),
+      const UnicodeEmoji("💁‍♀️"),
+      const UnicodeEmoji("💁🏻‍♀️"),
+      const UnicodeEmoji("💁🏼‍♀️"),
+      const UnicodeEmoji("💁🏽‍♀️"),
+      const UnicodeEmoji("💁🏾‍♀️"),
+      const UnicodeEmoji("💁🏿‍♀️"),
+      const UnicodeEmoji("💁‍♂️"),
+      const UnicodeEmoji("💁🏻‍♂️"),
+      const UnicodeEmoji("💁🏼‍♂️"),
+      const UnicodeEmoji("💁🏽‍♂️"),
+      const UnicodeEmoji("💁🏾‍♂️"),
+      const UnicodeEmoji("💁🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💂‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💂🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🥷"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🥷🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🥷🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🥷🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🥷🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🥷🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷"), [
-      const UnicodeEmoji("👷🏻"),
-      const UnicodeEmoji("👷🏼"),
-      const UnicodeEmoji("👷🏽"),
-      const UnicodeEmoji("👷🏾"),
-      const UnicodeEmoji("👷🏿"),
+    const UnicodeEmoji("🙆"), [
+      const UnicodeEmoji("🙆"),
+      const UnicodeEmoji("🙆🏻"),
+      const UnicodeEmoji("🙆🏼"),
+      const UnicodeEmoji("🙆🏽"),
+      const UnicodeEmoji("🙆🏾"),
+      const UnicodeEmoji("🙆🏿"),
+      const UnicodeEmoji("🙆‍♀️"),
+      const UnicodeEmoji("🙆🏻‍♀️"),
+      const UnicodeEmoji("🙆🏼‍♀️"),
+      const UnicodeEmoji("🙆🏽‍♀️"),
+      const UnicodeEmoji("🙆🏾‍♀️"),
+      const UnicodeEmoji("🙆🏿‍♀️"),
+      const UnicodeEmoji("🙆‍♂️"),
+      const UnicodeEmoji("🙆🏻‍♂️"),
+      const UnicodeEmoji("🙆🏼‍♂️"),
+      const UnicodeEmoji("🙆🏽‍♂️"),
+      const UnicodeEmoji("🙆🏾‍♂️"),
+      const UnicodeEmoji("🙆🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👷‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👷🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫅"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫅🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫅🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫅🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫅🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫅🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤴"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤴🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤴🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤴🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤴🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤴🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👸"), [
-      const UnicodeEmoji("👸🏻"),
-      const UnicodeEmoji("👸🏼"),
-      const UnicodeEmoji("👸🏽"),
-      const UnicodeEmoji("👸🏾"),
-      const UnicodeEmoji("👸🏿"),
+    const UnicodeEmoji("🙅"), [
+      const UnicodeEmoji("🙅"),
+      const UnicodeEmoji("🙅🏻"),
+      const UnicodeEmoji("🙅🏼"),
+      const UnicodeEmoji("🙅🏽"),
+      const UnicodeEmoji("🙅🏾"),
+      const UnicodeEmoji("🙅🏿"),
+      const UnicodeEmoji("🙅‍♀️"),
+      const UnicodeEmoji("🙅🏻‍♀️"),
+      const UnicodeEmoji("🙅🏼‍♀️"),
+      const UnicodeEmoji("🙅🏽‍♀️"),
+      const UnicodeEmoji("🙅🏾‍♀️"),
+      const UnicodeEmoji("🙅🏿‍♀️"),
+      const UnicodeEmoji("🙅‍♂️"),
+      const UnicodeEmoji("🙅🏻‍♂️"),
+      const UnicodeEmoji("🙅🏼‍♂️"),
+      const UnicodeEmoji("🙅🏽‍♂️"),
+      const UnicodeEmoji("🙅🏾‍♂️"),
+      const UnicodeEmoji("🙅🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👳"), [
-      const UnicodeEmoji("👳🏻"),
-      const UnicodeEmoji("👳🏼"),
-      const UnicodeEmoji("👳🏽"),
-      const UnicodeEmoji("👳🏾"),
-      const UnicodeEmoji("👳🏿"),
+    const UnicodeEmoji("🤷"), [
+      const UnicodeEmoji("🤷"),
+      const UnicodeEmoji("🤷🏻"),
+      const UnicodeEmoji("🤷🏼"),
+      const UnicodeEmoji("🤷🏽"),
+      const UnicodeEmoji("🤷🏾"),
+      const UnicodeEmoji("🤷🏿"),
+      const UnicodeEmoji("🤷‍♀️"),
+      const UnicodeEmoji("🤷🏻‍♀️"),
+      const UnicodeEmoji("🤷🏼‍♀️"),
+      const UnicodeEmoji("🤷🏽‍♀️"),
+      const UnicodeEmoji("🤷🏾‍♀️"),
+      const UnicodeEmoji("🤷🏿‍♀️"),
+      const UnicodeEmoji("🤷‍♂️"),
+      const UnicodeEmoji("🤷🏻‍♂️"),
+      const UnicodeEmoji("🤷🏼‍♂️"),
+      const UnicodeEmoji("🤷🏽‍♂️"),
+      const UnicodeEmoji("🤷🏾‍♂️"),
+      const UnicodeEmoji("🤷🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👳‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👳🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👲"), [
-      const UnicodeEmoji("👲🏻"),
-      const UnicodeEmoji("👲🏼"),
-      const UnicodeEmoji("👲🏽"),
-      const UnicodeEmoji("👲🏾"),
-      const UnicodeEmoji("👲🏿"),
+    const UnicodeEmoji("🤦"), [
+      const UnicodeEmoji("🤦"),
+      const UnicodeEmoji("🤦🏻"),
+      const UnicodeEmoji("🤦🏼"),
+      const UnicodeEmoji("🤦🏽"),
+      const UnicodeEmoji("🤦🏾"),
+      const UnicodeEmoji("🤦🏿"),
+      const UnicodeEmoji("🤦‍♀️"),
+      const UnicodeEmoji("🤦🏻‍♀️"),
+      const UnicodeEmoji("🤦🏼‍♀️"),
+      const UnicodeEmoji("🤦🏽‍♀️"),
+      const UnicodeEmoji("🤦🏾‍♀️"),
+      const UnicodeEmoji("🤦🏿‍♀️"),
+      const UnicodeEmoji("🤦‍♂️"),
+      const UnicodeEmoji("🤦🏻‍♂️"),
+      const UnicodeEmoji("🤦🏼‍♂️"),
+      const UnicodeEmoji("🤦🏽‍♂️"),
+      const UnicodeEmoji("🤦🏾‍♂️"),
+      const UnicodeEmoji("🤦🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧕"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧕🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧕🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧕🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧕🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧕🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤵🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰"), [
-      const UnicodeEmoji("👰🏻"),
-      const UnicodeEmoji("👰🏼"),
-      const UnicodeEmoji("👰🏽"),
-      const UnicodeEmoji("👰🏾"),
-      const UnicodeEmoji("👰🏿"),
+    const UnicodeEmoji("🙍"), [
+      const UnicodeEmoji("🙍"),
+      const UnicodeEmoji("🙍🏻"),
+      const UnicodeEmoji("🙍🏼"),
+      const UnicodeEmoji("🙍🏽"),
+      const UnicodeEmoji("🙍🏾"),
+      const UnicodeEmoji("🙍🏿"),
+      const UnicodeEmoji("🙍‍♀️"),
+      const UnicodeEmoji("🙍🏻‍♀️"),
+      const UnicodeEmoji("🙍🏼‍♀️"),
+      const UnicodeEmoji("🙍🏽‍♀️"),
+      const UnicodeEmoji("🙍🏾‍♀️"),
+      const UnicodeEmoji("🙍🏿‍♀️"),
+      const UnicodeEmoji("🙍‍♂️"),
+      const UnicodeEmoji("🙍🏻‍♂️"),
+      const UnicodeEmoji("🙍🏼‍♂️"),
+      const UnicodeEmoji("🙍🏽‍♂️"),
+      const UnicodeEmoji("🙍🏾‍♂️"),
+      const UnicodeEmoji("🙍🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👰‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👰🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤰🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤰🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤰🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤰🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤰🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫃"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫃🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫃🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫃🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫃🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫃🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫄🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫄🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫄🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫄🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫄🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤱🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤱🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤱🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤱🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤱🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🍼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👼"), [
-      const UnicodeEmoji("👼🏻"),
-      const UnicodeEmoji("👼🏼"),
-      const UnicodeEmoji("👼🏽"),
-      const UnicodeEmoji("👼🏾"),
-      const UnicodeEmoji("👼🏿"),
+    const UnicodeEmoji("🙎"), [
+      const UnicodeEmoji("🙎"),
+      const UnicodeEmoji("🙎🏻"),
+      const UnicodeEmoji("🙎🏼"),
+      const UnicodeEmoji("🙎🏽"),
+      const UnicodeEmoji("🙎🏾"),
+      const UnicodeEmoji("🙎🏿"),
+      const UnicodeEmoji("🙎‍♀️"),
+      const UnicodeEmoji("🙎🏻‍♀️"),
+      const UnicodeEmoji("🙎🏼‍♀️"),
+      const UnicodeEmoji("🙎🏽‍♀️"),
+      const UnicodeEmoji("🙎🏾‍♀️"),
+      const UnicodeEmoji("🙎🏿‍♀️"),
+      const UnicodeEmoji("🙎‍♂️"),
+      const UnicodeEmoji("🙎🏻‍♂️"),
+      const UnicodeEmoji("🙎🏼‍♂️"),
+      const UnicodeEmoji("🙎🏽‍♂️"),
+      const UnicodeEmoji("🙎🏾‍♂️"),
+      const UnicodeEmoji("🙎🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎅"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎅🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎅🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎅🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎅🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎅🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤶"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤶🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤶🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤶🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤶🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤶🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🎄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🎄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🎄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🎄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🎄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🎄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦸🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🦹🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧙🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧚🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧛🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧜🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧝🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧞"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧞‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧞‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧟"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧟‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧟‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧌"),
+    const UnicodeEmoji("🧏"), [
+      const UnicodeEmoji("🧏"),
+      const UnicodeEmoji("🧏🏻"),
+      const UnicodeEmoji("🧏🏼"),
+      const UnicodeEmoji("🧏🏽"),
+      const UnicodeEmoji("🧏🏾"),
+      const UnicodeEmoji("🧏🏿"),
+      const UnicodeEmoji("🧏‍♀️"),
+      const UnicodeEmoji("🧏🏻‍♀️"),
+      const UnicodeEmoji("🧏🏼‍♀️"),
+      const UnicodeEmoji("🧏🏽‍♀️"),
+      const UnicodeEmoji("🧏🏾‍♀️"),
+      const UnicodeEmoji("🧏🏿‍♀️"),
+      const UnicodeEmoji("🧏‍♂️"),
+      const UnicodeEmoji("🧏🏻‍♂️"),
+      const UnicodeEmoji("🧏🏼‍♂️"),
+      const UnicodeEmoji("🧏🏽‍♂️"),
+      const UnicodeEmoji("🧏🏾‍♂️"),
+      const UnicodeEmoji("🧏🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("💆"), [
+      const UnicodeEmoji("💆"),
       const UnicodeEmoji("💆🏻"),
       const UnicodeEmoji("💆🏼"),
       const UnicodeEmoji("💆🏽"),
       const UnicodeEmoji("💆🏾"),
       const UnicodeEmoji("💆🏿"),
+      const UnicodeEmoji("💆‍♀️"),
+      const UnicodeEmoji("💆🏻‍♀️"),
+      const UnicodeEmoji("💆🏼‍♀️"),
+      const UnicodeEmoji("💆🏽‍♀️"),
+      const UnicodeEmoji("💆🏾‍♀️"),
+      const UnicodeEmoji("💆🏿‍♀️"),
+      const UnicodeEmoji("💆‍♂️"),
+      const UnicodeEmoji("💆🏻‍♂️"),
+      const UnicodeEmoji("💆🏼‍♂️"),
+      const UnicodeEmoji("💆🏽‍♂️"),
+      const UnicodeEmoji("💆🏾‍♂️"),
+      const UnicodeEmoji("💆🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💆‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💆🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
     const UnicodeEmoji("💇"), [
+      const UnicodeEmoji("💇"),
       const UnicodeEmoji("💇🏻"),
       const UnicodeEmoji("💇🏼"),
       const UnicodeEmoji("💇🏽"),
       const UnicodeEmoji("💇🏾"),
       const UnicodeEmoji("💇🏿"),
+      const UnicodeEmoji("💇‍♀️"),
+      const UnicodeEmoji("💇🏻‍♀️"),
+      const UnicodeEmoji("💇🏼‍♀️"),
+      const UnicodeEmoji("💇🏽‍♀️"),
+      const UnicodeEmoji("💇🏾‍♀️"),
+      const UnicodeEmoji("💇🏿‍♀️"),
+      const UnicodeEmoji("💇‍♂️"),
+      const UnicodeEmoji("💇🏻‍♂️"),
+      const UnicodeEmoji("💇🏼‍♂️"),
+      const UnicodeEmoji("💇🏽‍♂️"),
+      const UnicodeEmoji("💇🏾‍♂️"),
+      const UnicodeEmoji("💇🏿‍♂️"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💇‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💇🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶"), [
-      const UnicodeEmoji("🚶🏻"),
-      const UnicodeEmoji("🚶🏼"),
-      const UnicodeEmoji("🚶🏽"),
-      const UnicodeEmoji("🚶🏾"),
-      const UnicodeEmoji("🚶🏿"),
+    const UnicodeEmoji("🧖"), [
+      const UnicodeEmoji("🧖"),
+      const UnicodeEmoji("🧖🏻"),
+      const UnicodeEmoji("🧖🏼"),
+      const UnicodeEmoji("🧖🏽"),
+      const UnicodeEmoji("🧖🏾"),
+      const UnicodeEmoji("🧖🏿"),
+      const UnicodeEmoji("🧖‍♀️"),
+      const UnicodeEmoji("🧖🏻‍♀️"),
+      const UnicodeEmoji("🧖🏼‍♀️"),
+      const UnicodeEmoji("🧖🏽‍♀️"),
+      const UnicodeEmoji("🧖🏾‍♀️"),
+      const UnicodeEmoji("🧖🏿‍♀️"),
+      const UnicodeEmoji("🧖‍♂️"),
+      const UnicodeEmoji("🧖🏻‍♂️"),
+      const UnicodeEmoji("🧖🏼‍♂️"),
+      const UnicodeEmoji("🧖🏽‍♂️"),
+      const UnicodeEmoji("🧖🏾‍♂️"),
+      const UnicodeEmoji("🧖🏿‍♂️"),
     ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚶🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧍🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧎🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🦯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🦼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🦽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏃🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💃"), [
-      const UnicodeEmoji("💃🏻"),
-      const UnicodeEmoji("💃🏼"),
-      const UnicodeEmoji("💃🏽"),
-      const UnicodeEmoji("💃🏾"),
-      const UnicodeEmoji("💃🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕺"), [
-      const UnicodeEmoji("🕺🏻"),
-      const UnicodeEmoji("🕺🏼"),
-      const UnicodeEmoji("🕺🏽"),
-      const UnicodeEmoji("🕺🏾"),
-      const UnicodeEmoji("🕺🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕴️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕴🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕴🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕴🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕴🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕴🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👯‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👯‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧖🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧗🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤺"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏇"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏇🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏇🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏇🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏇🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏇🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛷️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏂"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏂🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏂🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏂🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏂🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏂🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌️‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌️‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏌🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏄🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣"), [
-      const UnicodeEmoji("🚣🏻"),
-      const UnicodeEmoji("🚣🏼"),
-      const UnicodeEmoji("🚣🏽"),
-      const UnicodeEmoji("🚣🏾"),
-      const UnicodeEmoji("🚣🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚣🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏊🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹️‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹️‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛹🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋️‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋️‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏋🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴"), [
-      const UnicodeEmoji("🚴🏻"),
-      const UnicodeEmoji("🚴🏼"),
-      const UnicodeEmoji("🚴🏽"),
-      const UnicodeEmoji("🚴🏾"),
-      const UnicodeEmoji("🚴🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚴🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵"), [
-      const UnicodeEmoji("🚵🏻"),
-      const UnicodeEmoji("🚵🏼"),
-      const UnicodeEmoji("🚵🏽"),
-      const UnicodeEmoji("🚵🏾"),
-      const UnicodeEmoji("🚵🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚵🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤸🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤽🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤾🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🤹🏿‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏻‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏼‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏽‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏾‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏿‍♂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏻‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏼‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏽‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏾‍♀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧘🏿‍♀️"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🛀"), [
+      const UnicodeEmoji("🛀"),
       const UnicodeEmoji("🛀🏻"),
       const UnicodeEmoji("🛀🏼"),
       const UnicodeEmoji("🛀🏽"),
@@ -4830,6 +302,7 @@ final peopleBody = <EmojiCategoryItem<UnicodeEmoji>>[
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🛌"), [
+      const UnicodeEmoji("🛌"),
       const UnicodeEmoji("🛌🏻"),
       const UnicodeEmoji("🛌🏼"),
       const UnicodeEmoji("🛌🏽"),
@@ -4838,987 +311,1951 @@ final peopleBody = <EmojiCategoryItem<UnicodeEmoji>>[
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑‍🤝‍🧑"),
+    const UnicodeEmoji("🧘"), [
+      const UnicodeEmoji("🧘"),
+      const UnicodeEmoji("🧘🏻"),
+      const UnicodeEmoji("🧘🏼"),
+      const UnicodeEmoji("🧘🏽"),
+      const UnicodeEmoji("🧘🏾"),
+      const UnicodeEmoji("🧘🏿"),
+      const UnicodeEmoji("🧘‍♀️"),
+      const UnicodeEmoji("🧘🏻‍♀️"),
+      const UnicodeEmoji("🧘🏼‍♀️"),
+      const UnicodeEmoji("🧘🏽‍♀️"),
+      const UnicodeEmoji("🧘🏾‍♀️"),
+      const UnicodeEmoji("🧘🏿‍♀️"),
+      const UnicodeEmoji("🧘‍♂️"),
+      const UnicodeEmoji("🧘🏻‍♂️"),
+      const UnicodeEmoji("🧘🏼‍♂️"),
+      const UnicodeEmoji("🧘🏽‍♂️"),
+      const UnicodeEmoji("🧘🏾‍♂️"),
+      const UnicodeEmoji("🧘🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🤝‍🧑🏻"),
+    const UnicodeEmoji("🧑‍🦯"), [
+      const UnicodeEmoji("🧑‍🦯"),
+      const UnicodeEmoji("🧑🏻‍🦯"),
+      const UnicodeEmoji("🧑🏼‍🦯"),
+      const UnicodeEmoji("🧑🏽‍🦯"),
+      const UnicodeEmoji("🧑🏾‍🦯"),
+      const UnicodeEmoji("🧑🏿‍🦯"),
+      const UnicodeEmoji("👩‍🦯"),
+      const UnicodeEmoji("👩🏻‍🦯"),
+      const UnicodeEmoji("👩🏼‍🦯"),
+      const UnicodeEmoji("👩🏽‍🦯"),
+      const UnicodeEmoji("👩🏾‍🦯"),
+      const UnicodeEmoji("👩🏿‍🦯"),
+      const UnicodeEmoji("👨‍🦯"),
+      const UnicodeEmoji("👨🏻‍🦯"),
+      const UnicodeEmoji("👨🏼‍🦯"),
+      const UnicodeEmoji("👨🏽‍🦯"),
+      const UnicodeEmoji("👨🏾‍🦯"),
+      const UnicodeEmoji("👨🏿‍🦯"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🤝‍🧑🏼"),
+    const UnicodeEmoji("🧑‍🦼"), [
+      const UnicodeEmoji("🧑‍🦼"),
+      const UnicodeEmoji("🧑🏻‍🦼"),
+      const UnicodeEmoji("🧑🏼‍🦼"),
+      const UnicodeEmoji("🧑🏽‍🦼"),
+      const UnicodeEmoji("🧑🏾‍🦼"),
+      const UnicodeEmoji("🧑🏿‍🦼"),
+      const UnicodeEmoji("👩‍🦼"),
+      const UnicodeEmoji("👩🏻‍🦼"),
+      const UnicodeEmoji("👩🏼‍🦼"),
+      const UnicodeEmoji("👩🏽‍🦼"),
+      const UnicodeEmoji("👩🏾‍🦼"),
+      const UnicodeEmoji("👩🏿‍🦼"),
+      const UnicodeEmoji("👨‍🦼"),
+      const UnicodeEmoji("👨🏻‍🦼"),
+      const UnicodeEmoji("👨🏼‍🦼"),
+      const UnicodeEmoji("👨🏽‍🦼"),
+      const UnicodeEmoji("👨🏾‍🦼"),
+      const UnicodeEmoji("👨🏿‍🦼"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🤝‍🧑🏽"),
+    const UnicodeEmoji("🧑‍🦽"), [
+      const UnicodeEmoji("🧑‍🦽"),
+      const UnicodeEmoji("🧑🏻‍🦽"),
+      const UnicodeEmoji("🧑🏼‍🦽"),
+      const UnicodeEmoji("🧑🏽‍🦽"),
+      const UnicodeEmoji("🧑🏾‍🦽"),
+      const UnicodeEmoji("🧑🏿‍🦽"),
+      const UnicodeEmoji("👩‍🦽"),
+      const UnicodeEmoji("👩🏻‍🦽"),
+      const UnicodeEmoji("👩🏼‍🦽"),
+      const UnicodeEmoji("👩🏽‍🦽"),
+      const UnicodeEmoji("👩🏾‍🦽"),
+      const UnicodeEmoji("👩🏿‍🦽"),
+      const UnicodeEmoji("👨‍🦽"),
+      const UnicodeEmoji("👨🏻‍🦽"),
+      const UnicodeEmoji("👨🏼‍🦽"),
+      const UnicodeEmoji("👨🏽‍🦽"),
+      const UnicodeEmoji("👨🏾‍🦽"),
+      const UnicodeEmoji("👨🏿‍🦽"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🤝‍🧑🏾"),
+    const UnicodeEmoji("🧎"), [
+      const UnicodeEmoji("🧎"),
+      const UnicodeEmoji("🧎🏻"),
+      const UnicodeEmoji("🧎🏼"),
+      const UnicodeEmoji("🧎🏽"),
+      const UnicodeEmoji("🧎🏾"),
+      const UnicodeEmoji("🧎🏿"),
+      const UnicodeEmoji("🧎‍♀️"),
+      const UnicodeEmoji("🧎🏻‍♀️"),
+      const UnicodeEmoji("🧎🏼‍♀️"),
+      const UnicodeEmoji("🧎🏽‍♀️"),
+      const UnicodeEmoji("🧎🏾‍♀️"),
+      const UnicodeEmoji("🧎🏿‍♀️"),
+      const UnicodeEmoji("🧎‍♂️"),
+      const UnicodeEmoji("🧎🏻‍♂️"),
+      const UnicodeEmoji("🧎🏼‍♂️"),
+      const UnicodeEmoji("🧎🏽‍♂️"),
+      const UnicodeEmoji("🧎🏾‍♂️"),
+      const UnicodeEmoji("🧎🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍🤝‍🧑🏿"),
+    const UnicodeEmoji("🧍"), [
+      const UnicodeEmoji("🧍"),
+      const UnicodeEmoji("🧍🏻"),
+      const UnicodeEmoji("🧍🏼"),
+      const UnicodeEmoji("🧍🏽"),
+      const UnicodeEmoji("🧍🏾"),
+      const UnicodeEmoji("🧍🏿"),
+      const UnicodeEmoji("🧍‍♀️"),
+      const UnicodeEmoji("🧍🏻‍♀️"),
+      const UnicodeEmoji("🧍🏼‍♀️"),
+      const UnicodeEmoji("🧍🏽‍♀️"),
+      const UnicodeEmoji("🧍🏾‍♀️"),
+      const UnicodeEmoji("🧍🏿‍♀️"),
+      const UnicodeEmoji("🧍‍♂️"),
+      const UnicodeEmoji("🧍🏻‍♂️"),
+      const UnicodeEmoji("🧍🏼‍♂️"),
+      const UnicodeEmoji("🧍🏽‍♂️"),
+      const UnicodeEmoji("🧍🏾‍♂️"),
+      const UnicodeEmoji("🧍🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🤝‍🧑🏻"),
+    const UnicodeEmoji("🚶"), [
+      const UnicodeEmoji("🚶"),
+      const UnicodeEmoji("🚶🏻"),
+      const UnicodeEmoji("🚶🏼"),
+      const UnicodeEmoji("🚶🏽"),
+      const UnicodeEmoji("🚶🏾"),
+      const UnicodeEmoji("🚶🏿"),
+      const UnicodeEmoji("🚶‍♀️"),
+      const UnicodeEmoji("🚶🏻‍♀️"),
+      const UnicodeEmoji("🚶🏼‍♀️"),
+      const UnicodeEmoji("🚶🏽‍♀️"),
+      const UnicodeEmoji("🚶🏾‍♀️"),
+      const UnicodeEmoji("🚶🏿‍♀️"),
+      const UnicodeEmoji("🚶‍♂️"),
+      const UnicodeEmoji("🚶🏻‍♂️"),
+      const UnicodeEmoji("🚶🏼‍♂️"),
+      const UnicodeEmoji("🚶🏽‍♂️"),
+      const UnicodeEmoji("🚶🏾‍♂️"),
+      const UnicodeEmoji("🚶🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🤝‍🧑🏼"),
+    const UnicodeEmoji("🏃"), [
+      const UnicodeEmoji("🏃"),
+      const UnicodeEmoji("🏃🏻"),
+      const UnicodeEmoji("🏃🏼"),
+      const UnicodeEmoji("🏃🏽"),
+      const UnicodeEmoji("🏃🏾"),
+      const UnicodeEmoji("🏃🏿"),
+      const UnicodeEmoji("🏃‍♀️"),
+      const UnicodeEmoji("🏃🏻‍♀️"),
+      const UnicodeEmoji("🏃🏼‍♀️"),
+      const UnicodeEmoji("🏃🏽‍♀️"),
+      const UnicodeEmoji("🏃🏾‍♀️"),
+      const UnicodeEmoji("🏃🏿‍♀️"),
+      const UnicodeEmoji("🏃‍♂️"),
+      const UnicodeEmoji("🏃🏻‍♂️"),
+      const UnicodeEmoji("🏃🏼‍♂️"),
+      const UnicodeEmoji("🏃🏽‍♂️"),
+      const UnicodeEmoji("🏃🏾‍♂️"),
+      const UnicodeEmoji("🏃🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🤝‍🧑🏽"),
+    const UnicodeEmoji("🤸"), [
+      const UnicodeEmoji("🤸"),
+      const UnicodeEmoji("🤸🏻"),
+      const UnicodeEmoji("🤸🏼"),
+      const UnicodeEmoji("🤸🏽"),
+      const UnicodeEmoji("🤸🏾"),
+      const UnicodeEmoji("🤸🏿"),
+      const UnicodeEmoji("🤸‍♀️"),
+      const UnicodeEmoji("🤸🏻‍♀️"),
+      const UnicodeEmoji("🤸🏼‍♀️"),
+      const UnicodeEmoji("🤸🏽‍♀️"),
+      const UnicodeEmoji("🤸🏾‍♀️"),
+      const UnicodeEmoji("🤸🏿‍♀️"),
+      const UnicodeEmoji("🤸‍♂️"),
+      const UnicodeEmoji("🤸🏻‍♂️"),
+      const UnicodeEmoji("🤸🏼‍♂️"),
+      const UnicodeEmoji("🤸🏽‍♂️"),
+      const UnicodeEmoji("🤸🏾‍♂️"),
+      const UnicodeEmoji("🤸🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🤝‍🧑🏾"),
+    const UnicodeEmoji("🏋️"), [
+      const UnicodeEmoji("🏋️"),
+      const UnicodeEmoji("🏋🏻"),
+      const UnicodeEmoji("🏋🏼"),
+      const UnicodeEmoji("🏋🏽"),
+      const UnicodeEmoji("🏋🏾"),
+      const UnicodeEmoji("🏋🏿"),
+      const UnicodeEmoji("🏋️‍♀️"),
+      const UnicodeEmoji("🏋🏻‍♀️"),
+      const UnicodeEmoji("🏋🏼‍♀️"),
+      const UnicodeEmoji("🏋🏽‍♀️"),
+      const UnicodeEmoji("🏋🏾‍♀️"),
+      const UnicodeEmoji("🏋🏿‍♀️"),
+      const UnicodeEmoji("🏋️‍♂️"),
+      const UnicodeEmoji("🏋🏻‍♂️"),
+      const UnicodeEmoji("🏋🏼‍♂️"),
+      const UnicodeEmoji("🏋🏽‍♂️"),
+      const UnicodeEmoji("🏋🏾‍♂️"),
+      const UnicodeEmoji("🏋🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍🤝‍🧑🏿"),
+    const UnicodeEmoji("⛹️"), [
+      const UnicodeEmoji("⛹️"),
+      const UnicodeEmoji("⛹🏻"),
+      const UnicodeEmoji("⛹🏼"),
+      const UnicodeEmoji("⛹🏽"),
+      const UnicodeEmoji("⛹🏾"),
+      const UnicodeEmoji("⛹🏿"),
+      const UnicodeEmoji("⛹️‍♀️"),
+      const UnicodeEmoji("⛹🏻‍♀️"),
+      const UnicodeEmoji("⛹🏼‍♀️"),
+      const UnicodeEmoji("⛹🏽‍♀️"),
+      const UnicodeEmoji("⛹🏾‍♀️"),
+      const UnicodeEmoji("⛹🏿‍♀️"),
+      const UnicodeEmoji("⛹️‍♂️"),
+      const UnicodeEmoji("⛹🏻‍♂️"),
+      const UnicodeEmoji("⛹🏼‍♂️"),
+      const UnicodeEmoji("⛹🏽‍♂️"),
+      const UnicodeEmoji("⛹🏾‍♂️"),
+      const UnicodeEmoji("⛹🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🤝‍🧑🏻"),
+    const UnicodeEmoji("🤾"), [
+      const UnicodeEmoji("🤾"),
+      const UnicodeEmoji("🤾🏻"),
+      const UnicodeEmoji("🤾🏼"),
+      const UnicodeEmoji("🤾🏽"),
+      const UnicodeEmoji("🤾🏾"),
+      const UnicodeEmoji("🤾🏿"),
+      const UnicodeEmoji("🤾‍♀️"),
+      const UnicodeEmoji("🤾🏻‍♀️"),
+      const UnicodeEmoji("🤾🏼‍♀️"),
+      const UnicodeEmoji("🤾🏽‍♀️"),
+      const UnicodeEmoji("🤾🏾‍♀️"),
+      const UnicodeEmoji("🤾🏿‍♀️"),
+      const UnicodeEmoji("🤾‍♂️"),
+      const UnicodeEmoji("🤾🏻‍♂️"),
+      const UnicodeEmoji("🤾🏼‍♂️"),
+      const UnicodeEmoji("🤾🏽‍♂️"),
+      const UnicodeEmoji("🤾🏾‍♂️"),
+      const UnicodeEmoji("🤾🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🤝‍🧑🏼"),
+    const UnicodeEmoji("🚴"), [
+      const UnicodeEmoji("🚴"),
+      const UnicodeEmoji("🚴🏻"),
+      const UnicodeEmoji("🚴🏼"),
+      const UnicodeEmoji("🚴🏽"),
+      const UnicodeEmoji("🚴🏾"),
+      const UnicodeEmoji("🚴🏿"),
+      const UnicodeEmoji("🚴‍♀️"),
+      const UnicodeEmoji("🚴🏻‍♀️"),
+      const UnicodeEmoji("🚴🏼‍♀️"),
+      const UnicodeEmoji("🚴🏽‍♀️"),
+      const UnicodeEmoji("🚴🏾‍♀️"),
+      const UnicodeEmoji("🚴🏿‍♀️"),
+      const UnicodeEmoji("🚴‍♂️"),
+      const UnicodeEmoji("🚴🏻‍♂️"),
+      const UnicodeEmoji("🚴🏼‍♂️"),
+      const UnicodeEmoji("🚴🏽‍♂️"),
+      const UnicodeEmoji("🚴🏾‍♂️"),
+      const UnicodeEmoji("🚴🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🤝‍🧑🏽"),
+    const UnicodeEmoji("🚵"), [
+      const UnicodeEmoji("🚵"),
+      const UnicodeEmoji("🚵🏻"),
+      const UnicodeEmoji("🚵🏼"),
+      const UnicodeEmoji("🚵🏽"),
+      const UnicodeEmoji("🚵🏾"),
+      const UnicodeEmoji("🚵🏿"),
+      const UnicodeEmoji("🚵‍♀️"),
+      const UnicodeEmoji("🚵🏻‍♀️"),
+      const UnicodeEmoji("🚵🏼‍♀️"),
+      const UnicodeEmoji("🚵🏽‍♀️"),
+      const UnicodeEmoji("🚵🏾‍♀️"),
+      const UnicodeEmoji("🚵🏿‍♀️"),
+      const UnicodeEmoji("🚵‍♂️"),
+      const UnicodeEmoji("🚵🏻‍♂️"),
+      const UnicodeEmoji("🚵🏼‍♂️"),
+      const UnicodeEmoji("🚵🏽‍♂️"),
+      const UnicodeEmoji("🚵🏾‍♂️"),
+      const UnicodeEmoji("🚵🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🤝‍🧑🏾"),
+    const UnicodeEmoji("🧗"), [
+      const UnicodeEmoji("🧗"),
+      const UnicodeEmoji("🧗🏻"),
+      const UnicodeEmoji("🧗🏼"),
+      const UnicodeEmoji("🧗🏽"),
+      const UnicodeEmoji("🧗🏾"),
+      const UnicodeEmoji("🧗🏿"),
+      const UnicodeEmoji("🧗‍♀️"),
+      const UnicodeEmoji("🧗🏻‍♀️"),
+      const UnicodeEmoji("🧗🏼‍♀️"),
+      const UnicodeEmoji("🧗🏽‍♀️"),
+      const UnicodeEmoji("🧗🏾‍♀️"),
+      const UnicodeEmoji("🧗🏿‍♀️"),
+      const UnicodeEmoji("🧗‍♂️"),
+      const UnicodeEmoji("🧗🏻‍♂️"),
+      const UnicodeEmoji("🧗🏼‍♂️"),
+      const UnicodeEmoji("🧗🏽‍♂️"),
+      const UnicodeEmoji("🧗🏾‍♂️"),
+      const UnicodeEmoji("🧗🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍🤝‍🧑🏿"),
+    const UnicodeEmoji("🤼"), [
+      const UnicodeEmoji("🤼"),
+      const UnicodeEmoji("🤼‍♀️"),
+      const UnicodeEmoji("🤼‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🤝‍🧑🏻"),
+    const UnicodeEmoji("🤹"), [
+      const UnicodeEmoji("🤹"),
+      const UnicodeEmoji("🤹🏻"),
+      const UnicodeEmoji("🤹🏼"),
+      const UnicodeEmoji("🤹🏽"),
+      const UnicodeEmoji("🤹🏾"),
+      const UnicodeEmoji("🤹🏿"),
+      const UnicodeEmoji("🤹‍♀️"),
+      const UnicodeEmoji("🤹🏻‍♀️"),
+      const UnicodeEmoji("🤹🏼‍♀️"),
+      const UnicodeEmoji("🤹🏽‍♀️"),
+      const UnicodeEmoji("🤹🏾‍♀️"),
+      const UnicodeEmoji("🤹🏿‍♀️"),
+      const UnicodeEmoji("🤹‍♂️"),
+      const UnicodeEmoji("🤹🏻‍♂️"),
+      const UnicodeEmoji("🤹🏼‍♂️"),
+      const UnicodeEmoji("🤹🏽‍♂️"),
+      const UnicodeEmoji("🤹🏾‍♂️"),
+      const UnicodeEmoji("🤹🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🤝‍🧑🏼"),
+    const UnicodeEmoji("🏌️"), [
+      const UnicodeEmoji("🏌️"),
+      const UnicodeEmoji("🏌🏻"),
+      const UnicodeEmoji("🏌🏼"),
+      const UnicodeEmoji("🏌🏽"),
+      const UnicodeEmoji("🏌🏾"),
+      const UnicodeEmoji("🏌🏿"),
+      const UnicodeEmoji("🏌️‍♀️"),
+      const UnicodeEmoji("🏌🏻‍♀️"),
+      const UnicodeEmoji("🏌🏼‍♀️"),
+      const UnicodeEmoji("🏌🏽‍♀️"),
+      const UnicodeEmoji("🏌🏾‍♀️"),
+      const UnicodeEmoji("🏌🏿‍♀️"),
+      const UnicodeEmoji("🏌️‍♂️"),
+      const UnicodeEmoji("🏌🏻‍♂️"),
+      const UnicodeEmoji("🏌🏼‍♂️"),
+      const UnicodeEmoji("🏌🏽‍♂️"),
+      const UnicodeEmoji("🏌🏾‍♂️"),
+      const UnicodeEmoji("🏌🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🤝‍🧑🏽"),
+    const UnicodeEmoji("🏇"), [
+      const UnicodeEmoji("🏇"),
+      const UnicodeEmoji("🏇🏻"),
+      const UnicodeEmoji("🏇🏼"),
+      const UnicodeEmoji("🏇🏽"),
+      const UnicodeEmoji("🏇🏾"),
+      const UnicodeEmoji("🏇🏿"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🤝‍🧑🏾"),
+    const UnicodeEmoji("🤺"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍🤝‍🧑🏿"),
+    const UnicodeEmoji("⛷️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🤝‍🧑🏻"),
+    const UnicodeEmoji("🏂"), [
+      const UnicodeEmoji("🏂"),
+      const UnicodeEmoji("🏂🏻"),
+      const UnicodeEmoji("🏂🏼"),
+      const UnicodeEmoji("🏂🏽"),
+      const UnicodeEmoji("🏂🏾"),
+      const UnicodeEmoji("🏂🏿"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🤝‍🧑🏼"),
+    const UnicodeEmoji("🪂"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🤝‍🧑🏽"),
+    const UnicodeEmoji("🏄"), [
+      const UnicodeEmoji("🏄"),
+      const UnicodeEmoji("🏄🏻"),
+      const UnicodeEmoji("🏄🏼"),
+      const UnicodeEmoji("🏄🏽"),
+      const UnicodeEmoji("🏄🏾"),
+      const UnicodeEmoji("🏄🏿"),
+      const UnicodeEmoji("🏄‍♀️"),
+      const UnicodeEmoji("🏄🏻‍♀️"),
+      const UnicodeEmoji("🏄🏼‍♀️"),
+      const UnicodeEmoji("🏄🏽‍♀️"),
+      const UnicodeEmoji("🏄🏾‍♀️"),
+      const UnicodeEmoji("🏄🏿‍♀️"),
+      const UnicodeEmoji("🏄‍♂️"),
+      const UnicodeEmoji("🏄🏻‍♂️"),
+      const UnicodeEmoji("🏄🏼‍♂️"),
+      const UnicodeEmoji("🏄🏽‍♂️"),
+      const UnicodeEmoji("🏄🏾‍♂️"),
+      const UnicodeEmoji("🏄🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🤝‍🧑🏾"),
+    const UnicodeEmoji("🚣"), [
+      const UnicodeEmoji("🚣"),
+      const UnicodeEmoji("🚣🏻"),
+      const UnicodeEmoji("🚣🏼"),
+      const UnicodeEmoji("🚣🏽"),
+      const UnicodeEmoji("🚣🏾"),
+      const UnicodeEmoji("🚣🏿"),
+      const UnicodeEmoji("🚣‍♀️"),
+      const UnicodeEmoji("🚣🏻‍♀️"),
+      const UnicodeEmoji("🚣🏼‍♀️"),
+      const UnicodeEmoji("🚣🏽‍♀️"),
+      const UnicodeEmoji("🚣🏾‍♀️"),
+      const UnicodeEmoji("🚣🏿‍♀️"),
+      const UnicodeEmoji("🚣‍♂️"),
+      const UnicodeEmoji("🚣🏻‍♂️"),
+      const UnicodeEmoji("🚣🏼‍♂️"),
+      const UnicodeEmoji("🚣🏽‍♂️"),
+      const UnicodeEmoji("🚣🏾‍♂️"),
+      const UnicodeEmoji("🚣🏿‍♂️"),
+    ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍🤝‍🧑🏿"),
+    const UnicodeEmoji("🏊"), [
+      const UnicodeEmoji("🏊"),
+      const UnicodeEmoji("🏊🏻"),
+      const UnicodeEmoji("🏊🏼"),
+      const UnicodeEmoji("🏊🏽"),
+      const UnicodeEmoji("🏊🏾"),
+      const UnicodeEmoji("🏊🏿"),
+      const UnicodeEmoji("🏊‍♀️"),
+      const UnicodeEmoji("🏊🏻‍♀️"),
+      const UnicodeEmoji("🏊🏼‍♀️"),
+      const UnicodeEmoji("🏊🏽‍♀️"),
+      const UnicodeEmoji("🏊🏾‍♀️"),
+      const UnicodeEmoji("🏊🏿‍♀️"),
+      const UnicodeEmoji("🏊‍♂️"),
+      const UnicodeEmoji("🏊🏻‍♂️"),
+      const UnicodeEmoji("🏊🏼‍♂️"),
+      const UnicodeEmoji("🏊🏽‍♂️"),
+      const UnicodeEmoji("🏊🏾‍♂️"),
+      const UnicodeEmoji("🏊🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🤽"), [
+      const UnicodeEmoji("🤽"),
+      const UnicodeEmoji("🤽🏻"),
+      const UnicodeEmoji("🤽🏼"),
+      const UnicodeEmoji("🤽🏽"),
+      const UnicodeEmoji("🤽🏾"),
+      const UnicodeEmoji("🤽🏿"),
+      const UnicodeEmoji("🤽‍♀️"),
+      const UnicodeEmoji("🤽🏻‍♀️"),
+      const UnicodeEmoji("🤽🏼‍♀️"),
+      const UnicodeEmoji("🤽🏽‍♀️"),
+      const UnicodeEmoji("🤽🏾‍♀️"),
+      const UnicodeEmoji("🤽🏿‍♀️"),
+      const UnicodeEmoji("🤽‍♂️"),
+      const UnicodeEmoji("🤽🏻‍♂️"),
+      const UnicodeEmoji("🤽🏼‍♂️"),
+      const UnicodeEmoji("🤽🏽‍♂️"),
+      const UnicodeEmoji("🤽🏾‍♂️"),
+      const UnicodeEmoji("🤽🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧜"), [
+      const UnicodeEmoji("🧜"),
+      const UnicodeEmoji("🧜🏻"),
+      const UnicodeEmoji("🧜🏼"),
+      const UnicodeEmoji("🧜🏽"),
+      const UnicodeEmoji("🧜🏾"),
+      const UnicodeEmoji("🧜🏿"),
+      const UnicodeEmoji("🧜‍♀️"),
+      const UnicodeEmoji("🧜🏻‍♀️"),
+      const UnicodeEmoji("🧜🏼‍♀️"),
+      const UnicodeEmoji("🧜🏽‍♀️"),
+      const UnicodeEmoji("🧜🏾‍♀️"),
+      const UnicodeEmoji("🧜🏿‍♀️"),
+      const UnicodeEmoji("🧜‍♂️"),
+      const UnicodeEmoji("🧜🏻‍♂️"),
+      const UnicodeEmoji("🧜🏼‍♂️"),
+      const UnicodeEmoji("🧜🏽‍♂️"),
+      const UnicodeEmoji("🧜🏾‍♂️"),
+      const UnicodeEmoji("🧜🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧚"), [
+      const UnicodeEmoji("🧚"),
+      const UnicodeEmoji("🧚🏻"),
+      const UnicodeEmoji("🧚🏼"),
+      const UnicodeEmoji("🧚🏽"),
+      const UnicodeEmoji("🧚🏾"),
+      const UnicodeEmoji("🧚🏿"),
+      const UnicodeEmoji("🧚‍♀️"),
+      const UnicodeEmoji("🧚🏻‍♀️"),
+      const UnicodeEmoji("🧚🏼‍♀️"),
+      const UnicodeEmoji("🧚🏽‍♀️"),
+      const UnicodeEmoji("🧚🏾‍♀️"),
+      const UnicodeEmoji("🧚🏿‍♀️"),
+      const UnicodeEmoji("🧚‍♂️"),
+      const UnicodeEmoji("🧚🏻‍♂️"),
+      const UnicodeEmoji("🧚🏼‍♂️"),
+      const UnicodeEmoji("🧚🏽‍♂️"),
+      const UnicodeEmoji("🧚🏾‍♂️"),
+      const UnicodeEmoji("🧚🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧞"), [
+      const UnicodeEmoji("🧞"),
+      const UnicodeEmoji("🧞‍♀️"),
+      const UnicodeEmoji("🧞‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧝"), [
+      const UnicodeEmoji("🧝"),
+      const UnicodeEmoji("🧝🏻"),
+      const UnicodeEmoji("🧝🏼"),
+      const UnicodeEmoji("🧝🏽"),
+      const UnicodeEmoji("🧝🏾"),
+      const UnicodeEmoji("🧝🏿"),
+      const UnicodeEmoji("🧝‍♀️"),
+      const UnicodeEmoji("🧝🏻‍♀️"),
+      const UnicodeEmoji("🧝🏼‍♀️"),
+      const UnicodeEmoji("🧝🏽‍♀️"),
+      const UnicodeEmoji("🧝🏾‍♀️"),
+      const UnicodeEmoji("🧝🏿‍♀️"),
+      const UnicodeEmoji("🧝‍♂️"),
+      const UnicodeEmoji("🧝🏻‍♂️"),
+      const UnicodeEmoji("🧝🏼‍♂️"),
+      const UnicodeEmoji("🧝🏽‍♂️"),
+      const UnicodeEmoji("🧝🏾‍♂️"),
+      const UnicodeEmoji("🧝🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧙"), [
+      const UnicodeEmoji("🧙"),
+      const UnicodeEmoji("🧙🏻"),
+      const UnicodeEmoji("🧙🏼"),
+      const UnicodeEmoji("🧙🏽"),
+      const UnicodeEmoji("🧙🏾"),
+      const UnicodeEmoji("🧙🏿"),
+      const UnicodeEmoji("🧙‍♀️"),
+      const UnicodeEmoji("🧙🏻‍♀️"),
+      const UnicodeEmoji("🧙🏼‍♀️"),
+      const UnicodeEmoji("🧙🏽‍♀️"),
+      const UnicodeEmoji("🧙🏾‍♀️"),
+      const UnicodeEmoji("🧙🏿‍♀️"),
+      const UnicodeEmoji("🧙‍♂️"),
+      const UnicodeEmoji("🧙🏻‍♂️"),
+      const UnicodeEmoji("🧙🏼‍♂️"),
+      const UnicodeEmoji("🧙🏽‍♂️"),
+      const UnicodeEmoji("🧙🏾‍♂️"),
+      const UnicodeEmoji("🧙🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧛"), [
+      const UnicodeEmoji("🧛"),
+      const UnicodeEmoji("🧛🏻"),
+      const UnicodeEmoji("🧛🏼"),
+      const UnicodeEmoji("🧛🏽"),
+      const UnicodeEmoji("🧛🏾"),
+      const UnicodeEmoji("🧛🏿"),
+      const UnicodeEmoji("🧛‍♀️"),
+      const UnicodeEmoji("🧛🏻‍♀️"),
+      const UnicodeEmoji("🧛🏼‍♀️"),
+      const UnicodeEmoji("🧛🏽‍♀️"),
+      const UnicodeEmoji("🧛🏾‍♀️"),
+      const UnicodeEmoji("🧛🏿‍♀️"),
+      const UnicodeEmoji("🧛‍♂️"),
+      const UnicodeEmoji("🧛🏻‍♂️"),
+      const UnicodeEmoji("🧛🏼‍♂️"),
+      const UnicodeEmoji("🧛🏽‍♂️"),
+      const UnicodeEmoji("🧛🏾‍♂️"),
+      const UnicodeEmoji("🧛🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧟"), [
+      const UnicodeEmoji("🧟"),
+      const UnicodeEmoji("🧟‍♀️"),
+      const UnicodeEmoji("🧟‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧌"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🦸"), [
+      const UnicodeEmoji("🦸"),
+      const UnicodeEmoji("🦸🏻"),
+      const UnicodeEmoji("🦸🏼"),
+      const UnicodeEmoji("🦸🏽"),
+      const UnicodeEmoji("🦸🏾"),
+      const UnicodeEmoji("🦸🏿"),
+      const UnicodeEmoji("🦸‍♀️"),
+      const UnicodeEmoji("🦸🏻‍♀️"),
+      const UnicodeEmoji("🦸🏼‍♀️"),
+      const UnicodeEmoji("🦸🏽‍♀️"),
+      const UnicodeEmoji("🦸🏾‍♀️"),
+      const UnicodeEmoji("🦸🏿‍♀️"),
+      const UnicodeEmoji("🦸‍♂️"),
+      const UnicodeEmoji("🦸🏻‍♂️"),
+      const UnicodeEmoji("🦸🏼‍♂️"),
+      const UnicodeEmoji("🦸🏽‍♂️"),
+      const UnicodeEmoji("🦸🏾‍♂️"),
+      const UnicodeEmoji("🦸🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🦹"), [
+      const UnicodeEmoji("🦹"),
+      const UnicodeEmoji("🦹🏻"),
+      const UnicodeEmoji("🦹🏼"),
+      const UnicodeEmoji("🦹🏽"),
+      const UnicodeEmoji("🦹🏾"),
+      const UnicodeEmoji("🦹🏿"),
+      const UnicodeEmoji("🦹‍♀️"),
+      const UnicodeEmoji("🦹🏻‍♀️"),
+      const UnicodeEmoji("🦹🏼‍♀️"),
+      const UnicodeEmoji("🦹🏽‍♀️"),
+      const UnicodeEmoji("🦹🏾‍♀️"),
+      const UnicodeEmoji("🦹🏿‍♀️"),
+      const UnicodeEmoji("🦹‍♂️"),
+      const UnicodeEmoji("🦹🏻‍♂️"),
+      const UnicodeEmoji("🦹🏼‍♂️"),
+      const UnicodeEmoji("🦹🏽‍♂️"),
+      const UnicodeEmoji("🦹🏾‍♂️"),
+      const UnicodeEmoji("🦹🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🥷"), [
+      const UnicodeEmoji("🥷"),
+      const UnicodeEmoji("🥷🏻"),
+      const UnicodeEmoji("🥷🏼"),
+      const UnicodeEmoji("🥷🏽"),
+      const UnicodeEmoji("🥷🏾"),
+      const UnicodeEmoji("🥷🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🎄"), [
+      const UnicodeEmoji("🧑‍🎄"),
+      const UnicodeEmoji("🧑🏻‍🎄"),
+      const UnicodeEmoji("🧑🏼‍🎄"),
+      const UnicodeEmoji("🧑🏽‍🎄"),
+      const UnicodeEmoji("🧑🏾‍🎄"),
+      const UnicodeEmoji("🧑🏿‍🎄"),
+      const UnicodeEmoji("🤶"),
+      const UnicodeEmoji("🤶🏻"),
+      const UnicodeEmoji("🤶🏼"),
+      const UnicodeEmoji("🤶🏽"),
+      const UnicodeEmoji("🤶🏾"),
+      const UnicodeEmoji("🤶🏿"),
+      const UnicodeEmoji("🎅"),
+      const UnicodeEmoji("🎅🏻"),
+      const UnicodeEmoji("🎅🏼"),
+      const UnicodeEmoji("🎅🏽"),
+      const UnicodeEmoji("🎅🏾"),
+      const UnicodeEmoji("🎅🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👼"), [
+      const UnicodeEmoji("👼"),
+      const UnicodeEmoji("👼🏻"),
+      const UnicodeEmoji("👼🏼"),
+      const UnicodeEmoji("👼🏽"),
+      const UnicodeEmoji("👼🏾"),
+      const UnicodeEmoji("👼🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("💂"), [
+      const UnicodeEmoji("💂"),
+      const UnicodeEmoji("💂🏻"),
+      const UnicodeEmoji("💂🏼"),
+      const UnicodeEmoji("💂🏽"),
+      const UnicodeEmoji("💂🏾"),
+      const UnicodeEmoji("💂🏿"),
+      const UnicodeEmoji("💂‍♀️"),
+      const UnicodeEmoji("💂🏻‍♀️"),
+      const UnicodeEmoji("💂🏼‍♀️"),
+      const UnicodeEmoji("💂🏽‍♀️"),
+      const UnicodeEmoji("💂🏾‍♀️"),
+      const UnicodeEmoji("💂🏿‍♀️"),
+      const UnicodeEmoji("💂‍♂️"),
+      const UnicodeEmoji("💂🏻‍♂️"),
+      const UnicodeEmoji("💂🏼‍♂️"),
+      const UnicodeEmoji("💂🏽‍♂️"),
+      const UnicodeEmoji("💂🏾‍♂️"),
+      const UnicodeEmoji("💂🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🫅"), [
+      const UnicodeEmoji("🫅"),
+      const UnicodeEmoji("🫅🏻"),
+      const UnicodeEmoji("🫅🏼"),
+      const UnicodeEmoji("🫅🏽"),
+      const UnicodeEmoji("🫅🏾"),
+      const UnicodeEmoji("🫅🏿"),
+      const UnicodeEmoji("👸"),
+      const UnicodeEmoji("👸🏻"),
+      const UnicodeEmoji("👸🏼"),
+      const UnicodeEmoji("👸🏽"),
+      const UnicodeEmoji("👸🏾"),
+      const UnicodeEmoji("👸🏿"),
+      const UnicodeEmoji("🤴"),
+      const UnicodeEmoji("🤴🏻"),
+      const UnicodeEmoji("🤴🏼"),
+      const UnicodeEmoji("🤴🏽"),
+      const UnicodeEmoji("🤴🏾"),
+      const UnicodeEmoji("🤴🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🤵"), [
+      const UnicodeEmoji("🤵"),
+      const UnicodeEmoji("🤵🏻"),
+      const UnicodeEmoji("🤵🏼"),
+      const UnicodeEmoji("🤵🏽"),
+      const UnicodeEmoji("🤵🏾"),
+      const UnicodeEmoji("🤵🏿"),
+      const UnicodeEmoji("🤵‍♀️"),
+      const UnicodeEmoji("🤵🏻‍♀️"),
+      const UnicodeEmoji("🤵🏼‍♀️"),
+      const UnicodeEmoji("🤵🏽‍♀️"),
+      const UnicodeEmoji("🤵🏾‍♀️"),
+      const UnicodeEmoji("🤵🏿‍♀️"),
+      const UnicodeEmoji("🤵‍♂️"),
+      const UnicodeEmoji("🤵🏻‍♂️"),
+      const UnicodeEmoji("🤵🏼‍♂️"),
+      const UnicodeEmoji("🤵🏽‍♂️"),
+      const UnicodeEmoji("🤵🏾‍♂️"),
+      const UnicodeEmoji("🤵🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👰"), [
+      const UnicodeEmoji("👰"),
+      const UnicodeEmoji("👰🏻"),
+      const UnicodeEmoji("👰🏼"),
+      const UnicodeEmoji("👰🏽"),
+      const UnicodeEmoji("👰🏾"),
+      const UnicodeEmoji("👰🏿"),
+      const UnicodeEmoji("👰‍♀️"),
+      const UnicodeEmoji("👰🏻‍♀️"),
+      const UnicodeEmoji("👰🏼‍♀️"),
+      const UnicodeEmoji("👰🏽‍♀️"),
+      const UnicodeEmoji("👰🏾‍♀️"),
+      const UnicodeEmoji("👰🏿‍♀️"),
+      const UnicodeEmoji("👰‍♂️"),
+      const UnicodeEmoji("👰🏻‍♂️"),
+      const UnicodeEmoji("👰🏼‍♂️"),
+      const UnicodeEmoji("👰🏽‍♂️"),
+      const UnicodeEmoji("👰🏾‍♂️"),
+      const UnicodeEmoji("👰🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🚀"), [
+      const UnicodeEmoji("🧑‍🚀"),
+      const UnicodeEmoji("🧑🏻‍🚀"),
+      const UnicodeEmoji("🧑🏼‍🚀"),
+      const UnicodeEmoji("🧑🏽‍🚀"),
+      const UnicodeEmoji("🧑🏾‍🚀"),
+      const UnicodeEmoji("🧑🏿‍🚀"),
+      const UnicodeEmoji("👩‍🚀"),
+      const UnicodeEmoji("👩🏻‍🚀"),
+      const UnicodeEmoji("👩🏼‍🚀"),
+      const UnicodeEmoji("👩🏽‍🚀"),
+      const UnicodeEmoji("👩🏾‍🚀"),
+      const UnicodeEmoji("👩🏿‍🚀"),
+      const UnicodeEmoji("👨‍🚀"),
+      const UnicodeEmoji("👨🏻‍🚀"),
+      const UnicodeEmoji("👨🏼‍🚀"),
+      const UnicodeEmoji("👨🏽‍🚀"),
+      const UnicodeEmoji("👨🏾‍🚀"),
+      const UnicodeEmoji("👨🏿‍🚀"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👷"), [
+      const UnicodeEmoji("👷"),
+      const UnicodeEmoji("👷🏻"),
+      const UnicodeEmoji("👷🏼"),
+      const UnicodeEmoji("👷🏽"),
+      const UnicodeEmoji("👷🏾"),
+      const UnicodeEmoji("👷🏿"),
+      const UnicodeEmoji("👷‍♀️"),
+      const UnicodeEmoji("👷🏻‍♀️"),
+      const UnicodeEmoji("👷🏼‍♀️"),
+      const UnicodeEmoji("👷🏽‍♀️"),
+      const UnicodeEmoji("👷🏾‍♀️"),
+      const UnicodeEmoji("👷🏿‍♀️"),
+      const UnicodeEmoji("👷‍♂️"),
+      const UnicodeEmoji("👷🏻‍♂️"),
+      const UnicodeEmoji("👷🏼‍♂️"),
+      const UnicodeEmoji("👷🏽‍♂️"),
+      const UnicodeEmoji("👷🏾‍♂️"),
+      const UnicodeEmoji("👷🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👮"), [
+      const UnicodeEmoji("👮"),
+      const UnicodeEmoji("👮🏻"),
+      const UnicodeEmoji("👮🏼"),
+      const UnicodeEmoji("👮🏽"),
+      const UnicodeEmoji("👮🏾"),
+      const UnicodeEmoji("👮🏿"),
+      const UnicodeEmoji("👮‍♀️"),
+      const UnicodeEmoji("👮🏻‍♀️"),
+      const UnicodeEmoji("👮🏼‍♀️"),
+      const UnicodeEmoji("👮🏽‍♀️"),
+      const UnicodeEmoji("👮🏾‍♀️"),
+      const UnicodeEmoji("👮🏿‍♀️"),
+      const UnicodeEmoji("👮‍♂️"),
+      const UnicodeEmoji("👮🏻‍♂️"),
+      const UnicodeEmoji("👮🏼‍♂️"),
+      const UnicodeEmoji("👮🏽‍♂️"),
+      const UnicodeEmoji("👮🏾‍♂️"),
+      const UnicodeEmoji("👮🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🕵️"), [
+      const UnicodeEmoji("🕵️"),
+      const UnicodeEmoji("🕵🏻"),
+      const UnicodeEmoji("🕵🏼"),
+      const UnicodeEmoji("🕵🏽"),
+      const UnicodeEmoji("🕵🏾"),
+      const UnicodeEmoji("🕵🏿"),
+      const UnicodeEmoji("🕵️‍♀️"),
+      const UnicodeEmoji("🕵🏻‍♀️"),
+      const UnicodeEmoji("🕵🏼‍♀️"),
+      const UnicodeEmoji("🕵🏽‍♀️"),
+      const UnicodeEmoji("🕵🏾‍♀️"),
+      const UnicodeEmoji("🕵🏿‍♀️"),
+      const UnicodeEmoji("🕵️‍♂️"),
+      const UnicodeEmoji("🕵🏻‍♂️"),
+      const UnicodeEmoji("🕵🏼‍♂️"),
+      const UnicodeEmoji("🕵🏽‍♂️"),
+      const UnicodeEmoji("🕵🏾‍♂️"),
+      const UnicodeEmoji("🕵🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍✈️"), [
+      const UnicodeEmoji("🧑‍✈️"),
+      const UnicodeEmoji("🧑🏻‍✈️"),
+      const UnicodeEmoji("🧑🏼‍✈️"),
+      const UnicodeEmoji("🧑🏽‍✈️"),
+      const UnicodeEmoji("🧑🏾‍✈️"),
+      const UnicodeEmoji("🧑🏿‍✈️"),
+      const UnicodeEmoji("👩‍✈️"),
+      const UnicodeEmoji("👩🏻‍✈️"),
+      const UnicodeEmoji("👩🏼‍✈️"),
+      const UnicodeEmoji("👩🏽‍✈️"),
+      const UnicodeEmoji("👩🏾‍✈️"),
+      const UnicodeEmoji("👩🏿‍✈️"),
+      const UnicodeEmoji("👨‍✈️"),
+      const UnicodeEmoji("👨🏻‍✈️"),
+      const UnicodeEmoji("👨🏼‍✈️"),
+      const UnicodeEmoji("👨🏽‍✈️"),
+      const UnicodeEmoji("👨🏾‍✈️"),
+      const UnicodeEmoji("👨🏿‍✈️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🔬"), [
+      const UnicodeEmoji("🧑‍🔬"),
+      const UnicodeEmoji("🧑🏻‍🔬"),
+      const UnicodeEmoji("🧑🏼‍🔬"),
+      const UnicodeEmoji("🧑🏽‍🔬"),
+      const UnicodeEmoji("🧑🏾‍🔬"),
+      const UnicodeEmoji("🧑🏿‍🔬"),
+      const UnicodeEmoji("👩‍🔬"),
+      const UnicodeEmoji("👩🏻‍🔬"),
+      const UnicodeEmoji("👩🏼‍🔬"),
+      const UnicodeEmoji("👩🏽‍🔬"),
+      const UnicodeEmoji("👩🏾‍🔬"),
+      const UnicodeEmoji("👩🏿‍🔬"),
+      const UnicodeEmoji("👨‍🔬"),
+      const UnicodeEmoji("👨🏻‍🔬"),
+      const UnicodeEmoji("👨🏼‍🔬"),
+      const UnicodeEmoji("👨🏽‍🔬"),
+      const UnicodeEmoji("👨🏾‍🔬"),
+      const UnicodeEmoji("👨🏿‍🔬"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍⚕️"), [
+      const UnicodeEmoji("🧑‍⚕️"),
+      const UnicodeEmoji("🧑🏻‍⚕️"),
+      const UnicodeEmoji("🧑🏼‍⚕️"),
+      const UnicodeEmoji("🧑🏽‍⚕️"),
+      const UnicodeEmoji("🧑🏾‍⚕️"),
+      const UnicodeEmoji("🧑🏿‍⚕️"),
+      const UnicodeEmoji("👩‍⚕️"),
+      const UnicodeEmoji("👩🏻‍⚕️"),
+      const UnicodeEmoji("👩🏼‍⚕️"),
+      const UnicodeEmoji("👩🏽‍⚕️"),
+      const UnicodeEmoji("👩🏾‍⚕️"),
+      const UnicodeEmoji("👩🏿‍⚕️"),
+      const UnicodeEmoji("👨‍⚕️"),
+      const UnicodeEmoji("👨🏻‍⚕️"),
+      const UnicodeEmoji("👨🏼‍⚕️"),
+      const UnicodeEmoji("👨🏽‍⚕️"),
+      const UnicodeEmoji("👨🏾‍⚕️"),
+      const UnicodeEmoji("👨🏿‍⚕️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🔧"), [
+      const UnicodeEmoji("🧑‍🔧"),
+      const UnicodeEmoji("🧑🏻‍🔧"),
+      const UnicodeEmoji("🧑🏼‍🔧"),
+      const UnicodeEmoji("🧑🏽‍🔧"),
+      const UnicodeEmoji("🧑🏾‍🔧"),
+      const UnicodeEmoji("🧑🏿‍🔧"),
+      const UnicodeEmoji("👩‍🔧"),
+      const UnicodeEmoji("👩🏻‍🔧"),
+      const UnicodeEmoji("👩🏼‍🔧"),
+      const UnicodeEmoji("👩🏽‍🔧"),
+      const UnicodeEmoji("👩🏾‍🔧"),
+      const UnicodeEmoji("👩🏿‍🔧"),
+      const UnicodeEmoji("👨‍🔧"),
+      const UnicodeEmoji("👨🏻‍🔧"),
+      const UnicodeEmoji("👨🏼‍🔧"),
+      const UnicodeEmoji("👨🏽‍🔧"),
+      const UnicodeEmoji("👨🏾‍🔧"),
+      const UnicodeEmoji("👨🏿‍🔧"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🏭"), [
+      const UnicodeEmoji("🧑‍🏭"),
+      const UnicodeEmoji("🧑🏻‍🏭"),
+      const UnicodeEmoji("🧑🏼‍🏭"),
+      const UnicodeEmoji("🧑🏽‍🏭"),
+      const UnicodeEmoji("🧑🏾‍🏭"),
+      const UnicodeEmoji("🧑🏿‍🏭"),
+      const UnicodeEmoji("👩‍🏭"),
+      const UnicodeEmoji("👩🏻‍🏭"),
+      const UnicodeEmoji("👩🏼‍🏭"),
+      const UnicodeEmoji("👩🏽‍🏭"),
+      const UnicodeEmoji("👩🏾‍🏭"),
+      const UnicodeEmoji("👩🏿‍🏭"),
+      const UnicodeEmoji("👨‍🏭"),
+      const UnicodeEmoji("👨🏻‍🏭"),
+      const UnicodeEmoji("👨🏼‍🏭"),
+      const UnicodeEmoji("👨🏽‍🏭"),
+      const UnicodeEmoji("👨🏾‍🏭"),
+      const UnicodeEmoji("👨🏿‍🏭"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🚒"), [
+      const UnicodeEmoji("🧑‍🚒"),
+      const UnicodeEmoji("🧑🏻‍🚒"),
+      const UnicodeEmoji("🧑🏼‍🚒"),
+      const UnicodeEmoji("🧑🏽‍🚒"),
+      const UnicodeEmoji("🧑🏾‍🚒"),
+      const UnicodeEmoji("🧑🏿‍🚒"),
+      const UnicodeEmoji("👩‍🚒"),
+      const UnicodeEmoji("👩🏻‍🚒"),
+      const UnicodeEmoji("👩🏼‍🚒"),
+      const UnicodeEmoji("👩🏽‍🚒"),
+      const UnicodeEmoji("👩🏾‍🚒"),
+      const UnicodeEmoji("👩🏿‍🚒"),
+      const UnicodeEmoji("👨‍🚒"),
+      const UnicodeEmoji("👨🏻‍🚒"),
+      const UnicodeEmoji("👨🏼‍🚒"),
+      const UnicodeEmoji("👨🏽‍🚒"),
+      const UnicodeEmoji("👨🏾‍🚒"),
+      const UnicodeEmoji("👨🏿‍🚒"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🌾"), [
+      const UnicodeEmoji("🧑‍🌾"),
+      const UnicodeEmoji("🧑🏻‍🌾"),
+      const UnicodeEmoji("🧑🏼‍🌾"),
+      const UnicodeEmoji("🧑🏽‍🌾"),
+      const UnicodeEmoji("🧑🏾‍🌾"),
+      const UnicodeEmoji("🧑🏿‍🌾"),
+      const UnicodeEmoji("👩‍🌾"),
+      const UnicodeEmoji("👩🏻‍🌾"),
+      const UnicodeEmoji("👩🏼‍🌾"),
+      const UnicodeEmoji("👩🏽‍🌾"),
+      const UnicodeEmoji("👩🏾‍🌾"),
+      const UnicodeEmoji("👩🏿‍🌾"),
+      const UnicodeEmoji("👨‍🌾"),
+      const UnicodeEmoji("👨🏻‍🌾"),
+      const UnicodeEmoji("👨🏼‍🌾"),
+      const UnicodeEmoji("👨🏽‍🌾"),
+      const UnicodeEmoji("👨🏾‍🌾"),
+      const UnicodeEmoji("👨🏿‍🌾"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🏫"), [
+      const UnicodeEmoji("🧑‍🏫"),
+      const UnicodeEmoji("🧑🏻‍🏫"),
+      const UnicodeEmoji("🧑🏼‍🏫"),
+      const UnicodeEmoji("🧑🏽‍🏫"),
+      const UnicodeEmoji("🧑🏾‍🏫"),
+      const UnicodeEmoji("🧑🏿‍🏫"),
+      const UnicodeEmoji("👩‍🏫"),
+      const UnicodeEmoji("👩🏻‍🏫"),
+      const UnicodeEmoji("👩🏼‍🏫"),
+      const UnicodeEmoji("👩🏽‍🏫"),
+      const UnicodeEmoji("👩🏾‍🏫"),
+      const UnicodeEmoji("👩🏿‍🏫"),
+      const UnicodeEmoji("👨‍🏫"),
+      const UnicodeEmoji("👨🏻‍🏫"),
+      const UnicodeEmoji("👨🏼‍🏫"),
+      const UnicodeEmoji("👨🏽‍🏫"),
+      const UnicodeEmoji("👨🏾‍🏫"),
+      const UnicodeEmoji("👨🏿‍🏫"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🎓"), [
+      const UnicodeEmoji("🧑‍🎓"),
+      const UnicodeEmoji("🧑🏻‍🎓"),
+      const UnicodeEmoji("🧑🏼‍🎓"),
+      const UnicodeEmoji("🧑🏽‍🎓"),
+      const UnicodeEmoji("🧑🏾‍🎓"),
+      const UnicodeEmoji("🧑🏿‍🎓"),
+      const UnicodeEmoji("👩‍🎓"),
+      const UnicodeEmoji("👩🏻‍🎓"),
+      const UnicodeEmoji("👩🏼‍🎓"),
+      const UnicodeEmoji("👩🏽‍🎓"),
+      const UnicodeEmoji("👩🏾‍🎓"),
+      const UnicodeEmoji("👩🏿‍🎓"),
+      const UnicodeEmoji("👨‍🎓"),
+      const UnicodeEmoji("👨🏻‍🎓"),
+      const UnicodeEmoji("👨🏼‍🎓"),
+      const UnicodeEmoji("👨🏽‍🎓"),
+      const UnicodeEmoji("👨🏾‍🎓"),
+      const UnicodeEmoji("👨🏿‍🎓"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍💼"), [
+      const UnicodeEmoji("🧑‍💼"),
+      const UnicodeEmoji("🧑🏻‍💼"),
+      const UnicodeEmoji("🧑🏼‍💼"),
+      const UnicodeEmoji("🧑🏽‍💼"),
+      const UnicodeEmoji("🧑🏾‍💼"),
+      const UnicodeEmoji("🧑🏿‍💼"),
+      const UnicodeEmoji("👩‍💼"),
+      const UnicodeEmoji("👩🏻‍💼"),
+      const UnicodeEmoji("👩🏼‍💼"),
+      const UnicodeEmoji("👩🏽‍💼"),
+      const UnicodeEmoji("👩🏾‍💼"),
+      const UnicodeEmoji("👩🏿‍💼"),
+      const UnicodeEmoji("👨‍💼"),
+      const UnicodeEmoji("👨🏻‍💼"),
+      const UnicodeEmoji("👨🏼‍💼"),
+      const UnicodeEmoji("👨🏽‍💼"),
+      const UnicodeEmoji("👨🏾‍💼"),
+      const UnicodeEmoji("👨🏿‍💼"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍⚖️"), [
+      const UnicodeEmoji("🧑‍⚖️"),
+      const UnicodeEmoji("🧑🏻‍⚖️"),
+      const UnicodeEmoji("🧑🏼‍⚖️"),
+      const UnicodeEmoji("🧑🏽‍⚖️"),
+      const UnicodeEmoji("🧑🏾‍⚖️"),
+      const UnicodeEmoji("🧑🏿‍⚖️"),
+      const UnicodeEmoji("👩‍⚖️"),
+      const UnicodeEmoji("👩🏻‍⚖️"),
+      const UnicodeEmoji("👩🏼‍⚖️"),
+      const UnicodeEmoji("👩🏽‍⚖️"),
+      const UnicodeEmoji("👩🏾‍⚖️"),
+      const UnicodeEmoji("👩🏿‍⚖️"),
+      const UnicodeEmoji("👨‍⚖️"),
+      const UnicodeEmoji("👨🏻‍⚖️"),
+      const UnicodeEmoji("👨🏼‍⚖️"),
+      const UnicodeEmoji("👨🏽‍⚖️"),
+      const UnicodeEmoji("👨🏾‍⚖️"),
+      const UnicodeEmoji("👨🏿‍⚖️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍💻"), [
+      const UnicodeEmoji("🧑‍💻"),
+      const UnicodeEmoji("🧑🏻‍💻"),
+      const UnicodeEmoji("🧑🏼‍💻"),
+      const UnicodeEmoji("🧑🏽‍💻"),
+      const UnicodeEmoji("🧑🏾‍💻"),
+      const UnicodeEmoji("🧑🏿‍💻"),
+      const UnicodeEmoji("👩‍💻"),
+      const UnicodeEmoji("👩🏻‍💻"),
+      const UnicodeEmoji("👩🏼‍💻"),
+      const UnicodeEmoji("👩🏽‍💻"),
+      const UnicodeEmoji("👩🏾‍💻"),
+      const UnicodeEmoji("👩🏿‍💻"),
+      const UnicodeEmoji("👨‍💻"),
+      const UnicodeEmoji("👨🏻‍💻"),
+      const UnicodeEmoji("👨🏼‍💻"),
+      const UnicodeEmoji("👨🏽‍💻"),
+      const UnicodeEmoji("👨🏾‍💻"),
+      const UnicodeEmoji("👨🏿‍💻"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🎤"), [
+      const UnicodeEmoji("🧑‍🎤"),
+      const UnicodeEmoji("🧑🏻‍🎤"),
+      const UnicodeEmoji("🧑🏼‍🎤"),
+      const UnicodeEmoji("🧑🏽‍🎤"),
+      const UnicodeEmoji("🧑🏾‍🎤"),
+      const UnicodeEmoji("🧑🏿‍🎤"),
+      const UnicodeEmoji("👩‍🎤"),
+      const UnicodeEmoji("👩🏻‍🎤"),
+      const UnicodeEmoji("👩🏼‍🎤"),
+      const UnicodeEmoji("👩🏽‍🎤"),
+      const UnicodeEmoji("👩🏾‍🎤"),
+      const UnicodeEmoji("👩🏿‍🎤"),
+      const UnicodeEmoji("👨‍🎤"),
+      const UnicodeEmoji("👨🏻‍🎤"),
+      const UnicodeEmoji("👨🏼‍🎤"),
+      const UnicodeEmoji("👨🏽‍🎤"),
+      const UnicodeEmoji("👨🏾‍🎤"),
+      const UnicodeEmoji("👨🏿‍🎤"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🎨"), [
+      const UnicodeEmoji("🧑‍🎨"),
+      const UnicodeEmoji("🧑🏻‍🎨"),
+      const UnicodeEmoji("🧑🏼‍🎨"),
+      const UnicodeEmoji("🧑🏽‍🎨"),
+      const UnicodeEmoji("🧑🏾‍🎨"),
+      const UnicodeEmoji("🧑🏿‍🎨"),
+      const UnicodeEmoji("👩‍🎨"),
+      const UnicodeEmoji("👩🏻‍🎨"),
+      const UnicodeEmoji("👩🏼‍🎨"),
+      const UnicodeEmoji("👩🏽‍🎨"),
+      const UnicodeEmoji("👩🏾‍🎨"),
+      const UnicodeEmoji("👩🏿‍🎨"),
+      const UnicodeEmoji("👨‍🎨"),
+      const UnicodeEmoji("👨🏻‍🎨"),
+      const UnicodeEmoji("👨🏼‍🎨"),
+      const UnicodeEmoji("👨🏽‍🎨"),
+      const UnicodeEmoji("👨🏾‍🎨"),
+      const UnicodeEmoji("👨🏿‍🎨"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🍳"), [
+      const UnicodeEmoji("🧑‍🍳"),
+      const UnicodeEmoji("🧑🏻‍🍳"),
+      const UnicodeEmoji("🧑🏼‍🍳"),
+      const UnicodeEmoji("🧑🏽‍🍳"),
+      const UnicodeEmoji("🧑🏾‍🍳"),
+      const UnicodeEmoji("🧑🏿‍🍳"),
+      const UnicodeEmoji("👩‍🍳"),
+      const UnicodeEmoji("👩🏻‍🍳"),
+      const UnicodeEmoji("👩🏼‍🍳"),
+      const UnicodeEmoji("👩🏽‍🍳"),
+      const UnicodeEmoji("👩🏾‍🍳"),
+      const UnicodeEmoji("👩🏿‍🍳"),
+      const UnicodeEmoji("👨‍🍳"),
+      const UnicodeEmoji("👨🏻‍🍳"),
+      const UnicodeEmoji("👨🏼‍🍳"),
+      const UnicodeEmoji("👨🏽‍🍳"),
+      const UnicodeEmoji("👨🏾‍🍳"),
+      const UnicodeEmoji("👨🏿‍🍳"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👳"), [
+      const UnicodeEmoji("👳"),
+      const UnicodeEmoji("👳🏻"),
+      const UnicodeEmoji("👳🏼"),
+      const UnicodeEmoji("👳🏽"),
+      const UnicodeEmoji("👳🏾"),
+      const UnicodeEmoji("👳🏿"),
+      const UnicodeEmoji("👳‍♀️"),
+      const UnicodeEmoji("👳🏻‍♀️"),
+      const UnicodeEmoji("👳🏼‍♀️"),
+      const UnicodeEmoji("👳🏽‍♀️"),
+      const UnicodeEmoji("👳🏾‍♀️"),
+      const UnicodeEmoji("👳🏿‍♀️"),
+      const UnicodeEmoji("👳‍♂️"),
+      const UnicodeEmoji("👳🏻‍♂️"),
+      const UnicodeEmoji("👳🏼‍♂️"),
+      const UnicodeEmoji("👳🏽‍♂️"),
+      const UnicodeEmoji("👳🏾‍♂️"),
+      const UnicodeEmoji("👳🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧕"), [
+      const UnicodeEmoji("🧕"),
+      const UnicodeEmoji("🧕🏻"),
+      const UnicodeEmoji("🧕🏼"),
+      const UnicodeEmoji("🧕🏽"),
+      const UnicodeEmoji("🧕🏾"),
+      const UnicodeEmoji("🧕🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👲"), [
+      const UnicodeEmoji("👲"),
+      const UnicodeEmoji("👲🏻"),
+      const UnicodeEmoji("👲🏼"),
+      const UnicodeEmoji("👲🏽"),
+      const UnicodeEmoji("👲🏾"),
+      const UnicodeEmoji("👲🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👶"), [
+      const UnicodeEmoji("👶"),
+      const UnicodeEmoji("👶🏻"),
+      const UnicodeEmoji("👶🏼"),
+      const UnicodeEmoji("👶🏽"),
+      const UnicodeEmoji("👶🏾"),
+      const UnicodeEmoji("👶🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧒"), [
+      const UnicodeEmoji("🧒"),
+      const UnicodeEmoji("🧒🏻"),
+      const UnicodeEmoji("🧒🏼"),
+      const UnicodeEmoji("🧒🏽"),
+      const UnicodeEmoji("🧒🏾"),
+      const UnicodeEmoji("🧒🏿"),
+      const UnicodeEmoji("👧"),
+      const UnicodeEmoji("👧🏻"),
+      const UnicodeEmoji("👧🏼"),
+      const UnicodeEmoji("👧🏽"),
+      const UnicodeEmoji("👧🏾"),
+      const UnicodeEmoji("👧🏿"),
+      const UnicodeEmoji("👦"),
+      const UnicodeEmoji("👦🏻"),
+      const UnicodeEmoji("👦🏼"),
+      const UnicodeEmoji("👦🏽"),
+      const UnicodeEmoji("👦🏾"),
+      const UnicodeEmoji("👦🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑"), [
+      const UnicodeEmoji("🧑"),
+      const UnicodeEmoji("🧑🏻"),
+      const UnicodeEmoji("🧑🏼"),
+      const UnicodeEmoji("🧑🏽"),
+      const UnicodeEmoji("🧑🏾"),
+      const UnicodeEmoji("🧑🏿"),
+      const UnicodeEmoji("👩"),
+      const UnicodeEmoji("👩🏻"),
+      const UnicodeEmoji("👩🏼"),
+      const UnicodeEmoji("👩🏽"),
+      const UnicodeEmoji("👩🏾"),
+      const UnicodeEmoji("👩🏿"),
+      const UnicodeEmoji("👨"),
+      const UnicodeEmoji("👨🏻"),
+      const UnicodeEmoji("👨🏼"),
+      const UnicodeEmoji("👨🏽"),
+      const UnicodeEmoji("👨🏾"),
+      const UnicodeEmoji("👨🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧓"), [
+      const UnicodeEmoji("🧓"),
+      const UnicodeEmoji("🧓🏻"),
+      const UnicodeEmoji("🧓🏼"),
+      const UnicodeEmoji("🧓🏽"),
+      const UnicodeEmoji("🧓🏾"),
+      const UnicodeEmoji("🧓🏿"),
+      const UnicodeEmoji("👵"),
+      const UnicodeEmoji("👵🏻"),
+      const UnicodeEmoji("👵🏼"),
+      const UnicodeEmoji("👵🏽"),
+      const UnicodeEmoji("👵🏾"),
+      const UnicodeEmoji("👵🏿"),
+      const UnicodeEmoji("👴"),
+      const UnicodeEmoji("👴🏻"),
+      const UnicodeEmoji("👴🏼"),
+      const UnicodeEmoji("👴🏽"),
+      const UnicodeEmoji("👴🏾"),
+      const UnicodeEmoji("👴🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🦳"), [
+      const UnicodeEmoji("🧑‍🦳"),
+      const UnicodeEmoji("🧑🏻‍🦳"),
+      const UnicodeEmoji("🧑🏼‍🦳"),
+      const UnicodeEmoji("🧑🏽‍🦳"),
+      const UnicodeEmoji("🧑🏾‍🦳"),
+      const UnicodeEmoji("🧑🏿‍🦳"),
+      const UnicodeEmoji("👩‍🦳"),
+      const UnicodeEmoji("👩🏻‍🦳"),
+      const UnicodeEmoji("👩🏼‍🦳"),
+      const UnicodeEmoji("👩🏽‍🦳"),
+      const UnicodeEmoji("👩🏾‍🦳"),
+      const UnicodeEmoji("👩🏿‍🦳"),
+      const UnicodeEmoji("👨‍🦳"),
+      const UnicodeEmoji("👨🏻‍🦳"),
+      const UnicodeEmoji("👨🏼‍🦳"),
+      const UnicodeEmoji("👨🏽‍🦳"),
+      const UnicodeEmoji("👨🏾‍🦳"),
+      const UnicodeEmoji("👨🏿‍🦳"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🦰"), [
+      const UnicodeEmoji("🧑‍🦰"),
+      const UnicodeEmoji("🧑🏻‍🦰"),
+      const UnicodeEmoji("🧑🏼‍🦰"),
+      const UnicodeEmoji("🧑🏽‍🦰"),
+      const UnicodeEmoji("🧑🏾‍🦰"),
+      const UnicodeEmoji("🧑🏿‍🦰"),
+      const UnicodeEmoji("👩‍🦰"),
+      const UnicodeEmoji("👩🏻‍🦰"),
+      const UnicodeEmoji("👩🏼‍🦰"),
+      const UnicodeEmoji("👩🏽‍🦰"),
+      const UnicodeEmoji("👩🏾‍🦰"),
+      const UnicodeEmoji("👩🏿‍🦰"),
+      const UnicodeEmoji("👨‍🦰"),
+      const UnicodeEmoji("👨🏻‍🦰"),
+      const UnicodeEmoji("👨🏼‍🦰"),
+      const UnicodeEmoji("👨🏽‍🦰"),
+      const UnicodeEmoji("👨🏾‍🦰"),
+      const UnicodeEmoji("👨🏿‍🦰"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👱"), [
+      const UnicodeEmoji("👱"),
+      const UnicodeEmoji("👱🏻"),
+      const UnicodeEmoji("👱🏼"),
+      const UnicodeEmoji("👱🏽"),
+      const UnicodeEmoji("👱🏾"),
+      const UnicodeEmoji("👱🏿"),
+      const UnicodeEmoji("👱‍♀️"),
+      const UnicodeEmoji("👱🏻‍♀️"),
+      const UnicodeEmoji("👱🏼‍♀️"),
+      const UnicodeEmoji("👱🏽‍♀️"),
+      const UnicodeEmoji("👱🏾‍♀️"),
+      const UnicodeEmoji("👱🏿‍♀️"),
+      const UnicodeEmoji("👱‍♂️"),
+      const UnicodeEmoji("👱🏻‍♂️"),
+      const UnicodeEmoji("👱🏼‍♂️"),
+      const UnicodeEmoji("👱🏽‍♂️"),
+      const UnicodeEmoji("👱🏾‍♂️"),
+      const UnicodeEmoji("👱🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🦱"), [
+      const UnicodeEmoji("🧑‍🦱"),
+      const UnicodeEmoji("🧑🏻‍🦱"),
+      const UnicodeEmoji("🧑🏼‍🦱"),
+      const UnicodeEmoji("🧑🏽‍🦱"),
+      const UnicodeEmoji("🧑🏾‍🦱"),
+      const UnicodeEmoji("🧑🏿‍🦱"),
+      const UnicodeEmoji("👩‍🦱"),
+      const UnicodeEmoji("👩🏻‍🦱"),
+      const UnicodeEmoji("👩🏼‍🦱"),
+      const UnicodeEmoji("👩🏽‍🦱"),
+      const UnicodeEmoji("👩🏾‍🦱"),
+      const UnicodeEmoji("👩🏿‍🦱"),
+      const UnicodeEmoji("👨‍🦱"),
+      const UnicodeEmoji("👨🏻‍🦱"),
+      const UnicodeEmoji("👨🏼‍🦱"),
+      const UnicodeEmoji("👨🏽‍🦱"),
+      const UnicodeEmoji("👨🏾‍🦱"),
+      const UnicodeEmoji("👨🏿‍🦱"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🦲"), [
+      const UnicodeEmoji("🧑‍🦲"),
+      const UnicodeEmoji("🧑🏻‍🦲"),
+      const UnicodeEmoji("🧑🏼‍🦲"),
+      const UnicodeEmoji("🧑🏽‍🦲"),
+      const UnicodeEmoji("🧑🏾‍🦲"),
+      const UnicodeEmoji("🧑🏿‍🦲"),
+      const UnicodeEmoji("👩‍🦲"),
+      const UnicodeEmoji("👩🏻‍🦲"),
+      const UnicodeEmoji("👩🏼‍🦲"),
+      const UnicodeEmoji("👩🏽‍🦲"),
+      const UnicodeEmoji("👩🏾‍🦲"),
+      const UnicodeEmoji("👩🏿‍🦲"),
+      const UnicodeEmoji("👨‍🦲"),
+      const UnicodeEmoji("👨🏻‍🦲"),
+      const UnicodeEmoji("👨🏼‍🦲"),
+      const UnicodeEmoji("👨🏽‍🦲"),
+      const UnicodeEmoji("👨🏾‍🦲"),
+      const UnicodeEmoji("👨🏿‍🦲"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧔"), [
+      const UnicodeEmoji("🧔"),
+      const UnicodeEmoji("🧔🏻"),
+      const UnicodeEmoji("🧔🏼"),
+      const UnicodeEmoji("🧔🏽"),
+      const UnicodeEmoji("🧔🏾"),
+      const UnicodeEmoji("🧔🏿"),
+      const UnicodeEmoji("🧔‍♀️"),
+      const UnicodeEmoji("🧔🏻‍♀️"),
+      const UnicodeEmoji("🧔🏼‍♀️"),
+      const UnicodeEmoji("🧔🏽‍♀️"),
+      const UnicodeEmoji("🧔🏾‍♀️"),
+      const UnicodeEmoji("🧔🏿‍♀️"),
+      const UnicodeEmoji("🧔‍♂️"),
+      const UnicodeEmoji("🧔🏻‍♂️"),
+      const UnicodeEmoji("🧔🏼‍♂️"),
+      const UnicodeEmoji("🧔🏽‍♂️"),
+      const UnicodeEmoji("🧔🏾‍♂️"),
+      const UnicodeEmoji("🧔🏿‍♂️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🕴️"), [
+      const UnicodeEmoji("🕴️"),
+      const UnicodeEmoji("🕴🏻"),
+      const UnicodeEmoji("🕴🏼"),
+      const UnicodeEmoji("🕴🏽"),
+      const UnicodeEmoji("🕴🏾"),
+      const UnicodeEmoji("🕴🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("💃"), [
+      const UnicodeEmoji("💃"),
+      const UnicodeEmoji("💃🏻"),
+      const UnicodeEmoji("💃🏼"),
+      const UnicodeEmoji("💃🏽"),
+      const UnicodeEmoji("💃🏾"),
+      const UnicodeEmoji("💃🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🕺"), [
+      const UnicodeEmoji("🕺"),
+      const UnicodeEmoji("🕺🏻"),
+      const UnicodeEmoji("🕺🏼"),
+      const UnicodeEmoji("🕺🏽"),
+      const UnicodeEmoji("🕺🏾"),
+      const UnicodeEmoji("🕺🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👯"), [
+      const UnicodeEmoji("👯"),
+      const UnicodeEmoji("👯‍♂️"),
+      const UnicodeEmoji("👯‍♀️"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🤝‍🧑"), [
+      const UnicodeEmoji("🧑‍🤝‍🧑"),
+      const UnicodeEmoji("🧑🏻‍🤝‍🧑🏻"),
+      const UnicodeEmoji("🧑🏻‍🤝‍🧑🏼"),
+      const UnicodeEmoji("🧑🏻‍🤝‍🧑🏽"),
+      const UnicodeEmoji("🧑🏻‍🤝‍🧑🏾"),
+      const UnicodeEmoji("🧑🏻‍🤝‍🧑🏿"),
+      const UnicodeEmoji("🧑🏼‍🤝‍🧑🏻"),
+      const UnicodeEmoji("🧑🏼‍🤝‍🧑🏼"),
+      const UnicodeEmoji("🧑🏼‍🤝‍🧑🏽"),
+      const UnicodeEmoji("🧑🏼‍🤝‍🧑🏾"),
+      const UnicodeEmoji("🧑🏼‍🤝‍🧑🏿"),
+      const UnicodeEmoji("🧑🏽‍🤝‍🧑🏻"),
+      const UnicodeEmoji("🧑🏽‍🤝‍🧑🏼"),
+      const UnicodeEmoji("🧑🏽‍🤝‍🧑🏽"),
+      const UnicodeEmoji("🧑🏽‍🤝‍🧑🏾"),
+      const UnicodeEmoji("🧑🏽‍🤝‍🧑🏿"),
+      const UnicodeEmoji("🧑🏾‍🤝‍🧑🏻"),
+      const UnicodeEmoji("🧑🏾‍🤝‍🧑🏼"),
+      const UnicodeEmoji("🧑🏾‍🤝‍🧑🏽"),
+      const UnicodeEmoji("🧑🏾‍🤝‍🧑🏾"),
+      const UnicodeEmoji("🧑🏾‍🤝‍🧑🏿"),
+      const UnicodeEmoji("🧑🏿‍🤝‍🧑🏻"),
+      const UnicodeEmoji("🧑🏿‍🤝‍🧑🏼"),
+      const UnicodeEmoji("🧑🏿‍🤝‍🧑🏽"),
+      const UnicodeEmoji("🧑🏿‍🤝‍🧑🏾"),
+      const UnicodeEmoji("🧑🏿‍🤝‍🧑🏿"),
+    ],
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("👭"), [
+      const UnicodeEmoji("👭"),
       const UnicodeEmoji("👭🏻"),
+      const UnicodeEmoji("👩🏻‍🤝‍👩🏼"),
+      const UnicodeEmoji("👩🏻‍🤝‍👩🏽"),
+      const UnicodeEmoji("👩🏻‍🤝‍👩🏾"),
+      const UnicodeEmoji("👩🏻‍🤝‍👩🏿"),
+      const UnicodeEmoji("👩🏼‍🤝‍👩🏻"),
       const UnicodeEmoji("👭🏼"),
+      const UnicodeEmoji("👩🏼‍🤝‍👩🏽"),
+      const UnicodeEmoji("👩🏼‍🤝‍👩🏾"),
+      const UnicodeEmoji("👩🏼‍🤝‍👩🏿"),
+      const UnicodeEmoji("👩🏽‍🤝‍👩🏻"),
+      const UnicodeEmoji("👩🏽‍🤝‍👩🏼"),
       const UnicodeEmoji("👭🏽"),
+      const UnicodeEmoji("👩🏽‍🤝‍👩🏾"),
+      const UnicodeEmoji("👩🏽‍🤝‍👩🏿"),
+      const UnicodeEmoji("👩🏾‍🤝‍👩🏻"),
+      const UnicodeEmoji("👩🏾‍🤝‍👩🏼"),
+      const UnicodeEmoji("👩🏾‍🤝‍👩🏽"),
       const UnicodeEmoji("👭🏾"),
+      const UnicodeEmoji("👩🏾‍🤝‍👩🏿"),
+      const UnicodeEmoji("👩🏿‍🤝‍👩🏻"),
+      const UnicodeEmoji("👩🏿‍🤝‍👩🏼"),
+      const UnicodeEmoji("👩🏿‍🤝‍👩🏽"),
+      const UnicodeEmoji("👩🏿‍🤝‍👩🏾"),
       const UnicodeEmoji("👭🏿"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🤝‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🤝‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🤝‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🤝‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🤝‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🤝‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🤝‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🤝‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🤝‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🤝‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🤝‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🤝‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🤝‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🤝‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🤝‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🤝‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🤝‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🤝‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🤝‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🤝‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👫"), [
-      const UnicodeEmoji("👫🏻"),
-      const UnicodeEmoji("👫🏼"),
-      const UnicodeEmoji("👫🏽"),
-      const UnicodeEmoji("👫🏾"),
-      const UnicodeEmoji("👫🏿"),
-    ],
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🤝‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🤝‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🤝‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍🤝‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🤝‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🤝‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🤝‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍🤝‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🤝‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🤝‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🤝‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍🤝‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🤝‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🤝‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🤝‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍🤝‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🤝‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🤝‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🤝‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍🤝‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
     const UnicodeEmoji("👬"), [
+      const UnicodeEmoji("👬"),
       const UnicodeEmoji("👬🏻"),
+      const UnicodeEmoji("👨🏻‍🤝‍👨🏼"),
+      const UnicodeEmoji("👨🏻‍🤝‍👨🏽"),
+      const UnicodeEmoji("👨🏻‍🤝‍👨🏾"),
+      const UnicodeEmoji("👨🏻‍🤝‍👨🏿"),
+      const UnicodeEmoji("👨🏼‍🤝‍👨🏻"),
       const UnicodeEmoji("👬🏼"),
+      const UnicodeEmoji("👨🏼‍🤝‍👨🏽"),
+      const UnicodeEmoji("👨🏼‍🤝‍👨🏾"),
+      const UnicodeEmoji("👨🏼‍🤝‍👨🏿"),
+      const UnicodeEmoji("👨🏽‍🤝‍👨🏻"),
+      const UnicodeEmoji("👨🏽‍🤝‍👨🏼"),
       const UnicodeEmoji("👬🏽"),
+      const UnicodeEmoji("👨🏽‍🤝‍👨🏾"),
+      const UnicodeEmoji("👨🏽‍🤝‍👨🏿"),
+      const UnicodeEmoji("👨🏾‍🤝‍👨🏻"),
+      const UnicodeEmoji("👨🏾‍🤝‍👨🏼"),
+      const UnicodeEmoji("👨🏾‍🤝‍👨🏽"),
       const UnicodeEmoji("👬🏾"),
+      const UnicodeEmoji("👨🏾‍🤝‍👨🏿"),
+      const UnicodeEmoji("👨🏿‍🤝‍👨🏻"),
+      const UnicodeEmoji("👨🏿‍🤝‍👨🏼"),
+      const UnicodeEmoji("👨🏿‍🤝‍👨🏽"),
+      const UnicodeEmoji("👨🏿‍🤝‍👨🏾"),
       const UnicodeEmoji("👬🏿"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🤝‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🤝‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🤝‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍🤝‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🤝‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🤝‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🤝‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍🤝‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🤝‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🤝‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🤝‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍🤝‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🤝‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🤝‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🤝‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍🤝‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🤝‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🤝‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🤝‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍🤝‍👨🏾"),
+    const UnicodeEmoji("👫"), [
+      const UnicodeEmoji("👫"),
+      const UnicodeEmoji("👫🏻"),
+      const UnicodeEmoji("👩🏻‍🤝‍👨🏼"),
+      const UnicodeEmoji("👩🏻‍🤝‍👨🏽"),
+      const UnicodeEmoji("👩🏻‍🤝‍👨🏾"),
+      const UnicodeEmoji("👩🏻‍🤝‍👨🏿"),
+      const UnicodeEmoji("👩🏼‍🤝‍👨🏻"),
+      const UnicodeEmoji("👫🏼"),
+      const UnicodeEmoji("👩🏼‍🤝‍👨🏽"),
+      const UnicodeEmoji("👩🏼‍🤝‍👨🏾"),
+      const UnicodeEmoji("👩🏼‍🤝‍👨🏿"),
+      const UnicodeEmoji("👩🏽‍🤝‍👨🏻"),
+      const UnicodeEmoji("👩🏽‍🤝‍👨🏼"),
+      const UnicodeEmoji("👫🏽"),
+      const UnicodeEmoji("👩🏽‍🤝‍👨🏾"),
+      const UnicodeEmoji("👩🏽‍🤝‍👨🏿"),
+      const UnicodeEmoji("👩🏾‍🤝‍👨🏻"),
+      const UnicodeEmoji("👩🏾‍🤝‍👨🏼"),
+      const UnicodeEmoji("👩🏾‍🤝‍👨🏽"),
+      const UnicodeEmoji("👫🏾"),
+      const UnicodeEmoji("👩🏾‍🤝‍👨🏿"),
+      const UnicodeEmoji("👩🏿‍🤝‍👨🏻"),
+      const UnicodeEmoji("👩🏿‍🤝‍👨🏼"),
+      const UnicodeEmoji("👩🏿‍🤝‍👨🏽"),
+      const UnicodeEmoji("👩🏿‍🤝‍👨🏾"),
+      const UnicodeEmoji("👫🏿"),
+    ],
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("💏"), [
+      const UnicodeEmoji("💏"),
       const UnicodeEmoji("💏🏻"),
+      const UnicodeEmoji("🧑🏻‍❤️‍💋‍🧑🏼"),
+      const UnicodeEmoji("🧑🏻‍❤️‍💋‍🧑🏽"),
+      const UnicodeEmoji("🧑🏻‍❤️‍💋‍🧑🏾"),
+      const UnicodeEmoji("🧑🏻‍❤️‍💋‍🧑🏿"),
+      const UnicodeEmoji("🧑🏼‍❤️‍💋‍🧑🏻"),
       const UnicodeEmoji("💏🏼"),
+      const UnicodeEmoji("🧑🏼‍❤️‍💋‍🧑🏽"),
+      const UnicodeEmoji("🧑🏼‍❤️‍💋‍🧑🏾"),
+      const UnicodeEmoji("🧑🏼‍❤️‍💋‍🧑🏿"),
+      const UnicodeEmoji("🧑🏽‍❤️‍💋‍🧑🏻"),
+      const UnicodeEmoji("🧑🏽‍❤️‍💋‍🧑🏼"),
       const UnicodeEmoji("💏🏽"),
+      const UnicodeEmoji("🧑🏽‍❤️‍💋‍🧑🏾"),
+      const UnicodeEmoji("🧑🏽‍❤️‍💋‍🧑🏿"),
+      const UnicodeEmoji("🧑🏾‍❤️‍💋‍🧑🏻"),
+      const UnicodeEmoji("🧑🏾‍❤️‍💋‍🧑🏼"),
+      const UnicodeEmoji("🧑🏾‍❤️‍💋‍🧑🏽"),
       const UnicodeEmoji("💏🏾"),
+      const UnicodeEmoji("🧑🏾‍❤️‍💋‍🧑🏿"),
+      const UnicodeEmoji("🧑🏿‍❤️‍💋‍🧑🏻"),
+      const UnicodeEmoji("🧑🏿‍❤️‍💋‍🧑🏼"),
+      const UnicodeEmoji("🧑🏿‍❤️‍💋‍🧑🏽"),
+      const UnicodeEmoji("🧑🏿‍❤️‍💋‍🧑🏾"),
       const UnicodeEmoji("💏🏿"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍❤️‍💋‍🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍❤️‍💋‍🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍❤️‍💋‍🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍❤️‍💋‍🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍❤️‍💋‍🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍❤️‍💋‍🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍❤️‍💋‍🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍❤️‍💋‍🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍❤️‍💋‍🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍❤️‍💋‍🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍❤️‍💋‍🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍❤️‍💋‍🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍❤️‍💋‍🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍❤️‍💋‍🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍❤️‍💋‍🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍❤️‍💋‍🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍❤️‍💋‍🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍❤️‍💋‍🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍❤️‍💋‍🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍❤️‍💋‍🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍❤️‍💋‍👨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍❤️‍💋‍👨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍❤️‍💋‍👩"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏿"),
+    const UnicodeEmoji("👩‍❤️‍💋‍👨"), [
+      const UnicodeEmoji("👩‍❤️‍💋‍👨"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👨🏿"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👨🏿"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👨🏿"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👨🏿"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👨🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👨‍❤️‍💋‍👨"), [
+      const UnicodeEmoji("👨‍❤️‍💋‍👨"),
+      const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👨🏻‍❤️‍💋‍👨🏿"),
+      const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👨🏼‍❤️‍💋‍👨🏿"),
+      const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👨🏽‍❤️‍💋‍👨🏿"),
+      const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👨🏾‍❤️‍💋‍👨🏿"),
+      const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏻"),
+      const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏼"),
+      const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏽"),
+      const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏾"),
+      const UnicodeEmoji("👨🏿‍❤️‍💋‍👨🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👩‍❤️‍💋‍👩"), [
+      const UnicodeEmoji("👩‍❤️‍💋‍👩"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏻"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏼"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏽"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏾"),
+      const UnicodeEmoji("👩🏻‍❤️‍💋‍👩🏿"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏻"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏼"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏽"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏾"),
+      const UnicodeEmoji("👩🏼‍❤️‍💋‍👩🏿"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏻"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏼"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏽"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏾"),
+      const UnicodeEmoji("👩🏽‍❤️‍💋‍👩🏿"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏻"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏼"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏽"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏾"),
+      const UnicodeEmoji("👩🏾‍❤️‍💋‍👩🏿"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏻"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏼"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏽"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏾"),
+      const UnicodeEmoji("👩🏿‍❤️‍💋‍👩🏿"),
+    ],
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("💑"), [
+      const UnicodeEmoji("💑"),
       const UnicodeEmoji("💑🏻"),
+      const UnicodeEmoji("🧑🏻‍❤️‍🧑🏼"),
+      const UnicodeEmoji("🧑🏻‍❤️‍🧑🏽"),
+      const UnicodeEmoji("🧑🏻‍❤️‍🧑🏾"),
+      const UnicodeEmoji("🧑🏻‍❤️‍🧑🏿"),
+      const UnicodeEmoji("🧑🏼‍❤️‍🧑🏻"),
       const UnicodeEmoji("💑🏼"),
+      const UnicodeEmoji("🧑🏼‍❤️‍🧑🏽"),
+      const UnicodeEmoji("🧑🏼‍❤️‍🧑🏾"),
+      const UnicodeEmoji("🧑🏼‍❤️‍🧑🏿"),
+      const UnicodeEmoji("🧑🏽‍❤️‍🧑🏻"),
+      const UnicodeEmoji("🧑🏽‍❤️‍🧑🏼"),
       const UnicodeEmoji("💑🏽"),
+      const UnicodeEmoji("🧑🏽‍❤️‍🧑🏾"),
+      const UnicodeEmoji("🧑🏽‍❤️‍🧑🏿"),
+      const UnicodeEmoji("🧑🏾‍❤️‍🧑🏻"),
+      const UnicodeEmoji("🧑🏾‍❤️‍🧑🏼"),
+      const UnicodeEmoji("🧑🏾‍❤️‍🧑🏽"),
       const UnicodeEmoji("💑🏾"),
+      const UnicodeEmoji("🧑🏾‍❤️‍🧑🏿"),
+      const UnicodeEmoji("🧑🏿‍❤️‍🧑🏻"),
+      const UnicodeEmoji("🧑🏿‍❤️‍🧑🏼"),
+      const UnicodeEmoji("🧑🏿‍❤️‍🧑🏽"),
+      const UnicodeEmoji("🧑🏿‍❤️‍🧑🏾"),
       const UnicodeEmoji("💑🏿"),
     ],
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍❤️‍🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍❤️‍🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍❤️‍🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏻‍❤️‍🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍❤️‍🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍❤️‍🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍❤️‍🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏼‍❤️‍🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍❤️‍🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍❤️‍🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍❤️‍🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏽‍❤️‍🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍❤️‍🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍❤️‍🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍❤️‍🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏾‍❤️‍🧑🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍❤️‍🧑🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍❤️‍🧑🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍❤️‍🧑🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧑🏿‍❤️‍🧑🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍❤️‍👨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍❤️‍👨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏻‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏼‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏽‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏾‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍👨🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍👨🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍👨🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍👨🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨🏿‍❤️‍👨🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍❤️‍👩"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏻‍❤️‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏼‍❤️‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏽‍❤️‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏾‍❤️‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👩🏻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👩🏼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👩🏽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👩🏾"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩🏿‍❤️‍👩🏿"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👪"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👩‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👩‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👩‍👧‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👩‍👦‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👩‍👧‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👨‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👨‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👨‍👧‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👨‍👦‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👨‍👧‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👩‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👩‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👩‍👧‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👩‍👦‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👩‍👧‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👦‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👧‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👨‍👧‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👦‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👧‍👦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👩‍👧‍👧"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🗣️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👥"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🫂"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("👣"),
+    const UnicodeEmoji("👩‍❤️‍👨"), [
+      const UnicodeEmoji("👩‍❤️‍👨"),
+      const UnicodeEmoji("👩🏻‍❤️‍👨🏻"),
+      const UnicodeEmoji("👩🏻‍❤️‍👨🏼"),
+      const UnicodeEmoji("👩🏻‍❤️‍👨🏽"),
+      const UnicodeEmoji("👩🏻‍❤️‍👨🏾"),
+      const UnicodeEmoji("👩🏻‍❤️‍👨🏿"),
+      const UnicodeEmoji("👩🏼‍❤️‍👨🏻"),
+      const UnicodeEmoji("👩🏼‍❤️‍👨🏼"),
+      const UnicodeEmoji("👩🏼‍❤️‍👨🏽"),
+      const UnicodeEmoji("👩🏼‍❤️‍👨🏾"),
+      const UnicodeEmoji("👩🏼‍❤️‍👨🏿"),
+      const UnicodeEmoji("👩🏽‍❤️‍👨🏻"),
+      const UnicodeEmoji("👩🏽‍❤️‍👨🏼"),
+      const UnicodeEmoji("👩🏽‍❤️‍👨🏽"),
+      const UnicodeEmoji("👩🏽‍❤️‍👨🏾"),
+      const UnicodeEmoji("👩🏽‍❤️‍👨🏿"),
+      const UnicodeEmoji("👩🏾‍❤️‍👨🏻"),
+      const UnicodeEmoji("👩🏾‍❤️‍👨🏼"),
+      const UnicodeEmoji("👩🏾‍❤️‍👨🏽"),
+      const UnicodeEmoji("👩🏾‍❤️‍👨🏾"),
+      const UnicodeEmoji("👩🏾‍❤️‍👨🏿"),
+      const UnicodeEmoji("👩🏿‍❤️‍👨🏻"),
+      const UnicodeEmoji("👩🏿‍❤️‍👨🏼"),
+      const UnicodeEmoji("👩🏿‍❤️‍👨🏽"),
+      const UnicodeEmoji("👩🏿‍❤️‍👨🏾"),
+      const UnicodeEmoji("👩🏿‍❤️‍👨🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👨‍❤️‍👨"), [
+      const UnicodeEmoji("👨‍❤️‍👨"),
+      const UnicodeEmoji("👨🏻‍❤️‍👨🏻"),
+      const UnicodeEmoji("👨🏻‍❤️‍👨🏼"),
+      const UnicodeEmoji("👨🏻‍❤️‍👨🏽"),
+      const UnicodeEmoji("👨🏻‍❤️‍👨🏾"),
+      const UnicodeEmoji("👨🏻‍❤️‍👨🏿"),
+      const UnicodeEmoji("👨🏼‍❤️‍👨🏻"),
+      const UnicodeEmoji("👨🏼‍❤️‍👨🏼"),
+      const UnicodeEmoji("👨🏼‍❤️‍👨🏽"),
+      const UnicodeEmoji("👨🏼‍❤️‍👨🏾"),
+      const UnicodeEmoji("👨🏼‍❤️‍👨🏿"),
+      const UnicodeEmoji("👨🏽‍❤️‍👨🏻"),
+      const UnicodeEmoji("👨🏽‍❤️‍👨🏼"),
+      const UnicodeEmoji("👨🏽‍❤️‍👨🏽"),
+      const UnicodeEmoji("👨🏽‍❤️‍👨🏾"),
+      const UnicodeEmoji("👨🏽‍❤️‍👨🏿"),
+      const UnicodeEmoji("👨🏾‍❤️‍👨🏻"),
+      const UnicodeEmoji("👨🏾‍❤️‍👨🏼"),
+      const UnicodeEmoji("👨🏾‍❤️‍👨🏽"),
+      const UnicodeEmoji("👨🏾‍❤️‍👨🏾"),
+      const UnicodeEmoji("👨🏾‍❤️‍👨🏿"),
+      const UnicodeEmoji("👨🏿‍❤️‍👨🏻"),
+      const UnicodeEmoji("👨🏿‍❤️‍👨🏼"),
+      const UnicodeEmoji("👨🏿‍❤️‍👨🏽"),
+      const UnicodeEmoji("👨🏿‍❤️‍👨🏾"),
+      const UnicodeEmoji("👨🏿‍❤️‍👨🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👩‍❤️‍👩"), [
+      const UnicodeEmoji("👩‍❤️‍👩"),
+      const UnicodeEmoji("👩🏻‍❤️‍👩🏻"),
+      const UnicodeEmoji("👩🏻‍❤️‍👩🏼"),
+      const UnicodeEmoji("👩🏻‍❤️‍👩🏽"),
+      const UnicodeEmoji("👩🏻‍❤️‍👩🏾"),
+      const UnicodeEmoji("👩🏻‍❤️‍👩🏿"),
+      const UnicodeEmoji("👩🏼‍❤️‍👩🏻"),
+      const UnicodeEmoji("👩🏼‍❤️‍👩🏼"),
+      const UnicodeEmoji("👩🏼‍❤️‍👩🏽"),
+      const UnicodeEmoji("👩🏼‍❤️‍👩🏾"),
+      const UnicodeEmoji("👩🏼‍❤️‍👩🏿"),
+      const UnicodeEmoji("👩🏽‍❤️‍👩🏻"),
+      const UnicodeEmoji("👩🏽‍❤️‍👩🏼"),
+      const UnicodeEmoji("👩🏽‍❤️‍👩🏽"),
+      const UnicodeEmoji("👩🏽‍❤️‍👩🏾"),
+      const UnicodeEmoji("👩🏽‍❤️‍👩🏿"),
+      const UnicodeEmoji("👩🏾‍❤️‍👩🏻"),
+      const UnicodeEmoji("👩🏾‍❤️‍👩🏼"),
+      const UnicodeEmoji("👩🏾‍❤️‍👩🏽"),
+      const UnicodeEmoji("👩🏾‍❤️‍👩🏾"),
+      const UnicodeEmoji("👩🏾‍❤️‍👩🏿"),
+      const UnicodeEmoji("👩🏿‍❤️‍👩🏻"),
+      const UnicodeEmoji("👩🏿‍❤️‍👩🏼"),
+      const UnicodeEmoji("👩🏿‍❤️‍👩🏽"),
+      const UnicodeEmoji("👩🏿‍❤️‍👩🏾"),
+      const UnicodeEmoji("👩🏿‍❤️‍👩🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🫄"), [
+      const UnicodeEmoji("🫄"),
+      const UnicodeEmoji("🫄🏻"),
+      const UnicodeEmoji("🫄🏼"),
+      const UnicodeEmoji("🫄🏽"),
+      const UnicodeEmoji("🫄🏾"),
+      const UnicodeEmoji("🫄🏿"),
+      const UnicodeEmoji("🤰"),
+      const UnicodeEmoji("🤰🏻"),
+      const UnicodeEmoji("🤰🏼"),
+      const UnicodeEmoji("🤰🏽"),
+      const UnicodeEmoji("🤰🏾"),
+      const UnicodeEmoji("🤰🏿"),
+      const UnicodeEmoji("🫃"),
+      const UnicodeEmoji("🫃🏻"),
+      const UnicodeEmoji("🫃🏼"),
+      const UnicodeEmoji("🫃🏽"),
+      const UnicodeEmoji("🫃🏾"),
+      const UnicodeEmoji("🫃🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🤱"), [
+      const UnicodeEmoji("🤱"),
+      const UnicodeEmoji("🤱🏻"),
+      const UnicodeEmoji("🤱🏼"),
+      const UnicodeEmoji("🤱🏽"),
+      const UnicodeEmoji("🤱🏾"),
+      const UnicodeEmoji("🤱🏿"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧑‍🍼"), [
+      const UnicodeEmoji("🧑‍🍼"),
+      const UnicodeEmoji("🧑🏻‍🍼"),
+      const UnicodeEmoji("🧑🏼‍🍼"),
+      const UnicodeEmoji("🧑🏽‍🍼"),
+      const UnicodeEmoji("🧑🏾‍🍼"),
+      const UnicodeEmoji("🧑🏿‍🍼"),
+      const UnicodeEmoji("👩‍🍼"),
+      const UnicodeEmoji("👩🏻‍🍼"),
+      const UnicodeEmoji("👩🏼‍🍼"),
+      const UnicodeEmoji("👩🏽‍🍼"),
+      const UnicodeEmoji("👩🏾‍🍼"),
+      const UnicodeEmoji("👩🏿‍🍼"),
+      const UnicodeEmoji("👨‍🍼"),
+      const UnicodeEmoji("👨🏻‍🍼"),
+      const UnicodeEmoji("👨🏼‍🍼"),
+      const UnicodeEmoji("👨🏽‍🍼"),
+      const UnicodeEmoji("👨🏾‍🍼"),
+      const UnicodeEmoji("👨🏿‍🍼"),
+    ],
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("👪"), [
+      const UnicodeEmoji("👪"),
+      const UnicodeEmoji("👨‍👩‍👦"),
+      const UnicodeEmoji("👨‍👩‍👧"),
+      const UnicodeEmoji("👨‍👩‍👧‍👦"),
+      const UnicodeEmoji("👨‍👩‍👦‍👦"),
+      const UnicodeEmoji("👨‍👩‍👧‍👧"),
+      const UnicodeEmoji("👨‍👨‍👦"),
+      const UnicodeEmoji("👨‍👨‍👧"),
+      const UnicodeEmoji("👨‍👨‍👧‍👦"),
+      const UnicodeEmoji("👨‍👨‍👦‍👦"),
+      const UnicodeEmoji("👨‍👨‍👧‍👧"),
+      const UnicodeEmoji("👨‍👦"),
+      const UnicodeEmoji("👨‍👧"),
+      const UnicodeEmoji("👨‍👧‍👦"),
+      const UnicodeEmoji("👨‍👦‍👦"),
+      const UnicodeEmoji("👨‍👧‍👧"),
+      const UnicodeEmoji("👩‍👩‍👦"),
+      const UnicodeEmoji("👩‍👩‍👧"),
+      const UnicodeEmoji("👩‍👩‍👧‍👦"),
+      const UnicodeEmoji("👩‍👩‍👦‍👦"),
+      const UnicodeEmoji("👩‍👩‍👧‍👧"),
+      const UnicodeEmoji("👩‍👦"),
+      const UnicodeEmoji("👩‍👧"),
+      const UnicodeEmoji("👩‍👧‍👦"),
+      const UnicodeEmoji("👩‍👦‍👦"),
+      const UnicodeEmoji("👩‍👧‍👧"),
+    ],
   ),
 ];

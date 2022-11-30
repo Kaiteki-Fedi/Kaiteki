@@ -5,280 +5,76 @@ import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 final travelPlaces = <EmojiCategoryItem<UnicodeEmoji>>[
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌍"),
+    const UnicodeEmoji("🛑"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌎"),
+    const UnicodeEmoji("🚧"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌏"),
+    const UnicodeEmoji("🚨"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌐"),
+    const UnicodeEmoji("⛽"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗺️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🗾"),
+    const UnicodeEmoji("🛢️"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🧭"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏔️"),
+    const UnicodeEmoji("🛞"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛰️"),
+    const UnicodeEmoji("🛟"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌋"),
+    const UnicodeEmoji("⚓"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗻"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏕️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏖️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏜️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏝️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏞️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏟️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏛️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏗️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🧱"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🪨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🪵"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🛖"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏘️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏚️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏠"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏡"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏢"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏣"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏥"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏦"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏨"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏩"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏪"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏭"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏯"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏰"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🗼"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🗽"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛪"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕌"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🛕"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕍"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛩️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🕋"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛲"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛺"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌁"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌃"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🏙️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌅"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌆"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌇"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌉"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("♨️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎠"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🛝"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎡"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎢"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💈"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🎪"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚂"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚃"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚄"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚅"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚆"),
+    const UnicodeEmoji("🚏"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🚇"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚈"),
+    const UnicodeEmoji("🚥"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚉"),
+    const UnicodeEmoji("🚦"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚊"),
+    const UnicodeEmoji("🛴"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚝"),
+    const UnicodeEmoji("🦽"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚞"),
+    const UnicodeEmoji("🦼"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚋"),
+    const UnicodeEmoji("🩼"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚌"),
+    const UnicodeEmoji("🚲"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚍"),
+    const UnicodeEmoji("🛵"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚎"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚐"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚑"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚒"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚓"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚔"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚕"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚖"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚗"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚘"),
+    const UnicodeEmoji("🏍️"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🚙"),
   ),
   const EmojiCategoryItem(
+    const UnicodeEmoji("🚗"),
+  ),
+  const EmojiCategoryItem(
     const UnicodeEmoji("🛻"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🚐"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🚚"),
@@ -293,112 +89,91 @@ final travelPlaces = <EmojiCategoryItem<UnicodeEmoji>>[
     const UnicodeEmoji("🏎️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏍️"),
+    const UnicodeEmoji("🚒"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛵"),
+    const UnicodeEmoji("🚑"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🦽"),
+    const UnicodeEmoji("🚓"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🦼"),
+    const UnicodeEmoji("🚕"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🛺"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚲"),
+    const UnicodeEmoji("🚌"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛴"),
+    const UnicodeEmoji("🚈"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛹"),
+    const UnicodeEmoji("🚝"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛼"),
+    const UnicodeEmoji("🚅"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚏"),
+    const UnicodeEmoji("🚄"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛣️"),
+    const UnicodeEmoji("🚂"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛤️"),
+    const UnicodeEmoji("🚃"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛢️"),
+    const UnicodeEmoji("🚋"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛽"),
+    const UnicodeEmoji("🚎"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛞"),
+    const UnicodeEmoji("🚞"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚨"),
+    const UnicodeEmoji("🚊"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚥"),
+    const UnicodeEmoji("🚉"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚦"),
+    const UnicodeEmoji("🚍"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛑"),
+    const UnicodeEmoji("🚔"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚧"),
+    const UnicodeEmoji("🚘"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚓"),
+    const UnicodeEmoji("🚖"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛟"),
+    const UnicodeEmoji("🚆"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🚢"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🛳️"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🛥️"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🚤"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("⛴️"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("⛵"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🛶"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚤"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🛳️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛴️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🛥️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚢"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("✈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🛩️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🛫"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🛬"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🪂"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("💺"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚁"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🚟"),
@@ -410,252 +185,189 @@ final travelPlaces = <EmojiCategoryItem<UnicodeEmoji>>[
     const UnicodeEmoji("🚡"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛰️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🚀"),
+    const UnicodeEmoji("🚁"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("🛸"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛎️"),
+    const UnicodeEmoji("🚀"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧳"),
+    const UnicodeEmoji("✈️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⌛"),
+    const UnicodeEmoji("🛫"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⏳"),
+    const UnicodeEmoji("🛬"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⌚"),
+    const UnicodeEmoji("🛩️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⏰"),
+    const UnicodeEmoji("🛝"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⏱️"),
+    const UnicodeEmoji("🎢"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⏲️"),
+    const UnicodeEmoji("🎡"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕰️"),
+    const UnicodeEmoji("🎠"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕛"),
+    const UnicodeEmoji("🎪"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕧"),
+    const UnicodeEmoji("🗼"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕐"),
+    const UnicodeEmoji("🗽"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕜"),
+    const UnicodeEmoji("🗿"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕑"),
+    const UnicodeEmoji("🗻"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕝"),
+    const UnicodeEmoji("🏛️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕒"),
+    const UnicodeEmoji("💈"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕞"),
+    const UnicodeEmoji("⛲"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕓"),
+    const UnicodeEmoji("⛩️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕟"),
+    const UnicodeEmoji("🕍"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕔"),
+    const UnicodeEmoji("🕌"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕠"),
+    const UnicodeEmoji("🕋"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕕"),
+    const UnicodeEmoji("🛕"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕡"),
+    const UnicodeEmoji("⛪"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕖"),
+    const UnicodeEmoji("💒"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕢"),
+    const UnicodeEmoji("🏩"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕗"),
+    const UnicodeEmoji("🏯"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕣"),
+    const UnicodeEmoji("🏰"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕘"),
+    const UnicodeEmoji("🏗️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕤"),
+    const UnicodeEmoji("🏢"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕙"),
+    const UnicodeEmoji("🏭"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕥"),
+    const UnicodeEmoji("🏬"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕚"),
+    const UnicodeEmoji("🏪"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕦"),
+    const UnicodeEmoji("🏟️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌑"),
+    const UnicodeEmoji("🏦"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌒"),
+    const UnicodeEmoji("🏫"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌓"),
+    const UnicodeEmoji("🏨"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌔"),
+    const UnicodeEmoji("🏣"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌕"),
+    const UnicodeEmoji("🏤"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌖"),
+    const UnicodeEmoji("🏥"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌗"),
+    const UnicodeEmoji("🏚️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌘"),
+    const UnicodeEmoji("🏠"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌙"),
+    const UnicodeEmoji("🏡"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌚"),
+    const UnicodeEmoji("🏘️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌛"),
+    const UnicodeEmoji("🛖"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌜"),
+    const UnicodeEmoji("⛺"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌡️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☀️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌝"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌞"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🪐"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⭐"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌟"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌠"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌌"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☁️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛅"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("⛈️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌤️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌥️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌦️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌧️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌨️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌩️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌪️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌫️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌬️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌀"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌈"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("🌂"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☂️"),
-  ),
-  const EmojiCategoryItem(
-    const UnicodeEmoji("☔"),
+    const UnicodeEmoji("🏕️"),
   ),
   const EmojiCategoryItem(
     const UnicodeEmoji("⛱️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚡"),
+    const UnicodeEmoji("🏙️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("❄️"),
+    const UnicodeEmoji("🌆"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("☃️"),
+    const UnicodeEmoji("🌇"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛄"),
+    const UnicodeEmoji("🌃"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("☄️"),
+    const UnicodeEmoji("🌉"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔥"),
+    const UnicodeEmoji("🌁"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💧"),
+    const UnicodeEmoji("🛤️"),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌊"),
+    const UnicodeEmoji("🛣️"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🗾"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🗺️"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🌐"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("💺"),
+  ),
+  const EmojiCategoryItem(
+    const UnicodeEmoji("🧳"),
   ),
 ];

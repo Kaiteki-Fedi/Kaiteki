@@ -1,89 +1,56 @@
 // ignore_for_file: cascade_invocations, avoid_print
 
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:tuple/tuple.dart';
 
 final emojiListUri = Uri.parse(
-  "https://unicode.org/Public/emoji/15.0/emoji-test.txt",
+  "https://raw.githubusercontent.com/googlefonts/emoji-metadata/main/emoji_15_0_ordering.json",
 );
 
-const commentPrefix = "# ";
-const groupPrefix = "group: ";
-
-final components = [
-  "200D",
-  "FE0F",
-  "1F3FB",
-  "1F3FC",
-  "1F3FD",
-  "1F3FE",
-  "1F3FF",
-  "1F9B0",
-  "1F9B1",
-  "1F9B3",
-  "1F9B2",
-].map(parseCodePoints).toSet();
+const groupNameMap = {
+  "Smileys and emotions": "Smileys & Emotion",
+  "People": "People & Body",
+  "Animals and nature": "Animals & Nature",
+  "Food and drink": "Food & Drink",
+  "Activities and events": "Activities",
+  "Travel and places": "Travel & Places",
+};
 
 typedef EmojiCompound = Tuple2<String, List<String>>;
 
 void main(List<String> arguments) async {
-  final lines = (await fetchEmojiList())
-      .split("\n") // Split text file into lines
-      .where((l) => l.isNotEmpty); // Exclude empty lines
+  final raw = await fetchEmojiList();
+  final json = (jsonDecode(raw) as List<dynamic>).cast<Map<String, dynamic>>();
 
   final groups = <String, List<EmojiCompound>>{};
-  String? currentGroup;
+  for (final group in json) {
+    var groupName = group["group"] as String;
+    groupName = groupNameMap[groupName] ?? groupName;
 
-  for (final line in lines) {
-    if (line.trim().isEmpty) continue;
+    final emojis = group["emoji"] as List<dynamic>;
+    final compounds = <EmojiCompound>[];
 
-    if (line.startsWith(commentPrefix)) {
-      final comment = line.split(commentPrefix).last;
-      if (!comment.startsWith(groupPrefix)) continue;
+    for (final emoji in emojis) {
+      final baseCodePoints = (emoji["base"] as List<dynamic>).cast<int>();
+      final base = String.fromCharCodes(baseCodePoints);
 
-      final group = comment.split(groupPrefix).lastOrNull;
-      if (group != null) {
-        print("Processing group: $group");
-        currentGroup = group;
+      final alternates = emoji["alternates"] as List<dynamic>;
+      final variants = <String>[];
+
+      for (final a in alternates) {
+        final alternateCodePoints = (a as List<dynamic>).cast<int>();
+        final alternate = String.fromCharCodes(alternateCodePoints);
+        variants.add(alternate);
       }
 
-      continue;
+      compounds.add(EmojiCompound(base, variants));
     }
 
-    final parts = line.split("#").first.split(";").map((p) => p.trim());
-    if (parts.length != 2) continue;
-
-    // if (parts.elementAt(1) == "component") {
-    //   final charCodes = parts.elementAt(0);
-    //   components.add(parseCodePoints(charCodes));
-    //   continue;
-    // }
-
-    if (parts.elementAt(1) != "fully-qualified") continue;
-
-    assert(currentGroup == null);
-
-    final compounds = groups[currentGroup!] ??= [];
-
-    final charCodes = parts.elementAt(0);
-    final emoji = parseCodePoints(charCodes);
-    final withoutComponents = removeComponents(emoji);
-
-    var compound = compounds.firstWhereOrNull(
-      (c) => c.item1 == withoutComponents,
-    );
-    // We have an emoji that similar to the ones parsed before
-    if (compound != null) {
-      compound.item2.add(emoji);
-      print("Found similar emoji");
-    } else {
-      compound = EmojiCompound(emoji, []);
-      compounds.add(compound);
-    }
+    groups[groupName] = compounds;
   }
 
   await generateDartFiles(arguments[0], groups.entries);
@@ -99,16 +66,16 @@ String parseCodePoints(String input) {
   );
 }
 
-String removeComponents(String input) {
-  var inputCodeUnits = input.codeUnits.toSet();
-
-  for (final component in components) {
-    final set = component.codeUnits.toSet();
-    inputCodeUnits = inputCodeUnits.difference(set);
-  }
-
-  return String.fromCharCodes(inputCodeUnits);
-}
+// String removeComponents(String input) {
+//   var inputCodeUnits = input.codeUnits.toSet();
+//
+//   for (final component in components) {
+//     final set = component.codeUnits.toSet();
+//     inputCodeUnits = inputCodeUnits.difference(set);
+//   }
+//
+//   return String.fromCharCodes(inputCodeUnits);
+// }
 
 String capitalize(String input) {
   final buffer = StringBuffer();
