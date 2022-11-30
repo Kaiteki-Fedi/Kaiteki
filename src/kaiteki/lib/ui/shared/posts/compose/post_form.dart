@@ -247,7 +247,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
   PostDraft _getPostDraft(List<Attachment> attachments) {
     return PostDraft(
-      subject: _subjectController.value.text,
+      subject: _subjectController.text.isEmpty ? null : _subjectController.text,
       content: _bodyController.value.text,
       visibility: _visibility,
       formatting: _formatting,
