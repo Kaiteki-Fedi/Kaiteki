@@ -37,7 +37,7 @@ class MisskeyCapabilities extends AdapterCapabilities
     return const {
       TimelineKind.home,
       TimelineKind.local,
-      // TimelineKind.recommended,
+      TimelineKind.bubble,
       TimelineKind.hybrid,
       TimelineKind.federated,
     };
