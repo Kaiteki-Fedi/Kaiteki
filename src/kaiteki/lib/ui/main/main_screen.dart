@@ -107,6 +107,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         NewPostIntent: CallbackAction(
           onInvoke: (_) => context.showPostDialog(),
         ),
+        // SearchIntent: CallbackAction(
+        //   onInvoke: (_) => _search?.call(),
+        // ),
         RefreshIntent: CallbackAction(
           onInvoke: (_) => _refresh?.call(),
         ),
@@ -228,6 +231,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return destinations;
   }
 
+  VoidCallback? get _search {
+    return null;
+  }
+
   VoidCallback? get _refresh {
     switch (_currentTab) {
       case TabKind.timeline:
@@ -247,10 +254,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
     return [
       IconButton(
+        icon: const Icon(Icons.serach_rounded),
+        onPressed: _search,
+        tooltip: l10n.searchButtonLabel,
+      ),
+      IconButton(
         icon: const Icon(Icons.refresh_rounded),
         onPressed: _refresh,
         tooltip: l10n.refreshTimelineButtonLabel,
       ),
+
+      // TODO(ThatOneCalculator or Craftplacer): hide if Android
       PopupMenuButton<Function()>(
         onSelected: (v) => v.call(),
         itemBuilder: (_) {
