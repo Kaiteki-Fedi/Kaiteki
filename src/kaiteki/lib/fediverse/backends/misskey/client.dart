@@ -183,6 +183,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
+  // Have to implement checking nodeinfo for `disableLocalTimeline`
   Future<Iterable<misskey.Note>> getLocalTimeline(
     MisskeyTimelineRequest request,
   ) async {
@@ -194,6 +195,19 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
+  // Have to implement checking nodeinfo for `disableRecommendedTimeline`
+  // Future<Iterable<misskey.Note>> getRecommendedTimeline(
+  //   MisskeyTimelineRequest request,
+  // ) async {
+  //   return sendJsonRequestMultiple(
+  //     HttpMethod.post,
+  //     "api/notes/recommended-timeline",
+  //     misskey.Note.fromJson,
+  //     body: request,
+  //   );
+  // }
+
+  // Have to implement checking nodeinfo for `disableLocalTimeline` (yes, local)
   Future<Iterable<misskey.Note>> getHybridTimeline(
     MisskeyTimelineRequest request,
   ) async {
@@ -205,6 +219,7 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     );
   }
 
+  // Have to implement checking nodeinfo for `disableGlobalTimeline`
   Future<Iterable<misskey.Note>> getGlobalTimeline(
     MisskeyTimelineRequest request,
   ) async {
