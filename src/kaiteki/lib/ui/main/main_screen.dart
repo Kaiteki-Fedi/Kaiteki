@@ -254,7 +254,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
     return [
       IconButton(
-        icon: const Icon(Icons.serach_rounded),
+        icon: const Icon(Icons.search_rounded),
         onPressed: _search,
         tooltip: l10n.searchButtonLabel,
       ),
