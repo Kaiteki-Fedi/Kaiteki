@@ -256,15 +256,19 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
         break;
 
        case TimelineKind.local:
-        notes = await client.getTimeline(request);
+        notes = await client.getLocalTimeline(request);
+        break;
+
+      case TimelineKind.bubble:
+        notes = await client.getBubbleTimeline(request);
         break;
 
        case TimelineKind.hybrid:
-        notes = await client.getTimeline(request);
+        notes = await client.getHybridTimeline(request);
         break;
 
       case TimelineKind.federated:
-        notes = await client.getTimeline(request);
+        notes = await client.getGlobalTimeline(request);
         break;
 
       // ignore: no_default_cases
