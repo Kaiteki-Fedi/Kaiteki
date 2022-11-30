@@ -56,7 +56,11 @@ class AccountListDialog extends ConsumerWidget {
     );
   }
 
-  void onTapAdd(BuildContext context) => context.push("/login");
+  void onTapAdd(BuildContext context) {
+    final goRouter = GoRouter.of(context);
+    Navigator.of(context).pop();
+    goRouter.push("/login");
+  }
 }
 
 class AccountListTile extends ConsumerWidget {
