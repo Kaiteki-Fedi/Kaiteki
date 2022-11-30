@@ -39,7 +39,7 @@ class MisskeyCapabilities extends AdapterCapabilities
       TimelineKind.local,
       // TimelineKind.recommended,
       // TimelineKind.hybrid,
-      TimelineKind.global,
+      TimelineKind.federated,
     };
   }
 
