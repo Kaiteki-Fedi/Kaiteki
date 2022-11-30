@@ -84,7 +84,7 @@ class AccountManager extends ChangeNotifier {
 
     if (_accounts.isNotEmpty) {
       // TODO(Craftplacer): Store which account the user last used
-      current = _accounts.first;
+      current = _accounts.last;
     }
   }
 
