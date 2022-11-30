@@ -7,6 +7,9 @@ enum TimelineKind {
   /// Timeline that has the public posts of this instance.
   local,
 
+  // Timeline that is weird
+  hybrid,
+
   /// The federated timeline that has all public posts received from all instances.
   federated,
 

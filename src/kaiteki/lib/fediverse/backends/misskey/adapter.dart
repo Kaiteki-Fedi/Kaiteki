@@ -9,7 +9,7 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/authentication_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/misskey/capabilties.dart';
+import 'package:kaiteki/fediverse/backends/misskey/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/misskey/client.dart';
 import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
@@ -253,6 +253,22 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     switch (type) {
       case TimelineKind.home:
         notes = await client.getTimeline(request);
+        break;
+
+       case TimelineKind.local:
+        notes = await client.getLocalTimeline(request);
+        break;
+
+      case TimelineKind.bubble:
+        notes = await client.getBubbleTimeline(request);
+        break;
+
+       case TimelineKind.hybrid:
+        notes = await client.getHybridTimeline(request);
+        break;
+
+      case TimelineKind.federated:
+        notes = await client.getGlobalTimeline(request);
         break;
 
       // ignore: no_default_cases

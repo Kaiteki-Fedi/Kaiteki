@@ -1,6 +1,6 @@
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/capabilties.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v1/client.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v1/keys.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart'
@@ -82,6 +82,7 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
           maxId: query?.untilId,
         );
         return homeTimeine.map(toPost);
+
       default:
         throw UnimplementedError();
     }

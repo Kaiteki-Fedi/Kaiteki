@@ -33,7 +33,15 @@ class MisskeyCapabilities extends AdapterCapabilities
   bool get supportsSubjects => true;
 
   @override
-  Set<TimelineKind> get supportedTimelines => const {TimelineKind.home};
+  Set<TimelineKind> get supportedTimelines {
+    return const {
+      TimelineKind.home,
+      TimelineKind.local,
+      TimelineKind.bubble,
+      TimelineKind.hybrid,
+      TimelineKind.federated,
+    };
+  }
 
   @override
   bool get supportsMultipleReactions => false;
