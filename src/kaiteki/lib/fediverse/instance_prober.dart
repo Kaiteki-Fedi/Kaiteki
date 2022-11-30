@@ -7,10 +7,17 @@ import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/node_info.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'instance_prober.g.dart';
 
 final _logger = getLogger('InstanceProber');
 
-Future<InstanceProbeResult> probeInstance(String host) async {
+@riverpod
+Future<InstanceProbeResult> probeInstance(
+  ProbeInstanceRef ref,
+  String host,
+) async {
   final isInstanceAvailable = await _checkInstanceAvailability(host);
   if (!isInstanceAvailable) {
     throw InstanceUnreachableException();

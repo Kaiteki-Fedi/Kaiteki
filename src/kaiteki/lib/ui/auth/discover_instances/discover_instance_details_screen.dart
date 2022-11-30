@@ -21,56 +21,12 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.getL10n();
     const chipPadding = EdgeInsets.all(8.0);
-    final theme = Theme.of(context);
 
     var i = 1;
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 300.0,
-              pinned: true,
-              floating: true,
-              backgroundColor: theme.colorScheme.surface,
-              foregroundColor: theme.colorScheme.onSurface,
-              flexibleSpace: FlexibleSpaceBar(
-                centerTitle: true,
-                title: Text(
-                  data.name,
-                  style: TextStyle(color: theme.colorScheme.onSurface),
-                ),
-                collapseMode: CollapseMode.pin,
-                background: ColoredBox(
-                  color: theme.colorScheme.background,
-                  child: ShaderMask(
-                    blendMode: BlendMode.dstATop,
-                    shaderCallback: (bounds) {
-                      return LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Colors.red.withOpacity(.50),
-                          Colors.transparent,
-                        ],
-                      ).createShader(bounds);
-                    },
-                    child: FutureBuilder<String?>(
-                      future: fetchInstanceBackground(),
-                      builder: (context, snapshot) {
-                        final url = snapshot.data;
-                        if (url == null) {
-                          return const ColoredBox(color: Colors.grey);
-                        } else {
-                          return Image.network(url, fit: BoxFit.cover);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ];
+          return [_buildHeader(context, ref)];
         },
         body: SingleChildScrollView(
           child: Column(
@@ -158,13 +114,49 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Future<String?> fetchInstanceBackground() async {
-    final result = await probeInstance(data.name);
-
-    if (result.successful) {
-      return result.instance!.backgroundUrl;
-    }
-
-    return null;
+  SliverAppBar _buildHeader(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final value = ref.watch(probeInstanceProvider(data.name));
+    return SliverAppBar(
+      expandedHeight: 300.0,
+      pinned: true,
+      floating: true,
+      backgroundColor: theme.colorScheme.surface,
+      foregroundColor: theme.colorScheme.onSurface,
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text(
+          data.name,
+          style: TextStyle(color: theme.colorScheme.onSurface),
+        ),
+        collapseMode: CollapseMode.pin,
+        background: ColoredBox(
+          color: theme.colorScheme.background,
+          child: ShaderMask(
+            blendMode: BlendMode.dstATop,
+            shaderCallback: (bounds) {
+              return LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[
+                  Colors.red.withOpacity(.50),
+                  Colors.transparent,
+                ],
+              ).createShader(bounds);
+            },
+            child: value.when(
+              data: (r) => r.successful && r.instance?.backgroundUrl != null
+                  ? Image.network(
+                      r.instance!.backgroundUrl!,
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+              error: (_, __) => null,
+              loading: () => null,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

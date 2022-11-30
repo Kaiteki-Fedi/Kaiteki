@@ -151,53 +151,36 @@ class AccountListTile extends ConsumerWidget {
   }
 }
 
-class InstanceIcon extends StatefulWidget {
+class InstanceIcon extends ConsumerWidget {
   final String host;
   final double? size;
 
   const InstanceIcon(this.host, {super.key, this.size});
 
   @override
-  State<InstanceIcon> createState() => _InstanceIconState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final size = this.size ?? IconTheme.of(context).size;
+    final value = ref.watch(probeInstanceProvider(host));
 
-class _InstanceIconState extends State<InstanceIcon> {
-  late final Future<InstanceProbeResult> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = probeInstance(widget.host);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = widget.size ?? IconTheme.of(context).size;
-
-    return FutureBuilder<InstanceProbeResult>(
-      future: _future,
-      builder: (context, snapshot) {
-        final probeResult = snapshot.data;
-        final iconUrl = probeResult?.instance?.iconUrl;
-        if (iconUrl != null) {
-          return Image.network(
-            iconUrl,
-            width: size,
-            height: size,
-            cacheHeight: size?.ceil(),
-            cacheWidth: size?.ceil(),
-            errorBuilder: (_, __, ___) => _buildFallback(),
-            loadingBuilder: (_, child, event) =>
-                event == null ? child : _buildFallback(),
-          );
-        }
-
-        return _buildFallback();
+    return value.when(
+      data: (result) {
+        final iconUrl = result.instance?.iconUrl;
+        if (iconUrl == null) return _buildFallback();
+        return Image.network(
+          iconUrl,
+          width: size,
+          height: size,
+          cacheHeight: size?.ceil(),
+          cacheWidth: size?.ceil(),
+          errorBuilder: (_, __, ___) => _buildFallback(),
+          loadingBuilder: (_, child, event) =>
+              event == null ? child : _buildFallback(),
+        );
       },
+      error: (_, __) => _buildFallback(),
+      loading: _buildFallback,
     );
   }
 
-  Widget _buildFallback() {
-    return Icon(Icons.public, size: widget.size);
-  }
+  Widget _buildFallback() => Icon(Icons.public_rounded, size: size);
 }

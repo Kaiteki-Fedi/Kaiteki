@@ -164,7 +164,8 @@ class LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<InstanceCompound?> _fetchInstance(String host) async {
-    final result = await probeInstance(host);
+    final result = await ref.read(probeInstanceProvider(host).future);
+
     final ApiType type;
     final Instance instance;
 
