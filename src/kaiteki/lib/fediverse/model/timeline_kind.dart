@@ -8,7 +8,7 @@ enum TimelineKind {
   local,
 
   // Timeline that is weird
-  social,
+  hybrid,
 
   /// The federated timeline that has all public posts received from all instances.
   federated,
