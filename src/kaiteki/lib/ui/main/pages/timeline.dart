@@ -21,6 +21,8 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
     return const {
       TimelineKind.home,
       TimelineKind.local,
+      // TimelineKind.recommended,
+      TimelineKind.hybrid,
       TimelineKind.federated,
     };
   }
@@ -104,6 +106,14 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
         icon = const Icon(Icons.people_rounded);
         label = Text(l10n.timelineLocal);
         break;
+      case TimelineKind.hybrid:
+        icon = const Icon(Icons.handshake_rounded);
+        label = Text(l10n.timelineHybrid);
+        break;
+      // case TimelineKind.recommended:
+      //   icon = const Icon(Icons.thumb_up_rounded);
+      //   label = Text(l10n.timelineRecinnebded);
+      //   break;
       case TimelineKind.federated:
         icon = const Icon(Icons.public_rounded);
         label = Text(l10n.timelineFederated);
