@@ -32,6 +32,7 @@ class MisskeyCapabilities extends AdapterCapabilities
   @override
   bool get supportsSubjects => true;
 
+  // TODO(ThatOneCalculator): Check for nodeinfo here
   @override
   Set<TimelineKind> get supportedTimelines {
     return const {
