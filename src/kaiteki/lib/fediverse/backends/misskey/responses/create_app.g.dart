@@ -6,9 +6,8 @@ part of 'create_app.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyCreateAppResponse _$MisskeyCreateAppResponseFromJson(
-        Map<String, dynamic> json) =>
-    MisskeyCreateAppResponse(
+CreateAppResponse _$CreateAppResponseFromJson(Map<String, dynamic> json) =>
+    CreateAppResponse(
       id: json['id'] as String,
       name: json['name'] as String,
       callbackUrl: json['callbackUrl'] as String,
@@ -18,8 +17,7 @@ MisskeyCreateAppResponse _$MisskeyCreateAppResponseFromJson(
       secret: json['secret'] as String,
     );
 
-Map<String, dynamic> _$MisskeyCreateAppResponseToJson(
-        MisskeyCreateAppResponse instance) =>
+Map<String, dynamic> _$CreateAppResponseToJson(CreateAppResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

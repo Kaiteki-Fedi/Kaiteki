@@ -351,7 +351,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
     if (emoji == null) return;
 
-    final text;
+    final String text;
 
     if (emoji is UnicodeEmoji) {
       text = emoji.emoji;

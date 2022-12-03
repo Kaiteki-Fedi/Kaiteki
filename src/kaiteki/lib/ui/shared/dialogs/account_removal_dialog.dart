@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart' show dialogConstraints;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 

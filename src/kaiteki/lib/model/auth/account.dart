@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/model/account_key.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 
 @immutable
 class Account {

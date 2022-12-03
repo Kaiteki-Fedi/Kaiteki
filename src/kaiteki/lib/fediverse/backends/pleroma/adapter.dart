@@ -15,11 +15,19 @@ part 'adapter.c.dart';
 class PleromaAdapter //
     extends SharedMastodonAdapter<PleromaClient>
     implements ChatSupport, ReactionSupport, PreviewSupport {
+  @override
+  final String instance;
+
   factory PleromaAdapter(String instance) {
-    return PleromaAdapter.custom(PleromaClient(instance));
+    return PleromaAdapter.custom(
+      instance,
+      PleromaClient(
+        instance,
+      ),
+    );
   }
 
-  PleromaAdapter.custom(super.client);
+  PleromaAdapter.custom(this.instance, super.client);
 
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {
@@ -63,7 +71,7 @@ class PleromaAdapter //
       contentType: getContentType(draft.formatting),
       pleromaPreview: true,
     );
-    return toPost(status, client.instance);
+    return toPost(status, instance);
   }
 
   @override
@@ -86,8 +94,8 @@ class PleromaAdapter //
     final config = await client.getFrontendConfigurations();
     final pleroma = config.pleroma;
 
-    final background = ensureAbsolute(pleroma?.background, client.instance);
-    final logo = ensureAbsolute(pleroma?.logo, client.instance);
+    final background = ensureAbsolute(pleroma?.background, this.instance);
+    final logo = ensureAbsolute(pleroma?.logo, this.instance);
 
     return Instance(
       name: instance.name,

@@ -31,6 +31,7 @@ dependencies:
   crypto: ^3.0.1
   device_info_plus: ^8.0.0
   dynamic_color: ^1.5.4
+  equatable: ^2.0.5
   fediverse_objects:
     git: https://github.com/Kaiteki-Fedi/fediverse_objects.git
   file_picker: ^5.0.0
@@ -56,6 +57,7 @@ dependencies:
   json_annotation: any
   logger: ^1.0.0
   mdi: ^5.0.0-nullsafety.0
+  meta: ^1.8.0
   oauth1:
     git: https://github.com/Kaiteki-Fedi/dart-oauth1.git
   page_view_dot_indicator: ^2.0.0

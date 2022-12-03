@@ -9,7 +9,7 @@ import 'package:http/http.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
-import 'package:kaiteki/model/account_key.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/utils/image.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

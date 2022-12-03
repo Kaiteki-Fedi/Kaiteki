@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/authentication_data.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/client.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/extensions.dart';
@@ -20,11 +21,10 @@ import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/model/account_key.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/account.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -32,7 +32,7 @@ const clientId = kDebugMode
     ? "QTFFSnY5d2QwTkp3enliMHdfaXg6MTpjaQ"
     : "Q2lkU2p0VERwOWxreXdxeFVsQm46MTpjaQ";
 
-class TwitterAdapter extends FediverseAdapter<TwitterClient>
+class TwitterAdapter extends FediverseAdapter
     implements FavoriteSupport, BookmarkSupport {
   static const instanceModel = Instance(
     name: "Twitter",
@@ -41,13 +41,15 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
         "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
   );
 
+  final TwitterClient client;
+
   final String? _host;
 
   factory TwitterAdapter(String? host) {
     return TwitterAdapter.custom(TwitterClient(), host);
   }
 
-  TwitterAdapter.custom(super.client, [this._host]);
+  TwitterAdapter.custom(this.client, [this._host]);
 
   @override
   AdapterCapabilities get capabilities => const TwitterCapabilities();
@@ -256,17 +258,9 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
       codeVerifier: "challenge",
     );
 
-    client.authenticationData = TwitterAuthenticationData(
-      token.accessToken,
-      null,
-    );
-
+    client.token = token.accessToken;
     final me = await client.getMe(userFields: UserField.values.toSet());
-
-    client.authenticationData = TwitterAuthenticationData(
-      token.accessToken,
-      me.id,
-    );
+    client.userId = me.id;
 
     return LoginResult.successful(
       Account(
@@ -397,4 +391,31 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
     final response = await client.bookmarkTweet(id);
     assert(!response.data.bookmarked);
   }
+
+  @override
+  Future<void> applySecrets(
+    ClientSecret? clientSecret,
+    AccountSecret accountSecret,
+  ) async {
+    if (accountSecret.refreshToken != null) {
+      final token = await client.getToken(
+        clientId: clientId,
+        grantType: "refresh_token",
+        refreshToken: accountSecret.refreshToken,
+      );
+
+      client.token = token.accessToken;
+      final me = await client.getMe(userFields: UserField.values.toSet());
+      client.userId = me.id;
+
+      return;
+    }
+
+    client
+      ..userId = accountSecret.userId
+      ..token = accountSecret.accessToken;
+  }
+
+  @override
+  String get instance => "twitter.com";
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
 // FIXME(Craftplacer): Fix exports for Misskey notifications
@@ -6,7 +8,6 @@ import 'package:fediverse_objects/src/misskey/notification.dart' as misskey;
 import 'package:intl/intl.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/exceptions/authentication_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/misskey/capabilities.dart';
@@ -24,12 +25,10 @@ import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/account_key.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/authentication_data.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/account.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions/iterable.dart';
 import 'package:tuple/tuple.dart';
@@ -40,30 +39,35 @@ part 'adapter.c.dart';
 final _logger = getLogger('MisskeyAdapter');
 
 // TODO(Craftplacer): add missing implementations
-class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
+class MisskeyAdapter extends FediverseAdapter
     implements
         ChatSupport,
         ReactionSupport,
         CustomEmojiSupport,
         NotificationSupport {
+  final MisskeyClient client;
+
+  @override
+  final String instance;
+
   factory MisskeyAdapter(String instance) {
-    return MisskeyAdapter.custom(MisskeyClient(instance));
+    return MisskeyAdapter.custom(instance, MisskeyClient(instance));
   }
 
-  MisskeyAdapter.custom(super.client);
+  MisskeyAdapter.custom(this.instance, this.client);
 
   @override
   Future<User> getUser(String username, [String? instance]) async {
     final mkUser = await client.showUserByName(username, instance);
-    return toUser(mkUser, client.instance);
+    return toUser(mkUser, this.instance);
   }
 
   @override
   Future<User> getUserById(String id) async {
-    return toUser((await client.showUser(id))!, client.instance);
+    return toUser(await client.showUser(id), instance);
   }
 
-  Future<MisskeyCheckSessionResponse?> loginMiAuth(
+  Future<CheckSessionResponse?> loginMiAuth(
     String session,
     OAuthCallback requestOAuth,
   ) async {
@@ -111,7 +115,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     );
   }
 
-  Future<MisskeySignInResponse> loginPrivate(
+  Future<SignInResponse> loginPrivate(
     String username,
     String password,
   ) async {
@@ -178,29 +182,20 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
     if (credentials == null) return const LoginResult.aborted();
 
-    // Create and set account secret
-    final accountSecret = AccountSecret(credentials.item1);
-    client.authenticationData = MisskeyAuthenticationData(credentials.item1);
-
-    // Check whether secrets work, and if we can get an account back
     assert(
       !(credentials.item3 == null && credentials.item2 == null),
       "Both user and id are null",
     );
+
+    client.i = credentials.item1;
+
     final user = credentials.item3 ?? await client.showUser(credentials.item2!);
-
-    if (user == null) {
-      return const LoginResult.failed(
-        Tuple2(AuthenticationException("Failed to retrieve user info"), null),
-      );
-    }
-
     final account = Account(
       adapter: this,
-      user: toUser(user, client.instance),
+      user: toUser(user, instance),
       key: AccountKey(ApiType.misskey, instance, user.username),
       clientSecret: null,
-      accountSecret: accountSecret,
+      accountSecret: AccountSecret(credentials.item1),
     );
 
     return LoginResult.successful(account);
@@ -225,12 +220,12 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       }).toList(),
     );
 
-    return toPost(note, client.instance);
+    return toPost(note, instance);
   }
 
   @override
   Future<User> getMyself() async {
-    return toUser(await client.i(), client.instance);
+    return toUser(await client.getI(), instance);
   }
 
   @override
@@ -255,7 +250,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
         notes = await client.getTimeline(request);
         break;
 
-       case TimelineKind.local:
+      case TimelineKind.local:
         notes = await client.getLocalTimeline(request);
         break;
 
@@ -263,7 +258,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
         notes = await client.getBubbleTimeline(request);
         break;
 
-       case TimelineKind.hybrid:
+      case TimelineKind.hybrid:
         notes = await client.getHybridTimeline(request);
         break;
 
@@ -278,7 +273,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
         );
     }
 
-    return notes.map((n) => toPost(n, client.instance));
+    return notes.map((n) => toPost(n, instance));
   }
 
   @override
@@ -304,7 +299,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
       sinceId: query?.sinceId,
       untilId: query?.untilId,
     );
-    return notes.map((n) => toPost(n, client.instance));
+    return notes.map((n) => toPost(n, instance));
   }
 
   @override
@@ -342,7 +337,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
 
   @override
   Future<List<EmojiCategory>> getEmojis() async {
-    final instanceMeta = await client.getInstanceMeta();
+    final instanceMeta = await client.getMeta();
     final emojiCategories = instanceMeta.emojis.groupBy((e) => e.category);
     return emojiCategories.entries
         .map(
@@ -357,12 +352,15 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<Iterable<Post>> getThread(Post reply) async {
     final notes = await client.getConversation(reply.id);
-    return notes.map((n) => toPost(n, client.instance)).followedBy([reply]);
+    return notes.map((n) => toPost(n, instance)).followedBy([reply]);
   }
 
   @override
   Future<Instance> getInstance() async {
-    return toInstance(await client.getInstanceMeta(), client.baseUrl);
+    return toInstance(
+      await client.getMeta(),
+      client.client.baseUri.toString(),
+    );
   }
 
   @override
@@ -404,7 +402,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     final notes = await client.getRenotes(id);
     return notes
         .map((n) => n.user)
-        .map((u) => toUserFromLite(u, client.instance))
+        .map((u) => toUserFromLite(u, instance))
         .toList();
   }
 
@@ -415,9 +413,7 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
   @override
   Future<List<Notification>> getNotifications() async {
     final notifications = await client.getNotifications();
-    return notifications
-        .map((n) => toNotification(n, client.instance))
-        .toList();
+    return notifications.map((n) => toNotification(n, instance)).toList();
   }
 
   @override
@@ -429,5 +425,13 @@ class MisskeyAdapter extends FediverseAdapter<MisskeyClient>
     throw UnsupportedError(
       "Misskey does not support marking individual notifications as read",
     );
+  }
+
+  @override
+  FutureOr<void> applySecrets(
+    ClientSecret? clientSecret,
+    AccountSecret accountSecret,
+  ) {
+    client.i = accountSecret.accessToken;
   }
 }

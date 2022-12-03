@@ -141,7 +141,7 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
   final nodeInfo = await fetchNodeInfo(host);
   if (nodeInfo == null) return null;
 
-  final apiType = const {
+  final apiType = const <String, ApiType>{
     "mastodon": ApiType.mastodon,
     "pleroma": ApiType.pleroma,
     "misskey": ApiType.misskey,

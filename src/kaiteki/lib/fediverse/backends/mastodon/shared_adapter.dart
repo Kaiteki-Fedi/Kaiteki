@@ -17,12 +17,10 @@ import 'package:kaiteki/fediverse/model/notification.dart';
 // ignore: unnecessary_import, Dart Analyzer is fucking with me
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/model/account_key.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/authentication_data.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/account.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
@@ -32,44 +30,19 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
 abstract class SharedMastodonAdapter<T extends MastodonClient>
-    extends FediverseAdapter<T>
+    extends FediverseAdapter
     implements
         CustomEmojiSupport,
         FavoriteSupport,
         BookmarkSupport,
         NotificationSupport {
-  SharedMastodonAdapter(super.client);
+  final T client;
+
+  SharedMastodonAdapter(this.client);
 
   @override
   Future<User> getUserById(String id) async {
-    return toUser(await client.getAccount(id), client.instance);
-  }
-
-  Future<ClientSecret> _makeClientSecret(
-    String instance, [
-    String? redirectUri,
-  ]) async {
-    // _logger.v("Creating new application on $instance");
-
-    final application = await client.createApplication(
-      instance,
-      consts.appName,
-      consts.appWebsite,
-      redirectUri ?? "urn:ietf:wg:oauth:2.0:oob",
-      consts.defaultScopes,
-    );
-
-    final clientSecret = ClientSecret(
-      application.clientId!,
-      application.clientSecret!,
-    );
-
-    client.authenticationData = MastodonAuthenticationData(
-      clientSecret.clientId,
-      clientSecret.clientSecret,
-    );
-
-    return clientSecret;
+    return toUser(await client.getAccount(id), instance);
   }
 
   @override
@@ -79,25 +52,32 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     requestMfa,
     requestOAuth,
   ) async {
-    late final ClientSecret clientSecret;
     late final String accessToken;
+    late final mastodon.Application application;
 
     if (consts.useOAuth) {
       // if (Platform.isAndroid | Platform.isIOS) {}
       final scopes = consts.defaultScopes.join(" ");
       late final String url;
       final response = await requestOAuth((oauthUrl) async {
-        clientSecret = await _makeClientSecret(
+        application = await client.createApplication(
           instance,
+          consts.appName,
+          consts.appWebsite,
           url = oauthUrl.toString(),
+          consts.defaultScopes,
         );
 
-        return Uri.https(instance, "/oauth/authorize", {
-          "response_type": "code",
-          "client_id": clientSecret.clientId,
-          "redirect_uri": url,
-          "scope": scopes,
-        });
+        return Uri.https(
+          instance,
+          "/oauth/authorize",
+          {
+            "response_type": "code",
+            "client_id": application.clientId,
+            "redirect_uri": url,
+            "scope": scopes,
+          },
+        );
       });
 
       if (response == null) return const LoginResult.aborted();
@@ -105,8 +85,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       final code = response["code"]!;
       final loginResponse = await client.getToken(
         "authorization_code",
-        clientSecret.clientId,
-        clientSecret.clientSecret,
+        application.clientId!,
+        application.clientSecret!,
         url,
         code: code,
         scope: scopes,
@@ -114,7 +94,13 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
       accessToken = loginResponse.accessToken!;
     } else {
-      clientSecret = await _makeClientSecret(instance);
+      await client.createApplication(
+        instance,
+        consts.appName,
+        consts.appWebsite,
+        "urn:ietf:wg:oauth:2.0:oob",
+        consts.defaultScopes,
+      );
 
       String? mfaToken;
 
@@ -126,6 +112,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
             return await client.login(
               credentials.username,
               credentials.password,
+              application.clientId!,
+              application.clientSecret!,
             );
           } on MfaRequiredException catch (e) {
             mfaToken = e.mfaToken;
@@ -139,6 +127,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
           (code) => client.respondMfa(
             mfaToken!,
             int.parse(code),
+            application.clientId!,
+            application.clientSecret!,
           ),
         );
 
@@ -152,9 +142,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       }
     }
 
-    // Create and set account secret
-    final accountSecret = AccountSecret(accessToken);
-    client.authenticationData!.accessToken = accountSecret.accessToken;
+    client.accessToken = accessToken;
 
     // Check whether secrets work, and if we can get an account back
     mastodon.Account account;
@@ -169,11 +157,14 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
     final ktkAccount = Account(
       adapter: this,
-      user: toUser(account, client.instance),
-      clientSecret: clientSecret,
-      accountSecret: accountSecret,
+      user: toUser(account, instance),
+      clientSecret: ClientSecret(
+        application.clientId!,
+        application.clientSecret!,
+      ),
+      accountSecret: AccountSecret(accessToken),
       key: AccountKey(
-        client.type,
+        type,
         instance,
         account.username,
       ),
@@ -204,7 +195,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
           .map((a) => (a.source as mastodon.Attachment).id)
           .toList(),
     );
-    return toPost(newPost, client.instance);
+    return toPost(newPost, instance);
   }
 
   String? getContentType(Formatting? formatting) {
@@ -221,7 +212,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<User> getMyself() async {
     final account = await client.verifyCredentials();
-    return toUser(account, client.instance);
+    return toUser(account, instance);
   }
 
   @override
@@ -258,7 +249,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         throw UnimplementedError();
     }
 
-    return posts.map((p) => toPost(p, client.instance));
+    return posts.map((p) => toPost(p, instance));
   }
 
   @override
@@ -288,9 +279,9 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     final status = reply.source as mastodon.Status;
     final context = await client.getStatusContext(status.id);
     return <Post>[
-      ...context.ancestors.map((s) => toPost(s, client.instance)),
+      ...context.ancestors.map((s) => toPost(s, instance)),
       reply,
-      ...context.descendants.map((s) => toPost(s, client.instance)),
+      ...context.descendants.map((s) => toPost(s, instance)),
     ];
   }
 
@@ -303,7 +294,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<Post> getPostById(String id) async {
     final status = await client.getStatus(id);
-    return toPost(status, client.instance);
+    return toPost(status, instance);
   }
 
   @override
@@ -350,25 +341,25 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       sinceId: sinceId,
       minId: minId,
     );
-    return statuses.map((p) => toPost(p, client.instance)).toList();
+    return statuses.map((p) => toPost(p, instance)).toList();
   }
 
   @override
   Future<Post?> unbookmarkPost(String id) async {
     final status = await client.unbookmarkStatus(id);
-    return toPost(status, client.instance);
+    return toPost(status, instance);
   }
 
   @override
   Future<List<User>> getFavoritees(String id) async {
     final users = await client.getFavouritedBy(id);
-    return users.map((u) => toUser(u, client.instance)).toList();
+    return users.map((u) => toUser(u, instance)).toList();
   }
 
   @override
   Future<List<User>> getRepeatees(String id) async {
     final users = await client.getBoostedBy(id);
-    return users.map((u) => toUser(u, client.instance)).toList();
+    return users.map((u) => toUser(u, instance)).toList();
   }
 
   @override
@@ -381,7 +372,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       minId: query?.sinceId,
       maxId: query?.untilId,
     );
-    return statuses.map((p) => toPost(p, client.instance));
+    return statuses.map((p) => toPost(p, instance));
   }
 
   @override
@@ -398,12 +389,20 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
     final notifications = await client.getNotifications();
     return notifications
-        .map((n) => toNotification(n, client.instance, marker))
+        .map((n) => toNotification(n, instance, marker))
         .toList();
   }
 
   @override
   Future<void> clearAllNotifications() async {
     // TODO(Craftplacer): implement clearAllNotifications
+  }
+
+  @override
+  void applySecrets(
+    ClientSecret? clientSecret,
+    AccountSecret accountSecret,
+  ) {
+    client.accessToken = accountSecret.accessToken;
   }
 }

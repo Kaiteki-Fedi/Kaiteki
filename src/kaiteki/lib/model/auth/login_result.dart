@@ -1,4 +1,4 @@
-import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:kaiteki/model/auth/account.dart';
 import 'package:tuple/tuple.dart';
 
 class LoginResult {

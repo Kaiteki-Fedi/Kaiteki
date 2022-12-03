@@ -1,77 +1,60 @@
+import 'dart:convert';
+
 import 'package:fediverse_objects/mastodon.dart' show Notification;
 import 'package:fediverse_objects/pleroma.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:http/http.dart' show Response;
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/responses/emoji_packs_response.dart';
-import 'package:kaiteki/http/response.dart';
-import 'package:kaiteki/model/http_method.dart';
+import 'package:kaiteki/http/http.dart';
 
 class PleromaClient extends MastodonClient {
   PleromaClient(super.instance);
 
-  @override
-  ApiType get type => ApiType.pleroma;
+  Future<List<Chat>> getChats() async => client
+      .sendRequest(HttpMethod.get, "api/v1/pleroma/chats")
+      .then(Chat.fromJson.fromResponseList);
 
-  Future<Iterable<Chat>> getChats() async {
-    return sendJsonRequestMultiple(
-      HttpMethod.get,
-      "api/v1/pleroma/chats",
-      Chat.fromJson,
-    );
-  }
-
-  Future<Iterable<ChatMessage>> getChatMessages(String id) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.get,
-      "api/v1/pleroma/chats/$id/messages",
-      ChatMessage.fromJson,
-    );
-  }
+  Future<Iterable<ChatMessage>> getChatMessages(String id) async => client
+      .sendRequest(HttpMethod.get, "api/v1/pleroma/chats/$id/messages")
+      .then(ChatMessage.fromJson.fromResponseList);
 
   Future<ChatMessage> postChatMessage(String id, String message) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/pleroma/chats/$id/messages",
-      ChatMessage.fromJson,
-      body: {"content": message},
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/pleroma/chats/$id/messages",
+          body: {"content": message}.jsonBody,
+        )
+        .then(ChatMessage.fromJson.fromResponse);
   }
 
   Future<void> react(String postId, String emoji) async {
-    await sendJsonRequestWithoutResponse(
+    await client.sendRequest(
       HttpMethod.put,
       "/api/v1/pleroma/statuses/$postId/reactions/$emoji",
     );
   }
 
   Future<void> removeReaction(String postId, String emoji) async {
-    await sendJsonRequestWithoutResponse(
+    await client.sendRequest(
       HttpMethod.delete,
       "/api/v1/pleroma/statuses/$postId/reactions/$emoji",
     );
   }
 
-  Future<PleromaEmojiPacksResponse> getEmojiPacks() async {
-    return sendJsonRequest(
-      HttpMethod.get,
-      "/api/pleroma/emoji/packs",
-      PleromaEmojiPacksResponse.fromJson,
-    );
-  }
+  Future<PleromaEmojiPacksResponse> getEmojiPacks() async => client
+      .sendRequest(HttpMethod.get, "/api/pleroma/emoji/packs")
+      .then(PleromaEmojiPacksResponse.fromJson.fromResponse);
 
-  Future<FrontendConfiguration> getFrontendConfigurations() async {
-    return sendJsonRequest(
-      HttpMethod.get,
-      "/api/pleroma/frontend_configurations",
-      FrontendConfiguration.fromJson,
-    );
-  }
+  Future<FrontendConfiguration> getFrontendConfigurations() async => client
+      .sendRequest(HttpMethod.get, "/api/pleroma/frontend_configurations")
+      .then(FrontendConfiguration.fromJson.fromResponse);
 
   @override
-  Future<void> checkResponse(Response response) async {
+  void checkResponse(Response response) {
     if (response.statusCode == 403) {
-      final json = await response.getContentJson();
+      final json = jsonDecode(response.body);
       if (json["error"] == "mfa_required") {
         throw MfaRequiredException(json["mfa_token"]);
       }
@@ -81,21 +64,22 @@ class PleromaClient extends MastodonClient {
   }
 
   Future<Notification> markNotificationAsRead(int id) async {
-    return await sendJsonRequest(
-      HttpMethod.post,
-      "/api/v1/pleroma/notifications/read",
-      Notification.fromJson,
-      body: {"id": id},
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "/api/v1/pleroma/notifications/read",
+          body: {"id": id}.jsonBody,
+        )
+        .then(Notification.fromJson.fromResponse);
   }
 
   Future<List<Notification>> markNotificationsAsRead(int maxId) async {
-    final notifications = await sendJsonRequestMultiple(
-      HttpMethod.post,
-      "/api/v1/pleroma/notifications/read",
-      Notification.fromJson,
-      body: {"max_id": maxId},
-    );
-    return notifications.toList();
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "/api/v1/pleroma/notifications/read",
+          body: {"max_id": maxId}.jsonBody,
+        )
+        .then(Notification.fromJson.fromResponseList);
   }
 }

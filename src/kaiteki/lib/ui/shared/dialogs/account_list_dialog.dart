@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/instance_prober.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/ui/shared/dialogs/account_removal_dialog.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';

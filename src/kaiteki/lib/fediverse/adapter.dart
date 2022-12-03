@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:kaiteki/auth/login_typedefs.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -10,23 +10,23 @@ import 'package:kaiteki/fediverse/model/post_draft.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
 
 /// An adapter containing a backing Fediverse client that.
-abstract class FediverseAdapter<Client extends FediverseClientBase> {
-  /// The original client/backend that is being adapted.
-  final Client client;
-
-  String get instance => client.instance;
+abstract class FediverseAdapter {
+  String get instance;
 
   AdapterCapabilities get capabilities;
 
-  FediverseAdapter(this.client);
-
   /// Retrieves the profile of the currently authenticated user.
   Future<User> getMyself();
+
+  FutureOr<void> applySecrets(
+    ClientSecret? clientSecret,
+    AccountSecret accountSecret,
+  );
 
   /// Attempts to sign into an instance. Additionally, callback methods
   /// provided in the parameters can be used to request more data from
@@ -82,4 +82,8 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<Attachment> uploadAttachment(File file, String? description);
 
   Future<List<User>> getRepeatees(String id);
+}
+
+extension FediverseAdapterExtensions on FediverseAdapter {
+  ApiType get type => ApiType.values.firstWhere((t) => t.isType(this));
 }

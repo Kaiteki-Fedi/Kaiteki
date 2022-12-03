@@ -1,9 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:fediverse_objects/src/misskey/notification.dart' as misskey;
-import 'package:http/http.dart' show MultipartFile;
-import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:http/http.dart'
+    show MultipartFile, MultipartRequest, Request, Response;
 import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
@@ -12,36 +14,51 @@ import 'package:kaiteki/fediverse/backends/misskey/responses/create_app.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/generate_session.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/userkey.dart';
-import 'package:kaiteki/fediverse/client_base.dart';
-import 'package:kaiteki/http/response.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/authentication_data.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
-import 'package:kaiteki/model/http_method.dart';
+import 'package:kaiteki/http/http.dart';
 
-class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
-  MisskeyClient(super.instance);
+class MisskeyClient {
+  late final KaitekiClient client;
 
-  @override
-  ApiType get type => ApiType.misskey;
+  String? i;
 
-  Future<MisskeyCreateAppResponse> createApp(
+  MisskeyClient(String instance) {
+    client = KaitekiClient(
+      baseUri: Uri(scheme: "https", host: instance),
+      checkResponse: _checkResponse,
+      intercept: (request) {
+        final i = this.i;
+        if (i == null) return;
+
+        if (request is Request) {
+          // TODO(Craftplacer): we should avoid duplicate (de-)serialization.
+          final map = request.bodyBytes.isEmpty ? {} : jsonDecode(request.body);
+          map["i"] = i;
+          request.body = jsonEncode(map);
+        } else if (request is MultipartRequest) {
+          request.fields["i"] = i;
+        }
+      },
+    );
+  }
+
+  Future<CreateAppResponse> createApp(
     String name,
     String description,
     List<String> permissions, {
     String? callbackUrl,
   }) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/app/create",
-      MisskeyCreateAppResponse.fromJson,
-      body: {
-        "name": name,
-        "description": description,
-        "permission": permissions,
-        "callbackUrl": callbackUrl
-      },
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/app/create",
+          body: {
+            "name": name,
+            "description": description,
+            "permission": permissions,
+            "callbackUrl": callbackUrl
+          }.jsonBody,
+        )
+        .then(CreateAppResponse.fromJson.fromResponse);
   }
 
   Future<misskey.Note> createNote(
@@ -53,192 +70,198 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     List<String>? fileIds = const [],
   }) async {
     // FIXME(Craftplacer): Properly parse Misskey create note response
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/notes/create",
-      misskey.Note.fromJson,
-      body: <String, dynamic>{
-        "visibility": visibility,
-        "visibleUserIds": visibleUserIds ?? [],
-        if (text != null) "text": text,
-        if (cw != null) "cw": cw,
-        if (replyId != null) "replyId": replyId,
-        if (fileIds?.isNotEmpty == true) "fileIds": fileIds,
-      },
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/create",
+          body: <String, dynamic>{
+            "visibility": visibility,
+            "visibleUserIds": visibleUserIds ?? [],
+            if (text != null) "text": text,
+            if (cw != null) "cw": cw,
+            if (replyId != null) "replyId": replyId,
+            if (fileIds?.isNotEmpty == true) "fileIds": fileIds,
+          }.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponse);
   }
 
   Future<misskey.Note> showNote(String noteId) async {
-    return await sendJsonRequest(
-      HttpMethod.get,
-      "api/notes/show/$noteId",
-      misskey.Note.fromJson,
-    );
+    return client
+        .sendRequest(HttpMethod.get, "api/notes/show/$noteId")
+        .then(misskey.Note.fromJson.fromResponse);
   }
 
   Future<misskey.Note> createRenote(String renoteId) async {
     // FIXME(Craftplacer): Properly parse Misskey create note response
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/notes/create",
-      misskey.Note.fromJson,
-      body: <String, dynamic>{"renoteId": renoteId},
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/create",
+          body: {"renoteId": renoteId}.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponse);
   }
 
-  Future<MisskeyGenerateSessionResponse> generateSession(
+  Future<GenerateSessionResponse> generateSession(
     String appSecret,
   ) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "/api/auth/session/generate",
-      MisskeyGenerateSessionResponse.fromJson,
-      body: {"appSecret": appSecret},
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "/api/auth/session/generate",
+          body: {"appSecret": appSecret}.jsonBody,
+        )
+        .then(GenerateSessionResponse.fromJson.fromResponse);
   }
 
   Future<misskey.Page> getPage(String username, String name) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/pages/show",
-      misskey.Page.fromJson,
-      body: {
-        "username": username,
-        "name": name,
-      },
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/pages/show",
+          body: {"username": username, "name": name}.jsonBody,
+        )
+        .then(misskey.Page.fromJson.fromResponse);
   }
 
-  Future<MisskeyUserkeyResponse> userkey(String appSecret, String token) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/auth/session/userkey",
-      MisskeyUserkeyResponse.fromJson,
-      body: {"appSecret": appSecret, "token": token},
-    );
+  Future<UserkeyResponse> userkey(String appSecret, String token) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/auth/session/userkey",
+          body: {"appSecret": appSecret, "token": token}.jsonBody,
+        )
+        .then(UserkeyResponse.fromJson.fromResponse);
   }
 
-  Future<misskey.User?> showUser(String userId) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/users/show",
-      misskey.User.fromJson,
-      body: {"userId": userId},
-    );
+  Future<misskey.User> showUser(String userId) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/show",
+          body: {"userId": userId}.jsonBody,
+        )
+        .then(misskey.User.fromJson.fromResponse);
   }
 
   Future<misskey.User> showUserByName(
     String username, [
     String? instance,
   ]) async {
-    final body = {"username": username};
-
-    if (instance != null) body["instance"] = instance;
-
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/users/show",
-      misskey.User.fromJson,
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/show",
+          body: {
+            "username": username,
+            if (instance != null) "instance": instance,
+          }.jsonBody,
+        )
+        .then(misskey.User.fromJson.fromResponse);
   }
 
-  Future<Iterable<misskey.Note>> showUserNotes(
+  Future<List<misskey.Note>> showUserNotes(
     String userId, {
     required bool excludeNsfw,
     required Iterable<String> fileTypes,
     String? sinceId,
     String? untilId,
   }) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/users/notes",
-      misskey.Note.fromJson,
-      body: {
-        "userId": userId,
-        "fileType": fileTypes,
-        if (sinceId != null) "sinceId": sinceId,
-        if (untilId != null) "untilId": untilId,
-        "excludeNsfw": excludeNsfw,
-      },
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/notes",
+          body: {
+            "userId": userId,
+            "fileType": fileTypes,
+            if (sinceId != null) "sinceId": sinceId,
+            if (untilId != null) "untilId": untilId,
+            "excludeNsfw": excludeNsfw,
+          }.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
   }
 
-  Future<MisskeySignInResponse> signIn(MisskeySignInRequest request) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/signin",
-      MisskeySignInResponse.fromJson,
-      body: request,
-    );
+  Future<SignInResponse> signIn(MisskeySignInRequest request) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/signin",
+          body: request.toJson().jsonBody,
+        )
+        .then(SignInResponse.fromJson.fromResponse);
   }
 
-  Future<Iterable<misskey.Note>> getTimeline(
-    MisskeyTimelineRequest request,
-  ) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/notes/timeline",
-      misskey.Note.fromJson,
-      body: request,
-    );
+  Future<List<misskey.Note>> getTimeline(MisskeyTimelineRequest request) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/timeline",
+          body: request.toJson().jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
   }
 
   // Have to implement checking nodeinfo for `disableLocalTimeline`
-  Future<Iterable<misskey.Note>> getLocalTimeline(
+  Future<List<misskey.Note>> getLocalTimeline(
     MisskeyTimelineRequest request,
   ) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/notes/local-timeline",
-      misskey.Note.fromJson,
-      body: request,
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/local-timeline",
+          body: request.toJson().jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
   }
 
   // Have to implement checking nodeinfo for `disableRecommendedTimeline`
-  Future<Iterable<misskey.Note>> getBubbleTimeline(
+  Future<List<misskey.Note>> getBubbleTimeline(
     MisskeyTimelineRequest request,
   ) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/notes/recommended-timeline",
-      misskey.Note.fromJson,
-      body: request,
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/recommended-timeline",
+          body: request.toJson().jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
   }
 
   // Have to implement checking nodeinfo for `disableLocalTimeline` (yes, local)
   Future<Iterable<misskey.Note>> getHybridTimeline(
     MisskeyTimelineRequest request,
   ) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/notes/hybrid-timeline",
-      misskey.Note.fromJson,
-      body: request,
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/hybrid-timeline",
+          body: request.toJson().jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
   }
 
   // Have to implement checking nodeinfo for `disableGlobalTimeline`
   Future<Iterable<misskey.Note>> getGlobalTimeline(
     MisskeyTimelineRequest request,
   ) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/notes/global-timeline",
-      misskey.Note.fromJson,
-      body: request,
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/global-timeline",
+          body: request.toJson().jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
   }
 
-  @override
-  Future<void> checkResponse(Response response) async {
+  Future<void> _checkResponse(Response response) async {
     if (!response.isSuccessful) {
       // HACK(Craftplacer): I threw out the usual JSON deserialization pattern from Kaiteki because adding more error-prone code (that is Misskey's fucked API schemas) to error handling is just plain stupid.
       dynamic error;
 
       try {
-        final json = await response.getContentJson();
+        final json = jsonDecode(response.body);
         error = json["error"];
       } catch (e, s) {
         log(
@@ -256,77 +279,57 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
         );
       }
     }
-
-    super.checkResponse(response);
   }
 
   /// Gets your account information.
-  Future<misskey.User> i() async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/i",
-      misskey.User.fromJson,
-      body: {},
-    );
+  Future<misskey.User> getI() async {
+    return client //
+        .sendRequest(HttpMethod.post, "api/i")
+        .then(misskey.User.fromJson.fromResponse);
   }
 
   /// Reacts to the specified note.
   Future<void> createReaction(String noteId, String reaction) async {
-    return await sendJsonRequestWithoutResponse(
+    await client.sendRequest(
       HttpMethod.post,
       "api/notes/reactions/create",
-      body: {
-        "noteId": noteId,
-        "reaction": reaction,
-      },
+      body: {"noteId": noteId, "reaction": reaction}.jsonBody,
     );
   }
 
   /// Removes the reaction from the specified note.
   Future<misskey.User> deleteReaction(String noteId) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/notes/reactions/delete",
-      misskey.User.fromJson,
-      body: {"noteId": noteId},
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/reactions/delete",
+          body: {"noteId": noteId}.jsonBody,
+        )
+        .then(misskey.User.fromJson.fromResponse);
   }
 
-  Future<misskey.Meta> getInstanceMeta({bool detail = false}) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/meta",
-      misskey.Meta.fromJson,
-      body: {"detail": detail},
-    );
+  Future<misskey.Meta> getMeta({bool detail = false}) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/meta",
+          body: {"detail": detail}.jsonBody,
+        )
+        .then(misskey.Meta.fromJson.fromResponse);
   }
 
-  Future<Iterable<misskey.Note>> getConversation(
+  Future<List<misskey.Note>> getConversation(
     String id, {
     int limit = 30,
     int offset = 0,
   }) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/notes/conversation",
-      misskey.Note.fromJson,
-      body: {
-        "noteId": id,
-        "limit": limit,
-        "offset": offset,
-      },
-    );
-  }
-
-  @override
-  Future<void> setClientAuthentication(ClientSecret secret) {
-    return Future.value();
-  }
-
-  @override
-  Future<void> setAccountAuthentication(AccountSecret secret) {
-    authenticationData = MisskeyAuthenticationData(secret.accessToken);
-    return Future.value();
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/conversation",
+          body: {"noteId": id, "limit": limit, "offset": offset}.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
   }
 
   Future<misskey.DriveFile> createDriveFile(
@@ -334,13 +337,11 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     String? folderId,
     String? name,
     String? comment,
-
     // bool? isSensitive,
   }) {
-    return sendJsonMultiPartRequest(
+    return client.sendMultipartRequest(
       HttpMethod.post,
       "api/drive/files/create",
-      misskey.DriveFile.fromJson,
       fields: <String, String>{
         if (folderId != null) "folderId": folderId,
         if (name != null) "name": name,
@@ -348,32 +349,32 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
         // if (isSensitive != null) "isSensitive": isSensitive,
       },
       files: [file],
-    );
+    ).then(misskey.DriveFile.fromJson.fromResponse);
   }
 
-  Future<MisskeyCheckSessionResponse> checkSession(String session) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/miauth/$session/check",
-      MisskeyCheckSessionResponse.fromJson,
-      body: {},
-    );
+  Future<CheckSessionResponse> checkSession(String session) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/miauth/$session/check",
+        )
+        .then(CheckSessionResponse.fromJson.fromResponse);
   }
 
-  Future<Iterable<misskey.Note>> getRenotes(String id) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/notes/renotes",
-      misskey.Note.fromJson,
-      body: {"noteId": id},
-    );
+  Future<List<misskey.Note>> getRenotes(String id) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/renotes",
+          body: {"noteId": id}.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
   }
 
   Future<void> markAllNotificationsAsRead() async {
-    return sendJsonRequestWithoutResponse(
+    await client.sendRequest(
       HttpMethod.post,
       "api/notifications/mark-all-as-read",
-      body: {},
     );
   }
 
@@ -385,18 +386,18 @@ class MisskeyClient extends FediverseClientBase<MisskeyAuthenticationData> {
     bool? unreadOnly,
     // TODO(Craftplacer): add misskey notification types/filters
   }) async {
-    final notifications = await sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/i/notifications",
-      misskey.Notification.fromJson,
-      body: {
-        if (limit != null) "limit": limit,
-        if (markAsRead != null) "markAsRead": markAsRead,
-        if (sinceId != null) "sinceId": sinceId,
-        if (untilId != null) "untilId": untilId,
-        if (unreadOnly != null) "unreadOnly": unreadOnly,
-      },
-    );
-    return notifications.toList();
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/i/notifications",
+          body: {
+            if (limit != null) "limit": limit,
+            if (markAsRead != null) "markAsRead": markAsRead,
+            if (sinceId != null) "sinceId": sinceId,
+            if (untilId != null) "untilId": untilId,
+            if (unreadOnly != null) "unreadOnly": unreadOnly,
+          }.jsonBody,
+        )
+        .then(misskey.Notification.fromJson.fromResponseList);
   }
 }

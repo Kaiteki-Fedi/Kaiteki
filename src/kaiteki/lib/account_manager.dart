@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/account_key.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/account.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/repositories/repository.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
@@ -110,13 +109,11 @@ class AccountManager extends ChangeNotifier {
     _logger.v('Trying to recover a ${key.type!.displayName} account');
 
     final adapter = key.type!.createAdapter(key.host);
-    if (clientSecret != null) {
-      await adapter.client.setClientAuthentication(clientSecret);
-    }
+
     try {
-      await adapter.client.setAccountAuthentication(accountSecret);
+      await adapter.applySecrets(clientSecret, accountSecret);
     } catch (ex, s) {
-      _logger.e('Failed to set account authentication', ex, s);
+      _logger.e("Failed to apply secrets to adapter", ex, s);
       return;
     }
 
@@ -125,7 +122,7 @@ class AccountManager extends ChangeNotifier {
     try {
       user = await adapter.getMyself();
     } catch (ex, s) {
-      _logger.e('Failed to verify credentials', ex, s);
+      _logger.e("Failed to fetch user profile of authenticated user", ex, s);
       return;
     }
 
@@ -137,9 +134,7 @@ class AccountManager extends ChangeNotifier {
       accountSecret: accountSecret,
     );
 
-    _logger.v(
-      'Recovered ${account.user.displayName} @ ${key.host}',
-    );
+    _logger.v("Signed into @${account.user.username}@${key.host}");
 
     await add(account);
   }

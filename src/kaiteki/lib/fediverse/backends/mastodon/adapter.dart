@@ -4,15 +4,19 @@ import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 
 class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
+  @override
+  final String instance;
+
   factory MastodonAdapter(String instance) {
-    return MastodonAdapter.custom(MastodonClient(instance));
+    return MastodonAdapter.custom(instance, MastodonClient(instance));
   }
 
-  MastodonAdapter.custom(super.client);
+  MastodonAdapter.custom(this.instance, super.client);
 
   @override
   Future<Instance?> probeInstance() async {
     final instance = await client.getInstance();
+
     if (instance.version.contains("Pleroma")) {
       return null;
     }
