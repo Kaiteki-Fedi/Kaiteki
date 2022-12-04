@@ -71,7 +71,8 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
                       ),
                       onTap: (i) => _onTabTap(i, kinds),
                       tabs: [
-                        for (final kind in kinds) _buildTab(context, kind)
+                        for (final kind in kinds)
+                          _buildTab(context, kind, kinds.length <= 3),
                       ],
                     ),
                     const Divider(height: 1),
@@ -91,7 +92,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
 
   void refresh() => _timelineKey.currentState!.refresh();
 
-  Widget _buildTab(BuildContext context, TimelineKind kind) {
+  Widget _buildTab(BuildContext context, TimelineKind kind, bool showLabel) {
     final l10n = context.getL10n();
 
     final Widget label;
@@ -133,8 +134,10 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
       icon: Row(
         children: [
           icon,
-          const SizedBox(width: 8),
-          label,
+          if (showLabel) ...[
+            const SizedBox(width: 8),
+            label,
+          ],
         ],
       ),
     );
