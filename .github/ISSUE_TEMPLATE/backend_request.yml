@@ -25,7 +25,7 @@ body:
     placeholder: "https://example.com/api-documentation/"
   validations:
     required: false
-- type: input
+- type: textarea
   id: features
   attributes:
     label: Features
