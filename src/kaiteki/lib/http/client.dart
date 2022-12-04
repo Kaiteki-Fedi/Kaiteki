@@ -39,7 +39,7 @@ class KaitekiClient {
 
     if (body != null) {
       request.headers["Content-Type"] = body.contentType;
-      request.body = body.contentType;
+      request.bodyBytes = body.body;
     }
 
     _applyUserAgent(request);
