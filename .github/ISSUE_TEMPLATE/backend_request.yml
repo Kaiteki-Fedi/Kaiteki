@@ -13,8 +13,8 @@ body:
   id: link
   attributes:
     label: Link
-    description: A link to the project page, so we can check it out
-    placeholder: https://example.com/
+    description: "A link to the project page, so we can check it out"
+    placeholder: "https://example.com/"
   validations:
     required: true
 - type: input
@@ -22,6 +22,14 @@ body:
   attributes:
     label: API Docs Link
     description: "A link to the project's API documentation, without it, we can't support it!"
-    placeholder: https://example.com/api-documentation/
+    placeholder: "https://example.com/api-documentation/"
+  validations:
+    required: false
+- type: textarea
+  id: features
+  attributes:
+    label: Features
+    description: "Does the project have features that Kaiteki and/or other projects don't have? What do we need to look out for?"
+    placeholder: "- Aside from favoriting your post you can also hug them now"
   validations:
     required: false
