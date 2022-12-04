@@ -256,7 +256,7 @@ class PostFormState extends ConsumerState<PostForm> {
     );
   }
 
-  Future<void> post(BuildContext context, FediverseAdapter adapter) async {
+  Future<void> post(BuildContext context, BackendAdapter adapter) async {
     final messenger = ScaffoldMessenger.of(context);
     final contentKey = UniqueKey();
     final l10n = context.getL10n();

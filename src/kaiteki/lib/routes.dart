@@ -93,7 +93,7 @@ Widget _authenticatedBuilder(context, state, child) {
   return Consumer(
     child: child,
     builder: (context, ref, child) {
-      final FediverseAdapter? adapter;
+      final BackendAdapter? adapter;
 
       final user = state.params["accountUsername"];
       final host = state.params["accountHost"];

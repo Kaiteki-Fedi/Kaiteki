@@ -9,7 +9,7 @@ class Account {
   final AccountKey key;
   final AccountSecret accountSecret;
   final ClientSecret? clientSecret;
-  final FediverseAdapter adapter;
+  final BackendAdapter adapter;
   final User user;
 
   const Account({

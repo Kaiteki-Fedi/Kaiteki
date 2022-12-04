@@ -39,7 +39,7 @@ part 'adapter.c.dart';
 final _logger = getLogger('MisskeyAdapter');
 
 // TODO(Craftplacer): add missing implementations
-class MisskeyAdapter extends FediverseAdapter
+class MisskeyAdapter extends BackendAdapter
     implements
         ChatSupport,
         ReactionSupport,

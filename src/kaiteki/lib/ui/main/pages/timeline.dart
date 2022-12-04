@@ -39,7 +39,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
     final kinds = _defaultKinds.where(supported.contains).toSet();
 
     // ignore: avoid_types_on_closure_parameters, Dart is unable to infer type
-    ref.listen(adapterProvider, (previous, FediverseAdapter next) {
+    ref.listen(adapterProvider, (previous, BackendAdapter next) {
       if (!next.capabilities.supportedTimelines.contains(_kind)) {
         _kind = next.capabilities.supportedTimelines.first;
       }

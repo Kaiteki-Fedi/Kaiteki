@@ -27,12 +27,7 @@ import 'package:tuple/tuple.dart';
 
 part 'adapter.c.dart';
 
-class OldTwitterAdapter extends FediverseAdapter {
-  static const _twtInstance = Instance(name: "Twitter", source: null);
-
-  @override
-  String get instance => "twitter.com";
-
+class OldTwitterAdapter extends CentralizedBackendAdapter {
   final OldTwitterClient client;
 
   factory OldTwitterAdapter(String _) {
@@ -46,9 +41,6 @@ class OldTwitterAdapter extends FediverseAdapter {
     // TODO(Craftplacer): implement favoritePost, https://github.com/Kaiteki-Fedi/Kaiteki/issues/132
     throw UnimplementedError();
   }
-
-  @override
-  Future<Instance> getInstance() async => _twtInstance;
 
   @override
   Future<User> getMyself() async => toUser(await client.verifyCredentials());
@@ -193,11 +185,6 @@ class OldTwitterAdapter extends FediverseAdapter {
   }
 
   @override
-  Future<Instance?> probeInstance() async {
-    return instance == "twitter.com" ? _twtInstance : null;
-  }
-
-  @override
   Future<Attachment> uploadAttachment(File file, String? description) async {
     final upload = await client.uploadMedia(file);
     return Attachment(
@@ -242,4 +229,7 @@ class OldTwitterAdapter extends FediverseAdapter {
     // TODO(Craftplacer): implement applySecrets
     throw UnimplementedError();
   }
+
+  @override
+  Instance get instance => Instance(name: "Twitter", source: null);
 }

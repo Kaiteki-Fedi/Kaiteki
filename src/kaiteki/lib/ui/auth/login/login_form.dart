@@ -53,7 +53,7 @@ class InstanceCompound {
   @override
   int get hashCode => host.hashCode ^ type.hashCode ^ data.hashCode;
 
-  FediverseAdapter createAdapter() => type.createAdapter(host);
+  BackendAdapter createAdapter() => type.createAdapter(host);
 }
 
 class CallbackRequest<T, K extends Function> {

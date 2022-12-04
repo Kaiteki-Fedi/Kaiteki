@@ -14,10 +14,20 @@ import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
 
-/// An adapter containing a backing Fediverse client that.
-abstract class FediverseAdapter {
+abstract class CentralizedBackendAdapter extends BackendAdapter {
+  Instance get instance;
+
+  @override
+  FutureOr<Instance> getInstance() => instance;
+}
+
+abstract class DecentralizedBackendAdapter extends BackendAdapter {
   String get instance;
 
+  Future<Instance?> probeInstance();
+}
+
+abstract class BackendAdapter {
   AdapterCapabilities get capabilities;
 
   /// Retrieves the profile of the currently authenticated user.
@@ -60,9 +70,7 @@ abstract class FediverseAdapter {
     TimelineQuery<String>? query,
   });
 
-  Future<Instance> getInstance();
-
-  Future<Instance?> probeInstance();
+  FutureOr<Instance> getInstance();
 
   /// Retrieves a post.
   Future<Post> getPostById(String id);
@@ -84,6 +92,6 @@ abstract class FediverseAdapter {
   Future<List<User>> getRepeatees(String id);
 }
 
-extension FediverseAdapterExtensions on FediverseAdapter {
+extension FediverseAdapterExtensions on BackendAdapter {
   ApiType get type => ApiType.values.firstWhere((t) => t.isType(this));
 }

@@ -30,7 +30,7 @@ part 'shared_adapter.c.dart'; // That file contains toEntity() methods
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
 abstract class SharedMastodonAdapter<T extends MastodonClient>
-    extends FediverseAdapter
+    extends DecentralizedBackendAdapter
     implements
         CustomEmojiSupport,
         FavoriteSupport,

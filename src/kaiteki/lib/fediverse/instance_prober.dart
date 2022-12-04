@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
@@ -32,22 +34,22 @@ Future<InstanceProbeResult> probeInstance(
   if (result == null) {
     _logger.d("Couldn't detect backend on on $host");
     return const InstanceProbeResult.failed();
-  } else {
-    final type = result.type!;
-
-    if (result.method == null) {
-      _logger.d('Detected ${type.displayName} on $host');
-    } else {
-      _logger.d('Detected ${type.displayName} on $host using ${result.method}');
-    }
-
-    if (result.instance == null) {
-      final adapter = type.createAdapter(host);
-      result = result.copyWith(instance: await adapter.getInstance());
-    }
-
-    return result;
   }
+
+  final type = result.type!;
+
+  if (result.method == null) {
+    _logger.d('Detected ${type.displayName} on $host');
+  } else {
+    _logger.d('Detected ${type.displayName} on $host using ${result.method}');
+  }
+
+  if (result.instance == null) {
+    final adapter = type.createAdapter(host);
+    result = result.copyWith(instance: await adapter.getInstance());
+  }
+
+  return result;
 }
 
 Future<InstanceProbeResult?> _probeKnownInstances(String host) async {
@@ -55,10 +57,7 @@ Future<InstanceProbeResult?> _probeKnownInstances(String host) async {
 
   type = ApiType.values //
       .cast<ApiType?>()
-      .firstWhere(
-        (t) => (t!.hosts ?? []).contains(host),
-        orElse: () => null,
-      );
+      .firstWhereOrNull((t) => (t!.hosts ?? []).contains(host));
 
   if (type != null) {
     return InstanceProbeResult.successful(
@@ -160,6 +159,9 @@ Future<InstanceProbeResult?> _probeEndpoints(String host) async {
   for (final apiType in ApiType.values) {
     try {
       final adapter = apiType.createAdapter(host);
+
+      if (adapter is! DecentralizedBackendAdapter) continue;
+
       _logger.d('Probing for ${apiType.displayName} on $host...');
 
       final result = await adapter.probeInstance();
@@ -190,11 +192,7 @@ Future<bool> _checkInstanceAvailability(String instance) async {
   }
 }
 
-enum InstanceProbeMethod {
-  knownInstances,
-  nodeInfo,
-  endpoint,
-}
+enum InstanceProbeMethod { knownInstances, nodeInfo, endpoint }
 
 class InstanceProbeResult {
   final ApiType? type;

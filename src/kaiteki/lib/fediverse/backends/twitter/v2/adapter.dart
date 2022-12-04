@@ -32,15 +32,8 @@ const clientId = kDebugMode
     ? "QTFFSnY5d2QwTkp3enliMHdfaXg6MTpjaQ"
     : "Q2lkU2p0VERwOWxreXdxeFVsQm46MTpjaQ";
 
-class TwitterAdapter extends FediverseAdapter
+class TwitterAdapter extends CentralizedBackendAdapter
     implements FavoriteSupport, BookmarkSupport {
-  static const instanceModel = Instance(
-    name: "Twitter",
-    source: null,
-    backgroundUrl:
-        "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
-  );
-
   final TwitterClient client;
 
   final String? _host;
@@ -59,9 +52,6 @@ class TwitterAdapter extends FediverseAdapter
     // TODO(Craftplacer): implement followUser
     throw UnimplementedError();
   }
-
-  @override
-  Future<Instance> getInstance() => Future.value(instanceModel);
 
   @override
   Future<User> getMyself() async {
@@ -309,14 +299,6 @@ class TwitterAdapter extends FediverseAdapter
   }
 
   @override
-  Future<Instance?> probeInstance() async {
-    if (_host == "twitter.com") {
-      return instanceModel;
-    }
-    return null;
-  }
-
-  @override
   Future<Post?> repeatPost(String id) {
     // TODO(Craftplacer): implement repeatPost
     throw UnimplementedError();
@@ -417,5 +399,9 @@ class TwitterAdapter extends FediverseAdapter
   }
 
   @override
-  String get instance => "twitter.com";
+  final instance = const Instance(
+    name: "Twitter",
+    backgroundUrl:
+        "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
+  );
 }

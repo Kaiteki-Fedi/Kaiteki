@@ -157,7 +157,7 @@ extension HtmlNodeExtensions on Node {
 }
 
 extension UserReferenceExtensions on UserReference {
-  Future<User?> resolve(FediverseAdapter adapter) async {
+  Future<User?> resolve(BackendAdapter adapter) async {
     if (id != null) {
       return adapter.getUserById(id!);
     }

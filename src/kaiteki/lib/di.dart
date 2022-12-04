@@ -12,7 +12,7 @@ final accountProvider = ChangeNotifierProvider<AccountManager>((_) {
   throw UnimplementedError();
 });
 
-final adapterProvider = Provider<FediverseAdapter>(
+final adapterProvider = Provider<BackendAdapter>(
   (ref) => ref.watch(accountProvider).current.adapter,
 );
 

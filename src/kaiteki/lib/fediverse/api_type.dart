@@ -36,7 +36,7 @@ enum ApiType {
   );
 
   final String? _displayName;
-  final FediverseAdapter Function(String instance) createAdapter;
+  final BackendAdapter Function(String instance) createAdapter;
   final ApiTheme theme;
   final List<String>? hosts;
   final Type adapterType;
@@ -54,5 +54,5 @@ enum ApiType {
     this.hosts,
   }) : _displayName = displayName;
 
-  bool isType(FediverseAdapter adapter) => adapter.runtimeType == adapterType;
+  bool isType(BackendAdapter adapter) => adapter.runtimeType == adapterType;
 }
