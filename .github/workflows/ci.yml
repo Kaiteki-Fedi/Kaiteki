@@ -40,7 +40,8 @@ jobs:
 
       - name: Codecov
         uses: codecov/codecov-action@v3
-        files: ./coverage/lcov.info 
+        with:
+          files: ./coverage/lcov.info 
 
   build-linux:
     name: Build for Linux
