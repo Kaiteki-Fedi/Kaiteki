@@ -6,6 +6,7 @@ import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/compose/post_form.dart';
+import 'package:kaiteki/ui/shared/posts/compose/toggle_subject_button.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class ComposeScreen extends ConsumerStatefulWidget {
@@ -100,28 +101,4 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
 
   void toggleSubject() => setState(() => enableSubject = !enableSubject);
   void togglePreview() => setState(() => showPreview = !showPreview);
-}
-
-class ToggleSubjectButton extends StatelessWidget {
-  const ToggleSubjectButton({
-    super.key,
-    required this.value,
-    this.onChanged,
-  });
-
-  final bool value;
-  final VoidCallback? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.getL10n();
-    return IconButton(
-      onPressed: onChanged,
-      isSelected: value,
-      icon: const Icon(Icons.short_text_rounded),
-      tooltip: value
-          ? l10n.subjectButtonLabelDisable
-          : l10n.subjectButtonLabelEnable,
-    );
-  }
 }
