@@ -8,6 +8,7 @@ import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
+import 'package:kaiteki/theming/kaiteki/post.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
@@ -88,6 +89,58 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
     final adapter = ref.watch(adapterProvider);
 
+    final children = [
+      MetaBar(
+        post: _post,
+        showAvatar: !widget.hideAvatar && widget.wide,
+      ),
+      if (widget.showParentPost && _post.replyToUserId != null)
+        ReplyBar(post: _post),
+      PostContentWidget(
+        post: _post,
+        hideReplyee: widget.hideReplyee,
+      ),
+      if (_post.embeds.isNotEmpty)
+        Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: <Widget>[
+              for (var embed in _post.embeds) EmbedWidget(embed),
+            ].joinNonString(const Divider(height: 1)),
+          ),
+        ),
+      if (_post.quotedPost != null) EmbeddedPostWidget(_post.quotedPost!),
+      if (_post.attachments?.isNotEmpty == true) AttachmentRow(post: _post),
+      if (widget.expand && _post.client != null)
+        Text(
+          _post.client!,
+          style: TextStyle(color: Theme.of(context).disabledColor),
+        ),
+      if (_post.reactions.isNotEmpty)
+        ReactionRow(
+          _post.reactions,
+          (r) => _onChangeReaction(r.emoji),
+        ),
+      if (widget.showActions)
+        InteractionBar(
+          post: _post,
+          onReply: () => context.showPostDialog(replyTo: _post),
+          onFavorite: _onFavorite,
+          onRepeat: _onRepeat,
+          onReact: _onReact,
+          favorited: adapter is FavoriteSupport //
+              ? _post.liked
+              : null,
+          onShowFavoritees: _showFavoritees,
+          onShowRepeatees: _showRepeatees,
+          repeated: _post.repeated,
+          reacted: adapter is ReactionSupport ? false : null,
+          buildActions: _buildActions,
+        )
+    ];
+
+    final theme = Theme.of(context).ktkPostTheme!;
     return FocusableActionDetector(
       shortcuts: const {
         reply: ReplyIntent(),
@@ -108,79 +161,27 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         BookmarkIntent: CallbackAction(onInvoke: (_) => _onBookmark()),
         ReactIntent: CallbackAction(onInvoke: (_) => _onReact()),
       },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!widget.wide && !widget.hideAvatar)
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: AvatarWidget(
+      child: Padding(
+        padding: theme.padding,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (!widget.wide && !widget.hideAvatar) ...[
+              AvatarWidget(
                 _post.author,
                 onTap: () => context.showUser(_post.author, ref),
               ),
-            ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
+              SizedBox(width: theme.avatarSpacing),
+            ],
+            Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MetaBar(
-                    post: _post,
-                    showAvatar: !widget.hideAvatar && widget.wide,
-                  ),
-                  if (widget.showParentPost && _post.replyToUserId != null)
-                    ReplyBar(post: _post),
-                  PostContentWidget(
-                    post: _post,
-                    hideReplyee: widget.hideReplyee,
-                  ),
-                  if (_post.embeds.isNotEmpty)
-                    Card(
-                      margin: EdgeInsets.zero,
-                      clipBehavior: Clip.antiAlias,
-                      child: Column(
-                        children: <Widget>[
-                          for (var embed in _post.embeds) EmbedWidget(embed),
-                        ].joinNonString(const Divider(height: 1)),
-                      ),
-                    ),
-                  if (_post.quotedPost != null)
-                    EmbeddedPostWidget(_post.quotedPost!),
-                  if (_post.attachments?.isNotEmpty == true)
-                    AttachmentRow(post: _post),
-                  if (widget.expand && _post.client != null)
-                    Text(
-                      _post.client!,
-                      style: TextStyle(color: Theme.of(context).disabledColor),
-                    ),
-                  if (_post.reactions.isNotEmpty)
-                    ReactionRow(
-                      _post.reactions,
-                      (r) => _onChangeReaction(r.emoji),
-                    ),
-                  if (widget.showActions)
-                    InteractionBar(
-                      post: _post,
-                      onReply: () => context.showPostDialog(replyTo: _post),
-                      onFavorite: _onFavorite,
-                      onRepeat: _onRepeat,
-                      onReact: _onReact,
-                      favorited: adapter is FavoriteSupport //
-                          ? _post.liked
-                          : null,
-                      onShowFavoritees: _showFavoritees,
-                      onShowRepeatees: _showRepeatees,
-                      repeated: _post.repeated,
-                      reacted: adapter is ReactionSupport ? false : null,
-                      buildActions: _buildActions,
-                    )
-                ],
+                children: children,
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

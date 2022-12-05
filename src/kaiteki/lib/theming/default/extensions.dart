@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/theming/default/constants.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
+import 'package:kaiteki/theming/kaiteki/post.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/theming/kaiteki/theme.dart';
 
@@ -24,6 +25,7 @@ extension ThemeDataExtensions on ThemeData {
         ktkTextTheme,
         KaitekiColors.fromMaterialTheme(this),
         KaitekiTheme.fromMaterialTheme(this),
+        KaitekiPostTheme.fallback,
       ],
       textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
       checkboxTheme: CheckboxThemeData(
