@@ -43,11 +43,34 @@ class PostForm extends ConsumerStatefulWidget {
 }
 
 class PostFormState extends ConsumerState<PostForm> {
-  late final TextEditingController _bodyController = TextEditingController()
-    ..addListener(_typingTimer.reset);
+  late final TextEditingController _bodyController =
+      TextEditingController(text: initialBody)..addListener(_typingTimer.reset);
 
   late final TextEditingController _subjectController = TextEditingController()
     ..addListener(_typingTimer.reset);
+
+  String? get initialBody {
+    final op = widget.replyTo;
+
+    if (op != null) {
+      final currentUser = ref.read(accountProvider).current.user;
+
+      final handles = <String>[
+        if (op.author.id != currentUser.id) op.author.handle,
+        ...?op.mentionedUsers
+            ?.where((u) => u.username != null && u.host != null)
+            .where((u) {
+          return !(u.username == currentUser.username &&
+              u.host == currentUser.host);
+        }).map((u) => "@${u.username!}@${u.host!}"),
+      ];
+
+      // ignore: prefer_interpolation_to_compose_strings
+      if (handles.isNotEmpty) return handles.join(" ") + " ";
+    }
+
+    return null;
+  }
 
   late final RestartableTimer _typingTimer = RestartableTimer(
     const Duration(seconds: 1),
@@ -61,10 +84,12 @@ class PostFormState extends ConsumerState<PostForm> {
   Formatting? _formatting;
   final List<Future<Attachment>> attachments = [];
 
-  bool get isEmpty =>
-      _bodyController.value.text.isEmpty &&
-      _subjectController.value.text.isEmpty &&
-      attachments.isEmpty;
+  bool get isEmpty {
+    return (_bodyController.text.isEmpty ||
+            _bodyController.text == initialBody) &&
+        _subjectController.value.text.isEmpty &&
+        attachments.isEmpty;
+  }
 
   // FIXME(Craftplacer): Strings for PostForm's attach menu are not localized.
   late final _attachMenuItems = [
