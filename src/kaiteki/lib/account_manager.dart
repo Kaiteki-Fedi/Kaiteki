@@ -58,7 +58,9 @@ class AccountManager extends ChangeNotifier {
       "An account with the same username and instance already exists",
     );
 
-    await _accountSecrets.create(account.key, account.accountSecret);
+    if (account.accountSecret != null) {
+      await _accountSecrets.create(account.key, account.accountSecret!);
+    }
     if (account.clientSecret != null) {
       await _clientSecrets.create(account.key, account.clientSecret!);
     }

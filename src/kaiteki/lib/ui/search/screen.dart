@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';

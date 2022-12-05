@@ -30,17 +30,9 @@ part 'adapter.c.dart';
 class OldTwitterAdapter extends CentralizedBackendAdapter {
   final OldTwitterClient client;
 
-  factory OldTwitterAdapter(String _) {
-    return OldTwitterAdapter.custom(OldTwitterClient());
-  }
+  factory OldTwitterAdapter() => OldTwitterAdapter.custom(OldTwitterClient());
 
   OldTwitterAdapter.custom(this.client);
-
-  @override
-  Future<void> favoritePost(String id) {
-    // TODO(Craftplacer): implement favoritePost, https://github.com/Kaiteki-Fedi/Kaiteki/issues/132
-    throw UnimplementedError();
-  }
 
   @override
   Future<User> getMyself() async => toUser(await client.verifyCredentials());
@@ -165,7 +157,8 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
         "twitter.com",
         username,
       ),
-      accountSecret: AccountSecret(""),
+      // FIXME(Craftplacer): Make Twitter v1 restorable
+      accountSecret: null,
       clientSecret: null,
     );
 
@@ -231,5 +224,5 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   }
 
   @override
-  Instance get instance => Instance(name: "Twitter", source: null);
+  Instance get instance => const Instance(name: "Twitter");
 }

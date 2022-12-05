@@ -37,13 +37,11 @@ class TwitterAdapter extends CentralizedBackendAdapter
     implements FavoriteSupport, BookmarkSupport, SearchSupport {
   final TwitterClient client;
 
-  final String? _host;
-
-  factory TwitterAdapter(String? host) {
-    return TwitterAdapter.custom(TwitterClient(), host);
+  factory TwitterAdapter() {
+    return TwitterAdapter.custom(TwitterClient());
   }
 
-  TwitterAdapter.custom(this.client, [this._host]);
+  TwitterAdapter.custom(this.client);
 
   @override
   AdapterCapabilities get capabilities => const TwitterCapabilities();

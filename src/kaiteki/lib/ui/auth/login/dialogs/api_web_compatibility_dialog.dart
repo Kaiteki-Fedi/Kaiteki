@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart' as consts;
+import 'package:kaiteki/constants.dart' show dialogConstraints;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/link_constants.dart' show corsHelpArticleUrl;
@@ -14,12 +14,12 @@ class ApiWebCompatibilityDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
-    return ConstrainedBox(
-      constraints: consts.dialogConstraints,
-      child: AlertDialog(
-        icon: const Icon(Icons.error),
-        title: Text(l10n.unsupportedInstanceTitle),
-        content: Text.rich(
+    return AlertDialog(
+      icon: const Icon(Icons.error),
+      title: Text(l10n.unsupportedInstanceTitle),
+      content: SizedBox(
+        width: dialogConstraints.minWidth,
+        child: Text.rich(
           TextSpan(
             text: l10n.unsupportedInstanceDescriptionCORS(type.displayName),
             children: [
@@ -36,17 +36,17 @@ class ApiWebCompatibilityDialog extends StatelessWidget {
             ],
           ),
         ),
-        actions: [
-          TextButton(
-            child: Text(l10n.continueAnywayButtonLabel),
-            onPressed: () => Navigator.pop(context, true),
-          ),
-          TextButton(
-            child: Text(l10n.abortButtonLabel),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
       ),
+      actions: [
+        TextButton(
+          child: Text(l10n.continueAnywayButtonLabel),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+        TextButton(
+          child: Text(l10n.abortButtonLabel),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
     );
   }
 }

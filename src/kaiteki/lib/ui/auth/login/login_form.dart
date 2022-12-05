@@ -5,6 +5,7 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
@@ -248,6 +249,10 @@ class LoginFormState extends ConsumerState<LoginForm> {
 
     if (result.successful) {
       final account = result.account!;
+      if (account.accountSecret == null) {
+        await _showTemporaryAccountNotice();
+      }
+
       await accounts.add(account);
       accounts.current = account;
 
@@ -341,5 +346,29 @@ class LoginFormState extends ConsumerState<LoginForm> {
     } finally {
       _fetchInstanceFuture = null;
     }
+  }
+
+  Future<void> _showTemporaryAccountNotice() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          icon: const Icon(Icons.vpn_key_off_rounded),
+          title: const Text("Your session will be temporary"),
+          content: ConstrainedBox(
+            constraints: dialogConstraints,
+            child: const Text(
+              "The backend implementation of this service did not provide login information when you signed in. This means that you'll be signed out next time you use Kaiteki.",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.getMaterialL10n().okButtonLabel),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

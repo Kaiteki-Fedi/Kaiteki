@@ -14,12 +14,12 @@ class AccountRemovalDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
 
-    return ConstrainedBox(
-      constraints: dialogConstraints,
-      child: AlertDialog(
-        icon: const Icon(Icons.logout_rounded),
-        title: Text(l10n.accountRemovalConfirmationTitle),
-        content: Column(
+    return AlertDialog(
+      icon: const Icon(Icons.logout_rounded),
+      title: Text(l10n.accountRemovalConfirmationTitle),
+      content: SizedBox(
+        width: dialogConstraints.minWidth,
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(l10n.accountRemovalConfirmationDescription),
@@ -41,20 +41,20 @@ class AccountRemovalDialog extends StatelessWidget {
               )
           ],
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.cancelButtonLabel),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).errorColor,
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.removeButtonLabel),
-          )
-        ],
       ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancelButtonLabel),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).errorColor,
+          ),
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(l10n.removeButtonLabel),
+        )
+      ],
     );
   }
 }

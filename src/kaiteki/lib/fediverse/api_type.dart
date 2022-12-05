@@ -6,6 +6,9 @@ import 'package:kaiteki/fediverse/backends/pleroma/adapter.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v1/adapter.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/adapter.dart';
 
+TwitterAdapter _instantiateTwitterV2(String _) => TwitterAdapter();
+OldTwitterAdapter _instantiateTwitterV1(String _) => OldTwitterAdapter();
+
 enum ApiType {
   mastodon(
     createAdapter: MastodonAdapter.new,
@@ -23,13 +26,13 @@ enum ApiType {
     adapterType: MisskeyAdapter,
   ),
   twitter(
-    createAdapter: TwitterAdapter.new,
+    createAdapter: _instantiateTwitterV2,
     theme: twitterTheme,
     hosts: ["twitter.com"],
     adapterType: TwitterAdapter,
   ),
   twitterV1(
-    createAdapter: OldTwitterAdapter.new,
+    createAdapter: _instantiateTwitterV1,
     theme: twitterTheme,
     hosts: ["twitter.com"],
     adapterType: OldTwitterAdapter,

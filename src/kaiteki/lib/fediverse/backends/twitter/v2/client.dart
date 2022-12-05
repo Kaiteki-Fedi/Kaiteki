@@ -11,14 +11,11 @@ import 'package:kaiteki/fediverse/backends/twitter/v2/responses/timeline_respons
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/token_response.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/user_response.dart';
 import 'package:kaiteki/http/http.dart';
-import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 import 'model/media.dart';
 
 class TwitterClient {
-  static final _logger = getLogger("TwitterClient");
-
   late final KaitekiClient client;
 
   String? _userId;

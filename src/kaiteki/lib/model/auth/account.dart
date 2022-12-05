@@ -7,7 +7,7 @@ import 'package:kaiteki/model/auth/secret.dart';
 @immutable
 class Account {
   final AccountKey key;
-  final AccountSecret accountSecret;
+  final AccountSecret? accountSecret;
   final ClientSecret? clientSecret;
   final BackendAdapter adapter;
   final User user;

@@ -16,16 +16,16 @@ class KeyboardShortcutsDialog extends StatelessWidget {
       color: Theme.of(context).disabledColor,
     );
     final l10n = context.getL10n();
-    return ConstrainedBox(
-      constraints: dialogConstraints,
-      child: AlertDialog(
-        icon: const Icon(Icons.keyboard_rounded),
-        title: Text(l10n.keyboardShortcuts),
-        scrollable: true,
-        actionsPadding: Theme.of(context).useMaterial3
-            ? const EdgeInsets.fromLTRB(24, 24, 16, 24)
-            : null,
-        content: Column(
+    return AlertDialog(
+      icon: const Icon(Icons.keyboard_rounded),
+      title: Text(l10n.keyboardShortcuts),
+      scrollable: true,
+      actionsPadding: Theme.of(context).useMaterial3
+          ? const EdgeInsets.fromLTRB(24, 24, 16, 24)
+          : null,
+      content: ConstrainedBox(
+        constraints: dialogConstraints,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             KeyboardShortcut(
@@ -95,20 +95,20 @@ class KeyboardShortcutsDialog extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(l10n.closeButtonLabel),
-                const SizedBox(width: 12.0),
-                KeyboardKey.fromKey(context, LogicalKeyboardKey.escape),
-              ],
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
       ),
+      actions: [
+        TextButton(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.closeButtonLabel),
+              const SizedBox(width: 12.0),
+              KeyboardKey.fromKey(context, LogicalKeyboardKey.escape),
+            ],
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
     );
   }
 }
