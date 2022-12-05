@@ -400,4 +400,54 @@ class MisskeyClient {
         )
         .then(misskey.Notification.fromJson.fromResponseList);
   }
+
+  Future<List<misskey.UserLite>> searchUsers(
+    String query, {
+    int? offset,
+    int? limit,
+    String? origin,
+    bool? detail,
+  }) {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/search",
+          body: {
+            "query": query,
+            if (offset != null) "offset": offset,
+            if (limit != null) "limit": limit,
+            if (origin != null) "origin": origin,
+            if (detail != null) "detail": detail,
+          }.jsonBody,
+        )
+        .then(misskey.UserLite.fromJson.fromResponseList);
+  }
+
+  Future<List<misskey.Note>> searchNotes(
+    String query, {
+    String? sinceId,
+    String? untilId,
+    int? limit,
+    int? offset,
+    String? host,
+    String? userId,
+    String? channelId,
+  }) {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/search",
+          body: {
+            "query": query,
+            if (sinceId != null) "sinceId": sinceId,
+            if (untilId != null) "untilId": untilId,
+            if (limit != null) "limit": limit,
+            if (offset != null) "offset": offset,
+            if (host != null) "host": host,
+            if (userId != null) "userId": userId,
+            if (channelId != null) "channelId": channelId,
+          }.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
+  }
 }

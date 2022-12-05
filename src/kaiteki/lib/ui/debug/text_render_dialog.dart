@@ -7,6 +7,7 @@ import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
+import 'package:kaiteki/ui/shared/primary_tab_bar_theme.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
@@ -44,26 +45,17 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
                   elevation: 0,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TabBar(
-                    indicatorColor: Theme.of(context).colorScheme.primary,
-                    labelColor: Theme.of(context).colorScheme.primary,
-                    unselectedLabelColor: Theme.of(context).disabledColor,
-                    isScrollable: true,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicator: RoundedUnderlineTabIndicator(
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      radius: const Radius.circular(2),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: PrimaryTabBarTheme(
+                    child: TabBar(
+                      isScrollable: true,
+                      tabs: [
+                        Tab(text: "Raw"),
+                        Tab(text: "Parsed"),
+                        Tab(text: "Rendered"),
+                      ],
                     ),
-                    tabs: const [
-                      Tab(text: "Raw"),
-                      Tab(text: "Parsed"),
-                      Tab(text: "Rendered"),
-                    ],
                   ),
                 ),
                 const Divider(height: 1),

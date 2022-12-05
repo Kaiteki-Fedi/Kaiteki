@@ -21,6 +21,7 @@ import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
+import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
@@ -44,7 +45,8 @@ class MisskeyAdapter extends BackendAdapter
         ChatSupport,
         ReactionSupport,
         CustomEmojiSupport,
-        NotificationSupport {
+        NotificationSupport,
+        SearchSupport {
   final MisskeyClient client;
 
   @override
@@ -433,5 +435,30 @@ class MisskeyAdapter extends BackendAdapter
     AccountSecret accountSecret,
   ) {
     client.i = accountSecret.accessToken;
+  }
+
+  @override
+  Future<SearchResults> search(String query) async {
+    return SearchResults(
+      users: await searchForUsers(query),
+      posts: await searchForPosts(query),
+    );
+  }
+
+  @override
+  Future<List<String>> searchForHashtags(String query) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Post>> searchForPosts(String query) async {
+    final notes = await client.searchNotes(query);
+    return notes.map((n) => toPost(n, instance)).toList();
+  }
+
+  @override
+  Future<List<User>> searchForUsers(String query) async {
+    final users = await client.searchUsers(query);
+    return users.map((u) => toUserFromLite(u, instance)).toList();
   }
 }

@@ -14,6 +14,7 @@ import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart'
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
+import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
@@ -33,7 +34,7 @@ const clientId = kDebugMode
     : "Q2lkU2p0VERwOWxreXdxeFVsQm46MTpjaQ";
 
 class TwitterAdapter extends CentralizedBackendAdapter
-    implements FavoriteSupport, BookmarkSupport {
+    implements FavoriteSupport, BookmarkSupport, SearchSupport {
   final TwitterClient client;
 
   final String? _host;
@@ -404,4 +405,29 @@ class TwitterAdapter extends CentralizedBackendAdapter
     backgroundUrl:
         "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
   );
+
+  @override
+  Future<SearchResults> search(String query) async {
+    return SearchResults(
+      posts: await searchForPosts(query),
+    );
+  }
+
+  @override
+  Future<List<String>> searchForHashtags(String query) {
+    // TODO: implement searchForHashtags
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Post>> searchForPosts(String query) async {
+    final response = await client.searchRecentTweets(query);
+    return response.data!.map((t) => t.toKaiteki(response.includes!)).toList();
+  }
+
+  @override
+  Future<List<User>> searchForUsers(String query) {
+    // TODO: implement searchForUsers
+    throw UnimplementedError();
+  }
 }

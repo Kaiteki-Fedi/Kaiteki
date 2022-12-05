@@ -12,6 +12,7 @@ import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
+import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
 // ignore: unnecessary_import, Dart Analyzer is fucking with me
@@ -35,7 +36,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         CustomEmojiSupport,
         FavoriteSupport,
         BookmarkSupport,
-        NotificationSupport {
+        NotificationSupport,
+        SearchSupport {
   final T client;
 
   SharedMastodonAdapter(this.client);
@@ -404,5 +406,33 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     AccountSecret accountSecret,
   ) {
     client.accessToken = accountSecret.accessToken;
+  }
+
+  @override
+  Future<SearchResults> search(String query) async {
+    final results = await client.search(query);
+
+    return SearchResults(
+      users: results.accounts.map((a) => toUser(a, instance)).toList(),
+      posts: results.statuses.map((s) => toPost(s, instance)).toList(),
+    );
+  }
+
+  @override
+  Future<List<String>> searchForHashtags(String query) {
+    // TODO: implement searchForHashtags
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Post>> searchForPosts(String query) {
+    // TODO: implement searchForPosts
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<User>> searchForUsers(String query) {
+    // TODO: implement searchForUsers
+    throw UnimplementedError();
   }
 }

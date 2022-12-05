@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
+import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/services/notifications.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
@@ -232,7 +233,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   VoidCallback? get _search {
-    return null;
+    if (ref.watch(adapterProvider) is! SearchSupport) return null;
+    return () {
+      context.pushNamed("search", params: ref.accountRouterParams);
+    };
   }
 
   VoidCallback? get _refresh {

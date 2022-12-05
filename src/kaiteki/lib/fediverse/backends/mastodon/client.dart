@@ -4,6 +4,7 @@ import 'package:fediverse_objects/mastodon.dart';
 import 'package:http/http.dart' show Response;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/api_exception.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/models/search.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/marker.dart';
@@ -320,5 +321,26 @@ class MastodonClient {
           "api/v1/markers?timeline[]=${timeline.map((t) => t.name).join(",")}",
         )
         .then(MarkerResponse.fromJson.fromResponse);
+  }
+
+  Future<Search> search(
+    String query, {
+    String? type,
+    int? offset,
+    String? maxId,
+    String? minId,
+    bool? resolve,
+  }) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v2/search",
+      query: {
+        "q": query,
+        "offset": offset,
+        "max_id": maxId,
+        "min_id": minId,
+        "resolve": resolve,
+      },
+    ).then(Search.fromJson.fromResponse);
   }
 }

@@ -175,6 +175,14 @@ extension WidgetRefExtensions on WidgetRef {
     final account = read(accountProvider).current;
     return "@${account.key.username}@${account.key.host}";
   }
+
+  Map<String, String> get accountRouterParams {
+    final accountKey = read(accountProvider).current.key;
+    return {
+      "accountUsername": accountKey.username,
+      "accountHost": accountKey.host,
+    };
+  }
 }
 
 extension BreakpointExtensions on Breakpoint {
