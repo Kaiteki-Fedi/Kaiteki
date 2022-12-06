@@ -9,7 +9,7 @@ class LocaleListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.getL10n();
-    final prefs = ref.watch(preferencesProvider);
+    // final prefs = ref.watch(preferencesProvider);
     return ListTile(
       leading: const Icon(Icons.public),
       title: Text(l10n.settingsLocale),

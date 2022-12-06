@@ -24,6 +24,7 @@ import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
+import 'package:kaiteki/fediverse/model/post_metrics.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account.dart';

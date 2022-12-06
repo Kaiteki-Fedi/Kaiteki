@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart' as twt;
 import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart' as twt;
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart';
 import 'package:kaiteki/fediverse/model/model.dart' as ktk;
+import 'package:kaiteki/fediverse/model/post_metrics.dart';
 
 extension UserExtensions on twt.User {
   ktk.User toKaiteki() {
@@ -88,13 +89,19 @@ extension TweetExtensions on twt.Tweet {
               ?.firstWhereOrNull((t) => t.id == reply.id)
               ?.toKaiteki(includes)
           : null,
-      likeCount: publicMetrics?.likeCount ?? 0,
-      repeatCount:
-          (publicMetrics?.retweetCount ?? 0) + (publicMetrics?.quoteCount ?? 0),
-      replyCount: publicMetrics?.replyCount ?? 0,
+      metrics: PostMetrics(
+        likeCount: publicMetrics?.likeCount ?? 0,
+        repeatCount: (publicMetrics?.retweetCount ?? 0) +
+            (publicMetrics?.quoteCount ?? 0),
+        replyCount: publicMetrics?.replyCount ?? 0,
+      ),
       replyToPostId: reply?.id,
       replyToUserId: inReplyToUserId,
-      externalUrl: "https://twitter.com/${author.username}/status/$id",
+      externalUrl: Uri(
+        scheme: "https",
+        host: "twitter.com",
+        pathSegments: [author.username, "status", id],
+      ),
       client: source,
       // TODO(Craftplacer): I said they don't look nice enough, filter out like tweet text
       // embeds: entities?.urls?.map((u) => u.toKaiteki()).toList() ?? [],

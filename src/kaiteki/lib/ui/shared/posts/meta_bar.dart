@@ -47,7 +47,7 @@ class MetaBar extends StatelessWidget {
     final l10n = context.getL10n();
 
     return [
-      if (_post.pinned)
+      if (_post.state.pinned)
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Tooltip(

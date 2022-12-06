@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post_metrics.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/shared/posts/count_button.dart';
 
 class InteractionBar extends StatelessWidget {
   const InteractionBar({
     super.key,
-    required Post post,
+    required this.metrics,
     this.onReply,
     this.onFavorite,
     this.onRepeat,
@@ -17,9 +17,9 @@ class InteractionBar extends StatelessWidget {
     required this.buildActions,
     this.onShowFavoritees,
     this.onShowRepeatees,
-  }) : _post = post;
+  });
 
-  final Post _post;
+  final PostMetrics metrics;
 
   final VoidCallback? onReply;
   final VoidCallback? onFavorite;
@@ -39,16 +39,16 @@ class InteractionBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final buttons = [
       CountButton(
-        count: _post.replyCount,
+        count: metrics.replyCount,
         focusNode: FocusNode(skipTraversal: true),
         icon: const Icon(Icons.reply_rounded),
         onTap: onReply,
       ),
       if (repeated != null)
         CountButton(
-          active: _post.repeated,
+          active: repeated!,
           activeColor: Theme.of(context).ktkColors?.repeatColor,
-          count: _post.repeatCount,
+          count: metrics.repeatCount,
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.repeat_rounded),
           onTap: onRepeat,
@@ -56,10 +56,10 @@ class InteractionBar extends StatelessWidget {
         ),
       if (favorited != null)
         CountButton(
-          active: _post.liked,
+          active: favorited!,
           activeColor: Theme.of(context).ktkColors?.favoriteColor,
           activeIcon: const Icon(Icons.star_rounded),
-          count: _post.likeCount,
+          count: metrics.likeCount,
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.star_border_rounded),
           onTap: onFavorite,

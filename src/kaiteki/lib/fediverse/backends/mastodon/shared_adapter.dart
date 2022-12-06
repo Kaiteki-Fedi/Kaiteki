@@ -15,6 +15,8 @@ import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
+import 'package:kaiteki/fediverse/model/post_metrics.dart';
+import 'package:kaiteki/fediverse/model/post_state.dart';
 // ignore: unnecessary_import, Dart Analyzer is fucking with me
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';

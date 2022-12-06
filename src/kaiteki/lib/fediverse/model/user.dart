@@ -1,4 +1,3 @@
-import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/user_flags.dart';
 
@@ -63,18 +62,6 @@ class User<T> {
     this.url,
     this.flags,
   });
-
-  factory User.example() {
-    return User(
-      username: "NyaNya",
-      displayName: "banned for being a cute neko",
-      avatarUrl: consts.exampleAvatar,
-      joinDate: DateTime.now(),
-      id: "CuteNeko-Account",
-      source: null,
-      host: 'cute.social',
-    );
-  }
 }
 
 /// Details set by the [User].

@@ -23,7 +23,11 @@ Post toPost(misskey.Note source, String localHost) {
     id: source.id,
     visibility: toVisibility(source.visibility),
     attachments: source.files?.map(toAttachment).toList(),
-    externalUrl: source.url,
+    externalUrl: source.url == null ? null : Uri.parse(source.url!),
+    metrics: PostMetrics(
+      repeatCount: source.renoteCount,
+      replyCount: source.repliesCount,
+    ),
   );
 }
 

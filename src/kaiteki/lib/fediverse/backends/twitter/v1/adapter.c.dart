@@ -11,8 +11,10 @@ Post toPost(twitter.Tweet tweet) {
     postedAt: tweet.createdAt,
     source: tweet,
     content: content,
-    likeCount: tweet.favoriteCount,
-    repeatCount: tweet.retweetCount,
+    metrics: PostMetrics(
+      likeCount: tweet.favoriteCount,
+      repeatCount: tweet.retweetCount,
+    ),
     attachments: tweet.entities.media?.map(toAttachment).toList(),
     replyToUserId: tweet.inReplyToUserIdStr,
     replyToPostId: tweet.inReplyToStatusIdStr,

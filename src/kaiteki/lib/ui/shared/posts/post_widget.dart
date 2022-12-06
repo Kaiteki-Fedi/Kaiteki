@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post_state.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/theming/kaiteki/post.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
@@ -26,6 +27,7 @@ import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 
@@ -124,17 +126,17 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         ),
       if (widget.showActions)
         InteractionBar(
-          post: _post,
+          metrics: _post.metrics,
           onReply: () => context.showPostDialog(replyTo: _post),
           onFavorite: _onFavorite,
           onRepeat: _onRepeat,
           onReact: _onReact,
           favorited: adapter is FavoriteSupport //
-              ? _post.liked
+              ? _post.state.favorited
               : null,
           onShowFavoritees: _showFavoritees,
           onShowRepeatees: _showRepeatees,
-          repeated: _post.repeated,
+          repeated: _post.state.repeated,
           reacted: adapter is ReactionSupport ? false : null,
           buildActions: _buildActions,
         )
@@ -242,12 +244,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           value: _onBookmark,
           child: ListTile(
             title: Text(
-              _post.bookmarked
+              _post.state.bookmarked
                   ? l10n.postRemoveFromBookmarks
                   : l10n.postAddToBookmarks,
             ),
             leading: Icon(
-              _post.bookmarked
+              _post.state.bookmarked
                   ? Icons.bookmark_rounded
                   : Icons.bookmark_border_rounded,
               color: Theme.of(context).ktkColors?.bookmarkColor ??
@@ -267,7 +269,11 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           contentPadding: EdgeInsets.zero,
           enabled: openInBrowserAvailable,
         ),
-        value: () => context.launchUrl(_post.externalUrl!),
+        value: () async {
+          final url = _post.externalUrl;
+          if (url == null) return;
+          await launchUrl(url, mode: LaunchMode.externalApplication);
+        },
       ),
       if (_post.content != null)
         PopupMenuItem(
@@ -290,12 +296,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     try {
       final f = adapter as FavoriteSupport;
       final Post newPost;
-      if (_post.liked) {
+      if (_post.state.favorited) {
         await f.unfavoritePost(_post.id);
-        newPost = _post.copyWith(liked: false);
+        newPost = _post.copyWith.state(_post.state.copyWith.favorited(false));
       } else {
         await f.favoritePost(_post.id);
-        newPost = _post.copyWith(liked: true);
+        newPost = _post.copyWith.state(_post.state.copyWith.favorited(true));
       }
       setState(() => _post = newPost);
     } catch (e, s) {
@@ -314,12 +320,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       final f = adapter as BookmarkSupport;
 
       final Post newPost;
-      if (_post.bookmarked) {
+      if (_post.state.bookmarked) {
         await f.unbookmarkPost(_post.id);
-        newPost = _post.copyWith(bookmarked: false);
+        newPost = _post.copyWith.state(_post.state.copyWith.bookmarked(false));
       } else {
         await f.bookmarkPost(_post.id);
-        newPost = _post.copyWith(bookmarked: true);
+        newPost = _post.copyWith.state(_post.state.copyWith.bookmarked(false));
       }
 
       if (mounted) {
@@ -330,7 +336,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                 const TextInheritedIconTheme(child: Icon(Icons.check_rounded)),
                 const SizedBox(width: 8),
                 Text(
-                  _post.bookmarked
+                  _post.state.bookmarked
                       ? l10n.postBookmarkRemoved
                       : l10n.postBookmarkAdded,
                 ),
@@ -356,12 +362,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     try {
       final Post newPost;
 
-      if (_post.repeated) {
+      if (_post.state.repeated) {
         await adapter.unrepeatPost(_post.id);
-        newPost = _post.copyWith(repeated: false);
+        newPost = _post.copyWith.state(_post.state.copyWith.repeated(false));
       } else {
         await adapter.repeatPost(_post.id);
-        newPost = _post.copyWith(repeated: true);
+        newPost = _post.copyWith.state(_post.state.copyWith.repeated(true));
       }
 
       setState(() => _post = newPost);

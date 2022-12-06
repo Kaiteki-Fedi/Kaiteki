@@ -11,7 +11,7 @@
 
 # Tokens & keys
 *.jks
-lib/fediverse/backends/twitter/keys.dart
+lib/fediverse/backends/twitter/*/keys.dart
 
 # IntelliJ related
 *.iml

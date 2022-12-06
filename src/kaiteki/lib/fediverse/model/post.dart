@@ -4,6 +4,8 @@ import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/embed.dart';
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
+import 'package:kaiteki/fediverse/model/post_metrics.dart';
+import 'package:kaiteki/fediverse/model/post_state.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/fediverse/model/user_reference.dart';
@@ -23,25 +25,9 @@ class Post<T> {
   final User author;
   final bool nsfw;
   final Visibility? visibility;
-  final bool pinned;
 
-  // ENGAGEMENT
-  /// Whether the user has liked (favorited) this post
-  final bool liked;
-
-  /// Whether the user has repeated (boosted, retweeted, etc.) this post
-  final bool repeated;
-
-  /// How many users have liked this post
-  final int likeCount;
-
-  /// How many users have repeated (boosted, retweeted, etc.) this post
-  final int repeatCount;
-
-  /// How many users have replied to this post
-  final int replyCount;
-
-  final bool bookmarked;
+  final PostMetrics metrics;
+  final PostState state;
 
   /// What reactions this post has
   final List<Reaction> reactions;
@@ -69,7 +55,7 @@ class Post<T> {
 
   final List<UserReference>? mentionedUsers;
 
-  final String? externalUrl;
+  final Uri? externalUrl;
 
   Post({
     required this.source,
@@ -79,21 +65,16 @@ class Post<T> {
     this.reactions = const [],
     this.mentionedUsers = const [],
     this.attachments,
-    this.bookmarked = false,
     this.content,
     this.embeds = const [],
     this.emojis,
     this.externalUrl,
     this.formatting = Formatting.plainText,
-    this.likeCount = 0,
-    this.liked = false,
+    this.metrics = const PostMetrics(),
+    this.state = const PostState(),
     this.nsfw = false,
-    this.pinned = false,
     this.quotedPost,
-    this.repeatCount = 0,
-    this.repeated = false,
     this.repeatOf,
-    this.replyCount = 0,
     this.replyTo,
     this.replyToPostId,
     this.replyToUser,
@@ -102,18 +83,6 @@ class Post<T> {
     this.visibility,
     this.client,
   });
-
-  factory Post.example() {
-    return Post(
-      author: User.example(),
-      content: "Hello everyone!",
-      source: null,
-      postedAt: DateTime.now(),
-      reactions: [],
-      id: 'cool-post',
-      visibility: Visibility.public,
-    );
-  }
 
   Post addOrCreateReaction(
     Emoji emoji,
@@ -172,4 +141,11 @@ class Post<T> {
 
     return copyWith.reactions(reactions);
   }
+}
+
+enum PostFlag {
+  repeatable,
+  replyable,
+  favoritable,
+  federatable,
 }

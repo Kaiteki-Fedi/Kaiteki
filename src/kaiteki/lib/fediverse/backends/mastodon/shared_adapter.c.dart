@@ -8,25 +8,17 @@ Post toPost(mastodon.Status source, String localHost) {
     nsfw: source.sensitive,
     subject: source.spoilerText,
     author: toUser(source.account, localHost),
-    bookmarked: source.bookmarked ?? false,
     repeatOf: source.reblog != null ? toPost(source.reblog!, localHost) : null,
-    // shouldn't be null because we currently expect the user to be signed in
-    repeated: source.reblogged!,
-    liked: source.favourited!,
     emojis: source.emojis.map(toEmoji).toList(),
     attachments: source.mediaAttachments
         .map((a) => toAttachment(a, status: source))
         .toList(),
-    pinned: source.pinned ?? false,
-    likeCount: source.favouritesCount,
-    repeatCount: source.reblogsCount,
-    replyCount: source.repliesCount,
     visibility: toVisibility(source.visibility),
     replyToUserId: source.inReplyToAccountId,
     replyToPostId: source.inReplyToId,
     replyToUser: getRepliedUser(source, localHost),
     id: source.id,
-    externalUrl: source.url,
+    externalUrl: source.url == null ? null : Uri.parse(source.url!),
     client: source.application?.name,
     reactions: source.pleroma?.emojiReactions
             ?.map((r) => toReaction(r, localHost))
@@ -40,6 +32,18 @@ Post toPost(mastodon.Status source, String localHost) {
         host: getHost(e.account),
       );
     }).toList(growable: false),
+    metrics: PostMetrics(
+      likeCount: source.favouritesCount,
+      repeatCount: source.reblogsCount,
+      replyCount: source.repliesCount,
+    ),
+    state: PostState(
+      // shouldn't be null because we currently expect the user to be signed in
+      repeated: source.reblogged!,
+      favorited: source.favourited!,
+      bookmarked: source.bookmarked ?? false,
+      pinned: source.pinned ?? false,
+    ),
   );
 }
 
