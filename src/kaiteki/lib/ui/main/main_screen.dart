@@ -332,6 +332,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       );
     } else {
       return BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        selectedItemColor: Theme.of(context).colorScheme.onPrimary,
+        unselectedItemColor:
+            Theme.of(context).colorScheme.onPrimary.withOpacity(0.76),
+        selectedFontSize: 12,
+        showUnselectedLabels: false,
         onTap: _changeIndex,
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
@@ -368,6 +374,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       final unreadCount = tab.fetchUnreadCount?.call();
       bottomNavigationBarItems.add(
         BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           icon: _wrapInBadge(Icon(tab.icon), unreadCount),
           activeIcon: _wrapInBadge(Icon(tab.selectedIcon), unreadCount),
           label: tab.text,
