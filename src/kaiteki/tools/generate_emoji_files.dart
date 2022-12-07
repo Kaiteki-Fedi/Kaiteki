@@ -20,7 +20,7 @@ const groupNameMap = {
   "Travel and places": "Travel & Places",
 };
 
-typedef EmojiCompound = Tuple2<String, List<String>>;
+typedef EmojiCompound = Tuple3<String, List<String>, List<String>>;
 
 void main(List<String> arguments) async {
   final raw = await fetchEmojiList();
@@ -47,7 +47,9 @@ void main(List<String> arguments) async {
         variants.add(alternate);
       }
 
-      compounds.add(EmojiCompound(base, variants));
+      final shortCodes = emoji["shortcodes"] as List<dynamic>;
+
+      compounds.add(EmojiCompound(base, variants, shortCodes.cast()));
     }
 
     groups[groupName] = compounds;
@@ -125,14 +127,18 @@ String generateDartFile(String fieldName, List<EmojiCompound> emojis) {
   for (final compound in emojis) {
     final baseEmoji = compound.item1;
     final variants = compound.item2;
+    final shortCodes = compound.item3.map((e) => '"$e"').join(", ");
 
     buffer.writeln('  const EmojiCategoryItem(');
-    buffer.write('    const UnicodeEmoji("$baseEmoji"),');
+
+    buffer.write('    const UnicodeEmoji("$baseEmoji", const [$shortCodes]),');
 
     if (variants.isNotEmpty) {
       buffer.writeln(' [');
       for (final emoji in variants) {
-        buffer.writeln('      const UnicodeEmoji("$emoji"),');
+        buffer.writeln(
+          '      const UnicodeEmoji("$emoji", const [$shortCodes]),',
+        );
       }
       buffer.writeln('    ],');
     } else {

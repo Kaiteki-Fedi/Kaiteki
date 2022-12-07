@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
   final TextEditingController controller;
+  final VoidCallback? onEnter;
 
-  const SearchBar({super.key, required this.controller});
+  const SearchBar({super.key, required this.controller, this.onEnter});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      onSubmitted: (_) => onEnter?.call(),
       decoration: InputDecoration(
         fillColor: Theme.of(context).colorScheme.onSurface.withOpacity(1 / 15),
         filled: true,

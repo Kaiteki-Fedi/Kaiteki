@@ -15,11 +15,10 @@ abstract class Emoji {
 class UnicodeEmoji extends Emoji {
   final String emoji;
 
-  const UnicodeEmoji(this.emoji);
+  const UnicodeEmoji(this.emoji, [this.aliases = const []]);
 
   @override
-  // TODO(Craftplacer): implement aliases for unicode
-  List<String>? get aliases => null;
+  final List<String> aliases;
 
   @override
   String get short => emoji;

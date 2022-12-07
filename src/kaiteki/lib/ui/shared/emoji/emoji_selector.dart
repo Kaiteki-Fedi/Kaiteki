@@ -111,7 +111,15 @@ class _EmojiSelectorState extends State<EmojiSelector>
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SearchBar(controller: _searchTextController),
+                      child: SearchBar(
+                        controller: _searchTextController,
+                        onEnter: () {
+                          final emoji =
+                              _categories.firstOrNull?.emojis.firstOrNull;
+
+                          if (emoji != null) widget.onEmojiSelected(emoji);
+                        },
+                      ),
                     ),
                   ),
                 if (_categories.isEmpty &&
@@ -150,6 +158,8 @@ class _EmojiSelectorState extends State<EmojiSelector>
         delegate: SliverChildBuilderDelegate(
           (context, index) => _buildItem(context, category.items, index),
           childCount: category.items.length,
+          addSemanticIndexes: false,
+          addRepaintBoundaries: false,
         ),
       ),
     ];
@@ -272,7 +282,13 @@ class _EmojiSelectorState extends State<EmojiSelector>
             final keywords = i.emojis.expand(
               (i) => <String>[
                 i.short,
-                ...?i.aliases,
+                if (i.aliases != null)
+                  if (i is UnicodeEmoji)
+                    ...i.aliases.map((e) {
+                      return e.substring(1, e.length - 1).replaceAll("-", " ");
+                    })
+                  else
+                    ...?i.aliases,
               ],
             );
             return keywords.any((w) => w.contains(query));

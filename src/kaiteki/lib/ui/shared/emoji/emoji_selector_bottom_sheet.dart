@@ -130,7 +130,7 @@ class _EmojiSelectorBottomSheetState
       case _EmojiKindTab.unicode:
         _unicodeEmojis ??= _getUnicodeCategories(context);
         // FIXME(Craftplacer): Can't search unicode emojis because we don't have a list of aliases
-        return _buildSelector(context, _unicodeEmojis!, false);
+        return _buildSelector(context, _unicodeEmojis!);
     }
   }
 }
