@@ -1,7 +1,6 @@
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/primary_tab_bar_theme.dart';

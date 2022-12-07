@@ -6,7 +6,6 @@ import 'package:kaiteki/fediverse/model/post.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
-import 'package:kaiteki/ui/shared/primary_tab_bar_theme.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';

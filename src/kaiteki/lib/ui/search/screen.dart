@@ -5,7 +5,6 @@ import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
-import 'package:kaiteki/ui/shared/primary_tab_bar_theme.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});

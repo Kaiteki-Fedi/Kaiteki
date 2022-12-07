@@ -9,7 +9,6 @@ import 'package:kaiteki/fediverse/model/notification.dart';
 import 'package:kaiteki/fediverse/services/notifications.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';

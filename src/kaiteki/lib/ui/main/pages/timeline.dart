@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/widgets/timeline.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {

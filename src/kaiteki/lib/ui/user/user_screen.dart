@@ -9,7 +9,6 @@ import 'package:kaiteki/fediverse/model/user.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/preferences/app_experiment.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/shared/async/async_button.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
@@ -128,7 +127,8 @@ class _UserScreenState extends ConsumerState<UserScreen>
             const ListTile(
               title: Text("Would you like to fetch the remote profile?"),
               subtitle: Text(
-                  "Kaiteki can display the user profile from its remote instance for more up-to-date details"),
+                "Kaiteki can display the user profile from its remote instance for more up-to-date details",
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
@@ -166,9 +166,9 @@ class _UserScreenState extends ConsumerState<UserScreen>
                           id = remoteUser.id;
                           _future = Future.value(remoteUser);
                         });
-                      } catch (e, s) {
+                      } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text(
                               "We couldn't fetch the remote profile",
                             ),
