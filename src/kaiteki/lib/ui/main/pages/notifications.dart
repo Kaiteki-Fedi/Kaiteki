@@ -46,27 +46,17 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         headerSliverBuilder: (context, _) => [
           SliverToBoxAdapter(
             child: Column(
-              children: [
+              children: const [
                 TabBar(
-                  indicatorColor: Theme.of(context).colorScheme.primary,
-                  labelColor: Theme.of(context).colorScheme.primary,
-                  unselectedLabelColor: Theme.of(context).disabledColor,
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
-                  indicator: RoundedUnderlineTabIndicator(
-                    borderSide: BorderSide(
-                      width: 2,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    radius: const Radius.circular(2),
-                  ),
                   // TODO(Craftplacer): Localize
-                  tabs: const [
+                  tabs: [
                     Tab(text: "Unread"),
                     Tab(text: "Read"),
                   ],
                 ),
-                const Divider(height: 1),
+                Divider(height: 1),
               ],
             ),
           ),

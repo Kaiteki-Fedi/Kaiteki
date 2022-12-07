@@ -40,11 +40,6 @@ class PleromaAdapter //
   }
 
   @override
-  Future<User> getUser(String username, [String? instance]) {
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Iterable<ChatMessage>> getChatMessages(Chat chat) {
     throw UnimplementedError();
   }

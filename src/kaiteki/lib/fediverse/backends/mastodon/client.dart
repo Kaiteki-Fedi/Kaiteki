@@ -343,4 +343,20 @@ class MastodonClient {
       },
     ).then(Search.fromJson.fromResponse);
   }
+
+  Future<List<Account>> searchAccounts(
+    String q, {
+    bool? resolve,
+    bool? following,
+  }) {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/accounts/search",
+      query: {
+        "q": q,
+        "resolve": resolve,
+        "following": following,
+      },
+    ).then(Account.fromJson.fromResponseList);
+  }
 }

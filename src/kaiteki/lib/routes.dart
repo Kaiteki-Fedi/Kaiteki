@@ -14,6 +14,7 @@ import 'package:kaiteki/ui/settings/credits_screen.dart';
 import 'package:kaiteki/ui/settings/customization/customization_settings_screen.dart';
 import 'package:kaiteki/ui/settings/debug/theme_screen.dart';
 import 'package:kaiteki/ui/settings/debug_screen.dart';
+import 'package:kaiteki/ui/settings/experiments.dart';
 import 'package:kaiteki/ui/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shared/conversation_screen.dart';
 import 'package:kaiteki/ui/user/user_screen.dart';
@@ -28,6 +29,11 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: "customization",
           builder: (_, __) => const CustomizationSettingsScreen(),
+        ),
+        GoRoute(
+          name: "experiments",
+          path: "experiments",
+          builder: (_, __) => const ExperimentsScreen(),
         ),
         GoRoute(
           path: "debug",

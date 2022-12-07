@@ -74,7 +74,7 @@ class TimelineState extends ConsumerState<Timeline> {
 
   @override
   void didUpdateWidget(covariant Timeline oldWidget) {
-    if (widget.kind != oldWidget.kind) {
+    if (widget.kind != oldWidget.kind || widget.userId != oldWidget.userId) {
       _controller.refresh();
     }
 

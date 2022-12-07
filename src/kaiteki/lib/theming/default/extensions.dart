@@ -5,6 +5,7 @@ import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/theming/kaiteki/post.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/theming/kaiteki/theme.dart';
+import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyGeneralChanges() {
@@ -27,6 +28,13 @@ extension ThemeDataExtensions on ThemeData {
         KaitekiTheme.fromMaterialTheme(this),
         KaitekiPostTheme.fallback,
       ],
+      tabBarTheme: TabBarTheme(
+        indicator: RoundedUnderlineTabIndicator(
+          borderSide: BorderSide(width: 3, color: colorScheme.primary),
+        ),
+        labelColor: colorScheme.primary,
+        unselectedLabelColor: colorScheme.onSurfaceVariant,
+      ),
       textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
       checkboxTheme: CheckboxThemeData(
         checkColor: MaterialStateProperty.all(colorScheme.surface),

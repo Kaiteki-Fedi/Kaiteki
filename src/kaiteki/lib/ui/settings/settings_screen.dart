@@ -26,11 +26,18 @@ class SettingsScreen extends StatelessWidget {
               title: Text(l10n.settingsTabs),
               enabled: false,
             ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.science_rounded),
+              title: const Text("Experiments"),
+              subtitle: const Text("Try out experimental Kaiteki features!"),
+              onTap: () => context.pushNamed("experiments"),
+            ),
             ListTile(
               leading: const Icon(Icons.bug_report_rounded),
               title: Text(l10n.settingsDebugMaintenance),
               onTap: () => context.push("/settings/debug"),
-            )
+            ),
           ],
         ),
       ),

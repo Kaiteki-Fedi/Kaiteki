@@ -57,18 +57,8 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
                 child: Column(
                   children: [
                     TabBar(
-                      indicatorColor: Theme.of(context).colorScheme.primary,
-                      labelColor: Theme.of(context).colorScheme.primary,
-                      unselectedLabelColor: Theme.of(context).disabledColor,
                       isScrollable: true,
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicator: RoundedUnderlineTabIndicator(
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        radius: const Radius.circular(2),
-                      ),
                       onTap: (i) => _onTabTap(i, kinds),
                       tabs: [
                         for (final kind in kinds)

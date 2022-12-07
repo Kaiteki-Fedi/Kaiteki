@@ -46,15 +46,13 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: PrimaryTabBarTheme(
-                    child: TabBar(
-                      isScrollable: true,
-                      tabs: [
-                        Tab(text: "Raw"),
-                        Tab(text: "Parsed"),
-                        Tab(text: "Rendered"),
-                      ],
-                    ),
+                  child: TabBar(
+                    isScrollable: true,
+                    tabs: [
+                      Tab(text: "Raw"),
+                      Tab(text: "Parsed"),
+                      Tab(text: "Rendered"),
+                    ],
                   ),
                 ),
                 const Divider(height: 1),

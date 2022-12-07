@@ -257,9 +257,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<User> getUser(String username, [String? instance]) {
-    // TODO(Craftplacer): implement getUser
-    throw UnimplementedError();
+  Future<User> getUser(String username, [String? instance]) async {
+    final results = await client.searchAccounts(username);
+    final account = results.firstWhere((a) => a.username == username);
+    return toUser(account, this.instance);
   }
 
   @override

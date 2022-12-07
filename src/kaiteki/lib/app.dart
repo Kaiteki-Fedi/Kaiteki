@@ -11,7 +11,7 @@ class KaitekiApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appPrefs = ref.watch(preferencesProvider);
+    final locale = ref.watch(preferencesProvider.select((p) => p.locale));
     final themePrefs = ref.watch(themeProvider);
     final m3 = themePrefs.useMaterial3 ?? themePrefs.material3Default;
     return MaterialApp.router(
@@ -20,7 +20,7 @@ class KaitekiApp extends ConsumerWidget {
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: appPrefs.locale == null ? null : Locale(appPrefs.locale!),
+      locale: locale == null ? null : Locale(locale),
       theme: getTheme(Brightness.light, m3),
       themeMode: themePrefs.mode,
       title: consts.appName,
