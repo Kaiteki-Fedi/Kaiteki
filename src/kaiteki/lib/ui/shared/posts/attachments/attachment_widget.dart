@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/ui/shared/posts/attachments/fallback_attachment_widget.dart';
 import 'package:kaiteki/ui/shared/posts/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/shared/posts/attachments/video_attachment_widget.dart';

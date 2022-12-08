@@ -1,6 +1,6 @@
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
 
 abstract class ReactionSupport {
   ReactionSupportCapabilities get capabilities;

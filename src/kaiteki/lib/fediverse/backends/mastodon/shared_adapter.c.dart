@@ -1,6 +1,7 @@
 part of 'shared_adapter.dart';
 
 Post toPost(mastodon.Status source, String localHost) {
+  final repliedUser = getRepliedUser(source, localHost);
   return Post(
     source: source,
     content: source.content,
@@ -8,15 +9,16 @@ Post toPost(mastodon.Status source, String localHost) {
     nsfw: source.sensitive,
     subject: source.spoilerText,
     author: toUser(source.account, localHost),
-    repeatOf: source.reblog != null ? toPost(source.reblog!, localHost) : null,
+    repeatOf: source.reblog.nullTransform((r) => toPost(r, localHost)),
     emojis: source.emojis.map(toEmoji).toList(),
     attachments: source.mediaAttachments
         .map((a) => toAttachment(a, status: source))
         .toList(),
     visibility: toVisibility(source.visibility),
-    replyToUserId: source.inReplyToAccountId,
-    replyToPostId: source.inReplyToId,
-    replyToUser: getRepliedUser(source, localHost),
+    replyTo: source.inReplyToId.nullTransform(ResolvablePost.fromId),
+    replyToUser: repliedUser == null
+        ? source.inReplyToAccountId.nullTransform(ResolvableUser.fromId)
+        : ResolvableUser.fromData(repliedUser),
     id: source.id,
     externalUrl: source.url == null ? null : Uri.parse(source.url!),
     client: source.application?.name,
@@ -44,6 +46,24 @@ Post toPost(mastodon.Status source, String localHost) {
       bookmarked: source.bookmarked ?? false,
       pinned: source.pinned ?? false,
     ),
+    poll: source.poll.nullTransform(toPoll),
+  );
+}
+
+Poll toPoll(
+  mastodon.Poll poll,
+) {
+  return Poll(
+    id: poll.id,
+    hasEnded: poll.expired,
+    endedAt: poll.expiresAt!,
+    source: poll,
+    options:
+        poll.options.map((o) => PollOption(o.title, o.votesCount)).toList(),
+    hasVoted: poll.voted ?? false,
+    voteCount: poll.votesCount,
+    voterCount: poll.votersCount,
+    allowMultipleChoices: poll.multiple,
   );
 }
 
@@ -107,13 +127,13 @@ Reaction toReaction(pleroma.EmojiReaction reaction, String localHost) {
 }
 
 User? getRepliedUser(mastodon.Status status, String localHost) {
-  final mention = status.mentions.firstOrDefault((mention) {
+  if (status.inReplyToAccountId == null) return null;
+
+  final mention = status.mentions.firstWhereOrNull((mention) {
     return mention.id == status.inReplyToAccountId;
   });
 
-  if (mention == null) {
-    return null;
-  }
+  if (mention == null) return null;
 
   return User(
     host: getHost(mention.account) ?? localHost,

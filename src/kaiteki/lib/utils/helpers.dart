@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 Future<void> resolveAndOpenUser(

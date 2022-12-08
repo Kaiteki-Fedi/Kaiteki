@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:html/dom.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,11 +19,11 @@ export 'package:kaiteki/utils/extensions/iterable.dart';
 export 'package:kaiteki/utils/extensions/m3.dart';
 export 'package:kaiteki/utils/extensions/string.dart';
 
-extension ObjectExtensions<T> on Object? {
-  T2? nullTransform<T2>(T2 Function(T object) function) {
-    if (this == null) return null;
-
-    return function.call(this! as T);
+extension ObjectExtensions<T> on T? {
+  S? nullTransform<S>(S Function(T object) function) {
+    final value = this;
+    if (value == null) return null;
+    return function.call(value);
   }
 }
 
@@ -71,6 +71,7 @@ extension TextDirectionExtensions on TextDirection {
 }
 
 extension AsyncSnapshotExtensions on AsyncSnapshot {
+  @Deprecated("Use appropriate AsyncSnapshot properties instead")
   AsyncSnapshotState get state {
     if (hasError) {
       return AsyncSnapshotState.errored;
@@ -104,8 +105,6 @@ extension UserExtensions on User {
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
   }
-
-  String get handle => '@$username@$host';
 }
 
 extension PostExtensions on Post {
@@ -114,6 +113,7 @@ extension PostExtensions on Post {
     WidgetRef ref, {
     bool hideReplyee = false,
   }) {
+    final replyee = replyToUser?.data;
     return const TextRenderer().render(
       context,
       content!,
@@ -121,11 +121,8 @@ extension PostExtensions on Post {
         emojis: emojis?.toList(growable: false),
         users: mentionedUsers,
         excludedUsers: [
-          if (hideReplyee && replyToUser != null)
-            UserReference.handle(
-              replyToUser!.username,
-              replyToUser!.host,
-            )
+          if (hideReplyee && replyee != null)
+            UserReference.handle(replyee.username, replyee.host)
         ],
       ),
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),

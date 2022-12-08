@@ -112,25 +112,13 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
   }
 
   final nodeInfoResponse = await http.get(hrefUri);
-  late final String nodeInfoBody;
+  final String nodeInfoBody;
 
   try {
-    nodeInfoBody = nodeInfoResponse.body;
+    nodeInfoBody = utf8.decode(nodeInfoResponse.bodyBytes);
   } catch (e, s) {
-    // Checking type with string because we don't depend on `http`'s dependency `string_scanner`
-    final isHttpBug = e.runtimeType.toString() == "SourceSpanFormatException" &&
-        (e as dynamic).message == "Invalid media type: expected no more input.";
-    if (isHttpBug) {
-      _logger.w(
-        "Enforcing UTF-8 for nodeinfo response - "
-        "see https://github.com/dart-lang/http/issues/180",
-      );
-
-      nodeInfoBody = utf8.decode(nodeInfoResponse.bodyBytes);
-    } else {
-      _logger.w("Failed to read body from nodeinfo response", e, s);
-      return null;
-    }
+    _logger.w("Failed to decode nodeinfo body", e, s);
+    return null;
   }
 
   return NodeInfo.fromJson(jsonDecode(nodeInfoBody));

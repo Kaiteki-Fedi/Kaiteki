@@ -1,4 +1,4 @@
-import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers/text_parser.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'post_state.dart';
+part of 'state.dart';
 
 // **************************************************************************
 // CopyWithGenerator

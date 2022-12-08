@@ -1,4 +1,4 @@
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 
 abstract class FavoriteSupport {
   /// Favorites a post.

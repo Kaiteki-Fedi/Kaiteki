@@ -2,6 +2,15 @@ part of 'adapter.dart';
 
 Post toPost(misskey.Note source, String localHost) {
   final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji).toList();
+  final sourceReply = source.reply;
+  final sourceReplyId = source.replyId;
+
+  ResolvablePost? replyTo;
+  if (sourceReplyId != null) {
+    replyTo = sourceReply == null
+        ? ResolvablePost.fromId(sourceReplyId)
+        : toPost(sourceReply, localHost).resolved;
+  }
 
   return Post(
     source: source,
@@ -17,8 +26,7 @@ Post toPost(misskey.Note source, String localHost) {
         emoji: getEmojiFromString(mkr.key, mappedEmoji),
       );
     }).toList(),
-    replyTo: source.reply == null ? null : toPost(source.reply!, localHost),
-    replyToPostId: source.replyId,
+    replyTo: replyTo,
     repeatOf: source.renote == null ? null : toPost(source.renote!, localHost),
     id: source.id,
     visibility: toVisibility(source.visibility),
@@ -31,8 +39,8 @@ Post toPost(misskey.Note source, String localHost) {
   );
 }
 
-Emoji getEmojiFromString(String key, Iterable<CustomEmoji> mappedEmoji) {
-  final emoji = mappedEmoji.firstOrDefault(
+Emoji getEmojiFromString(String key, List<CustomEmoji> mappedEmoji) {
+  final emoji = mappedEmoji.firstWhereOrNull(
     (e) {
       if (key.length < 3) return false;
       final emojiName = key.substring(1, key.length - 1);

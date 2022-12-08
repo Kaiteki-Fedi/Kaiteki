@@ -31,6 +31,8 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> nsfw(bool nsfw);
 
+  Post<T> poll(Poll<dynamic>? poll);
+
   Post<T> postedAt(DateTime postedAt);
 
   Post<T> quotedPost(Post<dynamic>? quotedPost);
@@ -39,13 +41,9 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> repeatOf(Post<dynamic>? repeatOf);
 
-  Post<T> replyTo(Post<dynamic>? replyTo);
+  Post<T> replyTo(ResolvablePost? replyTo);
 
-  Post<T> replyToPostId(String? replyToPostId);
-
-  Post<T> replyToUser(User<dynamic>? replyToUser);
-
-  Post<T> replyToUserId(String? replyToUserId);
+  Post<T> replyToUser(ResolvableUser? replyToUser);
 
   Post<T> source(T? source);
 
@@ -74,14 +72,13 @@ abstract class _$PostCWProxy<T> {
     List<UserReference>? mentionedUsers,
     PostMetrics? metrics,
     bool? nsfw,
+    Poll<dynamic>? poll,
     DateTime? postedAt,
     Post<dynamic>? quotedPost,
     List<Reaction>? reactions,
     Post<dynamic>? repeatOf,
-    Post<dynamic>? replyTo,
-    String? replyToPostId,
-    User<dynamic>? replyToUser,
-    String? replyToUserId,
+    ResolvablePost? replyTo,
+    ResolvableUser? replyToUser,
     T? source,
     PostState? state,
     String? subject,
@@ -134,6 +131,9 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   Post<T> nsfw(bool nsfw) => this(nsfw: nsfw);
 
   @override
+  Post<T> poll(Poll<dynamic>? poll) => this(poll: poll);
+
+  @override
   Post<T> postedAt(DateTime postedAt) => this(postedAt: postedAt);
 
   @override
@@ -146,19 +146,11 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   Post<T> repeatOf(Post<dynamic>? repeatOf) => this(repeatOf: repeatOf);
 
   @override
-  Post<T> replyTo(Post<dynamic>? replyTo) => this(replyTo: replyTo);
+  Post<T> replyTo(ResolvablePost? replyTo) => this(replyTo: replyTo);
 
   @override
-  Post<T> replyToPostId(String? replyToPostId) =>
-      this(replyToPostId: replyToPostId);
-
-  @override
-  Post<T> replyToUser(User<dynamic>? replyToUser) =>
+  Post<T> replyToUser(ResolvableUser? replyToUser) =>
       this(replyToUser: replyToUser);
-
-  @override
-  Post<T> replyToUserId(String? replyToUserId) =>
-      this(replyToUserId: replyToUserId);
 
   @override
   Post<T> source(T? source) => this(source: source);
@@ -193,14 +185,13 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
     Object? mentionedUsers = const $CopyWithPlaceholder(),
     Object? metrics = const $CopyWithPlaceholder(),
     Object? nsfw = const $CopyWithPlaceholder(),
+    Object? poll = const $CopyWithPlaceholder(),
     Object? postedAt = const $CopyWithPlaceholder(),
     Object? quotedPost = const $CopyWithPlaceholder(),
     Object? reactions = const $CopyWithPlaceholder(),
     Object? repeatOf = const $CopyWithPlaceholder(),
     Object? replyTo = const $CopyWithPlaceholder(),
-    Object? replyToPostId = const $CopyWithPlaceholder(),
     Object? replyToUser = const $CopyWithPlaceholder(),
-    Object? replyToUserId = const $CopyWithPlaceholder(),
     Object? source = const $CopyWithPlaceholder(),
     Object? state = const $CopyWithPlaceholder(),
     Object? subject = const $CopyWithPlaceholder(),
@@ -255,6 +246,10 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
           ? _value.nsfw
           // ignore: cast_nullable_to_non_nullable
           : nsfw as bool,
+      poll: poll == const $CopyWithPlaceholder()
+          ? _value.poll
+          // ignore: cast_nullable_to_non_nullable
+          : poll as Poll<dynamic>?,
       postedAt: postedAt == const $CopyWithPlaceholder() || postedAt == null
           ? _value.postedAt
           // ignore: cast_nullable_to_non_nullable
@@ -274,19 +269,11 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
       replyTo: replyTo == const $CopyWithPlaceholder()
           ? _value.replyTo
           // ignore: cast_nullable_to_non_nullable
-          : replyTo as Post<dynamic>?,
-      replyToPostId: replyToPostId == const $CopyWithPlaceholder()
-          ? _value.replyToPostId
-          // ignore: cast_nullable_to_non_nullable
-          : replyToPostId as String?,
+          : replyTo as ResolvablePost?,
       replyToUser: replyToUser == const $CopyWithPlaceholder()
           ? _value.replyToUser
           // ignore: cast_nullable_to_non_nullable
-          : replyToUser as User<dynamic>?,
-      replyToUserId: replyToUserId == const $CopyWithPlaceholder()
-          ? _value.replyToUserId
-          // ignore: cast_nullable_to_non_nullable
-          : replyToUserId as String?,
+          : replyToUser as ResolvableUser?,
       source: source == const $CopyWithPlaceholder()
           ? _value.source
           // ignore: cast_nullable_to_non_nullable

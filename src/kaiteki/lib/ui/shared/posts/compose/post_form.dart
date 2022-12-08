@@ -56,7 +56,7 @@ class PostFormState extends ConsumerState<PostForm> {
       final currentUser = ref.read(accountProvider).current.user;
 
       final handles = <String>[
-        if (op.author.id != currentUser.id) op.author.handle,
+        if (op.author.id != currentUser.id) op.author.handle.toString(),
         ...?op.mentionedUsers
             ?.where((u) => u.username != null && u.host != null)
             .where((u) {

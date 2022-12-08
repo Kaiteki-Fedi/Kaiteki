@@ -16,8 +16,8 @@ Post toPost(twitter.Tweet tweet) {
       repeatCount: tweet.retweetCount,
     ),
     attachments: tweet.entities.media?.map(toAttachment).toList(),
-    replyToUserId: tweet.inReplyToUserIdStr,
-    replyToPostId: tweet.inReplyToStatusIdStr,
+    replyToUser: tweet.inReplyToUserIdStr?.nullTransform(ResolvableUser.fromId),
+    replyTo: tweet.inReplyToStatusIdStr?.nullTransform(ResolvablePost.fromId),
     mentionedUsers: tweet.entities.userMentions?.map((e) {
       return UserReference(e.idStr);
     }).toList(),

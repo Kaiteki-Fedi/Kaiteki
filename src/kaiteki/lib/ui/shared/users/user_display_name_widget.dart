@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class UserDisplayNameWidget extends ConsumerWidget {

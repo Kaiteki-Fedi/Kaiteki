@@ -16,13 +16,13 @@ import 'package:kaiteki/fediverse/backends/twitter/v1/model/user.dart'
     as twitter;
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/post_metrics.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
 import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:oauth1/oauth1.dart';
 import 'package:tuple/tuple.dart';
 

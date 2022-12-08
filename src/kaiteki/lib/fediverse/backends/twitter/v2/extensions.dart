@@ -7,7 +7,8 @@ import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart' as twt;
 import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart' as twt;
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart';
 import 'package:kaiteki/fediverse/model/model.dart' as ktk;
-import 'package:kaiteki/fediverse/model/post_metrics.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 extension UserExtensions on twt.User {
   ktk.User toKaiteki() {
@@ -51,6 +52,13 @@ extension TweetExtensions on twt.Tweet {
       return t.type == twt.ReferencedTweetType.repliedTo;
     });
 
+    Post? replyPost;
+    if (reply != null) {
+      replyPost = includes.tweets
+          ?.firstWhereOrNull((t) => t.id == reply.id)
+          ?.toKaiteki(includes);
+    }
+
     final media = attachments?.mediaKeys
         ?.map((key) {
           return includes.media?.firstWhereOrNull((m) => m.mediaKey == key);
@@ -84,19 +92,16 @@ extension TweetExtensions on twt.Tweet {
           })
           .map((m) => m.toKaiteki())
           .toList(),
-      replyTo: reply != null
-          ? includes.tweets
-              ?.firstWhereOrNull((t) => t.id == reply.id)
-              ?.toKaiteki(includes)
-          : null,
+      replyTo: replyPost == null
+          ? reply?.id.nullTransform(ResolvablePost.fromId)
+          : ResolvablePost.fromData(replyPost),
       metrics: PostMetrics(
         likeCount: publicMetrics?.likeCount ?? 0,
         repeatCount: (publicMetrics?.retweetCount ?? 0) +
             (publicMetrics?.quoteCount ?? 0),
         replyCount: publicMetrics?.replyCount ?? 0,
       ),
-      replyToPostId: reply?.id,
-      replyToUserId: inReplyToUserId,
+      replyToUser: inReplyToUserId?.nullTransform(ResolvableUser.fromId),
       externalUrl: Uri(
         scheme: "https",
         host: "twitter.com",

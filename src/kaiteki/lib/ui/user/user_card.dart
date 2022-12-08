@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -64,7 +64,7 @@ class UserCard extends ConsumerWidget {
                             ),
                             const SizedBox(height: 4.0),
                             Text(
-                              user.handle,
+                              user.handle.toString(),
                               overflow: TextOverflow.fade,
                               softWrap: false,
                               style: TextStyle(

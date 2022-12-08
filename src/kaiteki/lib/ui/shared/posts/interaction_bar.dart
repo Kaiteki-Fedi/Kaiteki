@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/post_metrics.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/shared/posts/count_button.dart';
 

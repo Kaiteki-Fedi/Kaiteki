@@ -1,15 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/embed.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/post_metrics.dart';
-import 'package:kaiteki/fediverse/model/post_state.dart';
-import 'package:kaiteki/fediverse/model/reaction.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
+
+export 'draft.dart';
+export 'metrics.dart';
+export 'state.dart';
 
 part 'post.g.dart';
 
@@ -44,11 +39,10 @@ class Post<T> {
   /// The client used to make this post.
   final String? client;
 
-  // REPLYING
-  final String? replyToPostId;
-  final String? replyToUserId;
-  final Post? replyTo;
-  final User? replyToUser;
+  final Poll? poll;
+
+  final ResolvablePost? replyTo;
+  final ResolvableUser? replyToUser;
 
   final Post? repeatOf;
   final Post? quotedPost;
@@ -76,12 +70,11 @@ class Post<T> {
     this.quotedPost,
     this.repeatOf,
     this.replyTo,
-    this.replyToPostId,
     this.replyToUser,
-    this.replyToUserId,
     this.subject,
     this.visibility,
     this.client,
+    this.poll,
   });
 
   Post addOrCreateReaction(

@@ -1,11 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/repositories/repository.dart';
-import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
 
 class AccountManager extends ChangeNotifier {
@@ -95,7 +95,7 @@ class AccountManager extends ChangeNotifier {
     String? username,
   ]) async {
     final secrets = await _clientSecrets.read();
-    final key = secrets.keys.firstOrDefault((key) {
+    final key = secrets.keys.firstWhereOrNull((key) {
       return key.host == instance && key.username == username;
     });
     return secrets[key];

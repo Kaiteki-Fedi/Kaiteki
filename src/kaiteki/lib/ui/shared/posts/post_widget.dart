@@ -6,8 +6,7 @@ import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_state.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/theming/kaiteki/post.dart';
 import 'package:kaiteki/ui/debug/text_render_dialog.dart';
@@ -19,6 +18,7 @@ import 'package:kaiteki/ui/shared/posts/embedded_post.dart';
 import 'package:kaiteki/ui/shared/posts/interaction_bar.dart';
 import 'package:kaiteki/ui/shared/posts/interaction_event_bar.dart';
 import 'package:kaiteki/ui/shared/posts/meta_bar.dart';
+import 'package:kaiteki/ui/shared/posts/poll_widget.dart';
 import 'package:kaiteki/ui/shared/posts/reaction_row.dart';
 import 'package:kaiteki/ui/shared/posts/reply_bar.dart';
 import 'package:kaiteki/ui/shared/posts/subject_bar.dart';
@@ -90,13 +90,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     }
 
     final adapter = ref.watch(adapterProvider);
+    const spacer = SizedBox(height: 8);
 
     final children = [
       MetaBar(
         post: _post,
         showAvatar: !widget.hideAvatar && widget.wide,
       ),
-      if (widget.showParentPost && _post.replyToUserId != null)
+      if (widget.showParentPost && _post.replyToUser != null)
         ReplyBar(post: _post),
       PostContentWidget(
         post: _post,
@@ -112,19 +113,34 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             ].joinNonString(const Divider(height: 1)),
           ),
         ),
+      if (_post.poll != null) ...[
+        spacer,
+        DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outline,
+            ),
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: PollWidget(_post.poll!, padding: const EdgeInsets.all(16)),
+        ),
+      ],
       if (_post.quotedPost != null) EmbeddedPostWidget(_post.quotedPost!),
-      if (_post.attachments?.isNotEmpty == true) AttachmentRow(post: _post),
+      if (_post.attachments?.isNotEmpty == true) ...[
+        spacer,
+        AttachmentRow(post: _post),
+      ],
       if (widget.expand && _post.client != null)
         Text(
           _post.client!,
           style: TextStyle(color: Theme.of(context).disabledColor),
         ),
-      if (_post.reactions.isNotEmpty)
-        ReactionRow(
-          _post.reactions,
-          (r) => _onChangeReaction(r.emoji),
-        ),
-      if (widget.showActions)
+      if (_post.reactions.isNotEmpty) ...[
+        spacer,
+        ReactionRow(_post.reactions, (r) => _onChangeReaction(r.emoji)),
+      ],
+      if (widget.showActions) ...[
+        spacer,
         InteractionBar(
           metrics: _post.metrics,
           onReply: () => context.showPostDialog(replyTo: _post),
@@ -140,6 +156,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           reacted: adapter is ReactionSupport ? false : null,
           buildActions: _buildActions,
         )
+      ],
     ];
 
     final theme = Theme.of(context).ktkPostTheme!;

@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -11,7 +11,7 @@ ThreadPost toThread(Iterable<Post> posts) {
 
   for (final post in threadPosts) {
     final id = post.post.id;
-    final parentId = post.post.replyToPostId;
+    final parentId = post.post.replyTo?.id;
 
     if (parentId != null) {
       final parent = threadPosts.firstWhereOrNull((p) => p.post.id == parentId);
@@ -24,7 +24,7 @@ ThreadPost toThread(Iterable<Post> posts) {
     }
   }
 
-  final op = threadPosts.firstWhereOrNull((p) => p.post.replyToPostId == null);
+  final op = threadPosts.firstWhereOrNull((p) => p.post.replyTo?.id == null);
   if (op == null) {
     throw Exception("Couldn't find original post for thread");
   }

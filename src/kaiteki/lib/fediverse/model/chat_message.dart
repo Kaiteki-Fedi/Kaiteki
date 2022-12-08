@@ -1,5 +1,5 @@
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 
 class ChatMessage {
   final DateTime sentAt;

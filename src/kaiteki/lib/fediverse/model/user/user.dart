@@ -1,5 +1,6 @@
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/user_flags.dart';
+import 'package:kaiteki/fediverse/model/user/flags.dart';
+import 'package:kaiteki/fediverse/model/user/handle.dart';
 
 /// A class representing an user or account.
 class User<T> {
@@ -43,6 +44,8 @@ class User<T> {
   final String? url;
 
   final UserFlags? flags;
+
+  UserHandle get handle => UserHandle.fromUser(this);
 
   const User({
     required this.id,
