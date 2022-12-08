@@ -12,6 +12,7 @@ class PollWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     //final maxVotes = poll.options.map((o) => o.voteCount).max;
+    final borderRadius = BorderRadius.circular(8);
     return Padding(
       padding: padding,
       child: LayoutBuilder(builder: (context, constraints) {
@@ -36,7 +37,7 @@ class PollWidget extends StatelessWidget {
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: theme.colorScheme.primary.withOpacity(.25),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: borderRadius,
                         ),
                         child: SizedBox(
                           width: constraints.maxWidth *
@@ -46,8 +47,8 @@ class PollWidget extends StatelessWidget {
                     ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 4.0,
-                      vertical: 2,
+                      horizontal: 8.0,
+                      vertical: 4,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,6 +59,16 @@ class PollWidget extends StatelessWidget {
                           style: theme.textTheme.labelSmall,
                         ),
                       ],
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        borderRadius: borderRadius,
+                      ),
                     ),
                   ),
                 ],
@@ -71,13 +82,13 @@ class PollWidget extends StatelessWidget {
                   style: theme.textTheme.labelSmall,
                 ),
                 Text(
-                  " - ",
+                  " • ",
                   style: theme.textTheme.labelSmall,
                 ),
                 Text(
-                  "Ends in ${poll.endedAt.difference(DateTime.now()).toStringHuman(
-                        context: context,
-                      )}",
+                  poll.hasEnded
+                      ? "Ended ${DateTime.now().difference(poll.endedAt).toStringHuman(context: context)} ago"
+                      : "Ends in ${poll.endedAt.difference(DateTime.now()).toStringHuman(context: context)}",
                   style: theme.textTheme.labelSmall,
                 ),
               ],
