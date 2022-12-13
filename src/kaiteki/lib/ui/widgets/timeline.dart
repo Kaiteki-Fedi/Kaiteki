@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
@@ -37,26 +40,34 @@ class TimelineState extends ConsumerState<Timeline> {
     firstPageKey: null,
   );
 
+  late ProviderSubscription<BackendAdapter> _subscription;
+
+  Future<List<Post>> Function(TimelineQuery<String> query) get _source {
+    final adapter = _subscription.read();
+
+    log("Showing posts from ${adapter.runtimeType}", name: "Timeline");
+
+    final timelineKind = widget.kind;
+    if (timelineKind != null) {
+      return (q) => adapter.getTimeline(timelineKind, query: q);
+    }
+
+    final userId = widget.userId;
+    if (userId != null) {
+      return (q) => adapter.getStatusesOfUserById(userId, query: q);
+    }
+
+    throw StateError("Cannot fetch timeline with no post source set.");
+  }
+
   @override
   void initState() {
     super.initState();
 
     _controller.addPageRequestListener((id) async {
       try {
-        final adapter = ref.watch(adapterProvider);
-        final Iterable<Post> posts;
         final query = TimelineQuery(untilId: id);
-
-        if (widget.kind != null) {
-          posts = await adapter.getTimeline(widget.kind!, query: query);
-        } else if (widget.userId != null) {
-          posts = await adapter.getStatusesOfUserById(
-            widget.userId!,
-            query: query,
-          );
-        } else {
-          throw StateError("Cannot fetch timeline with no post source set.");
-        }
+        final posts = await _source(query);
 
         if (mounted) {
           if (posts.isEmpty) {
@@ -69,6 +80,11 @@ class TimelineState extends ConsumerState<Timeline> {
         if (mounted) _controller.error = Tuple2(e, s);
       }
     });
+
+    _subscription = ref.listenManual(
+      adapterProvider,
+      (_, __) => _controller.refresh(),
+    );
   }
 
   @override
@@ -92,8 +108,6 @@ class TimelineState extends ConsumerState<Timeline> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(accountProvider, (_, __) => _controller.refresh());
-
     return RefreshIndicator(
       onRefresh: () => Future.sync(_controller.refresh),
       child: LayoutBuilder(
