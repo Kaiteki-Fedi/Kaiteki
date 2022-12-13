@@ -237,7 +237,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
     TimelineQuery<String>? query,
   }) async {
@@ -276,7 +276,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         );
     }
 
-    return notes.map((n) => toPost(n, instance));
+    return notes.map((n) => toPost(n, instance)).toList();
   }
 
   @override
@@ -285,7 +285,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(
+  Future<List<Post>> getStatusesOfUserById(
     String id, {
     TimelineQuery<String>? query,
   }) async {
@@ -302,7 +302,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       sinceId: query?.sinceId,
       untilId: query?.untilId,
     );
-    return notes.map((n) => toPost(n, instance));
+    return notes.map((n) => toPost(n, instance)).toList();
   }
 
   @override

@@ -78,7 +78,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(
+  Future<List<Post>> getStatusesOfUserById(
     String id, {
     TimelineQuery<String>? query,
   }) async {
@@ -96,7 +96,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
       mediaFields: MediaField.values.toSet(),
     );
 
-    return response.data.map((t) => t.toKaiteki(response.includes!));
+    return response.data.map((t) => t.toKaiteki(response.includes!)).toList();
   }
 
   @override
@@ -141,7 +141,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
     TimelineQuery<String>? query,
   }) async {

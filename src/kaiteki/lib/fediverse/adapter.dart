@@ -55,12 +55,12 @@ abstract class BackendAdapter {
   /// Retrieves a thread from a reply
   Future<Iterable<Post>> getThread(Post reply);
 
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
     TimelineQuery<String>? query,
   });
 
-  Future<Iterable<Post>> getStatusesOfUserById(
+  Future<List<Post>> getStatusesOfUserById(
     String id, {
     TimelineQuery<String>? query,
   });

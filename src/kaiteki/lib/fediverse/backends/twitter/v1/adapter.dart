@@ -44,12 +44,12 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(
+  Future<List<Post>> getStatusesOfUserById(
     String id, {
     TimelineQuery? query,
   }) async {
     // TODO(Craftplacer): support timeline query
-    return (await client.getUserTimeline(userId: id)).map(toPost);
+    return (await client.getUserTimeline(userId: id)).map(toPost).toList();
   }
 
   @override
@@ -59,7 +59,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
     TimelineQuery? query,
   }) async {
@@ -69,7 +69,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
           sinceId: query?.sinceId,
           maxId: query?.untilId,
         );
-        return homeTimeine.map(toPost);
+        return homeTimeine.map(toPost).toList();
 
       default:
         throw UnimplementedError();

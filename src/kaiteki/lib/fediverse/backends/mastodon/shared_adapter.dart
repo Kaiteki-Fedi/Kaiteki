@@ -219,7 +219,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
     TimelineQuery<String>? query,
   }) async {
@@ -230,6 +230,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         posts = await client.getHomeTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
+          onlyMedia: query?.onlyMedia,
         );
         break;
 
@@ -237,6 +238,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         posts = await client.getPublicTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
+          onlyMedia: query?.onlyMedia,
           local: true,
         );
         break;
@@ -245,6 +247,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         posts = await client.getPublicTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
+          onlyMedia: query?.onlyMedia,
         );
         break;
 
@@ -252,7 +255,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         throw UnimplementedError();
     }
 
-    return posts.map((p) => toPost(p, instance));
+    return posts.map((p) => toPost(p, instance)).toList();
   }
 
   @override
@@ -367,7 +370,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(
+  Future<List<Post>> getStatusesOfUserById(
     String id, {
     TimelineQuery<String>? query,
   }) async {
@@ -376,7 +379,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       minId: query?.sinceId,
       maxId: query?.untilId,
     );
-    return statuses.map((p) => toPost(p, instance));
+    return statuses.map((p) => toPost(p, instance)).toList();
   }
 
   @override
