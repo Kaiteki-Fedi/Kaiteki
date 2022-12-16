@@ -9,6 +9,9 @@ on:
       - master
     paths:
       - 'src/**'
+      - '!src/kaiteki/storybook/**'
+      - '!src/kaiteki/tools/**'
+      - '!src/kaiteki/README.md'
   pull_request:
   workflow_dispatch:
 
