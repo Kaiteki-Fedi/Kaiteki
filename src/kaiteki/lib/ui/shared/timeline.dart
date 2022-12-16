@@ -45,15 +45,21 @@ class TimelineState extends ConsumerState<Timeline> {
   Future<List<Post>> Function(TimelineQuery<String> query) get _source {
     final adapter = _subscription.read();
 
-    log("Showing posts from ${adapter.runtimeType}", name: "Timeline");
-
     final timelineKind = widget.kind;
     if (timelineKind != null) {
+      log(
+        "Showing posts from $timelineKind at ${adapter.runtimeType}",
+        name: "Timeline",
+      );
       return (q) => adapter.getTimeline(timelineKind, query: q);
     }
 
     final userId = widget.userId;
     if (userId != null) {
+      log(
+        "Showing posts from $userId at ${adapter.runtimeType}",
+        name: "Timeline",
+      );
       return (q) => adapter.getStatusesOfUserById(userId, query: q);
     }
 

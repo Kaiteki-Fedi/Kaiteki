@@ -14,10 +14,10 @@ import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/primary_tab_bar_theme.dart';
+import 'package:kaiteki/ui/shared/timeline.dart';
 import 'package:kaiteki/ui/user/constants.dart';
 import 'package:kaiteki/ui/user/desktop_user_header.dart';
 import 'package:kaiteki/ui/user/user_info_widget.dart';
-import 'package:kaiteki/ui/widgets/timeline.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class UserScreen extends ConsumerStatefulWidget {

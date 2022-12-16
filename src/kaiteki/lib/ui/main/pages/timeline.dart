@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/ui/widgets/timeline.dart';
+import 'package:kaiteki/ui/shared/timeline.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
   const TimelinePage({super.key});
@@ -16,6 +16,10 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
   final _timelineKey = GlobalKey<TimelineState>();
   TimelineKind? _kind;
 
+  /// Timeline tabs to show.
+  ///
+  /// This is intentionally not [TimelineKind.values] because the values might
+  /// not be important to the user.
   Set<TimelineKind> get _defaultKinds {
     return const {
       TimelineKind.home,
@@ -33,16 +37,12 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
 
   @override
   Widget build(BuildContext context) {
-    final supported =
-        ref.watch(adapterProvider).capabilities.supportedTimelines;
-    final kinds = _defaultKinds.where(supported.contains).toSet();
-
-    // ignore: avoid_types_on_closure_parameters, Dart is unable to infer type
-    ref.listen(adapterProvider, (previous, BackendAdapter next) {
-      if (!next.capabilities.supportedTimelines.contains(_kind)) {
-        _kind = next.capabilities.supportedTimelines.first;
-      }
-    });
+    final adapter = ref.watch(adapterProvider);
+    final supportedKinds = adapter.capabilities.supportedTimelines;
+    final kinds = _defaultKinds.where(supportedKinds.contains).toSet();
+    if (!supportedKinds.contains(_kind)) {
+      _kind = supportedKinds.first;
+    }
 
     return DefaultTabController(
       length: kinds.length,
@@ -84,48 +84,13 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
   Widget _buildTab(BuildContext context, TimelineKind kind, bool showLabel) {
     final l10n = context.getL10n();
 
-    final Widget label;
-    final Widget icon;
-
-    switch (kind) {
-      case TimelineKind.home:
-        icon = const Icon(Icons.home_rounded);
-        label = Text(l10n.timelineHome);
-        break;
-
-      case TimelineKind.local:
-        icon = const Icon(Icons.people_rounded);
-        label = Text(l10n.timelineLocal);
-        break;
-
-      case TimelineKind.bubble:
-        icon = const Icon(Icons.workspaces_rounded);
-        label = Text(l10n.timelineBubble);
-        break;
-
-      case TimelineKind.hybrid:
-        icon = const Icon(Icons.handshake_rounded);
-        label = Text(l10n.timelineHybrid);
-        break;
-
-      case TimelineKind.federated:
-        icon = const Icon(Icons.public_rounded);
-        label = Text(l10n.timelineFederated);
-        break;
-
-      case TimelineKind.directMessages:
-        icon = const Icon(Icons.mail_rounded);
-        label = Text(l10n.timelineDirectMessages);
-        break;
-    }
-
     return Tab(
       icon: Row(
         children: [
-          icon,
+          Icon(kind.getIconData()),
           if (showLabel) ...[
             const SizedBox(width: 8),
-            label,
+            Text(kind.getDisplayName(l10n)),
           ],
         ],
       ),
@@ -134,9 +99,6 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
 
   void _onTabTap(int value, Set<TimelineKind> kinds) {
     final kind = kinds.elementAt(value);
-    setState(() {
-      _kind = kind;
-      refresh();
-    });
+    setState(() => _kind = kind);
   }
 }
