@@ -287,7 +287,7 @@ class MastodonClient {
     if (json != null) {
       throw ApiException(
         response.statusCode,
-        reasonPhrase: json["error"] as String,
+        reasonPhrase: json["error"] as String? ?? response.reasonPhrase,
         data: json,
       );
     }
