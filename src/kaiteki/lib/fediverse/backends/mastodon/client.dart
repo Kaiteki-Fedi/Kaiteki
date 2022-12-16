@@ -314,13 +314,11 @@ class MastodonClient {
       .then(Account.fromJson.fromResponseList);
 
   Future<MarkerResponse> getMarkers(Set<MarkerTimeline> timeline) async {
-    // HACK(Craftplacer): query might be wrong
-    return client
-        .sendRequest(
-          HttpMethod.get,
-          "api/v1/markers?timeline[]=${timeline.map((t) => t.name).join(",")}",
-        )
-        .then(MarkerResponse.fromJson.fromResponse);
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/markers",
+      query: {"timeline": timeline.map((t) => t.name).join(",")},
+    ).then(MarkerResponse.fromJson.fromResponse);
   }
 
   Future<Search> search(
