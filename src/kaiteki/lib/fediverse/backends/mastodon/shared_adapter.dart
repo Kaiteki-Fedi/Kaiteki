@@ -97,7 +97,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
       accessToken = loginResponse.accessToken!;
     } else {
-      await client.createApplication(
+      application = await client.createApplication(
         instance,
         consts.appName,
         consts.appWebsite,
