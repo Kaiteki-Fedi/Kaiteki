@@ -1,9 +1,7 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post/post.dart';
+import 'package:kaiteki/platform_checks.dart';
 import 'package:kaiteki/ui/shared/posts/attachments/fallback_attachment_widget.dart';
 import 'package:kaiteki/ui/shared/posts/attachments/image_attachment_widget.dart';
 import 'package:kaiteki/ui/shared/posts/attachments/video_attachment_widget.dart';
@@ -12,11 +10,13 @@ class AttachmentWidget extends StatefulWidget {
   final Attachment attachment;
   final Post? parentPost;
   final int? attachmentIndex;
+  final BoxFit? boxFit;
 
   const AttachmentWidget({
     super.key,
     required this.attachment,
     this.parentPost,
+    this.boxFit,
     this.attachmentIndex,
   });
 
@@ -38,8 +38,6 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
       );
     }
 
-    final supportsVideoPlayer = kIsWeb || Platform.isIOS || Platform.isAndroid;
-
     Widget attachmentWidget;
 
     if (widget.attachment.type == AttachmentType.image) {
@@ -48,6 +46,7 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
         attachment: widget.attachment,
         index: widget.attachmentIndex!,
         post: widget.parentPost!,
+        boxFit: widget.boxFit,
       );
     } else if (widget.attachment.type == AttachmentType.video &&
         supportsVideoPlayer) {

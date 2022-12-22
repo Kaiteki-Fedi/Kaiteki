@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:animations/animations.dart';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/constants.dart';
@@ -322,9 +323,10 @@ class LoginFormState extends ConsumerState<LoginForm> {
             onNext: (host) {
               setState(() {
                 // ignore: unnecessary_lambdas, I intentionally want this method not to return a future so the dialog isn't
-                _loginFuture = _loginToInstance(host).catchError((e, s) {
-                  _showError(e, s);
-                }).then((_) => instance = null);
+                _loginFuture = _loginToInstance(host)
+                    .then((_) => context.go("/"))
+                    .catchError(_showError)
+                    .then((_) => instance = null);
               });
             },
           ),

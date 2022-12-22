@@ -1,6 +1,6 @@
 enum TabKind {
-  timeline,
+  home,
   notifications,
   chats,
-  bookmarks,
+  bookmarks;
 }

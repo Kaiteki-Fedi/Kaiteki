@@ -23,10 +23,10 @@ import 'package:kaiteki/ui/shared/posts/reaction_row.dart';
 import 'package:kaiteki/ui/shared/posts/reply_bar.dart';
 import 'package:kaiteki/ui/shared/posts/subject_bar.dart';
 import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
-import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki_material/kaiteki_material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);

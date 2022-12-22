@@ -5,7 +5,7 @@ import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/theming/kaiteki/post.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/theming/kaiteki/theme.dart';
-import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
+import 'package:kaiteki_material/kaiteki_material.dart';
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyGeneralChanges() {

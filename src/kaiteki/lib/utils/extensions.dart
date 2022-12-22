@@ -7,6 +7,7 @@ import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/fediverse/model/user/reference.dart';
 import 'package:kaiteki/fediverse/model/user/user.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -175,10 +176,20 @@ extension WidgetRefExtensions on WidgetRef {
 
   Map<String, String> get accountRouterParams {
     final accountKey = read(accountProvider).current.key;
-    return {
-      "accountUsername": accountKey.username,
-      "accountHost": accountKey.host,
-    };
+    return accountKey.accountRouterParams;
+  }
+}
+
+extension ProviderContainerExtensions on ProviderContainer {
+  Map<String, String> get accountRouterParams {
+    final accountKey = read(accountProvider).current.key;
+    return accountKey.accountRouterParams;
+  }
+}
+
+extension AccountKeyExtensions on AccountKey {
+  Map<String, String> get accountRouterParams {
+    return {"accountUsername": username, "accountHost": host};
   }
 }
 

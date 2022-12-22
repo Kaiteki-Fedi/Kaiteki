@@ -6,16 +6,19 @@ import 'package:kaiteki/utils/extensions.dart';
 class ErrorLandingWidget extends StatelessWidget {
   final dynamic error;
   final dynamic stackTrace;
+  final VoidCallback? onRetry;
 
   const ErrorLandingWidget({
     super.key,
     required this.error,
     this.stackTrace,
+    this.onRetry,
   });
 
   ErrorLandingWidget.fromAsyncSnapshot(
     AsyncSnapshot snapshot, {
     super.key,
+    this.onRetry,
   })  : error = snapshot.error,
         stackTrace = snapshot.stackTrace;
 
@@ -36,9 +39,25 @@ class ErrorLandingWidget extends StatelessWidget {
           icon: Icon(Icons.error_rounded),
           text: Text("An error occured"),
         ),
-        TextButton(
-          onPressed: () => context.showExceptionDialog(error, stackTrace),
-          child: const Text("Show details"),
+        const SizedBox(height: 16),
+        IntrinsicWidth(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (onRetry != null) ...[
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.refresh_rounded),
+                  label: const Text("Retry"),
+                  onPressed: onRetry,
+                ),
+                const SizedBox(height: 8),
+              ],
+              OutlinedButton(
+                onPressed: () => context.showExceptionDialog(error, stackTrace),
+                child: const Text("Show details"),
+              ),
+            ],
+          ),
         ),
       ],
     );

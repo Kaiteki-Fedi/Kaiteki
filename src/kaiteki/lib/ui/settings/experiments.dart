@@ -18,6 +18,26 @@ class ExperimentsScreen extends ConsumerWidget {
       body: ListView.separated(
         separatorBuilder: (_, __) => const Divider(),
         itemBuilder: (context, i) {
+          if (i == 0) {
+            return Padding(
+              padding: const EdgeInsets.all(16),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    "These settings are experimental, yadda yadda yadda, still work in progress, you know the spiel.",
+                  ),
+                ),
+              ),
+            );
+          }
+
+          i--;
+
           final experiment = experiments[i];
           return SwitchListTile(
             value: enabledExperiments.contains(experiment),
@@ -35,7 +55,7 @@ class ExperimentsScreen extends ConsumerWidget {
                 : Text(experiment.description!),
           );
         },
-        itemCount: experiments.length,
+        itemCount: experiments.length + 1,
       ),
     );
   }

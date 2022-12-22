@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:badges/badges.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:go_router/go_router.dart';
@@ -200,28 +199,38 @@ class NotificationWidget extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Badge(
-              position: BadgePosition.bottomEnd(bottom: 0, end: 0),
-              badgeContent: Icon(
-                icon ?? Icons.notifications_rounded,
-                size: 12,
-                color: ThemeData.estimateBrightnessForColor(color)
-                    .inverted
-                    .getColor(),
-              ),
-              badgeColor: color,
-              padding: const EdgeInsets.all(3.0),
-              borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.background,
-                width: 2,
-                strokeAlign: StrokeAlign.outside,
-              ),
-              showBadge: icon != null,
-              toAnimate: false,
-              child: AvatarWidget(
-                notification.user!,
-                size: 40,
-              ),
+            Stack(
+              children: [
+                AvatarWidget(
+                  notification.user!,
+                  size: 40,
+                ),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.background,
+                        width: 2,
+                        strokeAlign: StrokeAlign.outside,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Icon(
+                        icon ?? Icons.notifications_rounded,
+                        size: 12,
+                        color: ThemeData.estimateBrightnessForColor(color)
+                            .inverted
+                            .getColor(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(width: 12),
             Expanded(

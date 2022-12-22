@@ -15,87 +15,89 @@ class PollWidget extends StatelessWidget {
     final borderRadius = BorderRadius.circular(8);
     return Padding(
       padding: padding,
-      child: LayoutBuilder(builder: (context, constraints) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              "Poll",
-              style: theme.textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
-            for (final option in poll.options) ...[
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                "Poll",
+                style: theme.textTheme.titleLarge,
+              ),
               const SizedBox(height: 8),
-              Stack(
-                children: [
-                  if (option.voteCount != null)
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      bottom: 0,
+              for (final option in poll.options) ...[
+                const SizedBox(height: 8),
+                Stack(
+                  children: [
+                    if (option.voteCount != null)
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary.withOpacity(.25),
+                            borderRadius: borderRadius,
+                          ),
+                          child: SizedBox(
+                            width: constraints.maxWidth *
+                                (option.voteCount! / poll.voteCount),
+                          ),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(option.text),
+                          Text(
+                            "${option.voteCount} votes",
+                            style: theme.textTheme.labelSmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned.fill(
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.primary.withOpacity(.25),
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
                           borderRadius: borderRadius,
                         ),
-                        child: SizedBox(
-                          width: constraints.maxWidth *
-                              (option.voteCount! / poll.voteCount),
-                        ),
                       ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(option.text),
-                        Text(
-                          "${option.voteCount} votes",
-                          style: theme.textTheme.labelSmall,
-                        ),
-                      ],
-                    ),
+                  ],
+                )
+              ],
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Text(
+                    "${poll.voteCount} votes from ${poll.voterCount} people",
+                    style: theme.textTheme.labelSmall,
                   ),
-                  Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        borderRadius: borderRadius,
-                      ),
-                    ),
+                  Text(
+                    " • ",
+                    style: theme.textTheme.labelSmall,
+                  ),
+                  Text(
+                    poll.hasEnded
+                        ? "Ended ${DateTime.now().difference(poll.endedAt).toStringHuman(context: context)} ago"
+                        : "Ends in ${poll.endedAt.difference(DateTime.now()).toStringHuman(context: context)}",
+                    style: theme.textTheme.labelSmall,
                   ),
                 ],
-              )
+              ),
             ],
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Text(
-                  "${poll.voteCount} votes from ${poll.voterCount} people",
-                  style: theme.textTheme.labelSmall,
-                ),
-                Text(
-                  " • ",
-                  style: theme.textTheme.labelSmall,
-                ),
-                Text(
-                  poll.hasEnded
-                      ? "Ended ${DateTime.now().difference(poll.endedAt).toStringHuman(context: context)} ago"
-                      : "Ends in ${poll.endedAt.difference(DateTime.now()).toStringHuman(context: context)}",
-                  style: theme.textTheme.labelSmall,
-                ),
-              ],
-            ),
-          ],
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 }

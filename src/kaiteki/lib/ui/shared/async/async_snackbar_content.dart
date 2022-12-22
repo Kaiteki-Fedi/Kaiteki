@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
+import 'package:kaiteki_material/kaiteki_material.dart';
 
 class AsyncSnackBarContent extends StatelessWidget {
   final Icon icon;
