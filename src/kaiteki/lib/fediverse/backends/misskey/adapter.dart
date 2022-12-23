@@ -213,7 +213,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       Visibility.public: "public",
     }[draft.visibility]!;
 
-    final note = await client.createNote(
+    final response = await client.createNote(
       visibility,
       text: draft.content,
       cw: draft.subject,
@@ -223,7 +223,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       }).toList(),
     );
 
-    return toPost(note, instance);
+    return toPost(response.createdNote, instance);
   }
 
   @override

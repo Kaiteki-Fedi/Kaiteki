@@ -11,6 +11,7 @@ import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/create_app.dart';
+import 'package:kaiteki/fediverse/backends/misskey/responses/create_note.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/generate_session.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/userkey.dart';
@@ -61,7 +62,7 @@ class MisskeyClient {
         .then(CreateAppResponse.fromJson.fromResponse);
   }
 
-  Future<misskey.Note> createNote(
+  Future<CreateNoteResponse> createNote(
     String visibility, {
     List<String>? visibleUserIds,
     String? text,
@@ -83,7 +84,7 @@ class MisskeyClient {
             if (fileIds?.isNotEmpty == true) "fileIds": fileIds,
           }.jsonBody,
         )
-        .then(misskey.Note.fromJson.fromResponse);
+        .then(CreateNoteResponse.fromJson.fromResponse);
   }
 
   Future<misskey.Note> showNote(String noteId) async {
