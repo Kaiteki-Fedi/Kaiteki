@@ -10,7 +10,7 @@ class MainScreenDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.getL10n();
-    final account = ref.watch(accountProvider).current;
+    final account = ref.watch(accountProvider)!;
     final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
     return Drawer(
       child: SafeArea(

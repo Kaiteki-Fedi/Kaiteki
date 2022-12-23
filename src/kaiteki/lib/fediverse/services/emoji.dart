@@ -12,7 +12,7 @@ class EmojiService extends _$EmojiService {
 
   @override
   FutureOr<List<EmojiCategory>> build(AccountKey key) async {
-    final manager = ref.read(accountProvider);
+    final manager = ref.read(accountManagerProvider);
     final account = manager.accounts.firstWhere((a) => a.key == key);
     _backend = account.adapter as CustomEmojiSupport;
     return await _backend.getEmojis();

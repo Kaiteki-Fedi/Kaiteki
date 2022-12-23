@@ -12,13 +12,25 @@ class AccountManager extends ChangeNotifier {
   static final _logger = getLogger('AccountContainer');
 
   Account? _currentAccount;
+  @Deprecated("Accounts should be tracked manually through inheritance")
   Account get current => _currentAccount!;
+  @Deprecated("Accounts should be tracked manually through inheritance")
   set current(Account account) {
     assert(_accounts.contains(account));
     _currentAccount = account;
     notifyListeners();
   }
 
+  Account? _defaultAccount;
+  Account? get defaultAccount => _defaultAccount ?? accounts.last;
+  set defaultAccount(Account? account) {
+    if (account == null) throw ArgumentError.notNull("account");
+    assert(_accounts.contains(account));
+    _defaultAccount = account;
+    notifyListeners();
+  }
+
+  @Deprecated("Obsolete")
   String get instance => current.key.host;
   bool get loggedIn => _currentAccount != null;
 
@@ -43,8 +55,8 @@ class AccountManager extends ChangeNotifier {
     }
 
     _accounts.remove(account);
-    if (_currentAccount == account) {
-      _currentAccount = _accounts.firstOrNull;
+    if (_defaultAccount == account) {
+      _defaultAccount = _accounts.firstOrNull;
     }
 
     notifyListeners();
@@ -65,8 +77,6 @@ class AccountManager extends ChangeNotifier {
 
     _accounts.add(account);
 
-    _currentAccount ??= account;
-
     notifyListeners();
   }
 
@@ -83,7 +93,7 @@ class AccountManager extends ChangeNotifier {
 
     if (_accounts.isNotEmpty) {
       // TODO(Craftplacer): Store which account the user last used
-      current = _accounts.last;
+      _defaultAccount = _accounts.last;
     }
   }
 

@@ -35,7 +35,7 @@ class NotificationService extends _$NotificationService {
 
   @override
   FutureOr<List<Notification>> build(AccountKey key) async {
-    final manager = ref.read(accountProvider);
+    final manager = ref.read(accountManagerProvider);
     final account = manager.accounts.firstWhere((a) => a.key == key);
     _backend = account.adapter as NotificationSupport;
     return await _backend.getNotifications();

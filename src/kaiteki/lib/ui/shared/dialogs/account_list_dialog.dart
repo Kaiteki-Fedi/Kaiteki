@@ -14,7 +14,8 @@ class AccountListDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DynamicDialogContainer(
       builder: (context, fullscreen) {
-        final manager = ref.watch(accountProvider);
+        final manager = ref.watch(accountManagerProvider);
+        final currentAccount = ref.watch(accountProvider);
         final l10n = context.getL10n();
 
         return Column(
@@ -28,13 +29,31 @@ class AccountListDialog extends ConsumerWidget {
             ),
             Column(
               children: [
-                for (final compound in manager.accounts)
+                for (final account in manager.accounts)
                   AccountListTile(
-                    account: compound,
-                    selected: manager.current == compound,
-                    onTap: () => Navigator.of(context).pop(),
+                    account: account,
+                    selected: currentAccount == account,
+                    onSelect: () {
+                      Navigator.of(context).pop();
+                      context.goNamed(
+                        "home",
+                        params: {
+                          "accountUsername": account.key.username,
+                          "accountHost": account.key.host,
+                        },
+                      );
+                    },
+                    onSignOut: () async {
+                      final result = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AccountRemovalDialog(
+                          account: account,
+                        ),
+                      );
+
+                      if (result == true) manager.remove(account);
+                    },
                     showInstanceIcon: true,
-                    enableSignOut: true,
                   ),
                 const Divider(),
                 ListTile(
@@ -67,16 +86,16 @@ class AccountListTile extends ConsumerWidget {
   final Account account;
   final bool selected;
   final bool showInstanceIcon;
-  final VoidCallback? onTap;
-  final bool enableSignOut;
+  final VoidCallback? onSelect;
+  final VoidCallback? onSignOut;
 
   const AccountListTile({
     super.key,
     required this.account,
     this.selected = false,
     this.showInstanceIcon = false,
-    this.enableSignOut = false,
-    this.onTap,
+    this.onSelect,
+    this.onSignOut,
   });
 
   @override
@@ -115,8 +134,8 @@ class AccountListTile extends ConsumerWidget {
       ),
       title: Text(account.key.username),
       subtitle: Text(account.key.host),
-      onTap: () => _onSelect(ref),
-      trailing: enableSignOut
+      onTap: onSelect,
+      trailing: onSignOut != null
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -126,7 +145,7 @@ class AccountListTile extends ConsumerWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.logout_rounded),
-                  onPressed: () => _onRemove(context, ref),
+                  onPressed: onSignOut,
                   splashRadius: 24,
                   tooltip: "Remove account",
                 ),
@@ -134,24 +153,6 @@ class AccountListTile extends ConsumerWidget {
             )
           : null,
     );
-  }
-
-  Future<void> _onSelect(WidgetRef ref) async {
-    ref.read(accountProvider).current = account;
-    onTap?.call();
-  }
-
-  Future<void> _onRemove(BuildContext context, WidgetRef ref) async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => AccountRemovalDialog(
-        account: account,
-      ),
-    );
-
-    if (result == true) {
-      ref.read(accountProvider).remove(account);
-    }
   }
 }
 

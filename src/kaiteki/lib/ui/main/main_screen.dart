@@ -85,7 +85,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   int? _fetchNotificationCount() {
-    final account = ref.watch(accountProvider).current;
+    final account = ref.watch(accountProvider)!;
 
     if (account.adapter is! NotificationSupport) return null;
 
@@ -341,7 +341,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         return _timelineKey.currentState?.refresh;
 
       case TabKind.notifications:
-        final account = ref.watch(accountProvider).current.key;
+        final account = ref.watch(accountProvider)!.key;
         return ref.read(notificationServiceProvider(account).notifier).refresh;
 
       default:

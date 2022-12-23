@@ -14,7 +14,7 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
   @override
   bool build() {
     final isLoggedIn = ref.watch(
-      accountProvider.select((value) => value.loggedIn),
+      accountManagerProvider.select((value) => value.loggedIn),
     );
 
     ref.listenSelf((_, __) => _routerListener?.call());
@@ -23,7 +23,7 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
   }
 
   UserHandle get currentHandle {
-    final key = ref.read(accountProvider).current.key;
+    final key = ref.read(accountProvider)!.key;
     return UserHandle(key.username, key.host);
   }
 

@@ -399,8 +399,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
   Future<void> _onChangeReaction(Emoji emoji) async {
     final messenger = ScaffoldMessenger.of(context);
-    final manager = ref.read(accountProvider);
-    final adapter = manager.current.adapter as ReactionSupport;
+    final account = ref.read(accountProvider)!;
+    final adapter = account.adapter as ReactionSupport;
 
     try {
       final hasReacted = _post.reactions.any(
@@ -414,13 +414,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         await adapter.removeReaction(_post, emoji);
         newPost = _post.removeOrDeleteReaction(
           emoji,
-          manager.current.user,
+          account.user,
         );
       } else {
         await adapter.addReaction(_post, emoji);
         newPost = _post.addOrCreateReaction(
           emoji,
-          manager.current.user,
+          account.user,
           !adapter.capabilities.supportsMultipleReactions,
         );
       }

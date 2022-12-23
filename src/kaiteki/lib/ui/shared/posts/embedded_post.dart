@@ -46,9 +46,9 @@ class EmbeddedPostWidget extends ConsumerWidget {
   }
 
   void openPost(BuildContext context, WidgetRef ref) {
-    final account = ref.read(accountProvider).current;
-    final instance = account.key.host;
-    final username = account.key.username;
+    final accountKey = ref.read(accountProvider)!.key;
+    final instance = accountKey.host;
+    final username = accountKey.username;
     context.push(
       "/@$username@$instance/posts/${post.id}",
       extra: post,

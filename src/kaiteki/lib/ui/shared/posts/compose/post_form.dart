@@ -53,7 +53,7 @@ class PostFormState extends ConsumerState<PostForm> {
     final op = widget.replyTo;
 
     if (op != null) {
-      final currentUser = ref.read(accountProvider).current.user;
+      final currentUser = ref.read(accountProvider)!.user;
 
       final handles = <String>[
         if (op.author.id != currentUser.id) op.author.handle.toString(),
@@ -134,10 +134,9 @@ class PostFormState extends ConsumerState<PostForm> {
 
   @override
   Widget build(BuildContext context) {
-    final manager = ref.watch(accountProvider);
+    final adapter = ref.watch(adapterProvider);
     final flex = widget.expands ? 1 : 0;
     final l10n = context.getL10n();
-    final adapter = manager.current.adapter;
 
     return FocusableActionDetector(
       shortcuts: const {commit: SendIntent()},

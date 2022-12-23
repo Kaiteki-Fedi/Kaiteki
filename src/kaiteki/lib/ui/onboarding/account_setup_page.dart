@@ -8,7 +8,7 @@ class AccountSetupPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final manager = ref.watch(accountProvider);
+    final manager = ref.watch(accountManagerProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [

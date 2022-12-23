@@ -46,7 +46,7 @@ Future<void> main() async {
       overrides: [
         themeProvider.overrideWith((_) => themePreferences),
         preferencesProvider.overrideWith((_) => appPreferences),
-        accountProvider.overrideWith((_) => accountManager),
+        accountManagerProvider.overrideWith((_) => accountManager),
       ],
       child: const KaitekiApp(),
     );

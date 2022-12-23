@@ -105,7 +105,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (username.isNullOrEmpty) return l10n.authNoUsername;
 
-    final manager = ref.read(accountProvider);
+    final manager = ref.read(accountManagerProvider);
     if (manager.accounts.any(
       (account) {
         return account.key.host == instance && account.key.username == username;

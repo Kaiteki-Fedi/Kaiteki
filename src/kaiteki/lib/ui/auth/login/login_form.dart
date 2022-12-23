@@ -19,6 +19,7 @@ import 'package:kaiteki/ui/auth/login/pages/oauth_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/user_page.dart';
 import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -238,7 +239,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<void> _login(InstanceCompound instance) async {
-    final accounts = ref.read(accountProvider);
+    final accounts = ref.read(accountManagerProvider);
     final adapter = instance.createAdapter();
 
     final result = await adapter.login(
@@ -255,10 +256,9 @@ class LoginFormState extends ConsumerState<LoginForm> {
       }
 
       await accounts.add(account);
-      accounts.current = account;
 
       if (mounted) {
-        Navigator.of(context).pop();
+        context.goNamed("home", params: account.key.routerParams);
       }
 
       return;

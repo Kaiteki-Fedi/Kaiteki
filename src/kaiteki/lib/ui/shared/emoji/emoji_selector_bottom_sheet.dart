@@ -33,7 +33,7 @@ class _EmojiSelectorBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider).current;
+    final account = ref.watch(accountProvider)!;
 
     // "Basic" error checking whether tab can disappear between rebuilds
     final availableTabs = [
@@ -117,7 +117,7 @@ class _EmojiSelectorBottomSheetState
 
     switch (tab) {
       case _EmojiKindTab.custom:
-        final account = ref.read(accountProvider).current;
+        final account = ref.read(accountProvider)!;
         final customEmojis = emojiServiceProvider(account.key);
         return ref
             .watch(customEmojis) //

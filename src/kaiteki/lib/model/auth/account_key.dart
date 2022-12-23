@@ -1,7 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/fediverse/model/user/handle.dart';
 
 part 'account_key.g.dart';
 
@@ -9,7 +11,7 @@ part 'account_key.g.dart';
 @immutable
 @JsonSerializable()
 @HiveType(typeId: 0)
-class AccountKey {
+class AccountKey extends Equatable {
   @HiveField(2)
   final String username;
 
@@ -19,6 +21,8 @@ class AccountKey {
   @HiveField(0)
   @JsonKey(name: "type", unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
   final ApiType? type;
+
+  UserHandle get handle => UserHandle(username, host);
 
   const AccountKey(this.type, this.host, this.username);
 
@@ -38,23 +42,11 @@ class AccountKey {
 
   String toHandle() => "@$username@$host";
 
-  @override
-  int get hashCode => username.hashCode ^ host.hashCode ^ type.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    if (other is AccountKey) {
-      return //
-          username == other.username &&
-              host == other.host &&
-              type == other.type;
-    }
-
-    return false;
-  }
-
   factory AccountKey.fromJson(Map<String, dynamic> json) =>
       _$AccountKeyFromJson(json);
 
   Map<String, dynamic> toJson() => _$AccountKeyToJson(this);
+
+  @override
+  List<Object?> get props => [username, host, type];
 }

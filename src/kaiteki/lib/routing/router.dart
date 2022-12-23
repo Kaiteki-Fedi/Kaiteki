@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/routing/notifier.dart';
 import 'package:kaiteki/ui/account_required_screen.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
@@ -18,6 +18,7 @@ import 'package:kaiteki/ui/settings/debug_screen.dart';
 import 'package:kaiteki/ui/settings/experiments.dart';
 import 'package:kaiteki/ui/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shared/conversation_screen.dart';
+import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
 import 'package:kaiteki/ui/user/user_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -44,7 +45,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
           final scope = ProviderScope.containerOf(context);
-          final isLoggedIn = scope.read(accountProvider).loggedIn;
+          final isLoggedIn = scope.read(accountManagerProvider).loggedIn;
           if (!isLoggedIn) return "/welcome";
 
           return "/${notifier.currentHandle}/home";
@@ -57,6 +58,15 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
       GoRoute(
         path: "/about",
         builder: (_, __) => const AboutScreen(),
+      ),
+      GoRoute(
+        name: "accounts",
+        path: "/accounts",
+        pageBuilder: (context, state) {
+          return _DialogPage(
+            builder: (context) => const AccountListDialog(),
+          );
+        },
       ),
       GoRoute(
         path: "/settings",
@@ -156,31 +166,30 @@ Widget _authenticatedBuilder(context, state, child) {
   return Consumer(
     child: child,
     builder: (context, ref, child) {
-      final BackendAdapter? adapter;
+      final Account? account;
 
       final user = state.params["accountUsername"];
       final host = state.params["accountHost"];
 
       if (user != null && host != null) {
-        adapter = ref.watch(
-          accountProvider.select(
-            (manager) => manager.accounts
-                .firstWhere(
-                  (account) =>
-                      account.key.username == user && account.key.host == host,
-                )
-                .adapter,
+        account = ref.watch(
+          accountManagerProvider.select(
+            (manager) => manager.accounts.firstWhere(
+              (account) =>
+                  account.key.username == user && account.key.host == host,
+            ),
           ),
         );
       } else {
-        final accountManager = ref.watch(accountProvider);
-        adapter = accountManager.loggedIn //
-            ? accountManager.current.adapter
-            : null;
+        account = ref.watch(accountProvider);
       }
-      if (adapter != null) {
+
+      if (account != null) {
         return ProviderScope(
-          overrides: [adapterProvider.overrideWithValue(adapter)],
+          overrides: [
+            adapterProvider.overrideWithValue(account.adapter),
+            accountProvider.overrideWithValue(account),
+          ],
           child: child!,
         );
       } else {
@@ -188,4 +197,21 @@ Widget _authenticatedBuilder(context, state, child) {
       }
     },
   );
+}
+
+class _DialogPage extends Page {
+  final WidgetBuilder builder;
+
+  const _DialogPage({
+    required this.builder,
+  });
+
+  @override
+  Route createRoute(BuildContext context) {
+    return DialogRoute(
+      builder: builder,
+      context: context,
+      settings: this,
+    );
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/user/user.dart';
@@ -5,7 +6,7 @@ import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/model/auth/secret.dart';
 
 @immutable
-class Account {
+class Account extends Equatable {
   final AccountKey key;
   final AccountSecret? accountSecret;
   final ClientSecret? clientSecret;
@@ -21,20 +22,5 @@ class Account {
   });
 
   @override
-  bool operator ==(other) {
-    if (other is Account) {
-      return clientSecret == other.clientSecret &&
-          accountSecret == other.accountSecret;
-    } else {
-      return false;
-    }
-  }
-
-  @override
-  int get hashCode {
-    return accountSecret.hashCode ^
-        clientSecret.hashCode ^
-        adapter.hashCode ^
-        user.hashCode;
-  }
+  List<Object?> get props => [key, accountSecret, clientSecret, adapter, user];
 }

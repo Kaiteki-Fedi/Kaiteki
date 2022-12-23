@@ -89,9 +89,9 @@ class _CatalogMainScreenViewState extends ConsumerState<CatalogMainScreenView> {
     return InkWell(
       key: ValueKey(item.id),
       onTap: () {
-        final account = ref.read(accountProvider).current;
+        final accountKey = ref.read(accountProvider)!.key;
         context.push(
-          "/@${account.key.username}@${account.key.host}/posts/${item.id}",
+          "/@${accountKey.username}@${accountKey.host}/posts/${item.id}",
           extra: item,
         );
       },

@@ -23,7 +23,7 @@ class NotificationsPage extends ConsumerStatefulWidget {
 class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider).current;
+    final account = ref.watch(accountProvider)!;
     if (account.adapter is! NotificationSupport) {
       return const Center(
         child: IconLandingWidget(
@@ -360,9 +360,9 @@ class NotificationWidget extends ConsumerWidget {
           notification.post != null,
           "Tried to open a notification without a post attached to it",
         );
-        final account = ref.read(accountProvider).current;
+        final accountKey = ref.read(accountProvider)!.key;
         context.push(
-          "/@${account.key.username}@${account.key.host}/posts/${notification.post!.id}",
+          "/@${accountKey.username}@${accountKey.host}/posts/${notification.post!.id}",
           extra: notification.post,
         );
         break;
