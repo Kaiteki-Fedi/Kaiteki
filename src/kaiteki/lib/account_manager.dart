@@ -26,7 +26,7 @@ class AccountManager extends ChangeNotifier {
 
   Account? _defaultAccount;
 
-  Account? get defaultAccount => _defaultAccount ?? accounts.last;
+  Account? get defaultAccount => _defaultAccount ?? accounts.lastOrNull;
 
   set defaultAccount(Account? account) {
     if (account == null) throw ArgumentError.notNull("account");
