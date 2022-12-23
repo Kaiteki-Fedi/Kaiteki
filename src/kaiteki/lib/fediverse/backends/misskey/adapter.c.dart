@@ -67,8 +67,17 @@ Visibility toVisibility(String visibility) {
 Attachment toAttachment(misskey.DriveFile file) {
   var type = AttachmentType.file;
 
-  if (file.type.startsWith("image/")) {
-    type = AttachmentType.image;
+  final mainType = file.type.split("/").first.toLowerCase();
+  switch (mainType) {
+    case "video":
+      type = AttachmentType.video;
+      break;
+    case "image":
+      type = AttachmentType.image;
+      break;
+    case "audio":
+      type = AttachmentType.audio;
+      break;
   }
 
   return Attachment(
