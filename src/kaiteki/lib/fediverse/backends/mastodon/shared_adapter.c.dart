@@ -112,6 +112,16 @@ NotificationType toNotificationType(String type) {
       return NotificationType.mentioned;
     case "follow_request":
       return NotificationType.followRequest;
+    case "poll":
+      return NotificationType.pollEnded;
+    case "update":
+      return NotificationType.updated;
+    case "admin.sign_up":
+      return NotificationType.signedUp;
+    case "admin.report":
+      return NotificationType.reported;
+    case "status":
+      return NotificationType.newPost;
     default:
       throw Exception("Unknown notification type: $type");
   }

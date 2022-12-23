@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $NotificationServiceHash() =>
-    r'3e44f0d8b1a67fcc30da5fa4fd528719b461ae5b';
+    r'7c1059c06e5a9217672d2d31d3dcca09c884059a';
 
 /// See also [NotificationService].
 class NotificationServiceProvider

@@ -63,7 +63,7 @@ class PostFormState extends ConsumerState<PostForm> {
           return !(u.username == currentUser.username &&
               u.host == currentUser.host);
         }).map((u) => "@${u.username!}@${u.host!}"),
-      ];
+      ].distinct();
 
       // ignore: prefer_interpolation_to_compose_strings
       if (handles.isNotEmpty) return handles.join(" ") + " ";

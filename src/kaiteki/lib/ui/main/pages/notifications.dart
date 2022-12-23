@@ -175,22 +175,13 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 class NotificationWidget extends ConsumerWidget {
   final Notification notification;
 
-  static final _icons = <NotificationType, IconData>{
-    NotificationType.liked: Icons.star_rounded,
-    NotificationType.repeated: Icons.repeat_rounded,
-    NotificationType.mentioned: Icons.alternate_email_rounded,
-    NotificationType.followed: Icons.person_add_rounded,
-    NotificationType.followRequest: Icons.person_add_rounded,
-    NotificationType.reacted: Icons.emoji_emotions_rounded,
-  };
-
   const NotificationWidget(this.notification, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final inheritedTextStyle = DefaultTextStyle.of(context).style;
     final color = _getColor(context);
-    final icon = _icons[notification.type];
+    final icon = _getNotificationIcon(notification.type);
     final post = notification.post;
     return InkWell(
       onTap: () => _onTap(context, ref),
@@ -311,16 +302,83 @@ class NotificationWidget extends ConsumerWidget {
     );
   }
 
+  IconData? _getNotificationIcon(NotificationType type) {
+    switch (type) {
+      case NotificationType.liked:
+        return Icons.star_rounded;
+
+      case NotificationType.repeated:
+        return Icons.repeat_rounded;
+
+      case NotificationType.mentioned:
+        return Icons.alternate_email_rounded;
+
+      case NotificationType.followed:
+        return Icons.person_add_rounded;
+
+      case NotificationType.followRequest:
+        return Icons.person_add_rounded;
+
+      case NotificationType.reacted:
+        return Icons.emoji_emotions_rounded;
+
+      case NotificationType.groupInvite:
+        return Icons.group_add_rounded;
+
+      case NotificationType.pollEnded:
+        return Icons.poll_rounded;
+
+      case NotificationType.quoted:
+        return Icons.format_quote_rounded;
+
+      case NotificationType.replied:
+        return Icons.reply_rounded;
+
+      case NotificationType.updated:
+        return Icons.edit_rounded;
+
+      case NotificationType.reported:
+        return Icons.report_rounded;
+
+      case NotificationType.signedUp:
+        return Icons.person_add_rounded;
+
+      case NotificationType.newPost:
+        return Icons.post_add_rounded;
+    }
+  }
+
   Color _getColor(BuildContext context) {
-    final colors = Theme.of(context).ktkColors;
+    final theme = Theme.of(context);
+    final ktkColors = theme.ktkColors;
+    final colorScheme = theme.colorScheme;
 
     switch (notification.type) {
       case NotificationType.liked:
-        return colors!.favoriteColor;
+        return ktkColors!.favoriteColor;
+
       case NotificationType.repeated:
-        return colors!.repeatColor;
-      default:
-        return Colors.blue.shade400;
+        return ktkColors!.repeatColor;
+
+      case NotificationType.reported:
+        return colorScheme.error;
+
+      case NotificationType.reacted:
+      case NotificationType.updated:
+      case NotificationType.newPost:
+        return colorScheme.secondary;
+
+      case NotificationType.quoted:
+      case NotificationType.replied:
+      case NotificationType.mentioned:
+      case NotificationType.pollEnded:
+        return colorScheme.primary;
+
+      case NotificationType.followed:
+      case NotificationType.followRequest:
+      case NotificationType.groupInvite:
+      case NotificationType.signedUp:
+        return colorScheme.tertiary;
     }
   }
 
@@ -342,38 +400,49 @@ class NotificationWidget extends ConsumerWidget {
       case NotificationType.groupInvite:
         return " invited you to a group";
       case NotificationType.pollEnded:
-        return "Poll has ended";
+        return "'s poll has ended";
       case NotificationType.quoted:
         return " quoted you";
       case NotificationType.replied:
         return " replied to you";
+      case NotificationType.updated:
+        return " updated their post";
+      case NotificationType.reported:
+        return "New report";
+      case NotificationType.signedUp:
+        return " has joined the instance";
+      case NotificationType.newPost:
+        return " made a new post";
     }
   }
 
   void _onTap(BuildContext context, WidgetRef ref) {
-    switch (notification.type) {
-      case NotificationType.liked:
-      case NotificationType.repeated:
-      case NotificationType.reacted:
-      case NotificationType.mentioned:
-        assert(
-          notification.post != null,
-          "Tried to open a notification without a post attached to it",
-        );
-        final accountKey = ref.read(accountProvider)!.key;
-        context.push(
-          "/@${accountKey.username}@${accountKey.host}/posts/${notification.post!.id}",
-          extra: notification.post,
-        );
-        break;
-      case NotificationType.followed:
-      case NotificationType.followRequest:
-        assert(
-          notification.user != null,
-          "Tried to open a follow notification without a user attached to it",
-        );
-        context.showUser(notification.user!, ref);
-        break;
+    if (notification.post != null) {
+      final accountKey = ref.read(accountProvider)!.key;
+      context.pushNamed(
+        "post",
+        extra: notification.post,
+        params: {...accountKey.routerParams, "id": notification.post!.id},
+      );
+      return;
     }
+
+    if (notification.user != null) {
+      final accountKey = ref.read(accountProvider)!.key;
+      context.pushNamed(
+        "user",
+        extra: notification.user,
+        params: {...accountKey.routerParams, "id": notification.user!.id},
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "This notification doesn't have a post or user attached to it.",
+        ),
+      ),
+    );
   }
 }
