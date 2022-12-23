@@ -7,11 +7,19 @@ part of 'post.dart';
 // **************************************************************************
 
 abstract class _$PostCWProxy<T> {
-  Post<T> attachments(List<Attachment<dynamic>>? attachments);
+  Post<T> source(T? source);
+
+  Post<T> postedAt(DateTime postedAt);
 
   Post<T> author(User<dynamic> author);
 
-  Post<T> client(String? client);
+  Post<T> id(String id);
+
+  Post<T> reactions(List<Reaction> reactions);
+
+  Post<T> mentionedUsers(List<UserReference>? mentionedUsers);
+
+  Post<T> attachments(List<Attachment<dynamic>>? attachments);
 
   Post<T> content(String? content);
 
@@ -23,21 +31,13 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> formatting(Formatting? formatting);
 
-  Post<T> id(String id);
-
-  Post<T> mentionedUsers(List<UserReference>? mentionedUsers);
-
   Post<T> metrics(PostMetrics metrics);
+
+  Post<T> state(PostState state);
 
   Post<T> nsfw(bool nsfw);
 
-  Post<T> poll(Poll<dynamic>? poll);
-
-  Post<T> postedAt(DateTime postedAt);
-
   Post<T> quotedPost(Post<dynamic>? quotedPost);
-
-  Post<T> reactions(List<Reaction> reactions);
 
   Post<T> repeatOf(Post<dynamic>? repeatOf);
 
@@ -45,13 +45,13 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> replyToUser(ResolvableUser? replyToUser);
 
-  Post<T> source(T? source);
-
-  Post<T> state(PostState state);
-
   Post<T> subject(String? subject);
 
   Post<T> visibility(Visibility? visibility);
+
+  Post<T> client(String? client);
+
+  Post<T> poll(Poll<dynamic>? poll);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Post<T>(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -60,47 +60,60 @@ abstract class _$PostCWProxy<T> {
   /// Post<T>(...).copyWith(id: 12, name: "My name")
   /// ````
   Post<T> call({
-    List<Attachment<dynamic>>? attachments,
+    T? source,
+    DateTime? postedAt,
     User<dynamic>? author,
-    String? client,
+    String? id,
+    List<Reaction>? reactions,
+    List<UserReference>? mentionedUsers,
+    List<Attachment<dynamic>>? attachments,
     String? content,
     List<Embed>? embeds,
     List<Emoji>? emojis,
     Uri? externalUrl,
     Formatting? formatting,
-    String? id,
-    List<UserReference>? mentionedUsers,
     PostMetrics? metrics,
+    PostState? state,
     bool? nsfw,
-    Poll<dynamic>? poll,
-    DateTime? postedAt,
     Post<dynamic>? quotedPost,
-    List<Reaction>? reactions,
     Post<dynamic>? repeatOf,
     ResolvablePost? replyTo,
     ResolvableUser? replyToUser,
-    T? source,
-    PostState? state,
     String? subject,
     Visibility? visibility,
+    String? client,
+    Poll<dynamic>? poll,
   });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfPost.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfPost.copyWith.fieldName(...)`
 class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
-  final Post<T> _value;
-
   const _$PostCWProxyImpl(this._value);
 
+  final Post<T> _value;
+
   @override
-  Post<T> attachments(List<Attachment<dynamic>>? attachments) =>
-      this(attachments: attachments);
+  Post<T> source(T? source) => this(source: source);
+
+  @override
+  Post<T> postedAt(DateTime postedAt) => this(postedAt: postedAt);
 
   @override
   Post<T> author(User<dynamic> author) => this(author: author);
 
   @override
-  Post<T> client(String? client) => this(client: client);
+  Post<T> id(String id) => this(id: id);
+
+  @override
+  Post<T> reactions(List<Reaction> reactions) => this(reactions: reactions);
+
+  @override
+  Post<T> mentionedUsers(List<UserReference>? mentionedUsers) =>
+      this(mentionedUsers: mentionedUsers);
+
+  @override
+  Post<T> attachments(List<Attachment<dynamic>>? attachments) =>
+      this(attachments: attachments);
 
   @override
   Post<T> content(String? content) => this(content: content);
@@ -118,29 +131,16 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   Post<T> formatting(Formatting? formatting) => this(formatting: formatting);
 
   @override
-  Post<T> id(String id) => this(id: id);
-
-  @override
-  Post<T> mentionedUsers(List<UserReference>? mentionedUsers) =>
-      this(mentionedUsers: mentionedUsers);
-
-  @override
   Post<T> metrics(PostMetrics metrics) => this(metrics: metrics);
+
+  @override
+  Post<T> state(PostState state) => this(state: state);
 
   @override
   Post<T> nsfw(bool nsfw) => this(nsfw: nsfw);
 
   @override
-  Post<T> poll(Poll<dynamic>? poll) => this(poll: poll);
-
-  @override
-  Post<T> postedAt(DateTime postedAt) => this(postedAt: postedAt);
-
-  @override
   Post<T> quotedPost(Post<dynamic>? quotedPost) => this(quotedPost: quotedPost);
-
-  @override
-  Post<T> reactions(List<Reaction> reactions) => this(reactions: reactions);
 
   @override
   Post<T> repeatOf(Post<dynamic>? repeatOf) => this(repeatOf: repeatOf);
@@ -153,16 +153,16 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
       this(replyToUser: replyToUser);
 
   @override
-  Post<T> source(T? source) => this(source: source);
-
-  @override
-  Post<T> state(PostState state) => this(state: state);
-
-  @override
   Post<T> subject(String? subject) => this(subject: subject);
 
   @override
   Post<T> visibility(Visibility? visibility) => this(visibility: visibility);
+
+  @override
+  Post<T> client(String? client) => this(client: client);
+
+  @override
+  Post<T> poll(Poll<dynamic>? poll) => this(poll: poll);
 
   @override
 
@@ -173,49 +173,70 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   /// Post<T>(...).copyWith(id: 12, name: "My name")
   /// ````
   Post<T> call({
-    Object? attachments = const $CopyWithPlaceholder(),
+    Object? source = const $CopyWithPlaceholder(),
+    Object? postedAt = const $CopyWithPlaceholder(),
     Object? author = const $CopyWithPlaceholder(),
-    Object? client = const $CopyWithPlaceholder(),
+    Object? id = const $CopyWithPlaceholder(),
+    Object? reactions = const $CopyWithPlaceholder(),
+    Object? mentionedUsers = const $CopyWithPlaceholder(),
+    Object? attachments = const $CopyWithPlaceholder(),
     Object? content = const $CopyWithPlaceholder(),
     Object? embeds = const $CopyWithPlaceholder(),
     Object? emojis = const $CopyWithPlaceholder(),
     Object? externalUrl = const $CopyWithPlaceholder(),
     Object? formatting = const $CopyWithPlaceholder(),
-    Object? id = const $CopyWithPlaceholder(),
-    Object? mentionedUsers = const $CopyWithPlaceholder(),
     Object? metrics = const $CopyWithPlaceholder(),
+    Object? state = const $CopyWithPlaceholder(),
     Object? nsfw = const $CopyWithPlaceholder(),
-    Object? poll = const $CopyWithPlaceholder(),
-    Object? postedAt = const $CopyWithPlaceholder(),
     Object? quotedPost = const $CopyWithPlaceholder(),
-    Object? reactions = const $CopyWithPlaceholder(),
     Object? repeatOf = const $CopyWithPlaceholder(),
     Object? replyTo = const $CopyWithPlaceholder(),
     Object? replyToUser = const $CopyWithPlaceholder(),
-    Object? source = const $CopyWithPlaceholder(),
-    Object? state = const $CopyWithPlaceholder(),
     Object? subject = const $CopyWithPlaceholder(),
     Object? visibility = const $CopyWithPlaceholder(),
+    Object? client = const $CopyWithPlaceholder(),
+    Object? poll = const $CopyWithPlaceholder(),
   }) {
     return Post<T>(
+      source: source == const $CopyWithPlaceholder()
+          ? _value.source
+          // ignore: cast_nullable_to_non_nullable
+          : source as T?,
+      postedAt: postedAt == const $CopyWithPlaceholder() || postedAt == null
+          // ignore: unnecessary_non_null_assertion
+          ? _value.postedAt!
+          // ignore: cast_nullable_to_non_nullable
+          : postedAt as DateTime,
+      author: author == const $CopyWithPlaceholder() || author == null
+          // ignore: unnecessary_non_null_assertion
+          ? _value.author!
+          // ignore: cast_nullable_to_non_nullable
+          : author as User<dynamic>,
+      id: id == const $CopyWithPlaceholder() || id == null
+          // ignore: unnecessary_non_null_assertion
+          ? _value.id!
+          // ignore: cast_nullable_to_non_nullable
+          : id as String,
+      reactions: reactions == const $CopyWithPlaceholder() || reactions == null
+          // ignore: unnecessary_non_null_assertion
+          ? _value.reactions!
+          // ignore: cast_nullable_to_non_nullable
+          : reactions as List<Reaction>,
+      mentionedUsers: mentionedUsers == const $CopyWithPlaceholder()
+          ? _value.mentionedUsers
+          // ignore: cast_nullable_to_non_nullable
+          : mentionedUsers as List<UserReference>?,
       attachments: attachments == const $CopyWithPlaceholder()
           ? _value.attachments
           // ignore: cast_nullable_to_non_nullable
           : attachments as List<Attachment<dynamic>>?,
-      author: author == const $CopyWithPlaceholder() || author == null
-          ? _value.author
-          // ignore: cast_nullable_to_non_nullable
-          : author as User<dynamic>,
-      client: client == const $CopyWithPlaceholder()
-          ? _value.client
-          // ignore: cast_nullable_to_non_nullable
-          : client as String?,
       content: content == const $CopyWithPlaceholder()
           ? _value.content
           // ignore: cast_nullable_to_non_nullable
           : content as String?,
       embeds: embeds == const $CopyWithPlaceholder() || embeds == null
-          ? _value.embeds
+          // ignore: unnecessary_non_null_assertion
+          ? _value.embeds!
           // ignore: cast_nullable_to_non_nullable
           : embeds as List<Embed>,
       emojis: emojis == const $CopyWithPlaceholder()
@@ -230,38 +251,25 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
           ? _value.formatting
           // ignore: cast_nullable_to_non_nullable
           : formatting as Formatting?,
-      id: id == const $CopyWithPlaceholder() || id == null
-          ? _value.id
-          // ignore: cast_nullable_to_non_nullable
-          : id as String,
-      mentionedUsers: mentionedUsers == const $CopyWithPlaceholder()
-          ? _value.mentionedUsers
-          // ignore: cast_nullable_to_non_nullable
-          : mentionedUsers as List<UserReference>?,
       metrics: metrics == const $CopyWithPlaceholder() || metrics == null
-          ? _value.metrics
+          // ignore: unnecessary_non_null_assertion
+          ? _value.metrics!
           // ignore: cast_nullable_to_non_nullable
           : metrics as PostMetrics,
+      state: state == const $CopyWithPlaceholder() || state == null
+          // ignore: unnecessary_non_null_assertion
+          ? _value.state!
+          // ignore: cast_nullable_to_non_nullable
+          : state as PostState,
       nsfw: nsfw == const $CopyWithPlaceholder() || nsfw == null
-          ? _value.nsfw
+          // ignore: unnecessary_non_null_assertion
+          ? _value.nsfw!
           // ignore: cast_nullable_to_non_nullable
           : nsfw as bool,
-      poll: poll == const $CopyWithPlaceholder()
-          ? _value.poll
-          // ignore: cast_nullable_to_non_nullable
-          : poll as Poll<dynamic>?,
-      postedAt: postedAt == const $CopyWithPlaceholder() || postedAt == null
-          ? _value.postedAt
-          // ignore: cast_nullable_to_non_nullable
-          : postedAt as DateTime,
       quotedPost: quotedPost == const $CopyWithPlaceholder()
           ? _value.quotedPost
           // ignore: cast_nullable_to_non_nullable
           : quotedPost as Post<dynamic>?,
-      reactions: reactions == const $CopyWithPlaceholder() || reactions == null
-          ? _value.reactions
-          // ignore: cast_nullable_to_non_nullable
-          : reactions as List<Reaction>,
       repeatOf: repeatOf == const $CopyWithPlaceholder()
           ? _value.repeatOf
           // ignore: cast_nullable_to_non_nullable
@@ -274,14 +282,6 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
           ? _value.replyToUser
           // ignore: cast_nullable_to_non_nullable
           : replyToUser as ResolvableUser?,
-      source: source == const $CopyWithPlaceholder()
-          ? _value.source
-          // ignore: cast_nullable_to_non_nullable
-          : source as T?,
-      state: state == const $CopyWithPlaceholder() || state == null
-          ? _value.state
-          // ignore: cast_nullable_to_non_nullable
-          : state as PostState,
       subject: subject == const $CopyWithPlaceholder()
           ? _value.subject
           // ignore: cast_nullable_to_non_nullable
@@ -290,6 +290,14 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
           ? _value.visibility
           // ignore: cast_nullable_to_non_nullable
           : visibility as Visibility?,
+      client: client == const $CopyWithPlaceholder()
+          ? _value.client
+          // ignore: cast_nullable_to_non_nullable
+          : client as String?,
+      poll: poll == const $CopyWithPlaceholder()
+          ? _value.poll
+          // ignore: cast_nullable_to_non_nullable
+          : poll as Poll<dynamic>?,
     );
   }
 }

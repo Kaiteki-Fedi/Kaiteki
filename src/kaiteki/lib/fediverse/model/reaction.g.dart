@@ -7,11 +7,11 @@ part of 'reaction.dart';
 // **************************************************************************
 
 abstract class _$ReactionCWProxy {
-  Reaction count(int count);
-
   Reaction emoji(Emoji emoji);
 
   Reaction includesMe(bool includesMe);
+
+  Reaction count(int count);
 
   Reaction users(List<User<dynamic>>? users);
 
@@ -22,27 +22,27 @@ abstract class _$ReactionCWProxy {
   /// Reaction(...).copyWith(id: 12, name: "My name")
   /// ````
   Reaction call({
-    int? count,
     Emoji? emoji,
     bool? includesMe,
+    int? count,
     List<User<dynamic>>? users,
   });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfReaction.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfReaction.copyWith.fieldName(...)`
 class _$ReactionCWProxyImpl implements _$ReactionCWProxy {
-  final Reaction _value;
-
   const _$ReactionCWProxyImpl(this._value);
 
-  @override
-  Reaction count(int count) => this(count: count);
+  final Reaction _value;
 
   @override
   Reaction emoji(Emoji emoji) => this(emoji: emoji);
 
   @override
   Reaction includesMe(bool includesMe) => this(includesMe: includesMe);
+
+  @override
+  Reaction count(int count) => this(count: count);
 
   @override
   Reaction users(List<User<dynamic>>? users) => this(users: users);
@@ -56,25 +56,28 @@ class _$ReactionCWProxyImpl implements _$ReactionCWProxy {
   /// Reaction(...).copyWith(id: 12, name: "My name")
   /// ````
   Reaction call({
-    Object? count = const $CopyWithPlaceholder(),
     Object? emoji = const $CopyWithPlaceholder(),
     Object? includesMe = const $CopyWithPlaceholder(),
+    Object? count = const $CopyWithPlaceholder(),
     Object? users = const $CopyWithPlaceholder(),
   }) {
     return Reaction(
-      count: count == const $CopyWithPlaceholder() || count == null
-          ? _value.count
-          // ignore: cast_nullable_to_non_nullable
-          : count as int,
       emoji: emoji == const $CopyWithPlaceholder() || emoji == null
-          ? _value.emoji
+          // ignore: unnecessary_non_null_assertion
+          ? _value.emoji!
           // ignore: cast_nullable_to_non_nullable
           : emoji as Emoji,
       includesMe:
           includesMe == const $CopyWithPlaceholder() || includesMe == null
-              ? _value.includesMe
+              // ignore: unnecessary_non_null_assertion
+              ? _value.includesMe!
               // ignore: cast_nullable_to_non_nullable
               : includesMe as bool,
+      count: count == const $CopyWithPlaceholder() || count == null
+          // ignore: unnecessary_non_null_assertion
+          ? _value.count!
+          // ignore: cast_nullable_to_non_nullable
+          : count as int,
       users: users == const $CopyWithPlaceholder()
           ? _value.users
           // ignore: cast_nullable_to_non_nullable

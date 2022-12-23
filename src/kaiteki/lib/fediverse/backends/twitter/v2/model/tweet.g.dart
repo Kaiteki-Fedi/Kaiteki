@@ -7,7 +7,9 @@ part of 'tweet.dart';
 // **************************************************************************
 
 abstract class _$TweetCWProxy {
-  Tweet attachments(TweetAttachments? attachments);
+  Tweet id(String id);
+
+  Tweet text(String text);
 
   Tweet authorId(String? authorId);
 
@@ -15,23 +17,21 @@ abstract class _$TweetCWProxy {
 
   Tweet createdAt(DateTime? createdAt);
 
-  Tweet entities(TweetEntities? entities);
-
-  Tweet id(String id);
-
   Tweet inReplyToUserId(String? inReplyToUserId);
 
   Tweet lang(String? lang);
 
-  Tweet publicMetrics(PublicMetrics? publicMetrics);
+  Tweet replySettings(TweetReplySettings? replySettings);
+
+  Tweet attachments(TweetAttachments? attachments);
 
   Tweet referencedTweets(List<ReferencedTweet>? referencedTweets);
 
-  Tweet replySettings(TweetReplySettings? replySettings);
+  Tweet publicMetrics(PublicMetrics? publicMetrics);
+
+  Tweet entities(TweetEntities? entities);
 
   Tweet source(String? source);
-
-  Tweet text(String text);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Tweet(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -40,31 +40,33 @@ abstract class _$TweetCWProxy {
   /// Tweet(...).copyWith(id: 12, name: "My name")
   /// ````
   Tweet call({
-    TweetAttachments? attachments,
+    String? id,
+    String? text,
     String? authorId,
     String? conversationId,
     DateTime? createdAt,
-    TweetEntities? entities,
-    String? id,
     String? inReplyToUserId,
     String? lang,
-    PublicMetrics? publicMetrics,
-    List<ReferencedTweet>? referencedTweets,
     TweetReplySettings? replySettings,
+    TweetAttachments? attachments,
+    List<ReferencedTweet>? referencedTweets,
+    PublicMetrics? publicMetrics,
+    TweetEntities? entities,
     String? source,
-    String? text,
   });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfTweet.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfTweet.copyWith.fieldName(...)`
 class _$TweetCWProxyImpl implements _$TweetCWProxy {
-  final Tweet _value;
-
   const _$TweetCWProxyImpl(this._value);
 
+  final Tweet _value;
+
   @override
-  Tweet attachments(TweetAttachments? attachments) =>
-      this(attachments: attachments);
+  Tweet id(String id) => this(id: id);
+
+  @override
+  Tweet text(String text) => this(text: text);
 
   @override
   Tweet authorId(String? authorId) => this(authorId: authorId);
@@ -77,12 +79,6 @@ class _$TweetCWProxyImpl implements _$TweetCWProxy {
   Tweet createdAt(DateTime? createdAt) => this(createdAt: createdAt);
 
   @override
-  Tweet entities(TweetEntities? entities) => this(entities: entities);
-
-  @override
-  Tweet id(String id) => this(id: id);
-
-  @override
   Tweet inReplyToUserId(String? inReplyToUserId) =>
       this(inReplyToUserId: inReplyToUserId);
 
@@ -90,22 +86,26 @@ class _$TweetCWProxyImpl implements _$TweetCWProxy {
   Tweet lang(String? lang) => this(lang: lang);
 
   @override
-  Tweet publicMetrics(PublicMetrics? publicMetrics) =>
-      this(publicMetrics: publicMetrics);
+  Tweet replySettings(TweetReplySettings? replySettings) =>
+      this(replySettings: replySettings);
+
+  @override
+  Tweet attachments(TweetAttachments? attachments) =>
+      this(attachments: attachments);
 
   @override
   Tweet referencedTweets(List<ReferencedTweet>? referencedTweets) =>
       this(referencedTweets: referencedTweets);
 
   @override
-  Tweet replySettings(TweetReplySettings? replySettings) =>
-      this(replySettings: replySettings);
+  Tweet publicMetrics(PublicMetrics? publicMetrics) =>
+      this(publicMetrics: publicMetrics);
+
+  @override
+  Tweet entities(TweetEntities? entities) => this(entities: entities);
 
   @override
   Tweet source(String? source) => this(source: source);
-
-  @override
-  Tweet text(String text) => this(text: text);
 
   @override
 
@@ -116,25 +116,31 @@ class _$TweetCWProxyImpl implements _$TweetCWProxy {
   /// Tweet(...).copyWith(id: 12, name: "My name")
   /// ````
   Tweet call({
-    Object? attachments = const $CopyWithPlaceholder(),
+    Object? id = const $CopyWithPlaceholder(),
+    Object? text = const $CopyWithPlaceholder(),
     Object? authorId = const $CopyWithPlaceholder(),
     Object? conversationId = const $CopyWithPlaceholder(),
     Object? createdAt = const $CopyWithPlaceholder(),
-    Object? entities = const $CopyWithPlaceholder(),
-    Object? id = const $CopyWithPlaceholder(),
     Object? inReplyToUserId = const $CopyWithPlaceholder(),
     Object? lang = const $CopyWithPlaceholder(),
-    Object? publicMetrics = const $CopyWithPlaceholder(),
-    Object? referencedTweets = const $CopyWithPlaceholder(),
     Object? replySettings = const $CopyWithPlaceholder(),
+    Object? attachments = const $CopyWithPlaceholder(),
+    Object? referencedTweets = const $CopyWithPlaceholder(),
+    Object? publicMetrics = const $CopyWithPlaceholder(),
+    Object? entities = const $CopyWithPlaceholder(),
     Object? source = const $CopyWithPlaceholder(),
-    Object? text = const $CopyWithPlaceholder(),
   }) {
     return Tweet(
-      attachments: attachments == const $CopyWithPlaceholder()
-          ? _value.attachments
+      id: id == const $CopyWithPlaceholder() || id == null
+          // ignore: unnecessary_non_null_assertion
+          ? _value.id!
           // ignore: cast_nullable_to_non_nullable
-          : attachments as TweetAttachments?,
+          : id as String,
+      text: text == const $CopyWithPlaceholder() || text == null
+          // ignore: unnecessary_non_null_assertion
+          ? _value.text!
+          // ignore: cast_nullable_to_non_nullable
+          : text as String,
       authorId: authorId == const $CopyWithPlaceholder()
           ? _value.authorId
           // ignore: cast_nullable_to_non_nullable
@@ -147,14 +153,6 @@ class _$TweetCWProxyImpl implements _$TweetCWProxy {
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable
           : createdAt as DateTime?,
-      entities: entities == const $CopyWithPlaceholder()
-          ? _value.entities
-          // ignore: cast_nullable_to_non_nullable
-          : entities as TweetEntities?,
-      id: id == const $CopyWithPlaceholder() || id == null
-          ? _value.id
-          // ignore: cast_nullable_to_non_nullable
-          : id as String,
       inReplyToUserId: inReplyToUserId == const $CopyWithPlaceholder()
           ? _value.inReplyToUserId
           // ignore: cast_nullable_to_non_nullable
@@ -163,26 +161,30 @@ class _$TweetCWProxyImpl implements _$TweetCWProxy {
           ? _value.lang
           // ignore: cast_nullable_to_non_nullable
           : lang as String?,
-      publicMetrics: publicMetrics == const $CopyWithPlaceholder()
-          ? _value.publicMetrics
-          // ignore: cast_nullable_to_non_nullable
-          : publicMetrics as PublicMetrics?,
-      referencedTweets: referencedTweets == const $CopyWithPlaceholder()
-          ? _value.referencedTweets
-          // ignore: cast_nullable_to_non_nullable
-          : referencedTweets as List<ReferencedTweet>?,
       replySettings: replySettings == const $CopyWithPlaceholder()
           ? _value.replySettings
           // ignore: cast_nullable_to_non_nullable
           : replySettings as TweetReplySettings?,
+      attachments: attachments == const $CopyWithPlaceholder()
+          ? _value.attachments
+          // ignore: cast_nullable_to_non_nullable
+          : attachments as TweetAttachments?,
+      referencedTweets: referencedTweets == const $CopyWithPlaceholder()
+          ? _value.referencedTweets
+          // ignore: cast_nullable_to_non_nullable
+          : referencedTweets as List<ReferencedTweet>?,
+      publicMetrics: publicMetrics == const $CopyWithPlaceholder()
+          ? _value.publicMetrics
+          // ignore: cast_nullable_to_non_nullable
+          : publicMetrics as PublicMetrics?,
+      entities: entities == const $CopyWithPlaceholder()
+          ? _value.entities
+          // ignore: cast_nullable_to_non_nullable
+          : entities as TweetEntities?,
       source: source == const $CopyWithPlaceholder()
           ? _value.source
           // ignore: cast_nullable_to_non_nullable
           : source as String?,
-      text: text == const $CopyWithPlaceholder() || text == null
-          ? _value.text
-          // ignore: cast_nullable_to_non_nullable
-          : text as String,
     );
   }
 }
