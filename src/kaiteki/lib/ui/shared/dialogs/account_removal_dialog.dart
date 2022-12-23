@@ -49,7 +49,7 @@ class AccountRemovalDialog extends StatelessWidget {
         ),
         TextButton(
           style: TextButton.styleFrom(
-            foregroundColor: Theme.of(context).errorColor,
+            foregroundColor: Theme.of(context).colorScheme.error,
           ),
           onPressed: () => Navigator.of(context).pop(true),
           child: Text(l10n.removeButtonLabel),

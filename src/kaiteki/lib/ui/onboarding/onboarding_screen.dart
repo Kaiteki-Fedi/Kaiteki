@@ -268,7 +268,7 @@ class _UserBenefitText extends StatelessWidget {
             constraints: const BoxConstraints(minHeight: 96),
             child: Text(
               benefit.description,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           )
         ],

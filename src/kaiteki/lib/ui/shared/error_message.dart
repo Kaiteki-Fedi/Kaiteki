@@ -9,7 +9,7 @@ class ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).errorColor;
+    final color = Theme.of(context).colorScheme.error;
     return Row(
       children: [
         Flexible(
