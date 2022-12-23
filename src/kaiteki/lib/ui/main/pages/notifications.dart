@@ -206,7 +206,7 @@ class NotificationWidget extends ConsumerWidget {
                       border: Border.all(
                         color: Theme.of(context).colorScheme.background,
                         width: 2,
-                        strokeAlign: StrokeAlign.outside,
+                        strokeAlign: BorderSide.strokeAlignOutside,
                       ),
                     ),
                     child: Padding(

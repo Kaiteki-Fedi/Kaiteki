@@ -30,7 +30,7 @@ class EmojiWidget extends StatelessWidget {
       height: size,
       fit: BoxFit.contain,
       // cacheHeight: size.toInt(),
-      semanticLabel: "Emoji ${emoji.toString()}",
+      semanticLabel: "Emoji $emoji",
       loadingBuilder: (_, widget, event) => event == null //
           ? widget
           : PlaceholderEmoji(size: size),
