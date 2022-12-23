@@ -34,7 +34,7 @@ class AccountRequiredScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                    onPressed: () => context.push("/login"),
+                    onPressed: () => context.pushNamed("login"),
                   ),
                 ),
               ),

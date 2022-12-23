@@ -45,9 +45,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
           final scope = ProviderScope.containerOf(context);
-          final isLoggedIn = scope.read(accountManagerProvider).loggedIn;
-          if (!isLoggedIn) return "/welcome";
-
+          if (scope.read(accountProvider) == null) return "/welcome";
           return "/${notifier.currentHandle}/home";
         },
       ),
@@ -94,6 +92,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         ],
       ),
       GoRoute(
+        name: "login",
         path: "/login",
         builder: (_, __) => const LoginScreen(),
         parentNavigatorKey: _rootNavigatorKey,

@@ -16,7 +16,6 @@ final accountManagerProvider = ChangeNotifierProvider<AccountManager>((_) {
 final accountProvider = Provider<Account?>(
   (ref) {
     final accountManager = ref.watch(accountManagerProvider);
-    if (!accountManager.loggedIn) return null;
     // ignore: deprecated_member_use_from_same_package
     return accountManager.current;
   },

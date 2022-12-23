@@ -14,7 +14,7 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
   @override
   bool build() {
     final isLoggedIn = ref.watch(
-      accountManagerProvider.select((value) => value.loggedIn),
+      accountProvider.select((value) => value != null),
     );
 
     ref.listenSelf((_, __) => _routerListener?.call());

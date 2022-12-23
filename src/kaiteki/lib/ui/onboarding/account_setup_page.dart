@@ -24,7 +24,7 @@ class AccountSetupPage extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton.icon(
-            onPressed: () => context.push("/login"),
+            onPressed: () => context.pushNamed("login"),
             icon: const Icon(Icons.add_rounded),
             label: const Text("Add Account"),
           ),
