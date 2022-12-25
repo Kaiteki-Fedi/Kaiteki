@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/platform_checks.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/settings/about/app_badge_kind.dart';
 import 'package:kaiteki/ui/shared/layout/dfp.dart';
@@ -133,6 +134,8 @@ class AboutScreen extends StatelessWidget {
   }
 
   AppBadgeKind? getBadgeKind() {
+    if (kBuildFlavor == "BETA") return AppBadgeKind.beta;
+
     if (kDebugMode) {
       return AppBadgeKind.debug;
     }

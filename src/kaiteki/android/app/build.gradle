@@ -61,6 +61,7 @@ android {
     lint {
         disable 'InvalidPackage'
     }
+    namespace 'moe.craftplacer.kaiteki'
 }
 
 flutter {

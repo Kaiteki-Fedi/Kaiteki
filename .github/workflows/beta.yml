@@ -1,19 +1,12 @@
-name: Build & Deploy
+name: Beta CI
 
 env:
   SOURCE_PATH: './src/kaiteki'
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'src/**'
-      - '!src/kaiteki/storybook/**'
-      - '!src/kaiteki/tools/**'
-      - '!src/kaiteki/README.md'
-  pull_request:
   workflow_dispatch:
+  schedule:
+      - cron:  '* * * * 1'
 
 jobs:
   test:
@@ -30,6 +23,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
   
       - name: Get packages
@@ -41,10 +35,11 @@ jobs:
       - name: Test
         run: 'flutter test --coverage -r expanded --no-pub'
 
-      - name: Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: coverage/lcov.info 
+      - name: Provide build environment variables
+        run: |
+          echo "BUILD_NUMBER=$(date +%s)" >> $GITHUB_ENV
+          echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_ENV
+          echo "BUILD_ARGS=--build-number=\"$(date +%s)\" --build-name=\"$(date +%Y-%U)\" --release" >> $GITHUB_ENV
 
   build-linux:
     name: Build for Linux
@@ -61,6 +56,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
         
       - name: Update Linux repos
@@ -138,6 +134,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
 
       - name: Get packages
@@ -151,13 +148,8 @@ jobs:
           fileDir: '${{ env.SOURCE_PATH }}/android/app/'
           encodedString: ${{ secrets.ANDROID_JKS }}
 
-      - name: Build without release key
-        if: github.event_name == 'pull_request'
-        run: flutter build apk --build-number $(date +%s)
-
       - name: Build with release key
-        if: github.event_name != 'pull_request'
-        run: flutter build apk --build-number $(date +%s) --release
+        run: flutter build apk ${{ env.BUILD_ARGS }}
         env:
           STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
@@ -183,6 +175,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
         
       - name: Enable Windows Desktop
@@ -192,7 +185,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build windows --release'
+        run: 'flutter build windows ${{ env.BUILD_ARGS }}'
         
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
@@ -215,6 +208,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
 
       - name: Enable web
@@ -224,10 +218,54 @@ jobs:
         run: 'flutter pub get'
       
       - name: Build
-        run: 'flutter build web --release'
+        run: 'flutter build web ${{ env.BUILD_ARGS }}'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: web
           path: '${{ env.SOURCE_PATH }}/build/web/*'
+  deploy-web:
+    name: Deploy for Web
+    runs-on: ubuntu-latest
+    needs: build-web
+    if: github.event_name != 'pull_request'
+    steps:
+    - name: Download web artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: web
+        path: ./web-publish
+
+    - name: Push to GitHub Pages branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./web-publish
+        cname: kaiteki.craftplacer.moe
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [ "package-appimage", "build-android", "build-windows" ]
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Zip multi-file artifacts
+        run: |
+          zip -r windows.zip windows
+          zip -r linux.zip linux
+
+      - name: Create release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "Beta ${{ secrets.BUILD_NAME }}"
+          title: "${{ secrets.BUILD_NAME }}"
+          prerelease: true
+          files: |
+            android/*.apk
+            appimage/*.AppImage
+            linux.zip
+            windows.zip
