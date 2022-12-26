@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
@@ -29,16 +28,24 @@ class InstancePage extends StatefulWidget {
 
 class _InstancePageState extends State<InstancePage> {
   final _formKey = GlobalKey<FormState>();
-  final _instanceController = TextEditingController();
   List<InstanceData>? _instances;
+  late TextEditingController _instanceController;
 
   @override
   void initState() {
     super.initState();
 
+    _instanceController = TextEditingController();
+
     fetchInstances().then(
       (list) => setState(() => _instances = list),
     );
+  }
+
+  @override
+  void dispose() {
+    _instanceController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,32 +60,22 @@ class _InstancePageState extends State<InstancePage> {
           children: [
             Padding(
               padding: fieldMargin,
-              child: TypeAheadFormField<InstanceData>(
-                textFieldConfiguration: TextFieldConfiguration(
-                  // TODO(Craftplacer): `flutter_typeahead` is missing `autofillHints`
-                  // autofillHints: const [AutofillHints.url],
-                  controller: _instanceController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    contentPadding: fieldPadding,
-                    hintText: l10n.instanceFieldHint,
-                    prefixIcon: const Icon(Icons.public_rounded),
-                    prefixIconConstraints: iconConstraint,
-                  ),
-                  inputFormatters: [LowerCaseTextFormatter()],
-                  keyboardType: TextInputType.url,
-                  onSubmitted: (_) => _submit(),
-                ),
+              child: TextFormField(
                 enabled: widget.enabled,
-                hideOnEmpty: true,
-                hideOnLoading: true,
+                autofillHints: const [AutofillHints.impp, AutofillHints.url],
+                controller: _instanceController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  contentPadding: fieldPadding,
+                  hintText: l10n.instanceFieldHint,
+                  prefixIcon: const Icon(Icons.public_rounded),
+                  prefixIconConstraints: iconConstraint,
+                ),
+                inputFormatters: [LowerCaseTextFormatter()],
+                keyboardType: TextInputType.url,
                 validator: _validateInstance,
-                suggestionsCallback: _fetchSuggestions,
-                onSuggestionSelected: (suggestion) {
-                  _submitWithInstance(suggestion.name);
-                },
-                itemBuilder: _buildSuggestionItem,
+                onFieldSubmitted: _submit,
               ),
             ),
             Column(
@@ -134,39 +131,12 @@ class _InstancePageState extends State<InstancePage> {
 
   void _onNext() {
     if (_formKey.currentState?.validate() != true) return;
-    _submit.call();
+    _submit(_instanceController.text);
   }
 
-  Widget _buildSuggestionItem(BuildContext context, InstanceData itemData) {
-    const fallbackIcon = Icon(Icons.public_rounded);
-    return ListTile(
-      leading: itemData.favicon == null
-          ? fallbackIcon
-          : Image.network(
-              itemData.favicon!,
-              width: 24,
-              height: 24,
-              errorBuilder: (_, __, ___) => fallbackIcon,
-            ),
-      title: Text(itemData.name),
-    );
-  }
-
-  FutureOr<Iterable<InstanceData>> _fetchSuggestions(String pattern) {
-    final instances = _instances;
-
-    if (pattern.isEmpty || instances == null) {
-      return [];
-    }
-
-    return instances.where((instance) {
-      return instance.name.contains(pattern);
-    });
-  }
-
-  void _submit() {
+  void _submit(String instance) {
     if (_formKey.currentState!.validate()) {
-      var host = _instanceController.text;
+      var host = instance;
 
       // Extract host from URL, if necessary
       final uri = Uri.tryParse(host);
@@ -186,13 +156,9 @@ class _InstancePageState extends State<InstancePage> {
     );
 
     if (result is DiscoverInstanceScreenResult) {
-      _submitWithInstance(result.instance);
-      //if (!result.register) {}
+      _instanceController.text = result.instance;
+      _submit(result.instance);
     }
-  }
-
-  void _submitWithInstance(String instance) {
-    widget.onNext.call(_instanceController.text = instance);
   }
 
   String? _validateInstance(String? value) {

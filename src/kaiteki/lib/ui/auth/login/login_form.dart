@@ -323,10 +323,15 @@ class LoginFormState extends ConsumerState<LoginForm> {
             onNext: (host) {
               setState(() {
                 // ignore: unnecessary_lambdas, I intentionally want this method not to return a future so the dialog isn't
-                _loginFuture = _loginToInstance(host)
-                    .then((_) => context.go("/"))
-                    .catchError(_showError)
-                    .then((_) => instance = null);
+                _loginFuture = () async {
+                  try {
+                    await _loginToInstance(host);
+                  } catch (s, e) {
+                    _showError(s, e);
+                  } finally {
+                    instance = null;
+                  }
+                }();
               });
             },
           ),
