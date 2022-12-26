@@ -267,8 +267,8 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "weekly-${{needs.test.outputs.build-name}}"
-          title: "Weekly ${{needs.test.outputs.build-name}}"
+          automatic_release_tag: weekly-${{needs.test.outputs.build-name}}
+          title: Weekly ${{needs.test.outputs.build-name}}
           prerelease: true
           files: |
             android/*.apk
