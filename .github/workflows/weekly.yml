@@ -15,6 +15,10 @@ jobs:
     defaults:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
+    outputs:
+      build-number: ${{steps.build-variables.outputs.BUILD_NUMBER}}
+      build-name: ${{steps.build-variables.outputs.BUILD_NAME}}
+      build-args: ${{steps.build-variables.outputs.BUILD_ARGS}}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -35,20 +39,11 @@ jobs:
       - name: Test
         run: 'flutter test --coverage -r expanded --no-pub'
 
-      - name: Provide build number
-        id: build-number
+      - name: Provide build variables
+        id: build-variables
         run: |
           echo "BUILD_NUMBER=$(date +%s)" >> $GITHUB_OUTPUT
-
-
-      - name: Provide build name
-        id: build-name
-        run: |          
           echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
-          
-      - name: Provide build arguments
-        id: build-args
-        run: |
           echo "BUILD_ARGS=--build-number=\"$(date +%s)\" --build-name=\"$(date +%Y-%U)\" --release" >> $GITHUB_OUTPUT
 
   build-linux:
@@ -82,7 +77,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build linux ${{needs.test.outputs.BUILD_ARGS}}'
+        run: 'flutter build linux ${{needs.test.outputs.build-args}}'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -160,7 +155,7 @@ jobs:
           encodedString: ${{ secrets.ANDROID_JKS }}
 
       - name: Build with release key
-        run: flutter build apk ${{needs.test.outputs.BUILD_ARGS}}
+        run: flutter build apk ${{needs.test.outputs.build-args}}
         env:
           STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
@@ -196,7 +191,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build windows ${{needs.test.outputs.BUILD_ARGS}}'
+        run: 'flutter build windows ${{needs.test.outputs.build-args}}'
         
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
@@ -229,7 +224,7 @@ jobs:
         run: 'flutter pub get'
       
       - name: Build
-        run: 'flutter build web ${{needs.test.outputs.BUILD_ARGS}}'
+        run: 'flutter build web ${{needs.test.outputs.build-args}}'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -272,8 +267,8 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "weekly-${{needs.test.outputs.BUILD_NAME}}"
-          title: "Weekly ${{needs.test.outputs.BUILD_NAME}}"
+          automatic_release_tag: "weekly-${{needs.test.outputs.build-name}}"
+          title: "Weekly ${{needs.test.outputs.build-name}}"
           prerelease: true
           files: |
             android/*.apk
