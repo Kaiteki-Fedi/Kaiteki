@@ -28,19 +28,4 @@ Other features that are missing are extensive settings, unit tests, and many oth
 
 ## Compiling Kaiteki
 
-Depending on your platform you might have to take extra steps.
-See [this page for steps on compiling for desktop](https://docs.flutter.dev/desktop), and [this page for steps on compiling for web](https://flutter.dev/docs/get-started/web).
-
-```sh
-flutter upgrade # upgrade flutter to its latest version
-flutter pub get # get packages
-
-# run
-flutter run
-
-# ... or compile a release build
-flutter build apk --release
-flutter build windows --release
-flutter build linux --release
-flutter build web --release
-```
+Check [BUILDING.md](/BUILDING.md).
