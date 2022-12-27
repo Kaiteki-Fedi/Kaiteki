@@ -1,4 +1,4 @@
-# ![Kaiteki](assets/readme-banner.svg)
+# ![Kaiteki](/assets/readme-banner.svg)
 
 [![Build status](https://img.shields.io/github/actions/workflow/status/Kaiteki-Fedi/Kaiteki/ci.yml?branch=master)](https://github.com/Kaiteki-Fedi/Kaiteki/actions/workflows/ci.yml) [![CodeFactor](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki/badge)](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki) [![codecov](https://codecov.io/gh/Kaiteki-Fedi/Kaiteki/branch/master/graph/badge.svg?token=AFWBGW0XE4)](https://codecov.io/gh/Kaiteki-Fedi/Kaiteki)
 [![Translation status](https://hosted.weblate.org/widgets/kaiteki/-/kaiteki/svg-badge.svg)](https://hosted.weblate.org/engage/kaiteki/)
@@ -10,8 +10,8 @@ Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple M
 ## Screenshots
 
 <table>
-    <td><img src="assets/screenshots/misskey-feed-phone.jpg" width="110" alt="Screenshot of a Misskey feed inside Kaiteki on a phone"></td>
-    <td><img src="assets/screenshots/pleroma-user-tablet.jpg" width="400" alt="Screenshot of an user inside Kaiteki on a tablet"></td>
+    <td><img src="/assets/screenshots/misskey-feed-phone.jpg" width="110" alt="Screenshot of a Misskey feed inside Kaiteki on a phone"></td>
+    <td><img src="/assets/screenshots/pleroma-user-tablet.jpg" width="400" alt="Screenshot of an user inside Kaiteki on a tablet"></td>
 </table>
 
 ## Platforms & Releases
