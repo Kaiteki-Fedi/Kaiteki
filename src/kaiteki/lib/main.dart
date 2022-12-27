@@ -60,8 +60,8 @@ Future<void> main() async {
 
 void handleFatalError(Object error, StackTrace stackTrace) {
   final crashScreen = MaterialApp(
-    theme: getTheme(Brightness.light, true),
-    darkTheme: getTheme(Brightness.dark, true),
+    theme: getDefaultTheme(Brightness.light, true),
+    darkTheme: getDefaultTheme(Brightness.dark, true),
     home: CrashScreen(
       exception: error,
       stackTrace: stackTrace,

@@ -34,15 +34,20 @@ class ThemePreview extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         clipBehavior: Clip.antiAlias,
         elevation: 4,
+        color: colorScheme.surface,
         child: InkWell(
           onTap: onTap,
-          child: Container(
-            width: 8 * 12,
-            height: 8 * 12,
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(color: colorScheme.surface),
-            foregroundDecoration: selected ? selectedDecoration : null,
-            child: _buildContent(context),
+          child: DecoratedBox(
+            decoration: selected ? selectedDecoration : const BoxDecoration(),
+            position: DecorationPosition.foreground,
+            child: SizedBox(
+              width: 8 * 12,
+              height: 8 * 12,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _buildContent(context),
+              ),
+            ),
           ),
         ),
       ),
@@ -50,24 +55,22 @@ class ThemePreview extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     if (icon == null) {
       return Wrap(
         crossAxisAlignment: WrapCrossAlignment.end,
         spacing: 4.0,
         children: [
-          ColorCircle(color: colorScheme.onSurface),
-          ColorCircle(color: colorScheme.primary),
-          ColorCircle(color: colorScheme.secondary),
+          ColorCircle(color: theme.colorScheme.primary),
+          ColorCircle(color: theme.colorScheme.secondary),
+          if (theme.useMaterial3)
+            ColorCircle(color: theme.colorScheme.tertiary),
         ],
       );
     } else {
       return Center(
         child: IconTheme(
-          data: IconThemeData(
-            color: colorScheme.onSurface,
-            size: 32,
-          ),
+          data: IconThemeData(color: theme.colorScheme.onSurface, size: 32),
           child: icon!,
         ),
       );

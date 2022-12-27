@@ -212,6 +212,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
 
     final theme = Theme.of(context);
+    final elevation = theme.useMaterial3 ? 0.0 : null;
     return AppBar(
       backgroundColor: outsideColor,
       foregroundColor: foregroundColor,
@@ -219,10 +220,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         consts.appName,
         style: theme.ktkTextTheme?.kaitekiTextStyle,
       ),
-      elevation: theme.useMaterial3 ? 0.0 : null,
+      elevation: elevation,
       surfaceTintColor: theme.useMaterial3 ? Colors.transparent : null,
       actions: _buildAppBarActions(context),
-      scrolledUnderElevation: disableScrollElevation ? 0.0 : null,
+      scrolledUnderElevation: disableScrollElevation ? elevation : null,
     );
   }
 

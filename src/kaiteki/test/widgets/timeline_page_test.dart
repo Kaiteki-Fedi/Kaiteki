@@ -28,7 +28,7 @@ void main() {
             )
           ],
           child: MaterialApp(
-            theme: getTheme(Brightness.light, true),
+            theme: getDefaultTheme(Brightness.light, true),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: const Scaffold(body: TimelinePage()),

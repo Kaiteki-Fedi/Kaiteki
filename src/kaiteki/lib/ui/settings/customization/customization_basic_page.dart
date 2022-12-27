@@ -51,6 +51,13 @@ class _CustomizationBasicPageState
             tristate: true,
             onChanged: (value) => setState(() => prefs.useMaterial3 = value),
           ),
+          CheckboxListTile(
+            value: prefs.useSystemColorScheme ?? false,
+            title: Text(l10n.useSystemColorScheme),
+            controlAffinity: ListTileControlAffinity.leading,
+            onChanged: (value) =>
+                setState(() => prefs.useSystemColorScheme = value),
+          ),
         ],
       ),
     );
@@ -122,13 +129,12 @@ class ColorCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 16,
-      height: 16,
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(24),
       ),
+      child: const SizedBox.square(dimension: 16),
     );
   }
 }

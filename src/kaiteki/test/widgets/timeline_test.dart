@@ -19,7 +19,7 @@ void main() {
           ),
         ],
         child: MaterialApp(
-          theme: getTheme(Brightness.light, true),
+          theme: getDefaultTheme(Brightness.light, true),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(body: widget),
@@ -56,7 +56,7 @@ void main() {
           }),
         ],
         child: MaterialApp(
-          theme: getTheme(Brightness.light, true),
+          theme: getDefaultTheme(Brightness.light, true),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(body: widget),

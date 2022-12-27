@@ -14,6 +14,7 @@ extension ThemeDataExtensions on ThemeData {
     return copyWith(
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: colorScheme.secondaryContainer,
+        foregroundColor: colorScheme.onSecondaryContainer,
       ),
       snackBarTheme: const SnackBarThemeData(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),

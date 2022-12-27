@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const kModeKey = "themeMode";
 const kUseMaterial3Key = "m3";
+const kUseSystemSchemeKey = "systemScheme";
 
 class ThemePreferences extends ChangeNotifier {
   final SharedPreferences _preferences;
@@ -25,6 +26,14 @@ class ThemePreferences extends ChangeNotifier {
   set useMaterial3(bool? value) {
     if (useMaterial3 == value) return;
     _preferences.setTristateBool(kUseMaterial3Key, value);
+    notifyListeners();
+  }
+
+  bool? get useSystemColorScheme => _preferences.getBool(kUseSystemSchemeKey);
+
+  set useSystemColorScheme(bool? value) {
+    if (useSystemColorScheme == value) return;
+    _preferences.setTristateBool(kUseSystemSchemeKey, value);
     notifyListeners();
   }
 

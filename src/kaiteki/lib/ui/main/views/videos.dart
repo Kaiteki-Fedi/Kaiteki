@@ -142,7 +142,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
     ];
 
     return Theme(
-      data: getTheme(Brightness.dark, Theme.of(context).useMaterial3),
+      data: context.findAncestorWidgetOfExactType<MaterialApp>()!.darkTheme!,
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(
           dragDevices: {
