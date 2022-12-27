@@ -333,6 +333,26 @@ class MisskeyClient {
         .then(misskey.Note.fromJson.fromResponseList);
   }
 
+  Future<List<misskey.Note>> getNoteChildren(
+    String id, {
+    int limit = 30,
+    String? sinceId,
+    String? untilId,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/children",
+          body: {
+            "noteId": id,
+            "limit": limit,
+            if (sinceId != null) "sinceId": sinceId,
+            if (untilId != null) "untilId": untilId,
+          }.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
+  }
+
   Future<misskey.DriveFile> createDriveFile(
     MultipartFile file, {
     String? folderId,

@@ -354,7 +354,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
   @override
   Future<Iterable<Post>> getThread(Post reply) async {
-    final notes = await client.getConversation(reply.id);
+    // HACK(Craftplacer): I have no idea why this stopped working. (2022-12)
+    // final notes = await client.getConversation(reply.id);
+
+    // FIXME(Craftplacer): Fetch (entire thread), or implement incomplete threads (will be a nightmare to do)
+    final notes = await client.getNoteChildren(reply.id);
     return notes.map((n) => toPost(n, instance)).followedBy([reply]);
   }
 
