@@ -1,5 +1,6 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
@@ -150,8 +151,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           favorited: adapter is FavoriteSupport //
               ? _post.state.favorited
               : null,
-          onShowFavoritees: _showFavoritees,
-          onShowRepeatees: _showRepeatees,
+          onShowFavoritees: () => context.pushNamed(
+            "postFavorites",
+            params: {...ref.accountRouterParams, "id": _post.id},
+          ),
+          onShowRepeatees: () => context.pushNamed(
+            "postRepeats",
+            params: {...ref.accountRouterParams, "id": _post.id},
+          ),
           repeated: _post.state.repeated,
           reacted: adapter is ReactionSupport ? false : null,
           buildActions: _buildActions,
@@ -201,51 +208,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Future<void> _showFavoritees() async {
-    await showDialog(
-      context: context,
-      builder: (_) => Consumer(
-        builder: (context, ref, __) {
-          final l10n = context.getL10n();
-          final adapter = ref.watch(adapterProvider);
-          return UserListDialog(
-            title: Text(l10n.favoriteesTitle),
-            fetchUsers: () async {
-              final users =
-                  await (adapter as FavoriteSupport).getFavoritees(_post.id);
-              return users;
-            }(),
-            emptyIcon: const Icon(Icons.star_outline_rounded),
-            emptyTitle: Text(l10n.favoritesEmpty),
-          );
-        },
-      ),
-    );
-  }
-
-  Future<void> _showRepeatees() async {
-    showDialog(
-      context: context,
-      builder: (_) => Consumer(
-        builder: (context, ref, __) {
-          final l10n = context.getL10n();
-          final adapter = ref.watch(adapterProvider);
-          return UserListDialog(
-            title: Text(l10n.repeateesTitle),
-            fetchUsers: () async {
-              final users = await adapter.getRepeatees(
-                _post.id,
-              );
-              return users;
-            }(),
-            emptyIcon: const Icon(Icons.repeat_rounded),
-            emptyTitle: Text(l10n.repeatsEmpty),
-          );
-        },
       ),
     );
   }

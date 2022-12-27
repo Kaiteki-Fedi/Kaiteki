@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/routing/notifier.dart';
@@ -19,6 +20,7 @@ import 'package:kaiteki/ui/settings/experiments.dart';
 import 'package:kaiteki/ui/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shared/conversation_screen.dart';
 import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
+import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
 import 'package:kaiteki/ui/user/user_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -152,6 +154,59 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 builder: (context, state) {
                   return ConversationScreen(state.extra! as Post);
                 },
+                routes: [
+                  GoRoute(
+                    path: "repeats",
+                    name: "postRepeats",
+                    pageBuilder: (context, state) {
+                      return _DialogPage(
+                        builder: (context) => Consumer(
+                          builder: (context, ref, __) {
+                            final postId = state.params["id"]!;
+                            final l10n = context.getL10n();
+                            final adapter = ref.watch(adapterProvider);
+                            return UserListDialog(
+                              title: Text(l10n.repeateesTitle),
+                              fetchUsers: () async {
+                                final users = await adapter.getRepeatees(
+                                  postId,
+                                );
+                                return users;
+                              }(),
+                              emptyIcon: const Icon(Icons.repeat_rounded),
+                              emptyTitle: Text(l10n.repeatsEmpty),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: "favorites",
+                    name: "postFavorites",
+                    pageBuilder: (context, state) {
+                      return _DialogPage(
+                        builder: (context) => Consumer(
+                          builder: (context, ref, __) {
+                            final postId = state.params["id"]!;
+                            final l10n = context.getL10n();
+                            final adapter = ref.watch(adapterProvider);
+                            return UserListDialog(
+                              title: Text(l10n.favoriteesTitle),
+                              fetchUsers: () async {
+                                final users = await (adapter as FavoriteSupport)
+                                    .getFavoritees(postId);
+                                return users;
+                              }(),
+                              emptyIcon: const Icon(Icons.star_outline_rounded),
+                              emptyTitle: Text(l10n.favoritesEmpty),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
