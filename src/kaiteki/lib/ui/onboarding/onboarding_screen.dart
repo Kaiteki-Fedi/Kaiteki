@@ -24,6 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   late final RestartableTimer timer;
   int _currentPage = 0;
   bool get isLastPage => _currentPage >= benefits.length - 1;
+  bool get isFirstPage => _currentPage <= 0;
   UserBenefit get currentBenefit => benefits[_currentPage];
 
   @override
@@ -51,13 +52,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     if (!mounted) return const SizedBox();
 
-    return Scaffold(
-      body: BreakpointBuilder(
-        builder: (context, breakpoint) {
-          return breakpoint.window >= WindowSize.medium
-              ? buildLandscape()
-              : buildPortrait();
-        },
+    return GestureDetector(
+      onTap: () {
+        timer.reset();
+        setState(() => _currentPage = isLastPage ? 0 : _currentPage + 1);
+      },
+      onHorizontalDragEnd: (details) {
+        // Swiping in right direction.
+        if (details.primaryVelocity! < -5) {
+          timer.reset();
+          setState(() => _currentPage = isLastPage ? 0 : _currentPage + 1);
+        }
+
+        // Swiping in left direction.
+        if (details.primaryVelocity! > 5) {
+          timer.reset();
+          setState(() => _currentPage =
+              isFirstPage ? benefits.length - 1 : _currentPage - 1);
+        }
+      },
+      child: Scaffold(
+        body: BreakpointBuilder(
+          builder: (context, breakpoint) {
+            return breakpoint.window >= WindowSize.medium
+                ? buildLandscape()
+                : buildPortrait();
+          },
+        ),
       ),
     );
   }
