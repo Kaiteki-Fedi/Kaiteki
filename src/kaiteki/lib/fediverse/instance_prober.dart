@@ -99,8 +99,9 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
   final supportedLink = links.firstWhere((l) {
     final rel = (l["rel"] as String).toLowerCase();
 
-    return rel == "http://nodeinfo.diaspora.software/ns/schema/2.1" ||
-        rel == "http://nodeinfo.diaspora.software/ns/schema/2.0";
+    return RegExp(
+      r'^https?:\/\/nodeinfo\.diaspora\.software\/ns\/schema\/2\.(0|1)$',
+    ).hasMatch(rel);
   });
 
   final href = supportedLink["href"] as String;
