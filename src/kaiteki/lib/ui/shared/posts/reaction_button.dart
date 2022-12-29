@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/preferences/app_experiment.dart';
 import 'package:kaiteki/theming/kaiteki/theme.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
 
-class ReactionButton extends StatelessWidget {
+class ReactionButton extends ConsumerWidget {
   final Reaction reaction;
   final VoidCallback onPressed;
 
@@ -14,8 +16,11 @@ class ReactionButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    const emojiSize = 24.0;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dense = ref
+        .watch(preferencesProvider.select((p) => p.enabledExperiments))
+        .contains(AppExperiment.denseReactions);
+    final emojiSize = dense ? 16.0 : 24.0;
 
     final reacted = reaction.includesMe;
     final theme = Theme.of(context).ktkTheme!.reactionButtonTheme;
@@ -28,6 +33,7 @@ class ReactionButton extends StatelessWidget {
 
     if (reacted) count--;
 
+    // HACK (Craftplacer): Clean this up and use proper linguistic libs or translations
     return Tooltip(
       richMessage: TextSpan(
         children: [

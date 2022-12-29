@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
+import 'package:kaiteki/preferences/app_experiment.dart';
 import 'package:kaiteki/ui/shared/posts/reaction_button.dart';
 
-class ReactionRow extends StatelessWidget {
+class ReactionRow extends ConsumerWidget {
   final List<Reaction> reactions;
   final Function(Reaction reaction) onPressed;
 
@@ -13,10 +15,14 @@ class ReactionRow extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dense = ref
+        .watch(preferencesProvider.select((p) => p.enabledExperiments))
+        .contains(AppExperiment.denseReactions);
+    final spacing = dense ? 2.0 : 6.0;
     return Wrap(
-      spacing: 6.0,
-      runSpacing: 6.0,
+      spacing: spacing,
+      runSpacing: spacing,
       children: [
         for (var reaction in reactions)
           ReactionButton(
