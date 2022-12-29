@@ -3,7 +3,15 @@ enum AppExperiment {
     "Fetch users from remote instances",
     "Allows querying the remote instance for user details, bypassing how up-to-date the current instance is.",
   ),
-  timelineViews("Timeline views");
+  timelineViews("Timeline views"),
+  denseReactions(
+    "Denser reactions",
+    "Reduces the spacing between reactions in order to show more of them",
+  ),
+  newUserScreen(
+    "New User Screen",
+    "Use the new design of the user screen",
+  );
 
   final String displayName;
   final String? description;
