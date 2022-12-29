@@ -133,6 +133,7 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
     "mastodon": ApiType.mastodon,
     "pleroma": ApiType.pleroma,
     "misskey": ApiType.misskey,
+    "foundkey": ApiType.misskey,
     "calckey": ApiType.misskey, // TODO(thatonecalculator): change to ApiType.calckey once implemented
   }[nodeInfo.software.name];
 
