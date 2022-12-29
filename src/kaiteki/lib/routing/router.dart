@@ -5,6 +5,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/auth/account.dart';
+import 'package:kaiteki/preferences/app_experiment.dart';
 import 'package:kaiteki/routing/notifier.dart';
 import 'package:kaiteki/ui/account_required_screen.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
@@ -22,6 +23,7 @@ import 'package:kaiteki/ui/shared/conversation_screen.dart';
 import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
 import 'package:kaiteki/ui/user/user_screen.dart';
+import 'package:kaiteki/ui/user/user_screen_old.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "root");
@@ -140,10 +142,17 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 // parentNavigatorKey: _authNavigatorKey,
                 path: "users/:id",
                 builder: (context, state) {
+                  if (ref
+                      .read(preferencesProvider)
+                      .enabledExperiments
+                      .contains(AppExperiment.newUserScreen)) {
+                    return UserScreen(id: state.params["id"]!);
+                  }
+
                   if (state.extra == null) {
-                    return UserScreen.fromId(state.params["id"]!);
+                    return OldUserScreen.fromId(state.params["id"]!);
                   } else {
-                    return UserScreen.fromUser(state.extra! as User);
+                    return OldUserScreen.fromUser(state.extra! as User);
                   }
                 },
               ),
