@@ -117,7 +117,7 @@ class _CatalogMainScreenViewState extends ConsumerState<CatalogMainScreenView> {
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
-                  ?.copyWith(color: Colors.black),
+                  ?.copyWith(color: Theme.of(context).colorScheme.onSurface),
               children: [
                 if (item.subject != null && item.subject!.isNotEmpty)
                   TextSpan(
