@@ -470,7 +470,12 @@ class PostFormState extends ConsumerState<PostForm> {
           tooltip: l10n.emojiButtonTooltip,
           onPressed: openEmojiPicker,
         ),
-      const SizedBox(height: 24, child: VerticalDivider()),
+      const SizedBox(
+        height: 24,
+        child: VerticalDivider(
+          width: 16,
+        ),
+      ),
       if (supportedScopes.length >= 2)
         EnumIconButton<Visibility>(
           tooltip: l10n.visibilityButtonTooltip,

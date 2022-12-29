@@ -23,6 +23,10 @@ extension ThemeDataExtensions on ThemeData {
       dialogTheme: const DialogTheme(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
+      dividerTheme: dividerTheme.copyWith(
+        space: 1,
+        thickness: 1,
+      ),
       extensions: [
         ktkTextTheme,
         KaitekiColors.fromMaterialTheme(this),
@@ -35,6 +39,8 @@ extension ThemeDataExtensions on ThemeData {
         ),
         labelColor: colorScheme.primary,
         unselectedLabelColor: colorScheme.onSurfaceVariant,
+        // And there @Craftplacer said, "THIS DIVIDER SUCKS"
+        dividerColor: Colors.transparent,
       ),
       textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
       checkboxTheme: CheckboxThemeData(
