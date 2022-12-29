@@ -16,24 +16,32 @@ class KaitekiApp extends ConsumerWidget {
     final locale = ref.watch(preferencesProvider.select((p) => p.locale));
     final themePrefs = ref.watch(themeProvider);
     final router = ref.watch(routerProvider);
-    final m3 = themePrefs.useMaterial3 ?? themePrefs.material3Default;
+    final m3 = themePrefs.useMaterial3;
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         final useSystemScheme = themePrefs.useSystemColorScheme == true;
-        final lightTheme = (useSystemScheme ? lightDynamic : null) ??
+
+        final lightColorScheme = (useSystemScheme ? lightDynamic : null) ??
             getColorScheme(Brightness.light, m3);
-        final darkTheme = (useSystemScheme ? darkDynamic : null) ??
+        final lightTheme = ThemeData.from(
+          colorScheme: lightColorScheme,
+          useMaterial3: m3,
+        ).applyGeneralChanges();
+
+        final darkColorScheme = (useSystemScheme ? darkDynamic : null) ??
             getColorScheme(Brightness.dark, m3);
+        final darkTheme = ThemeData.from(
+          colorScheme: darkColorScheme,
+          useMaterial3: m3,
+        ).applyGeneralChanges();
 
         return MaterialApp.router(
-          darkTheme: ThemeData.from(colorScheme: darkTheme, useMaterial3: m3)
-              .applyGeneralChanges(),
+          darkTheme: darkTheme,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           routerConfig: router,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: locale == null ? null : Locale(locale),
-          theme: ThemeData.from(colorScheme: lightTheme, useMaterial3: m3)
-              .applyGeneralChanges(),
+          theme: lightTheme,
           themeMode: themePrefs.mode,
           title: consts.appName,
           shortcuts: shortcuts,

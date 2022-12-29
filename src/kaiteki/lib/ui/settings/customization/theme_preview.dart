@@ -61,10 +61,10 @@ class ThemePreview extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.end,
         spacing: 4.0,
         children: [
-          ColorCircle(color: theme.colorScheme.primary),
-          ColorCircle(color: theme.colorScheme.secondary),
+          _ColorCircle(color: theme.colorScheme.primary),
+          _ColorCircle(color: theme.colorScheme.secondary),
           if (theme.useMaterial3)
-            ColorCircle(color: theme.colorScheme.tertiary),
+            _ColorCircle(color: theme.colorScheme.tertiary),
         ],
       );
     } else {
@@ -75,5 +75,22 @@ class ThemePreview extends StatelessWidget {
         ),
       );
     }
+  }
+}
+
+class _ColorCircle extends StatelessWidget {
+  const _ColorCircle({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: const SizedBox.square(dimension: 16),
+    );
   }
 }

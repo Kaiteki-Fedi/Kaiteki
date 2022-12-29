@@ -21,19 +21,21 @@ class ThemePreferences extends ChangeNotifier {
     _preferences.setString(kModeKey, value.name).then((_) => notifyListeners());
   }
 
-  bool? get useMaterial3 => _preferences.getBool(kUseMaterial3Key);
+  bool get useMaterial3 =>
+      _preferences.getBool(kUseMaterial3Key) ?? material3Default;
 
-  set useMaterial3(bool? value) {
+  set useMaterial3(bool value) {
     if (useMaterial3 == value) return;
-    _preferences.setTristateBool(kUseMaterial3Key, value);
+    _preferences.setBool(kUseMaterial3Key, value);
     notifyListeners();
   }
 
-  bool? get useSystemColorScheme => _preferences.getBool(kUseSystemSchemeKey);
+  bool get useSystemColorScheme =>
+      _preferences.getBool(kUseSystemSchemeKey) ?? true;
 
-  set useSystemColorScheme(bool? value) {
+  set useSystemColorScheme(bool value) {
     if (useSystemColorScheme == value) return;
-    _preferences.setTristateBool(kUseSystemSchemeKey, value);
+    _preferences.setBool(kUseSystemSchemeKey, value);
     notifyListeners();
   }
 

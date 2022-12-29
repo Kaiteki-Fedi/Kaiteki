@@ -18,7 +18,7 @@ import 'package:kaiteki/ui/shared/crash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> get _useMaterial3ByDefault async {
-  if (kIsWeb || !Platform.isAndroid) return false;
+  if (kIsWeb || !Platform.isAndroid) return true;
   final androidInfo = await DeviceInfoPlugin().androidInfo;
   return androidInfo.version.sdkInt >= 12;
 }

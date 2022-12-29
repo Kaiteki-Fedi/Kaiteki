@@ -246,14 +246,6 @@ extension ListExtensions<T> on List<T> {
   }
 }
 
-extension SharedPreferencesExtensions on SharedPreferences {
-  Future<bool> setTristateBool(key, value) async {
-    if (value != null) return setBool(key, value);
-    if (containsKey(key)) return remove(key);
-    return true;
-  }
-}
-
 extension NullableObjectExtensions on Object? {}
 
 extension FunctionExtensions<T> on T Function(Map<String, dynamic>) {
