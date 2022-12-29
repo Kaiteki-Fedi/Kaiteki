@@ -27,13 +27,19 @@ class MainScreenNavigationBar extends StatelessWidget {
       );
     }
 
+    final foregroundColor = theme.colorScheme.brightness == Brightness.dark
+        ? theme.colorScheme.onSurface
+        : theme.colorScheme.onPrimary;
     return BottomNavigationBar(
-      backgroundColor: theme.colorScheme.primary,
-      selectedItemColor: theme.colorScheme.onPrimary,
-      unselectedItemColor: theme.colorScheme.onPrimary.withOpacity(0.76),
+      backgroundColor: theme.colorScheme.brightness == Brightness.dark
+          ? theme.colorScheme.surface
+          : theme.colorScheme.primary,
+      selectedItemColor: foregroundColor,
+      unselectedItemColor: foregroundColor.withOpacity(0.76),
       selectedFontSize: 12,
       showUnselectedLabels: false,
       onTap: onChangeIndex,
+      elevation: 8.0,
       currentIndex: currentIndex,
       type: BottomNavigationBarType.fixed,
       items: _buildBottomNavigationBarItems(context),
