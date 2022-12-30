@@ -5,21 +5,31 @@ import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 class EmojiWidget extends StatelessWidget {
   final Emoji emoji;
   final double size;
+  final Function()? onTextTap;
 
   const EmojiWidget({
     super.key,
     required this.emoji,
     required this.size,
+    this.onTextTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (emoji is CustomEmoji) return buildCustomEmoji(emoji as CustomEmoji);
+    Widget child;
+    if (emoji is CustomEmoji) {
+      child = buildCustomEmoji(emoji as CustomEmoji);
+    } else if (emoji is UnicodeEmoji) {
+      child = buildUnicodeEmoji(emoji as UnicodeEmoji);
+    } else {
+      throw UnimplementedError(
+        "There's no implementation for $emoji in EmojiWidget. Can't build.",
+      );
+    }
 
-    if (emoji is UnicodeEmoji) return buildUnicodeEmoji(emoji as UnicodeEmoji);
-
-    throw UnimplementedError(
-      "There's no implementation for $emoji in EmojiWidget. Can't build.",
+    return GestureDetector(
+      onTap: onTextTap,
+      child: child,
     );
   }
 

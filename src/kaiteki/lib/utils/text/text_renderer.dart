@@ -98,7 +98,12 @@ class TextRenderer {
       );
     }
     if (element is EmojiElement) {
-      return renderEmoji(textContext, element, scale: theme?.emojiScale);
+      return renderEmoji(
+        textContext,
+        element,
+        scale: theme?.emojiScale,
+        onTextTap: onTextTap,
+      );
     }
 
     if (childrenSpans.isNotEmpty == true) {
@@ -252,6 +257,7 @@ class TextRenderer {
     TextContext textContext,
     EmojiElement element, {
     double? scale,
+    Function()? onTextTap,
   }) {
     assert(
       textContext.emojis != null,
@@ -272,6 +278,7 @@ class TextRenderer {
           return EmojiWidget(
             emoji: emoji,
             size: inheritedFontSize * (scale ?? 1.0),
+            onTextTap: onTextTap,
           );
         },
       ),
