@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/ui/stack_trace_screen.dart';
+import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExceptionDialog extends StatelessWidget {
@@ -25,9 +27,13 @@ class ExceptionDialog extends StatelessWidget {
 
   String get exceptionRuntimeType => exception.runtimeType.toString();
 
-  Map<String, String> get longDetails {
+  Map<String, Tuple2<String, bool>> get longDetails {
     return {
-      if (stackTrace != null) "Stack Trace": stackTrace.toString(),
+      if (stackTrace != null)
+        "Stack Trace": Tuple2(
+          stackTrace.toString(),
+          false,
+        ),
     };
   }
 
@@ -40,34 +46,56 @@ class ExceptionDialog extends StatelessWidget {
         child: Column(
           children: [
             for (var detail in details.entries)
-              _DataRow(title: detail.key, value: detail.value),
-            const SizedBox(height: 8),
-            for (var detail in longDetails.entries)
-              ExpansionTile(
-                tilePadding: EdgeInsets.zero,
-                childrenPadding: EdgeInsets.zero,
+              ListTile(
                 title: Text(detail.key),
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SelectableText(
-                      detail.value,
-                      style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
-                    ),
-                  ),
-                ],
+                subtitle: Text(detail.value),
+                contentPadding: EdgeInsets.zero,
               ),
+            const Divider(height: 17),
+            ListTile(
+              title: const Text("Show stack trace"),
+              leading: const Icon(Icons.segment_rounded),
+              enabled: stackTrace != null,
+              onTap: () {
+                final stackTrace = this.stackTrace;
+                if (stackTrace == null) return;
+                showDialog(
+                  context: context,
+                  builder: (_) => StackTraceScreen(stackTrace: stackTrace),
+                );
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
+            ListTile(
+              title: const Text("Report on GitHub"),
+              leading: const Icon(Icons.error_rounded),
+              onTap: onReportIssue,
+              contentPadding: EdgeInsets.zero,
+            ),
+            for (var detail in longDetails.entries)
+              if (detail.value.item2)
+                ExpansionTile(
+                  tilePadding: EdgeInsets.zero,
+                  childrenPadding: EdgeInsets.zero,
+                  title: Text(detail.key),
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: SelectableText(
+                        detail.value.item1,
+                        style:
+                            Theme.of(context).ktkTextTheme?.monospaceTextStyle,
+                      ),
+                    ),
+                  ],
+                ),
           ],
         ),
       ),
       scrollable: true,
       actions: [
         TextButton(
-          onPressed: onReportIssue,
-          child: const Text('Create GitHub Issue'),
-        ),
-        TextButton(
-          child: const Text('OK'),
+          child: const Text('Close'),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],
@@ -150,32 +178,5 @@ ${detail.value}
     } on NoSuchMethodError catch (_) {
       return null;
     }
-  }
-}
-
-class _DataRow extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const _DataRow({required this.title, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "$title:",
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(width: 8.0),
-        Flexible(
-          child: SelectableText(
-            value,
-            style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
-          ),
-        ),
-      ],
-    );
   }
 }
