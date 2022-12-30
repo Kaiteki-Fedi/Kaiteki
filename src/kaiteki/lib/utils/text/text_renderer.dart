@@ -158,7 +158,9 @@ class TextRenderer {
       text: element.text,
       style: element.getFlutterTextStyle(context),
       children: childrenSpans,
-      recognizer: TapGestureRecognizer()..onTap = onTextTap,
+      recognizer: onTextTap != null
+          ? (TapGestureRecognizer()..onTap = onTextTap)
+          : null,
     );
 
     if (element.style?.blur == true) {

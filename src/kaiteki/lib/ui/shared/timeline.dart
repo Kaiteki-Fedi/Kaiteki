@@ -167,16 +167,22 @@ class TimelineState extends ConsumerState<Timeline> {
   Widget _buildPost(context, item, index) {
     return Consumer(
       builder: (context, ref, child) {
+        void pushPost() {
+          final accountKey = ref.read(accountProvider)!.key;
+          context.push(
+            "/@${accountKey.username}@${accountKey.host}/posts/${item.id}",
+            extra: item,
+          );
+        }
+
         return Material(
           child: InkWell(
-            onTap: () {
-              final accountKey = ref.read(accountProvider)!.key;
-              context.push(
-                "/@${accountKey.username}@${accountKey.host}/posts/${item.id}",
-                extra: item,
-              );
-            },
-            child: PostWidget(item, wide: widget.wide),
+            onTap: pushPost,
+            child: PostWidget(
+              item,
+              wide: widget.wide,
+              onTextTap: pushPost,
+            ),
           ),
         );
       },

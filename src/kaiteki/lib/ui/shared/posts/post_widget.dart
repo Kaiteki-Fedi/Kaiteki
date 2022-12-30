@@ -42,6 +42,7 @@ class PostWidget extends ConsumerStatefulWidget {
   final bool hideReplyee;
   final bool hideAvatar;
   final bool expand;
+  final Function()? onTextTap;
 
   const PostWidget(
     this.post, {
@@ -52,6 +53,7 @@ class PostWidget extends ConsumerStatefulWidget {
     this.hideReplyee = false,
     this.hideAvatar = false,
     this.expand = false,
+    this.onTextTap,
   });
 
   @override
@@ -105,6 +107,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       PostContentWidget(
         post: _post,
         hideReplyee: widget.hideReplyee,
+        onTextTap: widget.onTextTap,
       ),
       if (_post.embeds.isNotEmpty)
         Card(
@@ -432,11 +435,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 class PostContentWidget extends ConsumerStatefulWidget {
   final Post post;
   final bool hideReplyee;
+  final Function()? onTextTap;
 
   const PostContentWidget({
     super.key,
     required this.post,
     required this.hideReplyee,
+    this.onTextTap,
   });
 
   @override
@@ -450,13 +455,14 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
   @override
   Widget build(BuildContext context) {
     final post = widget.post;
+    final onTextTap = widget.onTextTap;
 
     if (post.content != null) {
       renderedContent = post.renderContent(
         context,
         ref,
         hideReplyee: widget.hideReplyee,
-        onTextTap: () => () {},
+        onTextTap: onTextTap,
       );
     }
 
