@@ -38,6 +38,7 @@ class TextRenderer {
     BuildContext context,
     String text, {
     TextContext? textContext,
+    Function()? onTextTap,
     required Function(UserReference reference) onUserClick,
   }) {
     final renderedElements = renderChildren(
@@ -46,6 +47,7 @@ class TextRenderer {
       textContext ?? TextContext(),
       Theme.of(context).ktkTextTheme,
       onUserClick: onUserClick,
+      onTextTap: onTextTap,
     );
     return TextSpan(children: renderedElements.toList(growable: false));
   }
@@ -56,6 +58,7 @@ class TextRenderer {
     TextContext textContext,
     KaitekiTextTheme? theme, {
     required Function(UserReference) onUserClick,
+    Function()? onTextTap,
   }) {
     final childrenSpans = renderChildren(
       context,
@@ -63,10 +66,11 @@ class TextRenderer {
       textContext,
       theme,
       onUserClick: onUserClick,
+      onTextTap: onTextTap,
     );
 
     if (element is TextElement) {
-      return renderText(context, element, childrenSpans);
+      return renderText(context, element, childrenSpans, onTextTap);
     }
     if (element is LinkElement) {
       return renderLink(
@@ -120,6 +124,7 @@ class TextRenderer {
     TextContext textContext,
     KaitekiTextTheme? theme, {
     required Function(UserReference reference) onUserClick,
+    Function()? onTextTap,
   }) {
     final spans = <InlineSpan>[];
 
@@ -131,6 +136,7 @@ class TextRenderer {
           textContext,
           theme,
           onUserClick: onUserClick,
+          onTextTap: onTextTap,
         );
 
         if (element != null) {
@@ -146,11 +152,13 @@ class TextRenderer {
     BuildContext context,
     TextElement element,
     List<InlineSpan>? childrenSpans,
+    Function()? onTextTap,
   ) {
     final InlineSpan span = TextSpan(
       text: element.text,
       style: element.getFlutterTextStyle(context),
       children: childrenSpans,
+      recognizer: TapGestureRecognizer()..onTap = onTextTap,
     );
 
     if (element.style?.blur == true) {

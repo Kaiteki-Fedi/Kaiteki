@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -454,6 +456,7 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
         context,
         ref,
         hideReplyee: widget.hideReplyee,
+        onTextTap: () => () {},
       );
     }
 

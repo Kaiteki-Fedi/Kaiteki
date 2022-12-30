@@ -113,6 +113,7 @@ extension PostExtensions on Post {
     BuildContext context,
     WidgetRef ref, {
     bool hideReplyee = false,
+    Function()? onTextTap,
   }) {
     final replyee = replyToUser?.data;
     return const TextRenderer().render(
@@ -126,6 +127,7 @@ extension PostExtensions on Post {
             UserReference.handle(replyee.username, replyee.host)
         ],
       ),
+      onTextTap: onTextTap,
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
   }
