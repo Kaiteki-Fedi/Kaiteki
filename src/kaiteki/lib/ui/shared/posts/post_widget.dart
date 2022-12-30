@@ -89,6 +89,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             _post.repeatOf!,
             showActions: widget.showActions,
             wide: widget.wide,
+            onTextTap: widget.onTextTap,
           ),
         ],
       );
