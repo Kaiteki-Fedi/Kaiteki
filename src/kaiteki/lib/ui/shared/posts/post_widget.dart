@@ -1,4 +1,5 @@
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart';
@@ -23,7 +24,6 @@ import 'package:kaiteki/ui/shared/posts/poll_widget.dart';
 import 'package:kaiteki/ui/shared/posts/reaction_row.dart';
 import 'package:kaiteki/ui/shared/posts/reply_bar.dart';
 import 'package:kaiteki/ui/shared/posts/subject_bar.dart';
-import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -41,6 +41,9 @@ class PostWidget extends ConsumerStatefulWidget {
   final bool hideAvatar;
   final bool expand;
 
+  /// onTap callback for content text
+  final VoidCallback? onTap;
+
   const PostWidget(
     this.post, {
     super.key,
@@ -50,6 +53,7 @@ class PostWidget extends ConsumerStatefulWidget {
     this.hideReplyee = false,
     this.hideAvatar = false,
     this.expand = false,
+    this.onTap,
   });
 
   @override
@@ -103,6 +107,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       PostContentWidget(
         post: _post,
         hideReplyee: widget.hideReplyee,
+        onTap: widget.onTap,
       ),
       if (_post.embeds.isNotEmpty)
         Card(
@@ -430,11 +435,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 class PostContentWidget extends ConsumerStatefulWidget {
   final Post post;
   final bool hideReplyee;
+  final VoidCallback? onTap;
 
   const PostContentWidget({
     super.key,
     required this.post,
     required this.hideReplyee,
+    this.onTap,
   });
 
   @override
@@ -471,7 +478,11 @@ class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
             !collapsed)
           Padding(
             padding: kPostPadding,
-            child: SelectableText.rich(TextSpan(children: [renderedContent!])),
+            child: SelectableText.rich(
+              TextSpan(children: [renderedContent!]),
+              // FIXME(Craftplacer): https://github.com/flutter/flutter/issues/53797
+              onTap: widget.onTap,
+            ),
           ),
       ],
     );

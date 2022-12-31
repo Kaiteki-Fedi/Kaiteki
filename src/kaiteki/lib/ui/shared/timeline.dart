@@ -5,10 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/interfaces/list_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
 
 class Timeline extends ConsumerStatefulWidget {
@@ -16,20 +18,31 @@ class Timeline extends ConsumerStatefulWidget {
   final bool wide;
   final TimelineKind? kind;
   final String? userId;
+  final String? listId;
 
   const Timeline.kind({
     super.key,
     this.maxWidth,
     this.wide = false,
     this.kind = TimelineKind.home,
-  }) : userId = null;
+  })  : userId = null,
+        listId = null;
 
   const Timeline.user({
     super.key,
     this.maxWidth,
     this.wide = false,
     required String this.userId,
-  }) : kind = null;
+  })  : kind = null,
+        listId = null;
+
+  const Timeline.list({
+    super.key,
+    this.maxWidth,
+    this.wide = false,
+    required String this.listId,
+  })  : kind = null,
+        userId = null;
 
   @override
   TimelineState createState() => TimelineState();
@@ -61,6 +74,16 @@ class TimelineState extends ConsumerState<Timeline> {
         name: "Timeline",
       );
       return (q) => adapter.getStatusesOfUserById(userId, query: q);
+    }
+
+    final listId = widget.listId;
+    if (listId != null) {
+      log(
+        "Showing posts from $listId at ${adapter.runtimeType}",
+        name: "Timeline",
+      );
+      final listAdapter = adapter as ListSupport;
+      return (q) => listAdapter.getListPosts(listId, query: q);
     }
 
     throw StateError("Cannot fetch timeline with no post source set.");
@@ -164,22 +187,22 @@ class TimelineState extends ConsumerState<Timeline> {
     }
   }
 
-  Widget _buildPost(context, item, index) {
-    return Consumer(
-      builder: (context, ref, child) {
-        return Material(
-          child: InkWell(
-            onTap: () {
-              final accountKey = ref.read(accountProvider)!.key;
-              context.push(
-                "/@${accountKey.username}@${accountKey.host}/posts/${item.id}",
-                extra: item,
-              );
-            },
-            child: PostWidget(item, wide: widget.wide),
-          ),
+  Widget _buildPost(BuildContext context, item, index) {
+    void openPost() => context.pushNamed(
+          "post",
+          params: {...ref.accountRouterParams, "id": item.id},
+          extra: item,
         );
-      },
+
+    return Material(
+      child: InkWell(
+        onTap: openPost,
+        child: PostWidget(
+          item,
+          wide: widget.wide,
+          onTap: openPost,
+        ),
+      ),
     );
   }
 
