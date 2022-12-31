@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:fediverse_objects/mastodon.dart';
+import 'package:fediverse_objects/mastodon.dart' hide List;
+import 'package:fediverse_objects/mastodon.dart' as mastodon show List;
 import 'package:http/http.dart' show Response;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/api_exception.dart';

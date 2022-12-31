@@ -3,9 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
-// FIXME(Craftplacer): Fix exports for Misskey notifications
-// ignore: implementation_imports
-import 'package:fediverse_objects/src/misskey/notification.dart' as misskey;
 import 'package:intl/intl.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/constants.dart' as consts;

@@ -1,4 +1,4 @@
-import 'package:fediverse_objects/mastodon.dart';
+import 'package:fediverse_objects/mastodon.dart' hide List;
 import 'package:json_annotation/json_annotation.dart';
 
 part 'search.g.dart';

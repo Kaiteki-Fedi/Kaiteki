@@ -1,13 +1,13 @@
-import 'package:fediverse_objects/mastodon.dart';
+import 'package:fediverse_objects/mastodon.dart' hide List;
 import 'package:json_annotation/json_annotation.dart';
 
 part 'context.g.dart';
 
 @JsonSerializable(createToJson: false)
 class ContextResponse {
-  final Iterable<Status> ancestors;
+  final List<Status> ancestors;
 
-  final Iterable<Status> descendants;
+  final List<Status> descendants;
 
   const ContextResponse(this.ancestors, this.descendants);
 

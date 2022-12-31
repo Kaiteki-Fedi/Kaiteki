@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:fediverse_objects/misskey.dart' as misskey;
-import 'package:fediverse_objects/src/misskey/notification.dart' as misskey;
 import 'package:http/http.dart'
     show MultipartFile, MultipartRequest, Request, Response;
 import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
