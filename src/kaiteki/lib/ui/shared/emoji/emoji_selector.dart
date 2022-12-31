@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:anchor_scroll_controller/anchor_scroll_controller.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/fediverse/model/emoji/category.dart';
@@ -213,7 +214,8 @@ class _EmojiSelectorState extends State<EmojiSelector>
       ),
     );
 
-    if (tooltip != null) {
+    // HACK(Craftplacer): We disable displaying `Tooltip`s on slivers when debugging because that fails an assert when hot-reloading.
+    if (!kDebugMode && tooltip != null) {
       return Tooltip(
         message: tooltip,
         child: child,
@@ -243,21 +245,21 @@ class _EmojiSelectorState extends State<EmojiSelector>
       emoji is CustomEmoji ? ":${emoji.short}:" : null;
 
   Widget _buildCategoryIcon(BuildContext context, EmojiCategory category) {
+    const iconMap = {
+      UnicodeEmojiGroup.animalsNature: Icons.emoji_nature_rounded,
+      UnicodeEmojiGroup.symbols: Icons.emoji_symbols_rounded,
+      UnicodeEmojiGroup.flags: Icons.emoji_flags_rounded,
+      UnicodeEmojiGroup.smileysEmotion: Icons.emoji_emotions_rounded,
+      UnicodeEmojiGroup.objects: Icons.emoji_objects_rounded,
+      UnicodeEmojiGroup.travelPlaces: Icons.emoji_transportation_rounded,
+      UnicodeEmojiGroup.activities: Icons.emoji_events_rounded,
+      UnicodeEmojiGroup.foodDrink: Icons.emoji_food_beverage_rounded,
+      UnicodeEmojiGroup.peopleBody: Icons.emoji_people_rounded,
+    };
+
     if (category is UnicodeEmojiCategory) {
       return Icon(
-        const {
-              UnicodeEmojiGroup.animalsNature: Icons.emoji_nature_rounded,
-              UnicodeEmojiGroup.symbols: Icons.emoji_symbols_rounded,
-              UnicodeEmojiGroup.flags: Icons.emoji_flags_rounded,
-              UnicodeEmojiGroup.smileysEmotion: Icons.emoji_emotions_rounded,
-              UnicodeEmojiGroup.objects: Icons.emoji_objects_rounded,
-              UnicodeEmojiGroup.travelPlaces:
-                  Icons.emoji_transportation_rounded,
-              UnicodeEmojiGroup.activities: Icons.emoji_events_rounded,
-              UnicodeEmojiGroup.foodDrink: Icons.emoji_food_beverage_rounded,
-              UnicodeEmojiGroup.peopleBody: Icons.emoji_people_rounded,
-            }[category.type] ??
-            Icons.circle_rounded,
+        iconMap[category.type] ?? Icons.circle_rounded,
         size: 24,
       );
     }

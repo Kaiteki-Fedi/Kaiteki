@@ -48,6 +48,14 @@ class _EmojiSelectorBottomSheetState
     }
     tab = _tab!;
 
+    final selectedButtonStyle = TextButton.styleFrom(
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      foregroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+    );
+
+    final emojiTabSelectorAvailable =
+        widget.showUnicodeEmojis && widget.showCustomEmojis;
+
     return Column(
       children: [
         ListTile(
@@ -60,27 +68,36 @@ class _EmojiSelectorBottomSheetState
           contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
         ),
         Expanded(child: _buildBody(context, tab)),
-        const Divider(height: 1),
-        if (widget.showUnicodeEmojis && widget.showCustomEmojis)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (availableTabs.contains(_EmojiKindTab.custom))
-                IconButton(
-                  tooltip: "Custom Emojis",
-                  icon: const Icon(Mdi.emoticon),
-                  onPressed: () => _tab = _EmojiKindTab.custom,
-                  isSelected: _tab == _EmojiKindTab.custom,
-                ),
-              if (availableTabs.contains(_EmojiKindTab.unicode))
-                IconButton(
-                  tooltip: "Unicode Emojis",
-                  icon: const Icon(Mdi.unicode),
-                  onPressed: () => _tab = _EmojiKindTab.unicode,
-                  isSelected: _tab == _EmojiKindTab.unicode,
-                ),
-            ],
+        if (emojiTabSelectorAvailable) ...[
+          const Divider(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              runAlignment: WrapAlignment.center,
+              spacing: 8.0,
+              children: [
+                if (availableTabs.contains(_EmojiKindTab.custom))
+                  TextButton.icon(
+                    label: const Text("Custom Emojis"),
+                    icon: const Icon(Mdi.emoticon),
+                    onPressed: () => _tab = _EmojiKindTab.custom,
+                    style: _tab == _EmojiKindTab.custom
+                        ? selectedButtonStyle
+                        : null,
+                  ),
+                if (availableTabs.contains(_EmojiKindTab.unicode))
+                  TextButton.icon(
+                    label: const Text("Unicode Emojis"),
+                    icon: const Icon(Mdi.unicode),
+                    onPressed: () => _tab = _EmojiKindTab.unicode,
+                    style: _tab == _EmojiKindTab.unicode
+                        ? selectedButtonStyle
+                        : null,
+                  ),
+              ],
+            ),
           ),
+        ],
       ],
     );
   }
