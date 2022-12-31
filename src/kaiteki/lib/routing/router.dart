@@ -21,6 +21,7 @@ import 'package:kaiteki/ui/settings/experiments.dart';
 import 'package:kaiteki/ui/settings/settings_screen.dart';
 import 'package:kaiteki/ui/shared/conversation_screen.dart';
 import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
+import 'package:kaiteki/ui/shared/posts/compose/compose_screen.dart';
 import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
 import 'package:kaiteki/ui/user/user_screen.dart';
 import 'package:kaiteki/ui/user/user_screen_old.dart';
@@ -126,6 +127,20 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             navigatorKey: _authNavigatorKey,
             builder: _authenticatedBuilder,
             routes: [
+              GoRoute(
+                name: "compose",
+                path: "compose",
+                pageBuilder: (context, state) {
+                  return _DialogPage(
+                    builder: (context) {
+                      return ComposeScreen(
+                        replyTo:
+                            state.extra is Post ? state.extra as Post : null,
+                      );
+                    },
+                  );
+                },
+              ),
               GoRoute(
                 name: "home",
                 path: "home",

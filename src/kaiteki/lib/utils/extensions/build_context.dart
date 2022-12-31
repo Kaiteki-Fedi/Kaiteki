@@ -12,16 +12,6 @@ import 'package:kaiteki_material/kaiteki_material.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 extension BuildContextExtensions on BuildContext {
-  Future<void> showPostDialog({Post? replyTo}) async {
-    final key = GlobalKey();
-    await showDialog(
-      context: this,
-      builder: (context) => ComposeScreen(key: key, replyTo: replyTo),
-      barrierDismissible: true,
-      useSafeArea: false,
-    );
-  }
-
   Future<bool> showWebCompatibilityDialog(ApiType type) async {
     final dialogResult = await showDialog(
       context: this,

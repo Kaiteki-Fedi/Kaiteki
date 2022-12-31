@@ -58,7 +58,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           icon: Icons.edit_rounded,
           tooltip: l10n.composeDialogTitle,
           text: l10n.composeButtonLabel,
-          onTap: () => context.showPostDialog(),
+          onTap: _onCompose,
         ),
         hideFabWhenDesktop: true,
       ),
@@ -115,6 +115,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
+  void _onCompose() => context.pushNamed(
+        "compose",
+        params: ref.accountRouterParams,
+      );
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.getL10n();
@@ -138,15 +143,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
     return FocusableActionDetector(
       actions: {
-        NewPostIntent: CallbackAction(
-          onInvoke: (_) => context.showPostDialog(),
-        ),
+        NewPostIntent: CallbackAction(onInvoke: (_) => _onCompose()),
         // SearchIntent: CallbackAction(
         //   onInvoke: (_) => _search?.call(),
         // ),
-        RefreshIntent: CallbackAction(
-          onInvoke: (_) => _refresh?.call(),
-        ),
+        RefreshIntent: CallbackAction(onInvoke: (_) => _refresh?.call()),
         GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
           onInvoke: _changeLocation,
         ),

@@ -149,7 +149,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         spacer,
         InteractionBar(
           metrics: _post.metrics,
-          onReply: () => context.showPostDialog(replyTo: _post),
+          onReply: _onReply,
           onFavorite: _onFavorite,
           onRepeat: _onRepeat,
           onReact: _onReact,
@@ -182,11 +182,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         menu: MenuIntent(),
       },
       actions: {
-        ReplyIntent: CallbackAction(
-          onInvoke: (_) {
-            return context.showPostDialog(replyTo: _post);
-          },
-        ),
+        ReplyIntent: CallbackAction(onInvoke: (_) => _onReply),
         FavoriteIntent: CallbackAction(onInvoke: (_) => _onFavorite()),
         RepeatIntent: CallbackAction(onInvoke: (_) => _onRepeat()),
         BookmarkIntent: CallbackAction(onInvoke: (_) => _onBookmark()),
@@ -272,6 +268,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           ),
         ),
     ];
+  }
+
+  void _onReply() {
+    context.pushNamed(
+      "compose",
+      params: ref.accountRouterParams,
+      extra: _post,
+    );
   }
 
   Future<void> _onFavorite() async {

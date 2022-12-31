@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -6,10 +7,12 @@ class ComposeFloatingActionButton extends StatelessWidget {
   final ComposeFloatingActionButtonType type;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final VoidCallback onTap;
 
   const ComposeFloatingActionButton({
     super.key,
     required this.type,
+    required this.onTap,
     this.backgroundColor,
     this.foregroundColor,
   });
@@ -21,7 +24,7 @@ class ComposeFloatingActionButton extends StatelessWidget {
     switch (type) {
       case ComposeFloatingActionButtonType.small:
         return FloatingActionButton.small(
-          onPressed: () => context.showPostDialog(),
+          onPressed: onTap,
           elevation: elevation,
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
@@ -29,7 +32,7 @@ class ComposeFloatingActionButton extends StatelessWidget {
         );
       case ComposeFloatingActionButtonType.normal:
         return FloatingActionButton(
-          onPressed: () => context.showPostDialog(),
+          onPressed: onTap,
           elevation: elevation,
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
@@ -39,7 +42,7 @@ class ComposeFloatingActionButton extends StatelessWidget {
         return SizedBox(
           height: 48,
           child: FloatingActionButton.extended(
-            onPressed: () => context.showPostDialog(),
+            onPressed: onTap,
             elevation: elevation,
             label: Text(context.getL10n().composeButtonLabel),
             backgroundColor: backgroundColor,
