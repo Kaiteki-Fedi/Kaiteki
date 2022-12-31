@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/interfaces/list_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
@@ -18,31 +17,20 @@ class Timeline extends ConsumerStatefulWidget {
   final bool wide;
   final TimelineKind? kind;
   final String? userId;
-  final String? listId;
 
   const Timeline.kind({
     super.key,
     this.maxWidth,
     this.wide = false,
     this.kind = TimelineKind.home,
-  })  : userId = null,
-        listId = null;
+  }) : userId = null;
 
   const Timeline.user({
     super.key,
     this.maxWidth,
     this.wide = false,
     required String this.userId,
-  })  : kind = null,
-        listId = null;
-
-  const Timeline.list({
-    super.key,
-    this.maxWidth,
-    this.wide = false,
-    required String this.listId,
-  })  : kind = null,
-        userId = null;
+  }) : kind = null;
 
   @override
   TimelineState createState() => TimelineState();
@@ -74,16 +62,6 @@ class TimelineState extends ConsumerState<Timeline> {
         name: "Timeline",
       );
       return (q) => adapter.getStatusesOfUserById(userId, query: q);
-    }
-
-    final listId = widget.listId;
-    if (listId != null) {
-      log(
-        "Showing posts from $listId at ${adapter.runtimeType}",
-        name: "Timeline",
-      );
-      final listAdapter = adapter as ListSupport;
-      return (q) => listAdapter.getListPosts(listId, query: q);
     }
 
     throw StateError("Cannot fetch timeline with no post source set.");
