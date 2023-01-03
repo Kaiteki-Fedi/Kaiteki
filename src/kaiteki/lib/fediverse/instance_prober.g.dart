@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $probeInstanceHash() => r'7360cc60a8cfc53b6ff6ca6ca1263f35eb1863f8';
+String _$probeInstanceHash() => r'410a406c0a0bd433713d165ffb26fdb895a71a2b';
 
 /// See also [probeInstance].
 class ProbeInstanceProvider
@@ -46,7 +46,7 @@ class ProbeInstanceProvider
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $probeInstanceHash,
+                  : _$probeInstanceHash,
         );
 
   final String host;

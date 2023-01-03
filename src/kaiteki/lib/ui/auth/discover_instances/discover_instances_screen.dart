@@ -57,7 +57,7 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
                 if (!snapshot.hasData) return centeredCircularProgressIndicator;
 
                 final sortedInstances = snapshot.data!.toList(growable: false)
-                  ..sort((a, b) => a.name.compareTo(b.name));
+                  ..sort((a, b) => a.host.compareTo(b.host));
 
                 return Column(
                   children: [

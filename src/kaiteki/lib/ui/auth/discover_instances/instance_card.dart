@@ -33,7 +33,7 @@ class InstanceCard extends StatelessWidget {
                       return const Icon(Icons.public);
                     },
                   ),
-            title: Text(data.name),
+            title: Text(data.host),
             subtitle: data.shortDescription == null
                 ? null
                 : Text(data.shortDescription!),

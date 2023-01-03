@@ -8,7 +8,8 @@ part of 'instances.dart';
 
 InstanceData _$InstanceDataFromJson(Map<String, dynamic> json) => InstanceData(
       type: $enumDecode(_$ApiTypeEnumMap, json['type']),
-      name: json['name'] as String,
+      host: json['host'] as String,
+      name: json['name'] as String?,
       shortDescription: json['shortDescription'] as String?,
       favicon: json['favicon'] as String?,
       rules:
@@ -21,6 +22,7 @@ InstanceData _$InstanceDataFromJson(Map<String, dynamic> json) => InstanceData(
 Map<String, dynamic> _$InstanceDataToJson(InstanceData instance) =>
     <String, dynamic>{
       'type': _$ApiTypeEnumMap[instance.type]!,
+      'host': instance.host,
       'name': instance.name,
       'shortDescription': instance.shortDescription,
       'favicon': instance.favicon,

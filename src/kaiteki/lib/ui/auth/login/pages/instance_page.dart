@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
 import 'package:kaiteki/ui/auth/login/constants.dart';
@@ -28,7 +27,6 @@ class InstancePage extends StatefulWidget {
 
 class _InstancePageState extends State<InstancePage> {
   final _formKey = GlobalKey<FormState>();
-  List<InstanceData>? _instances;
   late TextEditingController _instanceController;
 
   @override
@@ -36,10 +34,6 @@ class _InstancePageState extends State<InstancePage> {
     super.initState();
 
     _instanceController = TextEditingController();
-
-    fetchInstances().then(
-      (list) => setState(() => _instances = list),
-    );
   }
 
   @override

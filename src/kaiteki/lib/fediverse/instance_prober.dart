@@ -17,7 +17,7 @@ final _logger = getLogger('InstanceProber');
 
 @riverpod
 Future<InstanceProbeResult> probeInstance(
-  ProbeInstanceRef ref,
+  ProbeInstanceRef? ref,
   String host,
 ) async {
   final isInstanceAvailable = await _checkInstanceAvailability(host);
@@ -69,7 +69,7 @@ Future<InstanceProbeResult?> _probeKnownInstances(String host) async {
 
   type = (await fetchInstances())
       .cast<InstanceData?>()
-      .firstWhere((i) => i!.name == host, orElse: () => null)
+      .firstWhere((i) => i!.host == host, orElse: () => null)
       ?.type;
 
   if (type != null) {
@@ -134,7 +134,8 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
     "pleroma": ApiType.pleroma,
     "misskey": ApiType.misskey,
     "foundkey": ApiType.misskey,
-    "calckey": ApiType.misskey, // TODO(thatonecalculator): change to ApiType.calckey once implemented
+    "calckey": ApiType
+        .misskey, // TODO(thatonecalculator): change to ApiType.calckey once implemented
   }[nodeInfo.software.name];
 
   if (apiType == null) return null;

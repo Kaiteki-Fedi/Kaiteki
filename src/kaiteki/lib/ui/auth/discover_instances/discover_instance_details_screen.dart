@@ -96,7 +96,7 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop(
-                          DiscoverInstanceScreenResult(data.name, false),
+                          DiscoverInstanceScreenResult(data.host, false),
                         );
                       },
                       style: Theme.of(context).filledButtonStyle.copyWith(
@@ -116,7 +116,7 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
 
   SliverAppBar _buildHeader(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final value = ref.watch(probeInstanceProvider(data.name));
+    final value = ref.watch(probeInstanceProvider(data.host));
     return SliverAppBar(
       expandedHeight: 300.0,
       pinned: true,
@@ -126,7 +126,7 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         title: Text(
-          data.name,
+          data.host,
           style: TextStyle(color: theme.colorScheme.onSurface),
         ),
         collapseMode: CollapseMode.pin,
