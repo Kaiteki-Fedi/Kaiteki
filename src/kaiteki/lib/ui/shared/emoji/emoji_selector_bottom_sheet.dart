@@ -3,6 +3,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/model/emoji/category.dart';
 import 'package:kaiteki/fediverse/services/emoji.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
 import 'package:mdi/mdi.dart';
 
@@ -142,7 +143,7 @@ class _EmojiSelectorBottomSheetState
               data: (emojis) => _buildSelector(context, emojis),
               // TODO(Craftplacer): Add ability to see error details for failure on fetching custom emojis
               error: (_, __) => Center(child: Text(l10n.emojiRetrievalFailed)),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => centeredCircularProgressIndicator,
             );
       case _EmojiKindTab.unicode:
         _unicodeEmojis ??= _getUnicodeCategories(context);

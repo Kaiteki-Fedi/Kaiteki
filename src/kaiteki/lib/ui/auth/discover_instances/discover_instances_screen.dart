@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/ui/auth/discover_instances/instance_card.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 
 class DiscoverInstancesScreen extends StatefulWidget {
@@ -53,9 +54,7 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
             child: FutureBuilder<List<InstanceData>>(
               future: _instanceFetch,
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+                if (!snapshot.hasData) return centeredCircularProgressIndicator;
 
                 final sortedInstances = snapshot.data!.toList(growable: false)
                   ..sort((a, b) => a.name.compareTo(b.name));

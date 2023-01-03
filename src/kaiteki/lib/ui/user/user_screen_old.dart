@@ -11,6 +11,7 @@ import 'package:kaiteki/preferences/app_experiment.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart';
 import 'package:kaiteki/ui/shared/async/async_button.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
@@ -279,7 +280,7 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
     if (snapshot.hasError) {
       body = Center(child: ErrorLandingWidget.fromAsyncSnapshot(snapshot));
     } else if (!snapshot.hasData) {
-      body = const Center(child: CircularProgressIndicator());
+      body = centeredCircularProgressIndicator;
     } else {
       body = TabBarView(
         controller: _tabController,

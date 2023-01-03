@@ -18,6 +18,7 @@ import 'package:kaiteki/ui/auth/login/pages/mfa_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/oauth_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/user_page.dart';
 import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
@@ -317,7 +318,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
         return AsyncBlockWidget(
           blocking: isBusy,
           duration: const Duration(milliseconds: 250),
-          secondChild: const Center(child: CircularProgressIndicator()),
+          secondChild: centeredCircularProgressIndicator,
           child: InstancePage(
             enabled: !isBusy,
             onNext: (host) {

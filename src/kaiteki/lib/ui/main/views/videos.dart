@@ -7,7 +7,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/theming/default/themes.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -372,9 +372,7 @@ class _VideoWidgetState extends State<_VideoWidget> {
   @override
   Widget build(BuildContext context) {
     if (_videoController.value.isBuffering) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return centeredCircularProgressIndicator;
     }
 
     return Center(
