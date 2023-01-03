@@ -5,7 +5,6 @@ const String exampleAvatar = "https://craftplacer.keybase.pub/cute.jpg";
 final examplePost = Post(
   author: exampleUser,
   content: "Hello everyone!",
-  source: null,
   postedAt: DateTime.now(),
   reactions: [],
   id: 'cool-post',
@@ -18,6 +17,5 @@ final exampleUser = User(
   avatarUrl: exampleAvatar,
   joinDate: DateTime.now(),
   id: "CuteNeko-Account",
-  source: null,
   host: 'cute.social',
 );

@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $NotificationServiceHash() =>
+String _$NotificationServiceHash() =>
     r'7c1059c06e5a9217672d2d31d3dcca09c884059a';
 
 /// See also [NotificationService].
@@ -44,7 +44,7 @@ class NotificationServiceProvider
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $NotificationServiceHash,
+                  : _$NotificationServiceHash,
         );
 
   final AccountKey key;

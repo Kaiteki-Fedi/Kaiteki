@@ -60,13 +60,11 @@ class TimelineAdapter extends BackendAdapter {
     return [
       if (query?.sinceId == null && query?.untilId == null)
         Post(
-          source: null,
           postedAt: DateTime.now(),
           author: const User(
             displayName: 'User',
             host: 'example.social',
             id: '0',
-            source: null,
             username: 'User',
           ),
           id: DateTime.now().toIso8601String(),

@@ -1,5 +1,6 @@
-class Poll<T> {
-  final T? source;
+import 'package:kaiteki/fediverse/model/adapted_entity.dart';
+
+class Poll<T> extends AdaptedEntity<T> {
   final String id;
   final bool allowMultipleChoices;
   final bool hasVoted;
@@ -10,7 +11,7 @@ class Poll<T> {
   final int? voterCount;
 
   const Poll({
-    this.source,
+    super.source,
     required this.hasEnded,
     required this.id,
     required this.allowMultipleChoices,

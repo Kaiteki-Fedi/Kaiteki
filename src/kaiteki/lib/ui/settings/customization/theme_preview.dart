@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/settings/customization/customization_basic_page.dart';
 
 class ThemePreview extends StatelessWidget {
   final bool selected;

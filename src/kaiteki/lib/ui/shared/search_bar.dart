@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
   final TextEditingController controller;
-  final VoidCallback? onEnter;
+  final ValueChanged<String>? onSubmitted;
+  final String? hintText;
+  final bool autofocus;
 
-  const SearchBar({super.key, required this.controller, this.onEnter});
+  const SearchBar({
+    super.key,
+    required this.controller,
+    this.onSubmitted,
+    this.hintText,
+    this.autofocus = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      autofocus: autofocus,
       controller: controller,
-      onSubmitted: (_) => onEnter?.call(),
+      onSubmitted: onSubmitted,
       decoration: InputDecoration(
         fillColor: Theme.of(context).colorScheme.onSurface.withOpacity(1 / 15),
         filled: true,
@@ -19,7 +28,7 @@ class SearchBar extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         isDense: true,
-        hintText: "Search for emojis",
+        hintText: hintText ?? "Search",
         prefixIcon: const Icon(Icons.search_rounded),
         suffixIcon: controller.value.text.isNotEmpty
             ? IconButton(

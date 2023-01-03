@@ -14,17 +14,21 @@ class AppBarTabBarTheme extends StatelessWidget {
 
     if (theme.useMaterial3) return child;
 
+    final foregroundColor = theme.colorScheme.brightness == Brightness.dark
+        ? theme.colorScheme.onSurface
+        : theme.colorScheme.onPrimary;
+
     return Theme(
       data: theme.copyWith(
         tabBarTheme: TabBarTheme(
           indicator: RoundedUnderlineTabIndicator(
             borderSide: BorderSide(
               width: 3,
-              color: Theme.of(context).colorScheme.onPrimary,
+              color: foregroundColor,
             ),
           ),
-          labelColor: theme.colorScheme.onPrimary,
-          unselectedLabelColor: theme.colorScheme.onPrimaryContainer,
+          labelColor: foregroundColor,
+          unselectedLabelColor: foregroundColor.withOpacity(.7),
         ),
       ),
       child: child,

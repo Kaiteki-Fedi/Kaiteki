@@ -9,8 +9,8 @@ import 'package:kaiteki/fediverse/model/emoji/category.dart';
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_button.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
-import 'package:kaiteki/ui/shared/emoji/search_bar.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+import 'package:kaiteki/ui/shared/search_bar.dart';
 
 const _emojiSize = 32.0;
 
@@ -114,12 +114,13 @@ class _EmojiSelectorState extends State<EmojiSelector>
                       padding: const EdgeInsets.all(8.0),
                       child: SearchBar(
                         controller: _searchTextController,
-                        onEnter: () {
+                        onSubmitted: (_) {
                           final emoji =
                               _categories.firstOrNull?.emojis.firstOrNull;
 
                           if (emoji != null) widget.onEmojiSelected(emoji);
                         },
+                        hintText: "Search for emojis",
                       ),
                     ),
                   ),

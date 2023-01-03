@@ -248,3 +248,11 @@ Instance toInstance(mastodon.Instance instance) {
     backgroundUrl: instance.thumbnail,
   );
 }
+
+PostList toList(mastodon.List list) {
+  return PostList(
+    source: list,
+    id: list.id,
+    name: list.title,
+  );
+}

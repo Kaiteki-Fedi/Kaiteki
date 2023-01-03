@@ -195,6 +195,25 @@ class MastodonClient {
     ).then(Status.fromJson.fromResponseList);
   }
 
+  Future<List<Status>> getListTimeline(
+    String listId, {
+    String? maxId,
+    String? sinceId,
+    String? minId,
+    int? limit,
+  }) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/timelines/list/$listId",
+      query: {
+        'max_id': maxId,
+        'since_id': sinceId,
+        'min_id': minId,
+        'limit': limit,
+      },
+    ).then(Status.fromJson.fromResponseList);
+  }
+
   Future<Status> postStatus(
     String status, {
     String? spoilerText,
@@ -357,5 +376,66 @@ class MastodonClient {
         "following": following,
       },
     ).then(Account.fromJson.fromResponseList);
+  }
+
+  Future<List<mastodon.List>> getLists() async {
+    return client
+        .sendRequest(HttpMethod.get, "api/v1/lists")
+        .then(mastodon.List.fromJson.fromResponseList);
+  }
+
+  Future<mastodon.List> getList(String id) async {
+    return client
+        .sendRequest(HttpMethod.get, "api/v1/lists/$id")
+        .then(mastodon.List.fromJson.fromResponse);
+  }
+
+  Future<mastodon.List> createList(
+    String title, [
+    RepliesPolicy? repliesPolicy,
+  ]) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/lists",
+          body: {
+            "title": title,
+            if (repliesPolicy != null) "replies_policy": repliesPolicy,
+          }.jsonBody,
+        )
+        .then(mastodon.List.fromJson.fromResponse);
+  }
+
+  Future<void> deleteList(String id) async =>
+      client.sendRequest(HttpMethod.delete, "api/v1/lists/$id");
+
+  Future<List<Account>> getListAccounts(String id) async => client
+      .sendRequest(HttpMethod.get, "api/v1/lists/$id/accounts")
+      .then(Account.fromJson.fromResponseList);
+
+  Future<void> addListAccounts(String id, Set<String> accountIds) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/v1/lists/$id/accounts",
+      body: {"account_ids": accountIds.toList()}.jsonBody,
+    );
+  }
+
+  Future<void> removeListAccounts(String id, Set<String> accountIds) async {
+    await client.sendRequest(
+      HttpMethod.delete,
+      "api/v1/lists/$id/accounts",
+      body: {"account_ids": accountIds.toList()}.jsonBody,
+    );
+  }
+
+  Future<void> updateList(String id, String title) async {
+    await client
+        .sendRequest(
+          HttpMethod.put,
+          "api/v1/lists/$id",
+          body: {"title": title}.jsonBody,
+        )
+        .then(mastodon.List.fromJson.fromResponse);
   }
 }

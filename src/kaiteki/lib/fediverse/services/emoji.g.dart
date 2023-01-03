@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $EmojiServiceHash() => r'f49fb3422094cdee597f163a27acb60f264ce4db';
+String _$EmojiServiceHash() => r'f49fb3422094cdee597f163a27acb60f264ce4db';
 
 /// See also [EmojiService].
 class EmojiServiceProvider
@@ -43,7 +43,7 @@ class EmojiServiceProvider
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $EmojiServiceHash,
+                  : _$EmojiServiceHash,
         );
 
   final AccountKey key;

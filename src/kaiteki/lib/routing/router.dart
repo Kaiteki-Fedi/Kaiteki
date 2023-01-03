@@ -13,6 +13,7 @@ import 'package:kaiteki/routing/notifier.dart';
 import 'package:kaiteki/ui/account_required_screen.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
 import 'package:kaiteki/ui/auth/login/login_screen.dart';
+import 'package:kaiteki/ui/lists/lists_screen.dart';
 import 'package:kaiteki/ui/main/main_screen.dart';
 import 'package:kaiteki/ui/search/screen.dart';
 import 'package:kaiteki/ui/settings/about/about_screen.dart';
@@ -198,6 +199,11 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                     return OldUserScreen.fromUser(state.extra! as User);
                   }
                 },
+              ),
+              GoRoute(
+                name: "lists",
+                path: "lists",
+                builder: (_, __) => const ListsScreen(),
               ),
               GoRoute(
                 name: "post",

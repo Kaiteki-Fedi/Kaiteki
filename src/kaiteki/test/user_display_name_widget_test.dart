@@ -6,7 +6,6 @@ void main() {
   test("separated", () {
     const user = User(
       id: "",
-      source: null,
       username: "alice",
       displayName: "Alice 🌈",
       host: "example.org",
@@ -20,7 +19,6 @@ void main() {
   test("unseparated", () {
     const user = User(
       id: "",
-      source: null,
       username: "alice",
       displayName: "Alice",
       host: "example.org",

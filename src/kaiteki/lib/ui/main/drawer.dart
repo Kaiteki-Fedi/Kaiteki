@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart' show appName;
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/list_support.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 class MainScreenDrawer extends ConsumerWidget {
   const MainScreenDrawer({super.key});
@@ -12,6 +14,7 @@ class MainScreenDrawer extends ConsumerWidget {
     final l10n = context.getL10n();
     final account = ref.watch(accountProvider)!;
     final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
+    final adapter = ref.watch(adapterProvider);
     return Drawer(
       child: SafeArea(
         child: SingleChildScrollView(
@@ -36,10 +39,14 @@ class MainScreenDrawer extends ConsumerWidget {
                 title: Text(l10n.directMessagesTitle),
                 enabled: false,
               ),
+              if (adapter is ListSupport)
               ListTile(
                 leading: const Icon(Icons.article_rounded),
                 title: Text(l10n.listsTitle),
-                enabled: false,
+                  onTap: () => context.pushNamed(
+                    "lists",
+                    params: ref.accountRouterParams,
+                  ),
               ),
               ListTile(
                 leading: const Icon(Icons.trending_up_rounded),

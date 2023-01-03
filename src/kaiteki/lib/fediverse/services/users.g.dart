@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $UsersServiceHash() => r'631460631420ad196db95a548ee5e2272b9cc151';
+String _$UsersServiceHash() => r'631460631420ad196db95a548ee5e2272b9cc151';
 
 /// See also [UsersService].
 class UsersServiceProvider
@@ -46,7 +46,7 @@ class UsersServiceProvider
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $UsersServiceHash,
+                  : _$UsersServiceHash,
         );
 
   final AccountKey key;

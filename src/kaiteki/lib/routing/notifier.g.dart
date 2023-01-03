@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $RouterNotifierHash() => r'c463868dc8e7ad26250dd6ce55037d6264363822';
+String _$RouterNotifierHash() => r'c463868dc8e7ad26250dd6ce55037d6264363822';
 
 /// See also [RouterNotifier].
 final routerNotifierProvider =
@@ -38,7 +38,7 @@ final routerNotifierProvider =
   name: r'routerNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : $RouterNotifierHash,
+      : _$RouterNotifierHash,
 );
 typedef RouterNotifierRef = AutoDisposeNotifierProviderRef<bool>;
 

@@ -2,6 +2,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:kaiteki/fediverse/model/adapted_entity.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 
 export 'draft.dart';
@@ -12,9 +13,8 @@ part 'post.g.dart';
 
 /// A class representing a post.
 @CopyWith()
-class Post<T> {
+class Post<T> extends AdaptedEntity<T> {
   /// The original object.
-  final T? source;
   final String id;
 
   // METADATA
@@ -54,7 +54,7 @@ class Post<T> {
   final Uri? externalUrl;
 
   Post({
-    required this.source,
+    super.source,
     required this.postedAt,
     required this.author,
     required this.id,

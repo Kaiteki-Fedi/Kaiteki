@@ -11,12 +11,14 @@ import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/backends/misskey/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/misskey/client.dart';
 import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
+import 'package:kaiteki/fediverse/backends/misskey/model/list.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
+import 'package:kaiteki/fediverse/interfaces/list_support.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/interfaces/search_support.dart';
@@ -44,7 +46,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         ReactionSupport,
         CustomEmojiSupport,
         NotificationSupport,
-        SearchSupport {
+        SearchSupport,
+        ListSupport {
   final MisskeyClient client;
 
   @override
@@ -462,5 +465,61 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   Future<List<User>> searchForUsers(String query) async {
     final users = await client.searchUsers(query);
     return users.map((u) => toUserFromLite(u, instance)).toList();
+  }
+
+  @override
+  Future<void> addUserToList(String listId, User user) async {
+    await client.pushToList(listId, user.id);
+  }
+
+  @override
+  Future<PostList> createList(String name) async {
+    final list = await client.createList(name);
+    return toList(list);
+  }
+
+  @override
+  Future<void> deleteList(String listId) => client.deleteList(listId);
+
+  @override
+  Future<List<Post>> getListPosts(
+    String listId, {
+    TimelineQuery<String>? query,
+  }) async {
+    final request = MisskeyTimelineRequest(
+      sinceId: query?.sinceId,
+      untilId: query?.untilId,
+    );
+    final notes = await client.getUserListTimeline(listId, request);
+    return notes.map((n) => toPost(n, instance)).toList();
+  }
+
+  @override
+  Future<List<User>> getListUsers(String listId) async {
+    final list = await client.showList(listId);
+    final userIds = list.userIds;
+    var users = const <misskey.User>[];
+
+    if (userIds != null && userIds.isNotEmpty) {
+      users = await client.showUsers(userIds.toSet());
+    }
+
+    return users.map((e) => toUser(e, instance)).toList();
+  }
+
+  @override
+  Future<List<PostList>> getLists() async {
+    final lists = await client.listLists();
+    return lists.map(toList).toList();
+  }
+
+  @override
+  Future<void> removeUserFromList(String listId, User user) async {
+    await client.pullFromList(listId, user.id);
+  }
+
+  @override
+  Future<void> renameList(String listId, String name) async {
+    await client.updateList(listId, name);
   }
 }

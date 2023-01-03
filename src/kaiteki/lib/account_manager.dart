@@ -9,14 +9,12 @@ import 'package:kaiteki/repositories/repository.dart';
 import 'package:tuple/tuple.dart';
 
 class AccountManager extends ChangeNotifier {
-  static final _logger = getLogger('AccountContainer');
+  static final _logger = getLogger('AccountManager');
 
   Account? _currentAccount;
 
-  @Deprecated("Accounts should be tracked manually through inheritance")
   Account? get current => _currentAccount ?? defaultAccount;
 
-  @Deprecated("Accounts should be tracked manually through inheritance")
   set current(Account? account) {
     if (current == null) throw ArgumentError.notNull("current");
     assert(_accounts.contains(account));

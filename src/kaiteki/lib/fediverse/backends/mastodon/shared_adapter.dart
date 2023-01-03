@@ -12,6 +12,7 @@ import 'package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart'
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
+import 'package:kaiteki/fediverse/interfaces/list_support.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
@@ -38,7 +39,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         FavoriteSupport,
         BookmarkSupport,
         NotificationSupport,
-        SearchSupport {
+        SearchSupport,
+        ListSupport {
   final T client;
 
   SharedMastodonAdapter(this.client);
@@ -439,5 +441,50 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   Future<List<User>> searchForUsers(String query) {
     // TODO: implement searchForUsers
     throw UnimplementedError();
+  }
+
+  @override
+  Future<List<PostList>> getLists() async {
+    final lists = await client.getLists();
+    return lists.map(toList).toList();
+  }
+
+  @override
+  Future<List<Post>> getListPosts(
+    String listId, {
+    TimelineQuery? query,
+  }) async {
+    final posts = await client.getListTimeline(listId);
+    return posts.map((p) => toPost(p, instance)).toList();
+  }
+
+  @override
+  Future<List<User>> getListUsers(String listId) async {
+    final users = await client.getListAccounts(listId);
+    return users.map((p) => toUser(p, instance)).toList();
+  }
+
+  @override
+  Future<PostList> createList(String title) async {
+    final list = await client.createList(title);
+    return toList(list);
+  }
+
+  @override
+  Future<void> addUserToList(String listId, User user) async {
+    await client.addListAccounts(listId, {user.id});
+  }
+
+  @override
+  Future<void> removeUserFromList(String listId, User user) async {
+    await client.removeListAccounts(listId, {user.id});
+  }
+
+  @override
+  Future<void> deleteList(String listId) async => client.deleteList(listId);
+
+  @override
+  Future<void> renameList(String listId, String name) async {
+    await client.updateList(listId, name);
   }
 }

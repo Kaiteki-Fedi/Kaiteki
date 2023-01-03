@@ -1,12 +1,10 @@
+import 'package:kaiteki/fediverse/model/adapted_entity.dart';
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/user/flags.dart';
 import 'package:kaiteki/fediverse/model/user/handle.dart';
 
 /// A class representing an user or account.
-class User<T> {
-  /// The original object.
-  final T? source;
-
+class User<T> extends AdaptedEntity<T> {
   /// The time that this user was created.
   final DateTime? joinDate;
 
@@ -48,22 +46,22 @@ class User<T> {
   UserHandle get handle => UserHandle.fromUser(this);
 
   const User({
-    required this.id,
-    required this.source,
-    required this.username,
     required this.displayName,
     required this.host,
-    this.joinDate,
-    this.description,
+    required this.id,
+    required this.username,
+    super.source,
     this.avatarUrl,
     this.bannerUrl,
+    this.description,
     this.details = const UserDetails(),
     this.emojis,
-    this.postCount,
+    this.flags,
     this.followerCount,
     this.followingCount,
+    this.joinDate,
+    this.postCount,
     this.url,
-    this.flags,
   });
 }
 

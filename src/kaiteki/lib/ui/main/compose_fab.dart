@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/utils/extensions.dart';
 
 class ComposeFloatingActionButton extends StatelessWidget {
   final ComposeFloatingActionButtonType type;

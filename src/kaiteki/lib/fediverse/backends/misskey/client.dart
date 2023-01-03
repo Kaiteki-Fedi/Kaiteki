@@ -6,6 +6,7 @@ import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:http/http.dart'
     show MultipartFile, MultipartRequest, Request, Response;
 import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
+import 'package:kaiteki/fediverse/backends/misskey/model/list.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
@@ -34,6 +35,10 @@ class MisskeyClient {
           final map = request.bodyBytes.isEmpty ? {} : jsonDecode(request.body);
           map["i"] = i;
           request.body = jsonEncode(map);
+
+          if (!request.headers.containsKey("Content-Type")) {
+            request.headers["Content-Type"] = "application/json";
+          }
         } else if (request is MultipartRequest) {
           request.fields["i"] = i;
         }
@@ -469,5 +474,88 @@ class MisskeyClient {
           }.jsonBody,
         )
         .then(misskey.Note.fromJson.fromResponseList);
+  }
+
+  Future<List<MisskeyList>> listLists() async {
+    return client
+        .sendRequest(HttpMethod.post, "api/users/lists/list")
+        .then(MisskeyList.fromJson.fromResponseList);
+  }
+
+  Future<MisskeyList> updateList(String listId, String name) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/lists/update",
+          body: {"listId": listId, "name": name}.jsonBody,
+        )
+        .then(MisskeyList.fromJson.fromResponse);
+  }
+
+  Future<MisskeyList> createList(String name) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/lists/create",
+          body: {"name": name}.jsonBody,
+        )
+        .then(MisskeyList.fromJson.fromResponse);
+  }
+
+  Future<MisskeyList> showList(String listId) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/lists/show",
+          body: {"listId": listId}.jsonBody,
+        )
+        .then(MisskeyList.fromJson.fromResponse);
+  }
+
+  Future<void> pullFromList(String listId, String userId) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/users/lists/pull",
+      body: {"listId": listId, "userId": userId}.jsonBody,
+    );
+  }
+
+  Future<void> pushToList(String listId, String userId) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/users/lists/push",
+      body: {"listId": listId, "userId": userId}.jsonBody,
+    );
+  }
+
+  Future<void> deleteList(String listId) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/users/lists/delete",
+      body: {"listId": listId}.jsonBody,
+    );
+  }
+
+  Future<List<misskey.Note>> getUserListTimeline(
+    String listId,
+    MisskeyTimelineRequest request,
+  ) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/user-list-timeline",
+          body: {"listId": listId, ...request.toJson()}.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
+  }
+
+  Future<List<misskey.User>> showUsers(Set<String> userIds) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/show",
+          body: {"userIds": userIds.toList()}.jsonBody,
+        )
+        .then(misskey.User.fromJson.fromResponseList);
   }
 }

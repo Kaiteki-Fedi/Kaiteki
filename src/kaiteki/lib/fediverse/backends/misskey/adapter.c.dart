@@ -204,3 +204,12 @@ Notification toNotification(
     unread: !notification.isRead,
   );
 }
+
+PostList toList(MisskeyList list) {
+  return PostList(
+    id: list.id,
+    name: list.name,
+    createdAt: list.createdAt,
+    source: list.createdAt,
+  );
+}

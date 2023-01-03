@@ -10,7 +10,6 @@ import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tuple/tuple.dart';
 
 export 'package:kaiteki/utils/extensions/build_context.dart';

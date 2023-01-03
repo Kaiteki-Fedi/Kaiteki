@@ -9,6 +9,7 @@ export 'formatting.dart';
 export 'instance.dart';
 export 'poll.dart';
 export 'post/post.dart';
+export 'post_list.dart';
 export 'reaction.dart';
 export 'resolvable.dart';
 export 'timeline_kind.dart';
