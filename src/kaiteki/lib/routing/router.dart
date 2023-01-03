@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -117,6 +120,31 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         path: authenticatedPath,
         builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
+          final user = state.params["accountUsername"];
+          final host = state.params["accountHost"];
+
+          if (user != null && host != null) {
+            final account = ref.read(
+              accountManagerProvider.select(
+                (manager) => manager.accounts.firstWhereOrNull(
+                  (account) =>
+                      account.key.username == user && account.key.host == host,
+                ),
+              ),
+            );
+
+            if (account == null) {
+              log("No account matching to @$user@$host, so no account was switched");
+            }
+
+            final accountManager = ref.read(accountManagerProvider);
+            final previousAccount = accountManager.current;
+            if (previousAccount != account) {
+              accountManager.current = account;
+              log("Switched from ${previousAccount?.key.handle} to ${account!.key.handle} due to navigation path");
+            }
+          }
+
           if (state.fullpath == authenticatedPath) {
             return "${state.location}/home";
           }
