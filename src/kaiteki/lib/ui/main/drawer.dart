@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart' show appName;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/list_support.dart';
+import 'package:kaiteki/preferences/app_experiment.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -80,11 +81,14 @@ class MainScreenDrawer extends ConsumerWidget {
                 title: Text(l10n.settings),
                 onTap: () => context.push("/settings"),
               ),
-              ListTile(
-                leading: const Icon(Icons.feedback_rounded),
-                title: const Text("Send Feedback"),
-                onTap: () => context.push("/send-feedback"),
-              ),
+              if (ref
+                  .read(preferencesProvider.select((v) => v.enabledExperiments))
+                  .contains(AppExperiment.feedback))
+                ListTile(
+                  leading: const Icon(Icons.feedback_rounded),
+                  title: const Text("Send Feedback"),
+                  onTap: () => context.push("/send-feedback"),
+                ),
               ListTile(
                 leading: const Icon(Icons.info_rounded),
                 title: Text(l10n.settingsAbout),

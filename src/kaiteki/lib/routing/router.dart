@@ -13,6 +13,7 @@ import 'package:kaiteki/routing/notifier.dart';
 import 'package:kaiteki/ui/account_required_screen.dart';
 import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
 import 'package:kaiteki/ui/auth/login/login_screen.dart';
+import 'package:kaiteki/ui/feedback_screen.dart';
 import 'package:kaiteki/ui/lists/lists_screen.dart';
 import 'package:kaiteki/ui/main/main_screen.dart';
 import 'package:kaiteki/ui/search/screen.dart';
@@ -65,6 +66,10 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
       GoRoute(
         path: "/about",
         builder: (_, __) => const AboutScreen(),
+      ),
+      GoRoute(
+        path: "/send-feedback",
+        builder: (_, __) => const FeedbackScreen(),
       ),
       GoRoute(
         name: "accounts",

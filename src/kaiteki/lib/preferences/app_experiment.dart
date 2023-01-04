@@ -11,6 +11,10 @@ enum AppExperiment {
   newUserScreen(
     "New User Screen",
     "Use the new design of the user screen",
+  ),
+  feedback(
+    "App Feedback",
+    "Enable the feedback screen; currently unfunctional",
   );
 
   final String displayName;
