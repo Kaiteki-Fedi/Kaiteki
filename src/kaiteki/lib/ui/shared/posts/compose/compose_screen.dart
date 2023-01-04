@@ -90,6 +90,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
                   showPreview: showPreview,
                   expands: fullscreen,
                   replyTo: widget.replyTo,
+                  onSubmit: () => Navigator.of(context).pop(),
                 ),
               ),
             ],

@@ -28,6 +28,7 @@ class PostForm extends ConsumerStatefulWidget {
   final bool enableSubject;
   final bool showPreview;
   final bool expands;
+  final VoidCallback? onSubmit;
 
   const PostForm({
     super.key,
@@ -35,6 +36,7 @@ class PostForm extends ConsumerStatefulWidget {
     this.enableSubject = true,
     this.showPreview = false,
     this.expands = false,
+    this.onSubmit,
   });
 
   @override
@@ -326,7 +328,7 @@ class PostFormState extends ConsumerState<PostForm> {
       );
     });
 
-    Navigator.of(context).pop();
+    widget.onSubmit?.call();
   }
 
   Future<void> openEmojiPicker() async {
