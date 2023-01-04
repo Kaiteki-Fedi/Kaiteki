@@ -47,8 +47,6 @@ dependencies:
   fpdart: ^0.4.0
   go_router: ^6.0.0
   google_fonts: ^3.0.0
-  google_mlkit_language_id: ^0.5.0
-  google_mlkit_translation: ^0.5.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   html: ^0.15.0
