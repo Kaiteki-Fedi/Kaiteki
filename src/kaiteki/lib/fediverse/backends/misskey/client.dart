@@ -35,10 +35,7 @@ class MisskeyClient {
           final map = request.bodyBytes.isEmpty ? {} : jsonDecode(request.body);
           map["i"] = i;
           request.body = jsonEncode(map);
-
-          if (!request.headers.containsKey("Content-Type")) {
-            request.headers["Content-Type"] = "application/json";
-          }
+          request.headers["Content-Type"] = "application/json";
         } else if (request is MultipartRequest) {
           request.fields["i"] = i;
         }
