@@ -61,6 +61,7 @@ class PostWidget extends ConsumerStatefulWidget {
 
 class _PostWidgetState extends ConsumerState<PostWidget> {
   late Post _post;
+  Post? _translatedPost;
 
   @override
   void initState() {
@@ -104,7 +105,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       if (widget.showParentPost && _post.replyToUser != null)
         ReplyBar(post: _post),
       PostContentWidget(
-        post: _post,
+        post: _translatedPost ?? _post,
         hideReplyee: widget.hideReplyee,
         onTap: widget.onTap,
       ),
@@ -217,6 +218,11 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final l10n = context.getL10n();
     final adapter = ref.read(adapterProvider);
 
+    final translator = ref.read(translatorProvider);
+    final langId = ref.read(languageIdentificatorProvider);
+
+    final translationAvailable = translator != null && langId != null;
+
     return [
       if (adapter is BookmarkSupport)
         PopupMenuItem(
@@ -238,6 +244,57 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             ),
             contentPadding: EdgeInsets.zero,
           ),
+        ),
+      if (_translatedPost == null)
+        PopupMenuItem(
+          enabled: translationAvailable,
+          child: ListTile(
+            title: const Text("Translate"),
+            leading: const Icon(Icons.translate_rounded),
+            contentPadding: EdgeInsets.zero,
+            enabled: translationAvailable,
+          ),
+          value: () async {
+            if (!translationAvailable) return;
+
+            final content = _post.content;
+            if (content == null) return;
+
+            final displayLang = Localizations.localeOf(context).languageCode;
+            final sourceLang = await langId.identifyLanguage(content);
+
+            if (sourceLang == null &&
+                !translator.supportsLanguageDetection &&
+                mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Could not determine source language."),
+                ),
+              );
+              return;
+            }
+
+            final translatedContent = await translator.translate(
+              _post.content!,
+              displayLang,
+              sourceLang,
+            );
+
+            setState(
+              () => _translatedPost = _post.copyWith(
+                content: translatedContent,
+              ),
+            );
+          },
+        )
+      else
+        PopupMenuItem(
+          child: const ListTile(
+            title: Text("Show original text"),
+            leading: Icon(Icons.undo_rounded),
+            contentPadding: EdgeInsets.zero,
+          ),
+          value: () => setState(() => _translatedPost = null),
         ),
       const PopupMenuDivider(),
       PopupMenuItem(
