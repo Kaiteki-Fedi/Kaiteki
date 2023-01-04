@@ -46,34 +46,32 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
 
     return DefaultTabController(
       length: kinds.length,
-      child: Material(
-        child: NestedScrollView(
-          floatHeaderSlivers: true,
-          dragStartBehavior: DragStartBehavior.down,
-          headerSliverBuilder: (context, _) => [
-            if (kinds.length >= 2)
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    TabBar(
-                      isScrollable: true,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      onTap: (i) => _onTabTap(i, kinds),
-                      tabs: [
-                        for (final kind in kinds)
-                          _buildTab(context, kind, kinds.length <= 3),
-                      ],
-                    ),
-                    const Divider(height: 1),
-                  ],
-                ),
+      child: NestedScrollView(
+        floatHeaderSlivers: true,
+        dragStartBehavior: DragStartBehavior.down,
+        headerSliverBuilder: (context, _) => [
+          if (kinds.length >= 2)
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  TabBar(
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    onTap: (i) => _onTabTap(i, kinds),
+                    tabs: [
+                      for (final kind in kinds)
+                        _buildTab(context, kind, kinds.length <= 3),
+                    ],
+                  ),
+                  const Divider(height: 1),
+                ],
               ),
-          ],
-          body: Timeline.kind(
-            key: _timelineKey,
-            kind: _kind ?? kinds.first,
-            maxWidth: 800,
-          ),
+            ),
+        ],
+        body: Timeline.kind(
+          key: _timelineKey,
+          kind: _kind ?? kinds.first,
+          maxWidth: 800,
         ),
       ),
     );

@@ -194,14 +194,12 @@ class TimelineState extends ConsumerState<Timeline> {
           extra: item,
         );
 
-    return Material(
-      child: InkWell(
+    return InkWell(
+      onTap: openPost,
+      child: PostWidget(
+        item,
+        wide: widget.wide,
         onTap: openPost,
-        child: PostWidget(
-          item,
-          wide: widget.wide,
-          onTap: openPost,
-        ),
       ),
     );
   }
