@@ -135,7 +135,7 @@ class PostFormState extends ConsumerState<PostForm> {
   Widget build(BuildContext context) {
     final adapter = ref.watch(adapterProvider);
     final flex = widget.expands ? 1 : 0;
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return FocusableActionDetector(
       shortcuts: const {commit: SendIntent()},
@@ -233,7 +233,7 @@ class PostFormState extends ConsumerState<PostForm> {
     BuildContext context,
     AsyncSnapshot<Post<dynamic>> snapshot,
   ) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     switch (snapshot.connectionState) {
       case ConnectionState.none:
@@ -281,7 +281,7 @@ class PostFormState extends ConsumerState<PostForm> {
 
   Future<void> post(BuildContext context, BackendAdapter adapter) async {
     final messenger = ScaffoldMessenger.of(context);
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     Future<Post> submitPost() async {
       final attachments = await Future.wait(this.attachments);
@@ -422,7 +422,7 @@ class PostFormState extends ConsumerState<PostForm> {
   }
 
   List<Widget> _buildActions(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final adapter = ref.watch(adapterProvider);
     final formattingList = adapter.capabilities.supportedFormattings;
     final supportedScopes = adapter.capabilities.supportedScopes;

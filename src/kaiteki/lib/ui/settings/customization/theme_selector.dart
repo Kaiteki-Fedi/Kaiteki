@@ -49,7 +49,7 @@ class ThemeSelector extends StatelessWidget {
   }
 
   String _themeToString(BuildContext context, ThemeMode mode) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     switch (mode) {
       case ThemeMode.light:

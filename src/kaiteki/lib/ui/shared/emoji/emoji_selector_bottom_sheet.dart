@@ -106,7 +106,7 @@ class _EmojiSelectorBottomSheetState
   static List<UnicodeEmojiCategory> _getUnicodeCategories(
     BuildContext context,
   ) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return UnicodeEmojiGroup.values
         .map(
@@ -131,7 +131,7 @@ class _EmojiSelectorBottomSheetState
   }
 
   Widget _buildBody(BuildContext context, _EmojiKindTab tab) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     switch (tab) {
       case _EmojiKindTab.custom:

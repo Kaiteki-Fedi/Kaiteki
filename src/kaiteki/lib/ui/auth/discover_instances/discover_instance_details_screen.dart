@@ -19,7 +19,7 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     const chipPadding = EdgeInsets.all(8.0);
 
     var i = 1;

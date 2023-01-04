@@ -16,7 +16,7 @@ class AccountListDialog extends ConsumerWidget {
       builder: (context, fullscreen) {
         final manager = ref.watch(accountManagerProvider);
         final currentAccount = ref.watch(accountProvider);
-        final l10n = context.getL10n();
+        final l10n = context.l10n;
 
         return Column(
           mainAxisSize: MainAxisSize.min,

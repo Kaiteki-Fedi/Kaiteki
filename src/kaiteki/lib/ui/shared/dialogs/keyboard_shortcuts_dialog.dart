@@ -15,7 +15,7 @@ class KeyboardShortcutsDialog extends StatelessWidget {
     final sectionTextStyle = TextStyle(
       color: Theme.of(context).disabledColor,
     );
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return AlertDialog(
       icon: const Icon(Icons.keyboard_rounded),
       title: Text(l10n.keyboardShortcuts),

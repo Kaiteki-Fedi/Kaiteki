@@ -63,7 +63,7 @@ class MetaBar extends StatelessWidget {
     final visibility = _post.visibility;
     final secondaryColor = Theme.of(context).disabledColor;
     final secondaryTextTheme = TextStyle(color: secondaryColor);
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return [
       if (_post.state.pinned)

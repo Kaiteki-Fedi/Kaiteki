@@ -47,7 +47,7 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return LayoutBuilder(
       builder: (context, constraints) {
         return PagedListView<String?, Post>.separated(

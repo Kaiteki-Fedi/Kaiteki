@@ -19,7 +19,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final instanceName = _instance?.name;
     final instanceBackgroundUrl = _instance?.backgroundUrl;
 
@@ -74,7 +74,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   String? validateInstance(String? instance) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     if (instance.isNullOrEmpty) {
       return l10n.authNoInstance;
@@ -96,12 +96,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   String? validatePassword(String? password) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return password.isNullOrEmpty ? l10n.authNoPassword : null;
   }
 
   String? validateUsername(String? instance, String? username) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     if (username.isNullOrEmpty) return l10n.authNoUsername;
 

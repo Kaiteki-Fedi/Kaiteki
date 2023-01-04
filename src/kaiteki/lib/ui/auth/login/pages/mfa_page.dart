@@ -25,7 +25,7 @@ class _MfaPageState extends State<MfaPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {

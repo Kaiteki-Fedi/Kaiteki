@@ -123,7 +123,7 @@ class TimelineDeckColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return DeckColumn(
       icon: Icon(timelineKind.getIconData()),
       title: Text(timelineKind.getDisplayName(l10n)),

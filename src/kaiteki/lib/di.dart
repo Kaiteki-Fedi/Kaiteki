@@ -56,9 +56,9 @@ final languageIdentificatorProvider = Provider<LanguageIdentificator?>((_) {
 });
 
 extension BuildContextExtensions on BuildContext {
-  AppLocalizations getL10n() => AppLocalizations.of(this)!;
+  AppLocalizations get l10n => AppLocalizations.of(this)!;
 
-  MaterialLocalizations getMaterialL10n() {
+  MaterialLocalizations get materialL10n {
     return Localizations.of<MaterialLocalizations>(
       this,
       MaterialLocalizations,

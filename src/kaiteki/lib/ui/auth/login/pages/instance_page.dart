@@ -44,7 +44,7 @@ class _InstancePageState extends State<InstancePage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return Padding(
       padding: contentMargin,
       child: Form(
@@ -157,7 +157,7 @@ class _InstancePageState extends State<InstancePage> {
 
   String? _validateInstance(String? value) {
     if (value == null || value.isEmpty || !value.contains(".")) {
-      return context.getL10n().authNoInstance;
+      return context.l10n.authNoInstance;
     }
 
     return null;

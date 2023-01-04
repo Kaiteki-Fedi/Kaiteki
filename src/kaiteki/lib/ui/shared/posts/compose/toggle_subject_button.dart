@@ -13,7 +13,7 @@ class ToggleSubjectButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return IconButton(
       onPressed: onChanged,
       isSelected: value,

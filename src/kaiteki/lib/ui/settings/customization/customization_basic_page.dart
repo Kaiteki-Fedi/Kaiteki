@@ -15,7 +15,7 @@ class _CustomizationBasicPageState
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(themeProvider);
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return SingleChildScrollView(
       child: Column(

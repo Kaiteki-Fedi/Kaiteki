@@ -15,7 +15,7 @@ class CapabilitiesDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final adapter = type.createAdapter("");
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final otherCapabilities = _buildOtherCapabilities(context);
     return ConstrainedBox(
       constraints: dialogConstraints,

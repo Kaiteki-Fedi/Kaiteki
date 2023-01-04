@@ -404,7 +404,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
             ),
           ),
           action: SnackBarAction(
-            label: context.getL10n().whyButtonLabel,
+            label: context.l10n.whyButtonLabel,
             onPressed: () => context.showExceptionDialog(e, s),
           ),
         ),
@@ -458,7 +458,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
             "There was a problem removing ${widget.list.name}",
           ),
           action: SnackBarAction(
-            label: context.getL10n().whyButtonLabel,
+            label: context.l10n.whyButtonLabel,
             onPressed: () => context.showExceptionDialog(e, s),
           ),
         ),

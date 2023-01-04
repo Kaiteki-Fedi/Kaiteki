@@ -36,7 +36,7 @@ extension BuildContextExtensions on BuildContext {
     required dynamic error,
     dynamic stackTrace,
   }) {
-    final l10n = getL10n();
+    final l10n = this.l10n;
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Row(

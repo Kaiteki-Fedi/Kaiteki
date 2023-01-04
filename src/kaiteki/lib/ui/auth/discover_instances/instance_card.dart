@@ -13,7 +13,7 @@ class InstanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final iconLocation = data.type.theme.iconAssetLocation;
 
     return Card(

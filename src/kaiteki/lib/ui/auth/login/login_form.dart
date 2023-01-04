@@ -372,7 +372,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(context.getMaterialL10n().okButtonLabel),
+              child: Text(context.materialL10n.okButtonLabel),
             ),
           ],
         );

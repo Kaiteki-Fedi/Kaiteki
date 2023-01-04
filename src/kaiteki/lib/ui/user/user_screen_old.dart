@@ -312,7 +312,7 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
     bool showCountBadges,
     Axis direction,
   ) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return [
       buildTab(
         l10n.postsTab,
@@ -467,7 +467,7 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
   }
 
   List<Widget> buildActions(BuildContext context, {User? user}) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final url = user?.url;
 
     return [

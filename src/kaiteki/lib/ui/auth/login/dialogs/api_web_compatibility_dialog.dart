@@ -13,7 +13,7 @@ class ApiWebCompatibilityDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return AlertDialog(
       icon: const Icon(Icons.error),
       title: Text(l10n.unsupportedInstanceTitle),

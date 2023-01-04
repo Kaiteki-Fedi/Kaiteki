@@ -11,7 +11,7 @@ class MainScreenDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final account = ref.watch(accountProvider)!;
     final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
     final adapter = ref.watch(adapterProvider);
@@ -81,7 +81,12 @@ class MainScreenDrawer extends ConsumerWidget {
                 onTap: () => context.push("/settings"),
               ),
               ListTile(
-                leading: const Icon(Icons.info_outline_rounded),
+                leading: const Icon(Icons.feedback_rounded),
+                title: const Text("Send Feedback"),
+                onTap: () => context.push("/send-feedback"),
+              ),
+              ListTile(
+                leading: const Icon(Icons.info_rounded),
                 title: Text(l10n.settingsAbout),
                 onTap: () => context.push("/about"),
               ),

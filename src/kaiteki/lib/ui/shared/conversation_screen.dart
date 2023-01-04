@@ -46,7 +46,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +104,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   }
 
   Widget _buildErrorListTile(BuildContext context, AsyncSnapshot snapshot) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return ListTile(
       leading: const Icon(Icons.error_rounded),
       title: Text(l10n.threadRetrievalFailed),

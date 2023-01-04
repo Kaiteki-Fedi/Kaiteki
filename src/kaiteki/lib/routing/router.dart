@@ -221,7 +221,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
                             final postId = state.params["id"]!;
-                            final l10n = context.getL10n();
+                            final l10n = context.l10n;
                             final adapter = ref.watch(adapterProvider);
                             return UserListDialog(
                               title: Text(l10n.repeateesTitle),
@@ -247,7 +247,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
                             final postId = state.params["id"]!;
-                            final l10n = context.getL10n();
+                            final l10n = context.l10n;
                             final adapter = ref.watch(adapterProvider);
                             return UserListDialog(
                               title: Text(l10n.favoriteesTitle),

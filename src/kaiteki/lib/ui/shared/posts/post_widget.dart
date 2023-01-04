@@ -71,7 +71,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     if (_post.repeatOf != null) {
       return Column(
@@ -215,7 +215,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
   List<PopupMenuEntry> _buildActions(BuildContext context) {
     final openInBrowserAvailable = _post.externalUrl != null;
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final adapter = ref.read(adapterProvider);
 
     final translator = ref.read(translatorProvider);
@@ -336,7 +336,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
   Future<void> _onFavorite() async {
     final adapter = ref.read(adapterProvider);
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     try {
       final f = adapter as FavoriteSupport;
       final Post newPost;
@@ -359,7 +359,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
   Future<void> _onBookmark() async {
     final adapter = ref.read(adapterProvider);
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     try {
       final f = adapter as BookmarkSupport;
 
@@ -402,7 +402,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
   Future<void> _onRepeat() async {
     final adapter = ref.read(adapterProvider);
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     try {
       final Post newPost;
 

@@ -122,7 +122,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     _tabs ??= getTabs(l10n);
 
     final body = PageTransitionSwitcher(
@@ -255,7 +255,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   List<Widget> _buildAppBarActions(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final experiments =
         ref.watch(preferencesProvider.select((p) => p.enabledExperiments));
 

@@ -38,7 +38,7 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
@@ -148,12 +148,12 @@ class _UserPageState extends State<UserPage> {
 
   String? _validatePassword(String? value) {
     if (value?.trim().isNotEmpty == true) return null;
-    return context.getL10n().authNoPassword;
+    return context.l10n.authNoPassword;
   }
 
   String? _validateUsername(String? value) {
     if (value?.trim().isNotEmpty == true) return null;
-    return context.getL10n().authNoUsername;
+    return context.l10n.authNoUsername;
   }
 
   Future<void> _onLogin() async {

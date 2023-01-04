@@ -16,19 +16,19 @@ class ThemeSetupPage extends ConsumerWidget {
     return ListView(
       children: [
         RadioListTile<ThemeMode>(
-          title: Text(context.getL10n().themeSystem),
+          title: Text(context.l10n.themeSystem),
           value: ThemeMode.system,
           groupValue: prefs.mode,
           onChanged: setMode,
         ),
         RadioListTile<ThemeMode>(
-          title: Text(context.getL10n().themeLight),
+          title: Text(context.l10n.themeLight),
           value: ThemeMode.light,
           groupValue: prefs.mode,
           onChanged: setMode,
         ),
         RadioListTile<ThemeMode>(
-          title: Text(context.getL10n().themeDark),
+          title: Text(context.l10n.themeDark),
           value: ThemeMode.dark,
           groupValue: prefs.mode,
           onChanged: setMode,

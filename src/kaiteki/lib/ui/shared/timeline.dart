@@ -159,7 +159,7 @@ class TimelineState extends ConsumerState<Timeline> {
                 );
               },
               noMoreItemsIndicatorBuilder: (context) {
-                final l10n = context.getL10n();
+                final l10n = context.l10n;
                 return Align(
                   child: Padding(
                     padding: const EdgeInsets.all(24.0),

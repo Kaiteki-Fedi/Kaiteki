@@ -27,7 +27,7 @@ class ErrorLandingWidget extends StatelessWidget {
     if (error is UnimplementedError) {
       return IconLandingWidget(
         icon: const Icon(Icons.assignment_late_rounded),
-        text: Text(context.getL10n().niy),
+        text: Text(context.l10n.niy),
       );
     }
 

@@ -82,7 +82,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
   void refresh() => _timelineKey.currentState!.refresh();
 
   Widget _buildTab(BuildContext context, TimelineKind kind, bool showLabel) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Tab(
       icon: Row(

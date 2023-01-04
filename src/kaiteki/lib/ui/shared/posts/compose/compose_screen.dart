@@ -25,7 +25,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final adapter = ref.watch(adapterProvider);
     final replyTo = widget.replyTo;
 

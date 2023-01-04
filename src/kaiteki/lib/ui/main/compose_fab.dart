@@ -42,7 +42,7 @@ class ComposeFloatingActionButton extends StatelessWidget {
           child: FloatingActionButton.extended(
             onPressed: onTap,
             elevation: elevation,
-            label: Text(context.getL10n().composeButtonLabel),
+            label: Text(context.l10n.composeButtonLabel),
             backgroundColor: backgroundColor,
             foregroundColor: foregroundColor,
             icon: icon,
