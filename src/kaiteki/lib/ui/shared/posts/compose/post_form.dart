@@ -281,79 +281,50 @@ class PostFormState extends ConsumerState<PostForm> {
 
   Future<void> post(BuildContext context, BackendAdapter adapter) async {
     final messenger = ScaffoldMessenger.of(context);
-    final contentKey = UniqueKey();
     final l10n = context.getL10n();
 
-    late ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
-        snackBarController;
-    final snackBar = SnackBar(
-      duration: const Duration(days: 1),
-      content: FutureBuilder<Post>(
-        future: () async {
-          final attachments = await Future.wait(this.attachments);
-          final draft = _getPostDraft(attachments);
-          return adapter.postStatus(draft);
-        }(),
-        builder: (context, snapshot) {
-          switch (snapshot.state) {
-            case AsyncSnapshotState.errored:
-              Future.delayed(
-                const Duration(seconds: 4),
-                snackBarController.close,
-              );
-              return AsyncSnackBarContent(
-                key: contentKey,
-                done: true,
-                icon: const Icon(Mdi.close),
-                text: Text(l10n.postSubmissionFailed),
-                // FIXME(Craftplacer): Theme inheritance is broken here
-                // trailing: TextButton(
-                //   child: Text(l10n.whyButtonLabel),
-                //   onPressed: () => context.showExceptionDialog(
-                //     snapshot.error,
-                //     snapshot.stackTrace,
-                //   ),
-                // ),
-              );
+    Future<Post> submitPost() async {
+      final attachments = await Future.wait(this.attachments);
+      final draft = _getPostDraft(attachments);
+      return adapter.postStatus(draft);
+    }
 
-            case AsyncSnapshotState.loading:
-              return AsyncSnackBarContent(
-                key: contentKey,
-                done: false,
-                icon: const Icon(Mdi.textBox),
-                text: Text(l10n.postSubmissionSending),
-              );
-          }
-
-          Future.delayed(
-            const Duration(seconds: 4),
-            snackBarController.close,
-          );
-
-          return AsyncSnackBarContent(
-            key: contentKey,
-            done: true,
-            icon: const Icon(Mdi.check),
-            text: Text(l10n.postSubmissionSent),
-            trailing: Consumer(
-              builder: (context, ref, child) => TextButton(
-                onPressed: () {
-                  final post = snapshot.data!;
-                  context.push(
-                    "/${ref.getCurrentAccountHandle()}/posts/${post.id}",
-                    extra: post,
-                  );
-                  messenger.hideCurrentSnackBar();
-                },
-                child: Text(l10n.viewPostButtonLabel),
-              ),
-            ),
-          );
-        },
-      ),
+    var snackBarController = messenger.showSnackBar(
+      SnackBar(content: Text(l10n.postSubmissionSending)),
     );
 
-    snackBarController = messenger.showSnackBar(snackBar);
+    final goRouter = GoRouter.of(context);
+
+    submitPost().then((post) {
+      snackBarController.close();
+      snackBarController = messenger.showSnackBar(
+        SnackBar(
+          content: Text(l10n.postSubmissionSent),
+          action: SnackBarAction(
+            label: l10n.viewPostButtonLabel,
+            onPressed: () {
+              goRouter.pushNamed(
+                "post",
+                params: {...ref.accountRouterParams, "id": post.id},
+                extra: post,
+              );
+              messenger.hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+    }).catchError((e, s) {
+      snackBarController.close();
+      snackBarController = messenger.showSnackBar(
+        SnackBar(
+          content: Text(l10n.postSubmissionFailed),
+          action: SnackBarAction(
+            label: l10n.whyButtonLabel,
+            onPressed: () => context.showExceptionDialog(e, s),
+          ),
+        ),
+      );
+    });
 
     Navigator.of(context).pop();
   }
