@@ -23,6 +23,7 @@ import 'package:kaiteki/ui/main/tab.dart';
 import 'package:kaiteki/ui/main/tab_kind.dart';
 import 'package:kaiteki/ui/main/views/catalog.dart';
 import 'package:kaiteki/ui/main/views/deck.dart';
+import 'package:kaiteki/ui/main/views/fox.dart';
 import 'package:kaiteki/ui/main/views/videos.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
@@ -112,6 +113,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         return const CatalogMainScreenView();
       case MainScreenView.videos:
         return const VideoMainScreenView();
+      case MainScreenView.fox:
+        return const FoxMainScreenView();
     }
   }
 
@@ -142,6 +145,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
 
     return FocusableActionDetector(
+      autofocus: true,
       actions: {
         NewPostIntent: CallbackAction(onInvoke: (_) => _onCompose()),
         // SearchIntent: CallbackAction(
@@ -162,8 +166,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           final tab = _tabs![_currentIndex];
           final fab = tab.fab;
 
-          final hideBottomBar =
-              _tabs!.length < 2 || _view == MainScreenView.videos;
+          final hideNavigation = _view == MainScreenView.fox;
+          final hideBottomBar = _tabs!.length < 2 ||
+              _view == MainScreenView.videos ||
+              hideNavigation;
           final hideFab = fab == null || _view == MainScreenView.videos;
 
           if (isMobile) {
@@ -186,8 +192,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               backgroundColor: outsideColor,
               appBar: _buildAppBar(context, true),
               body: _buildDesktopView(
+                hideNavigation,
                 breakpoint.window >= WindowSize.medium &&
-                    !(_view == MainScreenView.deck &&
+                    !((_view == MainScreenView.deck ||
+                            _view == MainScreenView.fox) &&
                         _currentTab == TabKind.home),
                 body,
               ),
@@ -238,6 +246,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         return const Icon(Icons.view_module_rounded);
       case MainScreenView.videos:
         return const Icon(Icons.videocam_rounded);
+      case MainScreenView.fox:
+        return Builder(
+          builder: (context) {
+            return Text(
+              "🦊",
+              style: TextStyle(fontSize: IconTheme.of(context).size! * 0.8),
+            );
+          },
+        );
     }
   }
 
@@ -251,6 +268,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         return "Catalog";
       case MainScreenView.videos:
         return "Videos";
+      case MainScreenView.fox:
+        return "Fox";
     }
   }
 
@@ -319,12 +338,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildDesktopView(bool extendNavRail, Widget child) {
+  Widget _buildDesktopView(bool hideNavRail, bool extendNavRail, Widget child) {
     final m3 = Theme.of(context).useMaterial3;
     return Row(
       children: [
-        _buildNavigationRail(extendNavRail),
-        if (!m3) const VerticalDivider(thickness: 1, width: 1),
+        if (!hideNavRail) ...[
+          _buildNavigationRail(extendNavRail),
+          if (!m3) const VerticalDivider(thickness: 1, width: 1),
+        ],
         Expanded(child: _roundWidgetM3(context, child)),
       ],
     );
@@ -410,4 +431,4 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 }
 
-enum MainScreenView { stream, deck, catalog, videos }
+enum MainScreenView { stream, deck, catalog, videos, fox }
