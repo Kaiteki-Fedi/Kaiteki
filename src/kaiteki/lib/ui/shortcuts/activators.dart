@@ -1,12 +1,37 @@
 import 'package:flutter/services.dart' show LogicalKeyboardKey;
 import 'package:flutter/widgets.dart'
-    show CharacterActivator, LogicalKeySet, SingleActivator;
+    show CharacterActivator, LogicalKeySet, ShortcutActivator, SingleActivator;
 
-const newPost = SingleActivator(LogicalKeyboardKey.keyN);
-const reply = SingleActivator(LogicalKeyboardKey.keyR);
-const repeat = SingleActivator(LogicalKeyboardKey.keyT);
-const favorite = SingleActivator(LogicalKeyboardKey.keyL);
-const bookmark = SingleActivator(LogicalKeyboardKey.keyB);
+/// List of [ShortcutActivator]s that should not be triggered in text input
+/// scenarios.
+final propagatingTextFieldActivators = <ShortcutActivator>[
+  newPost,
+  gotoHome,
+  gotoBookmarks,
+  gotoNotifications,
+  gotoSettings
+];
+
+const newPost = SingleActivator(
+  LogicalKeyboardKey.keyN,
+  includeRepeats: false,
+);
+const reply = SingleActivator(
+  LogicalKeyboardKey.keyR,
+  includeRepeats: false,
+);
+const repeat = SingleActivator(
+  LogicalKeyboardKey.keyT,
+  includeRepeats: false,
+);
+const favorite = SingleActivator(
+  LogicalKeyboardKey.keyL,
+  includeRepeats: false,
+);
+const bookmark = SingleActivator(
+  LogicalKeyboardKey.keyB,
+  includeRepeats: false,
+);
 const menu = SingleActivator(LogicalKeyboardKey.contextMenu);
 const commit = SingleActivator(LogicalKeyboardKey.enter, control: true);
 final gotoHome = LogicalKeySet(

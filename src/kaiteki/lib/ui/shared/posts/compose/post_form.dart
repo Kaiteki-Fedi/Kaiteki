@@ -19,6 +19,7 @@ import 'package:kaiteki/ui/shared/posts/compose/attachment_tray.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
+import 'package:kaiteki/ui/shortcuts/shortcuts.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 const double splashRadius = 20.0;
@@ -139,94 +140,97 @@ class PostFormState extends ConsumerState<PostForm> {
     final flex = widget.expands ? 1 : 0;
     final l10n = context.l10n;
 
-    return FocusableActionDetector(
-      shortcuts: const {commit: SendIntent()},
-      actions: {
-        SendIntent: CallbackAction(
-          onInvoke: (_) => post(context, adapter),
-        ),
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (widget.showPreview && adapter is PreviewSupport) ...[
-            FutureBuilder(
-              future: getPreviewFuture(adapter as PreviewSupport),
-              builder: buildPreview,
-            ),
-            const Divider(height: 15),
-          ],
-          Flexible(
-            flex: flex,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
+    return Shortcuts(
+      shortcuts: propagatingTextFieldShortcuts,
+      child: FocusableActionDetector(
+        shortcuts: const {commit: SendIntent()},
+        actions: {
+          SendIntent: CallbackAction(
+            onInvoke: (_) => post(context, adapter),
+          ),
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.showPreview && adapter is PreviewSupport) ...[
+              FutureBuilder(
+                future: getPreviewFuture(adapter as PreviewSupport),
+                builder: buildPreview,
               ),
-              child: Column(
-                children: [
-                  if (widget.enableSubject)
-                    Column(
-                      children: [
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: l10n.composeSubjectHint,
-                            border: InputBorder.none,
+              const Divider(height: 15),
+            ],
+            Flexible(
+              flex: flex,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: Column(
+                  children: [
+                    if (widget.enableSubject)
+                      Column(
+                        children: [
+                          TextField(
+                            decoration: InputDecoration(
+                              hintText: l10n.composeSubjectHint,
+                              border: InputBorder.none,
+                            ),
+                            controller: _subjectController,
                           ),
-                          controller: _subjectController,
-                        ),
-                        const Divider(),
-                      ],
-                    ),
-                  Flexible(
-                    flex: flex,
-                    child: TextField(
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: l10n.composeBodyHint,
-                        border: InputBorder.none,
+                          const Divider(),
+                        ],
                       ),
-                      textAlignVertical: TextAlignVertical.top,
-                      expands: widget.expands,
-                      minLines: widget.expands ? null : 6,
-                      maxLines: widget.expands ? null : 8,
-                      controller: _bodyController,
+                    Flexible(
+                      flex: flex,
+                      child: TextField(
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: l10n.composeBodyHint,
+                          border: InputBorder.none,
+                        ),
+                        textAlignVertical: TextAlignVertical.top,
+                        expands: widget.expands,
+                        minLines: widget.expands ? null : 6,
+                        maxLines: widget.expands ? null : 8,
+                        controller: _bodyController,
+                      ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+            if (attachments.isNotEmpty) const Divider(height: 1),
+            if (attachments.isNotEmpty)
+              AttachmentTray(
+                attachments: attachments,
+                onRemoveAttachment: (i) => setState(() {
+                  attachments.removeAt(i);
+                }),
+              ),
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                right: 10.0,
+                top: 8.0,
+                bottom: 8.0,
+              ),
+              child: Row(
+                children: [
+                  ..._buildActions(context),
+                  const Spacer(),
+                  FloatingActionButton.small(
+                    onPressed: () => post(context, adapter),
+                    elevation: 2.0,
+                    tooltip: l10n.submitButtonTooltip,
+                    child: const Icon(Icons.send_rounded),
                   ),
                 ],
               ),
             ),
-          ),
-          if (attachments.isNotEmpty) const Divider(height: 1),
-          if (attachments.isNotEmpty)
-            AttachmentTray(
-              attachments: attachments,
-              onRemoveAttachment: (i) => setState(() {
-                attachments.removeAt(i);
-              }),
-            ),
-          const Divider(height: 1),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 8.0,
-              right: 10.0,
-              top: 8.0,
-              bottom: 8.0,
-            ),
-            child: Row(
-              children: [
-                ..._buildActions(context),
-                const Spacer(),
-                FloatingActionButton.small(
-                  onPressed: () => post(context, adapter),
-                  elevation: 2.0,
-                  tooltip: l10n.submitButtonTooltip,
-                  child: const Icon(Icons.send_rounded),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
