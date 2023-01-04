@@ -67,8 +67,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         // Swiping in left direction.
         if (details.primaryVelocity! > 5) {
           timer.reset();
-          setState(() => _currentPage =
-              isFirstPage ? benefits.length - 1 : _currentPage - 1);
+          setState(() {
+            _currentPage = isFirstPage ? benefits.length - 1 : _currentPage - 1;
+          });
         }
       },
       child: Scaffold(
@@ -282,7 +283,7 @@ class _UserBenefitText extends StatelessWidget {
         children: [
           Text(
             benefit.title,
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 8.0),
           ConstrainedBox(

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/ui/lists/lists_screen.dart';
-import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
 import 'package:kaiteki/ui/shared/search_bar.dart';
 

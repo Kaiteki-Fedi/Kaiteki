@@ -40,14 +40,14 @@ class MainScreenDrawer extends ConsumerWidget {
                 enabled: false,
               ),
               if (adapter is ListSupport)
-              ListTile(
-                leading: const Icon(Icons.article_rounded),
-                title: Text(l10n.listsTitle),
+                ListTile(
+                  leading: const Icon(Icons.article_rounded),
+                  title: Text(l10n.listsTitle),
                   onTap: () => context.pushNamed(
                     "lists",
                     params: ref.accountRouterParams,
                   ),
-              ),
+                ),
               ListTile(
                 leading: const Icon(Icons.trending_up_rounded),
                 title: Text(l10n.trendsTitle),
@@ -60,7 +60,12 @@ class MainScreenDrawer extends ConsumerWidget {
               ),
               const Divider(),
               ListTile(
-                title: Text("@${account.key.username}@${account.key.host}"),
+                title: Text(
+                  account.key.handle.toString(),
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
                 enabled: false,
               ),
               ListTile(

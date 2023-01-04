@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +9,9 @@ import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/preferences/app_preferences.dart';
 import 'package:kaiteki/preferences/theme_preferences.dart';
+import 'package:kaiteki/translation/language_identificator.dart';
+import 'package:kaiteki/translation/mlkit.dart';
+import 'package:kaiteki/translation/translator.dart';
 
 export 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,6 +39,20 @@ final themeProvider = ChangeNotifierProvider<ThemePreferences>((_) {
 
 final preferencesProvider = ChangeNotifierProvider<AppPreferences>((_) {
   throw UnimplementedError();
+});
+
+final translatorProvider = Provider<Translator?>((_) {
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    return MLKitTranslator();
+  }
+  return null;
+});
+final languageIdentificatorProvider = Provider<LanguageIdentificator?>((_) {
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    return MLKitLanguageIdentificator();
+  }
+
+  return null;
 });
 
 extension BuildContextExtensions on BuildContext {
