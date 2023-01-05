@@ -1,1 +1,1 @@
-Fediverse client for microblogging instances
+The comfy SNS client for everything, everywhere
