@@ -7,6 +7,7 @@ import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
 import 'package:kaiteki/fediverse/interfaces/search_support.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/services/notifications.dart';
 import 'package:kaiteki/platform_checks.dart';
 import 'package:kaiteki/preferences/app_experiment.dart';
@@ -31,7 +32,10 @@ import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  const MainScreen({super.key});
+  @visibleForTesting
+  final TimelineKind? initialTimeline;
+
+  const MainScreen({super.key, this.initialTimeline});
 
   @override
   ConsumerState<MainScreen> createState() => _MainScreenState();
@@ -106,7 +110,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget _buildTimeline(BuildContext context) {
     switch (_view) {
       case MainScreenView.stream:
-        return TimelinePage(key: _timelineKey);
+        return TimelinePage(
+          key: _timelineKey,
+          initialTimeline: widget.initialTimeline,
+        );
       case MainScreenView.deck:
         return const DeckMainScreenView();
       case MainScreenView.catalog:

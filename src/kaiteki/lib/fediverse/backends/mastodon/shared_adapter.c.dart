@@ -41,8 +41,8 @@ Post toPost(mastodon.Status source, String localHost) {
     ),
     state: PostState(
       // shouldn't be null because we currently expect the user to be signed in
-      repeated: source.reblogged!,
-      favorited: source.favourited!,
+      repeated: source.reblogged ?? false,
+      favorited: source.favourited ?? false,
       bookmarked: source.bookmarked ?? false,
       pinned: source.pinned ?? false,
     ),

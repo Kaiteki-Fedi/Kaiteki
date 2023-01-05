@@ -6,6 +6,7 @@ class Attachment<T> extends AdaptedEntity<T> {
   final String? description;
   final AttachmentType type;
   final bool isSensitive;
+  final String? blurHash;
 
   Attachment({
     super.source,
@@ -14,6 +15,7 @@ class Attachment<T> extends AdaptedEntity<T> {
     this.description,
     this.type = AttachmentType.file,
     this.isSensitive = false,
+    this.blurHash,
   });
 }
 
