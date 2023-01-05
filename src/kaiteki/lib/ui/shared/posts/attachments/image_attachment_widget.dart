@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/ui/shared/attachment_inspection_screen.dart';
@@ -34,9 +35,15 @@ class ImageAttachmentWidget extends StatelessWidget {
             progress = loadingProgress.cumulativeBytesLoaded /
                 loadingProgress.expectedTotalBytes!;
           }
-
-          return Center(
-            child: CircularProgressIndicator(value: progress),
+          final blurHash = attachment.blurHash;
+          return Stack(
+            children: [
+              if (blurHash != null && blurHash.isNotEmpty)
+                BlurHash(hash: attachment.blurHash!),
+              Center(
+                child: CircularProgressIndicator(value: progress),
+              ),
+            ],
           );
         },
         errorBuilder: (_, w, c) {
