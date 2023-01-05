@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/platform_checks.dart';
@@ -29,12 +30,22 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final blurHash = widget.attachment.blurHash;
     if (widget.attachment.isSensitive && !revealed) {
-      return Center(
-        child: OutlinedButton(
-          onPressed: reveal,
-          child: const Text("Show sensitive content"),
-        ),
+      return Stack(
+        children: [
+          if (blurHash != null && blurHash.isNotEmpty)
+            BlurHash(hash: widget.attachment.blurHash!),
+          Center(
+            child: FilledButton.tonal(
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.background,
+              ),
+              onPressed: reveal,
+              child: const Text("Show sensitive content"),
+            ),
+          ),
+        ],
       );
     }
 
