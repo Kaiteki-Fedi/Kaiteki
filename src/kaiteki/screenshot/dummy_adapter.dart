@@ -2,37 +2,20 @@ import 'dart:async';
 
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/client_base.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
 
 import 'example_data.dart';
 
-class DummyClient extends FediverseClientBase {
-  DummyClient(super.instance);
-
-  @override
-  FutureOr<void> setAccountAuthentication(
-    AccountSecret secret,
-  ) =>
-      throw UnimplementedError();
-
-  @override
-  ApiType get type => ApiType.mastodon;
-}
-
-class DummyAdapter extends FediverseAdapter<DummyClient> {
+class DummyAdapter extends BackendAdapter {
   final List<Post> posts;
   final List<User> users;
 
-  DummyAdapter(
-    super.client, {
+  DummyAdapter({
     this.posts = const [],
     this.users = const [],
   });
@@ -58,7 +41,7 @@ class DummyAdapter extends FediverseAdapter<DummyClient> {
   Future<List<User>> getRepeatees(String id) => throw UnimplementedError();
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(
+  Future<List<Post>> getStatusesOfUserById(
     String id, {
     TimelineQuery<String>? query,
   }) async {
@@ -67,24 +50,24 @@ class DummyAdapter extends FediverseAdapter<DummyClient> {
     final untilId = query?.untilId;
     if (untilId != null) {
       final dt = posts.firstWhere((p) => p.id == untilId).postedAt;
-      return posts.where((p) => p.postedAt.isAfter(dt));
+      return posts.where((p) => p.postedAt.isAfter(dt)).toList();
     }
 
-    return posts;
+    return posts.toList();
   }
 
   @override
   Future<Iterable<Post>> getThread(Post reply) => throw UnimplementedError();
 
   @override
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
     TimelineQuery<String>? query,
   }) async {
     final untilId = query?.untilId;
     if (untilId != null) {
       final dt = posts.firstWhere((p) => p.id == untilId).postedAt;
-      return posts.where((p) => p.postedAt.isAfter(dt));
+      return posts.where((p) => p.postedAt.isAfter(dt)).toList();
     }
 
     return posts;
@@ -119,20 +102,20 @@ class DummyAdapter extends FediverseAdapter<DummyClient> {
       throw UnimplementedError();
 
   @override
-  Future<Instance?> probeInstance() async => null;
-
-  @override
   Future<void> repeatPost(String id) => throw UnimplementedError();
 
   @override
   Future<void> unrepeatPost(String id) => throw UnimplementedError();
 
   @override
-  Future<Attachment> uploadAttachment(
-    File file,
-    String? description,
-  ) =>
+  Future<Attachment> uploadAttachment(File file, String? description) =>
       throw UnimplementedError();
+
+  @override
+  FutureOr<void> applySecrets(
+    ClientSecret? clientSecret,
+    AccountSecret accountSecret,
+  ) {}
 }
 
 class DummyAdapterCapability extends AdapterCapabilities {

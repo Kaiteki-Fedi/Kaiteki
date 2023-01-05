@@ -438,4 +438,20 @@ class MastodonClient {
         )
         .then(mastodon.List.fromJson.fromResponse);
   }
+
+  Future<List<Status>> getTrendingStatuses({
+    int? limit,
+    int? offset,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          "api/v1/trends/statuses",
+          body: {
+            if (limit == null) "limit": limit,
+            if (offset == null) "offset": offset,
+          }.jsonBody,
+        )
+        .then(Status.fromJson.fromResponseList);
+  }
 }

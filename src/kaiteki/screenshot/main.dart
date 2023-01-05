@@ -1,52 +1,147 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart' hide Visibility;
-import 'package:flutter/rendering.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/rendering.dart'
+    show NetworkImage, OffsetLayer, RenderObject, Size;
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/model/account_key.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
-import 'package:kaiteki/theming/default/themes.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/ui/main/main_screen.dart';
-import 'package:kaiteki/ui/user/user_screen.dart';
+import 'package:kaiteki/ui/shared/posts/compose/compose_screen.dart';
+import 'package:kaiteki/ui/user/user_screen_old.dart';
+import 'package:path/path.dart' as path;
 
-import 'dummy_adapter.dart';
-import 'dummy_repository.dart';
+import 'bootstrapper.dart';
 import 'example_data.dart';
+
+class ScreenConfig {
+  final Size size;
+  final double density;
+
+  ScreenConfig(int width, int height, this.density)
+      : size = Size(width.toDouble(), height.toDouble());
+}
+
+List<String> get locales => [
+      "en_US",
+      "de_DE",
+      "ja_JP",
+      "fr_FR",
+    ];
+
+const duration = Duration(milliseconds: 100);
+const timeout = Duration(seconds: 10);
+
+// https://stackoverflow.com/a/25054998/7972419
+final deviceTypes = {
+  "phoneScreenshots": ScreenConfig(360, 640, 1),
+  "sevenInchScreenshots": ScreenConfig(1024, 600, 1), // Kindle Fire
+  "tenInchScreenshots":
+      ScreenConfig(1280, 800, 1), // Galaxy Tab (div'd by density)
+};
 
 Future<void> main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  for (final deviceType in deviceTypes.entries) {
+    for (final locale in locales) {
+      final directoryPath = path.joinAll([
+        "fastlane",
+        "metadata",
+        "android",
+        locale,
+        "images",
+        deviceType.key,
+      ]);
+
+      final directory = Directory(directoryPath);
+      if (!directory.existsSync()) directory.createSync(recursive: true);
+
+      final screenshots = <String, Uint8List>{};
+
+      takeScreenshots(
+        screenshots,
+        screenSize: deviceType.value.size,
+        screenDensity: deviceType.value.density,
+        locale: locale.split("_").first,
+      );
+
+      tearDownAll(() async {
+        for (var i = 0; i < screenshots.length; i++) {
+          final filePath = path.join(directoryPath, "$i.png");
+          final bytes = screenshots.values.elementAt(i);
+          await File(filePath).writeAsBytes(bytes, flush: true);
+        }
+      });
+    }
+  }
+}
+
+void takeScreenshots(
+  Map<String, Uint8List> map, {
+  required Size screenSize,
+  double screenDensity = 1,
+  String? locale,
+}) {
   testWidgets(
     'Main screen',
     (tester) async {
-      await tester.setScreenSize(1280, 720);
-      final bootstrapper = await Bootstrapper.getInstance();
-      runApp(bootstrapper.wrap(const MainScreen()));
-      await tester.pumpAndSettle();
+      await tester.setScreenSize(screenSize, screenDensity);
+      final bootstrapper = await Bootstrapper.getInstance(locale);
+      runApp(
+        bootstrapper.wrap(
+          const MainScreen(initialTimeline: TimelineKind.federated),
+        ),
+      );
+      await tester.pumpAndSettle(
+        duration,
+        EnginePhase.sendSemanticsUpdate,
+        timeout,
+      );
       await precacheImages(tester.allStates.first.context);
-      await takeScreenshot<MainScreen>("main-screen.png");
+      map["main-screen"] = await takeScreenshot<MainScreen>();
+    },
+  );
+
+  testWidgets(
+    'Compose screen',
+    (tester) async {
+      await tester.setScreenSize(screenSize, screenDensity);
+      final bootstrapper = await Bootstrapper.getInstance(locale);
+      runApp(bootstrapper.wrap(const ComposeScreen()));
+      await tester.pumpAndSettle(
+        duration,
+        EnginePhase.sendSemanticsUpdate,
+        timeout,
+      );
+      await precacheImages(tester.allStates.first.context);
+      map["compose-screen"] = await takeScreenshot<ComposeScreen>();
     },
   );
 
   testWidgets(
     'User screen',
     (tester) async {
-      await tester.setScreenSize(1280, 720);
-      final bootstrapper = await Bootstrapper.getInstance();
-      runApp(bootstrapper.wrap(UserScreen.fromUser(alice)));
-      await tester.pumpAndSettle();
+      await tester.setScreenSize(screenSize, screenDensity);
+      final bootstrapper = await Bootstrapper.getInstance(locale);
+
+      final account = await bootstrapper.adapter.getUserById(
+        "109349633552584749",
+      );
+
+      runApp(bootstrapper.wrap(OldUserScreen.fromUser(account)));
+      await tester.pumpAndSettle(
+        duration,
+        EnginePhase.sendSemanticsUpdate,
+        timeout,
+      );
       await precacheImages(tester.allStates.first.context);
-      await takeScreenshot<UserScreen>("user-screen.png");
+      map["user-screen"] = await takeScreenshot<OldUserScreen>();
     },
   );
 }
@@ -61,72 +156,18 @@ Future<void> precacheImages(BuildContext context) async {
   ];
 
   for (final url in urls) {
-    if (url != null) {
-      log("Precaching $url...");
-      await precacheImage(
-        NetworkImage(url),
-        context,
-      );
-    }
+    if (url == null) continue;
+    log("Precaching $url...");
+    await precacheImage(NetworkImage(url), context);
+    log("Cached $url...");
   }
 }
 
-Future<void> takeScreenshot<T extends Widget>(String path) async {
+Future<Uint8List> takeScreenshot<T extends Widget>() async {
   final element = find.byType(T, skipOffstage: false).evaluate().first;
   final image = await captureImage(element);
   final data = await image.toByteData(format: ui.ImageByteFormat.png);
-  await File(path).writeAsBytes(
-    data!.buffer.asUint8List(),
-    flush: true,
-  );
-}
-
-class Bootstrapper {
-  final FediverseAdapter adapter;
-  final AccountManager accountManager;
-
-  const Bootstrapper._(this.adapter, this.accountManager);
-
-  static Future<Bootstrapper> getInstance() async {
-    final accountRepo = DummyRepository<AccountSecret, AccountKey>();
-    final clientRepo = DummyRepository<ClientSecret, AccountKey>();
-    final accountManager = AccountManager(accountRepo, clientRepo);
-    final adapter = DummyAdapter(
-      DummyClient("instance"),
-      posts: posts,
-      users: [alice],
-    );
-    final account = Account(
-      accountSecret: const AccountSecret(""),
-      clientSecret: const ClientSecret("", ""),
-      adapter: adapter,
-      key: AccountKey(ApiType.mastodon, alice.host, alice.username),
-      user: alice,
-    );
-    await accountManager.add(account);
-    return Bootstrapper._(adapter, accountManager);
-  }
-
-  Widget wrap(Widget child) {
-    return ProviderScope(
-      overrides: [
-        accountProvider.overrideWithProvider(
-          ChangeNotifierProvider((_) => accountManager),
-        ),
-        adapterProvider.overrideWithProvider(
-          Provider((_) => adapter),
-        ),
-      ],
-      child: MaterialApp(
-        home: child,
-        useInheritedMediaQuery: true,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale("en"),
-        theme: getTheme(Brightness.light, true),
-      ),
-    );
-  }
+  return data!.buffer.asUint8List();
 }
 
 Future<ui.Image> captureImage(Element element) {
@@ -141,12 +182,7 @@ Future<ui.Image> captureImage(Element element) {
 }
 
 extension SetScreenSize on WidgetTester {
-  Future<void> setScreenSize(
-    double width,
-    double height, {
-    double pixelDensity = 1,
-  }) async {
-    final size = Size(width, height);
+  Future<void> setScreenSize(Size size, [double pixelDensity = 1]) async {
     await binding.setSurfaceSize(size);
     binding.window.physicalSizeTestValue = size;
     binding.window.devicePixelRatioTestValue = pixelDensity;

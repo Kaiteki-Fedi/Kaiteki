@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
@@ -6,7 +7,9 @@ import 'package:kaiteki/ui/shared/timeline.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class TimelinePage extends ConsumerStatefulWidget {
-  const TimelinePage({super.key});
+  final TimelineKind? initialTimeline;
+
+  const TimelinePage({super.key, this.initialTimeline});
 
   @override
   ConsumerState<TimelinePage> createState() => TimelinePageState();
@@ -14,7 +17,7 @@ class TimelinePage extends ConsumerStatefulWidget {
 
 class TimelinePageState extends ConsumerState<TimelinePage> {
   final _timelineKey = GlobalKey<TimelineState>();
-  TimelineKind? _kind;
+  late TimelineKind? _kind = widget.initialTimeline;
 
   /// Timeline tabs to show.
   ///
@@ -39,13 +42,15 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
   Widget build(BuildContext context) {
     final adapter = ref.watch(adapterProvider);
     final supportedKinds = adapter.capabilities.supportedTimelines;
-    final kinds = _defaultKinds.where(supportedKinds.contains).toSet();
+    final kinds = _defaultKinds.where(supportedKinds.contains);
     if (!supportedKinds.contains(_kind)) {
       _kind = supportedKinds.first;
     }
 
+    final initialIndex = kinds.toList().indexOf(_kind!);
     return DefaultTabController(
       length: kinds.length,
+      initialIndex: initialIndex,
       child: NestedScrollView(
         floatHeaderSlivers: true,
         dragStartBehavior: DragStartBehavior.down,
@@ -95,7 +100,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
     );
   }
 
-  void _onTabTap(int value, Set<TimelineKind> kinds) {
+  void _onTabTap(int value, Iterable<TimelineKind> kinds) {
     final kind = kinds.elementAt(value);
     setState(() => _kind = kind);
   }

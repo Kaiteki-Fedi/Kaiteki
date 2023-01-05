@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -243,11 +244,6 @@ class TextRenderer {
     EmojiElement element, {
     double? scale,
   }) {
-    assert(
-      textContext.emojis != null,
-      "An emoji is about to be rendered, but no emojis were provided.",
-    );
-
     final emoji = textContext.emojis?.firstWhereOrNull((e) {
       return e.short == element.name;
     });
