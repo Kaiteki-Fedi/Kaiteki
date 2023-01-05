@@ -88,6 +88,7 @@ Attachment toAttachment(misskey.DriveFile file) {
     url: file.url!,
     type: type,
     isSensitive: file.isSensitive,
+    blurHash: file.blurhash,
   );
 }
 
