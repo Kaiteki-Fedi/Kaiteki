@@ -16,6 +16,7 @@ Post toPost(misskey.Note source, String localHost) {
     source: source,
     postedAt: source.createdAt,
     author: toUserFromLite(source.user, localHost),
+    subject: source.cw,
     content: source.text,
     emojis: mappedEmoji,
     reactions: source.reactions.entries.map((mkr) {
@@ -86,6 +87,7 @@ Attachment toAttachment(misskey.DriveFile file) {
     previewUrl: file.thumbnailUrl ?? file.url!,
     url: file.url!,
     type: type,
+    isSensitive: file.isSensitive,
   );
 }
 
