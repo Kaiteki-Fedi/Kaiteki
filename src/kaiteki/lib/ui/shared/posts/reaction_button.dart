@@ -62,23 +62,33 @@ class ReactionButton extends ConsumerWidget {
           ),
         ],
       ),
-      child: OutlinedButton.icon(
+      child: OutlinedButton(
         style: OutlinedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.0),
+          ),
           backgroundColor: backgroundColor,
+          minimumSize: Size.zero,
           // HACK(Craftplacer): We're changing padding based on the M3 flag, but the better approach would be analyzing the button shape
           padding: Theme.of(context).useMaterial3
-              ? const EdgeInsets.symmetric(horizontal: 12.0)
-              : const EdgeInsets.symmetric(horizontal: 6.0),
-        ),
-        icon: EmojiWidget(
-          emoji: reaction.emoji,
-          size: emojiSize,
-        ),
-        label: Text(
-          reaction.count.toString(),
-          style: textStyle,
+              ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0)
+              : const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
         ),
         onPressed: onPressed,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            EmojiWidget(
+              emoji: reaction.emoji,
+              size: emojiSize,
+            ),
+            const SizedBox(width: 3),
+            Text(
+              reaction.count.toString(),
+              style: textStyle,
+            ),
+          ],
+        ),
       ),
     );
   }
