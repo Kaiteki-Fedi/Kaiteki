@@ -16,7 +16,13 @@ Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple M
 
 ## Platforms & Releases
 
-Kaiteki is available for Web, Windows, Linux and Android. Check out [the releases page](https://github.com/Kaiteki-Fedi/Kaiteki/releases) for automatic builds.
+Kaiteki is available for Web, Windows, Linux and Android. Check out [the releases page](https://github.com/Kaiteki-Fedi/Kaiteki/releases) for weekly builds.
+
+### Android
+
+Kaiteki is also available on IzzyOnDroid's F-Droid repository.
+
+<a href="https://apt.izzysoft.de/fdroid/index/apk/moe.craftplacer.kaiteki"><img src="/.github/IzzyOnDroid.png" alt="Get it on IzzyOnDroid"/></a>
 
 ## What's working, what's missing?
 
