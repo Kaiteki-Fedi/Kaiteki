@@ -8,8 +8,8 @@ class LocaleListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.getL10n();
-    final prefs = ref.watch(preferencesProvider);
+    final l10n = context.l10n;
+    // final prefs = ref.watch(preferencesProvider);
     return ListTile(
       leading: const Icon(Icons.public),
       title: Text(l10n.settingsLocale),
@@ -37,7 +37,7 @@ class SelectLocaleDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return SimpleDialog(
       title: Text(l10n.selectLocaleTitle),
       children: [

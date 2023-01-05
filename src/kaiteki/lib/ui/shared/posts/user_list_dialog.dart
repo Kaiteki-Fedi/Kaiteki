@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/shared/posts/user_display_name_widget.dart';
+import 'package:kaiteki/ui/shared/users/user_display_name_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class UserListDialog extends StatelessWidget {
@@ -39,7 +40,7 @@ class UserListDialog extends StatelessWidget {
                     );
                   }
                   if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
+                    return centeredCircularProgressIndicator;
                   }
 
                   final users = snapshot.data!;
@@ -75,47 +76,64 @@ class UserListTile extends ConsumerWidget {
   const UserListTile({
     super.key,
     required this.user,
+    this.onPressed,
+    this.trailing = const [],
+    this.minLeadingWidget = 52.0,
   });
 
   final User user;
+  final VoidCallback? onPressed;
+  final List<Widget> trailing;
+  final double minLeadingWidget;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final description = user.description?.trim();
+    const avatarOffset = -4;
+    final leftSideWidth = minLeadingWidget - avatarOffset;
+
     return InkWell(
-      onTap: () => context.showUser(user, ref),
+      onTap: onPressed ?? () => context.showUser(user, ref),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.only(
+          left: 16.0 + avatarOffset,
+          right: 16.0,
+          top: 8.0,
+          bottom: 8.0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            AvatarWidget(user, size: 32),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 32),
+              child: Row(
                 children: [
                   SizedBox(
-                    height: 32,
+                    width: leftSideWidth,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: UserDisplayNameWidget(user),
+                      child: AvatarWidget(user, size: 32),
                     ),
                   ),
-                  if (description != null && description.isNotEmpty)
-                    Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        Text.rich(
-                          user.renderText(context, ref, description),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+                  Expanded(child: UserDisplayNameWidget(user)),
+                  ...trailing,
                 ],
               ),
             ),
+            if (description != null && description.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Padding(
+                padding: EdgeInsets.only(left: leftSideWidth),
+                child: Flexible(
+                  child: Text.rich(
+                    user.renderText(context, ref, description),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

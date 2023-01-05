@@ -1,4 +1,4 @@
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
 
 abstract class BookmarkSupport {
   /// Adds a post to the bookmarks.

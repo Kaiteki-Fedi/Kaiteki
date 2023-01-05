@@ -1,16 +1,15 @@
 import 'package:fediverse_objects/misskey.dart';
 
-class MisskeyUserkeyResponse {
-  late final String accessToken;
-  late final User? user;
+class UserkeyResponse {
+  final String accessToken;
+  final User? user;
 
-  MisskeyUserkeyResponse.fromJson(Map<String, dynamic> json) {
-    accessToken = json["accessToken"];
+  UserkeyResponse(this.accessToken, this.user);
 
-    if (json["user"] == null) {
-      user = null;
-    } else {
-      user = User.fromJson(json["user"]);
-    }
+  factory UserkeyResponse.fromJson(Map<String, dynamic> json) {
+    return UserkeyResponse(
+      json["accessToken"],
+      json["user"] == null ? null : User.fromJson(json["user"]),
+    );
   }
 }

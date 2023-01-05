@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/auth/login/constants.dart';
 import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/error_message.dart';
 
 class MfaPage extends StatefulWidget {
@@ -24,14 +25,14 @@ class _MfaPageState extends State<MfaPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
         return AsyncBlockWidget(
           blocking: snapshot.connectionState == ConnectionState.waiting,
           duration: const Duration(milliseconds: 250),
-          secondChild: const Center(child: CircularProgressIndicator()),
+          secondChild: centeredCircularProgressIndicator,
           child: Padding(
             padding: contentMargin,
             child: Form(

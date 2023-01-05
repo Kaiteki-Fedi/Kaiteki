@@ -7,6 +7,8 @@ import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart' as twt;
 import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart' as twt;
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart';
 import 'package:kaiteki/fediverse/model/model.dart' as ktk;
+import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 extension UserExtensions on twt.User {
   ktk.User toKaiteki() {
@@ -50,6 +52,13 @@ extension TweetExtensions on twt.Tweet {
       return t.type == twt.ReferencedTweetType.repliedTo;
     });
 
+    Post? replyPost;
+    if (reply != null) {
+      replyPost = includes.tweets
+          ?.firstWhereOrNull((t) => t.id == reply.id)
+          ?.toKaiteki(includes);
+    }
+
     final media = attachments?.mediaKeys
         ?.map((key) {
           return includes.media?.firstWhereOrNull((m) => m.mediaKey == key);
@@ -75,23 +84,29 @@ extension TweetExtensions on twt.Tweet {
               ?.firstWhereOrNull((t) => t.id == quote.id)
               ?.toKaiteki(includes)
           : null,
-      attachments: media?.where((m) {
-        final hasUrl = m.url != null || m.previewImageUrl != null;
-        if (!hasUrl) log("Media (${m.mediaKey}) has no URL");
-        return hasUrl;
-      }).map((m) => m.toKaiteki()),
-      replyTo: reply != null
-          ? includes.tweets
-              ?.firstWhereOrNull((t) => t.id == reply.id)
-              ?.toKaiteki(includes)
-          : null,
-      likeCount: publicMetrics?.likeCount ?? 0,
-      repeatCount:
-          (publicMetrics?.retweetCount ?? 0) + (publicMetrics?.quoteCount ?? 0),
-      replyCount: publicMetrics?.replyCount ?? 0,
-      replyToPostId: reply?.id,
-      replyToUserId: inReplyToUserId,
-      externalUrl: "https://twitter.com/${author.username}/status/$id",
+      attachments: media
+          ?.where((m) {
+            final hasUrl = m.url != null || m.previewImageUrl != null;
+            if (!hasUrl) log("Media (${m.mediaKey}) has no URL");
+            return hasUrl;
+          })
+          .map((m) => m.toKaiteki())
+          .toList(),
+      replyTo: replyPost == null
+          ? reply?.id.nullTransform(ResolvablePost.fromId)
+          : ResolvablePost.fromData(replyPost),
+      metrics: PostMetrics(
+        likeCount: publicMetrics?.likeCount ?? 0,
+        repeatCount: (publicMetrics?.retweetCount ?? 0) +
+            (publicMetrics?.quoteCount ?? 0),
+        replyCount: publicMetrics?.replyCount ?? 0,
+      ),
+      replyToUser: inReplyToUserId?.nullTransform(ResolvableUser.fromId),
+      externalUrl: Uri(
+        scheme: "https",
+        host: "twitter.com",
+        pathSegments: [author.username, "status", id],
+      ),
       client: source,
       // TODO(Craftplacer): I said they don't look nice enough, filter out like tweet text
       // embeds: entities?.urls?.map((u) => u.toKaiteki()).toList() ?? [],

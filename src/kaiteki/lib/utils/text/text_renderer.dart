@@ -1,11 +1,12 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Element;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
@@ -247,8 +248,8 @@ class TextRenderer {
       "An emoji is about to be rendered, but no emojis were provided.",
     );
 
-    final emoji = textContext.emojis?.firstOrDefault((e) {
-      return e.name == element.name;
+    final emoji = textContext.emojis?.firstWhereOrNull((e) {
+      return e.short == element.name;
     });
 
     if (emoji == null) return TextSpan(text: ":${element.name}:");
@@ -300,7 +301,7 @@ class UserChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     return FutureBuilder<User?>(
       initialData: user,
       future: reference.resolve(adapter),
@@ -309,7 +310,7 @@ class UserChip extends ConsumerWidget {
           final user = snapshot.data!;
 
           return Tooltip(
-            message: user.handle,
+            message: user.handle.toString(),
             child: ActionChip(
               avatar: AvatarWidget(user, size: 24),
               label: Text.rich(user.renderDisplayName(context, ref)),

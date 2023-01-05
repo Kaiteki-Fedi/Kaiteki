@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
+import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:mdi/mdi.dart';
 
@@ -83,6 +84,52 @@ extension FormattingExtensions on Formatting {
         return "BBCode";
       case Formatting.misskeyMarkdown:
         return l10n.formattingMfm;
+    }
+  }
+}
+
+extension TimelindKindExtensions on TimelineKind {
+  IconData getIconData() {
+    switch (this) {
+      case TimelineKind.home:
+        return Icons.home_rounded;
+
+      case TimelineKind.local:
+        return Icons.people_rounded;
+
+      case TimelineKind.bubble:
+        return Icons.workspaces_rounded;
+
+      case TimelineKind.hybrid:
+        return Icons.handshake_rounded;
+
+      case TimelineKind.federated:
+        return Icons.public_rounded;
+
+      case TimelineKind.directMessages:
+        return Icons.mail_rounded;
+    }
+  }
+
+  String getDisplayName(AppLocalizations l10n) {
+    switch (this) {
+      case TimelineKind.home:
+        return l10n.timelineHome;
+
+      case TimelineKind.local:
+        return l10n.timelineLocal;
+
+      case TimelineKind.bubble:
+        return l10n.timelineBubble;
+
+      case TimelineKind.hybrid:
+        return l10n.timelineHybrid;
+
+      case TimelineKind.federated:
+        return l10n.timelineFederated;
+
+      case TimelineKind.directMessages:
+        return l10n.timelineDirectMessages;
     }
   }
 }

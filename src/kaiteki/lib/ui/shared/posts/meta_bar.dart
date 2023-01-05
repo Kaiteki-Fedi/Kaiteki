@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/ui/shared/posts/user_display_name_widget.dart';
+import 'package:kaiteki/ui/shared/users/user_badge.dart';
+import 'package:kaiteki/ui/shared/users/user_display_name_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class MetaBar extends StatelessWidget {
@@ -36,7 +37,25 @@ class MetaBar extends StatelessWidget {
           padding: const EdgeInsets.only(right: 8.0),
           child: AvatarWidget(_post.author, size: 40),
         ),
-      Expanded(child: UserDisplayNameWidget(_post.author)),
+      Expanded(
+        child: Row(
+          children: [
+            Flexible(child: UserDisplayNameWidget(_post.author)),
+            if (_post.author.flags?.isAdministrator == true) ...[
+              const SizedBox(width: 8),
+              const AdministratorUserBadge(),
+            ],
+            if (_post.author.flags?.isModerator == true) ...[
+              const SizedBox(width: 8),
+              const ModeratorUserBadge(),
+            ],
+            if (_post.author.flags?.isBot == true) ...[
+              const SizedBox(width: 8),
+              const BotUserBadge(),
+            ],
+          ],
+        ),
+      ),
     ];
   }
 
@@ -44,10 +63,10 @@ class MetaBar extends StatelessWidget {
     final visibility = _post.visibility;
     final secondaryColor = Theme.of(context).disabledColor;
     final secondaryTextTheme = TextStyle(color: secondaryColor);
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return [
-      if (_post.pinned)
+      if (_post.state.pinned)
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Tooltip(

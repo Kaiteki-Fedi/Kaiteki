@@ -4,7 +4,6 @@ import 'package:async/async.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:go_router/go_router.dart';
-import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/constants.dart' show bottomSheetConstraints;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
@@ -12,16 +11,16 @@ import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/ui/shared/async/async_snackbar_content.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
+import 'package:kaiteki/ui/shared/common.dart';
+import 'package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart';
 import 'package:kaiteki/ui/shared/enum_icon_button.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/ui/shared/posts/compose/attachment_tray.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
+import 'package:kaiteki/ui/shortcuts/shortcuts.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:mdi/mdi.dart';
 
 const double splashRadius = 20.0;
 
@@ -30,6 +29,7 @@ class PostForm extends ConsumerStatefulWidget {
   final bool enableSubject;
   final bool showPreview;
   final bool expands;
+  final VoidCallback? onSubmit;
 
   const PostForm({
     super.key,
@@ -37,6 +37,7 @@ class PostForm extends ConsumerStatefulWidget {
     this.enableSubject = true,
     this.showPreview = false,
     this.expands = false,
+    this.onSubmit,
   });
 
   @override
@@ -44,11 +45,34 @@ class PostForm extends ConsumerStatefulWidget {
 }
 
 class PostFormState extends ConsumerState<PostForm> {
-  late final TextEditingController _bodyController = TextEditingController()
-    ..addListener(_typingTimer.reset);
+  late final TextEditingController _bodyController =
+      TextEditingController(text: initialBody)..addListener(_typingTimer.reset);
 
   late final TextEditingController _subjectController = TextEditingController()
     ..addListener(_typingTimer.reset);
+
+  String? get initialBody {
+    final op = widget.replyTo;
+
+    if (op != null) {
+      final currentUser = ref.read(accountProvider)!.user;
+
+      final handles = <String>[
+        if (op.author.id != currentUser.id) op.author.handle.toString(),
+        ...?op.mentionedUsers
+            ?.where((u) => u.username != null && u.host != null)
+            .where((u) {
+          return !(u.username == currentUser.username &&
+              u.host == currentUser.host);
+        }).map((u) => "@${u.username!}@${u.host!}"),
+      ].distinct();
+
+      // ignore: prefer_interpolation_to_compose_strings
+      if (handles.isNotEmpty) return handles.join(" ") + " ";
+    }
+
+    return null;
+  }
 
   late final RestartableTimer _typingTimer = RestartableTimer(
     const Duration(seconds: 1),
@@ -62,10 +86,12 @@ class PostFormState extends ConsumerState<PostForm> {
   Formatting? _formatting;
   final List<Future<Attachment>> attachments = [];
 
-  bool get isEmpty =>
-      _bodyController.value.text.isEmpty &&
-      _subjectController.value.text.isEmpty &&
-      attachments.isEmpty;
+  bool get isEmpty {
+    return (_bodyController.text.isEmpty ||
+            _bodyController.text == initialBody) &&
+        _subjectController.value.text.isEmpty &&
+        attachments.isEmpty;
+  }
 
   // FIXME(Craftplacer): Strings for PostForm's attach menu are not localized.
   late final _attachMenuItems = [
@@ -110,98 +136,101 @@ class PostFormState extends ConsumerState<PostForm> {
 
   @override
   Widget build(BuildContext context) {
-    final manager = ref.watch(accountProvider);
+    final adapter = ref.watch(adapterProvider);
     final flex = widget.expands ? 1 : 0;
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
-    return FocusableActionDetector(
-      shortcuts: const {commit: SendIntent()},
-      actions: {
-        SendIntent: CallbackAction(
-          onInvoke: (_) => post(context, manager.adapter),
-        ),
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (widget.showPreview && manager.adapter is PreviewSupport) ...[
-            FutureBuilder(
-              future: getPreviewFuture(manager),
-              builder: buildPreview,
-            ),
-            const Divider(height: 15),
-          ],
-          Flexible(
-            flex: flex,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
+    return Shortcuts(
+      shortcuts: propagatingTextFieldShortcuts,
+      child: FocusableActionDetector(
+        shortcuts: const {commit: SendIntent()},
+        actions: {
+          SendIntent: CallbackAction(
+            onInvoke: (_) => post(context, adapter),
+          ),
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.showPreview && adapter is PreviewSupport) ...[
+              FutureBuilder(
+                future: getPreviewFuture(adapter as PreviewSupport),
+                builder: buildPreview,
               ),
-              child: Column(
-                children: [
-                  if (widget.enableSubject)
-                    Column(
-                      children: [
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: l10n.composeSubjectHint,
-                            border: InputBorder.none,
+              const Divider(height: 15),
+            ],
+            Flexible(
+              flex: flex,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: Column(
+                  children: [
+                    if (widget.enableSubject)
+                      Column(
+                        children: [
+                          TextField(
+                            decoration: InputDecoration(
+                              hintText: l10n.composeSubjectHint,
+                              border: InputBorder.none,
+                            ),
+                            controller: _subjectController,
                           ),
-                          controller: _subjectController,
-                        ),
-                        const Divider(),
-                      ],
-                    ),
-                  Flexible(
-                    flex: flex,
-                    child: TextField(
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: l10n.composeBodyHint,
-                        border: InputBorder.none,
+                          const Divider(),
+                        ],
                       ),
-                      textAlignVertical: TextAlignVertical.top,
-                      expands: widget.expands,
-                      minLines: widget.expands ? null : 6,
-                      maxLines: widget.expands ? null : 8,
-                      controller: _bodyController,
+                    Flexible(
+                      flex: flex,
+                      child: TextField(
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: l10n.composeBodyHint,
+                          border: InputBorder.none,
+                        ),
+                        textAlignVertical: TextAlignVertical.top,
+                        expands: widget.expands,
+                        minLines: widget.expands ? null : 6,
+                        maxLines: widget.expands ? null : 8,
+                        controller: _bodyController,
+                      ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+            if (attachments.isNotEmpty) const Divider(height: 1),
+            if (attachments.isNotEmpty)
+              AttachmentTray(
+                attachments: attachments,
+                onRemoveAttachment: (i) => setState(() {
+                  attachments.removeAt(i);
+                }),
+              ),
+            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                right: 10.0,
+                top: 8.0,
+                bottom: 8.0,
+              ),
+              child: Row(
+                children: [
+                  ..._buildActions(context),
+                  const Spacer(),
+                  FloatingActionButton.small(
+                    onPressed: () => post(context, adapter),
+                    elevation: 2.0,
+                    tooltip: l10n.submitButtonTooltip,
+                    child: const Icon(Icons.send_rounded),
                   ),
                 ],
               ),
             ),
-          ),
-          if (attachments.isNotEmpty) const Divider(height: 1),
-          if (attachments.isNotEmpty)
-            AttachmentTray(
-              attachments: attachments,
-              onRemoveAttachment: (i) => setState(() {
-                attachments.removeAt(i);
-              }),
-            ),
-          const Divider(height: 1),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 8.0,
-              right: 10.0,
-              top: 8.0,
-              bottom: 8.0,
-            ),
-            child: Row(
-              children: [
-                ..._buildActions(context),
-                const Spacer(),
-                FloatingActionButton.small(
-                  onPressed: () => post(context, manager.adapter),
-                  elevation: 2.0,
-                  tooltip: l10n.submitButtonTooltip,
-                  child: const Icon(Icons.send_rounded),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -210,7 +239,7 @@ class PostFormState extends ConsumerState<PostForm> {
     BuildContext context,
     AsyncSnapshot<Post<dynamic>> snapshot,
   ) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     switch (snapshot.connectionState) {
       case ConnectionState.none:
@@ -234,21 +263,20 @@ class PostFormState extends ConsumerState<PostForm> {
 
     return const Padding(
       padding: EdgeInsets.all(8.0),
-      child: Center(child: CircularProgressIndicator()),
+      child: centeredCircularProgressIndicator,
     );
   }
 
-  Future<Post>? getPreviewFuture(AccountManager manager) {
+  Future<Post>? getPreviewFuture(PreviewSupport adapter) {
     if (_bodyController.value.text.isEmpty) return null;
 
     final draft = _getPostDraft([]);
-    final previewAdapter = manager.adapter as PreviewSupport;
-    return previewAdapter.getPreview(draft);
+    return adapter.getPreview(draft);
   }
 
   PostDraft _getPostDraft(List<Attachment> attachments) {
     return PostDraft(
-      subject: _subjectController.value.text,
+      subject: _subjectController.text.isEmpty ? null : _subjectController.text,
       content: _bodyController.value.text,
       visibility: _visibility,
       formatting: _formatting,
@@ -257,98 +285,61 @@ class PostFormState extends ConsumerState<PostForm> {
     );
   }
 
-  Future<void> post(BuildContext context, FediverseAdapter adapter) async {
+  Future<void> post(BuildContext context, BackendAdapter adapter) async {
     final messenger = ScaffoldMessenger.of(context);
-    final contentKey = UniqueKey();
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
-    late ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
-        snackBarController;
-    final snackBar = SnackBar(
-      duration: const Duration(days: 1),
-      content: FutureBuilder<Post>(
-        future: () async {
-          final attachments = await Future.wait(this.attachments);
-          final draft = _getPostDraft(attachments);
-          return adapter.postStatus(draft);
-        }(),
-        builder: (context, snapshot) {
-          switch (snapshot.state) {
-            case AsyncSnapshotState.errored:
-              Future.delayed(
-                const Duration(seconds: 4),
-                snackBarController.close,
-              );
-              return AsyncSnackBarContent(
-                key: contentKey,
-                done: true,
-                icon: const Icon(Mdi.close),
-                text: Text(l10n.postSubmissionFailed),
-                // FIXME(Craftplacer): Theme inheritance is broken here
-                // trailing: TextButton(
-                //   child: Text(l10n.whyButtonLabel),
-                //   onPressed: () => context.showExceptionDialog(
-                //     snapshot.error,
-                //     snapshot.stackTrace,
-                //   ),
-                // ),
-              );
+    Future<Post> submitPost() async {
+      final attachments = await Future.wait(this.attachments);
+      final draft = _getPostDraft(attachments);
+      return adapter.postStatus(draft);
+    }
 
-            case AsyncSnapshotState.loading:
-              return AsyncSnackBarContent(
-                key: contentKey,
-                done: false,
-                icon: const Icon(Mdi.textBox),
-                text: Text(l10n.postSubmissionSending),
-              );
-          }
-
-          Future.delayed(
-            const Duration(seconds: 4),
-            snackBarController.close,
-          );
-
-          return AsyncSnackBarContent(
-            key: contentKey,
-            done: true,
-            icon: const Icon(Mdi.check),
-            text: Text(l10n.postSubmissionSent),
-            trailing: Consumer(
-              builder: (context, ref, child) => TextButton(
-                onPressed: () {
-                  final post = snapshot.data!;
-                  context.push(
-                    "/${ref.getCurrentAccountHandle()}/posts/${post.id}",
-                    extra: post,
-                  );
-                  messenger.hideCurrentSnackBar();
-                },
-                child: Text(l10n.viewPostButtonLabel),
-              ),
-            ),
-          );
-        },
-      ),
+    var snackBarController = messenger.showSnackBar(
+      SnackBar(content: Text(l10n.postSubmissionSending)),
     );
 
-    snackBarController = messenger.showSnackBar(snackBar);
+    final goRouter = GoRouter.of(context);
 
-    Navigator.of(context).pop();
+    submitPost().then((post) {
+      snackBarController.close();
+      snackBarController = messenger.showSnackBar(
+        SnackBar(
+          content: Text(l10n.postSubmissionSent),
+          action: SnackBarAction(
+            label: l10n.viewPostButtonLabel,
+            onPressed: () {
+              goRouter.pushNamed(
+                "post",
+                params: {...ref.accountRouterParams, "id": post.id},
+                extra: post,
+              );
+              messenger.hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+    }).catchError((e, s) {
+      snackBarController.close();
+      snackBarController = messenger.showSnackBar(
+        SnackBar(
+          content: Text(l10n.postSubmissionFailed),
+          action: SnackBarAction(
+            label: l10n.whyButtonLabel,
+            onPressed: () => context.showExceptionDialog(e, s),
+          ),
+        ),
+      );
+    });
+
+    widget.onSubmit?.call();
   }
 
-  void openEmojiPicker(BuildContext context, AccountManager container) {
-    showModalBottomSheet(
+  Future<void> openEmojiPicker() async {
+    final emoji = await showModalBottomSheet<Emoji?>(
       context: context,
       constraints: bottomSheetConstraints,
-      builder: (context) {
-        return SizedBox(
-          height: 250,
-          child: FutureBuilder(
-            future: (container.adapter as CustomEmojiSupport).getEmojis(),
-            builder: buildEmojiSelector,
-          ),
-        );
-      },
+      builder: (_) => const EmojiSelectorBottomSheet(),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(12.0),
@@ -357,26 +348,20 @@ class PostFormState extends ConsumerState<PostForm> {
       elevation: 16.0,
       clipBehavior: Clip.antiAlias,
     );
-  }
 
-  Widget buildEmojiSelector(
-    BuildContext context,
-    AsyncSnapshot<Iterable<EmojiCategory>> s,
-  ) {
-    final l10n = context.getL10n();
+    if (emoji == null) return;
 
-    if (s.hasError) {
-      return Center(child: Text(l10n.emojiRetrievalFailed));
+    final String text;
+
+    if (emoji is UnicodeEmoji) {
+      text = emoji.emoji;
+    } else if (emoji is CustomEmoji) {
+      text = ":${emoji.short}:";
+    } else {
+      throw UnimplementedError();
     }
 
-    if (!s.hasData) return const Center(child: CircularProgressIndicator());
-
-    return EmojiSelector(
-      categories: s.data!,
-      onEmojiSelected: (emoji) {
-        _bodyController.text = _bodyController.text += emoji.toString();
-      },
-    );
+    _bodyController.text = _bodyController.text += text;
   }
 
   void openAttachDrawer() {
@@ -436,17 +421,17 @@ class PostFormState extends ConsumerState<PostForm> {
 
     final pickedFile = result.files.first;
     final kaitekiFile = File.path(pickedFile.path!, name: pickedFile.name);
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     setState(
       () => attachments.add(adapter.uploadAttachment(kaitekiFile, null)),
     );
   }
 
   List<Widget> _buildActions(BuildContext context) {
-    final l10n = context.getL10n();
-    final manager = ref.watch(accountProvider);
-    final formattingList = manager.adapter.capabilities.supportedFormattings;
-    final supportedScopes = manager.adapter.capabilities.supportedScopes;
+    final l10n = context.l10n;
+    final adapter = ref.watch(adapterProvider);
+    final formattingList = adapter.capabilities.supportedFormattings;
+    final supportedScopes = adapter.capabilities.supportedScopes;
     return [
       IconButton(
         onPressed: openAttachDrawer,
@@ -454,14 +439,19 @@ class PostFormState extends ConsumerState<PostForm> {
         splashRadius: splashRadius,
         tooltip: l10n.attachButtonTooltip,
       ),
-      if (manager.adapter is CustomEmojiSupport)
+      if (adapter is CustomEmojiSupport)
         IconButton(
-          onPressed: () => openEmojiPicker(context, manager),
           icon: const Icon(Icons.mood_rounded),
           splashRadius: splashRadius,
           tooltip: l10n.emojiButtonTooltip,
+          onPressed: openEmojiPicker,
         ),
-      const SizedBox(height: 24, child: VerticalDivider()),
+      const SizedBox(
+        height: 24,
+        child: VerticalDivider(
+          width: 16,
+        ),
+      ),
       if (supportedScopes.length >= 2)
         EnumIconButton<Visibility>(
           tooltip: l10n.visibilityButtonTooltip,

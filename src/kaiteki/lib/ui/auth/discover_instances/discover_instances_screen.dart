@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/ui/auth/discover_instances/instance_card.dart';
-import 'package:kaiteki/ui/shared/breakpoint_container.dart';
+import 'package:kaiteki/ui/shared/common.dart';
+import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 
 class DiscoverInstancesScreen extends StatefulWidget {
   const DiscoverInstancesScreen({super.key});
@@ -42,7 +43,7 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.discoverInstancesTitle)),
@@ -53,12 +54,10 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
             child: FutureBuilder<List<InstanceData>>(
               future: _instanceFetch,
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+                if (!snapshot.hasData) return centeredCircularProgressIndicator;
 
                 final sortedInstances = snapshot.data!.toList(growable: false)
-                  ..sort((a, b) => a.name.compareTo(b.name));
+                  ..sort((a, b) => a.host.compareTo(b.host));
 
                 return Column(
                   children: [
@@ -83,7 +82,7 @@ class _DiscoverInstancesScreenState extends State<DiscoverInstancesScreen> {
   }
 
   MaterialBanner _buildBanner(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return MaterialBanner(
       leading: CircleAvatar(
         radius: 20,

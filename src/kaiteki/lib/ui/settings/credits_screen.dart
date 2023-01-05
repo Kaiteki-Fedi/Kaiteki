@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/error_landing_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
@@ -28,7 +29,7 @@ class _CreditsScreenState extends State<CreditsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.creditsTitle)),
@@ -40,7 +41,7 @@ class _CreditsScreenState extends State<CreditsScreen> {
               child: ErrorLandingWidget.fromAsyncSnapshot(snapshot),
             );
           } else if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return centeredCircularProgressIndicator;
           } else {
             final items = snapshot.data!;
             return ListView.separated(

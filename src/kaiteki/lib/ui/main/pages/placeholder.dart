@@ -7,7 +7,7 @@ class PlaceholderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return Center(
       child: IconLandingWidget(
         icon: const Icon(Icons.more_horiz_rounded),

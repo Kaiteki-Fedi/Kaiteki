@@ -11,11 +11,13 @@ Post toPost(twitter.Tweet tweet) {
     postedAt: tweet.createdAt,
     source: tweet,
     content: content,
-    likeCount: tweet.favoriteCount,
-    repeatCount: tweet.retweetCount,
-    attachments: tweet.entities.media?.map(toAttachment),
-    replyToUserId: tweet.inReplyToUserIdStr,
-    replyToPostId: tweet.inReplyToStatusIdStr,
+    metrics: PostMetrics(
+      likeCount: tweet.favoriteCount,
+      repeatCount: tweet.retweetCount,
+    ),
+    attachments: tweet.entities.media?.map(toAttachment).toList(),
+    replyToUser: tweet.inReplyToUserIdStr?.nullTransform(ResolvableUser.fromId),
+    replyTo: tweet.inReplyToStatusIdStr?.nullTransform(ResolvablePost.fromId),
     mentionedUsers: tweet.entities.userMentions?.map((e) {
       return UserReference(e.idStr);
     }).toList(),

@@ -35,10 +35,10 @@
             }
         },
         {
-            "name": "Widgetbook",
+            "name": "Storybook",
             "request": "launch",
             "type": "dart",
-            "program": "widgetbook/main.dart"
+            "program": "storybook/main.dart"
         }
     ]
 }

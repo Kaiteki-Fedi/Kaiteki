@@ -1,70 +1,76 @@
-import 'package:fediverse_objects/mastodon.dart' as mastodon;
+import 'dart:convert';
+
+import 'package:fediverse_objects/mastodon.dart' hide List;
+import 'package:fediverse_objects/mastodon.dart' as mastodon show List;
+import 'package:http/http.dart' show Response;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/api_exception.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/models/search.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
-import 'package:kaiteki/fediverse/client_base.dart';
-import 'package:kaiteki/http/response.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/authentication_data.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/responses/marker.dart';
+import 'package:kaiteki/http/http.dart';
 import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/model/http_method.dart';
-import 'package:kaiteki/utils/utils.dart';
 
-class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
-  MastodonClient(super.instance);
+class MastodonClient {
+  late final KaitekiClient client;
 
-  @override
-  ApiType get type => ApiType.mastodon;
+  String? accessToken;
 
-  Future<mastodon.Instance> getInstance() async {
-    return sendJsonRequest(
-      HttpMethod.get,
-      "api/v1/instance",
-      mastodon.Instance.fromJson,
+  MastodonClient(String instance) {
+    client = KaitekiClient(
+      baseUri: Uri(scheme: "https", host: instance),
+      checkResponse: checkResponse,
+      intercept: (request) {
+        if (accessToken == null) return;
+        request.headers["Authorization"] = "Bearer $accessToken";
+      },
     );
   }
 
-  Future<mastodon.Account> getAccount(String id) async {
-    return sendJsonRequest(
-      HttpMethod.get,
-      "api/v1/accounts/$id",
-      mastodon.Account.fromJson,
-    );
-  }
+  Future<Instance> getInstance() async => client
+      .sendRequest(HttpMethod.get, "api/v1/instance")
+      .then(Instance.fromJson.fromResponse);
 
-  Future<Iterable<mastodon.Status>> getStatuses(
+  Future<Account> getAccount(String id) async => client
+      .sendRequest(HttpMethod.get, "api/v1/accounts/$id")
+      .then(Account.fromJson.fromResponse);
+
+  Future<List<Status>> getStatuses(
     String id, {
     String? minId,
     String? maxId,
   }) async {
-    final queryParams = {
-      if (minId != null) "min_id": minId,
-      if (maxId != null) "max_id": maxId,
-    };
-    return sendJsonRequestMultiple(
+    return client.sendRequest(
       HttpMethod.get,
-      withQueries("api/v1/accounts/$id/statuses", queryParams),
-      mastodon.Status.fromJson,
-    );
+      "api/v1/accounts/$id/statuses",
+      query: {
+        if (minId != null) "min_id": minId,
+        if (maxId != null) "max_id": maxId,
+      },
+    ).then(Status.fromJson.fromResponseList);
   }
 
   /// This method does not error-check on its own!
-  Future<LoginResponse> login(String username, String password) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "oauth/token",
-      LoginResponse.fromJson,
-      body: {
-        "username": username,
-        "password": password,
-        "grant_type": "password",
-        "client_id": authenticationData!.clientId,
-        "client_secret": authenticationData!.clientSecret,
-      },
-    );
+  Future<LoginResponse> login(
+    String username,
+    String password,
+    String clientId,
+    String clientSecret,
+  ) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "oauth/token",
+          body: {
+            "username": username,
+            "password": password,
+            "grant_type": "password",
+            "client_id": clientId,
+            "client_secret": clientSecret,
+          }.jsonBody,
+        )
+        .then(LoginResponse.fromJson.fromResponse);
   }
 
   Future<LoginResponse> getToken(
@@ -75,73 +81,97 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     String? scope,
     String? code,
   }) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "oauth/token",
-      LoginResponse.fromJson,
-      body: {
-        "grant_type": grantType,
-        "client_id": clientId,
-        "client_secret": clientSecret,
-        "redirect_uri": redirectUri,
-        if (scope != null) "scope": scope,
-        if (code != null) "code": code,
-      },
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "oauth/token",
+          body: {
+            "grant_type": grantType,
+            "client_id": clientId,
+            "client_secret": clientSecret,
+            "redirect_uri": redirectUri,
+            if (scope != null) "scope": scope,
+            if (code != null) "code": code,
+          }.jsonBody,
+        )
+        .then(LoginResponse.fromJson.fromResponse);
   }
 
-  Future<LoginResponse> respondMfa(String mfaToken, int code) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "/oauth/mfa/challenge",
-      LoginResponse.fromJson,
-      body: {
-        "mfa_token": mfaToken,
-        "code": code.toString(),
-        "challenge_type": "totp",
-        "client_id": authenticationData!.clientId,
-        "client_secret": authenticationData!.clientSecret,
-      },
-    );
+  Future<LoginResponse> respondMfa(
+    String mfaToken,
+    int code,
+    String clientId,
+    String clientSecret,
+  ) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "/oauth/mfa/challenge",
+          body: {
+            "mfa_token": mfaToken,
+            "code": code.toString(),
+            "challenge_type": "totp",
+            "client_id": clientId,
+            "client_secret": clientSecret,
+          }.jsonBody,
+        )
+        .then(LoginResponse.fromJson.fromResponse);
   }
 
-  Future<Iterable<mastodon.Emoji>> getCustomEmojis() async {
-    return sendJsonRequestMultiple(
-      HttpMethod.get,
-      "api/v1/custom_emojis",
-      mastodon.Emoji.fromJson,
-    );
-  }
+  Future<List<Emoji>> getCustomEmojis() async => client
+      .sendRequest(HttpMethod.get, "api/v1/custom_emojis")
+      .then(Emoji.fromJson.fromResponseList);
 
-  Future<mastodon.Account> verifyCredentials() async {
-    return sendJsonRequest(
-      HttpMethod.get,
-      "api/v1/accounts/verify_credentials",
-      mastodon.Account.fromJson,
-    );
-  }
+  Future<Account> verifyCredentials() async => client
+      .sendRequest(HttpMethod.get, "api/v1/accounts/verify_credentials")
+      .then(Account.fromJson.fromResponse);
 
-  Future<mastodon.Application> createApplication(
+  Future<Application> createApplication(
     String instance,
     String clientName,
     String website,
     String redirect,
     List<String> scopes,
   ) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/apps",
-      mastodon.Application.fromJson,
-      body: {
-        "client_name": clientName,
-        "website": website,
-        "redirect_uris": redirect,
-        "scopes": scopes.join(" "),
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/apps",
+          body: {
+            "client_name": clientName,
+            "website": website,
+            "redirect_uris": redirect,
+            "scopes": scopes.join(" "),
+          }.jsonBody,
+        )
+        .then(Application.fromJson.fromResponse);
+  }
+
+  Future<List<Status>> getHomeTimeline({
+    bool? local,
+    bool? remote,
+    bool? onlyMedia,
+    String? maxId,
+    String? sinceId,
+    String? minId,
+    int? limit,
+  }) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/timelines/home",
+      query: {
+        'local': local,
+        'remote': remote,
+        'only_media': onlyMedia,
+        'max_id': maxId,
+        'since_id': sinceId,
+        'min_id': minId,
+        'limit': limit,
       },
-    );
+    ).then(Status.fromJson.fromResponseList);
   }
 
-  Future<Iterable<mastodon.Status>> getHomeTimeline({
+  Future<List<Status>> getPublicTimeline({
     bool? local,
     bool? remote,
     bool? onlyMedia,
@@ -150,50 +180,41 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     String? minId,
     int? limit,
   }) async {
-    final queryParams = {
-      'local': local,
-      'remote': remote,
-      'only_media': onlyMedia,
-      'max_id': maxId,
-      'since_id': sinceId,
-      'min_id': minId,
-      'limit': limit,
-    };
-
-    return sendJsonRequestMultiple(
+    return client.sendRequest(
       HttpMethod.get,
-      withQueries("api/v1/timelines/home", queryParams),
-      mastodon.Status.fromJson,
-    );
+      "api/v1/timelines/public",
+      query: {
+        'local': local,
+        'remote': remote,
+        'only_media': onlyMedia,
+        'max_id': maxId,
+        'since_id': sinceId,
+        'min_id': minId,
+        'limit': limit,
+      },
+    ).then(Status.fromJson.fromResponseList);
   }
 
-  Future<Iterable<mastodon.Status>> getPublicTimeline({
-    bool? local,
-    bool? remote,
-    bool? onlyMedia,
+  Future<List<Status>> getListTimeline(
+    String listId, {
     String? maxId,
     String? sinceId,
     String? minId,
     int? limit,
   }) async {
-    final queryParams = {
-      'local': local,
-      'remote': remote,
-      'only_media': onlyMedia,
-      'max_id': maxId,
-      'since_id': sinceId,
-      'min_id': minId,
-      'limit': limit,
-    };
-
-    return sendJsonRequestMultiple(
+    return client.sendRequest(
       HttpMethod.get,
-      withQueries("api/v1/timelines/public", queryParams),
-      mastodon.Status.fromJson,
-    );
+      "api/v1/timelines/list/$listId",
+      query: {
+        'max_id': maxId,
+        'since_id': sinceId,
+        'min_id': minId,
+        'limit': limit,
+      },
+    ).then(Status.fromJson.fromResponseList);
   }
 
-  Future<mastodon.Status> postStatus(
+  Future<Status> postStatus(
     String status, {
     String? spoilerText,
     bool? pleromaPreview,
@@ -202,171 +223,219 @@ class MastodonClient extends FediverseClientBase<MastodonAuthenticationData> {
     String? contentType = "text/plain",
     List<String> mediaIds = const [],
   }) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/statuses",
-      mastodon.Status.fromJson,
-      body: {
-        "status": status,
-        "source": consts.appName,
-        "spoiler_text": spoilerText ?? "",
-        "content_type": contentType,
-        "preview": pleromaPreview.toString(),
-        "visibility": visibility,
-        "in_reply_to_id": inReplyToId,
-        "media_ids": mediaIds
-      },
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/statuses",
+          body: {
+            "status": status,
+            "source": consts.appName,
+            "spoiler_text": spoilerText ?? "",
+            "content_type": contentType,
+            "preview": pleromaPreview.toString(),
+            "visibility": visibility,
+            "in_reply_to_id": inReplyToId,
+            "media_ids": mediaIds
+          }.jsonBody,
+        )
+        .then(Status.fromJson.fromResponse);
   }
 
-  Future<Iterable<mastodon.Notification>> getNotifications() {
-    return sendJsonRequestMultiple(
-      HttpMethod.get,
-      "api/v1/notifications",
-      mastodon.Notification.fromJson,
-    );
-  }
+  Future<List<Notification>> getNotifications() => client
+      .sendRequest(HttpMethod.get, "api/v1/notifications")
+      .then(Notification.fromJson.fromResponseList);
 
-  Future<ContextResponse> getStatusContext(String id) {
-    return sendJsonRequest(
-      HttpMethod.get,
-      "api/v1/statuses/$id/context",
-      ContextResponse.fromJson,
-    );
-  }
+  Future<ContextResponse> getStatusContext(String id) => client
+      .sendRequest(HttpMethod.get, "api/v1/statuses/$id/context")
+      .then(ContextResponse.fromJson.fromResponse);
 
-  Future<mastodon.Status> favouriteStatus(String id) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/statuses/$id/favourite",
-      mastodon.Status.fromJson,
-    );
-  }
+  Future<Status> favouriteStatus(String id) async => client
+      .sendRequest(HttpMethod.post, "api/v1/statuses/$id/favourite")
+      .then(Status.fromJson.fromResponse);
 
-  Future<mastodon.Status> getStatus(String id) async {
-    return sendJsonRequest(
-      HttpMethod.get,
-      "api/v1/statuses/$id",
-      mastodon.Status.fromJson,
-    );
-  }
+  Future<Status> getStatus(String id) async => client
+      .sendRequest(HttpMethod.get, "api/v1/statuses/$id")
+      .then(Status.fromJson.fromResponse);
 
-  Future<mastodon.Status> unfavouriteStatus(String id) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/statuses/$id/unfavourite",
-      mastodon.Status.fromJson,
-    );
-  }
+  Future<Status> unfavouriteStatus(String id) async => client
+      .sendRequest(HttpMethod.post, "api/v1/statuses/$id/unfavourite")
+      .then(Status.fromJson.fromResponse);
 
-  Future<mastodon.Status> reblogStatus(String id) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/statuses/$id/reblog",
-      mastodon.Status.fromJson,
-    );
-  }
+  Future<Status> reblogStatus(String id) async => client
+      .sendRequest(HttpMethod.post, "api/v1/statuses/$id/reblog")
+      .then(Status.fromJson.fromResponse);
 
-  Future<mastodon.Status> unreblogStatus(String id) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/statuses/$id/unreblog",
-      mastodon.Status.fromJson,
-    );
-  }
+  Future<Status> unreblogStatus(String id) async => client
+      .sendRequest(HttpMethod.post, "api/v1/statuses/$id/unreblog")
+      .then(Status.fromJson.fromResponse);
 
-  Future<Iterable<mastodon.Status>> getBookmarkedStatuses({
+  Future<Iterable<Status>> getBookmarkedStatuses({
     String? maxId,
     String? sinceId,
     String? minId,
     int? limit,
   }) async {
-    final queryParams = {
-      'max_id': maxId,
-      'since_id': sinceId,
-      'min_id': minId,
-      'limit': limit,
-    };
-    return sendJsonRequestMultiple(
+    return client.sendRequest(
       HttpMethod.get,
-      withQueries("api/v1/bookmarks", queryParams),
-      mastodon.Status.fromJson,
-    );
+      "api/v1/bookmarks",
+      query: {
+        'max_id': maxId,
+        'since_id': sinceId,
+        'min_id': minId,
+        'limit': limit,
+      },
+    ).then(Status.fromJson.fromResponseList);
   }
 
-  Future<mastodon.Status> bookmarkStatus(String id) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/statuses/$id/bookmark",
-      mastodon.Status.fromJson,
-    );
-  }
+  Future<Status> bookmarkStatus(String id) async => client
+      .sendRequest(HttpMethod.post, "api/v1/statuses/$id/bookmark")
+      .then(Status.fromJson.fromResponse);
 
-  Future<mastodon.Status> unbookmarkStatus(String id) async {
-    return sendJsonRequest(
-      HttpMethod.post,
-      "api/v1/statuses/$id/unbookmark",
-      mastodon.Status.fromJson,
-    );
-  }
+  Future<Status> unbookmarkStatus(String id) async => client
+      .sendRequest(HttpMethod.post, "api/v1/statuses/$id/unbookmark")
+      .then(Status.fromJson.fromResponse);
 
-  @override
-  Future<void> checkResponse(Response response) async {
-    if (!response.isSuccessful) {
-      final json = await response.getContentJson();
+  void checkResponse(Response response) {
+    if (response.isSuccessful) return;
+
+    dynamic json;
+
+    try {
+      json = jsonDecode(response.body);
+    } catch (_) {}
+
+    if (json != null) {
       throw ApiException(
         response.statusCode,
-        reasonPhrase: json["error"] as String,
+        reasonPhrase: json["error"] as String? ?? response.reasonPhrase,
         data: json,
       );
     }
   }
 
-  @override
-  Future<void> setClientAuthentication(ClientSecret secret) {
-    authenticationData = MastodonAuthenticationData(
-      secret.clientId,
-      secret.clientSecret,
-    );
-    return Future.value();
-  }
-
-  @override
-  Future<void> setAccountAuthentication(AccountSecret secret) {
-    authenticationData!.accessToken = secret.accessToken;
-    return Future.value();
-  }
-
-  Future<mastodon.Attachment> uploadMedia(
+  Future<Attachment> uploadMedia(
     File file,
     String? description,
   ) async {
-    return sendJsonMultiPartRequest(
+    return client.sendMultipartRequest(
       HttpMethod.post,
       "api/v1/media",
-      mastodon.Attachment.fromJson,
-      fields: {
-        if (description != null) "description": description,
-      },
+      fields: {if (description != null) "description": description},
       files: [await file.toMultipartFile("file")],
+    ).then(Attachment.fromJson.fromResponse);
+  }
+
+  Future<List<Account>> getFavouritedBy(String statusId) async => client
+      .sendRequest(HttpMethod.get, "api/v1/statuses/$statusId/favourited_by")
+      .then(Account.fromJson.fromResponseList);
+
+  Future<List<Account>> getBoostedBy(String statusId) async => client
+      .sendRequest(HttpMethod.get, "api/v1/statuses/$statusId/reblogged_by")
+      .then(Account.fromJson.fromResponseList);
+
+  Future<MarkerResponse> getMarkers(Set<MarkerTimeline> timeline) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/markers",
+      query: {"timeline": timeline.map((t) => t.name).join(",")},
+    ).then(MarkerResponse.fromJson.fromResponse);
+  }
+
+  Future<Search> search(
+    String query, {
+    String? type,
+    int? offset,
+    String? maxId,
+    String? minId,
+    bool? resolve,
+  }) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v2/search",
+      query: {
+        "q": query,
+        "offset": offset,
+        "max_id": maxId,
+        "min_id": minId,
+        "resolve": resolve,
+      },
+    ).then(Search.fromJson.fromResponse);
+  }
+
+  Future<List<Account>> searchAccounts(
+    String q, {
+    bool? resolve,
+    bool? following,
+  }) {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/accounts/search",
+      query: {
+        "q": q,
+        "resolve": resolve,
+        "following": following,
+      },
+    ).then(Account.fromJson.fromResponseList);
+  }
+
+  Future<List<mastodon.List>> getLists() async {
+    return client
+        .sendRequest(HttpMethod.get, "api/v1/lists")
+        .then(mastodon.List.fromJson.fromResponseList);
+  }
+
+  Future<mastodon.List> getList(String id) async {
+    return client
+        .sendRequest(HttpMethod.get, "api/v1/lists/$id")
+        .then(mastodon.List.fromJson.fromResponse);
+  }
+
+  Future<mastodon.List> createList(
+    String title, [
+    RepliesPolicy? repliesPolicy,
+  ]) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/lists",
+          body: {
+            "title": title,
+            if (repliesPolicy != null) "replies_policy": repliesPolicy,
+          }.jsonBody,
+        )
+        .then(mastodon.List.fromJson.fromResponse);
+  }
+
+  Future<void> deleteList(String id) async =>
+      client.sendRequest(HttpMethod.delete, "api/v1/lists/$id");
+
+  Future<List<Account>> getListAccounts(String id) async => client
+      .sendRequest(HttpMethod.get, "api/v1/lists/$id/accounts")
+      .then(Account.fromJson.fromResponseList);
+
+  Future<void> addListAccounts(String id, Set<String> accountIds) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/v1/lists/$id/accounts",
+      body: {"account_ids": accountIds.toList()}.jsonBody,
     );
   }
 
-  Future<List<mastodon.Account>> getFavouritedBy(String statusId) async {
-    final users = await sendJsonRequestMultiple(
-      HttpMethod.get,
-      "api/v1/statuses/$statusId/favourited_by",
-      mastodon.Account.fromJson,
+  Future<void> removeListAccounts(String id, Set<String> accountIds) async {
+    await client.sendRequest(
+      HttpMethod.delete,
+      "api/v1/lists/$id/accounts",
+      body: {"account_ids": accountIds.toList()}.jsonBody,
     );
-    return users.toList();
   }
 
-  Future<List<mastodon.Account>> getBoostedBy(String statusId) async {
-    final users = await sendJsonRequestMultiple(
-      HttpMethod.get,
-      "api/v1/statuses/$statusId/reblogged_by",
-      mastodon.Account.fromJson,
-    );
-    return users.toList();
+  Future<void> updateList(String id, String title) async {
+    await client
+        .sendRequest(
+          HttpMethod.put,
+          "api/v1/lists/$id",
+          body: {"title": title}.jsonBody,
+        )
+        .then(mastodon.List.fromJson.fromResponse);
   }
 }

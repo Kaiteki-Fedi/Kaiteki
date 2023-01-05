@@ -2,8 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/helpers.dart';
@@ -36,7 +36,7 @@ class UserInfoWidget extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          user.handle,
+          user.handle.toString(),
           style: Theme.of(context).textTheme.bodySmall,
         ),
         if (user.description != null) const SizedBox(height: 12.0),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/shared/posts/user_display_name_widget.dart';
+import 'package:kaiteki/ui/shared/users/user_display_name_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class EmbeddedPostWidget extends ConsumerWidget {
@@ -46,9 +46,9 @@ class EmbeddedPostWidget extends ConsumerWidget {
   }
 
   void openPost(BuildContext context, WidgetRef ref) {
-    final account = ref.read(accountProvider).currentAccount;
-    final instance = account.key.host;
-    final username = account.key.username;
+    final accountKey = ref.read(accountProvider)!.key;
+    final instance = accountKey.host;
+    final username = accountKey.username;
     context.push(
       "/@$username@$instance/posts/${post.id}",
       extra: post,

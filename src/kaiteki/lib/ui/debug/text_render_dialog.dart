@@ -2,9 +2,8 @@ import 'package:flutter/material.dart' hide Element;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/ui/rounded_underline_tab_indicator.dart';
 import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -44,22 +43,11 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
                   elevation: 0,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: TabBar(
-                    indicatorColor: Theme.of(context).colorScheme.primary,
-                    labelColor: Theme.of(context).colorScheme.primary,
-                    unselectedLabelColor: Theme.of(context).disabledColor,
                     isScrollable: true,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicator: RoundedUnderlineTabIndicator(
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      radius: const Radius.circular(2),
-                    ),
-                    tabs: const [
+                    tabs: [
                       Tab(text: "Raw"),
                       Tab(text: "Parsed"),
                       Tab(text: "Rendered"),

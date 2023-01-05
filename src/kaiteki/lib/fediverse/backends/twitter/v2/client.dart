@@ -1,11 +1,7 @@
-// ignore_for_file: unnecessary_await_in_return, obfuscates method call
-
 import 'dart:async';
+import 'dart:convert';
 
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/adapter.dart'
-    show clientId;
-import 'package:kaiteki/fediverse/backends/twitter/v2/authentication_data.dart';
+import 'package:http/http.dart' as http show Response;
 import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/bookmark_response.dart';
@@ -14,67 +10,47 @@ import 'package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/timeline_response.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/token_response.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/responses/user_response.dart';
-import 'package:kaiteki/fediverse/client_base.dart';
-import 'package:kaiteki/http/response.dart' as ktk;
-import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/http_method.dart';
+import 'package:kaiteki/http/http.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 import 'model/media.dart';
 
-class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
-  static final _logger = getLogger("TwitterClient");
+class TwitterClient {
+  late final KaitekiClient client;
 
-  TwitterClient() : super("twitter.com");
-
-  @override
-  String get baseUrl => "https://api.twitter.com";
-
-  @override
-  FutureOr<void> setAccountAuthentication(AccountSecret secret) async {
-    if (secret.refreshToken == null) {
-      authenticationData = TwitterAuthenticationData(
-        secret.accessToken,
-        secret.userId,
-      );
-    } else {
-      _logger.v("Refreshing account token");
-
-      final token = await getToken(
-        clientId: clientId,
-        grantType: "refresh_token",
-        refreshToken: secret.refreshToken,
-      );
-
-      authenticationData = TwitterAuthenticationData(
-        token.accessToken,
-        null,
-      );
-
-      final me = await getMe(userFields: UserField.values.toSet());
-
-      authenticationData = TwitterAuthenticationData(
-        token.accessToken,
-        me.id,
-      );
+  String? _userId;
+  String get userId {
+    final id = _userId;
+    if (id == null) {
+      throw StateError("Tried to access user id when it was null");
     }
+    return id;
   }
 
-  @override
-  ApiType get type => ApiType.twitter;
+  set userId(String? userId) {
+    _userId = userId;
+  }
 
-  Future<User> getMe({
-    UserFields userFields = const {},
-  }) async {
-    final query = {
-      if (userFields.isNotEmpty) "user.fields": userFields.join(","),
-    };
-    return await sendJsonRequest(
-      HttpMethod.get,
-      "2/users/me${query.toQueryString()}",
-      (j) => User.fromJson(j["data"]!),
+  String? token;
+
+  TwitterClient() {
+    client = KaitekiClient(
+      baseUri: Uri(scheme: "https", host: "api.twitter.com"),
+      checkResponse: _checkResponse,
+      intercept: (request) {
+        if (token != null) request.headers["Authorization"] = "Bearer $token";
+      },
     );
+  }
+
+  Future<User> getMe({UserFields userFields = const {}}) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "2/users/me",
+      query: {
+        if (userFields.isNotEmpty) "user.fields": userFields.join(","),
+      },
+    ).then(((j) => User.fromJson(j["data"]!)).fromResponse);
   }
 
   Future<TweetResponse> getTweet(
@@ -84,17 +60,17 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
     UserFields userFields = const {},
     MediaFields mediaFields = const {},
   }) async {
-    final query = {
-      if (expansions.isNotEmpty) "expansions": expansions.join(","),
-      if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
-      if (userFields.isNotEmpty) "user.fields": userFields.join(","),
-      if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
-    };
-
-    return await sendJsonRequest(
+    return client.sendRequest(
       HttpMethod.get,
-      "2/tweets/$id${query.toQueryString()}",
-      (j) => TweetResponse.fromJson(j, Tweet.fromJson.generic),
+      "2/tweets/$userId",
+      query: {
+        if (expansions.isNotEmpty) "expansions": expansions.join(","),
+        if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
+        if (userFields.isNotEmpty) "user.fields": userFields.join(","),
+        if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
+      },
+    ).then(
+      ((j) => TweetResponse.fromJson(j, Tweet.fromJson.generic)).fromResponse,
     );
   }
 
@@ -105,27 +81,27 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
     String? quoteTweetId,
     TweetReplySettings replySettings = TweetReplySettings.everyone,
   }) async {
-    final id = authenticationData!.userId!;
-    return await sendJsonRequest(
-      HttpMethod.post,
-      "2/tweets",
-      (json) => Tweet.fromJson(json["data"]),
-      body: {
-        if (text != null) "text": text,
-        if (replySettings != TweetReplySettings.everyone)
-          "reply_settings": replySettings.name,
-        if (inReplyToTweetId != null)
-          "reply": {
-            "in_reply_to_tweet_id": inReplyToTweetId,
-            "exclude_reply_user_ids": excludeReplyUserIds.toList(
-              growable: false,
-            ),
-          },
-        if (quoteTweetId != null) "quote_tweet_id": quoteTweetId,
-        "direct_message_deep_link":
-            "https://twitter.com/messages/compose?recipient_id=$id"
-      },
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "2/tweets",
+          body: {
+            if (text != null) "text": text,
+            if (replySettings != TweetReplySettings.everyone)
+              "reply_settings": replySettings.name,
+            if (inReplyToTweetId != null)
+              "reply": {
+                "in_reply_to_tweet_id": inReplyToTweetId,
+                "exclude_reply_user_ids": excludeReplyUserIds.toList(
+                  growable: false,
+                ),
+              },
+            if (quoteTweetId != null) "quote_tweet_id": quoteTweetId,
+            "direct_message_deep_link":
+                "https://twitter.com/messages/compose?recipient_id=$userId"
+          }.jsonBody,
+        )
+        .then(((j) => Tweet.fromJson(j["data"])).fromResponse);
   }
 
   Future<TimelineResponse> getReverseChronologicalTimeline({
@@ -136,21 +112,18 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
     String? untilId,
     String? sinceId,
   }) async {
-    final query = {
-      if (expansions.isNotEmpty) "expansions": expansions.join(","),
-      if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
-      if (userFields.isNotEmpty) "user.fields": userFields.join(","),
-      if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
-      if (untilId != null) "until_id": untilId,
-      if (sinceId != null) "since_id": sinceId,
-    };
-
-    final id = authenticationData!.userId!;
-    return await sendJsonRequest(
+    return client.sendRequest(
       HttpMethod.get,
-      "2/users/$id/timelines/reverse_chronological${query.toQueryString()}",
-      TimelineResponse.fromJson,
-    );
+      "2/users/$userId/timelines/reverse_chronological",
+      query: {
+        if (expansions.isNotEmpty) "expansions": expansions.join(","),
+        if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
+        if (userFields.isNotEmpty) "user.fields": userFields.join(","),
+        if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
+        if (untilId != null) "until_id": untilId,
+        if (sinceId != null) "since_id": sinceId,
+      },
+    ).then(TimelineResponse.fromJson.fromResponse);
   }
 
   Future<TimelineResponse> getUserTweets(
@@ -162,20 +135,18 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
     String? untilId,
     String? sinceId,
   }) async {
-    final query = {
-      if (expansions.isNotEmpty) "expansions": expansions.join(","),
-      if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
-      if (userFields.isNotEmpty) "user.fields": userFields.join(","),
-      if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
-      if (untilId != null) "until_id": untilId,
-      if (sinceId != null) "since_id": sinceId,
-    };
-
-    return await sendJsonRequest(
+    return client.sendRequest(
       HttpMethod.get,
-      "2/users/$id/tweets${query.toQueryString()}",
-      TimelineResponse.fromJson,
-    );
+      "2/users/$userId/tweets",
+      query: {
+        if (expansions.isNotEmpty) "expansions": expansions.join(","),
+        if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
+        if (userFields.isNotEmpty) "user.fields": userFields.join(","),
+        if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
+        if (untilId != null) "until_id": untilId,
+        if (sinceId != null) "since_id": sinceId,
+      },
+    ).then(TimelineResponse.fromJson.fromResponse);
   }
 
   Future<UserResponse> getUser(
@@ -184,32 +155,29 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
     TweetFields tweetFields = const {},
     UserFields userFields = const {},
   }) async {
-    final query = {
-      if (expansions.isNotEmpty) "expansions": expansions.join(","),
-      if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
-      if (userFields.isNotEmpty) "user.fields": userFields.join(","),
-    };
-
-    return await sendJsonRequest(
+    return client.sendRequest(
       HttpMethod.get,
-      "2/users/$id${query.toQueryString()}",
-      UserResponse.fromJson,
-    );
+      "2/users/$userId",
+      query: {
+        if (expansions.isNotEmpty) "expansions": expansions.join(","),
+        if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
+        if (userFields.isNotEmpty) "user.fields": userFields.join(","),
+      },
+    ).then(UserResponse.fromJson.fromResponse);
   }
 
-  @override
-  Future<void> checkResponse(ktk.Response response) async {
-    if (!response.isSuccessful) {
-      Map<String, dynamic>? json;
+  void _checkResponse(http.Response response) {
+    if (response.isSuccessful) return;
 
-      try {
-        json = await response.getContentJson();
-      } catch (_) {}
+    Map<String, dynamic>? json;
 
-      if (json != null) throw Exception(json["title"] ?? json["detail"]);
+    try {
+      json = jsonDecode(response.body);
+    } catch (_) {}
+
+    if (json != null) {
+      throw Exception(json["error"] + ": " + json["error_description"]);
     }
-
-    super.checkResponse(response);
   }
 
   Future<TweetListResponse> searchRecentTweets(
@@ -219,18 +187,20 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
     UserFields userFields = const {},
     MediaFields mediaFields = const {},
   }) async {
-    final urlQuery = {
-      "query": query,
-      if (expansions.isNotEmpty) "expansions": expansions.join(","),
-      if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
-      if (userFields.isNotEmpty) "user.fields": userFields.join(","),
-      if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
-    };
-
-    return await sendJsonRequest(
+    return client.sendRequest(
       HttpMethod.get,
-      "2/tweets/search/recent${urlQuery.toQueryString()}",
-      (j) => TweetListResponse.fromJson(j, Tweet.fromJson.genericList),
+      "2/tweets/search/recent",
+      query: {
+        "query": query,
+        if (expansions.isNotEmpty) "expansions": expansions.join(","),
+        if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
+        if (userFields.isNotEmpty) "user.fields": userFields.join(","),
+        if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
+      },
+    ).then(
+      ((j) {
+        return TweetListResponse.fromJson(j, Tweet.fromJson.genericList);
+      }).fromResponse,
     );
   }
 
@@ -242,49 +212,48 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
     String? codeVerifier,
     String? refreshToken,
   }) async {
-    final map = <String, String>{
-      "grant_type": grantType,
-      "client_id": clientId,
-      if (codeVerifier != null) "code_verifier": codeVerifier,
-      if (redirectUri != null) "redirect_uri": redirectUri,
-      if (code != null) "code": code,
-      if (refreshToken != null) "refresh_token": refreshToken,
-    };
-
-    final response = await sendRequest(
+    return client.sendRequest(
       HttpMethod.post,
       "2/oauth2/token",
-      contentType: "application/x-www-form-urlencoded",
-      body: Uri(queryParameters: map).query,
-    );
-
-    final json = await response.getContentJson();
-    return TokenResponse.fromJson(json);
+      query: {
+        "grant_type": grantType,
+        "client_id": clientId,
+        if (codeVerifier != null) "code_verifier": codeVerifier,
+        if (redirectUri != null) "redirect_uri": redirectUri,
+        if (code != null) "code": code,
+        if (refreshToken != null) "refresh_token": refreshToken,
+      },
+    ).then(TokenResponse.fromJson.fromResponse);
   }
 
   Future<BookmarkResponse> bookmarkTweet(String tweetId) async {
-    final id = authenticationData!.userId!;
-    return await sendJsonRequest(
-      HttpMethod.post,
-      "2/users/$id/bookmarks",
-      (j) => BookmarkResponse.fromJson(
-        j,
-        BookmarkResponseData.fromJson.generic,
-      ),
-      body: {"tweet_id": tweetId},
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "2/users/$userId/bookmarks",
+          body: {"tweet_id": tweetId}.jsonBody,
+        )
+        .then(
+          ((j) {
+            return BookmarkResponse.fromJson(
+              j,
+              BookmarkResponseData.fromJson.generic,
+            );
+          }).fromResponse,
+        );
   }
 
   Future<BookmarkResponse> unbookmarkTweet(String tweetId) async {
-    final id = authenticationData!.userId!;
-    return await sendJsonRequest(
-      HttpMethod.delete,
-      "2/users/$id/bookmarks/$tweetId",
-      (j) => BookmarkResponse.fromJson(
-        j,
-        BookmarkResponseData.fromJson.generic,
-      ),
-    );
+    return client
+        .sendRequest(
+          HttpMethod.delete,
+          "2/users/$userId/bookmarks/$tweetId",
+        )
+        .then(
+          BookmarkResponse.fromJson.fromResponse(
+            BookmarkResponseData.fromJson.generic,
+          ),
+        );
   }
 
   Future<TweetListResponse> getBookmarks({
@@ -300,31 +269,34 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
       if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
     };
 
-    final id = authenticationData!.userId!;
-    return await sendJsonRequest(
-      HttpMethod.get,
-      "2/users/$id/bookmarks${urlQuery.toQueryString()}",
-      (j) => TweetListResponse.fromJson(j, Tweet.fromJson.genericList),
-    );
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          "2/users/$userId/bookmarks${urlQuery.toQueryString()}",
+        )
+        .then(
+          TweetListResponse.fromJson.fromResponse(Tweet.fromJson.genericList),
+        );
   }
 
   Future<LikeResponse> likeTweet(String tweetId) async {
-    final id = authenticationData!.userId!;
-    return await sendJsonRequest(
-      HttpMethod.post,
-      "2/users/$id/likes",
-      (j) => LikeResponse.fromJson(j, LikeResponseData.fromJson.generic),
-      body: {"tweet_id": tweetId},
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "2/users/$userId/likes",
+          body: {"tweet_id": tweetId}.jsonBody,
+        )
+        .then(
+          LikeResponse.fromJson.fromResponse(LikeResponseData.fromJson.generic),
+        );
   }
 
   Future<LikeResponse> unlikeTweet(String tweetId) async {
-    final id = authenticationData!.userId!;
-    return await sendJsonRequest(
-      HttpMethod.delete,
-      "2/users/$id/likes/$tweetId",
-      (j) => LikeResponse.fromJson(j, LikeResponseData.fromJson.generic),
-    );
+    return client
+        .sendRequest(HttpMethod.delete, "2/users/$userId/likes/$tweetId")
+        .then(
+          LikeResponse.fromJson.fromResponse(LikeResponseData.fromJson.generic),
+        );
   }
 
   Future<LikingUsersResponse> getLikingUsers(
@@ -332,14 +304,10 @@ class TwitterClient extends FediverseClientBase<TwitterAuthenticationData> {
     TweetFields tweetFields = const {},
     UserFields userFields = const {},
   }) async {
-    final id = authenticationData!.userId!;
-    return await sendJsonRequest(
-      HttpMethod.delete,
-      "2/users/$id/likes",
-      (j) => LikingUsersResponse.fromJson(
-        j,
-        (obj) => User.fromJson.genericList(obj)!,
-      ),
+    return client.sendRequest(HttpMethod.delete, "2/users/$userId/likes").then(
+      LikingUsersResponse.fromJson.fromResponse((obj) {
+        return User.fromJson.genericList(obj)!;
+      }),
     );
   }
 }

@@ -22,7 +22,7 @@ class SubjectBar extends StatelessWidget {
           ListTile(
             title: Text(
               subject,
-              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
             ),

@@ -4,17 +4,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'check_session.g.dart';
 
 @JsonSerializable()
-class MisskeyCheckSessionResponse {
+class CheckSessionResponse {
   final String token;
   final User user;
 
-  const MisskeyCheckSessionResponse({
+  const CheckSessionResponse({
     required this.token,
     required this.user,
   });
 
-  factory MisskeyCheckSessionResponse.fromJson(Map<String, dynamic> json) =>
-      _$MisskeyCheckSessionResponseFromJson(json);
+  factory CheckSessionResponse.fromJson(Map<String, dynamic> json) =>
+      _$CheckSessionResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MisskeyCheckSessionResponseToJson(this);
+  Map<String, dynamic> toJson() => _$CheckSessionResponseToJson(this);
 }

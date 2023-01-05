@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 
 class AccountSwitcherWidget extends ConsumerWidget {
@@ -13,27 +13,17 @@ class AccountSwitcherWidget extends ConsumerWidget {
     return IconButton(
       iconSize: size ?? 24,
       icon: buildIcon(context, ref),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AccountListDialog();
-          },
-        );
-      },
+      onPressed: () => context.pushNamed("accounts"),
     );
   }
 
   Widget buildIcon(BuildContext context, WidgetRef ref) {
-    final container = ref.watch(accountProvider);
+    final account = ref.watch(accountProvider);
 
-    if (!container.loggedIn) {
+    if (account == null) {
       return const Icon(Icons.account_circle_rounded);
     }
 
-    return AvatarWidget(
-      container.currentAccount.user,
-      size: size ?? 24,
-    );
+    return AvatarWidget(account.user, size: size ?? 24);
   }
 }

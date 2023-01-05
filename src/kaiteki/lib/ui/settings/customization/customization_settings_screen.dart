@@ -14,7 +14,7 @@ class _CustomizationSettingsScreenState
     extends State<CustomizationSettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsCustomization)),

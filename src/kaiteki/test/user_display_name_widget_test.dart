@@ -1,12 +1,11 @@
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/ui/shared/posts/user_display_name_widget.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
+import 'package:kaiteki/ui/shared/users/user_display_name_widget.dart';
 import 'package:test/test.dart';
 
 void main() {
   test("separated", () {
     const user = User(
       id: "",
-      source: null,
       username: "alice",
       displayName: "Alice 🌈",
       host: "example.org",
@@ -20,7 +19,6 @@ void main() {
   test("unseparated", () {
     const user = User(
       id: "",
-      source: null,
       username: "alice",
       displayName: "Alice",
       host: "example.org",

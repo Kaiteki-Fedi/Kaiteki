@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/authentication_data.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/client.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v2/extensions.dart';
@@ -13,18 +14,13 @@ import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart'
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
+import 'package:kaiteki/fediverse/interfaces/search_support.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/model/account_key.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/account.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -32,20 +28,15 @@ const clientId = kDebugMode
     ? "QTFFSnY5d2QwTkp3enliMHdfaXg6MTpjaQ"
     : "Q2lkU2p0VERwOWxreXdxeFVsQm46MTpjaQ";
 
-class TwitterAdapter extends FediverseAdapter<TwitterClient>
-    implements FavoriteSupport, BookmarkSupport {
-  static const instanceModel = Instance(
-    name: "Twitter",
-    source: null,
-    backgroundUrl:
-        "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
-  );
+class TwitterAdapter extends CentralizedBackendAdapter
+    implements FavoriteSupport, BookmarkSupport, SearchSupport {
+  final TwitterClient client;
 
-  factory TwitterAdapter(String _) {
+  factory TwitterAdapter() {
     return TwitterAdapter.custom(TwitterClient());
   }
 
-  TwitterAdapter.custom(super.client);
+  TwitterAdapter.custom(this.client);
 
   @override
   AdapterCapabilities get capabilities => const TwitterCapabilities();
@@ -55,9 +46,6 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
     // TODO(Craftplacer): implement followUser
     throw UnimplementedError();
   }
-
-  @override
-  Future<Instance> getInstance() => Future.value(instanceModel);
 
   @override
   Future<User> getMyself() async {
@@ -90,7 +78,7 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(
+  Future<List<Post>> getStatusesOfUserById(
     String id, {
     TimelineQuery<String>? query,
   }) async {
@@ -108,7 +96,7 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
       mediaFields: MediaField.values.toSet(),
     );
 
-    return response.data.map((t) => t.toKaiteki(response.includes!));
+    return response.data.map((t) => t.toKaiteki(response.includes!)).toList();
   }
 
   @override
@@ -153,7 +141,7 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
     TimelineQuery<String>? query,
   }) async {
@@ -254,17 +242,9 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
       codeVerifier: "challenge",
     );
 
-    client.authenticationData = TwitterAuthenticationData(
-      token.accessToken,
-      null,
-    );
-
+    client.token = token.accessToken;
     final me = await client.getMe(userFields: UserField.values.toSet());
-
-    client.authenticationData = TwitterAuthenticationData(
-      token.accessToken,
-      me.id,
-    );
+    client.userId = me.id;
 
     return LoginResult.successful(
       Account(
@@ -310,14 +290,6 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
       },
     );
     return response.data.toKaiteki(response.includes!);
-  }
-
-  @override
-  Future<Instance?> probeInstance() {
-    if (client.instance == "twitter.com") {
-      return Future.value(instanceModel);
-    }
-    return Future.value();
   }
 
   @override
@@ -394,5 +366,61 @@ class TwitterAdapter extends FediverseAdapter<TwitterClient>
   Future<void> unbookmarkPost(String id) async {
     final response = await client.bookmarkTweet(id);
     assert(!response.data.bookmarked);
+  }
+
+  @override
+  Future<void> applySecrets(
+    ClientSecret? clientSecret,
+    AccountSecret accountSecret,
+  ) async {
+    if (accountSecret.refreshToken != null) {
+      final token = await client.getToken(
+        clientId: clientId,
+        grantType: "refresh_token",
+        refreshToken: accountSecret.refreshToken,
+      );
+
+      client.token = token.accessToken;
+      final me = await client.getMe(userFields: UserField.values.toSet());
+      client.userId = me.id;
+
+      return;
+    }
+
+    client
+      ..userId = accountSecret.userId
+      ..token = accountSecret.accessToken;
+  }
+
+  @override
+  final instance = const Instance(
+    name: "Twitter",
+    backgroundUrl:
+        "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
+  );
+
+  @override
+  Future<SearchResults> search(String query) async {
+    return SearchResults(
+      posts: await searchForPosts(query),
+    );
+  }
+
+  @override
+  Future<List<String>> searchForHashtags(String query) {
+    // TODO: implement searchForHashtags
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Post>> searchForPosts(String query) async {
+    final response = await client.searchRecentTweets(query);
+    return response.data!.map((t) => t.toKaiteki(response.includes!)).toList();
+  }
+
+  @override
+  Future<List<User>> searchForUsers(String query) {
+    // TODO: implement searchForUsers
+    throw UnimplementedError();
   }
 }

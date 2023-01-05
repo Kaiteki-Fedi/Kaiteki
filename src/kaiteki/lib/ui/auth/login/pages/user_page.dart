@@ -7,6 +7,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/auth/login/constants.dart';
 import 'package:kaiteki/ui/auth/login/login_form.dart';
 import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/error_message.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -37,14 +38,14 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
         return AsyncBlockWidget(
           blocking: snapshot.connectionState == ConnectionState.waiting,
           duration: const Duration(milliseconds: 250),
-          secondChild: const Center(child: CircularProgressIndicator()),
+          secondChild: centeredCircularProgressIndicator,
           child: Padding(
             padding: contentMargin,
             child: Form(
@@ -147,12 +148,12 @@ class _UserPageState extends State<UserPage> {
 
   String? _validatePassword(String? value) {
     if (value?.trim().isNotEmpty == true) return null;
-    return context.getL10n().authNoPassword;
+    return context.l10n.authNoPassword;
   }
 
   String? _validateUsername(String? value) {
     if (value?.trim().isNotEmpty == true) return null;
-    return context.getL10n().authNoUsername;
+    return context.l10n.authNoUsername;
   }
 
   Future<void> _onLogin() async {

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart'
+    show DoNothingAndStopPropagationTextIntent;
 import 'package:flutter/widgets.dart'
     show Intent, ShortcutActivator, WidgetsApp;
 import 'package:kaiteki/ui/shortcuts/activators.dart';
@@ -14,4 +16,9 @@ final shortcuts = <ShortcutActivator, Intent>{
   gotoBookmarks: const GoToAppLocationIntent(AppLocation.bookmarks),
   gotoNotifications: const GoToAppLocationIntent(AppLocation.notifications),
   newPost: const NewPostIntent(),
+};
+
+final propagatingTextFieldShortcuts = {
+  for (final activator in propagatingTextFieldActivators)
+    activator: const DoNothingAndStopPropagationTextIntent(),
 };

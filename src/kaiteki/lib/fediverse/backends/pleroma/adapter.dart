@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart';
 import 'package:kaiteki/fediverse/backends/pleroma/capabilities.dart';
@@ -6,6 +7,7 @@ import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/notification.dart';
 
 part 'adapter.c.dart';
 
@@ -13,11 +15,19 @@ part 'adapter.c.dart';
 class PleromaAdapter //
     extends SharedMastodonAdapter<PleromaClient>
     implements ChatSupport, ReactionSupport, PreviewSupport {
+  @override
+  final String instance;
+
   factory PleromaAdapter(String instance) {
-    return PleromaAdapter.custom(PleromaClient(instance));
+    return PleromaAdapter.custom(
+      instance,
+      PleromaClient(
+        instance,
+      ),
+    );
   }
 
-  PleromaAdapter.custom(super.client);
+  PleromaAdapter.custom(this.instance, super.client);
 
   @override
   Future<ChatMessage> postChatMessage(Chat chat, ChatMessage message) async {
@@ -27,11 +37,6 @@ class PleromaAdapter //
       message.content.content!,
     );
     return toChatMessage(sentMessage);
-  }
-
-  @override
-  Future<User> getUser(String username, [String? instance]) {
-    throw UnimplementedError();
   }
 
   @override
@@ -45,13 +50,13 @@ class PleromaAdapter //
   }
 
   @override
-  Future<void> addReaction(Post post, Emoji emoji) {
-    throw UnimplementedError();
+  Future<void> addReaction(Post post, covariant UnicodeEmoji emoji) async {
+    await client.react(post.id, emoji.emoji);
   }
 
   @override
-  Future<void> removeReaction(Post post, Emoji emoji) {
-    throw UnimplementedError();
+  Future<void> removeReaction(Post post, covariant UnicodeEmoji emoji) async {
+    await client.removeReaction(post.id, emoji.emoji);
   }
 
   @override
@@ -61,7 +66,7 @@ class PleromaAdapter //
       contentType: getContentType(draft.formatting),
       pleromaPreview: true,
     );
-    return toPost(status, client.instance);
+    return toPost(status, instance);
   }
 
   @override
@@ -84,8 +89,8 @@ class PleromaAdapter //
     final config = await client.getFrontendConfigurations();
     final pleroma = config.pleroma;
 
-    final background = ensureAbsolute(pleroma?.background, client.instance);
-    final logo = ensureAbsolute(pleroma?.logo, client.instance);
+    final background = ensureAbsolute(pleroma?.background, this.instance);
+    final logo = ensureAbsolute(pleroma?.logo, this.instance);
 
     return Instance(
       name: instance.name,
@@ -114,4 +119,21 @@ class PleromaAdapter //
 
   @override
   PleromaCapabilities get capabilities => const PleromaCapabilities();
+
+  @override
+  Future<void> markAllNotificationsAsRead() async {
+    final notifications = await client.getNotifications();
+    final lastNotification = notifications.firstOrNull;
+    if (lastNotification != null) {
+      await client.markNotificationsAsRead(
+        int.parse(lastNotification.id),
+      );
+    }
+  }
+
+  @override
+  Future<void> markNotificationAsRead(Notification notification) {
+    // TODO: implement markNotificationAsRead
+    throw UnimplementedError();
+  }
 }

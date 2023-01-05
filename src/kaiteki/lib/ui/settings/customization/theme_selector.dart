@@ -16,6 +16,10 @@ class ThemeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final app = context.findAncestorWidgetOfExactType<MaterialApp>();
+    final m3 = Theme.of(context).useMaterial3;
+    final defaultDarkTheme = getDefaultTheme(Brightness.dark, m3);
+    final defaultLightTheme = getDefaultTheme(Brightness.dark, m3);
     return Wrap(
       children: [
         ThemePreview(
@@ -25,7 +29,7 @@ class ThemeSelector extends StatelessWidget {
           icon: const Icon(Icons.auto_fix_high_rounded),
         ),
         Theme(
-          data: getTheme(Brightness.light, Theme.of(context).useMaterial3),
+          data: app?.theme ?? defaultLightTheme,
           child: ThemePreview(
             name: _themeToString(context, ThemeMode.light),
             selected: theme == ThemeMode.light,
@@ -33,7 +37,7 @@ class ThemeSelector extends StatelessWidget {
           ),
         ),
         Theme(
-          data: getTheme(Brightness.dark, Theme.of(context).useMaterial3),
+          data: app?.darkTheme ?? defaultDarkTheme,
           child: ThemePreview(
             name: _themeToString(context, ThemeMode.dark),
             selected: theme == ThemeMode.dark,
@@ -45,7 +49,7 @@ class ThemeSelector extends StatelessWidget {
   }
 
   String _themeToString(BuildContext context, ThemeMode mode) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     switch (mode) {
       case ThemeMode.light:

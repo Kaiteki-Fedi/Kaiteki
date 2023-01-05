@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/reaction.dart';
-import 'package:kaiteki/ui/shared/posts/reaction_widget.dart';
+import 'package:kaiteki/preferences/app_experiment.dart';
+import 'package:kaiteki/ui/shared/posts/reaction_button.dart';
 
-class ReactionRow extends StatelessWidget {
-  final Iterable<Reaction> _reactions;
-  final Post _parentPost;
+class ReactionRow extends ConsumerWidget {
+  final List<Reaction> reactions;
+  final Function(Reaction reaction) onPressed;
 
   const ReactionRow(
-    this._parentPost,
-    this._reactions, {
+    this.reactions,
+    this.onPressed, {
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dense = ref
+        .watch(preferencesProvider.select((p) => p.enabledExperiments))
+        .contains(AppExperiment.denseReactions);
+    final spacing = dense ? 2.0 : 6.0;
     return Wrap(
+      spacing: spacing,
+      runSpacing: spacing,
       children: [
-        for (var reaction in _reactions)
-          ReactionWidget(parentPost: _parentPost, reaction: reaction),
+        for (var reaction in reactions)
+          ReactionButton(
+            reaction: reaction,
+            onPressed: () => onPressed(reaction),
+          ),
       ],
     );
   }

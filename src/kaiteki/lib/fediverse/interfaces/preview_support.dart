@@ -1,5 +1,4 @@
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 
 abstract class PreviewSupport {
   Future<Post> getPreview(PostDraft draft);

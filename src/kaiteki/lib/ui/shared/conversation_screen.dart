@@ -2,8 +2,10 @@ import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/ui/shared/breakpoint_container.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/ui/shared/common.dart';
+import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -27,7 +29,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     try {
       _threadFetchFuture = adapter.getThread(widget.post.getRoot());
     } on UnimplementedError {
@@ -35,7 +37,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "Fetching threads with ${adapter.client.type.displayName} is not implemented.",
+            "Fetching threads with ${adapter.type.displayName} is not implemented.",
           ),
         ),
       );
@@ -44,7 +46,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
@@ -80,8 +82,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       return compute(toThread, thread.toList(growable: false));
     });
 
-    final l10n = context.getL10n();
-
     return FutureBuilder<ThreadPost>(
       future: _threadedFuture,
       builder: (_, snapshot) {
@@ -97,14 +97,14 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
             ],
           );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return centeredCircularProgressIndicator;
         }
       },
     );
   }
 
   Widget _buildErrorListTile(BuildContext context, AsyncSnapshot snapshot) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return ListTile(
       leading: const Icon(Icons.error_rounded),
       title: Text(l10n.threadRetrievalFailed),
@@ -142,7 +142,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
             ],
           );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return centeredCircularProgressIndicator;
         }
       },
     );

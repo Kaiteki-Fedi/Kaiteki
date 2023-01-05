@@ -48,7 +48,7 @@ class _AttachmentInspectionScreenState
     final count = widget.attachments.length;
     final singleAttachment = count == 1;
     final focusNode = FocusNode();
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     final pageView = PageView(
       controller: controller,
@@ -88,7 +88,7 @@ class _AttachmentInspectionScreenState
           IconButton(
             icon: const Icon(Icons.subtitles_rounded),
             onPressed: attachment.description == null ? null : _showAltText,
-            tooltip: context.getL10n().showAltTextTooltip,
+            tooltip: context.l10n.showAltTextTooltip,
           ),
           IconButton(
             icon: const Icon(Icons.download_rounded),
@@ -179,7 +179,7 @@ class _AttachmentInspectionScreenState
   }
 
   List<PopupMenuEntry> _buildPopupMenu(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     return [
       PopupMenuItem(
         child: Text(l10n.copyAttachmentUrl),
@@ -220,7 +220,7 @@ class _AttachmentInspectionScreenState
 
   Widget buildTitle(BuildContext context) {
     final count = widget.attachments.length;
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Text(
       l10n.pageViewTitle(currentPage + 1, count),
@@ -250,7 +250,7 @@ class _AttachmentInspectionScreenState
   }
 
   Future<void> downloadAttachment(BuildContext context) async {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
 
     final uri = Uri.parse(attachment.url);

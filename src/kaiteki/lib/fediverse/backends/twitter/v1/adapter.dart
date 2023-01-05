@@ -1,6 +1,6 @@
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/capabilties.dart';
+import 'package:kaiteki/fediverse/backends/twitter/v1/capabilities.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v1/client.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v1/keys.dart';
 import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart'
@@ -17,35 +17,23 @@ import 'package:kaiteki/fediverse/backends/twitter/v1/model/user.dart'
 import 'package:kaiteki/fediverse/capabilities.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/model/account_key.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/model/auth/authentication_data.dart';
-import 'package:kaiteki/model/auth/client_secret.dart';
+import 'package:kaiteki/model/auth/account.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:oauth1/oauth1.dart';
 import 'package:tuple/tuple.dart';
 
 part 'adapter.c.dart';
 
-class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
-  static const _twtInstance = Instance(name: "Twitter", source: null);
+class OldTwitterAdapter extends CentralizedBackendAdapter {
+  final OldTwitterClient client;
 
-  factory OldTwitterAdapter(String _) {
-    return OldTwitterAdapter.custom(OldTwitterClient(""));
-  }
+  factory OldTwitterAdapter() => OldTwitterAdapter.custom(OldTwitterClient());
 
-  OldTwitterAdapter.custom(super.client);
-
-  @override
-  Future<void> favoritePost(String id) {
-    // TODO(Craftplacer): implement favoritePost, https://github.com/Kaiteki-Fedi/Kaiteki/issues/132
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Instance> getInstance() async => _twtInstance;
+  OldTwitterAdapter.custom(this.client);
 
   @override
   Future<User> getMyself() async => toUser(await client.verifyCredentials());
@@ -56,12 +44,12 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
   }
 
   @override
-  Future<Iterable<Post>> getStatusesOfUserById(
+  Future<List<Post>> getStatusesOfUserById(
     String id, {
     TimelineQuery? query,
   }) async {
     // TODO(Craftplacer): support timeline query
-    return (await client.getUserTimeline(userId: id)).map(toPost);
+    return (await client.getUserTimeline(userId: id)).map(toPost).toList();
   }
 
   @override
@@ -71,7 +59,7 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
   }
 
   @override
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
     TimelineQuery? query,
   }) async {
@@ -81,7 +69,8 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
           sinceId: query?.sinceId,
           maxId: query?.untilId,
         );
-        return homeTimeine.map(toPost);
+        return homeTimeine.map(toPost).toList();
+
       default:
         throw UnimplementedError();
     }
@@ -148,13 +137,11 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
       );
     }
 
+    client
+      ..credentials = authResp.credentials
+      ..clientCredentials = clientCredentials;
+
     var username = authResp.optionalParameters['screen_name'];
-
-    client.authenticationData = TwitterAuthenticationData(
-      authResp.credentials,
-      clientCredentials,
-    );
-
     try {
       account = await client.verifyCredentials();
       username ??= account.screenName;
@@ -167,11 +154,12 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
       adapter: this,
       user: toUser(account),
       key: AccountKey(
-        ApiType.twitter,
+        ApiType.twitterV1,
         "twitter.com",
         username,
       ),
-      accountSecret: AccountSecret(""),
+      // FIXME(Craftplacer): Make Twitter v1 restorable
+      accountSecret: null,
       clientSecret: null,
     );
 
@@ -188,11 +176,6 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
       replyToStatusId: draft.replyTo?.id,
     );
     return toPost(tweet);
-  }
-
-  @override
-  Future<Instance?> probeInstance() async {
-    return client.instance == "twitter.com" ? _twtInstance : null;
   }
 
   @override
@@ -231,4 +214,16 @@ class OldTwitterAdapter extends FediverseAdapter<OldTwitterClient> {
     // TODO(Craftplacer): implement unrepeatPost
     throw UnimplementedError();
   }
+
+  @override
+  void applySecrets(
+    ClientSecret? clientSecret,
+    AccountSecret accountSecret,
+  ) {
+    // TODO(Craftplacer): implement applySecrets
+    throw UnimplementedError();
+  }
+
+  @override
+  Instance get instance => const Instance(name: "Twitter");
 }

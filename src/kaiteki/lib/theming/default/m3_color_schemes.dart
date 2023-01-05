@@ -30,12 +30,14 @@ const lightColorScheme = ColorScheme(
   inversePrimary: Color(0xFFFFB2BC),
   shadow: Color(0xFF000000),
   surfaceTint: Color(0xFFA7354E),
+  outlineVariant: Color(0xFFD7C1C3),
+  scrim: Color(0xFF000000),
 );
 
 const darkColorScheme = ColorScheme(
   brightness: Brightness.dark,
   primary: Color(0xFFFFB2BC),
-  onPrimary: Color(0xFF670023),
+  onPrimary: Color(0xFF670022),
   primaryContainer: Color(0xFF871C37),
   onPrimaryContainer: Color(0xFFFFD9DD),
   secondary: Color(0xFFE5BDC1),
@@ -62,4 +64,6 @@ const darkColorScheme = ColorScheme(
   inversePrimary: Color(0xFFA7354E),
   shadow: Color(0xFF000000),
   surfaceTint: Color(0xFFFFB2BC),
+  outlineVariant: Color(0xFF524344),
+  scrim: Color(0xFF000000),
 );

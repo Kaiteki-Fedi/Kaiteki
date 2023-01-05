@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' show dialogConstraints;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/text_inherited_icon_theme.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki_material/kaiteki_material.dart';
 
 class KeyboardShortcutsDialog extends StatelessWidget {
   const KeyboardShortcutsDialog({super.key});
@@ -15,17 +15,17 @@ class KeyboardShortcutsDialog extends StatelessWidget {
     final sectionTextStyle = TextStyle(
       color: Theme.of(context).disabledColor,
     );
-    final l10n = context.getL10n();
-    return ConstrainedBox(
-      constraints: dialogConstraints,
-      child: AlertDialog(
-        icon: const Icon(Icons.keyboard_rounded),
-        title: Text(l10n.keyboardShortcuts),
-        scrollable: true,
-        actionsPadding: Theme.of(context).useMaterial3
-            ? const EdgeInsets.fromLTRB(24, 24, 16, 24)
-            : null,
-        content: Column(
+    final l10n = context.l10n;
+    return AlertDialog(
+      icon: const Icon(Icons.keyboard_rounded),
+      title: Text(l10n.keyboardShortcuts),
+      scrollable: true,
+      actionsPadding: Theme.of(context).useMaterial3
+          ? const EdgeInsets.fromLTRB(24, 24, 16, 24)
+          : null,
+      content: ConstrainedBox(
+        constraints: dialogConstraints,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             KeyboardShortcut(
@@ -95,20 +95,20 @@ class KeyboardShortcutsDialog extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(l10n.closeButtonLabel),
-                const SizedBox(width: 12.0),
-                KeyboardKey.fromKey(context, LogicalKeyboardKey.escape),
-              ],
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
       ),
+      actions: [
+        TextButton(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.closeButtonLabel),
+              const SizedBox(width: 12.0),
+              KeyboardKey.fromKey(context, LogicalKeyboardKey.escape),
+            ],
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/constants.dart' show dialogConstraints;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -12,14 +12,14 @@ class AccountRemovalDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
-    return ConstrainedBox(
-      constraints: dialogConstraints,
-      child: AlertDialog(
-        icon: const Icon(Icons.logout_rounded),
-        title: Text(l10n.accountRemovalConfirmationTitle),
-        content: Column(
+    return AlertDialog(
+      icon: const Icon(Icons.logout_rounded),
+      title: Text(l10n.accountRemovalConfirmationTitle),
+      content: SizedBox(
+        width: dialogConstraints.minWidth,
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(l10n.accountRemovalConfirmationDescription),
@@ -41,20 +41,20 @@ class AccountRemovalDialog extends StatelessWidget {
               )
           ],
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.cancelButtonLabel),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).errorColor,
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.removeButtonLabel),
-          )
-        ],
       ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.cancelButtonLabel),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).colorScheme.error,
+          ),
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(l10n.removeButtonLabel),
+        )
+      ],
     );
   }
 }

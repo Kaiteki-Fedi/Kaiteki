@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 
 class AttachmentTrayItem extends StatelessWidget {
   final VoidCallback? onRemove;
@@ -25,7 +26,7 @@ class AttachmentTrayItem extends StatelessWidget {
         if (snapshot.hasError) {
           widget = const Center(child: Icon(Icons.error));
         } else if (!snapshot.hasData) {
-          widget = const Center(child: CircularProgressIndicator());
+          widget = centeredCircularProgressIndicator;
         } else {
           final attachment = snapshot.data!;
           switch (attachment.type) {

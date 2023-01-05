@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:animations/animations.dart';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/auth/login_functions.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
@@ -15,7 +18,9 @@ import 'package:kaiteki/ui/auth/login/pages/mfa_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/oauth_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/user_page.dart';
 import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
+import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -52,7 +57,7 @@ class InstanceCompound {
   @override
   int get hashCode => host.hashCode ^ type.hashCode ^ data.hashCode;
 
-  FediverseAdapter createAdapter() => type.createAdapter(host);
+  BackendAdapter createAdapter() => type.createAdapter(host);
 }
 
 class CallbackRequest<T, K extends Function> {
@@ -67,6 +72,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
   InstanceCompound? get instance => _instance;
   set instance(InstanceCompound? instance) {
     if (instance == _instance) return;
+    assert(mounted);
     setState(() => _instance = instance);
     widget.onInstanceChanged?.call(_instance);
   }
@@ -75,7 +81,16 @@ class LoginFormState extends ConsumerState<LoginForm> {
   CallbackRequest<void, MfaSubmitCallback>? _mfaRequest;
   VoidCallback? _oAuth;
 
+  CancelableOperation<InstanceCompound?>? _fetchInstanceFuture;
+
   Future<void>? _loginFuture;
+
+  @override
+  void dispose() {
+    // Avoid setting state when widget becomes unmounted
+    _fetchInstanceFuture?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +168,8 @@ class LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<InstanceCompound?> _fetchInstance(String host) async {
-    final result = await probeInstance(host);
+    final result = await ref.read(probeInstanceProvider(host).future);
+
     final ApiType type;
     final Instance instance;
 
@@ -224,7 +240,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<void> _login(InstanceCompound instance) async {
-    final accounts = ref.read(accountProvider);
+    final accounts = ref.read(accountManagerProvider);
     final adapter = instance.createAdapter();
 
     final result = await adapter.login(
@@ -236,11 +252,14 @@ class LoginFormState extends ConsumerState<LoginForm> {
 
     if (result.successful) {
       final account = result.account!;
+      if (account.accountSecret == null) {
+        await _showTemporaryAccountNotice();
+      }
+
       await accounts.add(account);
-      accounts.currentAccount = account;
 
       if (mounted) {
-        Navigator.of(context).pop();
+        context.goNamed("home", params: account.key.routerParams);
       }
 
       return;
@@ -254,7 +273,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<void> _showError(dynamic error, StackTrace? stack) async {
-    return showDialog(
+    await showDialog(
       context: context,
       builder: (_) => AuthenticationUnsuccessfulDialog(
         error: Tuple2(error, stack),
@@ -299,15 +318,21 @@ class LoginFormState extends ConsumerState<LoginForm> {
         return AsyncBlockWidget(
           blocking: isBusy,
           duration: const Duration(milliseconds: 250),
-          secondChild: const Center(child: CircularProgressIndicator()),
+          secondChild: centeredCircularProgressIndicator,
           child: InstancePage(
             enabled: !isBusy,
             onNext: (host) {
               setState(() {
                 // ignore: unnecessary_lambdas, I intentionally want this method not to return a future so the dialog isn't
-                _loginFuture = _loginToInstance(host).catchError((e, s) {
-                  _showError(e, s);
-                }).then((_) => instance = null);
+                _loginFuture = () async {
+                  try {
+                    await _loginToInstance(host);
+                  } catch (s, e) {
+                    _showError(s, e);
+                  } finally {
+                    instance = null;
+                  }
+                }();
               });
             },
           ),
@@ -317,10 +342,41 @@ class LoginFormState extends ConsumerState<LoginForm> {
   }
 
   Future<void> _loginToInstance(String host) async {
-    final instance = await _fetchInstance(host);
-    if (instance == null) return;
+    assert(_fetchInstanceFuture == null);
+    _fetchInstanceFuture = CancelableOperation.fromFuture(_fetchInstance(host));
 
-    this.instance = instance;
-    await _login(instance);
+    try {
+      final instance = await _fetchInstanceFuture!.valueOrCancellation();
+      if (instance == null) return;
+
+      this.instance = instance;
+      await _login(instance);
+    } finally {
+      _fetchInstanceFuture = null;
+    }
+  }
+
+  Future<void> _showTemporaryAccountNotice() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          icon: const Icon(Icons.vpn_key_off_rounded),
+          title: const Text("Your session will be temporary"),
+          content: ConstrainedBox(
+            constraints: dialogConstraints,
+            child: const Text(
+              "The backend implementation of this service did not provide login information when you signed in. This means that you'll be signed out next time you use Kaiteki.",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.materialL10n.okButtonLabel),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

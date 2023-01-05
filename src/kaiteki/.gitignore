@@ -11,7 +11,7 @@
 
 # Tokens & keys
 *.jks
-lib/fediverse/backends/twitter/keys.dart
+lib/fediverse/backends/twitter/*/keys.dart
 
 # IntelliJ related
 *.iml
@@ -35,9 +35,6 @@ lib/fediverse/backends/twitter/keys.dart
 .pub/
 /build/
 
-# Web related
-lib/generated_plugin_registrant.dart
-
 # Symbolication related
 app.*.symbols
 
@@ -48,3 +45,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Test coverage
+coverage/lcov.info

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -22,8 +22,8 @@ class ReplyBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledColor = Theme.of(context).disabledColor;
-    final l10n = context.getL10n();
-    final adapter = ref.watch(accountProvider).adapter;
+    final l10n = context.l10n;
+    final adapter = ref.watch(adapterProvider);
 
     return Padding(
       padding: kPostPadding,
@@ -72,22 +72,23 @@ class ReplyBar extends ConsumerWidget {
   }
 
   String _getText() {
-    final user = post.replyToUser;
-    if (user != null) {
-      return '@${user.username}';
-    }
+    final reference = post.replyToUser;
 
-    final id = post.replyToUserId;
-    if (id != null) {
-      return id;
-    }
+    if (reference == null) return "unknown user";
 
-    return "unknown user";
+    final user = reference.data;
+    if (user != null) return '@${user.username}';
+
+    return reference.id;
   }
 
   String _getUserId() {
-    if (post.replyToUserId != null) return post.replyToUserId!;
-    if (post.replyTo != null) return post.replyTo!.author.id;
+    final authorId = post.replyToUser?.id;
+    if (authorId != null) return authorId;
+
+    final authorIdFromPost = post.replyTo?.data?.author.id;
+    if (authorIdFromPost != null) return authorIdFromPost;
+
     throw Exception("Can't find user id as reply");
   }
 }

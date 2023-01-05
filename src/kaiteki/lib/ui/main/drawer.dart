@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/constants.dart' show appName;
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/fediverse/interfaces/list_support.dart';
+import 'package:kaiteki/preferences/app_experiment.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 class MainScreenDrawer extends ConsumerWidget {
   const MainScreenDrawer({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.getL10n();
-    final account = ref.watch(accountProvider).currentAccount;
+    final l10n = context.l10n;
+    final account = ref.watch(accountProvider)!;
     final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
+    final adapter = ref.watch(adapterProvider);
     return Drawer(
       child: SafeArea(
         child: SingleChildScrollView(
@@ -36,11 +40,15 @@ class MainScreenDrawer extends ConsumerWidget {
                 title: Text(l10n.directMessagesTitle),
                 enabled: false,
               ),
-              ListTile(
-                leading: const Icon(Icons.article_rounded),
-                title: Text(l10n.listsTitle),
-                enabled: false,
-              ),
+              if (adapter is ListSupport)
+                ListTile(
+                  leading: const Icon(Icons.article_rounded),
+                  title: Text(l10n.listsTitle),
+                  onTap: () => context.pushNamed(
+                    "lists",
+                    params: ref.accountRouterParams,
+                  ),
+                ),
               ListTile(
                 leading: const Icon(Icons.trending_up_rounded),
                 title: Text(l10n.trendsTitle),
@@ -53,7 +61,12 @@ class MainScreenDrawer extends ConsumerWidget {
               ),
               const Divider(),
               ListTile(
-                title: Text("@${account.key.username}@${account.key.host}"),
+                title: Text(
+                  account.key.handle.toString(),
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
                 enabled: false,
               ),
               ListTile(
@@ -68,8 +81,16 @@ class MainScreenDrawer extends ConsumerWidget {
                 title: Text(l10n.settings),
                 onTap: () => context.push("/settings"),
               ),
+              if (ref
+                  .read(preferencesProvider.select((v) => v.enabledExperiments))
+                  .contains(AppExperiment.feedback))
+                ListTile(
+                  leading: const Icon(Icons.feedback_rounded),
+                  title: const Text("Send Feedback"),
+                  onTap: () => context.push("/send-feedback"),
+                ),
               ListTile(
-                leading: const Icon(Icons.info_outline_rounded),
+                leading: const Icon(Icons.info_rounded),
                 title: Text(l10n.settingsAbout),
                 onTap: () => context.push("/about"),
               ),
