@@ -117,6 +117,9 @@ User toUser(misskey.User source, String localHost) {
       birthday: _parseBirthday(source.birthday),
       fields: _parseFields(source.fields),
     ),
+    followerCount: source.followersCount,
+    followingCount: source.followingCount,
+    postCount: source.notesCount,
   );
 }
 
