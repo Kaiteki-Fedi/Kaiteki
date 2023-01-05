@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
@@ -20,16 +21,32 @@ Future<InstanceProbeResult> probeInstance(
   ProbeInstanceRef? ref,
   String host,
 ) async {
-  final isInstanceAvailable = await _checkInstanceAvailability(host);
-  if (!isInstanceAvailable) {
-    throw InstanceUnreachableException();
+  if (!kIsWeb) {
+    final isInstanceAvailable = await _checkInstanceAvailability(host);
+    if (!isInstanceAvailable) {
+      throw InstanceUnreachableException();
+    }
   }
 
   InstanceProbeResult? result;
 
-  result ??= await _probeKnownInstances(host);
-  result ??= await _probeActivityPubNodeInfo(host);
-  result ??= await _probeEndpoints(host);
+  try {
+    result ??= await _probeKnownInstances(host);
+  } catch (e, s) {
+    _logger.w("Couldn't check for $host in known instances", e, s);
+  }
+
+  try {
+    result ??= await _probeActivityPubNodeInfo(host);
+  } catch (e, s) {
+    _logger.w("Couldn't check node info for $host", e, s);
+  }
+
+  try {
+    result ??= await _probeEndpoints(host);
+  } catch (e, s) {
+    _logger.w("Couldn't probe endpoints for $host", e, s);
+  }
 
   if (result == null) {
     _logger.d("Couldn't detect backend on on $host");
