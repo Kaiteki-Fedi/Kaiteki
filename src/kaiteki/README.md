@@ -22,7 +22,7 @@ Kaiteki is available for Web, Windows, Linux and Android. Check out [the release
 
 Kaiteki is also available on IzzyOnDroid's F-Droid repository.
 
-<a href="https://apt.izzysoft.de/fdroid/index/apk/moe.craftplacer.kaiteki"><img src="/.github/IzzyOnDroid.png" alt="Get it on IzzyOnDroid"/></a>
+<a href="https://apt.izzysoft.de/fdroid/index/apk/moe.craftplacer.kaiteki"><img src="/.github/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="64"/></a>
 
 ## What's working, what's missing?
 
