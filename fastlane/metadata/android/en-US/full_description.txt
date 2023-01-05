@@ -1,0 +1,1 @@
+<p><i>Kaiteki</i> is a Fediverse client for microblogging instances. It currently comes with simple Mastodon/Pleroma and Misskey support, future backends could follow.</p><p><i>Kaiteki</i> is available for Web, Windows, Linux and Android.</p>
