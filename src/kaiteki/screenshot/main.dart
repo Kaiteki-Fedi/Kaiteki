@@ -54,7 +54,7 @@ Future<void> main() async {
         "fastlane",
         "metadata",
         "android",
-        locale,
+        locale.replaceAll("_", "-"),
         "images",
         deviceType.key,
       ]);
