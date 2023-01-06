@@ -64,15 +64,13 @@ class ReactionButton extends ConsumerWidget {
       ),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
+          tapTargetSize: MaterialTapTargetSize.padded,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.0),
           ),
           backgroundColor: backgroundColor,
           minimumSize: Size.zero,
-          // HACK(Craftplacer): We're changing padding based on the M3 flag, but the better approach would be analyzing the button shape
-          padding: Theme.of(context).useMaterial3
-              ? const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0)
-              : const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8.0),
         ),
         onPressed: onPressed,
         child: Row(
