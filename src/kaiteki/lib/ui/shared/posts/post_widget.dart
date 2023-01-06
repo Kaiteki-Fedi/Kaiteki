@@ -311,7 +311,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           await launchUrl(url, mode: LaunchMode.externalApplication);
         },
       ),
-      if (_post.content != null)
+      if (_post.content != null && ref.read(preferencesProvider).developerMode)
         PopupMenuItem(
           child: const ListTile(
             title: Text("Debug text rendering"),

@@ -5,6 +5,7 @@ import 'package:kaiteki/preferences/app_experiment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const kLocale = "locale";
+const kDev = "dev";
 const kEnabledExperiments = "enabledExperiments";
 
 class AppPreferences extends ChangeNotifier {
@@ -20,6 +21,14 @@ class AppPreferences extends ChangeNotifier {
     } else {
       _preferences.setString(kLocale, locale).then((_) => notifyListeners());
     }
+  }
+
+  bool get developerMode => _preferences.getBool(kDev) ?? false;
+
+  set developerMode(bool value) {
+    if (developerMode == value) return;
+
+    _preferences.setBool(kDev, value).then((_) => notifyListeners());
   }
 
   UnmodifiableSetView<AppExperiment> get enabledExperiments {
