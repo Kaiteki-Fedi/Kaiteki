@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parseFragment;
 import 'package:kaiteki/fediverse/model/user/reference.dart';
@@ -6,7 +7,7 @@ import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
 
-typedef HtmlElementConstructor = Element Function(
+typedef HtmlElementConstructor = List<Element> Function(
   dom.Element element,
   List<Element> subElements,
 );
@@ -17,7 +18,7 @@ class HtmlTextParser implements TextParser {
   @override
   List<Element> parse(String text, [List<Element>? children]) {
     final fragment = parseFragment(text);
-    return fragment.nodes.map<Element>(renderNode).toList(growable: false);
+    return fragment.nodes.map(renderNode).flattened.toList(growable: false);
   }
 
   static const Map<String, HtmlElementConstructor> htmlConstructors = {
@@ -28,19 +29,20 @@ class HtmlTextParser implements TextParser {
     "p": _renderParagraph,
     "i": _renderItalic,
     "b": _renderBold,
-    "span": _renderAsContainer,
+    "span": _renderNoop,
   };
 
   const HtmlTextParser();
 
-  Element renderNode(dom.Node node) {
+  List<Element> renderNode(dom.Node node) {
     final renderedSubNodes = node.nodes //
-        .map<Element>(renderNode)
+        .map(renderNode)
+        .flattened
         .toList(growable: false);
 
     if (node is dom.Element) {
       final override = renderNodeOverride(node);
-      if (override != null) return override;
+      if (override != null) return [override];
 
       final tag = node.localName!.toLowerCase();
       final constructor = htmlConstructors[tag];
@@ -55,56 +57,66 @@ class HtmlTextParser implements TextParser {
     //}
 
     if (node.text == null) {
-      return Element(children: renderedSubNodes);
+      return renderedSubNodes;
     } else {
-      return TextElement(node.text, children: renderedSubNodes);
+      return [TextElement(node.text, children: renderedSubNodes)];
     }
   }
 
-  Element? renderNodeOverride(dom.Node node) {
-    return null;
-  }
+  Element? renderNodeOverride(dom.Node node) => null;
 
-  static Element _renderLink(dom.Element element, List<Element> subElements) {
+  static List<Element> _renderLink(
+    dom.Element element,
+    List<Element> subElements,
+  ) {
     final uri = Uri.parse(element.attributes["href"]!);
-    return LinkElement(uri, children: subElements);
+    return [LinkElement(uri, children: subElements)];
   }
 
-  static Element _renderBreakLine(
+  static List<Element> _renderBreakLine(dom.Element _, List<Element> __) {
+    return [const TextElement("\n")];
+  }
+
+  static List<Element> _renderCodeFont(
     dom.Element element,
     List<Element> subElements,
   ) {
-    return const TextElement("\n");
+    return [
+      TextElement(
+        null,
+        style: const TextElementStyle(font: TextElementFont.monospace),
+        children: subElements,
+      )
+    ];
   }
 
-  static Element _renderCodeFont(
+  static List<Element> _renderItalic(
     dom.Element element,
     List<Element> subElements,
   ) {
-    return TextElement(
-      null,
-      style: const TextElementStyle(font: TextElementFont.monospace),
-      children: subElements,
-    );
+    return [
+      TextElement(
+        null,
+        style: const TextElementStyle(italic: true),
+        children: subElements,
+      )
+    ];
   }
 
-  static Element _renderItalic(dom.Element element, List<Element> subElements) {
-    return TextElement(
-      null,
-      style: const TextElementStyle(italic: true),
-      children: subElements,
-    );
+  static List<Element> _renderBold(
+    dom.Element element,
+    List<Element> subElements,
+  ) {
+    return [
+      TextElement(
+        null,
+        style: const TextElementStyle(bold: true),
+        children: subElements,
+      )
+    ];
   }
 
-  static Element _renderBold(dom.Element element, List<Element> subElements) {
-    return TextElement(
-      null,
-      style: const TextElementStyle(bold: true),
-      children: subElements,
-    );
-  }
-
-  static Element _renderParagraph(
+  static List<Element> _renderParagraph(
     dom.Element element,
     List<Element> subElements,
   ) {
@@ -114,18 +126,11 @@ class HtmlTextParser implements TextParser {
       text = "\n\n$text";
     }
 
-    return TextElement(text, children: subElements);
+    return [TextElement(text, children: subElements)];
   }
 
-  static Element _renderAsContainer(
-    dom.Element element,
-    List<Element> subElements,
-  ) {
-    if (subElements.length == 1) {
-      return subElements.first;
-    } else {
-      return Element(children: subElements);
-    }
+  static List<Element> _renderNoop(dom.Element _, List<Element> subElements) {
+    return subElements;
   }
 }
 
@@ -143,17 +148,20 @@ class MastodonHtmlTextParser extends HtmlTextParser {
       }
     }
 
+    if (node.hasClass("hashtag")) {
+      final name = node.attributes["data-tag"];
+      if (name != null) return HashtagElement(name);
+
+      final nameSpan = node.children
+          .firstWhereOrNull((child) => child.localName == "span")
+          ?.text;
+      if (nameSpan != null) return HashtagElement(nameSpan);
+    }
+
     final url = node.attributes["href"];
     if (url != null) {
       if (node.hasClass("mention")) {
         return MentionElement(UserReference.url(url));
-      }
-    }
-
-    if (node.hasClass("hashtag")) {
-      final name = node.attributes["data-tag"];
-      if (name != null) {
-        return HashtagElement(name);
       }
     }
 

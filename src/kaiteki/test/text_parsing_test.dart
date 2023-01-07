@@ -1,3 +1,4 @@
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/utils/text/elements.dart';
 import 'package:kaiteki/utils/text/parsers.dart';
 import 'package:test/test.dart';
@@ -111,6 +112,22 @@ void main() {
         ),
       );
     });
+  });
+
+  test("Mastodon mention & hashtag", () {
+    const input =
+        '<a href="https://floss.social/tags/Test" class="mention hashtag" rel="tag">#<span>Test</span></a> <span class="h-card"><a href="https://floss.social/@Kaiteki" class="u-url mention">@<span>Kaiteki</span></a></span>';
+
+    final parsed = const MastodonHtmlTextParser().parse(input);
+
+    expect(
+      parsed,
+      orderedEquals([
+        const HashtagElement("Test"),
+        const TextElement(" "),
+        const MentionElement(UserReference.url("https://floss.social/@Kaiteki"))
+      ]),
+    );
   });
 }
 
