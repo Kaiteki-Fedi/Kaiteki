@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:kaiteki/fediverse/model/user/user.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 class AvatarWidget extends StatelessWidget {
   final User user;
@@ -19,6 +21,7 @@ class AvatarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = this.size;
     final url = user.avatarUrl;
+    final String? avatarBlurhash = user.source?.avatarBlurhash;
 
     Widget avatar;
     final Widget fallback = SizedBox(
@@ -30,26 +33,18 @@ class AvatarWidget extends StatelessWidget {
     if (url == null) {
       avatar = fallback;
     } else {
-      avatar = Ink.image(
-        image: NetworkImage(url),
+      avatar = Image.network(
+        url,
+        loadingBuilder: avatarBlurhash?.nullTransform((b) => blurhashLoader),
+        frameBuilder: avatarBlurhash?.nullTransform((b) => blurhashAnimation),
         width: size,
         height: size,
         fit: BoxFit.cover,
-        // onImageError: (_, __, ___) => fallback,
       );
-      // avatar = Image.network(
-      //   url,
-      //   width: size,
-      //   height: size,
-      //   cacheWidth: size?.toInt(),
-      //   cacheHeight: size?.toInt(),
-      //   errorBuilder: (_, __, ___) => fallback,
-      // );
     }
 
     if (onTap != null) {
       avatar = InkWell(onTap: onTap, child: avatar);
-      // avatar = Ink.image(child: avatar);
     }
 
     final borderRadius = radius;
@@ -64,6 +59,29 @@ class AvatarWidget extends StatelessWidget {
     );
 
     return avatar;
+  }
+
+  Widget blurhashAnimation(context, child, frame, wasSynchronouslyLoaded) {
+    if (wasSynchronouslyLoaded) {
+      return child;
+    }
+    return AnimatedOpacity(
+      opacity: frame == null ? 0 : 1,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeOut,
+      child: child,
+    );
+  }
+
+  Widget blurhashLoader(context, child, loadingProgress) {
+    if (loadingProgress == null) {
+      return child;
+    }
+    return SizedBox(
+      width: size,
+      height: size,
+      child: BlurHash(hash: user.source.avatarBlurhash),
+    );
   }
 }
 
