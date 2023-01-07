@@ -376,10 +376,12 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     String id, {
     TimelineQuery<String>? query,
   }) async {
-    final statuses = await client.getStatuses(
+    final statuses = await client.getAccountStatuses(
       id,
       minId: query?.sinceId,
       maxId: query?.untilId,
+      onlyMedia: query?.onlyMedia,
+      excludeReplies: query?.includeReplies == false,
     );
     return statuses.map((p) => toPost(p, instance)).toList();
   }
@@ -486,5 +488,35 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<void> renameList(String listId, String name) async {
     await client.updateList(listId, name);
+  }
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) async {
+    final pagination = await client.getAccountFollowers(
+      userId,
+    );
+    return Pagination(
+      pagination.data.map((e) => toUser(e, instance)).toList(),
+      null,
+      pagination.next?.queryParameters["max_id"],
+    );
+  }
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) async {
+    final pagination = await client.getAccountFollowing(userId);
+    return Pagination(
+      pagination.data.map((e) => toUser(e, instance)).toList(),
+      null,
+      pagination.next?.queryParameters["max_id"],
+    );
   }
 }

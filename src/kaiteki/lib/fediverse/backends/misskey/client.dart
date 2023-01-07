@@ -6,6 +6,7 @@ import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:http/http.dart'
     show MultipartFile, MultipartRequest, Request, Response;
 import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
+import 'package:kaiteki/fediverse/backends/misskey/model/follow.dart';
 import 'package:kaiteki/fediverse/backends/misskey/model/list.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
 import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
@@ -554,5 +555,45 @@ class MisskeyClient {
           body: {"userIds": userIds.toList()}.jsonBody,
         )
         .then(misskey.User.fromJson.fromResponseList);
+  }
+
+  Future<List<MisskeyFollow>> getUserFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+    int? limit,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/following",
+          body: {
+            "userId": userId,
+            if (sinceId != null) "sinceId": sinceId,
+            if (untilId != null) "untilId": untilId,
+            if (limit != null) "limit": limit,
+          }.jsonBody,
+        )
+        .then(MisskeyFollow.fromJson.fromResponseList);
+  }
+
+  Future<List<MisskeyFollow>> getUserFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+    int? limit,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/followers",
+          body: {
+            "userId": userId,
+            if (sinceId != null) "sinceId": sinceId,
+            if (untilId != null) "untilId": untilId,
+            if (limit != null) "limit": limit,
+          }.jsonBody,
+        )
+        .then(MisskeyFollow.fromJson.fromResponseList);
   }
 }

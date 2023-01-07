@@ -85,6 +85,18 @@ abstract class BackendAdapter {
   Future<Attachment> uploadAttachment(File file, String? description);
 
   Future<List<User>> getRepeatees(String id);
+
+  Future<Pagination<dynamic, User>> getFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  });
+
+  Future<Pagination<dynamic, User>> getFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  });
 }
 
 extension FediverseAdapterExtensions on BackendAdapter {

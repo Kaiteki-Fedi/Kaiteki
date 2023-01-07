@@ -5,12 +5,15 @@ import 'package:fediverse_objects/mastodon.dart' as mastodon show List;
 import 'package:http/http.dart' show Response;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/exceptions/api_exception.dart';
+import 'package:kaiteki/fediverse/backends/mastodon/models/pagination.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/models/search.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/responses/marker.dart';
 import 'package:kaiteki/http/http.dart';
 import 'package:kaiteki/model/file.dart';
+import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki/utils/link_header_parser.dart';
 
 class MastodonClient {
   late final KaitekiClient client;
@@ -36,10 +39,14 @@ class MastodonClient {
       .sendRequest(HttpMethod.get, "api/v1/accounts/$id")
       .then(Account.fromJson.fromResponse);
 
-  Future<List<Status>> getStatuses(
+  Future<List<Status>> getAccountStatuses(
     String id, {
     String? minId,
     String? maxId,
+    bool? onlyMedia,
+    bool? excludeReblogs,
+    bool? excludeReplies,
+    bool? pinned,
   }) async {
     return client.sendRequest(
       HttpMethod.get,
@@ -47,6 +54,10 @@ class MastodonClient {
       query: {
         if (minId != null) "min_id": minId,
         if (maxId != null) "max_id": maxId,
+        if (onlyMedia != null) "only_media": onlyMedia,
+        if (excludeReblogs != null) "exclude_reblogs": excludeReblogs,
+        if (excludeReplies != null) "exclude_replies": excludeReplies,
+        if (pinned != null) "pinned": pinned,
       },
     ).then(Status.fromJson.fromResponseList);
   }
@@ -453,5 +464,66 @@ class MastodonClient {
           }.jsonBody,
         )
         .then(Status.fromJson.fromResponseList);
+  }
+
+  Future<MastodonPagination<List<Account>>> getAccountFollowing(
+    String id, {
+    String? maxId,
+    String? sinceId,
+    String? minId,
+  }) async {
+    final response = await client.sendRequest(
+      HttpMethod.get,
+      "api/v1/accounts/$id/following",
+      query: {
+        if (maxId != null) "max_id": maxId,
+        if (sinceId != null) "since_id": sinceId,
+        if (minId != null) "min_id": minId,
+      },
+    );
+
+    final accounts = Account.fromJson.fromResponseList(response);
+    final links = parseLinkHeader(response.headers["Link"]!);
+
+    final previous = links.firstWhere(
+      (element) => element.parameters["rel"] == '"prev"',
+    );
+
+    final next = links.firstWhere(
+      (element) => element.parameters["rel"] == '"next"',
+    );
+
+    return MastodonPagination(accounts, previous.reference, next.reference);
+  }
+
+  Future<MastodonPagination<List<Account>>> getAccountFollowers(
+    String id, {
+    String? maxId,
+    String? sinceId,
+    String? minId,
+  }) async {
+    final response = await client.sendRequest(
+      HttpMethod.get,
+      "api/v1/accounts/$id/followers",
+      query: {
+        if (maxId != null) "max_id": maxId,
+        if (sinceId != null) "since_id": sinceId,
+        if (minId != null) "min_id": minId,
+      },
+    );
+
+    final accounts = Account.fromJson.fromResponseList(response);
+    final linkHeader = response.headers["Link"];
+    final links = linkHeader.nullTransform(parseLinkHeader);
+
+    final previous = links?.firstWhere(
+      (element) => element.parameters["rel"] == '"prev"',
+    );
+
+    final next = links?.firstWhere(
+      (element) => element.parameters["rel"] == '"next"',
+    );
+
+    return MastodonPagination(accounts, previous?.reference, next?.reference);
   }
 }

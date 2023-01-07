@@ -82,7 +82,7 @@ void main() {
 
     // Switch to hybrid timeline
     await tester.pumpWidget(
-      wrapper(const Timeline.kind(kind: TimelineKind.hybrid)),
+      wrapper(const TimelineSliver.kind(kind: TimelineKind.hybrid)),
     );
 
     await tester.pumpAndSettle();

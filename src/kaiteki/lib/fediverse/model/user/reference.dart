@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
-class UserReference {
+class UserReference extends Equatable {
   final String? id;
   final String? remoteUrl;
   final String? username;
@@ -59,4 +60,7 @@ class UserReference {
 
     return '<unknown>';
   }
+
+  @override
+  List<Object?> get props => [id, remoteUrl, username, host];
 }

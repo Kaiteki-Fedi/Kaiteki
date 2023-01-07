@@ -116,6 +116,22 @@ class DummyAdapter extends BackendAdapter {
     ClientSecret? clientSecret,
     AccountSecret accountSecret,
   ) {}
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) =>
+      throw UnimplementedError();
 }
 
 class DummyAdapterCapability extends AdapterCapabilities {

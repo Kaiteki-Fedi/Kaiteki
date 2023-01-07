@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shared/common.dart';
 
 class FeedbackScreen extends StatefulWidget {

@@ -136,4 +136,38 @@ class PleromaAdapter //
     // TODO: implement markNotificationAsRead
     throw UnimplementedError();
   }
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) async {
+    final accounts = await client.getAccountFollowersPleroma(
+      userId,
+      maxId: untilId,
+    );
+    return Pagination(
+      accounts.map((e) => toUser(e, instance)).toList(),
+      null,
+      accounts.lastOrNull?.id,
+    );
+  }
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) async {
+    final accounts = await client.getAccountFollowingPleroma(
+      userId,
+      maxId: untilId,
+    );
+    return Pagination(
+      accounts.map((e) => toUser(e, instance)).toList(),
+      null,
+      accounts.lastOrNull?.id,
+    );
+  }
 }

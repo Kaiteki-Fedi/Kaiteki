@@ -7,6 +7,7 @@ export 'emoji/category.dart';
 export 'emoji/emoji.dart';
 export 'formatting.dart';
 export 'instance.dart';
+export 'pagination.dart';
 export 'poll.dart';
 export 'post/post.dart';
 export 'post_list.dart';

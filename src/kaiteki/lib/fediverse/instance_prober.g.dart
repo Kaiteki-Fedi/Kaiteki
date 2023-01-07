@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$probeInstanceHash() => r'410a406c0a0bd433713d165ffb26fdb895a71a2b';
+String _$probeInstanceHash() => r'4167dac1e770ce1454439f3ecd65d74fae231b17';
 
 /// See also [probeInstance].
 class ProbeInstanceProvider

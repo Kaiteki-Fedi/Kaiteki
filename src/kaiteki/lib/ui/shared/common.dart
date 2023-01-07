@@ -20,3 +20,7 @@ Future<void> showTextAlert(BuildContext context, String title, String body) {
     context: context,
   );
 }
+
+extension ColorKaitekiExtension on Color {
+  TextStyle get textStyle => TextStyle(color: this);
+}

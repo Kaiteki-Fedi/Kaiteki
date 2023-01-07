@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fediverse_objects/mastodon.dart' show Notification;
+import 'package:fediverse_objects/mastodon.dart' show Account, Notification;
 import 'package:fediverse_objects/pleroma.dart';
 import 'package:http/http.dart' show Response;
 import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
@@ -81,5 +81,27 @@ class PleromaClient extends MastodonClient {
           body: {"max_id": maxId}.jsonBody,
         )
         .then(Notification.fromJson.fromResponseList);
+  }
+
+  Future<List<Account>> getAccountFollowersPleroma(
+    String id, {
+    String? maxId,
+  }) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/accounts/$id/followers",
+      query: {if (maxId != null) "max_id": maxId},
+    ).then(Account.fromJson.fromResponseList);
+  }
+
+  Future<List<Account>> getAccountFollowingPleroma(
+    String id, {
+    String? maxId,
+  }) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/accounts/$id/following",
+      query: {if (maxId != null) "max_id": maxId},
+    ).then(Account.fromJson.fromResponseList);
   }
 }

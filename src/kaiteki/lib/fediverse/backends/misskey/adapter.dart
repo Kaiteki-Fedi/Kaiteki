@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
@@ -354,11 +355,21 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
   @override
   Future<Iterable<Post>> getThread(Post reply) async {
-    // HACK(Craftplacer): I have no idea why this stopped working. (2022-12)
-    // final notes = await client.getConversation(reply.id);
+    List<misskey.Note> notes;
 
-    // FIXME(Craftplacer): Fetch (entire thread), or implement incomplete threads (will be a nightmare to do)
-    final notes = await client.getNoteChildren(reply.id);
+    try {
+      notes = await client.getConversation(reply.id);
+    } catch (e, s) {
+      log(
+        "Failed to fetch thread using notes/conversation",
+        error: e,
+        stackTrace: s,
+      );
+
+      // FIXME(Craftplacer): Fetch (entire thread), or implement incomplete threads (will be a nightmare to do)
+      notes = await client.getNoteChildren(reply.id);
+    }
+
     return notes.map((n) => toPost(n, instance)).followedBy([reply]);
   }
 
@@ -521,5 +532,41 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<void> renameList(String listId, String name) async {
     await client.updateList(listId, name);
+  }
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) async {
+    final users = await client.getUserFollowers(
+      userId,
+      sinceId: sinceId,
+      untilId: untilId,
+    );
+    return Pagination(
+      users.map((e) => toUser(e.follower!, instance)).toList(),
+      null,
+      users.last.followerId,
+    );
+  }
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) async {
+    final users = await client.getUserFollowing(
+      userId,
+      sinceId: sinceId,
+      untilId: untilId,
+    );
+    return Pagination(
+      users.map((e) => toUser(e.followee!, instance)).toList(),
+      null,
+      users.last.followeeId,
+    );
   }
 }

@@ -423,4 +423,24 @@ class TwitterAdapter extends CentralizedBackendAdapter
     // TODO: implement searchForUsers
     throw UnimplementedError();
   }
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) {
+    // TODO: implement getFollowers
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) {
+    // TODO: implement getFollowing
+    throw UnimplementedError();
+  }
 }

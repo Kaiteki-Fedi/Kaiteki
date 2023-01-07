@@ -226,4 +226,20 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
 
   @override
   Instance get instance => const Instance(name: "Twitter");
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Pagination<dynamic, User>> getFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  }) =>
+      throw UnimplementedError();
 }

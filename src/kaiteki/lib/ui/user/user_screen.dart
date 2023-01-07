@@ -1,14 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/fediverse/services/users.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
+import 'package:kaiteki/ui/shared/timeline.dart';
+import 'package:kaiteki/ui/user/user_panel.dart';
+import 'package:kaiteki/ui/user/user_sliver.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:share_plus/share_plus.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
   final String id;
@@ -22,20 +21,66 @@ class UserScreen extends ConsumerStatefulWidget {
 class _UserScreenState extends ConsumerState<UserScreen> {
   Future<User>? _future;
 
+  late StateProvider<bool> _showReplies;
+
   @override
   void initState() {
     super.initState();
     _future = ref.read(adapterProvider).getUserById(widget.id);
+    _showReplies = StateProvider((_) => true);
+  }
+
+  Widget _buildAppBarUserName(User user) {
+    final displayName = user.displayName;
+    return ListTile(
+      title: displayName == null
+          ? Text(
+              user.username,
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            )
+          : Text.rich(
+              user.renderDisplayName(context, ref),
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            ),
+      subtitle: Text(
+        user.handle.toString(),
+        style: Theme.of(context).textTheme.labelSmall,
+      ),
+      contentPadding: EdgeInsets.zero,
+    );
+  }
+
+  Widget _buildBanner(User? user) {
+    final placeholder = Flexible(
+      child: ColoredBox(color: Colors.black.withOpacity(.125)),
+    );
+
+    if (user == null || user.bannerUrl == null) return placeholder;
+
+    return Image.network(
+      user.bannerUrl!,
+      fit: BoxFit.cover,
+      color: Colors.white.withOpacity(0.5),
+      colorBlendMode: BlendMode.modulate,
+      isAntiAlias: true,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    const avatarSize = 72.0;
+    const bannerHeight = 8.0 * 16.0;
     return DefaultTabController(
-      length: 5,
+      length: 3,
       child: FutureBuilder<User>(
         future: _future,
         builder: (context, snapshot) {
           final user = snapshot.data;
+          final includeReplies = ref.watch(_showReplies);
           return Scaffold(
             body: NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -43,117 +88,55 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                   SliverAppBar(
                     actions: [
                       PopupMenuButton(
-                        itemBuilder: (context) {
-                          return [
-                            PopupMenuItem(
-                              child: Text("Mute"),
-                              value: 1,
-                            ),
-                            PopupMenuItem(
-                              child: Text("Block"),
-                              value: 2,
-                            ),
-                          ];
-                        },
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            onTap: () async {
+                              final url = user?.url;
+                              if (url != null) await Share.share(url);
+                            },
+                            enabled: user?.url != null,
+                            child: const Text("Share"),
+                          ),
+                        ],
                       ),
                     ],
-                    title: user?.nullTransform(
-                      (d) => ListTile(
-                        title: Text(d.displayName!),
-                        subtitle: Text(
-                          d.handle.toString(),
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                        contentPadding: EdgeInsets.zero,
-                      ),
+                    title: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 150),
+                      child: !innerBoxIsScrolled
+                          ? null
+                          : user?.nullTransform(_buildAppBarUserName),
                     ),
                     pinned: true,
                     forceElevated: innerBoxIsScrolled,
-                    expandedHeight: 8.0 * 24.0,
+                    expandedHeight: bannerHeight + (avatarSize / 2),
                     flexibleSpace: FlexibleSpaceBar(
-                      background: user?.bannerUrl.nullTransform(
-                            (u) => Image.network(
-                              u,
-                              fit: BoxFit.cover,
-                              color: Colors.white.withOpacity(0.5),
-                              colorBlendMode: BlendMode.modulate,
-                            ),
-                          ) ??
-                          SizedBox(),
+                      collapseMode: CollapseMode.pin,
+                      background: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Padding(
+                            padding: !innerBoxIsScrolled
+                                ? const EdgeInsets.only(
+                                    bottom: avatarSize / 2,
+                                  )
+                                : EdgeInsets.zero,
+                            child: _buildBanner(user),
+                          ),
+                          if (user != null && !innerBoxIsScrolled)
+                            Positioned(
+                              left: 16.0,
+                              bottom: 0,
+                              child: AvatarWidget(user, size: avatarSize),
+                            )
+                        ],
+                      ),
                     ),
                   ),
                   if (user != null)
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text.rich(user.renderDescription(context, ref)),
-                            const SizedBox(height: 16.0),
-                            if (user.details.fields != null)
-                              for (final field
-                                  in user.details.fields!.entries) ...[
-                                Text(
-                                  field.key,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                  ),
-                                ),
-                                const SizedBox(height: 4.0),
-                                Text.rich(
-                                  user.renderText(
-                                    context,
-                                    ref,
-                                    field.value,
-                                  ),
-                                ),
-                                const SizedBox(height: 16.0),
-                              ],
-                            IconTheme(
-                              data: IconThemeData(
-                                color: Theme.of(context).colorScheme.outline,
-                                size: 16.0,
-                              ),
-                              child: DefaultTextStyle.merge(
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                                child: Wrap(
-                                  direction: Axis.horizontal,
-                                  spacing: 16.0,
-                                  children: [
-                                    if (user.joinDate != null)
-                                      _UserDetailItem(
-                                        icon: Icon(Icons.today_rounded),
-                                        text: Text(
-                                          "Joined ${DateFormat('MMMM yyyy').format(user.joinDate!)}",
-                                        ),
-                                      ),
-                                    if (user.details.birthday != null)
-                                      _UserDetailItem(
-                                        icon: Icon(Icons.cake_rounded),
-                                        text: Text(
-                                          "Born ${DateFormat('dd MMMM yyyy').format(user.details.birthday!)}",
-                                        ),
-                                      ),
-                                    if (user.details.location != null)
-                                      _UserDetailItem(
-                                        icon: Icon(Icons.location_on_rounded),
-                                        text: Text(user.details.location!),
-                                      ),
-                                    if (user.details.website != null)
-                                      _UserDetailItem(
-                                        icon: Icon(Icons.link_rounded),
-                                        text: Text(user.details.website!),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                        child: UserPanel(user),
                       ),
                     ),
                   CustomSliverPersistentHeader(
@@ -162,75 +145,56 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
+                        children: const [
                           TabBar(
-                            isScrollable: true,
-                            tabs: const [
+                            //isScrollable: true,
+                            tabs: [
                               Tab(text: "Posts"),
-                              Tab(text: "Media"),
-                              Tab(text: "Likes"),
+                              //Tab(text: "Media"),
+                              //Tab(text: "Likes"),
                               Tab(text: "Followers"),
                               Tab(text: "Following"),
                             ],
                           ),
-                          const Divider(),
+                          Divider(),
                         ],
                       ),
                     ),
                   ),
                 ];
               },
-              body: ListView.builder(
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Column(
-                      children: [
-                        CheckboxListTile(
-                          value: false,
-                          onChanged: (v) {},
+              body: TabBarView(
+                children: [
+                  CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: CheckboxListTile(
+                          value: includeReplies,
+                          onChanged: (value) =>
+                              ref.read(_showReplies.notifier).state = value!,
                           title: const Text("Show replies"),
                           controlAffinity: ListTileControlAffinity.leading,
                         ),
-                        const Divider(),
-                      ],
-                    );
-                  }
-
-                  index--;
-                  return ListTile(
-                    leading: CircleAvatar(
-                      child: Text(index.toString()),
-                    ),
-                    title: Text("Item $index"),
-                  );
-                },
+                      ),
+                      const SliverToBoxAdapter(child: Divider()),
+                      TimelineSliver.user(
+                        userId: widget.id,
+                        includeReplies: includeReplies,
+                      ),
+                    ],
+                  ),
+                  CustomScrollView(
+                    slivers: [UserSliver.followers(userId: widget.id)],
+                  ),
+                  CustomScrollView(
+                    slivers: [UserSliver.following(userId: widget.id)],
+                  ),
+                ],
               ),
             ),
           );
         },
       ),
-    );
-  }
-}
-
-class _UserDetailItem extends StatelessWidget {
-  final Widget icon;
-  final Widget text;
-
-  const _UserDetailItem({
-    required this.icon,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        icon,
-        const SizedBox(width: 8.0),
-        text,
-      ],
     );
   }
 }
