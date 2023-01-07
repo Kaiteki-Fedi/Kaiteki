@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 
 class CountButton extends StatelessWidget {
   final bool active;
@@ -16,7 +18,7 @@ class CountButton extends StatelessWidget {
   final FocusNode? focusNode;
 
   const CountButton({
-    Key? key,
+    super.key,
     this.active = false,
     this.count = 0,
     this.color,
@@ -27,7 +29,7 @@ class CountButton extends StatelessWidget {
     this.disabled = false,
     this.focusNode,
     this.onLongPress,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,11 @@ class CountButton extends StatelessWidget {
     final color = _getColor(context);
     final currentIcon = active ? (activeIcon ?? icon) : icon;
     final count = this.count;
-    final hasNumber = count == null || count >= 1;
+
+    final hasNumber = count != null && count >= 1;
+    final shortenedCount = NumberFormat.compact() //
+        .format(count ?? 0)
+        .toLowerCase();
 
     return Row(
       children: [
@@ -48,12 +54,22 @@ class CountButton extends StatelessWidget {
             enableFeedback: !disabled,
             focusNode: focusNode,
             splashRadius: 18,
+            padding: EdgeInsets.zero,
           ),
         ),
         if (hasNumber)
-          Text(
-            count.toString(),
-            style: TextStyle(color: color),
+          Expanded(
+            child: DefaultTextStyle.merge(
+              style: Theme.of(context).ktkTextTheme!.countTextStyle.copyWith(
+                    color: color,
+                  ),
+              child: Text(
+                shortenedCount,
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
+            ),
           ),
       ],
     );

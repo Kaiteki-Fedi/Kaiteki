@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/theming/default/constants.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/theming/kaiteki/colors.dart';
+import 'package:kaiteki/theming/kaiteki/post.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/theming/kaiteki/theme.dart';
+import 'package:kaiteki_material/kaiteki_material.dart';
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyGeneralChanges() {
+    final ktkTextTheme = KaitekiTextTheme.fromMaterialTheme(this);
+
     return copyWith(
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: colorScheme.secondaryContainer,
+        foregroundColor: colorScheme.onSecondaryContainer,
+      ),
       snackBarTheme: const SnackBarThemeData(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         behavior: SnackBarBehavior.floating,
@@ -13,8 +23,26 @@ extension ThemeDataExtensions on ThemeData {
       dialogTheme: const DialogTheme(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
-      extensions: [KaitekiExtension.material(this)],
-      textTheme: createKaitekiTextTheme(textTheme),
+      dividerTheme: dividerTheme.copyWith(
+        space: 1,
+        thickness: 1,
+      ),
+      extensions: [
+        ktkTextTheme,
+        KaitekiColors.fromMaterialTheme(this),
+        KaitekiTheme.fromMaterialTheme(this),
+        KaitekiPostTheme.fallback,
+      ],
+      tabBarTheme: TabBarTheme(
+        indicator: RoundedUnderlineTabIndicator(
+          borderSide: BorderSide(width: 3, color: colorScheme.primary),
+        ),
+        labelColor: colorScheme.primary,
+        unselectedLabelColor: colorScheme.onSurfaceVariant,
+        // And there @Craftplacer said, "THIS DIVIDER SUCKS"
+        dividerColor: Colors.transparent,
+      ),
+      textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
       checkboxTheme: CheckboxThemeData(
         checkColor: MaterialStateProperty.all(colorScheme.surface),
         fillColor: MaterialStateProperty.resolveWith(
@@ -28,11 +56,15 @@ extension ThemeDataExtensions on ThemeData {
   }
 }
 
-TextTheme createKaitekiTextTheme(TextTheme original) {
-  return GoogleFonts.robotoTextTheme(original).copyWith(
-    titleLarge: GoogleFonts.quicksand(
-      textStyle: original.titleLarge,
-      fontWeight: FontWeight.w600,
+TextTheme _createKaitekiTextTheme(
+  TextTheme original,
+  KaitekiTextTheme ktkTextTheme,
+) {
+  final baseTextTheme = GoogleFonts.robotoTextTheme(original);
+  return baseTextTheme.copyWith(
+    titleLarge: ktkTextTheme.kaitekiTextStyle.copyWith(
+      fontSize: baseTextTheme.titleLarge?.fontSize,
+      color: baseTextTheme.titleLarge?.color,
     ),
   );
 }

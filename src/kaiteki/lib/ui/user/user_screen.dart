@@ -1,338 +1,219 @@
-import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/rendering.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/ui/shared/breakpoint_container.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/user/constants.dart';
-import 'package:kaiteki/ui/user/desktop_user_header.dart';
-import 'package:kaiteki/ui/user/posts_page.dart';
-import 'package:kaiteki/ui/user/user_info_widget.dart';
+import 'package:kaiteki/ui/shared/timeline.dart';
+import 'package:kaiteki/ui/user/user_panel.dart';
+import 'package:kaiteki/ui/user/user_sliver.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:share_plus/share_plus.dart';
 
 class UserScreen extends ConsumerStatefulWidget {
   final String id;
-  final User? initialUser;
 
-  const UserScreen.fromId(
-    this.id, {
-    Key? key,
-  })  : initialUser = null,
-        super(key: key);
-
-  UserScreen.fromUser(
-    User this.initialUser, {
-    Key? key,
-  })  : id = initialUser.id,
-        super(key: key);
+  const UserScreen({super.key, required this.id});
 
   @override
   ConsumerState<UserScreen> createState() => _UserScreenState();
 }
 
-class _UserScreenState extends ConsumerState<UserScreen>
-    with TickerProviderStateMixin {
-  late TabController _tabController;
-  late Future<User> _future;
-  ImageProvider? _bannerProvider;
+class _UserScreenState extends ConsumerState<UserScreen> {
+  Future<User>? _future;
+
+  late StateProvider<bool> _showReplies;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 3);
-
-    final bannerUrl = widget.initialUser?.bannerUrl;
-    if (bannerUrl != null) {
-      _bannerProvider = NetworkImage(bannerUrl);
-    }
+    _future = ref.read(adapterProvider).getUserById(widget.id);
+    _showReplies = StateProvider((_) => true);
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final accounts = ref.watch(accountProvider);
-    _future = accounts.adapter.getUserById(widget.id);
+  Widget _buildAppBarUserName(User user) {
+    final displayName = user.displayName;
+    return ListTile(
+      title: displayName == null
+          ? Text(
+              user.username,
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            )
+          : Text.rich(
+              user.renderDisplayName(context, ref),
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            ),
+      subtitle: Text(
+        user.handle.toString(),
+        style: Theme.of(context).textTheme.labelSmall,
+      ),
+      contentPadding: EdgeInsets.zero,
+    );
+  }
+
+  Widget _buildBanner(User? user) {
+    final placeholder = Expanded(
+      child: ColoredBox(color: Colors.black.withOpacity(.125)),
+    );
+
+    if (user == null || user.bannerUrl == null) return placeholder;
+
+    return Image.network(
+      user.bannerUrl!,
+      fit: BoxFit.cover,
+      color: Colors.white.withOpacity(0.5),
+      colorBlendMode: BlendMode.modulate,
+      isAntiAlias: true,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<User>(
-      initialData: widget.initialUser,
-      future: _future,
-      builder: (_, snapshot) {
-        return BreakpointBuilder(
-          builder: (context, breakpoint) {
-            return breakpoint.window < WindowSize.medium
-                ? _buildMobile(snapshot, breakpoint.window)
-                : _buildDesktop(context, snapshot, breakpoint);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildDesktop(
-    BuildContext context,
-    AsyncSnapshot<User> snapshot,
-    Breakpoint breakpoint,
-  ) {
-    final user = snapshot.data;
-
-    return Material(
-      child: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              actions: buildActions(context, user: user),
-              expandedHeight: user?.bannerUrl != null ? 450.0 : null,
-              pinned: true,
-              forceElevated: true,
-              flexibleSpace: DesktopUserHeader(
-                tabController: _tabController,
-                tabs: buildTabs(context, user, true, Axis.horizontal),
-                user: user,
-                color: null,
-              ),
-            ),
-          ];
-        },
-        body: BreakpointContainer(
-          breakpoint: breakpoint,
-          child: Row(
-            children: [
-              Flexible(
-                child: Column(
-                  children: [
-                    if (user != null)
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(columnPadding),
-                            child: UserInfoWidget(user: user),
+    const avatarSize = 72.0;
+    const bannerHeight = 8.0 * 16.0;
+    return DefaultTabController(
+      length: 3,
+      child: FutureBuilder<User>(
+        future: _future,
+        builder: (context, snapshot) {
+          final user = snapshot.data;
+          final includeReplies = ref.watch(_showReplies);
+          return Scaffold(
+            body: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    actions: [
+                      PopupMenuButton(
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            onTap: () async {
+                              final url = user?.url;
+                              if (url != null) await Share.share(url);
+                            },
+                            enabled: user?.url != null,
+                            child: const Text("Share"),
                           ),
+                        ],
+                      ),
+                    ],
+                    title: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 150),
+                      child: !innerBoxIsScrolled
+                          ? null
+                          : user?.nullTransform(_buildAppBarUserName),
+                    ),
+                    pinned: true,
+                    forceElevated: innerBoxIsScrolled,
+                    expandedHeight: bannerHeight + (avatarSize / 2),
+                    flexibleSpace: FlexibleSpaceBar(
+                      collapseMode: CollapseMode.pin,
+                      background: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Padding(
+                            padding: !innerBoxIsScrolled
+                                ? const EdgeInsets.only(
+                                    bottom: avatarSize / 2,
+                                  )
+                                : EdgeInsets.zero,
+                            child: _buildBanner(user),
+                          ),
+                          if (user != null && !innerBoxIsScrolled)
+                            Positioned(
+                              left: 16.0,
+                              bottom: 0,
+                              child: AvatarWidget(user, size: avatarSize),
+                            )
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (user != null)
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: UserPanel(user),
+                      ),
+                    ),
+                  CustomSliverPersistentHeader(
+                    child: Material(
+                      color: Theme.of(context).colorScheme.surface,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: const [
+                          TabBar(
+                            //isScrollable: true,
+                            tabs: [
+                              Tab(text: "Posts"),
+                              //Tab(text: "Media"),
+                              //Tab(text: "Likes"),
+                              Tab(text: "Followers"),
+                              Tab(text: "Following"),
+                            ],
+                          ),
+                          Divider(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ];
+              },
+              body: TabBarView(
+                children: [
+                  CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: CheckboxListTile(
+                          value: includeReplies,
+                          onChanged: (value) =>
+                              ref.read(_showReplies.notifier).state = value!,
+                          title: const Text("Show replies"),
+                          controlAffinity: ListTileControlAffinity.leading,
                         ),
                       ),
-                  ],
-                ),
-              ),
-              SizedBox(width: breakpoint.gutters),
-              Flexible(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(columnPadding),
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      PostsPage(
-                        container: ref.watch(accountProvider),
-                        widget: widget,
+                      const SliverToBoxAdapter(child: Divider()),
+                      TimelineSliver.user(
+                        userId: widget.id,
+                        includeReplies: includeReplies,
                       ),
-                      Container(),
-                      Container(),
                     ],
                   ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMobile(
-    AsyncSnapshot<User> snapshot,
-    WindowSize windowSize,
-  ) {
-    final Widget body;
-
-    if (snapshot.hasError) {
-      body = ErrorLandingWidget.fromAsyncSnapshot(snapshot);
-    } else if (!snapshot.hasData) {
-      body = const Center(child: CircularProgressIndicator());
-    } else {
-      body = TabBarView(
-        controller: _tabController,
-        children: [
-          PostsPage(
-            container: ref.watch(accountProvider),
-            widget: widget,
-          ),
-          Container(),
-          Container(),
-        ],
-      );
-    }
-
-    final isLoading = !(snapshot.hasData || snapshot.hasError);
-    final tooSmall = windowSize < WindowSize.small;
-
-    return Scaffold(
-      appBar: snapshot.hasData //
-          ? _buildAppBar(
-              !(tooSmall || isLoading),
-              snapshot,
-            )
-          : AppBar(),
-      body: body,
-    );
-  }
-
-  List<Tab> buildTabs(
-    BuildContext context,
-    User? user,
-    bool showCountBadges,
-    Axis direction,
-  ) {
-    final l10n = context.getL10n();
-    return [
-      buildTab(
-        l10n.postsTab,
-        user?.postCount ?? 0,
-        showCountBadges,
-        direction,
-      ),
-      buildTab(
-        l10n.followersTab,
-        user?.followerCount ?? 0,
-        showCountBadges,
-        direction,
-      ),
-      buildTab(
-        l10n.followingTab,
-        user?.followingCount ?? 0,
-        showCountBadges,
-        direction,
-      ),
-    ];
-  }
-
-  Tab buildTab(String text, int count, bool showCountBadges, Axis direction) {
-    if (direction == Axis.horizontal) {
-      return Tab(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(text),
-            if (showCountBadges) buildBadge(context, count),
-          ],
-        ),
-      );
-    } else {
-      final countLabel = shortenNumber(count);
-      return Tab(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(text),
-            const SizedBox(height: 4.0),
-            Text(countLabel),
-            const SizedBox(height: 4.0),
-          ],
-        ),
-      );
-    }
-  }
-
-  AppBar _buildAppBar(
-    bool showCountBadges,
-    AsyncSnapshot<User<dynamic>> snapshot,
-  ) {
-    final displayName = snapshot.data?.renderDisplayName(context, ref);
-
-    return AppBar(
-      actions: buildActions(context, user: snapshot.data),
-      bottom: TabBar(
-        tabs: buildTabs(
-          context,
-          snapshot.data,
-          showCountBadges,
-          Axis.horizontal,
-        ),
-        controller: _tabController,
-      ),
-      title: snapshot.data == null
-          ? const SizedBox()
-          : Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: AvatarWidget(
-                    snapshot.data!,
-                    size: 24,
+                  CustomScrollView(
+                    slivers: [UserSliver.followers(userId: widget.id)],
                   ),
-                ),
-                Flexible(
-                  child: displayName == null
-                      ? const Text("...")
-                      : Text.rich(
-                          displayName,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                ),
-              ],
-            ),
-      flexibleSpace: FlexibleSpaceBar(
-        background: _bannerProvider == null
-            ? null
-            : Opacity(
-                opacity: 0.25,
-                child: Image(
-                  image: _bannerProvider!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const SizedBox();
-                  },
-                ),
+                  CustomScrollView(
+                    slivers: [UserSliver.following(userId: widget.id)],
+                  ),
+                ],
               ),
+            ),
+          );
+        },
       ),
     );
   }
+}
 
-  String shortenNumber(int count) {
-    var text = count.toString();
+class CustomSliverPersistentHeader extends SingleChildRenderObjectWidget {
+  const CustomSliverPersistentHeader({super.key, required super.child});
 
-    if (count / 1000 >= 1) {
-      text = '${(count / 1000).toStringAsFixed(2)}k';
-    }
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderCustomSliverPersistentHeader();
+}
 
-    return text;
-  }
+class _RenderCustomSliverPersistentHeader
+    extends RenderSliverPinnedPersistentHeader {
+  @override
+  double get maxExtent =>
+      child!.getMaxIntrinsicHeight(constraints.crossAxisExtent);
 
-  Widget buildBadge(BuildContext context, int count) {
-    final text = shortenNumber(count);
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3.0),
-        color: Colors.white,
-      ),
-      margin: const EdgeInsets.only(left: 6.0),
-      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-      child: Text(
-        text,
-        style: GoogleFonts.robotoMono(
-          color: Colors.black,
-          fontWeight: FontWeight.w600,
-        ),
-        textScaleFactor: 0.9,
-        overflow: TextOverflow.fade,
-      ),
-    );
-  }
-
-  List<Widget> buildActions(BuildContext context, {User? user}) {
-    final l10n = context.getL10n();
-    final url = user?.url;
-
-    return [
-      IconButton(
-        tooltip: l10n.openInBrowserLabel,
-        icon: const Icon(Icons.open_in_new_rounded),
-        onPressed: url == null ? null : () => context.launchUrl(url),
-      ),
-    ];
-  }
+  @override
+  double get minExtent =>
+      child!.getMaxIntrinsicHeight(constraints.crossAxisExtent);
 }

@@ -13,12 +13,15 @@ class PleromaCapabilities extends MastodonCapabilities
   const PleromaCapabilities();
 
   @override
-  List<Formatting> get supportedFormattings {
-    return List.unmodifiable([
+  Set<Formatting> get supportedFormattings {
+    return const {
       Formatting.plainText,
       Formatting.html,
       Formatting.markdown,
       Formatting.bbCode,
-    ]);
+    };
   }
+
+  @override
+  bool get supportsMultipleReactions => true;
 }

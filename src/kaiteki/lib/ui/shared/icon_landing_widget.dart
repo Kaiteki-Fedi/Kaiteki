@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class IconLandingWidget extends StatelessWidget {
-  final Icon icon;
-  final Text text;
+  final Widget icon;
+  final Widget text;
   final double spacing;
 
   const IconLandingWidget({
-    Key? key,
+    super.key,
     this.spacing = 6.0,
     required this.icon,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,12 @@ class IconLandingWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        IconTheme(
-          data: IconThemeData(color: color, size: 72),
-          child: icon,
+        DefaultTextStyle(
+          style: TextStyle(color: color, fontSize: 72),
+          child: IconTheme(
+            data: IconThemeData(color: color, size: 72),
+            child: icon,
+          ),
         ),
         SizedBox(height: spacing),
         DefaultTextStyle(

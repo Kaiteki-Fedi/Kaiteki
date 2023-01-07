@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
+import 'package:kaiteki/fediverse/instance_prober.dart';
+import 'package:kaiteki/model/auth/account.dart';
 import 'package:kaiteki/ui/shared/dialogs/account_removal_dialog.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 
 class AccountListDialog extends ConsumerWidget {
-  const AccountListDialog({Key? key}) : super(key: key);
+  const AccountListDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DynamicDialogContainer(
       builder: (context, fullscreen) {
-        final manager = ref.watch(accountProvider);
-        final l10n = context.getL10n();
+        final manager = ref.watch(accountManagerProvider);
+        final currentAccount = ref.watch(accountProvider);
+        final l10n = context.l10n;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -27,11 +29,31 @@ class AccountListDialog extends ConsumerWidget {
             ),
             Column(
               children: [
-                for (final compound in manager.accounts)
+                for (final account in manager.accounts)
                   AccountListTile(
-                    compound: compound,
-                    selected: manager.currentAccount == compound,
-                    onTap: () => Navigator.of(context).pop(),
+                    account: account,
+                    selected: currentAccount == account,
+                    onSelect: () {
+                      Navigator.of(context).pop();
+                      context.goNamed(
+                        "home",
+                        params: {
+                          "accountUsername": account.key.username,
+                          "accountHost": account.key.host,
+                        },
+                      );
+                    },
+                    onSignOut: () async {
+                      final result = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AccountRemovalDialog(
+                          account: account,
+                        ),
+                      );
+
+                      if (result == true) manager.remove(account);
+                    },
+                    showInstanceIcon: true,
                   ),
                 const Divider(),
                 ListTile(
@@ -53,53 +75,113 @@ class AccountListDialog extends ConsumerWidget {
     );
   }
 
-  void onTapAdd(BuildContext context) => context.push("/login");
+  void onTapAdd(BuildContext context) => context.pushReplacementNamed("login");
 }
 
 class AccountListTile extends ConsumerWidget {
-  final AccountCompound compound;
+  final Account account;
   final bool selected;
-  final VoidCallback? onTap;
+  final bool showInstanceIcon;
+  final VoidCallback? onSelect;
+  final VoidCallback? onSignOut;
 
   const AccountListTile({
-    Key? key,
-    required this.compound,
+    super.key,
+    required this.account,
     this.selected = false,
-    this.onTap,
-  }) : super(key: key);
+    this.showInstanceIcon = false,
+    this.onSelect,
+    this.onSignOut,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
       selected: selected,
-      leading: AvatarWidget(
-        compound.account,
-        size: 44,
+      leading: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 4.0, bottom: 4.0),
+            child: AvatarWidget(
+              account.user,
+              size: 40,
+            ),
+          ),
+          if (showInstanceIcon)
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Material(
+                color: Theme.of(context).colorScheme.surface,
+                type: MaterialType.circle,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: IconTheme(
+                    data: IconThemeData(
+                      size: 16,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    child: InstanceIcon(account.key.host),
+                  ),
+                ),
+              ),
+            )
+        ],
       ),
-      title: Text(compound.accountSecret.username),
-      subtitle: Text(compound.instance),
-      onTap: () => _onSelect(ref),
-      trailing: IconButton(
-        icon: const Icon(Icons.close_rounded),
-        onPressed: () => _onRemove(context, ref),
-        splashRadius: 24,
-      ),
+      title: Text(account.key.username),
+      subtitle: Text(account.key.host),
+      onTap: onSelect,
+      trailing: onSignOut != null
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(
+                  height: 24,
+                  child: VerticalDivider(width: 15),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.logout_rounded),
+                  onPressed: onSignOut,
+                  splashRadius: 24,
+                  tooltip: "Remove account",
+                ),
+              ],
+            )
+          : null,
+    );
+  }
+}
+
+class InstanceIcon extends ConsumerWidget {
+  final String host;
+  final double? size;
+
+  const InstanceIcon(this.host, {super.key, this.size});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final size = this.size ?? IconTheme.of(context).size;
+    final value = ref.watch(probeInstanceProvider(host));
+
+    return value.when(
+      data: (result) {
+        final iconUrl = result.instance?.iconUrl;
+        if (iconUrl == null) return _buildFallback();
+        return Image.network(
+          iconUrl,
+          width: size,
+          height: size,
+          cacheHeight: size?.ceil(),
+          cacheWidth: size?.ceil(),
+          errorBuilder: (_, __, ___) => _buildFallback(),
+          loadingBuilder: (_, child, event) =>
+              event == null ? child : _buildFallback(),
+        );
+      },
+      error: (_, __) => _buildFallback(),
+      loading: _buildFallback,
     );
   }
 
-  Future<void> _onSelect(WidgetRef ref) async {
-    await ref.read(accountProvider).changeAccount(compound);
-    onTap?.call();
-  }
-
-  Future<void> _onRemove(BuildContext context, WidgetRef ref) async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => const AccountRemovalDialog(),
-    );
-
-    if (result == true) {
-      ref.read(accountProvider).remove(compound);
-    }
-  }
+  Widget _buildFallback() => Icon(Icons.public_rounded, size: size);
 }

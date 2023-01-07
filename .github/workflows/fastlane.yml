@@ -1,0 +1,14 @@
+name: "Validate Fastlane metadata"
+
+on:
+  push:
+    paths:
+      - 'fastlane/**'
+
+jobs:
+  validate:
+    name: "Validate"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ashutoshgngwr/validate-fastlane-supply-metadata@v2

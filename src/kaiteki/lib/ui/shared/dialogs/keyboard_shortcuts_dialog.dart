@@ -2,113 +2,113 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' show dialogConstraints;
-import 'package:kaiteki/ui/shared/dialogs/dialog_title_with_hero.dart';
+import 'package:kaiteki/di.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki_material/kaiteki_material.dart';
 
 class KeyboardShortcutsDialog extends StatelessWidget {
-  const KeyboardShortcutsDialog({Key? key}) : super(key: key);
+  const KeyboardShortcutsDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
     final sectionTextStyle = TextStyle(
       color: Theme.of(context).disabledColor,
     );
-    return ConstrainedBox(
-      constraints: dialogConstraints,
-      child: AlertDialog(
-        title: const DialogTitleWithHero(
-          icon: Icon(Icons.keyboard_rounded),
-          title: Text("Keyboard Shortcuts"),
-        ),
-        scrollable: true,
-        content: Column(
+    final l10n = context.l10n;
+    return AlertDialog(
+      icon: const Icon(Icons.keyboard_rounded),
+      title: Text(l10n.keyboardShortcuts),
+      scrollable: true,
+      actionsPadding: Theme.of(context).useMaterial3
+          ? const EdgeInsets.fromLTRB(24, 24, 16, 24)
+          : null,
+      content: ConstrainedBox(
+        constraints: dialogConstraints,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const KeyboardShortcut(
-              icon: Icon(Icons.help_rounded),
-              label: Text("Open keyboard shortcuts"),
-              shortcuts: [shortcutsHelp],
+            KeyboardShortcut(
+              icon: const Icon(Icons.help_rounded),
+              label: Text(l10n.keyboardShortcutsOpenDialog),
+              shortcuts: const [shortcutsHelp],
             ),
             const Divider(thickness: 1, height: 23),
-            Text("Navigation", style: sectionTextStyle),
+            Text(l10n.keyboardShortcutsNavigation, style: sectionTextStyle),
             KeyboardShortcut(
               icon: const Icon(Icons.home_rounded),
-              label: const Text("Go to home"),
+              label: Text(l10n.keyboardShortcutsGoToHome),
               shortcuts: [gotoHome],
             ),
             KeyboardShortcut(
               icon: const Icon(Icons.notifications_rounded),
-              label: const Text("Go to notifications"),
+              label: Text(l10n.keyboardShortcutsGoToNotifications),
               shortcuts: [gotoNotifications],
             ),
             KeyboardShortcut(
               icon: const Icon(Icons.bookmark_rounded),
-              label: const Text("Go to bookmarks"),
+              label: Text(l10n.keyboardShortcutsGoToBookmarks),
               shortcuts: [gotoBookmarks],
             ),
             KeyboardShortcut(
               icon: const Icon(Icons.settings_rounded),
-              label: const Text("Go to settings"),
+              label: Text(l10n.keyboardShortcutsGoToSettings),
               shortcuts: [gotoSettings],
             ),
             const Divider(thickness: 1, height: 23),
-            const KeyboardShortcut(
-              icon: Icon(Icons.send_rounded),
-              label: Text("Submit post"),
-              shortcuts: [commit],
+            KeyboardShortcut(
+              icon: const Icon(Icons.send_rounded),
+              label: Text(l10n.keyboardShortcutsSubmitPost),
+              shortcuts: const [commit],
             ),
-            const KeyboardShortcut(
-              icon: Icon(Icons.refresh_rounded),
-              label: Text("Refresh view"),
-              shortcuts: [refresh, refresh2, refresh3],
+            KeyboardShortcut(
+              icon: const Icon(Icons.refresh_rounded),
+              label: Text(l10n.keyboardShortcutsRefreshView),
+              shortcuts: const [refresh, refresh2, refresh3],
             ),
-            const KeyboardShortcut(
-              icon: Icon(Icons.edit_rounded),
-              label: Text("Compose a new post"),
-              shortcuts: [newPost],
+            KeyboardShortcut(
+              icon: const Icon(Icons.edit_rounded),
+              label: Text(l10n.keyboardShortcutsComposePost),
+              shortcuts: const [newPost],
             ),
             const Divider(thickness: 1, height: 23),
-            Text("Post shortcuts", style: sectionTextStyle),
-            const KeyboardShortcut(
-              icon: Icon(Icons.reply_rounded),
-              label: Text("Reply to a post"),
-              shortcuts: [reply],
+            Text(l10n.keyboardShortcutsPostShortcuts, style: sectionTextStyle),
+            KeyboardShortcut(
+              icon: const Icon(Icons.reply_rounded),
+              label: Text(l10n.keyboardShortcutsReplyToPost),
+              shortcuts: const [reply],
             ),
-            const KeyboardShortcut(
-              icon: Icon(Icons.star_rounded),
-              label: Text("Favorite a post"),
-              shortcuts: [favorite],
+            KeyboardShortcut(
+              icon: const Icon(Icons.star_rounded),
+              label: Text(l10n.keyboardShortcutsFavoritePost),
+              shortcuts: const [favorite],
             ),
-            const KeyboardShortcut(
-              icon: Icon(Icons.repeat_rounded),
-              label: Text("Repeat a post"),
-              shortcuts: [repeat],
+            KeyboardShortcut(
+              icon: const Icon(Icons.repeat_rounded),
+              label: Text(l10n.keyboardShortcutsRepeatPost),
+              shortcuts: const [repeat],
             ),
-            const KeyboardShortcut(
-              icon: Icon(Icons.bookmark_rounded),
-              label: Text("Bookmark a post"),
-              shortcuts: [bookmark],
+            KeyboardShortcut(
+              icon: const Icon(Icons.bookmark_rounded),
+              label: Text(l10n.keyboardShortcutsBookmarkPost),
+              shortcuts: const [bookmark],
             ),
           ],
         ),
-        actionsPadding: Theme.of(context).useMaterial3 //
-            ? const EdgeInsets.only(right: -12)
-            : EdgeInsets.zero,
-        actions: [
-          TextButton(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text("Close"),
-                const SizedBox(width: 12.0),
-                KeyboardKey.fromKey(LogicalKeyboardKey.escape),
-              ],
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
       ),
+      actions: [
+        TextButton(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.closeButtonLabel),
+              const SizedBox(width: 12.0),
+              KeyboardKey.fromKey(context, LogicalKeyboardKey.escape),
+            ],
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
     );
   }
 }
@@ -148,7 +148,7 @@ class KeyboardShortcut extends StatelessWidget {
           // HACK(Craftplacer): Janky code, looks pretty much inefficient, could be refactored to perform better.
           Row(
             children: shortcuts
-                .map(buildKeyCombination)
+                .map((s) => buildKeyCombination(context, s))
                 .toList()
                 .joinNonString([const Text(" / ")])
                 .expand((e) => e)
@@ -159,7 +159,10 @@ class KeyboardShortcut extends StatelessWidget {
     );
   }
 
-  List<Widget> buildKeyCombination(ShortcutActivator activator) {
+  List<Widget> buildKeyCombination(
+    BuildContext context,
+    ShortcutActivator activator,
+  ) {
     if (activator is CharacterActivator) {
       return [KeyboardKey.text(activator.character)];
     }
@@ -180,7 +183,7 @@ class KeyboardShortcut extends StatelessWidget {
     }
 
     return keys
-        .map<Widget>(KeyboardKey.fromKey)
+        .map<Widget>((k) => KeyboardKey.fromKey(context, k))
         .toList()
         .joinNonString(const Text(" + "));
   }
@@ -194,11 +197,23 @@ class KeyboardKey extends StatelessWidget {
 
   const KeyboardKey.text(this.text, {super.key}) : icon = null;
 
-  factory KeyboardKey.fromKey(LogicalKeyboardKey keyboardKey, {Key? key}) {
+  factory KeyboardKey.fromKey(
+    BuildContext context,
+    LogicalKeyboardKey keyboardKey, {
+    Key? key,
+  }) {
     if (keyboardKey == LogicalKeyboardKey.browserRefresh) {
       return KeyboardKey.icon(const Icon(Icons.refresh_rounded), key: key);
-    } else if (keyboardKey == LogicalKeyboardKey.control) {
-      return KeyboardKey.text("Ctrl", key: key);
+    }
+
+    final mL10n = MaterialLocalizations.of(context);
+    final localizationMappings = {
+      LogicalKeyboardKey.control: mL10n.keyboardKeyControl,
+      LogicalKeyboardKey.escape: mL10n.keyboardKeyEscape,
+    };
+    final keyLabel = localizationMappings[keyboardKey];
+    if (localizationMappings.containsKey(keyboardKey)) {
+      return KeyboardKey.text(keyLabel, key: key);
     }
 
     return KeyboardKey.text(keyboardKey.keyLabel);
@@ -216,21 +231,14 @@ class KeyboardKey extends StatelessWidget {
           horizontal: 8,
           vertical: 4,
         ),
-        child: Builder(
-          builder: (context) => IconTheme(
-            data: IconThemeData(
-              size: DefaultTextStyle.of(context).style.fontSize! * 1.5,
-            ),
-            child: _getKeyWidget(),
-          ),
-        ),
+        child: _getKeyWidget(),
       ),
     );
   }
 
   Widget _getKeyWidget() {
     if (icon != null) {
-      return icon!;
+      return TextInheritedIconTheme(child: icon!);
     }
 
     if (text != null) {

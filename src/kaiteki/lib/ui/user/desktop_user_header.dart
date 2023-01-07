@@ -1,7 +1,9 @@
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/ui/shared/breakpoint_container.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
+import 'package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart';
+import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -10,32 +12,28 @@ class DesktopUserHeader extends StatelessWidget {
   final TabController tabController;
   final List<Tab> tabs;
   final User? user;
-  final Color? color;
 
   const DesktopUserHeader({
-    Key? key,
+    super.key,
     required this.tabController,
     required this.tabs,
     this.user,
-    required this.color,
-  }) : super(key: key);
+  });
 
-  Color getAppBarBackgroundColor(ThemeData theme) {
-    if (theme.appBarTheme.backgroundColor != null) {
-      return theme.appBarTheme.backgroundColor!;
-    }
-    return theme.primaryColor;
-    //return theme.colorScheme.brightness == Brightness.dark
-    //    ? theme.colorScheme.surface
-    //    : theme.colorScheme.primary;
+  Color getAppBarBackgroundColor(BuildContext context) {
+    final inheritedColor = AppBarTheme.of(context).backgroundColor;
+
+    if (inheritedColor != null) return inheritedColor;
+
+    return Theme.of(context).colorScheme.primary;
   }
 
   @override
   Widget build(BuildContext context) {
     final avatarBorderRadius = BorderRadius.circular(8.0);
-    final foregroundColor = color.nullTransform(
-      (c) => ThemeData.estimateBrightnessForColor(c).inverted.getColor(),
-    );
+    // final foregroundColor = Theme.of(context).useMaterial3
+    //     ? Theme.of(context).colorScheme.onSurface
+    //     : Theme.of(context).colorScheme.onPrimary;
 
     return BreakpointBuilder(
       builder: (context, breakpoint) {
@@ -61,11 +59,12 @@ class DesktopUserHeader extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                             horizontal: columnPadding,
                           ),
-                          child: TabBar(
-                            controller: tabController,
-                            tabs: tabs,
-                            indicatorColor: foregroundColor,
-                            labelColor: foregroundColor,
+                          child: AppBarTabBarTheme(
+                            child: TabBar(
+                              indicatorSize: TabBarIndicatorSize.label,
+                              controller: tabController,
+                              tabs: tabs,
+                            ),
                           ),
                         ),
                       ),
@@ -80,22 +79,20 @@ class DesktopUserHeader extends StatelessWidget {
                   breakpoint: breakpoint,
                   child: Align(
                     alignment: Alignment.bottomLeft,
-                    child: Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Flexible(
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: user == null
-                                  ? const SizedBox()
-                                  : _buildAvatar(context, avatarBorderRadius),
-                            ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Flexible(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: user == null
+                                ? const SizedBox()
+                                : _buildAvatar(context, avatarBorderRadius),
                           ),
-                          const SizedBox(width: gutter), // Gutter
-                          const Flexible(flex: 3, child: SizedBox()),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: gutter), // Gutter
+                        const Flexible(flex: 3, child: SizedBox()),
+                      ],
                     ),
                   ),
                 ),
@@ -115,7 +112,7 @@ class DesktopUserHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: ElevationOverlay.applyOverlay(
           context,
-          color ?? getAppBarBackgroundColor(Theme.of(context)),
+          getAppBarBackgroundColor(context),
           4.0,
         ),
         borderRadius: borderRadius * 2,
@@ -138,9 +135,27 @@ class DesktopUserHeader extends StatelessWidget {
     } else {
       return Image.network(
         url,
+        frameBuilder: _frameBuilder,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => const SizedBox(),
       );
     }
+  }
+
+  Widget _frameBuilder(
+    BuildContext context,
+    Widget child,
+    int? frame,
+    bool wasSynchronouslyLoaded,
+  ) {
+    if (wasSynchronouslyLoaded) return child;
+
+    final bannerBlurHash = user?.bannerBlurHash;
+    return AnimatedSwitcher(
+      duration: const Duration(seconds: 1),
+      child: frame == null && bannerBlurHash != null
+          ? BlurHash(hash: bannerBlurHash)
+          : child,
+    );
   }
 }

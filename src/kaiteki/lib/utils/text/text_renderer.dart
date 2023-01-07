@@ -1,12 +1,13 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Element;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
@@ -43,7 +44,7 @@ class TextRenderer {
       context,
       parser.parse(text).parseWith(const SocialTextParser()),
       textContext ?? TextContext(),
-      context.getKaitekiTheme(),
+      Theme.of(context).ktkTextTheme,
       onUserClick: onUserClick,
     );
     return TextSpan(children: renderedElements.toList(growable: false));
@@ -53,7 +54,7 @@ class TextRenderer {
     BuildContext context,
     Element element,
     TextContext textContext,
-    KaitekiExtension? theme, {
+    KaitekiTextTheme? theme, {
     required Function(UserReference) onUserClick,
   }) {
     final childrenSpans = renderChildren(
@@ -66,21 +67,24 @@ class TextRenderer {
 
     if (element is TextElement) {
       return renderText(context, element, childrenSpans);
-    } else if (element is LinkElement) {
+    }
+    if (element is LinkElement) {
       return renderLink(
         context,
         element,
         childrenSpans,
         style: theme?.linkTextStyle,
       );
-    } else if (element is HashtagElement) {
+    }
+    if (element is HashtagElement) {
       return renderHashtag(
         context,
         textContext,
         element,
         style: theme?.hashtagTextStyle,
       );
-    } else if (element is MentionElement) {
+    }
+    if (element is MentionElement) {
       return renderMention(
         context,
         textContext,
@@ -88,14 +92,19 @@ class TextRenderer {
         onUserClick: onUserClick,
         style: theme?.mentionTextStyle,
       );
-    } else if (element is EmojiElement) {
+    }
+    if (element is EmojiElement) {
       return renderEmoji(textContext, element, scale: theme?.emojiScale);
     }
 
-    if (element.children?.isNotEmpty == true) {
+    if (childrenSpans.isNotEmpty == true) {
       return TextSpan(children: childrenSpans);
     }
 
+    return renderFallbackSpan(element);
+  }
+
+  InlineSpan renderFallbackSpan(Element element) {
     return TextSpan(
       text: "[NIY ${element.runtimeType}]",
       style: const TextStyle(
@@ -109,7 +118,7 @@ class TextRenderer {
     BuildContext context,
     List<Element>? children,
     TextContext textContext,
-    KaitekiExtension? theme, {
+    KaitekiTextTheme? theme, {
     required Function(UserReference reference) onUserClick,
   }) {
     final spans = <InlineSpan>[];
@@ -217,7 +226,7 @@ class TextRenderer {
     List<InlineSpan> children, {
     TextStyle? style,
   }) {
-    // FIXME: We should be passing down the "click-ability" to the children.
+    // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
 
     final recognizer = TapGestureRecognizer()
       ..onTap = () => context.launchUrl(link.destination.toString());
@@ -234,13 +243,11 @@ class TextRenderer {
     EmojiElement element, {
     double? scale,
   }) {
-    final emoji = textContext.emojis!.firstOrDefault((e) {
-      return e.name == element.name;
+    final emoji = textContext.emojis?.firstWhereOrNull((e) {
+      return e.short == element.name;
     });
 
-    if (emoji == null) {
-      return TextSpan(text: element.name);
-    }
+    if (emoji == null) return TextSpan(text: ":${element.name}:");
 
     // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
     return WidgetSpan(
@@ -282,14 +289,14 @@ class UserChip extends ConsumerWidget {
   final User? user;
 
   const UserChip({
-    Key? key,
+    super.key,
     required this.reference,
     this.user,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     return FutureBuilder<User?>(
       initialData: user,
       future: reference.resolve(adapter),
@@ -298,7 +305,7 @@ class UserChip extends ConsumerWidget {
           final user = snapshot.data!;
 
           return Tooltip(
-            message: user.handle,
+            message: user.handle.toString(),
             child: ActionChip(
               avatar: AvatarWidget(user, size: 24),
               label: Text.rich(user.renderDisplayName(context, ref)),

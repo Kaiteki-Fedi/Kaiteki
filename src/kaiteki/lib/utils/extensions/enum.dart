@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart' hide Visibility;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kaiteki/fediverse/model/formatting.dart';
 import 'package:kaiteki/fediverse/model/timeline_kind.dart';
 import 'package:kaiteki/fediverse/model/visibility.dart';
 import 'package:mdi/mdi.dart';
-import 'package:tuple/tuple.dart';
 
 extension VisibilityExtensions on Visibility {
   IconData toIconData() {
@@ -19,54 +19,39 @@ extension VisibilityExtensions on Visibility {
 
       case Visibility.public:
         return Icons.public_rounded;
+
+      case Visibility.circle:
+        return Icons.workspaces_rounded;
     }
   }
 
-  String toDisplayString() {
+  String toDisplayString(AppLocalizations l10n) {
     switch (this) {
       case Visibility.direct:
-        return 'Direct';
+        return l10n.visibilityDirect;
       case Visibility.followersOnly:
-        return 'Followers only';
+        return l10n.visibilityFollowersOnly;
       case Visibility.unlisted:
-        return 'Unlisted';
+        return l10n.visibilityUnlisted;
       case Visibility.public:
-        return 'Public';
-    }
-  }
-}
-
-extension TimelineKindExtensions on TimelineKind {
-  Tuple2<IconData, IconData> get icon {
-    switch (this) {
-      case TimelineKind.federated:
-        return const Tuple2(Icons.public_rounded, Icons.public_rounded);
-      case TimelineKind.home:
-        return const Tuple2(Icons.home_outlined, Icons.home_rounded);
-      case TimelineKind.public:
-        return const Tuple2(Icons.people_outline_rounded, Icons.people_rounded);
-      case TimelineKind.directMessages:
-        return const Tuple2(Icons.mail_outline_rounded, Icons.mail_rounded);
-      case TimelineKind.bookmarks:
-        return const Tuple2(
-          Icons.bookmark_border_rounded,
-          Icons.bookmark_rounded,
-        );
+        return l10n.visibilityPublic;
+      case Visibility.circle:
+        return l10n.visibilityCircle;
     }
   }
 
-  String get displayName {
+  String toDescription(AppLocalizations l10n) {
     switch (this) {
-      case TimelineKind.federated:
-        return "Federated";
-      case TimelineKind.home:
-        return "Home";
-      case TimelineKind.public:
-        return "Public";
-      case TimelineKind.directMessages:
-        return "Direct Messages";
-      case TimelineKind.bookmarks:
-        return "Bookmarks";
+      case Visibility.direct:
+        return l10n.visibilityDirectDescription;
+      case Visibility.followersOnly:
+        return l10n.visibilityFollowersOnlyDescription;
+      case Visibility.unlisted:
+        return l10n.visibilityUnlistedDescription;
+      case Visibility.public:
+        return l10n.visibilityPublicDescription;
+      case Visibility.circle:
+        return l10n.visibilityCircleDescription;
     }
   }
 }
@@ -87,10 +72,10 @@ extension FormattingExtensions on Formatting {
     }
   }
 
-  String toDisplayString() {
+  String toDisplayString(AppLocalizations l10n) {
     switch (this) {
       case Formatting.plainText:
-        return "Plain text";
+        return l10n.formattingPlain;
       case Formatting.markdown:
         return "Markdown";
       case Formatting.html:
@@ -98,7 +83,53 @@ extension FormattingExtensions on Formatting {
       case Formatting.bbCode:
         return "BBCode";
       case Formatting.misskeyMarkdown:
-        return "Misskey-flavored Markdown (MFM)";
+        return l10n.formattingMfm;
+    }
+  }
+}
+
+extension TimelindKindExtensions on TimelineKind {
+  IconData getIconData() {
+    switch (this) {
+      case TimelineKind.home:
+        return Icons.home_rounded;
+
+      case TimelineKind.local:
+        return Icons.people_rounded;
+
+      case TimelineKind.bubble:
+        return Icons.workspaces_rounded;
+
+      case TimelineKind.hybrid:
+        return Icons.handshake_rounded;
+
+      case TimelineKind.federated:
+        return Icons.public_rounded;
+
+      case TimelineKind.directMessages:
+        return Icons.mail_rounded;
+    }
+  }
+
+  String getDisplayName(AppLocalizations l10n) {
+    switch (this) {
+      case TimelineKind.home:
+        return l10n.timelineHome;
+
+      case TimelineKind.local:
+        return l10n.timelineLocal;
+
+      case TimelineKind.bubble:
+        return l10n.timelineBubble;
+
+      case TimelineKind.hybrid:
+        return l10n.timelineHybrid;
+
+      case TimelineKind.federated:
+        return l10n.timelineFederated;
+
+      case TimelineKind.directMessages:
+        return l10n.timelineDirectMessages;
     }
   }
 }

@@ -3,14 +3,14 @@ import 'package:json_annotation/json_annotation.dart';
 part 'create_app.g.dart';
 
 @JsonSerializable()
-class MisskeyCreateAppResponse {
+class CreateAppResponse {
   final String id;
   final String name;
   final String callbackUrl;
   final List<String> permission;
   final String secret;
 
-  MisskeyCreateAppResponse({
+  CreateAppResponse({
     required this.id,
     required this.name,
     required this.callbackUrl,
@@ -18,8 +18,8 @@ class MisskeyCreateAppResponse {
     required this.secret,
   });
 
-  factory MisskeyCreateAppResponse.fromJson(Map<String, dynamic> json) =>
-      _$MisskeyCreateAppResponseFromJson(json);
+  factory CreateAppResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateAppResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MisskeyCreateAppResponseToJson(this);
+  Map<String, dynamic> toJson() => _$CreateAppResponseToJson(this);
 }

@@ -7,13 +7,13 @@ class InstanceCard extends StatelessWidget {
   final InstanceData data;
 
   const InstanceCard({
-    Key? key,
+    super.key,
     required this.data,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final iconLocation = data.type.theme.iconAssetLocation;
 
     return Card(
@@ -33,7 +33,7 @@ class InstanceCard extends StatelessWidget {
                       return const Icon(Icons.public);
                     },
                   ),
-            title: Text(data.name),
+            title: Text(data.host),
             subtitle: data.shortDescription == null
                 ? null
                 : Text(data.shortDescription!),

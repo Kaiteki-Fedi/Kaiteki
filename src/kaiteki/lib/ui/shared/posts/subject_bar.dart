@@ -7,11 +7,11 @@ class SubjectBar extends StatelessWidget {
   final VoidCallback? onTap;
 
   const SubjectBar({
-    Key? key,
+    super.key,
     required this.subject,
     required this.collapsed,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class SubjectBar extends StatelessWidget {
           ListTile(
             title: Text(
               subject,
-              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
             ),

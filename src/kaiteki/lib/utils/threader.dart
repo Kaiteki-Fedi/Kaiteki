@@ -1,7 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -9,16 +10,25 @@ ThreadPost toThread(Iterable<Post> posts) {
   final threadPosts = posts.map((post) => ThreadPost(post.getRoot())).toList();
 
   for (final post in threadPosts) {
-    final id = post.post.replyToPostId;
+    final id = post.post.id;
+    final parentId = post.post.replyTo?.id;
 
-    if (id != null) {
-      final parent = threadPosts.firstWhere((p) => p.post.id == id);
+    if (parentId != null) {
+      final parent = threadPosts.firstWhereOrNull((p) => p.post.id == parentId);
+      if (parent == null) {
+        throw Exception("Couldn't find parent post $parentId for $id");
+      }
+
       parent.replies.add(post);
       post.parent = parent;
     }
   }
 
-  final op = threadPosts.firstWhere((p) => p.post.replyToPostId == null);
+  final op = threadPosts.firstWhereOrNull((p) => p.post.replyTo?.id == null);
+  if (op == null) {
+    throw Exception("Couldn't find original post for thread");
+  }
+
   return op;
 }
 
@@ -61,8 +71,8 @@ class ThreadPostContainer extends StatelessWidget {
   const ThreadPostContainer(
     this.post, {
     this.threadLayer = 0,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +108,7 @@ class ThreadPostContainer extends StatelessWidget {
                 post.post,
                 showParentPost: false,
                 hideReplyee: true,
+                expand: threadLayer == 0,
               ),
             ),
           ],

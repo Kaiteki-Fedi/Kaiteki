@@ -2,8 +2,10 @@ import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/ui/shared/breakpoint_container.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/ui/shared/common.dart';
+import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -12,7 +14,7 @@ import 'package:kaiteki/utils/threader.dart';
 class ConversationScreen extends ConsumerStatefulWidget {
   final Post post;
 
-  const ConversationScreen(this.post, {Key? key}) : super(key: key);
+  const ConversationScreen(this.post, {super.key});
 
   @override
   ConsumerState<ConversationScreen> createState() => _ConversationScreenState();
@@ -20,13 +22,14 @@ class ConversationScreen extends ConsumerStatefulWidget {
 
 class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   Future<Iterable<Post>>? _threadFetchFuture;
+  Future<ThreadPost>? _threadedFuture;
   bool showThreaded = true;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final adapter = ref.watch(accountProvider).adapter;
+    final adapter = ref.watch(adapterProvider);
     try {
       _threadFetchFuture = adapter.getThread(widget.post.getRoot());
     } on UnimplementedError {
@@ -34,7 +37,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "Fetching threads with ${adapter.client.type.displayName} is not implemented.",
+            "Fetching threads with ${adapter.type.displayName} is not implemented.",
           ),
         ),
       );
@@ -43,7 +46,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +58,11 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                   ? Icons.view_timeline_rounded
                   : Icons.article_rounded,
             ),
-            onPressed: () => setState(() => showThreaded = !showThreaded),
+            onPressed: () {
+              setState(() {
+                showThreaded = !showThreaded;
+              });
+            },
           ),
         ],
       ),
@@ -71,14 +78,12 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   }
 
   Widget buildThreaded(BuildContext context) {
-    final future = _threadFetchFuture?.then((thread) {
+    _threadedFuture ??= _threadFetchFuture?.then((thread) {
       return compute(toThread, thread.toList(growable: false));
     });
 
-    final l10n = context.getL10n();
-
     return FutureBuilder<ThreadPost>(
-      future: future,
+      future: _threadedFuture,
       builder: (_, snapshot) {
         if (snapshot.hasData) {
           return SingleChildScrollView(
@@ -87,48 +92,57 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         } else if (snapshot.hasError) {
           return Column(
             children: [
-              PostWidget(widget.post),
-              ListTile(
-                leading: const Icon(Icons.close_rounded),
-                title: Text(l10n.threadRetrievalFailed),
-                subtitle: Text(snapshot.error.toString()),
-              ),
+              PostWidget(widget.post, expand: true),
+              _buildErrorListTile(context, snapshot),
             ],
           );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return centeredCircularProgressIndicator;
         }
       },
     );
   }
 
-  Widget buildFlat(BuildContext context) {
-    final l10n = context.getL10n();
+  Widget _buildErrorListTile(BuildContext context, AsyncSnapshot snapshot) {
+    final l10n = context.l10n;
+    return ListTile(
+      leading: const Icon(Icons.error_rounded),
+      title: Text(l10n.threadRetrievalFailed),
+      trailing: OutlinedButton(
+        child: const Text("Show details"),
+        onPressed: () => context.showExceptionDialog(
+          snapshot.error,
+          snapshot.stackTrace,
+        ),
+      ),
+    );
+  }
 
+  Widget buildFlat(BuildContext context) {
     return FutureBuilder<Iterable<Post>>(
       future: _threadFetchFuture,
       builder: (_, snapshot) {
         if (snapshot.hasData) {
-          return ListView.builder(
+          return ListView.separated(
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final post = snapshot.data!.elementAt(index);
-              return PostWidget(post);
+              return PostWidget(
+                post,
+                expand: index == 0,
+              );
             },
+            separatorBuilder: (_, __) => const Divider(height: 1),
           );
         } else if (snapshot.hasError) {
           return Column(
             children: [
-              PostWidget(widget.post),
-              ListTile(
-                leading: const Icon(Icons.close_rounded),
-                title: Text(l10n.threadRetrievalFailed),
-                subtitle: Text(snapshot.error.toString()),
-              ),
+              PostWidget(widget.post, expand: true),
+              _buildErrorListTile(context, snapshot),
             ],
           );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return centeredCircularProgressIndicator;
         }
       },
     );

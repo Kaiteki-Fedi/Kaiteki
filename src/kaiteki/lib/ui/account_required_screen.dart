@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/form_widget.dart';
+import 'package:kaiteki/ui/shared/layout/form_widget.dart';
 import 'package:kaiteki/utils/extensions/m3.dart';
 
 class AccountRequiredScreen extends StatelessWidget {
-  const AccountRequiredScreen({Key? key}) : super(key: key);
+  const AccountRequiredScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
 
     return Scaffold(
       body: SafeArea(
@@ -34,7 +34,7 @@ class AccountRequiredScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                    onPressed: () => context.push("/login"),
+                    onPressed: () => context.pushNamed("login"),
                   ),
                 ),
               ),

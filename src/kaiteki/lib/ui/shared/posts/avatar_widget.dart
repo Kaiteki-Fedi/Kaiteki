@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 
 class AvatarWidget extends StatelessWidget {
   final User user;
@@ -9,11 +10,11 @@ class AvatarWidget extends StatelessWidget {
 
   const AvatarWidget(
     this.user, {
-    Key? key,
+    super.key,
     this.size = 48,
     this.onTap,
     this.radius,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,26 +31,18 @@ class AvatarWidget extends StatelessWidget {
     if (url == null) {
       avatar = fallback;
     } else {
-      avatar = Ink.image(
-        image: NetworkImage(url),
+      avatar = Image.network(
+        url,
+        frameBuilder: _frameBuilder,
         width: size,
         height: size,
+        errorBuilder: (_, __, ___) => fallback,
         fit: BoxFit.cover,
-        // onImageError: (_, __, ___) => fallback,
       );
-      // avatar = Image.network(
-      //   url,
-      //   width: size,
-      //   height: size,
-      //   cacheWidth: size?.toInt(),
-      //   cacheHeight: size?.toInt(),
-      //   errorBuilder: (_, __, ___) => fallback,
-      // );
     }
 
     if (onTap != null) {
       avatar = InkWell(onTap: onTap, child: avatar);
-      // avatar = Ink.image(child: avatar);
     }
 
     final borderRadius = radius;
@@ -65,12 +58,37 @@ class AvatarWidget extends StatelessWidget {
 
     return avatar;
   }
+
+  Widget _frameBuilder(
+    BuildContext context,
+    Widget child,
+    int? frame,
+    bool wasSynchronouslyLoaded,
+  ) {
+    if (wasSynchronouslyLoaded) return child;
+
+    final blurHash = user.avatarBlurHash;
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 150),
+      child: frame == null
+          ? SizedBox.square(
+              dimension: size,
+              child: blurHash != null
+                  ? BlurHash(
+                      color: Colors.transparent,
+                      hash: blurHash,
+                    )
+                  : null,
+            )
+          : SizedBox(child: child),
+    );
+  }
 }
 
 class FallbackAvatar extends StatelessWidget {
   const FallbackAvatar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

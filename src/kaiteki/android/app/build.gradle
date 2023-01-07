@@ -26,20 +26,16 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
     defaultConfig {
         applicationId "moe.craftplacer.kaiteki"
-        minSdkVersion 18
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -58,7 +54,14 @@ android {
         release {
             signingConfig signingConfigs.release
         }
+        debug {
+            applicationIdSuffix ".dev"
+        }
     }
+    lint {
+        disable 'InvalidPackage'
+    }
+    namespace 'moe.craftplacer.kaiteki'
 }
 
 flutter {

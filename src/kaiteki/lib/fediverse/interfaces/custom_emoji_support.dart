@@ -1,5 +1,5 @@
-import 'package:kaiteki/fediverse/model/emoji_category.dart';
+import 'package:kaiteki/fediverse/model/emoji/category.dart';
 
 abstract class CustomEmojiSupport {
-  Future<Iterable<EmojiCategory>> getEmojis();
+  Future<List<EmojiCategory>> getEmojis();
 }

@@ -14,6 +14,4 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
       json['refresh_token'] as String?,
       json['scope'] as String?,
       json['token_type'] as String?,
-      json['error'] as String?,
-      json['mfa_token'] as String?,
     );

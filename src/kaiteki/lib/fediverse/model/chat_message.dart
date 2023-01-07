@@ -1,6 +1,4 @@
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 
 class ChatMessage {
   final DateTime sentAt;

@@ -1,7 +1,7 @@
 [
   {
     "type": "pleroma",
-    "name": "fedi.absturztau.be",
+    "host": "fedi.absturztau.be",
     "shortDescription": "This instances tries to be as cute, fluffy and adorable as possible.",
     "rules": [
       "Don't post Illegal Content",
@@ -14,7 +14,7 @@
   },
   {
     "type": "pleroma",
-    "name": "udongein.xyz",
+    "host": "udongein.xyz",
     "shortDescription": "Welcome to Udongein! The friendly comfy instance of Pleroma!",
     "rules": [
       "Don't post pornographic materials involving minors.",
@@ -34,13 +34,13 @@
   },
   {
     "type": "misskey",
-    "name": "misskey.io",
+    "host": "misskey.io",
     "shortDescription": "Misskey.ioは、地球で生まれた分散マイクロブログSNSです。",
     "favicon": "https://s3.arkjp.net/misskey/webpublic-0c66b1ca-b8c0-4eaa-9827-47674f4a1580.png"
   },
   {
     "type": "mastodon",
-    "name": "mastodon.social",
+    "host": "mastodon.social",
     "favicon": "https://mastodon.social/favicon.ico",
     "shortDescription": "Server run by the main developers of the project 🐘 It is not focused on any particular niche interest - everyone is welcome as long as you follow our code of conduct!",
     "rules": [
@@ -55,7 +55,7 @@
   },
   {
     "type": "pleroma",
-    "name": "cdrom.tokyo",
+    "host": "cdrom.tokyo",
     "favicon": "https://cdrom.tokyo/favicon.png",
     "shortDescription": "cdrom.tokyo is one of many places where you can join the Fediverse!",
     "rules": [
@@ -70,7 +70,7 @@
   },
   {
     "type": "pleroma",
-    "name": "blob.cat",
+    "host": "blob.cat",
     "favicon": "https://blob.cat/favicon.png",
     "rules": [
       "Never post anything illegal (USA jurisdiction)",
@@ -81,7 +81,7 @@
   },
   {
     "type": "pleroma",
-    "name": "outerheaven.club",
+    "host": "outerheaven.club",
     "shortDescription": "An instance without a specific theme except when it comes to having fun and taking it easy :comfy:",
     "rules": [
       "Lewd or violent content must be tagged. Marking them as sensitive is good, but providing context even with just one word to describe the content is preferable.",
@@ -99,7 +99,7 @@
   },
   {
     "type": "pleroma",
-    "name": "stereophonic.space",
+    "host": "stereophonic.space",
     "shortDescription": "Stereophonic.space is a nice and cozy socialization platform. We have cofe",
     "favicon": "https://stereophonic.space/favicon.png",
     "rules": [
@@ -115,7 +115,7 @@
   },
   {
     "type": "pleroma",
-    "name": "cawfee.club",
+    "host": "cawfee.club",
     "favicon": "https://cawfee.club/favicon.png",
     "rulesUrl": "https://cawfee.club/about",
     "rules": [
@@ -127,7 +127,7 @@
   },
   {
     "type": "pleroma",
-    "name": "shitposter.club",
+    "host": "shitposter.club",
     "favicon": "https://shitposter.club/favicon.png",
     "rulesUrl": "https://shitposter.club/about",
     "rules": [
@@ -143,7 +143,7 @@
   },
   {
     "type": "mastodon",
-    "name": "mstdn.social",
+    "host": "mstdn.social",
     "favicon": "https://mstdn.social/favicon.ico",
     "rules": [
       "Sexually explicit or violent media must be marked as sensitive when posting.",
@@ -158,7 +158,7 @@
   },
   {
     "type": "mastodon",
-    "name": "mastodon.online",
+    "host": "mastodon.online",
     "shortDescription": "This is a brand new server run by the main developers of the project as a spin-off of mastodon.social \uD83D\uDC18 It is not focused on any particular niche interest - everyone is welcome as long as you follow our code of conduct!",
     "favicon": "https://mastodon.online/favicon.ico",
     "rules": [
@@ -175,7 +175,7 @@
   },
   {
     "type": "mastodon",
-    "name": "koyu.space",
+    "host": "koyu.space",
     "favicon": "https://koyu.space/favicon.ico",
     "rules": [
       "Respect other users and their backgrounds",
@@ -200,7 +200,7 @@
   },
   {
     "type": "mastodon",
-    "name": "mas.to",
+    "host": "mas.to",
     "shortDescription": "mas.to is a general-topic, mainly English-speaking instance. We're enthusiastic about Mastodon and aim to run a fast, up-to-date and fun Mastodon instance.",
     "favicon": "https://mas.to/favicon.ico",
     "rules": [
@@ -214,13 +214,13 @@
   },
   {
     "type": "misskey",
-    "name": "quietplace.xyz",
+    "host": "quietplace.xyz",
     "shortDescription": "This is a city that holds the many dreams and stories of its people. Most of these stories are left untold. But some few find solace in the embrace of bricks and wood and glass. They are told over drinks, then take up residence in some stranger's memories. In one corner of the city stand a Quiet Place. A place that is only open when the sun is sleeping. A place where people share their stories. And these are their stories...",
     "favicon": "https://quietplace.xyz/favicon.ico"
   },
   {
     "type": "misskey",
-    "name": "mk.nixnet.social",
+    "host": "mk.nixnet.social",
     "shortDescription": "General-purpose instance that aims to be friendly, reliable, and welcoming. Run by the people behind nixnet.services",
     "favicon": "https://mk.nixnet.social/favicon.ico",
     "rules": [
@@ -234,7 +234,7 @@
   },
   {
     "type": "pleroma",
-    "name": "nixnet.social",
+    "host": "nixnet.social",
     "shortDescription": "General-purpose instance that aims to be friendly, reliable, and welcoming. Run by the people behind nixnet.services",
     "favicon": "https://nixnet.social/favicon.png",
     "rules": [
@@ -249,7 +249,7 @@
   },
   {
     "type": "pleroma",
-    "name": "landofkittens.social",
+    "host": "landofkittens.social",
     "shortDescription": "A community based Fediverse server with kittens at heart",
     "favicon": "https://landofkittens.social/favicon.png",
     "rules": [
@@ -263,7 +263,7 @@
   },
   {
     "type": "misskey",
-    "name": "jigglypuff.club",
+    "host": "jigglypuff.club",
     "shortDescription": "Jigglypuff!",
     "favicon": "https://jigglypuff.club/files/0118e4bf-ef61-4565-805e-7fa6271beb0a",
     "rules": [
@@ -272,7 +272,7 @@
   },
   {
     "type": "pleroma",
-    "name": "social.handholding.io",
+    "host": "social.handholding.io",
     "shortDescription": "Streaming, with a social touch",
     "favicon": "https://social.handholding.io/favicon.png",
     "rules": [
@@ -284,7 +284,7 @@
   },
   {
     "type": "misskey",
-    "name": "stop.voring.me",
+    "host": "stop.voring.me",
     "shortDescription": "Fun hangout for furries and normies alike.",
     "favicon": "https://stop.voring.me/assets/about-icon.86c5c1fe.png",
     "rules": [

@@ -17,7 +17,8 @@ Future<List<InstanceData>> fetchInstances() async {
 @JsonSerializable()
 class InstanceData {
   final ApiType type;
-  final String name;
+  final String host;
+  final String? name;
   final String? shortDescription;
   final String? favicon;
   final List<String>? rules;
@@ -27,7 +28,8 @@ class InstanceData {
 
   const InstanceData({
     required this.type,
-    required this.name,
+    required this.host,
+    this.name,
     this.shortDescription,
     this.favicon,
     this.rules,

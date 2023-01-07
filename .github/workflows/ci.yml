@@ -9,6 +9,9 @@ on:
       - master
     paths:
       - 'src/**'
+      - '!src/kaiteki/storybook/**'
+      - '!src/kaiteki/tools/**'
+      - '!src/kaiteki/README.md'
   pull_request:
   workflow_dispatch:
 
@@ -20,11 +23,14 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
   
       - name: Get packages
@@ -34,7 +40,12 @@ jobs:
         run: 'flutter analyze --no-pub --no-fatal-infos --no-congratulate --no-preamble'
 
       - name: Test
-        run: 'flutter test --no-pub'
+        run: 'flutter test --coverage -r expanded --no-pub'
+
+      - name: Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: coverage/lcov.info 
 
   build-linux:
     name: Build for Linux
@@ -44,11 +55,14 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
         
       - name: Update Linux repos
@@ -119,11 +133,14 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
 
       - name: Get packages
@@ -162,11 +179,14 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
         
       - name: Enable Windows Desktop
@@ -192,11 +212,14 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          channel: 'beta'
           cache: true
 
       - name: Enable web
@@ -213,45 +236,3 @@ jobs:
         with:
           name: web
           path: '${{ env.SOURCE_PATH }}/build/web/*'
-  deploy-web:
-    name: Deploy for Web
-    runs-on: ubuntu-latest
-    needs: build-web
-    if: github.event_name != 'pull_request'
-    steps:
-    - name: Download web artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: web
-        path: ./web-publish
-
-    - name: Push to GitHub Pages branch
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./web-publish
-        cname: kaiteki.craftplacer.moe
-
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: [ "package-appimage", "build-android", "build-windows" ]
-    steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v3
-
-      - name: Zip multi-file artifacts
-        run: |
-          zip -r windows.zip windows
-          zip -r linux.zip linux
-
-      - name: Create release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          files: |
-            android/*.apk
-            appimage/*.AppImage
-            linux.zip
-            windows.zip

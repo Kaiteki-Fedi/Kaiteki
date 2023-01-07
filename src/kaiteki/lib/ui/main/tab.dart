@@ -9,6 +9,7 @@ class MainScreenTab {
   final FloatingActionButtonData? fab;
   final bool hideFabWhenDesktop;
   final TabKind kind;
+  final int? Function()? fetchUnreadCount;
 
   const MainScreenTab({
     required this.kind,
@@ -17,5 +18,6 @@ class MainScreenTab {
     required this.icon,
     this.fab,
     this.hideFabWhenDesktop = false,
+    this.fetchUnreadCount,
   });
 }

@@ -1,39 +1,46 @@
 import 'dart:async';
 
-import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/auth/login_typedefs.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/client_base.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/post_draft.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/model/timeline_query.dart';
 import 'package:kaiteki/model/auth/login_result.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/model/file.dart';
 
-/// An adapter containing a backing Fediverse client that.
-abstract class FediverseAdapter<Client extends FediverseClientBase> {
-  /// The original client/backend that is being adapted.
-  Client client;
+abstract class CentralizedBackendAdapter extends BackendAdapter {
+  Instance get instance;
 
+  @override
+  FutureOr<Instance> getInstance() => instance;
+}
+
+abstract class DecentralizedBackendAdapter extends BackendAdapter {
+  String get instance;
+
+  Future<Instance?> probeInstance();
+}
+
+abstract class BackendAdapter {
   AdapterCapabilities get capabilities;
-
-  FediverseAdapter(this.client);
 
   /// Retrieves the profile of the currently authenticated user.
   Future<User> getMyself();
 
-  /// Attempts to sign into an instance. Additionally, mfaCallback can be used
-  /// to request more data from the user, if required.
+  FutureOr<void> applySecrets(
+    ClientSecret? clientSecret,
+    AccountSecret accountSecret,
+  );
+
+  /// Attempts to sign into an instance. Additionally, callback methods
+  /// provided in the parameters can be used to request more data from
+  /// the user, if required.
   Future<LoginResult> login(
-    String instance,
-    String username,
-    String password,
+    ClientSecret? clientSecret,
+    CredentialsCallback requestCredentials,
     MfaCallback requestMfa,
     OAuthCallback requestOAuth,
-    AccountManager accounts,
   );
 
   /// Retrieves an user of another instance
@@ -48,30 +55,26 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   /// Retrieves a thread from a reply
   Future<Iterable<Post>> getThread(Post reply);
 
-  Future<Iterable<Post>> getTimeline(
+  Future<List<Post>> getTimeline(
     TimelineKind type, {
-    String? sinceId,
-    String? untilId,
+    TimelineQuery<String>? query,
   });
 
-  Future<Iterable<Post>> getStatusesOfUserById(String id);
+  Future<List<Post>> getStatusesOfUserById(
+    String id, {
+    TimelineQuery<String>? query,
+  });
 
-  Future<Instance> getInstance();
-
-  Future<Instance?> probeInstance();
+  FutureOr<Instance> getInstance();
 
   /// Retrieves a post.
   Future<Post> getPostById(String id);
 
   /// Repeats a post.
-  ///
-  /// This method *may* return a [Post] containing the repeated post.
-  Future<Post?> repeatPost(String id);
+  Future<void> repeatPost(String id);
 
   /// Unrepeats a post.
-  ///
-  /// This method *may* return the [Post] that was unrepeated.
-  Future<Post?> unrepeatPost(String id);
+  Future<void> unrepeatPost(String id);
 
   /// Follows an user.
   ///
@@ -80,4 +83,22 @@ abstract class FediverseAdapter<Client extends FediverseClientBase> {
   Future<User?> followUser(String id);
 
   Future<Attachment> uploadAttachment(File file, String? description);
+
+  Future<List<User>> getRepeatees(String id);
+
+  Future<Pagination<dynamic, User>> getFollowers(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  });
+
+  Future<Pagination<dynamic, User>> getFollowing(
+    String userId, {
+    String? sinceId,
+    String? untilId,
+  });
+}
+
+extension FediverseAdapterExtensions on BackendAdapter {
+  ApiType get type => ApiType.values.firstWhere((t) => t.isType(this));
 }

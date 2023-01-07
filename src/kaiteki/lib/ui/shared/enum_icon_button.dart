@@ -11,12 +11,12 @@ class EnumIconButton<T> extends StatelessWidget {
   final double? splashRadius;
   final String tooltip;
   final T value;
-  final List<T>? values;
+  final Set<T>? values;
   final bool? dense;
   final bool isThreeLine;
 
   const EnumIconButton({
-    Key? key,
+    super.key,
     this.onChanged,
     required this.tooltip,
     required this.iconBuilder,
@@ -27,7 +27,7 @@ class EnumIconButton<T> extends StatelessWidget {
     this.values,
     this.dense,
     this.isThreeLine = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

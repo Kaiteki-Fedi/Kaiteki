@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/shared/posts/post_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/utils.dart';
 
 class ReplyBar extends ConsumerWidget {
   const ReplyBar({
-    Key? key,
+    super.key,
     this.textStyle,
     required this.post,
-  }) : super(key: key);
+  });
 
   final TextStyle? textStyle;
   final Post post;
@@ -20,66 +22,73 @@ class ReplyBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledColor = Theme.of(context).disabledColor;
-    final l10n = context.getL10n();
-    final adapter = ref.watch(accountProvider).adapter;
+    final l10n = context.l10n;
+    final adapter = ref.watch(adapterProvider);
 
     return Padding(
       padding: kPostPadding,
-      child: FutureBuilder<User?>(
-        future: UserReference(_getUserId()).resolve(adapter),
-        builder: (context, snapshot) {
-          final span = snapshot.hasData
-              ? snapshot.data!.renderDisplayName(context, ref)
-              : TextSpan(
-                  text: _getText(),
-                  style: context.getKaitekiTheme()!.linkTextStyle,
-                );
+      child: InkWell(
+        onTap: () {
+          final userId = _getUserId();
+          context.push("/${ref.getCurrentAccountHandle()}/users/$userId");
+        },
+        child: FutureBuilder<User?>(
+          future: UserReference(_getUserId()).resolve(adapter),
+          builder: (context, snapshot) {
+            final span = snapshot.hasData
+                ? snapshot.data!.renderDisplayName(context, ref)
+                : TextSpan(
+                    text: _getText(),
+                    style: Theme.of(context).ktkTextTheme!.linkTextStyle,
+                  );
 
-          return Text.rich(
-            TextSpan(
-              style: textStyle,
-              children: [
-                // TODO(Craftplacer): refactor the following widget pattern to a future "IconSpan"
-                WidgetSpan(
-                  child: Directionality(
-                    textDirection: Directionality.of(context).inverted,
-                    child: Icon(
-                      Icons.reply_rounded,
-                      size: getLocalFontSize(context) * 1.25,
-                      color: disabledColor,
+            return Text.rich(
+              TextSpan(
+                style: textStyle,
+                children: [
+                  // TODO(Craftplacer): refactor the following widget pattern to a future "IconSpan"
+                  WidgetSpan(
+                    child: Directionality(
+                      textDirection: Directionality.of(context).inverted,
+                      child: Icon(
+                        Icons.reply_rounded,
+                        size: getLocalFontSize(context) * 1.25,
+                        color: disabledColor,
+                      ),
                     ),
                   ),
-                ),
-                TextSpan(
-                  text: ' ${l10n.replyTo} ',
-                  style: TextStyle(color: disabledColor),
-                ),
-                span,
-              ],
-            ),
-          );
-        },
+                  TextSpan(
+                    text: ' ${l10n.replyTo} ',
+                    style: TextStyle(color: disabledColor),
+                  ),
+                  span,
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
   String _getText() {
-    final user = post.replyToUser;
-    if (user != null) {
-      return '@${user.username}';
-    }
+    final reference = post.replyToUser;
 
-    final id = post.replyToUserId;
-    if (id != null) {
-      return id;
-    }
+    if (reference == null) return "unknown user";
 
-    return "unknown user";
+    final user = reference.data;
+    if (user != null) return '@${user.username}';
+
+    return reference.id;
   }
 
   String _getUserId() {
-    if (post.replyToUserId != null) return post.replyToUserId!;
-    if (post.replyTo != null) return post.replyTo!.author.id;
+    final authorId = post.replyToUser?.id;
+    if (authorId != null) return authorId;
+
+    final authorIdFromPost = post.replyTo?.data?.author.id;
+    if (authorIdFromPost != null) return authorIdFromPost;
+
     throw Exception("Can't find user id as reply");
   }
 }

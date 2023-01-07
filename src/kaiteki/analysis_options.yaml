@@ -31,7 +31,6 @@ linter:
     # Code style
     - always_declare_return_types
     - avoid_void_async
-    - invariant_booleans
     - join_return_with_assignment
     - only_throw_errors
     - prefer_constructors_over_static_methods
@@ -42,6 +41,7 @@ linter:
     - use_setters_to_change_properties
     - use_string_buffers
     - use_test_throws_matchers
+    - use_super_parameters
 
     # Dart features
     - avoid_classes_with_only_static_members

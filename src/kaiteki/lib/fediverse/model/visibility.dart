@@ -10,5 +10,8 @@ enum Visibility {
   followersOnly,
 
   /// This [Post] is federated only to mentioned users.
-  direct
+  direct,
+
+  /// This [Post] is visible to the author's circle.
+  circle,
 }

@@ -5,9 +5,10 @@ import 'package:html/dom.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
-import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:kaiteki/fediverse/model/post/post.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
 import 'package:kaiteki/utils/helpers.dart';
 import 'package:kaiteki/utils/text/text_renderer.dart';
 import 'package:tuple/tuple.dart';
@@ -19,11 +20,11 @@ export 'package:kaiteki/utils/extensions/iterable.dart';
 export 'package:kaiteki/utils/extensions/m3.dart';
 export 'package:kaiteki/utils/extensions/string.dart';
 
-extension ObjectExtensions<T> on Object? {
-  T2? nullTransform<T2>(T2 Function(T object) function) {
-    if (this == null) return null;
-
-    return function.call(this! as T);
+extension ObjectExtensions<T> on T? {
+  S? nullTransform<S>(S Function(T object) function) {
+    final value = this;
+    if (value == null) return null;
+    return function.call(value);
   }
 }
 
@@ -71,6 +72,7 @@ extension TextDirectionExtensions on TextDirection {
 }
 
 extension AsyncSnapshotExtensions on AsyncSnapshot {
+  @Deprecated("Use appropriate AsyncSnapshot properties instead")
   AsyncSnapshotState get state {
     if (hasError) {
       return AsyncSnapshotState.errored;
@@ -86,7 +88,7 @@ enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
   InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
-    return renderText(context, ref, displayName);
+    return renderText(context, ref, displayName!);
   }
 
   InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
@@ -104,14 +106,6 @@ extension UserExtensions on User {
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
     );
   }
-
-  String get handle {
-    if (host == null) {
-      return '@$username';
-    } else {
-      return '@$username@$host';
-    }
-  }
 }
 
 extension PostExtensions on Post {
@@ -120,6 +114,7 @@ extension PostExtensions on Post {
     WidgetRef ref, {
     bool hideReplyee = false,
   }) {
+    final replyee = replyToUser?.data;
     return const TextRenderer().render(
       context,
       content!,
@@ -127,11 +122,8 @@ extension PostExtensions on Post {
         emojis: emojis?.toList(growable: false),
         users: mentionedUsers,
         excludedUsers: [
-          if (hideReplyee && replyToUser != null)
-            UserReference.handle(
-              replyToUser!.username,
-              replyToUser!.host,
-            )
+          if (hideReplyee && replyee != null)
+            UserReference.handle(replyee.username, replyee.host)
         ],
       ),
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
@@ -176,7 +168,7 @@ extension HtmlNodeExtensions on Node {
 }
 
 extension UserReferenceExtensions on UserReference {
-  Future<User?> resolve(FediverseAdapter adapter) async {
+  Future<User?> resolve(BackendAdapter adapter) async {
     if (id != null) {
       return adapter.getUserById(id!);
     }
@@ -191,8 +183,26 @@ extension UserReferenceExtensions on UserReference {
 
 extension WidgetRefExtensions on WidgetRef {
   String getCurrentAccountHandle() {
-    final account = read(accountProvider).currentAccount.accountSecret;
-    return "@${account.username}@${account.instance}";
+    final accountKey = read(accountProvider)!.key;
+    return "@${accountKey.username}@${accountKey.host}";
+  }
+
+  Map<String, String> get accountRouterParams {
+    final accountKey = read(accountProvider)!.key;
+    return accountKey.routerParams;
+  }
+}
+
+extension ProviderContainerExtensions on ProviderContainer {
+  Map<String, String> get accountRouterParams {
+    final accountKey = read(accountProvider)!.key;
+    return accountKey.routerParams;
+  }
+}
+
+extension AccountKeyExtensions on AccountKey {
+  Map<String, String> get routerParams {
+    return {"accountUsername": username, "accountHost": host};
   }
 }
 
@@ -246,5 +256,22 @@ extension ListExtensions<T> on List<T> {
       length * 2 - 1,
       (i) => i % 2 == 0 ? this[i ~/ 2] : separator,
     );
+  }
+}
+
+extension NullableObjectExtensions on Object? {}
+
+extension FunctionExtensions<T> on T Function(Map<String, dynamic>) {
+  T Function(Object?) get generic {
+    return (obj) => this(obj as Map<String, dynamic>);
+  }
+
+  List<T>? Function(Object?) get genericList {
+    return (obj) {
+      if (obj == null) return null;
+      final list = obj as List<dynamic>;
+      final castedList = list.cast<Map<String, dynamic>>();
+      return castedList.map(this).toList();
+    };
   }
 }

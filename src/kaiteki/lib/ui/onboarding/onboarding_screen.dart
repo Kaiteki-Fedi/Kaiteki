@@ -14,7 +14,7 @@ const transitionDuration = Duration(milliseconds: 800);
 const pageDuration = Duration(seconds: 5);
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -24,6 +24,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   late final RestartableTimer timer;
   int _currentPage = 0;
   bool get isLastPage => _currentPage >= benefits.length - 1;
+  bool get isFirstPage => _currentPage <= 0;
   UserBenefit get currentBenefit => benefits[_currentPage];
 
   @override
@@ -51,13 +52,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     if (!mounted) return const SizedBox();
 
-    return Scaffold(
-      body: BreakpointBuilder(
-        builder: (context, breakpoint) {
-          return breakpoint.window >= WindowSize.medium
-              ? buildLandscape()
-              : buildPortrait();
-        },
+    return GestureDetector(
+      onTap: () {
+        timer.reset();
+        setState(() => _currentPage = isLastPage ? 0 : _currentPage + 1);
+      },
+      onHorizontalDragEnd: (details) {
+        // Swiping in right direction.
+        if (details.primaryVelocity! < -5) {
+          timer.reset();
+          setState(() => _currentPage = isLastPage ? 0 : _currentPage + 1);
+        }
+
+        // Swiping in left direction.
+        if (details.primaryVelocity! > 5) {
+          timer.reset();
+          setState(() {
+            _currentPage = isFirstPage ? benefits.length - 1 : _currentPage - 1;
+          });
+        }
+      },
+      child: Scaffold(
+        body: BreakpointBuilder(
+          builder: (context, breakpoint) {
+            return breakpoint.window >= WindowSize.medium
+                ? buildLandscape()
+                : buildPortrait();
+          },
+        ),
       ),
     );
   }
@@ -196,7 +218,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class AlphaDisclaimer extends StatelessWidget {
-  const AlphaDisclaimer({Key? key}) : super(key: key);
+  const AlphaDisclaimer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -246,10 +268,10 @@ class _UserBenefitText extends StatelessWidget {
   final bool center;
 
   const _UserBenefitText({
-    Key? key,
+    super.key,
     required this.benefit,
     this.center = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -261,14 +283,14 @@ class _UserBenefitText extends StatelessWidget {
         children: [
           Text(
             benefit.title,
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           const SizedBox(height: 8.0),
           ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 96),
             child: Text(
               benefit.description,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           )
         ],

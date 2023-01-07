@@ -1,6 +1,6 @@
 name: Bug report
 description: Create a bug report about Kaiteki
-title: ""
+title: "Bug report"
 labels: [ bug ]
 body:
 - type: textarea
@@ -14,25 +14,26 @@ body:
   id: expected
   attributes:
     label: Expected behavior
+    description: If the solution is not obvious, please enter what you want to be changed in order to fix your issue.
     placeholder: For it to work
 - type: textarea
   id: reproduction
   attributes:
-    label: To Reproduce
-    value: |
+    label: How to reproduce
+    placeholder: |
       1.
       2.
       3.
       ...
-- type: checkboxes
+- type: dropdown
   id: platform
   attributes:
     label: What platform are you seeing the issue on?
     options:
-    - label: Android
-    - label: Windows
-    - label: Linux
-    - label: Web
+    - Android
+    - Windows
+    - Linux
+    - Web
 - type: textarea
   id: context
   attributes:

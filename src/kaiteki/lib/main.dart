@@ -1,78 +1,103 @@
-import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:kaiteki/account_manager.dart';
 import 'package:kaiteki/app.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/logger.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
+import 'package:kaiteki/model/auth/secret.dart';
 import 'package:kaiteki/preferences/app_preferences.dart';
-import 'package:kaiteki/preferences/preference_container.dart';
-import 'package:kaiteki/repositories/account_secret_repository.dart';
-import 'package:kaiteki/repositories/client_secret_repository.dart';
-import 'package:kaiteki/repositories/secret_storages/shared_preferences_secret_storage.dart';
+import 'package:kaiteki/preferences/theme_preferences.dart';
+import 'package:kaiteki/repositories/hive_repository.dart';
 import 'package:kaiteki/theming/default/themes.dart';
-import 'package:kaiteki/theming/theme_container.dart';
+import 'package:kaiteki/ui/shared/crash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final logger = getLogger('Kaiteki');
+Future<bool> get _useMaterial3ByDefault async {
+  if (kIsWeb || !Platform.isAndroid) return true;
+  final androidInfo = await DeviceInfoPlugin().androidInfo;
+  return androidInfo.version.sdkInt >= 12;
+}
 
 /// Main entrypoint.
 Future<void> main() async {
-  GoRouter.setUrlPathStrategy(UrlPathStrategy.hash);
+  final Widget app;
 
-  // we need to run this to be able to get access to SharedPreferences
-  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    // we need to run this to be able to get access to SharedPreferences
+    WidgetsFlutterBinding.ensureInitialized();
 
-  final themeContainer = ThemeContainer(lightThemeData);
-  final sharedPrefs = await SharedPreferences.getInstance();
-  final accountManager = await getAccountManager(sharedPrefs);
-  final appPreferences = getPreferences(sharedPrefs);
+    await initializeHive();
+    final accountManager = await getAccountManager();
 
-  // construct app & run
-  final app = ProviderScope(
-    overrides: [
-      themeProvider.overrideWithValue(themeContainer),
-      preferenceProvider.overrideWithValue(appPreferences),
-      accountProvider.overrideWithValue(accountManager),
-    ],
-    child: KaitekiApp(),
-  );
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final themePreferences = ThemePreferences(
+      sharedPrefs,
+      await _useMaterial3ByDefault,
+    );
+    final appPreferences = AppPreferences(sharedPrefs);
+
+    // construct app & run
+    app = ProviderScope(
+      overrides: [
+        themeProvider.overrideWith((_) => themePreferences),
+        preferencesProvider.overrideWith((_) => appPreferences),
+        accountManagerProvider.overrideWith((_) => accountManager),
+      ],
+      child: const KaitekiApp(),
+    );
+  } catch (e, s) {
+    handleFatalError(e, s);
+    return;
+  }
 
   runApp(app);
 }
 
-/// Initializes the account manager.
-Future<AccountManager> getAccountManager(SharedPreferences sharedPrefs) async {
-  final accountStorage = SharedPreferencesAccountSecretStorage(sharedPrefs);
-  final accounts = AccountSecretRepository(accountStorage);
-
-  final clientStorage = SharedPreferencesClientSecretStorage(sharedPrefs);
-  final clients = ClientSecretRepository(clientStorage);
-
-  try {
-    await accounts.initialize();
-    await clients.initialize();
-  } catch (e) {
-    logger.e("Failed to initialize account and client secret repositories", e);
-    rethrow;
-  }
-
-  final manager = AccountManager(accounts, clients);
-  await manager.loadAllAccounts();
-  return manager;
+void handleFatalError(Object error, StackTrace stackTrace) {
+  final crashScreen = MaterialApp(
+    theme: getDefaultTheme(Brightness.light, true),
+    darkTheme: getDefaultTheme(Brightness.dark, true),
+    home: CrashScreen(
+      exception: error,
+      stackTrace: stackTrace,
+    ),
+  );
+  runApp(crashScreen);
 }
 
-/// Initializes app preferences.
-PreferenceContainer getPreferences(SharedPreferences sharedPrefs) {
-  late final AppPreferences appPreferences;
+Future<void> initializeHive() async {
+  await Hive.initFlutter();
+  Hive
+    ..registerAdapter(AccountKeyAdapter())
+    ..registerAdapter(ClientSecretAdapter())
+    ..registerAdapter(AccountSecretAdapter());
+}
 
-  if (sharedPrefs.containsKey('preferences')) {
-    final json = jsonDecode(sharedPrefs.getString('preferences')!);
-    appPreferences = AppPreferences.fromJson(json);
-  } else {
-    appPreferences = AppPreferences();
-  }
+/// Initializes the account manager.
+Future<AccountManager> getAccountManager() async {
+  AccountKey fromHive(dynamic k) => AccountKey.fromUri(k);
+  String toHive(AccountKey k) => k.toUri().toString();
 
-  return PreferenceContainer(appPreferences);
+  final accountBox = await Hive.openBox<AccountSecret>("accountSecrets");
+  final accountRepository = HiveRepository<AccountSecret, AccountKey>(
+    accountBox,
+    fromHive,
+    toHive,
+  );
+
+  final clientBox = await Hive.openBox<ClientSecret>("clientSecrets");
+  final clientRepository = HiveRepository<ClientSecret, AccountKey>(
+    clientBox,
+    fromHive,
+    toHive,
+  );
+
+  final manager = AccountManager(accountRepository, clientRepository);
+  await manager.loadAllAccounts();
+  return manager;
 }

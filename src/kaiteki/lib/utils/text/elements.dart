@@ -1,8 +1,9 @@
-import 'package:kaiteki/fediverse/model/user_reference.dart';
+import 'package:equatable/equatable.dart';
+import 'package:kaiteki/fediverse/model/user/reference.dart';
 import 'package:kaiteki/utils/extensions.dart';
 import 'package:kaiteki/utils/text/parsers/text_parser.dart';
 
-class Element {
+abstract class Element extends Equatable {
   final List<Element>? children;
 
   const Element({this.children});
@@ -17,8 +18,8 @@ class TextElement extends Element {
   const TextElement(
     this.text, {
     this.style,
-    List<Element>? children,
-  }) : super(children: children);
+    super.children,
+  });
 
   List<Element> cut(int index, int length, ReplacementElementBuilder builder) {
     final text = this.text;
@@ -70,6 +71,9 @@ class TextElement extends Element {
   String toString() {
     return "Text ($text)";
   }
+
+  @override
+  List<Object?> get props => [text];
 }
 
 class TextElementStyle {
@@ -98,13 +102,14 @@ class LinkElement extends Element {
 
   const LinkElement(
     this.destination, {
-    List<Element>? children,
-  }) : super(children: children);
+    super.children,
+  });
 
   @override
-  String toString() {
-    return "Link ($destination)";
-  }
+  String toString() => "Link ($destination)";
+
+  @override
+  List<Object?> get props => [destination];
 }
 
 class MentionElement extends Element {
@@ -113,9 +118,10 @@ class MentionElement extends Element {
   const MentionElement(this.reference);
 
   @override
-  String toString() {
-    return "Mention";
-  }
+  String toString() => "Mention";
+
+  @override
+  List<Object?> get props => [reference];
 }
 
 class HashtagElement extends Element {
@@ -124,9 +130,10 @@ class HashtagElement extends Element {
   const HashtagElement(this.name);
 
   @override
-  String toString() {
-    return "Hashtag";
-  }
+  String toString() => "Hashtag";
+
+  @override
+  List<Object?> get props => [name];
 }
 
 class EmojiElement extends Element {
@@ -135,9 +142,10 @@ class EmojiElement extends Element {
   const EmojiElement(this.name);
 
   @override
-  String toString() {
-    return "Emoji (:$name:)";
-  }
+  String toString() => "Emoji (:$name:)";
+
+  @override
+  List<Object?> get props => [name];
 }
 
 extension ElementExtensions on Element {

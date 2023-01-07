@@ -10,7 +10,7 @@ import 'package:kaiteki/utils/extensions.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 
 class SelfSelectScreen extends StatefulWidget {
-  const SelfSelectScreen({Key? key}) : super(key: key);
+  const SelfSelectScreen({super.key});
 
   @override
   State<SelfSelectScreen> createState() => _SelfSelectScreenState();
@@ -78,7 +78,7 @@ class _SelfSelectScreenState extends State<SelfSelectScreen> {
                       const SizedBox(height: 12.0),
                       Text(
                         pages[currentPage].subtitle,
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 12.0),
                       Expanded(child: pages[currentPage].build()),
@@ -128,7 +128,7 @@ class _SelfSelectScreenState extends State<SelfSelectScreen> {
                             style: isLastPage
                                 ? buttonStyle.merge(
                                     TextButton.styleFrom(
-                                      primary: Theme.of(context)
+                                      foregroundColor: Theme.of(context)
                                           .colorScheme
                                           .tertiary,
                                     ),

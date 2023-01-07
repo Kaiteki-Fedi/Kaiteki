@@ -3,37 +3,50 @@ import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/main/bookmarks_page.dart';
-import 'package:kaiteki/ui/main/compose_fab.dart';
+import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
+import 'package:kaiteki/fediverse/interfaces/search_support.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/fediverse/services/notifications.dart';
+import 'package:kaiteki/platform_checks.dart';
+import 'package:kaiteki/preferences/app_experiment.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import 'package:kaiteki/ui/main/drawer.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
-import 'package:kaiteki/ui/main/placeholder_page.dart';
+import 'package:kaiteki/ui/main/navigation/navigation_bar.dart';
+import 'package:kaiteki/ui/main/navigation/navigation_rail.dart';
+import 'package:kaiteki/ui/main/pages/bookmarks.dart';
+import 'package:kaiteki/ui/main/pages/notifications.dart';
+import 'package:kaiteki/ui/main/pages/placeholder.dart';
+import 'package:kaiteki/ui/main/pages/timeline.dart';
 import 'package:kaiteki/ui/main/tab.dart';
 import 'package:kaiteki/ui/main/tab_kind.dart';
-import 'package:kaiteki/ui/main/timeline_bottom_sheet.dart';
-import 'package:kaiteki/ui/main/timeline_page.dart';
+import 'package:kaiteki/ui/main/views/catalog.dart';
+import 'package:kaiteki/ui/main/views/deck.dart';
+import 'package:kaiteki/ui/main/views/fox.dart';
+import 'package:kaiteki/ui/main/views/videos.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  @visibleForTesting
+  final TimelineKind? initialTimeline;
+
+  const MainScreen({super.key, this.initialTimeline});
 
   @override
   ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends ConsumerState<MainScreen> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  // Why does this exist? In order to refresh the timeline
   final _timelineKey = GlobalKey<TimelinePageState>();
-  TimelineKind _timelineKind = TimelineKind.home;
   List<MainScreenTab>? _tabs;
-  TabKind _currentTab = TabKind.timeline;
+  TabKind _currentTab = TabKind.home;
+  MainScreenView _view = MainScreenView.stream;
 
   int get _currentIndex {
     return _tabs!.indexWhere((tab) => tab.kind == _currentTab);
@@ -42,7 +55,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   List<MainScreenTab> getTabs(AppLocalizations l10n) {
     return [
       MainScreenTab(
-        kind: TabKind.timeline,
+        kind: TabKind.home,
         selectedIcon: Icons.home,
         icon: Icons.home_outlined,
         text: l10n.timelineTab,
@@ -50,7 +63,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           icon: Icons.edit_rounded,
           tooltip: l10n.composeDialogTitle,
           text: l10n.composeButtonLabel,
-          onTap: () => context.showPostDialog(),
+          onTap: _onCompose,
         ),
         hideFabWhenDesktop: true,
       ),
@@ -59,6 +72,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         selectedIcon: Icons.notifications_rounded,
         icon: Icons.notifications_none,
         text: l10n.notificationsTab,
+        fetchUnreadCount: _fetchNotificationCount,
       ),
       MainScreenTab(
         kind: TabKind.chats,
@@ -75,26 +89,76 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ];
   }
 
-  static Color? getOutsideColor(BuildContext context) {
-    if (consts.useM3) {
-      return Theme.of(context).colorScheme.surfaceVariant;
-    }
+  int? _fetchNotificationCount() {
+    final account = ref.watch(accountProvider)!;
+
+    if (account.adapter is! NotificationSupport) return null;
+
+    final notifications = ref.watch(
+      notificationServiceProvider(account.key),
+    );
+
+    return notifications.valueOrNull?.where((n) => n.unread != false).length;
+  }
+
+  Color? get _outsideColor {
+    final theme = Theme.of(context);
+    if (theme.useMaterial3) return theme.colorScheme.surfaceVariant;
     return null;
   }
 
+  Widget _buildTimeline(BuildContext context) {
+    switch (_view) {
+      case MainScreenView.stream:
+        return TimelinePage(
+          key: _timelineKey,
+          initialTimeline: widget.initialTimeline,
+        );
+      case MainScreenView.deck:
+        return const DeckMainScreenView();
+      case MainScreenView.catalog:
+        return const CatalogMainScreenView();
+      case MainScreenView.videos:
+        return const VideoMainScreenView();
+      case MainScreenView.fox:
+        return const FoxMainScreenView();
+    }
+  }
+
+  void _onCompose() => context.pushNamed(
+        "compose",
+        params: ref.accountRouterParams,
+      );
+
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     _tabs ??= getTabs(l10n);
 
+    final body = PageTransitionSwitcher(
+      transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+        return FadeThroughTransition(
+          animation: primaryAnimation,
+          secondaryAnimation: secondaryAnimation,
+          child: child,
+        );
+      },
+      child: [
+        _buildTimeline(context),
+        const NotificationsPage(),
+        const PlaceholderPage(),
+        const BookmarksPage(),
+      ][_currentIndex],
+    );
+
     return FocusableActionDetector(
+      autofocus: true,
       actions: {
-        NewPostIntent: CallbackAction(
-          onInvoke: (_) => context.showPostDialog(),
-        ),
-        RefreshIntent: CallbackAction(
-          onInvoke: (_) => _refresh?.call(),
-        ),
+        NewPostIntent: CallbackAction(onInvoke: (_) => _onCompose()),
+        // SearchIntent: CallbackAction(
+        //   onInvoke: (_) => _search?.call(),
+        // ),
+        RefreshIntent: CallbackAction(onInvoke: (_) => _refresh?.call()),
         GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
           onInvoke: _changeLocation,
         ),
@@ -105,31 +169,47 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: BreakpointBuilder(
         builder: (_, breakpoint) {
           final isMobile = breakpoint.window == WindowSize.xsmall;
-          final outsideColor = getOutsideColor(context);
+          final outsideColor = _outsideColor;
           final tab = _tabs![_currentIndex];
           final fab = tab.fab;
 
-          if (breakpoint.window == WindowSize.xsmall) {
+          final hideNavigation = _view == MainScreenView.fox;
+          final hideBottomBar = _tabs!.length < 2 ||
+              _view == MainScreenView.videos ||
+              hideNavigation;
+          final hideFab = fab == null || _view == MainScreenView.videos;
+
+          if (isMobile) {
             return Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: outsideColor,
-              appBar: buildAppBar(outsideColor, context),
-              body: _getPage(),
-              bottomNavigationBar: _getNavigationBar(),
+              appBar: _buildAppBar(context, false),
+              body: body,
+              bottomNavigationBar: hideBottomBar
+                  ? null
+                  : MainScreenNavigationBar(
+                      tabs: _tabs!,
+                      currentIndex: _currentIndex,
+                      onChangeIndex: _changeIndex,
+                    ),
               floatingActionButton:
-                  fab != null ? _buildFab(context, fab, true) : null,
-              drawer: _buildDrawer(context),
+                  hideFab ? null : _buildFab(context, fab, true),
+              drawer: const MainScreenDrawer(),
             );
           } else {
             return Scaffold(
-              key: _scaffoldKey,
               backgroundColor: outsideColor,
-              appBar: buildAppBar(outsideColor, context),
-              body: _buildDesktopView(breakpoint.window >= WindowSize.medium),
-              floatingActionButton: !tab.hideFabWhenDesktop && fab != null
-                  ? _buildFab(context, fab, isMobile)
-                  : null,
-              drawer: _buildDrawer(context),
+              appBar: _buildAppBar(context, true),
+              body: _buildDesktopView(
+                hideNavigation,
+                breakpoint.window >= WindowSize.medium &&
+                    !((_view == MainScreenView.deck ||
+                            _view == MainScreenView.fox) &&
+                        _currentTab == TabKind.home),
+                body,
+              ),
+              floatingActionButton: tab.hideFabWhenDesktop || hideFab
+                  ? null
+                  : _buildFab(context, fab, isMobile),
+              drawer: const MainScreenDrawer(),
             );
           }
         },
@@ -137,157 +217,166 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
-    final handle = ref.getCurrentAccountHandle();
-    final l10n = context.getL10n();
-    return Drawer(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18.0,
-                vertical: 16.0,
-              ),
-              child: Text(
-                "Kaiteki",
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            ),
-            ..._tabs!.map((tab) => _buildDrawerTab(context, tab)),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.flag_rounded),
-              title: Text(l10n.reportsTitle),
-              onTap: () => context.push("/$handle/reports"),
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.manage_accounts_rounded),
-              title: Text(l10n.accountSettingsTitle),
-              onTap: () => context.push("/$handle/settings"),
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings_rounded),
-              title: Text(l10n.settings),
-              onTap: () => context.push("/settings"),
-            ),
-            ListTile(
-              leading: const Icon(Icons.info_outline_rounded),
-              title: Text(l10n.settingsAbout),
-              onTap: () => context.push("/about"),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  AppBar _buildAppBar(BuildContext context, bool disableScrollElevation) {
+    Color? foregroundColor;
 
-  Widget _buildDrawerTab(BuildContext context, MainScreenTab tab) {
-    final selected = _currentTab == tab.kind;
-    return ListTile(
-      leading: selected //
-          ? Icon(tab.selectedIcon)
-          : Icon(tab.icon),
-      title: Text(tab.text),
-      selected: selected,
-      onTap: () {
-        setState(() => _currentTab = tab.kind);
-        Navigator.pop(context);
-      },
-    );
-  }
-
-  AppBar buildAppBar(Color? outsideColor, BuildContext context) {
-    return AppBar(
-      backgroundColor: outsideColor,
-      foregroundColor: outsideColor != null
-          ? ThemeData.estimateBrightnessForColor(outsideColor)
-              .inverted
-              .getColor()
-          : null,
-      title: Text(
-        consts.appName,
-        style: GoogleFonts.quicksand(fontWeight: FontWeight.w600),
-      ),
-      elevation: consts.useM3 ? 0.0 : null,
-      actions: _buildAppBarActions(context),
-    );
-  }
-
-  Widget _buildDesktopView(bool extendNavRail) {
-    final outsideColor = getOutsideColor(context);
-    return Row(
-      children: [
-        Column(
-          children: [
-            Flexible(
-              child: NavigationRail(
-                backgroundColor: outsideColor,
-                useIndicator: consts.useM3,
-                selectedIndex: _currentIndex,
-                onDestinationSelected: _changeIndex,
-                extended: extendNavRail,
-                // groupAlignment: consts.useM3 ? 0 : null,
-                minWidth: consts.useM3 ? null : 56,
-                leading: ComposeFloatingActionButton(
-                  type: extendNavRail
-                      ? ComposeFloatingActionButtonType.extended
-                      : ComposeFloatingActionButtonType.small,
-                  elevate: !consts.useM3,
-                ),
-                destinations: [
-                  for (var tab in _tabs!)
-                    NavigationRailDestination(
-                      icon: Icon(tab.icon),
-                      selectedIcon: Icon(tab.selectedIcon),
-                      label: Text(tab.text),
-                    ),
-                ],
-              ),
-            ),
-            // if (consts.useM3) SizedBox(height: extendNavRail ? 96 : 72),
-          ],
-        ),
-        if (!consts.useM3) const VerticalDivider(thickness: 1, width: 1),
-        Expanded(
-          child: _roundWidgetM3(_getPage()),
-        ),
-      ],
-    );
-  }
-
-  Function()? get _refresh {
-    if (_currentTab == TabKind.timeline) {
-      return () => _timelineKey.currentState?.refresh();
+    final outsideColor = _outsideColor;
+    if (outsideColor != null) {
+      foregroundColor = ThemeData.estimateBrightnessForColor(outsideColor)
+          .inverted
+          .getColor();
     }
 
-    return null;
+    final theme = Theme.of(context);
+    final elevation = theme.useMaterial3 ? 0.0 : null;
+    return AppBar(
+      backgroundColor: outsideColor,
+      foregroundColor: foregroundColor,
+      title: Text(
+        consts.appName,
+        style: theme.ktkTextTheme?.kaitekiTextStyle,
+      ),
+      elevation: elevation,
+      surfaceTintColor: theme.useMaterial3 ? Colors.transparent : null,
+      actions: _buildAppBarActions(context),
+      scrolledUnderElevation: disableScrollElevation ? elevation : null,
+    );
+  }
+
+  static Widget _buildViewIcon(MainScreenView view) {
+    switch (view) {
+      case MainScreenView.stream:
+        return const Icon(Icons.view_stream_rounded);
+      case MainScreenView.deck:
+        return const Icon(Icons.view_column_rounded);
+      case MainScreenView.catalog:
+        return const Icon(Icons.view_module_rounded);
+      case MainScreenView.videos:
+        return const Icon(Icons.videocam_rounded);
+      case MainScreenView.fox:
+        return Builder(
+          builder: (context) {
+            return Text(
+              "🦊",
+              style: TextStyle(fontSize: IconTheme.of(context).size! * 0.8),
+            );
+          },
+        );
+    }
+  }
+
+  static String _getViewDisplayName(MainScreenView view) {
+    switch (view) {
+      case MainScreenView.stream:
+        return "Stream";
+      case MainScreenView.deck:
+        return "Deck";
+      case MainScreenView.catalog:
+        return "Catalog";
+      case MainScreenView.videos:
+        return "Videos";
+      case MainScreenView.fox:
+        return "Fox";
+    }
   }
 
   List<Widget> _buildAppBarActions(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
+    final experiments =
+        ref.watch(preferencesProvider.select((p) => p.enabledExperiments));
 
     return [
+      if (_currentTab == TabKind.home &&
+          experiments.contains(AppExperiment.timelineViews))
+        PopupMenuButton<MainScreenView>(
+          initialValue: _view,
+          icon: _buildViewIcon(_view),
+          tooltip: "View",
+          onSelected: (view) => setState(() => _view = view),
+          itemBuilder: (context) {
+            return [
+              for (final view in MainScreenView.values)
+                PopupMenuItem(
+                  value: view,
+                  enabled:
+                      !(view == MainScreenView.videos && !supportsVideoPlayer),
+                  child: ListTile(
+                    leading: _buildViewIcon(view),
+                    title: Text(_getViewDisplayName(view)),
+                    contentPadding: EdgeInsets.zero,
+                    enabled: !(view == MainScreenView.videos &&
+                        !supportsVideoPlayer),
+                  ),
+                ),
+            ];
+          },
+        ),
+      IconButton(
+        icon: const Icon(Icons.search_rounded),
+        onPressed: _search,
+        tooltip: l10n.searchButtonLabel,
+      ),
       IconButton(
         icon: const Icon(Icons.refresh_rounded),
         onPressed: _refresh,
         tooltip: l10n.refreshTimelineButtonLabel,
       ),
-      PopupMenuButton<Function()>(
-        onSelected: (v) => v.call(),
-        itemBuilder: (_) {
-          return [
-            PopupMenuItem(
-              value: _showKeyboardShortcuts,
-              child: const Text("Keyboard Shortcuts"),
-            ),
-          ];
-        },
+
+      // TODO(Craftplacer): hide if no keyboard is detected
+      PopupMenuButton(
+        itemBuilder: (_) => [
+          PopupMenuItem(
+            onTap: _showKeyboardShortcuts,
+            child: Text(l10n.keyboardShortcuts),
+          ),
+        ],
       ),
       const AccountSwitcherWidget(size: 40),
     ];
+  }
+
+  Widget _buildNavigationRail(bool extend) {
+    return MainScreenNavigationRail(
+      tabs: _tabs!,
+      currentIndex: _currentIndex,
+      onChangeIndex: _changeIndex,
+      extended: extend,
+      backgroundColor: _outsideColor,
+    );
+  }
+
+  Widget _buildDesktopView(bool hideNavRail, bool extendNavRail, Widget child) {
+    final m3 = Theme.of(context).useMaterial3;
+    return Row(
+      children: [
+        if (!hideNavRail) ...[
+          _buildNavigationRail(extendNavRail),
+          if (!m3) const VerticalDivider(thickness: 1, width: 1),
+        ],
+        Expanded(child: _roundWidgetM3(context, child)),
+      ],
+    );
+  }
+
+  VoidCallback? get _search {
+    if (ref.watch(adapterProvider) is! SearchSupport) return null;
+    return () {
+      context.pushNamed("search", params: ref.accountRouterParams);
+    };
+  }
+
+  VoidCallback? get _refresh {
+    switch (_currentTab) {
+      case TabKind.home:
+        return _timelineKey.currentState?.refresh;
+
+      case TabKind.notifications:
+        final account = ref.watch(accountProvider)!.key;
+        return ref.read(notificationServiceProvider(account).notifier).refresh;
+
+      default:
+        return null;
+    }
   }
 
   Future<void> _showKeyboardShortcuts() async {
@@ -297,85 +386,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _getPage() {
-    final pages = [
-      TimelinePage(_timelineKind, key: _timelineKey),
-      const PlaceholderPage(),
-      const PlaceholderPage(),
-      const BookmarksPage(),
-    ];
+  static Widget _roundWidgetM3(BuildContext context, Widget widget) {
+    if (!Theme.of(context).useMaterial3) return widget;
 
-    return PageTransitionSwitcher(
-      transitionBuilder: animations.fadeThrough,
-      child: pages[_currentIndex],
-    );
-  }
-
-  static Widget _roundWidgetM3(Widget widget) {
-    if (!consts.useM3) return widget;
-
+    const radius = Radius.circular(16.0);
     return ClipRRect(
-      borderRadius: const BorderRadius.only(topLeft: Radius.circular(16.0)),
+      borderRadius: const BorderRadius.only(topLeft: radius),
       child: widget,
     );
   }
 
-  Widget? _getNavigationBar() {
-    if (_tabs!.length < 2) {
-      return null;
-    }
-
-    if (consts.useM3) {
-      return NavigationBar(
-        onDestinationSelected: _changeIndex,
-        selectedIndex: _currentIndex,
-        destinations: [
-          for (var tab in _tabs!)
-            NavigationDestination(
-              icon: Icon(tab.icon),
-              selectedIcon: Icon(tab.selectedIcon),
-              label: tab.text,
-            ),
-        ],
-      );
-    } else {
-      return BottomNavigationBar(
-        onTap: _changeIndex,
-        currentIndex: _currentIndex,
-        items: [
-          for (var tab in _tabs!)
-            BottomNavigationBarItem(
-              icon: Icon(tab.icon),
-              activeIcon: Icon(tab.selectedIcon),
-              label: tab.text,
-            ),
-        ],
-      );
-    }
-  }
-
-  Future<void> _changeIndex(int index) async {
-    await _changePage(_tabs![index].kind);
-  }
-
-  Future<void> _changePage(TabKind tab) async {
-    final isSamePage = _currentTab == tab;
-
-    if (isSamePage && _currentTab == TabKind.timeline) {
-      final timelineType = await showModalBottomSheet<TimelineKind?>(
-        context: context,
-        constraints: consts.bottomSheetConstraints,
-        builder: (context) => TimelineBottomSheet(_timelineKind),
-      );
-
-      if (timelineType != null) {
-        setState(() => _timelineKind = timelineType);
-      }
-      return;
-    }
-
-    setState(() => _currentTab = tab);
-  }
+  void _changeIndex(int index) => _changePage(_tabs![index].kind);
+  void _changePage(TabKind tab) => setState(() => _currentTab = tab);
 
   Widget? _buildFab(
     BuildContext context,
@@ -400,7 +422,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   dynamic _changeLocation(GoToAppLocationIntent i) {
     switch (i.location) {
       case AppLocation.home:
-        _changePage(TabKind.timeline);
+        _changePage(TabKind.home);
         break;
       case AppLocation.notifications:
         _changePage(TabKind.notifications);
@@ -415,3 +437,5 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return null;
   }
 }
+
+enum MainScreenView { stream, deck, catalog, videos, fox }

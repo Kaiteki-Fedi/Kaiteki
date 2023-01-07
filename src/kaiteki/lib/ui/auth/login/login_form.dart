@@ -1,123 +1,106 @@
 import 'dart:async';
 
 import 'package:animations/animations.dart';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kaiteki/auth/login_functions.dart';
+import 'package:kaiteki/auth/login_typedefs.dart';
+import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/instances.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
+import 'package:kaiteki/fediverse/api_type.dart';
+import 'package:kaiteki/fediverse/instance_prober.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/theming/default/colors.dart';
-import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
-import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
+import 'package:kaiteki/ui/auth/login/dialogs/api_type_dialog.dart';
+import 'package:kaiteki/ui/auth/login/pages/instance_page.dart';
+import 'package:kaiteki/ui/auth/login/pages/mfa_page.dart';
+import 'package:kaiteki/ui/auth/login/pages/oauth_page.dart';
+import 'package:kaiteki/ui/auth/login/pages/user_page.dart';
+import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
+import 'package:kaiteki/ui/shared/common.dart';
+import 'package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/lower_case_text_formatter.dart';
 import 'package:tuple/tuple.dart';
-
-typedef CredentialsCallback = void Function(
-  String instance,
-  String username,
-  String password,
-);
-
-typedef IdValidationCallback = String? Function(
-  String? instance,
-  String? username,
-);
-
-typedef FetchInstanceCallback = Future<Instance?> Function(String instance);
+import 'package:url_launcher/url_launcher.dart';
 
 const iconConstraint = BoxConstraints.tightFor(width: 48, height: 24);
 const fieldMargin = EdgeInsets.symmetric(vertical: 8.0);
 const fieldPadding = EdgeInsets.all(8.0);
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({
-    Key? key,
-    required this.onValidateInstance,
-    required this.onValidateUsername,
-    required this.onValidatePassword,
-    required this.onLogin,
-    this.enabled = true,
-    this.currentError,
-    required this.onFetchInstance,
-    this.onResetInstance,
-  }) : super(key: key);
+    super.key,
+    this.onInstanceChanged,
+  });
 
-  final bool enabled;
-
-  final FormFieldValidator<String?> onValidateInstance;
-  final FetchInstanceCallback onFetchInstance;
-  final IdValidationCallback onValidateUsername;
-  final FormFieldValidator<String?> onValidatePassword;
-  final VoidCallback? onResetInstance;
-
-  final CredentialsCallback onLogin;
-
-  final Tuple2<dynamic, StackTrace?>? currentError;
+  final void Function(InstanceCompound? compound)? onInstanceChanged;
 
   @override
   LoginFormState createState() => LoginFormState();
 }
 
-class LoginFormState extends State<LoginForm> {
-  final _instanceController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _transitionKey = GlobalKey();
+class InstanceCompound {
+  final String host;
+  final ApiType type;
+  final Instance data;
 
-  String? image;
-  bool showAuthentication = false;
+  const InstanceCompound(this.host, this.type, this.data);
+
+  @override
+  bool operator ==(Object other) =>
+      other is InstanceCompound &&
+      host == other.host &&
+      type == other.type &&
+      data == other.data;
+
+  @override
+  int get hashCode => host.hashCode ^ type.hashCode ^ data.hashCode;
+
+  BackendAdapter createAdapter() => type.createAdapter(host);
+}
+
+class CallbackRequest<T, K extends Function> {
+  final Completer<T> completer;
+  final K callback;
+
+  const CallbackRequest(this.completer, this.callback);
+}
+
+class LoginFormState extends ConsumerState<LoginForm> {
+  InstanceCompound? _instance;
+  InstanceCompound? get instance => _instance;
+  set instance(InstanceCompound? instance) {
+    if (instance == _instance) return;
+    assert(mounted);
+    setState(() => _instance = instance);
+    widget.onInstanceChanged?.call(_instance);
+  }
+
+  CallbackRequest<void, CredentialsSubmitCallback>? _credentialRequest;
+  CallbackRequest<void, MfaSubmitCallback>? _mfaRequest;
+  VoidCallback? _oAuth;
+
+  CancelableOperation<InstanceCompound?>? _fetchInstanceFuture;
+
+  Future<void>? _loginFuture;
+
+  @override
+  void dispose() {
+    // Avoid setting state when widget becomes unmounted
+    _fetchInstanceFuture?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final currentError = widget.currentError;
-    final errorColor = Theme.of(context).errorColor;
-    return Column(
-      children: [
-        SingleChildScrollView(
-          padding: const EdgeInsets.only(
-            left: 24.0,
-            right: 24.0,
-            top: 64.0,
-          ),
-          child: PageTransitionSwitcher(
-            key: _transitionKey,
-            transitionBuilder: _buildTransition,
-            duration: const Duration(milliseconds: 750),
-            reverse: !showAuthentication,
-            child: _buildPage(),
-          ),
-        ),
-        if (currentError != null)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    currentError.item1.toString(),
-                    style: TextStyle(color: errorColor),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.info_outline,
-                    color: errorColor,
-                  ),
-                  splashRadius: 18,
-                  tooltip: "View error details",
-                  onPressed: () => context.showExceptionDialog(
-                    currentError.item1,
-                    currentError.item2,
-                  ),
-                )
-              ],
-            ),
-          ),
-      ],
+    return WillPopScope(
+      onWillPop: _onBackButtonPressed,
+      child: PageTransitionSwitcher(
+        transitionBuilder: _buildTransition,
+        duration: const Duration(milliseconds: 750),
+        child: _buildPage(),
+      ),
     );
   }
 
@@ -135,386 +118,265 @@ class LoginFormState extends State<LoginForm> {
     );
   }
 
-  Future<void> onBackButtonPressed() async {
-    if (showAuthentication) {
-      setState(() => showAuthentication = false);
+  Future<bool> _onBackButtonPressed() async {
+    // Cancel ongoing requests for user input.
+    final request = _credentialRequest ?? _mfaRequest;
+    if (request != null) {
+      request.completer.complete(null);
+      return false;
+    }
 
-      // Remove instance data
-      widget.onResetInstance?.call();
-      image = null;
-    } else {
-      Navigator.pop(context);
+    // Cancel ongoing OAuth requests.
+    if (_oAuth != null) {
+      _oAuth!();
+      return false;
+    }
+
+    // Reset instance
+    if (instance != null) {
+      instance = null;
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<Map<String, String>?> _handleOAuth(
+    GenerateOAuthUrlCallback generateUrl,
+  ) async {
+    final successPage = await generateOAuthLandingPage(
+      Theme.of(context).colorScheme,
+    );
+
+    try {
+      return await runOAuthServer(
+        (localUrl, cancel) async {
+          // TODO(Craftplacer): Show WebView inside login screen when possible
+          final generatedUrl = await generateUrl(localUrl);
+
+          final canLaunch = await canLaunchUrl(generatedUrl);
+          if (!canLaunch) throw Exception("Invalid URL");
+
+          await launchUrl(generatedUrl);
+          setState(() => _oAuth = cancel);
+        },
+        successPage,
+      );
+    } finally {
+      setState(() => _oAuth = null);
     }
   }
 
-  Future<void> onNextButtonPressed() async {
-    if (showAuthentication) {
-      widget.onLogin.call(
-        _instanceController.text,
-        _usernameController.text,
-        _passwordController.text,
-      );
-    } else {
-      final instance = await widget.onFetchInstance.call(
-        _instanceController.text,
-      );
+  Future<InstanceCompound?> _fetchInstance(String host) async {
+    final result = await ref.read(probeInstanceProvider(host).future);
 
-      if (instance == null) {
-        return;
+    final ApiType type;
+    final Instance instance;
+
+    if (result.successful) {
+      // ignore: unnecessary_null_checks
+      type = result.type!;
+      instance = result.instance!;
+    } else {
+      if (!mounted) return null;
+
+      final selectedType = await showInstanceDialog(context);
+      if (selectedType == null) return null;
+      type = selectedType;
+
+      final adapter = type.createAdapter(host);
+      instance = await adapter.getInstance();
+    }
+
+    // // Check for known issue with Misskey instances
+    // if (kIsWeb && type == ApiType.misskey) {
+    //   if (!await _showWebCompatibilityDialog()) {
+    //     return null;
+    //   }
+    // }
+
+    return InstanceCompound(host, type, instance);
+  }
+
+  Future<ApiType?> showInstanceDialog(BuildContext context) async {
+    return showDialog<ApiType?>(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => const Center(child: ApiTypeDialog()),
+    );
+  }
+
+  Future<T?> _askForCredentials<T>(
+    CredentialsSubmitCallback<T> onSubmit,
+  ) async {
+    assert(
+      _credentialRequest == null,
+      "Credentials are already being asked for",
+    );
+
+    final completer = Completer<T?>();
+
+    setState(() => _credentialRequest = CallbackRequest(completer, onSubmit));
+
+    try {
+      return await completer.future;
+    } finally {
+      setState(() => _credentialRequest = null);
+    }
+  }
+
+  Future<T?> _askForMfa<T>(MfaSubmitCallback<T> onSubmit) async {
+    assert(_mfaRequest == null, "MFA is already being requested");
+
+    final completer = Completer<T?>();
+
+    setState(() => _mfaRequest = CallbackRequest(completer, onSubmit));
+
+    try {
+      return await completer.future;
+    } finally {
+      setState(() => _mfaRequest = null);
+    }
+  }
+
+  Future<void> _login(InstanceCompound instance) async {
+    final accounts = ref.read(accountManagerProvider);
+    final adapter = instance.createAdapter();
+
+    final result = await adapter.login(
+      await accounts.getClientSecret(instance.host),
+      _askForCredentials,
+      _askForMfa,
+      _handleOAuth,
+    );
+
+    if (result.successful) {
+      final account = result.account!;
+      if (account.accountSecret == null) {
+        await _showTemporaryAccountNotice();
       }
 
-      setState(() {
-        image = instance.iconUrl ?? instance.mascotUrl;
-        showAuthentication = true;
-      });
+      await accounts.add(account);
+
+      if (mounted) {
+        context.goNamed("home", params: account.key.routerParams);
+      }
+
+      return;
     }
+
+    if (!result.aborted) {
+      final error = result.error!;
+      _showError(error.item1, error.item2);
+      return;
+    }
+  }
+
+  Future<void> _showError(dynamic error, StackTrace? stack) async {
+    await showDialog(
+      context: context,
+      builder: (_) => AuthenticationUnsuccessfulDialog(
+        error: Tuple2(error, stack),
+      ),
+    );
   }
 
   Widget _buildPage() {
-    if (showAuthentication) {
-      return _UserPage(
-        usernameController: _usernameController,
-        passwordController: _passwordController,
-        usernameValidator: (username) => widget.onValidateUsername.call(
-          _instanceController.text,
-          username,
-        ),
-        passwordValidator: widget.onValidatePassword,
-        image: image,
-        onBack: onBackButtonPressed,
-        onNext: onNextButtonPressed,
-      );
-    } else {
-      return _InstancePage(
-        instanceController: _instanceController,
-        validator: widget.onValidateInstance,
-        onNext: onNextButtonPressed,
+    if (_oAuth != null) return Center(child: OAuthPage(onCancel: _oAuth));
+
+    final credentialRequest = _credentialRequest;
+    if (credentialRequest != null) {
+      return UserPage(
+        image: _instance?.data.iconUrl,
+        onBack: _onBackButtonPressed,
+        onSubmit: (username, password) async {
+          final credentials = Credentials(username, password);
+          // Technically we could directly pass the future to the Completer, but
+          // this would move the place where the error is raised to the
+          // askForCredentials method and not UserPage wanting to show the
+          // error.
+          final result = await credentialRequest.callback(credentials);
+          credentialRequest.completer.complete(result);
+        },
       );
     }
-  }
-}
 
-class _InstancePage extends StatefulWidget {
-  final TextEditingController instanceController;
-  final FormFieldValidator<String?> validator;
-  final VoidCallback onNext;
-
-  const _InstancePage({
-    Key? key,
-    required this.instanceController,
-    required this.validator,
-    required this.onNext,
-  }) : super(key: key);
-
-  @override
-  __InstancePageState createState() => __InstancePageState();
-}
-
-class __InstancePageState extends State<_InstancePage> {
-  final _formKey = GlobalKey<FormState>();
-  late bool _nextEnabled;
-  List<InstanceData>? _instances;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _nextEnabled = widget.validator(widget.instanceController.text) == null;
-
-    fetchInstances().then(
-      (list) => setState(() => _instances = list),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.getL10n();
-    return Form(
-      key: _formKey,
-      onChanged: _onFormChanged,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: fieldMargin,
-            child: TypeAheadFormField<InstanceData>(
-              textFieldConfiguration: TextFieldConfiguration(
-                // TODO(Craftplacer): `flutter_typeahead` is missing `autofillHints`
-                // autofillHints: const [AutofillHints.url],
-                controller: widget.instanceController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  contentPadding: fieldPadding,
-                  hintText: l10n.instanceFieldHint,
-                  prefixIcon: const Icon(Icons.public_rounded),
-                  prefixIconConstraints: iconConstraint,
-                ),
-                inputFormatters: [LowerCaseTextFormatter()],
-                keyboardType: TextInputType.url,
-                onSubmitted: (_) => _submit(),
-              ),
-              hideOnEmpty: true,
-              validator: widget.validator,
-              suggestionsCallback: _fetchSuggestions,
-              onSuggestionSelected: (suggestion) {
-                _submitWithInstance(suggestion.name);
-              },
-              itemBuilder: _buildSuggestionWidget,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                onPressed: _onDiscoverInstancesPressed,
-                child: Text(l10n.discoverInstancesButtonLabel),
-              ),
-              ElevatedButton(
-                onPressed: _nextEnabled ? _submit : null,
-                child: Text(l10n.nextButtonLabel),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSuggestionWidget(BuildContext context, InstanceData itemData) {
-    const fallbackIcon = Icon(Icons.public_rounded);
-    return ListTile(
-      leading: itemData.favicon == null
-          ? fallbackIcon
-          : Image.network(
-              itemData.favicon!,
-              width: 24,
-              height: 24,
-              errorBuilder: (_, __, ___) => fallbackIcon,
-            ),
-      title: Text(itemData.name),
-    );
-  }
-
-  FutureOr<Iterable<InstanceData>> _fetchSuggestions(String pattern) {
-    final instances = _instances;
-
-    if (pattern.isEmpty || instances == null) {
-      return [];
+    final mfaRequest = _mfaRequest;
+    if (mfaRequest != null) {
+      return MfaPage(
+        onSubmit: (code) async {
+          final result = await mfaRequest.callback(code);
+          mfaRequest.completer.complete(result);
+        },
+      );
     }
 
-    return instances.where((instance) {
-      return instance.name.contains(pattern);
-    });
-  }
-
-  void _onFormChanged() {
-    final formState = _formKey.currentState;
-    if (formState != null) {
-      final isFormValid = formState.validate();
-      if (_nextEnabled != isFormValid) {
-        setState(() => _nextEnabled = isFormValid);
-      }
-    }
-  }
-
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      widget.onNext.call();
-    }
-  }
-
-  Future<void> _onDiscoverInstancesPressed() async {
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const DiscoverInstancesScreen(),
-      ),
-    );
-
-    if (result is DiscoverInstanceScreenResult) {
-      _submitWithInstance(result.instance);
-      //if (!result.register) {}
-    }
-  }
-
-  void _submitWithInstance(String instance) {
-    widget.instanceController.text = instance;
-    widget.onNext.call();
-  }
-}
-
-class _UserPage extends StatefulWidget {
-  final TextEditingController? usernameController;
-  final TextEditingController? passwordController;
-  final FormFieldValidator<String?>? usernameValidator;
-  final FormFieldValidator<String?>? passwordValidator;
-  final String? image;
-
-  final VoidCallback? onBack;
-  final VoidCallback? onNext;
-
-  const _UserPage({
-    Key? key,
-    this.usernameController,
-    this.passwordController,
-    this.usernameValidator,
-    this.passwordValidator,
-    this.image,
-    this.onBack,
-    this.onNext,
-  }) : super(key: key);
-
-  @override
-  __UserPageState createState() => __UserPageState();
-}
-
-class __UserPageState extends State<_UserPage> {
-  // ignore: prefer_final_fields
-  bool _register = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.getL10n();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: _getImageWidget(),
-            ),
-          ),
-        ),
-        if (_register)
-          Padding(
-            padding: fieldMargin,
-            child: TextFormField(
-              decoration: InputDecoration(
-                hintText: l10n.emailFieldHint,
-                prefixIcon: const Icon(Icons.mail_rounded),
-                prefixIconConstraints: iconConstraint,
-                border: const OutlineInputBorder(),
-                contentPadding: fieldPadding,
-              ),
-              autofillHints: const [AutofillHints.email],
-              keyboardType: TextInputType.emailAddress,
-            ),
-          ),
-        Padding(
-          padding: fieldMargin,
-          child: TextFormField(
-            autofocus: true,
-            controller: widget.usernameController,
-            decoration: InputDecoration(
-              hintText: l10n.usernameFieldHint,
-              prefixIcon: const Icon(Icons.person_rounded),
-              prefixIconConstraints: iconConstraint,
-              border: const OutlineInputBorder(),
-              contentPadding: fieldPadding,
-            ),
-            validator: widget.usernameValidator,
-            // ---
-            autofillHints: const [AutofillHints.username],
-            keyboardType: TextInputType.text,
-          ),
-        ),
-        Padding(
-          padding: fieldMargin,
-          child: TextFormField(
-            controller: widget.passwordController,
-            decoration: InputDecoration(
-              hintText: l10n.passwordFieldHint,
-              prefixIcon: const Icon(Icons.vpn_key_rounded),
-              prefixIconConstraints: iconConstraint,
-              border: const OutlineInputBorder(),
-              contentPadding: fieldPadding,
-            ),
-            validator: widget.passwordValidator,
-            keyboardType: TextInputType.text,
-            autofillHints: const [AutofillHints.password],
-            obscureText: true,
-          ),
-        ),
-        if (_register)
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: l10n.repeatPasswordFieldHint,
-              prefixIcon: const Icon(Icons.vpn_key_rounded),
-              prefixIconConstraints: iconConstraint,
-              border: const OutlineInputBorder(),
-              contentPadding: fieldPadding,
-            ),
-            validator: (input) {
-              if (input != widget.passwordController!.text) {
-                return l10n.authPasswordNoMatch;
-              }
-              return null;
+    return FutureBuilder(
+      future: _loginFuture,
+      builder: (context, snapshot) {
+        final isBusy = snapshot.connectionState == ConnectionState.waiting;
+        return AsyncBlockWidget(
+          blocking: isBusy,
+          duration: const Duration(milliseconds: 250),
+          secondChild: centeredCircularProgressIndicator,
+          child: InstancePage(
+            enabled: !isBusy,
+            onNext: (host) {
+              setState(() {
+                // ignore: unnecessary_lambdas, I intentionally want this method not to return a future so the dialog isn't
+                _loginFuture = () async {
+                  try {
+                    await _loginToInstance(host);
+                  } catch (s, e) {
+                    _showError(s, e);
+                  } finally {
+                    instance = null;
+                  }
+                }();
+              });
             },
-            keyboardType: TextInputType.text,
-            autofillHints: const [AutofillHints.password],
-            obscureText: true,
           ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Row(
-            children: [
-              TextButton(
-                onPressed: null,
-                child: Text(l10n.forgotPasswordButtonLabel),
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: TextButton(
-                  onPressed: null,
-                  child: Text(
-                    _register
-                        ? l10n.existingAccountButtonLabel
-                        : l10n.createAccountButtonLabel,
-                  ), //() => setState(() => _register = !_register),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: widget.onNext,
-                child: Text(
-                  _register ? l10n.registerButtonLabel : l10n.loginButtonLabel,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 
-  Widget _getImageWidget() {
-    const size = 96.0;
+  Future<void> _loginToInstance(String host) async {
+    assert(_fetchInstanceFuture == null);
+    _fetchInstanceFuture = CancelableOperation.fromFuture(_fetchInstance(host));
 
-    final url = widget.image;
-    if (url != null) {
-      if (url.toLowerCase().endsWith(".svg")) {
-        return SvgPicture.network(url, width: size);
-      } else {
-        return Image.network(
-          url,
-          width: size,
-          filterQuality: FilterQuality.high,
-        );
-      }
+    try {
+      final instance = await _fetchInstanceFuture!.valueOrCancellation();
+      if (instance == null) return;
+
+      this.instance = instance;
+      await _login(instance);
+    } finally {
+      _fetchInstanceFuture = null;
     }
+  }
 
-    return Container(
-      width: size,
-      height: size,
-      color: kaitekiDarkBackground.shade500,
-      child: const Icon(
-        Icons.public,
-        size: 64.0,
-        color: Colors.white,
-      ),
+  Future<void> _showTemporaryAccountNotice() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          icon: const Icon(Icons.vpn_key_off_rounded),
+          title: const Text("Your session will be temporary"),
+          content: ConstrainedBox(
+            constraints: dialogConstraints,
+            child: const Text(
+              "The backend implementation of this service did not provide login information when you signed in. This means that you'll be signed out next time you use Kaiteki.",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.materialL10n.okButtonLabel),
+            ),
+          ],
+        );
+      },
     );
   }
 }

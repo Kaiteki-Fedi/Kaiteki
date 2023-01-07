@@ -6,15 +6,15 @@ part of 'check_session.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MisskeyCheckSessionResponse _$MisskeyCheckSessionResponseFromJson(
+CheckSessionResponse _$CheckSessionResponseFromJson(
         Map<String, dynamic> json) =>
-    MisskeyCheckSessionResponse(
+    CheckSessionResponse(
       token: json['token'] as String,
       user: User.fromJson(json['user'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$MisskeyCheckSessionResponseToJson(
-        MisskeyCheckSessionResponse instance) =>
+Map<String, dynamic> _$CheckSessionResponseToJson(
+        CheckSessionResponse instance) =>
     <String, dynamic>{
       'token': instance.token,
       'user': instance.user,

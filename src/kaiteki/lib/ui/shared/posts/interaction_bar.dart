@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/post.dart';
-import 'package:kaiteki/theming/kaiteki_extension.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
+import 'package:kaiteki/theming/kaiteki/colors.dart';
 import 'package:kaiteki/ui/shared/posts/count_button.dart';
 
 class InteractionBar extends StatelessWidget {
   const InteractionBar({
-    Key? key,
-    required Post post,
+    super.key,
+    required this.metrics,
     this.onReply,
     this.onFavorite,
     this.onRepeat,
@@ -15,16 +15,20 @@ class InteractionBar extends StatelessWidget {
     this.repeated,
     this.reacted,
     required this.buildActions,
-  })  : _post = post,
-        super(key: key);
+    this.onShowFavoritees,
+    this.onShowRepeatees,
+  });
 
-  final Post _post;
+  final PostMetrics metrics;
 
   final VoidCallback? onReply;
   final VoidCallback? onFavorite;
+  final VoidCallback? onShowFavoritees;
   final bool? favorited;
 
   final VoidCallback? onRepeat;
+  final VoidCallback? onShowRepeatees;
+
   final bool? repeated;
 
   final VoidCallback? onReact;
@@ -33,33 +37,33 @@ class InteractionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final kTheme = context.kaitekiExtension!;
-
     final buttons = [
       CountButton(
-        count: _post.replyCount,
+        count: metrics.replyCount,
         focusNode: FocusNode(skipTraversal: true),
         icon: const Icon(Icons.reply_rounded),
         onTap: onReply,
       ),
       if (repeated != null)
         CountButton(
-          active: _post.repeated,
-          activeColor: kTheme.repeatColor,
-          count: _post.repeatCount,
+          active: repeated!,
+          activeColor: Theme.of(context).ktkColors?.repeatColor,
+          count: metrics.repeatCount,
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.repeat_rounded),
           onTap: onRepeat,
+          onLongPress: onShowRepeatees,
         ),
       if (favorited != null)
         CountButton(
-          active: _post.liked,
-          activeColor: kTheme.favoriteColor,
+          active: favorited!,
+          activeColor: Theme.of(context).ktkColors?.favoriteColor,
           activeIcon: const Icon(Icons.star_rounded),
-          count: _post.likeCount,
+          count: metrics.likeCount,
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.star_border_rounded),
           onTap: onFavorite,
+          onLongPress: onShowFavoritees,
         ),
       if (reacted != null)
         CountButton(
@@ -77,16 +81,11 @@ class InteractionBar extends StatelessWidget {
 
     // Added Material for fixing bork with Hero *shrug*
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 450),
-      child: Flex(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        direction: Axis.horizontal,
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          for (var button in buttons)
-            Flexible(
-              fit: FlexFit.tight,
-              child: Row(children: [button]),
-            ),
+          for (final button in buttons) Flexible(child: button),
         ],
       ),
     );

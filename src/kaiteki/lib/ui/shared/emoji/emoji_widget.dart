@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/emoji.dart';
+import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 /// A widget that displays an emoji.
 class EmojiWidget extends StatelessWidget {
@@ -7,10 +7,10 @@ class EmojiWidget extends StatelessWidget {
   final double size;
 
   const EmojiWidget({
-    Key? key,
+    super.key,
     required this.emoji,
     required this.size,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,25 +28,31 @@ class EmojiWidget extends StatelessWidget {
       customEmoji.url,
       width: size,
       height: size,
-      isAntiAlias: true,
-      filterQuality: FilterQuality.high,
-      semanticLabel: "Emoji ${emoji.name}",
-      loadingBuilder: (context, widget, event) {
-        if (event == null || event.expectedTotalBytes == null) {
-          return widget;
-        } else {
-          return PlaceholderEmoji(size: size);
-        }
-      },
+      fit: BoxFit.contain,
+      // cacheHeight: size.toInt(),
+      semanticLabel: "Emoji $emoji",
+      loadingBuilder: (_, widget, event) => event == null //
+          ? widget
+          : PlaceholderEmoji(size: size),
       errorBuilder: (_, __, ___) => PlaceholderEmoji(size: size),
     );
   }
 
   Widget buildUnicodeEmoji(UnicodeEmoji unicodeEmoji) {
+    const textStyle = TextStyle(
+      fontFamily: "Noto Color Emoji",
+      fontFamilyFallback: ["Segoe UI Emoji"],
+    );
+
     return SizedBox(
       width: size,
       height: size,
-      child: FittedBox(child: Text(unicodeEmoji.source!)),
+      child: FittedBox(
+        child: Text(
+          unicodeEmoji.short,
+          style: textStyle,
+        ),
+      ),
     );
   }
 }
@@ -54,7 +60,7 @@ class EmojiWidget extends StatelessWidget {
 class PlaceholderEmoji extends StatelessWidget {
   final double size;
 
-  const PlaceholderEmoji({Key? key, required this.size}) : super(key: key);
+  const PlaceholderEmoji({super.key, required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +81,7 @@ class PlaceholderEmoji extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6.0),
-          color: Theme.of(context).disabledColor,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(.125),
         ),
         child: SizedBox.square(dimension: finalSize),
       ),

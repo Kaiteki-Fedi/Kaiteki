@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/settings/customization/customization_basic_page.dart';
 
 class ThemePreview extends StatelessWidget {
   final bool selected;
@@ -8,12 +7,12 @@ class ThemePreview extends StatelessWidget {
   final String name;
 
   const ThemePreview({
-    Key? key,
+    super.key,
     this.selected = false,
     required this.onTap,
     this.icon,
     required this.name,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +33,20 @@ class ThemePreview extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         clipBehavior: Clip.antiAlias,
         elevation: 4,
+        color: colorScheme.surface,
         child: InkWell(
           onTap: onTap,
-          child: Container(
-            width: 8 * 12,
-            height: 8 * 12,
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(color: colorScheme.surface),
-            foregroundDecoration: selected ? selectedDecoration : null,
-            child: _buildContent(context),
+          child: DecoratedBox(
+            decoration: selected ? selectedDecoration : const BoxDecoration(),
+            position: DecorationPosition.foreground,
+            child: SizedBox(
+              width: 8 * 12,
+              height: 8 * 12,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _buildContent(context),
+              ),
+            ),
           ),
         ),
       ),
@@ -50,27 +54,42 @@ class ThemePreview extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     if (icon == null) {
       return Wrap(
         crossAxisAlignment: WrapCrossAlignment.end,
         spacing: 4.0,
         children: [
-          ColorCircle(color: colorScheme.onSurface),
-          ColorCircle(color: colorScheme.primary),
-          ColorCircle(color: colorScheme.secondary),
+          _ColorCircle(color: theme.colorScheme.primary),
+          _ColorCircle(color: theme.colorScheme.secondary),
+          if (theme.useMaterial3)
+            _ColorCircle(color: theme.colorScheme.tertiary),
         ],
       );
     } else {
       return Center(
         child: IconTheme(
-          data: IconThemeData(
-            color: colorScheme.onSurface,
-            size: 32,
-          ),
+          data: IconThemeData(color: theme.colorScheme.onSurface, size: 32),
           child: icon!,
         ),
       );
     }
+  }
+}
+
+class _ColorCircle extends StatelessWidget {
+  const _ColorCircle({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: const SizedBox.square(dimension: 16),
+    );
   }
 }

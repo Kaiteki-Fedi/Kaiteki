@@ -1,20 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/platform_checks.dart';
+import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/settings/about/app_badge_kind.dart';
-import 'package:kaiteki/ui/shared/dfp.dart';
+import 'package:kaiteki/ui/shared/layout/dfp.dart';
 import 'package:kaiteki/utils/extensions/build_context.dart';
 import 'package:mdi/mdi.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({Key? key}) : super(key: key);
+  const AboutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.getL10n();
+    final l10n = context.l10n;
     final badge = getBadgeKind();
 
     return Scaffold(
@@ -42,9 +43,9 @@ class AboutScreen extends StatelessWidget {
                           Text(
                             consts.appName,
                             textScaleFactor: 2,
-                            style: GoogleFonts.quicksand(
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: Theme.of(context)
+                                .ktkTextTheme
+                                ?.kaitekiTextStyle,
                           ),
                           if (badge != null)
                             Padding(
@@ -133,6 +134,8 @@ class AboutScreen extends StatelessWidget {
   }
 
   AppBadgeKind? getBadgeKind() {
+    if (kBuildFlavor == "BETA") return AppBadgeKind.beta;
+
     if (kDebugMode) {
       return AppBadgeKind.debug;
     }

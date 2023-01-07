@@ -1,46 +1,72 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
+import 'package:kaiteki/fediverse/adapter.dart';
 import 'package:kaiteki/fediverse/api_type.dart';
 import 'package:kaiteki/fediverse/instances.dart';
 import 'package:kaiteki/fediverse/model/instance.dart';
 import 'package:kaiteki/logger.dart';
 import 'package:kaiteki/model/node_info.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'instance_prober.g.dart';
 
 final _logger = getLogger('InstanceProber');
 
-Future<InstanceProbeResult> probeInstance(String host) async {
-  final isInstanceAvailable = await _checkInstanceAvailability(host);
-  if (!isInstanceAvailable) {
-    throw InstanceUnreachableException();
+@riverpod
+Future<InstanceProbeResult> probeInstance(
+  ProbeInstanceRef? ref,
+  String host,
+) async {
+  if (!kIsWeb) {
+    final isInstanceAvailable = await _checkInstanceAvailability(host);
+    if (!isInstanceAvailable) {
+      throw InstanceUnreachableException();
+    }
   }
 
   InstanceProbeResult? result;
 
-  result ??= await _probeKnownInstances(host);
-  result ??= await _probeActivityPubNodeInfo(host);
-  result ??= await _probeEndpoints(host);
+  try {
+    result ??= await _probeKnownInstances(host);
+  } catch (e, s) {
+    _logger.w("Couldn't check for $host in known instances", e, s);
+  }
+
+  try {
+    result ??= await _probeActivityPubNodeInfo(host);
+  } catch (e, s) {
+    _logger.w("Couldn't check node info for $host", e, s);
+  }
+
+  try {
+    result ??= await _probeEndpoints(host);
+  } catch (e, s) {
+    _logger.w("Couldn't probe endpoints for $host", e, s);
+  }
 
   if (result == null) {
     _logger.d("Couldn't detect backend on on $host");
     return const InstanceProbeResult.failed();
-  } else {
-    final type = result.type!;
-
-    if (result.method == null) {
-      _logger.d('Detected ${type.displayName} on $host');
-    } else {
-      _logger.d('Detected ${type.displayName} on $host using ${result.method}');
-    }
-
-    if (result.instance == null) {
-      final adapter = type.createAdapter()..client.instance = host;
-      result = result.copyWith(instance: await adapter.getInstance());
-    }
-
-    return result;
   }
+
+  final type = result.type!;
+
+  if (result.method == null) {
+    _logger.d('Detected ${type.displayName} on $host');
+  } else {
+    _logger.d('Detected ${type.displayName} on $host using ${result.method}');
+  }
+
+  if (result.instance == null) {
+    final adapter = type.createAdapter(host);
+    result = result.copyWith(instance: await adapter.getInstance());
+  }
+
+  return result;
 }
 
 Future<InstanceProbeResult?> _probeKnownInstances(String host) async {
@@ -48,10 +74,7 @@ Future<InstanceProbeResult?> _probeKnownInstances(String host) async {
 
   type = ApiType.values //
       .cast<ApiType?>()
-      .firstWhere(
-        (t) => (t!.hosts ?? []).contains(host),
-        orElse: () => null,
-      );
+      .firstWhereOrNull((t) => (t!.hosts ?? []).contains(host));
 
   if (type != null) {
     return InstanceProbeResult.successful(
@@ -63,7 +86,7 @@ Future<InstanceProbeResult?> _probeKnownInstances(String host) async {
 
   type = (await fetchInstances())
       .cast<InstanceData?>()
-      .firstWhere((i) => i!.name == host, orElse: () => null)
+      .firstWhere((i) => i!.host == host, orElse: () => null)
       ?.type;
 
   if (type != null) {
@@ -93,8 +116,9 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
   final supportedLink = links.firstWhere((l) {
     final rel = (l["rel"] as String).toLowerCase();
 
-    return rel == "http://nodeinfo.diaspora.software/ns/schema/2.1" ||
-        rel == "http://nodeinfo.diaspora.software/ns/schema/2.0";
+    return RegExp(
+      r'^https?:\/\/nodeinfo\.diaspora\.software\/ns\/schema\/2\.(0|1)$',
+    ).hasMatch(rel);
   });
 
   final href = supportedLink["href"] as String;
@@ -106,26 +130,13 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
   }
 
   final nodeInfoResponse = await http.get(hrefUri);
-  late final String nodeInfoBody;
+  final String nodeInfoBody;
 
   try {
-    nodeInfoBody = nodeInfoResponse.body;
+    nodeInfoBody = utf8.decode(nodeInfoResponse.bodyBytes);
   } catch (e, s) {
-    // Checking type with string because we don't depend on `http`'s dependency `string_scanner`
-    final isHttpBug = e.runtimeType.toString() == "SourceSpanFormatException" &&
-        (e as dynamic).message == "Invalid media type: expected no more input.";
-    if (isHttpBug) {
-      _logger.w(
-        "Enforcing UTF-8 for nodeinfo response\n"
-        "Dart's `http` package still doesn't gracefully handle edge-case `Content-Type`s\n"
-        "Give them greetings from me over at https://github.com/dart-lang/http/issues/180",
-      );
-
-      nodeInfoBody = utf8.decode(nodeInfoResponse.bodyBytes);
-    } else {
-      _logger.w("Failed to read body from nodeinfo response", e, s);
-      return null;
-    }
+    _logger.w("Failed to decode nodeinfo body", e, s);
+    return null;
   }
 
   return NodeInfo.fromJson(jsonDecode(nodeInfoBody));
@@ -135,10 +146,13 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
   final nodeInfo = await fetchNodeInfo(host);
   if (nodeInfo == null) return null;
 
-  final apiType = const {
+  final apiType = const <String, ApiType>{
     "mastodon": ApiType.mastodon,
     "pleroma": ApiType.pleroma,
     "misskey": ApiType.misskey,
+    "foundkey": ApiType.misskey,
+    "calckey": ApiType
+        .misskey, // TODO(thatonecalculator): change to ApiType.calckey once implemented
   }[nodeInfo.software.name];
 
   if (apiType == null) return null;
@@ -153,10 +167,12 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
 Future<InstanceProbeResult?> _probeEndpoints(String host) async {
   for (final apiType in ApiType.values) {
     try {
-      final adapter = apiType.createAdapter();
+      final adapter = apiType.createAdapter(host);
+
+      if (adapter is! DecentralizedBackendAdapter) continue;
+
       _logger.d('Probing for ${apiType.displayName} on $host...');
 
-      adapter.client.instance = host;
       final result = await adapter.probeInstance();
 
       if (result != null) {
@@ -185,11 +201,7 @@ Future<bool> _checkInstanceAvailability(String instance) async {
   }
 }
 
-enum InstanceProbeMethod {
-  knownInstances,
-  nodeInfo,
-  endpoint,
-}
+enum InstanceProbeMethod { knownInstances, nodeInfo, endpoint }
 
 class InstanceProbeResult {
   final ApiType? type;

@@ -1,135 +1,150 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/auth/account_compound.dart';
-import 'package:kaiteki/model/auth/account_secret.dart';
-import 'package:kaiteki/repositories/account_secret_repository.dart';
-import 'package:kaiteki/repositories/client_secret_repository.dart';
+import 'package:kaiteki/model/auth/account.dart';
+import 'package:kaiteki/model/auth/account_key.dart';
+import 'package:kaiteki/model/auth/secret.dart';
+import 'package:kaiteki/repositories/repository.dart';
+import 'package:tuple/tuple.dart';
 
 class AccountManager extends ChangeNotifier {
-  static final _logger = getLogger('AccountContainer');
+  static final _logger = getLogger('AccountManager');
 
-  AccountCompound? _currentAccount;
-  AccountCompound get currentAccount => _currentAccount!;
+  Account? _currentAccount;
 
-  String get instance => currentAccount.clientSecret.instance;
-  FediverseAdapter get adapter => currentAccount.adapter;
-  bool get loggedIn => _currentAccount != null;
+  Account? get current => _currentAccount ?? defaultAccount;
 
-  final AccountSecretRepository _accountSecrets;
-  final ClientSecretRepository _clientSecrets;
+  set current(Account? account) {
+    if (current == null) throw ArgumentError.notNull("current");
+    assert(_accounts.contains(account));
+    _currentAccount = account;
+    notifyListeners();
+  }
 
-  final List<AccountCompound> _accounts = <AccountCompound>[];
-  Iterable<AccountCompound> get accounts => List.unmodifiable(_accounts);
+  Account? _defaultAccount;
+
+  Account? get defaultAccount => _defaultAccount ?? accounts.lastOrNull;
+
+  set defaultAccount(Account? account) {
+    if (account == null) throw ArgumentError.notNull("account");
+    assert(_accounts.contains(account));
+    _defaultAccount = account;
+    notifyListeners();
+  }
+
+  final Repository<AccountSecret, AccountKey> _accountSecrets;
+  final Repository<ClientSecret, AccountKey> _clientSecrets;
+
+  final Set<Account> _accounts = {};
+  UnmodifiableListView<Account> get accounts => UnmodifiableListView(_accounts);
 
   AccountManager(this._accountSecrets, this._clientSecrets);
 
-  Future<void> remove(AccountCompound compound) async {
-    _accounts.remove(compound);
-    await _accountSecrets.remove(compound.accountSecret);
-    await _clientSecrets.remove(compound.clientSecret);
+  Future<void> remove(Account account) async {
+    assert(
+      _accounts.contains(account),
+      "The specified account doesn't exist",
+    );
+
+    await _accountSecrets.delete(account.key);
+
+    if (account.clientSecret != null) {
+      await _clientSecrets.delete(account.key);
+    }
+
+    _accounts.remove(account);
+    if (_defaultAccount == account) {
+      _defaultAccount = _accounts.firstOrNull;
+    }
 
     notifyListeners();
-
-    _logger.d('Removed account ${compound.instance}');
   }
 
-  Future<void> addCurrentAccount(AccountCompound compound) async {
-    if (contains(compound)) {
-      throw Exception(
-        'Cannot add an account with the same instance and username',
-      );
+  Future<void> add(Account account) async {
+    assert(
+      !_accounts.contains(account),
+      "An account with the same username and instance already exists",
+    );
+
+    if (account.accountSecret != null) {
+      await _accountSecrets.create(account.key, account.accountSecret!);
+    }
+    if (account.clientSecret != null) {
+      await _clientSecrets.create(account.key, account.clientSecret!);
     }
 
-    _accounts.add(compound);
-    _accountSecrets.insert(compound.accountSecret);
-
-    if (!await _clientSecrets.contains(compound.clientSecret)) {
-      _clientSecrets.insert(compound.clientSecret);
-    }
-
-    await changeAccount(compound);
-  }
-
-  bool contains(AccountCompound account) {
-    for (final otherAccount in _accounts) {
-      if (otherAccount == account) return true;
-    }
-
-    return false;
-  }
-
-  Future<void> changeAccount(AccountCompound account) async {
-    assert(_accounts.contains(account));
-
-    _currentAccount = account;
+    _accounts.add(account);
 
     notifyListeners();
   }
 
   Future<void> loadAllAccounts() async {
-    _accounts.clear();
+    final accountSecrets = await _accountSecrets.read();
+    final clientSecrets = await _clientSecrets.read();
 
-    final secrets = _accountSecrets.getAll();
-    await Future.forEach(secrets, _restoreSession);
+    final secretPairs = accountSecrets.entries.map((kv) {
+      final clientSecret = clientSecrets[kv.key];
+      return Tuple3(kv.key, kv.value, clientSecret);
+    });
+
+    await Future.forEach(secretPairs, _restoreSession);
 
     if (_accounts.isNotEmpty) {
       // TODO(Craftplacer): Store which account the user last used
-      await changeAccount(_accounts.first);
+      _defaultAccount = _accounts.last;
     }
   }
 
-  Future<void> _restoreSession(AccountSecret accountSecret) async {
-    final instance = accountSecret.instance;
-    final clientSecret = _clientSecrets.get(instance);
+  /// Retrieves the client secret for a given instance.
+  Future<ClientSecret?> getClientSecret(
+    String instance, [
+    String? username,
+  ]) async {
+    final secrets = await _clientSecrets.read();
+    final key = secrets.keys.firstWhereOrNull((key) {
+      return key.host == instance && key.username == username;
+    });
+    return secrets[key];
+  }
 
-    if (clientSecret == null) {
-      _logger.w("Couldn't find a matching client secret for account");
+  Future<void> _restoreSession(
+    Tuple3<AccountKey, AccountSecret, ClientSecret?> credentials,
+  ) async {
+    final key = credentials.item1;
+    final accountSecret = credentials.item2;
+    final clientSecret = credentials.item3;
+
+    _logger.v('Trying to recover a ${key.type!.displayName} account');
+
+    final adapter = key.type!.createAdapter(key.host);
+
+    try {
+      await adapter.applySecrets(clientSecret, accountSecret);
+    } catch (ex, s) {
+      _logger.e("Failed to apply secrets to adapter", ex, s);
       return;
     }
 
-    final apiType = clientSecret.apiType;
+    User user;
 
-    if (apiType == null) {
-      _logger.d("Client secret didn't have contain API type.");
-      return;
-    }
-
-    _logger.d('Trying to recover a ${apiType.displayName} account');
-
-    final adapter = apiType.createAdapter();
-    await adapter.client.setClientAuthentication(clientSecret);
-    await adapter.client.setAccountAuthentication(accountSecret);
-
-    // restoring user object
-    User? user;
     try {
       user = await adapter.getMyself();
-    } catch (ex) {
-      _logger.e('Failed to verify credentials', ex);
-    }
-
-    if (user == null) {
-      _logger.w('No user data was recovered, assuming user info is incorrect.');
+    } catch (ex, s) {
+      _logger.e("Failed to fetch user profile of authenticated user", ex, s);
       return;
     }
 
-    final compound = AccountCompound(
-      container: this,
+    final account = Account(
+      key: key,
       adapter: adapter,
-      account: user,
+      user: user,
       clientSecret: clientSecret,
       accountSecret: accountSecret,
     );
 
-    _accounts.add(compound);
+    _logger.v("Signed into @${account.user.username}@${key.host}");
 
-    _logger.d(
-      'Recovered ${compound.account.displayName} @ ${compound.clientSecret.instance}',
-    );
+    await add(account);
   }
-
-  // HACK(Craftplacer): This should not exist, please refactor.
-  ClientSecretRepository getClientRepo() => _clientSecrets;
 }
