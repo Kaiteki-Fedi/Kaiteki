@@ -67,6 +67,7 @@ dependencies:
   path: ^1.8.1
   path_provider: ^2.0.11
   riverpod_annotation: ^1.0.6
+  share_plus: ^6.3.0
   shared_preferences: ^2.0.5
   shelf: ^1.3.0
   state_notifier: ^0.7.1
