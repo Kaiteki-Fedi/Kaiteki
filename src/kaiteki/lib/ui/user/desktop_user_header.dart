@@ -1,10 +1,12 @@
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:kaiteki/fediverse/model/user/user.dart';
 import 'package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart';
 import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 class DesktopUserHeader extends StatelessWidget {
   final TabController tabController;
@@ -128,14 +130,38 @@ class DesktopUserHeader extends StatelessWidget {
 
   Widget? buildBackground() {
     final url = user?.bannerUrl;
+    final String? bannerBlurhash = user?.source.bannerBlurhash;
     if (url == null) {
       return null;
     } else {
       return Image.network(
         url,
+        loadingBuilder: bannerBlurhash?.nullTransform((b) => blurhashLoader),
+        frameBuilder: bannerBlurhash?.nullTransform((b) => blurhashAnimation),
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => const SizedBox(),
       );
     }
+  }
+
+  Widget blurhashAnimation(context, child, frame, wasSynchronouslyLoaded) {
+    if (wasSynchronouslyLoaded) {
+      return child;
+    }
+    return AnimatedOpacity(
+      opacity: frame == null ? 0 : 1,
+      duration: const Duration(seconds: 1),
+      curve: Curves.easeOut,
+      child: child,
+    );
+  }
+
+  Widget blurhashLoader(context, child, loadingProgress) {
+    if (loadingProgress == null) {
+      return child;
+    }
+    return SizedBox(
+      child: BlurHash(hash: user!.source.bannerBlurhash),
+    );
   }
 }
