@@ -33,9 +33,10 @@ class AvatarWidget extends StatelessWidget {
     } else {
       avatar = Image.network(
         url,
-        frameBuilder: _loadingBuilder,
+        frameBuilder: _frameBuilder,
         width: size,
         height: size,
+        errorBuilder: (_, __, ___) => fallback,
         fit: BoxFit.cover,
       );
     }
@@ -58,15 +59,28 @@ class AvatarWidget extends StatelessWidget {
     return avatar;
   }
 
-  Widget _loadingBuilder(context, child, frame, wasSynchronouslyLoaded) {
+  Widget _frameBuilder(
+    BuildContext context,
+    Widget child,
+    int? frame,
+    bool wasSynchronouslyLoaded,
+  ) {
     if (wasSynchronouslyLoaded) return child;
 
-    final bannerBlurHash = user.avatarBlurHash;
+    final blurHash = user.avatarBlurHash;
     return AnimatedSwitcher(
-      duration: const Duration(seconds: 1),
-      child: frame == null && bannerBlurHash != null
-          ? BlurHash(hash: bannerBlurHash)
-          : frame,
+      duration: const Duration(milliseconds: 150),
+      child: frame == null
+          ? SizedBox.square(
+              dimension: size,
+              child: blurHash != null
+                  ? BlurHash(
+                      color: Colors.transparent,
+                      hash: blurHash,
+                    )
+                  : null,
+            )
+          : SizedBox(child: child),
     );
   }
 }
