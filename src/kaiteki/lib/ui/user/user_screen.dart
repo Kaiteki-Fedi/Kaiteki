@@ -55,7 +55,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 
   Widget _buildBanner(User? user) {
-    final placeholder = Flexible(
+    final placeholder = Expanded(
       child: ColoredBox(color: Colors.black.withOpacity(.125)),
     );
 
