@@ -135,16 +135,19 @@ class DesktopUserHeader extends StatelessWidget {
     } else {
       return Image.network(
         url,
-        frameBuilder: user?.bannerBlurHash?.nullTransform(
-          (b) => blurhashAnimation,
-        ),
+        frameBuilder: _frameBuilder,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => const SizedBox(),
       );
     }
   }
 
-  Widget blurhashAnimation(context, child, frame, wasSynchronouslyLoaded) {
+  Widget _frameBuilder(
+    BuildContext context,
+    Widget child,
+    int? frame,
+    bool wasSynchronouslyLoaded,
+  ) {
     if (wasSynchronouslyLoaded) return child;
 
     final bannerBlurHash = user?.bannerBlurHash;
@@ -152,7 +155,7 @@ class DesktopUserHeader extends StatelessWidget {
       duration: const Duration(seconds: 1),
       child: frame == null && bannerBlurHash != null
           ? BlurHash(hash: bannerBlurHash)
-          : frame,
+          : child,
     );
   }
 }
