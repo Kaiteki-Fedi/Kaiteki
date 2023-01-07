@@ -429,19 +429,19 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<List<String>> searchForHashtags(String query) {
-    // TODO: implement searchForHashtags
+    // TODO(Craftplacer): implement searchForHashtags
     throw UnimplementedError();
   }
 
   @override
   Future<List<Post>> searchForPosts(String query) {
-    // TODO: implement searchForPosts
+    // TODO(Craftplacer): implement searchForPosts
     throw UnimplementedError();
   }
 
   @override
   Future<List<User>> searchForUsers(String query) {
-    // TODO: implement searchForUsers
+    // TODO(Craftplacer): implement searchForUsers
     throw UnimplementedError();
   }
 

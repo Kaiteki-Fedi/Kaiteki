@@ -133,7 +133,7 @@ class PleromaAdapter //
 
   @override
   Future<void> markNotificationAsRead(Notification notification) {
-    // TODO: implement markNotificationAsRead
+    // TODO(Craftplacer): implement markNotificationAsRead
     throw UnimplementedError();
   }
 

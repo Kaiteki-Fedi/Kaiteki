@@ -408,7 +408,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
 
   @override
   Future<List<String>> searchForHashtags(String query) {
-    // TODO: implement searchForHashtags
+    // TODO(Craftplacer): implement searchForHashtags
     throw UnimplementedError();
   }
 
@@ -420,7 +420,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
 
   @override
   Future<List<User>> searchForUsers(String query) {
-    // TODO: implement searchForUsers
+    // TODO(Craftplacer): implement searchForUsers
     throw UnimplementedError();
   }
 
@@ -430,7 +430,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
     String? sinceId,
     String? untilId,
   }) {
-    // TODO: implement getFollowers
+    // TODO(Craftplacer): implement getFollowers
     throw UnimplementedError();
   }
 
@@ -440,7 +440,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
     String? sinceId,
     String? untilId,
   }) {
-    // TODO: implement getFollowing
+    // TODO(Craftplacer): implement getFollowing
     throw UnimplementedError();
   }
 }
