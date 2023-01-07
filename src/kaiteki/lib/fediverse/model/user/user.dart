@@ -16,8 +16,14 @@ class User<T> extends AdaptedEntity<T> {
   /// The URL of the user's avatar. Null, if the user didn't set one.
   final String? avatarUrl;
 
+  /// The blur hash of the user's banner.
+  final String? avatarBlurHash;
+
   /// The URL of the user's banner. Null, if the user didn't set one.
   final String? bannerUrl;
+
+  /// The blur hash of the user's banner.
+  final String? bannerBlurHash;
 
   /// The id of the user.
   final String id;
@@ -51,7 +57,9 @@ class User<T> extends AdaptedEntity<T> {
     required this.id,
     required this.username,
     super.source,
+    this.avatarBlurHash,
     this.avatarUrl,
+    this.bannerBlurHash,
     this.bannerUrl,
     this.description,
     this.details = const UserDetails(),

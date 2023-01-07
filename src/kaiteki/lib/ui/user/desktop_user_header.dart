@@ -130,14 +130,14 @@ class DesktopUserHeader extends StatelessWidget {
 
   Widget? buildBackground() {
     final url = user?.bannerUrl;
-    final String? bannerBlurhash = user?.source.bannerBlurhash;
     if (url == null) {
       return null;
     } else {
       return Image.network(
         url,
-        loadingBuilder: bannerBlurhash?.nullTransform((b) => blurhashLoader),
-        frameBuilder: bannerBlurhash?.nullTransform((b) => blurhashAnimation),
+        frameBuilder: user?.bannerBlurHash?.nullTransform(
+          (b) => blurhashAnimation,
+        ),
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => const SizedBox(),
       );
@@ -145,23 +145,14 @@ class DesktopUserHeader extends StatelessWidget {
   }
 
   Widget blurhashAnimation(context, child, frame, wasSynchronouslyLoaded) {
-    if (wasSynchronouslyLoaded) {
-      return child;
-    }
-    return AnimatedOpacity(
-      opacity: frame == null ? 0 : 1,
-      duration: const Duration(seconds: 1),
-      curve: Curves.easeOut,
-      child: child,
-    );
-  }
+    if (wasSynchronouslyLoaded) return child;
 
-  Widget blurhashLoader(context, child, loadingProgress) {
-    if (loadingProgress == null) {
-      return child;
-    }
-    return SizedBox(
-      child: BlurHash(hash: user!.source.bannerBlurhash),
+    final bannerBlurHash = user?.bannerBlurHash;
+    return AnimatedSwitcher(
+      duration: const Duration(seconds: 1),
+      child: frame == null && bannerBlurHash != null
+          ? BlurHash(hash: bannerBlurHash)
+          : frame,
     );
   }
 }

@@ -103,7 +103,9 @@ CustomEmoji toEmoji(misskey.Emoji emoji) {
 User toUser(misskey.User source, String localHost) {
   return User(
     avatarUrl: source.avatarUrl,
+    avatarBlurHash: source.avatarBlurhash,
     bannerUrl: source.bannerUrl,
+    bannerBlurHash: source.bannerBlurhash,
     description: source.description,
     displayName: source.name,
     emojis: source.emojis.map(toEmoji),
@@ -169,9 +171,7 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
     iconUrl: instance.iconUrl == null
         ? null
         : instanceUri.resolve(instance.iconUrl!).toString(),
-    mascotUrl: instance.mascotImageUrl == null
-        ? null
-        : instanceUri.resolve(instance.mascotImageUrl!).toString(),
+    mascotUrl: instanceUri.resolve(instance.mascotImageUrl).toString(),
     backgroundUrl: instance.bannerUrl,
     source: instance,
   );
