@@ -42,7 +42,9 @@ class PollWidget extends StatelessWidget {
                           ),
                           child: SizedBox(
                             width: constraints.maxWidth *
-                                (option.voteCount! / poll.voteCount),
+                                (poll.voteCount == 0
+                                    ? 1
+                                    : (option.voteCount! / poll.voteCount)),
                           ),
                         ),
                       ),
