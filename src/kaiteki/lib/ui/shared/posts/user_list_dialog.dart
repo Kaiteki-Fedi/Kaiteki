@@ -125,12 +125,10 @@ class UserListTile extends ConsumerWidget {
               const SizedBox(height: 8),
               Padding(
                 padding: EdgeInsets.only(left: leftSideWidth),
-                child: Flexible(
-                  child: Text.rich(
-                    user.renderText(context, ref, description),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                child: Text.rich(
+                  user.renderText(context, ref, description),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
