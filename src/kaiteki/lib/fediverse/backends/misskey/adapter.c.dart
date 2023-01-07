@@ -173,7 +173,7 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
         : instanceUri.resolve(instance.iconUrl!).toString(),
     mascotUrl: instance.mascotImageUrl == null
         ? null
-        : instanceUri.resolve(instance.mascotImageUrl).toString(),
+        : instanceUri.resolve(instance.mascotImageUrl!).toString(),
     backgroundUrl: instance.bannerUrl,
     source: instance,
   );
