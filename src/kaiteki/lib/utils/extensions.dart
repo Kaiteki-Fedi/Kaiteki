@@ -92,7 +92,7 @@ Set<TextParser> _getTextParsers(WidgetRef ref) {
   const socialTextParser = SocialTextParser();
   final adapter = ref.watch(adapterProvider);
   if (adapter is MisskeyAdapter) {
-    return const {MfmTextParser()};
+    return const {MfmTextParser(), socialTextParser};
   } else if (adapter is SharedMastodonAdapter) {
     return const {MastodonHtmlTextParser(), socialTextParser};
   } else {

@@ -154,7 +154,7 @@ InlineSpan renderText(
   TextElement element,
   List<InlineSpan>? childrenSpans,
 ) {
-  final InlineSpan span = TextSpan(
+  final span = TextSpan(
     text: element.text,
     style: element.getFlutterTextStyle(context),
     children: childrenSpans,
@@ -162,7 +162,7 @@ InlineSpan renderText(
 
   if (element.style?.blur == true) {
     return WidgetSpan(
-      child: UnblurOnHover(child: Text(element.text!)),
+      child: UnblurOnHover(child: Text.rich(span)),
     );
   }
 
