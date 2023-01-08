@@ -201,6 +201,10 @@ class ChatView extends ConsumerWidget {
     if (chat is DirectChat) {
       return Text.rich(chat.recipient.renderDisplayName(context, ref));
     }
+    if (chat is GroupChat) {
+      return Text(chat.name ?? chat.fallbackName);
+    }
+
     return Text(chat.toString());
   }
 

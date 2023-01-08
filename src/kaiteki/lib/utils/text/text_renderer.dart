@@ -30,7 +30,7 @@ class TextContext {
 
 class TextRenderer {
   // TODO(Craftplacer): Use appropiate parser on specific instances
-  final TextParser parser = const MastodonHtmlTextParser();
+  final TextParser parser = const MfmTextParser();
 
   const TextRenderer();
 
@@ -267,19 +267,17 @@ class TextRenderer {
 }
 
 extension TextElementExtension on TextElement {
-  TextStyle getFlutterTextStyle(BuildContext context) {
+  TextStyle? getFlutterTextStyle(BuildContext context) {
     final style = this.style;
 
-    if (style == null) {
-      return const TextStyle();
-    }
+    if (style == null) return null;
 
     final inheritedSize = DefaultTextStyle.of(context).style.fontSize;
 
     return TextStyle(
       fontWeight: style.bold == true ? FontWeight.bold : null,
       fontStyle: style.italic == true ? FontStyle.italic : null,
-      fontSize: style.scale != 1.0 ? (inheritedSize! * style.scale) : null,
+      fontSize: style.scale.nullTransform((scale) => inheritedSize! * scale),
     );
   }
 }

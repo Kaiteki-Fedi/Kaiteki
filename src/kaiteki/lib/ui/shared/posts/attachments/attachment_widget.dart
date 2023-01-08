@@ -55,8 +55,8 @@ class _AttachmentWidgetState extends State<AttachmentWidget> {
       // HACK(Craftplacer): missing case when null
       attachmentWidget = ImageAttachmentWidget(
         attachment: widget.attachment,
-        index: widget.attachmentIndex!,
-        post: widget.parentPost!,
+        index: widget.attachmentIndex,
+        post: widget.parentPost,
         boxFit: widget.boxFit,
       );
     } else if (widget.attachment.type == AttachmentType.video &&

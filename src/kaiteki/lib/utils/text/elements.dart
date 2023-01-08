@@ -80,13 +80,13 @@ class TextElementStyle {
   final bool bold;
   final bool italic;
   final TextElementFont font;
-  final double scale;
+  final double? scale;
   final bool blur;
 
   const TextElementStyle({
     this.bold = false,
     this.italic = false,
-    this.scale = 1.0,
+    this.scale,
     this.font = TextElementFont.normal,
     this.blur = false,
   });

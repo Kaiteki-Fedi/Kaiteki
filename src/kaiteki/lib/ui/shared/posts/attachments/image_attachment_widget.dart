@@ -6,8 +6,8 @@ import 'package:kaiteki/ui/shared/attachment_inspection_screen.dart';
 
 class ImageAttachmentWidget extends StatelessWidget {
   final Attachment attachment;
-  final int index;
-  final Post post;
+  final int? index;
+  final Post? post;
   final BoxFit? boxFit;
 
   const ImageAttachmentWidget({
@@ -66,10 +66,17 @@ class ImageAttachmentWidget extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) {
-        return AttachmentInspectionScreen(
-          attachments: post.attachments!,
-          index: index,
-        );
+        if (post == null) {
+          return AttachmentInspectionScreen(
+            attachments: [attachment],
+            index: 0,
+          );
+        } else {
+          return AttachmentInspectionScreen(
+            attachments: post!.attachments!,
+            index: index ?? 0,
+          );
+        }
       },
     );
   }

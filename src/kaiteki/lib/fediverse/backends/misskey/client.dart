@@ -355,7 +355,7 @@ class MisskeyClient {
         .then(misskey.Note.fromJson.fromResponseList);
   }
 
-  Future<Iterable<misskey.MessagingMessage>> getChatHistory({
+  Future<Iterable<misskey.MessagingMessage>> getMessagingHistory({
     int limit = 10,
     bool group = true,
   }) async {

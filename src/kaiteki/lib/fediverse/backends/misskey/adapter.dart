@@ -233,8 +233,46 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Iterable<ChatTarget>> getChats() {
-    throw UnimplementedError();
+  Future<Iterable<ChatTarget>> getChats() async {
+    final groupChats = await client.getMessagingHistory().then(
+      (groupMessages) async {
+        return Future.wait(
+          groupMessages.map(
+            (e) async {
+              final userIds = e.group!.userIds;
+              final resolvedUsers = userIds != null && userIds.isNotEmpty
+                  ? await client.showUsers(userIds.toSet())
+                  : [];
+              return GroupChat(
+                source: e,
+                name: e.group!.name,
+                id: e.groupId!,
+                createdAt: e.createdAt,
+                recipients:
+                    resolvedUsers.map((e) => toUser(e, instance)).toList(),
+              );
+            },
+          ),
+        );
+      },
+    );
+    final directChats = await client.getMessagingHistory(group: false).then(
+      (directMessages) async {
+        return Future.wait(
+          directMessages.map(
+            (e) async => DirectChat(
+              source: e,
+              id: e.recipientId!,
+              recipient: toUserFromLite(e.recipient!, instance),
+              lastMessage: toChatMessage(e, instance),
+              unread: e.isRead == false,
+            ),
+          ),
+        );
+      },
+    );
+
+    return [...groupChats, ...directChats];
   }
 
   @override
@@ -281,8 +319,12 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Iterable<ChatMessage>> getChatMessages(ChatTarget chat) {
-    throw UnimplementedError();
+  Future<Iterable<ChatMessage>> getChatMessages(ChatTarget chat) async {
+    final messages = await client.getMessages(
+      userId: chat is DirectChat ? chat.id : null,
+      groupId: chat is GroupChat ? chat.id : null,
+    );
+    return messages.map((e) => toChatMessage(e, instance));
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
+import 'package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -146,10 +147,7 @@ class ChatMessageWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: ifReverse(
         [
-          AvatarWidget(
-            message.author,
-            size: 32.0,
-          ),
+          AvatarWidget(message.author, size: 32.0),
           const SizedBox(width: 6.0),
           Flexible(
             child: ClipPath(
@@ -169,8 +167,14 @@ class ChatMessageWidget extends ConsumerWidget {
                         style: TextStyle(color: textColor),
                       ),
                     // FIXME(Craftplacer): Attachment display changes are not compatible
-                    // if (message.attachments.isNotEmpty == true)
-                    //   getAttachmentWidget(message.attachments.first),
+                    if (message.attachments.isNotEmpty == true)
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: 300,
+                        ),
+                        child: AttachmentWidget(
+                            attachment: message.attachments.first),
+                      ),
                   ],
                 ),
               ),

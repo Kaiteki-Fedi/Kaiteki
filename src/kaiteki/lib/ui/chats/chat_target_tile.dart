@@ -83,11 +83,9 @@ class ChatTargetTile extends ConsumerWidget {
   }
 
   Widget? _buildBadge(BuildContext context) {
-    if (chat.unreadMessages < 1) {
-      return null;
-    }
+    if (!chat.unread) return null;
 
-    return Badge(label: Text(chat.unreadMessages.toString()));
+    return const Badge();
   }
 
   InlineSpan _getChatTitle(
@@ -98,8 +96,7 @@ class ChatTargetTile extends ConsumerWidget {
     if (chat is DirectChat) {
       return chat.recipient.renderDisplayName(context, ref);
     } else if (chat is GroupChat) {
-      // TODO(Craftplacer): Display chat group title
-      return const TextSpan(text: "Group Title");
+      return TextSpan(text: chat.name);
     } else {
       throw UnimplementedError();
     }

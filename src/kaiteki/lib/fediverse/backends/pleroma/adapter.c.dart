@@ -29,6 +29,6 @@ ChatTarget toChatTarget(pleroma.Chat chat, User currentUser, String localHost) {
     }),
     recipient: toUser(chat.account, localHost),
     createdAt: DateTime.now(),
-    unreadMessages: chat.unread,
+    unread: chat.unread != 0,
   );
 }

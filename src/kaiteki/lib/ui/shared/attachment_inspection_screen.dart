@@ -9,7 +9,7 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/attachment.dart';
 
 class AttachmentInspectionScreen extends StatefulWidget {
-  final Iterable<Attachment> attachments;
+  final List<Attachment> attachments;
   final int index;
 
   const AttachmentInspectionScreen({
