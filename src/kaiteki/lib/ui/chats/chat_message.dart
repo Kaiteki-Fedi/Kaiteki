@@ -116,10 +116,10 @@ class ChatMessageWidget extends ConsumerWidget {
 
   final bool received;
   const ChatMessageWidget({
-    Key? key,
+    super.key,
     required this.message,
     required this.received,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -144,36 +144,41 @@ class ChatMessageWidget extends ConsumerWidget {
     return Row(
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: ifReverse([
-        AvatarWidget(
-          message.author,
-          size: 32.0,
-        ),
-        const SizedBox(width: 6.0),
-        Flexible(
-          child: ClipPath(
-            clipper: clip,
-            child: Container(
-              color: messageColor,
-              constraints: const BoxConstraints(maxWidth: 450),
-              padding: clip.getPadding(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (message.content != null)
-                    Text.rich(
-                      message.renderContent(context, ref),
-                      style: TextStyle(color: textColor),
-                    ),
-                  // FIXME(Craftplacer): Attachment display changes are not compatible
-                  // if (message.attachments.isNotEmpty == true)
-                  //   getAttachmentWidget(message.attachments.first),
-                ],
+      children: ifReverse(
+        [
+          AvatarWidget(
+            message.author,
+            size: 32.0,
+          ),
+          const SizedBox(width: 6.0),
+          Flexible(
+            child: ClipPath(
+              clipper: clip,
+              child: Container(
+                color: messageColor,
+                constraints: const BoxConstraints(maxWidth: 450),
+                padding: clip.getPadding(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (message.content != null)
+                      SelectableText.rich(
+                        TextSpan(
+                          children: [message.renderContent(context, ref)],
+                        ),
+                        style: TextStyle(color: textColor),
+                      ),
+                    // FIXME(Craftplacer): Attachment display changes are not compatible
+                    // if (message.attachments.isNotEmpty == true)
+                    //   getAttachmentWidget(message.attachments.first),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ], reverse),
+        ],
+        reverse,
+      ),
     );
   }
 

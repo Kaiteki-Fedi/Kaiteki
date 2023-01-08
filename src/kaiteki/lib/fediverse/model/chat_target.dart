@@ -1,5 +1,4 @@
-import 'package:kaiteki/fediverse/model/chat_message.dart';
-import 'package:kaiteki/fediverse/model/user.dart';
+import 'package:kaiteki/fediverse/model/model.dart';
 
 abstract class ChatTarget<T> {
   final T source;
@@ -21,36 +20,24 @@ class GroupChat<T> extends ChatTarget<T> {
   final List<User> recipients;
 
   const GroupChat({
-    required source,
-    required id,
-    required createdAt,
+    required super.source,
+    required super.id,
+    required super.createdAt,
     required this.recipients,
-    lastMessage,
-    unreadMessages = 0,
-  }) : super(
-          source: source,
-          id: id,
-          createdAt: createdAt,
-          lastMessage: lastMessage,
-          unreadMessages: unreadMessages,
-        );
+    super.lastMessage,
+    super.unreadMessages = 0,
+  });
 }
 
 class DirectChat<T> extends ChatTarget<T> {
   final User recipient;
 
   const DirectChat({
-    required source,
-    required id,
-    required createdAt,
+    required super.source,
+    required super.id,
+    required super.createdAt,
     required this.recipient,
-    lastMessage,
-    unreadMessages = 0,
-  }) : super(
-          source: source,
-          id: id,
-          createdAt: createdAt,
-          lastMessage: lastMessage,
-          unreadMessages: unreadMessages,
-        );
+    super.lastMessage,
+    super.unreadMessages = 0,
+  });
 }

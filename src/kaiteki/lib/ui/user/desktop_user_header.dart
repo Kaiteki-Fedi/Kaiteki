@@ -6,7 +6,6 @@ import 'package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart';
 import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
 import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
 import 'package:kaiteki/ui/user/constants.dart';
-import 'package:kaiteki/utils/extensions.dart';
 
 class DesktopUserHeader extends StatelessWidget {
   final TabController tabController;

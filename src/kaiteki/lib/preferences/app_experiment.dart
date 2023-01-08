@@ -15,7 +15,8 @@ enum AppExperiment {
   feedback(
     "App Feedback",
     "Enable the feedback screen; currently unfunctional",
-  );
+  ),
+  chats("Chats");
 
   final String displayName;
   final String? description;

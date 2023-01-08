@@ -7,9 +7,9 @@ typedef MessageCallback = void Function(
 
 class ComposeMessageBar extends StatelessWidget {
   ComposeMessageBar({
-    Key? key,
+    super.key,
     required this.onSendMessage,
-  }) : super(key: key);
+  });
 
   final MessageCallback onSendMessage;
   final _controller = TextEditingController();
@@ -34,8 +34,11 @@ class ComposeMessageBar extends StatelessWidget {
               hintText: "Write a message...",
               border: InputBorder.none,
             ),
-            onSubmitted: (input) => onSendMessage.call(input, []),
-            maxLines: null,
+            onSubmitted: (input) {
+              onSendMessage.call(input, []);
+              _controller.clear();
+            },
+            // maxLines: null,
           ),
         ),
         Padding(
@@ -45,6 +48,7 @@ class ComposeMessageBar extends StatelessWidget {
             onPressed: () {
               final input = _controller.value.text;
               onSendMessage.call(input, []);
+              _controller.clear();
             },
             splashRadius: 24,
             tooltip: "Send message",

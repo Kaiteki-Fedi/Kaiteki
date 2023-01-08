@@ -359,12 +359,13 @@ class MisskeyClient {
     int limit = 10,
     bool group = true,
   }) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/messaging/history",
-      misskey.MessagingMessage.fromJson,
-      body: {limit, group},
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/messaging/history",
+          body: {"limit": limit, "group": group}.jsonBody,
+        )
+        .then(misskey.MessagingMessage.fromJson.fromResponseList);
   }
 
   Future<Iterable<misskey.MessagingMessage>> getMessages({
@@ -373,17 +374,18 @@ class MisskeyClient {
     required String? userId,
     required String? groupId,
   }) async {
-    return sendJsonRequestMultiple(
-      HttpMethod.post,
-      "api/messaging/messages",
-      misskey.MessagingMessage.fromJson,
-      body: {
-        if (userId != null) userId,
-        if (groupId != null) groupId,
-        limit,
-        markAsRead,
-      },
-    );
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/messaging/messages",
+          body: {
+            if (userId != null) "userId": userId,
+            if (groupId != null) "groupId": groupId,
+            "limit": limit,
+            "markAsRead": markAsRead,
+          }.jsonBody,
+        )
+        .then(misskey.MessagingMessage.fromJson.fromResponseList);
   }
 
   Future<misskey.DriveFile> createDriveFile(

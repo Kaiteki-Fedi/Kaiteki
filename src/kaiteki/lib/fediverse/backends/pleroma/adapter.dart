@@ -8,6 +8,7 @@ import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/model/notification.dart';
+import 'package:kaiteki/utils/extensions.dart';
 
 part 'adapter.c.dart';
 
@@ -59,7 +60,7 @@ class PleromaAdapter //
   Future<Iterable<ChatTarget>> getChats() async {
     final currentAccount = toUser(await client.verifyCredentials(), instance);
     final chats = await client.getChats();
-    return chats.map((chat) => toChatTarget(chat, currentAccount));
+    return chats.map((chat) => toChatTarget(chat, currentAccount, instance));
   }
 
   @override

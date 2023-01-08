@@ -179,10 +179,10 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
   );
 }
 
-ChatMessage toChatMessage(misskey.MessagingMessage message) {
+ChatMessage toChatMessage(misskey.MessagingMessage message, String localHost) {
   final file = message.file;
   return ChatMessage(
-    author: toUserFromLite(message.user!),
+    author: toUserFromLite(message.user!, localHost),
     content: message.text,
     sentAt: message.createdAt,
     emojis: [],

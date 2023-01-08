@@ -3,15 +3,18 @@ import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
 import 'package:kaiteki/fediverse/model/chat_target.dart';
-import 'package:kaiteki/ui/dialogs/search_user_dialog.dart';
+import 'package:kaiteki/preferences/app_experiment.dart';
+import 'package:kaiteki/ui/chats/chat_message.dart';
+import 'package:kaiteki/ui/chats/chat_target_list.dart';
+import 'package:kaiteki/ui/chats/compose_message_bar.dart';
+import 'package:kaiteki/ui/shared/dialogs/find_user_dialog.dart';
 import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/ui/widgets/chats/chat_message.dart';
-import 'package:kaiteki/ui/widgets/chats/chat_target_list.dart';
-import 'package:kaiteki/ui/widgets/chats/compose_message_bar.dart';
+import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
+import 'package:kaiteki/utils/extensions.dart';
 import 'package:mdi/mdi.dart';
 
 class ChatsPage extends ConsumerStatefulWidget {
-  const ChatsPage({Key? key}) : super(key: key);
+  const ChatsPage({super.key});
 
   @override
   ConsumerState<ChatsPage> createState() => _ChatsPageState();
@@ -19,11 +22,33 @@ class ChatsPage extends ConsumerStatefulWidget {
 
 class _ChatsPageState extends ConsumerState<ChatsPage> {
   ChatTarget? selectedChat;
-  bool _readNotice = false;
 
   @override
   Widget build(BuildContext context) {
     final adapter = ref.read(adapterProvider) as ChatSupport;
+
+    if (!ref
+        .watch(preferencesProvider.select((value) => value.enabledExperiments))
+        .contains(AppExperiment.chats)) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const IconLandingWidget(
+              icon: Icon(Icons.science_rounded),
+              text: Text("Chats are experimental"),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => ref
+                  .read(preferencesProvider)
+                  .enableExperiment(AppExperiment.chats),
+              child: const Text("Enable Experiment"),
+            ),
+          ],
+        ),
+      );
+    }
 
     return Row(
       children: [
@@ -31,28 +56,6 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
           width: 350,
           child: Column(
             children: [
-              if (!_readNotice)
-                MaterialBanner(
-                  content: const ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    minVerticalPadding: 12,
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.yellow,
-                      child: Icon(
-                        Mdi.alertOctagon,
-                        color: Colors.black,
-                      ),
-                    ),
-                    title: Text("Chats are currently in development"),
-                    subtitle: Text("Not all UI elements may work."),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => setState(() => _readNotice = true),
-                      child: const Text("Got it"),
-                    ),
-                  ],
-                ),
               Expanded(
                 child: FutureBuilder<Iterable<ChatTarget>>(
                   future: adapter.getChats(),
@@ -82,7 +85,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
                             onPressed: () async {
                               await showDialog(
                                 context: context,
-                                builder: (_) => const SearchUserDialog(),
+                                builder: (_) => const FindUserDialog(),
                               );
                             },
                             tooltip: "Start a new chat",
@@ -121,35 +124,32 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
 
 class ChatView extends ConsumerWidget {
   const ChatView({
-    Key? key,
+    super.key,
     required this.chat,
-  }) : super(key: key);
+  });
 
   final ChatTarget chat;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final manager = ref.read(accountProvider);
-    final adapter = manager.adapter as ChatSupport;
-    final currentAccount = manager.currentAccount.account;
+    final adapter = ref.watch(adapterProvider) as ChatSupport;
+    final currentUser = ref.watch(accountProvider)?.user;
 
     return Column(
       children: [
-        Row(
-          children: [
-            const Text("Chat recipient"),
-            const Spacer(),
-            PopupMenuButton(
-              itemBuilder: (context) {
-                return List.generate(5, (index) {
-                  return PopupMenuItem(
-                    value: index,
-                    child: Text('button no $index'),
-                  );
-                });
-              },
-            )
-          ],
+        ListTile(
+          leading: _buildIcon(context, ref),
+          title: _buildTitle(context, ref),
+          trailing: PopupMenuButton(
+            itemBuilder: (context) {
+              return List.generate(5, (index) {
+                return PopupMenuItem(
+                  value: index,
+                  child: Text('button no $index'),
+                );
+              });
+            },
+          ),
         ),
         const Divider(height: 1),
         Expanded(
@@ -178,7 +178,7 @@ class ChatView extends ConsumerWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ChatMessageWidget(
                       message: item,
-                      received: currentAccount.id != item.author.id,
+                      received: currentUser?.id != item.author.id,
                     ),
                   );
                 },
@@ -194,5 +194,21 @@ class ChatView extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  Widget _buildTitle(BuildContext context, WidgetRef ref) {
+    final chat = this.chat;
+    if (chat is DirectChat) {
+      return Text.rich(chat.recipient.renderDisplayName(context, ref));
+    }
+    return Text(chat.toString());
+  }
+
+  Widget? _buildIcon(BuildContext context, WidgetRef ref) {
+    final chat = this.chat;
+    if (chat is DirectChat) {
+      return AvatarWidget(chat.recipient, size: 32);
+    }
+    return null;
   }
 }

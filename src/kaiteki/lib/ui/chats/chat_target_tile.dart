@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/model/chat_target.dart';
@@ -27,11 +26,9 @@ class ChatTargetTile extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return ListTileTheme(
-      selectedColor: theme.colorScheme.onPrimary,
-      selectedTileColor: theme.colorScheme.primary,
+      selectedColor: theme.colorScheme.onSecondaryContainer,
+      selectedTileColor: theme.colorScheme.secondaryContainer,
       child: ListTile(
-        tileColor: Colors.green,
-        selectedTileColor: Colors.red,
         selected: selected,
         leading: _buildChatTargetAvatar(chat),
         title: Text.rich(_getChatTitle(context, ref, chat)),
@@ -90,25 +87,14 @@ class ChatTargetTile extends ConsumerWidget {
       return null;
     }
 
-    final theme = Theme.of(context);
-    return Badge(
-      badgeContent: Text(
-        chat.unreadMessages.toString(),
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12.0,
-          color: theme.colorScheme.onSecondary,
-        ),
-      ),
-      badgeColor: theme.colorScheme.secondary,
-      padding: const EdgeInsets.all(6.0),
-      elevation: 0,
-      toAnimate: false,
-    );
+    return Badge(label: Text(chat.unreadMessages.toString()));
   }
 
   InlineSpan _getChatTitle(
-      BuildContext context, WidgetRef ref, ChatTarget chat) {
+    BuildContext context,
+    WidgetRef ref,
+    ChatTarget chat,
+  ) {
     if (chat is DirectChat) {
       return chat.recipient.renderDisplayName(context, ref);
     } else if (chat is GroupChat) {

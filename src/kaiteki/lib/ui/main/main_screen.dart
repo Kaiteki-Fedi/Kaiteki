@@ -17,8 +17,8 @@ import 'package:kaiteki/ui/main/fab_data.dart';
 import 'package:kaiteki/ui/main/navigation/navigation_bar.dart';
 import 'package:kaiteki/ui/main/navigation/navigation_rail.dart';
 import 'package:kaiteki/ui/main/pages/bookmarks.dart';
+import 'package:kaiteki/ui/main/pages/chats.dart';
 import 'package:kaiteki/ui/main/pages/notifications.dart';
-import 'package:kaiteki/ui/main/pages/placeholder.dart';
 import 'package:kaiteki/ui/main/pages/timeline.dart';
 import 'package:kaiteki/ui/main/tab.dart';
 import 'package:kaiteki/ui/main/tab_kind.dart';
@@ -146,7 +146,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: [
         _buildTimeline(context),
         const NotificationsPage(),
-        const PlaceholderPage(),
+        const ChatsPage(),
         const BookmarksPage(),
       ][_currentIndex],
     );

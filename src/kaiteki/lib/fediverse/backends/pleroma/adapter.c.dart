@@ -10,7 +10,7 @@ ChatMessage toChatMessage(
   return ChatMessage(
     content: message.content,
     author: message.accountId == chat.account.id
-        ? toUser(chat.account)
+        ? toUser(chat.account, currentUser.host)
         : currentUser,
     sentAt: message.createdAt,
     attachments: [
@@ -20,14 +20,14 @@ ChatMessage toChatMessage(
   );
 }
 
-ChatTarget toChatTarget(pleroma.Chat chat, User currentUser) {
+ChatTarget toChatTarget(pleroma.Chat chat, User currentUser, String localHost) {
   return DirectChat(
     source: chat,
     id: chat.id,
     lastMessage: chat.lastMessage.nullTransform((msg) {
       return toChatMessage(msg, chat, currentUser);
     }),
-    recipient: toUser(chat.account),
+    recipient: toUser(chat.account, localHost),
     createdAt: DateTime.now(),
     unreadMessages: chat.unread,
   );
