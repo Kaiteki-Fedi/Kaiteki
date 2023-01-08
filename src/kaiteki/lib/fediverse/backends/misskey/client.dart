@@ -14,6 +14,7 @@ import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart'
 import 'package:kaiteki/fediverse/backends/misskey/responses/create_app.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/create_note.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/generate_session.dart';
+import 'package:kaiteki/fediverse/backends/misskey/responses/note_translate.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
 import 'package:kaiteki/fediverse/backends/misskey/responses/userkey.dart';
 import 'package:kaiteki/http/http.dart';
@@ -628,5 +629,18 @@ class MisskeyClient {
           }.jsonBody,
         )
         .then(MisskeyFollow.fromJson.fromResponseList);
+  }
+
+  Future<NoteTranslateResponse> translateNote(
+    String noteId,
+    String targetLang,
+  ) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/notes/translate",
+          body: {"noteId": noteId, "targetLang": targetLang}.jsonBody,
+        )
+        .then(NoteTranslateResponse.fromJson.fromResponse);
   }
 }

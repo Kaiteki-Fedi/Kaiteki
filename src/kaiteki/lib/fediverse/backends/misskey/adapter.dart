@@ -21,6 +21,7 @@ import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
 import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
 import 'package:kaiteki/fediverse/interfaces/list_support.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
+import 'package:kaiteki/fediverse/interfaces/post_translation_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/interfaces/search_support.dart';
 import 'package:kaiteki/fediverse/model/model.dart';
@@ -48,7 +49,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         CustomEmojiSupport,
         NotificationSupport,
         SearchSupport,
-        ListSupport {
+        ListSupport,
+        PostTranslationSupport {
   final MisskeyClient client;
 
   @override
@@ -610,5 +612,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       null,
       users.last.followeeId,
     );
+  }
+
+  @override
+  Future<Post> translatePost(Post post, String targetLanguage) async {
+    final response = await client.translateNote(post.id, targetLanguage);
+    return post.copyWith(content: response.text);
   }
 }

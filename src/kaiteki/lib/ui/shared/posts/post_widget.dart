@@ -5,6 +5,7 @@ import 'package:kaiteki/constants.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
 import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
+import 'package:kaiteki/fediverse/interfaces/post_translation_support.dart';
 import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
 import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 import 'package:kaiteki/fediverse/model/post/post.dart';
@@ -221,7 +222,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final translator = ref.read(translatorProvider);
     final langId = ref.read(languageIdentificatorProvider);
 
-    final translationAvailable = translator != null && langId != null;
+    final genericTranslationAvailable = translator != null && langId != null;
+    final translationAvailable =
+        adapter is PostTranslationSupport || genericTranslationAvailable;
 
     return [
       if (adapter is BookmarkSupport)
@@ -255,36 +258,46 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             enabled: translationAvailable,
           ),
           value: () async {
-            if (!translationAvailable) return;
-
             final content = _post.content;
             if (content == null) return;
 
-            final displayLang = Localizations.localeOf(context).languageCode;
-            final sourceLang = await langId.identifyLanguage(content);
+            if (adapter is PostTranslationSupport) {
+              final displayLang = Localizations.localeOf(context).languageCode;
+              final translationAdapter = adapter as PostTranslationSupport;
 
-            if (sourceLang == null &&
-                !translator.supportsLanguageDetection &&
-                mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Could not determine source language."),
+              final translatedPost = await translationAdapter.translatePost(
+                _post,
+                displayLang,
+              );
+
+              setState(() => _translatedPost = translatedPost);
+            } else if (genericTranslationAvailable) {
+              final displayLang = Localizations.localeOf(context).languageCode;
+              final sourceLang = await langId.identifyLanguage(content);
+
+              if (sourceLang == null &&
+                  !translator.supportsLanguageDetection &&
+                  mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Could not determine source language."),
+                  ),
+                );
+                return;
+              }
+
+              final translatedContent = await translator.translate(
+                _post.content!,
+                displayLang,
+                sourceLang,
+              );
+
+              setState(
+                () => _translatedPost = _post.copyWith(
+                  content: translatedContent,
                 ),
               );
-              return;
             }
-
-            final translatedContent = await translator.translate(
-              _post.content!,
-              displayLang,
-              sourceLang,
-            );
-
-            setState(
-              () => _translatedPost = _post.copyWith(
-                content: translatedContent,
-              ),
-            );
           },
         )
       else
