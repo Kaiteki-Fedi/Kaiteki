@@ -169,11 +169,12 @@ class ChatMessageWidget extends ConsumerWidget {
                     // FIXME(Craftplacer): Attachment display changes are not compatible
                     if (message.attachments.isNotEmpty == true)
                       ConstrainedBox(
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           maxHeight: 300,
                         ),
                         child: AttachmentWidget(
-                            attachment: message.attachments.first),
+                          attachment: message.attachments.first,
+                        ),
                       ),
                   ],
                 ),

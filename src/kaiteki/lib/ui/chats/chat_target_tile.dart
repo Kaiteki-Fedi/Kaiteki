@@ -48,7 +48,7 @@ class ChatTargetTile extends ConsumerWidget {
 
     final content = lastMessage.content;
     if (content != null) {
-      final renderedContent = const TextRenderer().render(
+      final renderedContent = render(
         context,
         content,
         textContext: TextContext(

@@ -149,7 +149,7 @@ class _UserInfoFieldRow extends ConsumerWidget {
         ),
         const SizedBox(height: 4.0),
         Text.rich(
-          const TextRenderer().render(
+          render(
             context,
             field.value,
             textContext: TextContext(emojis: emojis),
