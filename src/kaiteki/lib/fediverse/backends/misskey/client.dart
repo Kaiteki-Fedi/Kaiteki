@@ -96,15 +96,14 @@ class MisskeyClient {
         .then(misskey.Note.fromJson.fromResponse);
   }
 
-  Future<misskey.Note> createRenote(String renoteId) async {
-    // FIXME(Craftplacer): Properly parse Misskey create note response
+  Future<CreateNoteResponse> createRenote(String renoteId) async {
     return client
         .sendRequest(
           HttpMethod.post,
           "api/notes/create",
           body: {"renoteId": renoteId}.jsonBody,
         )
-        .then(misskey.Note.fromJson.fromResponse);
+        .then(CreateNoteResponse.fromJson.fromResponse);
   }
 
   Future<GenerateSessionResponse> generateSession(
