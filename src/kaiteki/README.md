@@ -10,8 +10,13 @@ Currently, Kaiteki is still in a **proof-of-concept/alpha stage**, with simple M
 ## Screenshots
 
 <table>
-    <td><img src="/assets/screenshots/misskey-feed-phone.jpg" width="110" alt="Screenshot of a Misskey feed inside Kaiteki on a phone"></td>
-    <td><img src="/assets/screenshots/pleroma-user-tablet.jpg" width="400" alt="Screenshot of an user inside Kaiteki on a tablet"></td>
+    <tr>
+        <td><img src="/fastlane/metadata/android/en-US/images/sevenInchScreenshots/0.png" alt="Screenshot"></td>
+        <td><img src="/fastlane/metadata/android/en-US/images/sevenInchScreenshots/1.png" alt="Screenshot"></td>    
+    </tr>
+    <tr>
+        <td><img src="/fastlane/metadata/android/en-US/images/sevenInchScreenshots/2.png" alt="Screenshot"></td>
+    </tr>
 </table>
 
 ## Platforms & Releases
@@ -23,14 +28,6 @@ Kaiteki is available for Web, Windows, Linux and Android. Check out [the release
 Kaiteki is also available on IzzyOnDroid's F-Droid repository.
 
 <a href="https://apt.izzysoft.de/fdroid/index/apk/moe.craftplacer.kaiteki"><img src="/.github/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="64"/></a>
-
-## What's working, what's missing?
-
-Currently, Kaiteki only allows viewing timelines, making text posts and viewing users.
-
-Most important API calls for Misskey, Mastodon/Pleroma are already implemented but need a UI implementation.
-
-Other features that are missing are extensive settings, unit tests, and many other things. **If you'd like to contribute, feel free to do so.**
 
 ## Compiling Kaiteki
 
