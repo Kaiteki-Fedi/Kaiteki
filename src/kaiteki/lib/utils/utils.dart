@@ -45,41 +45,6 @@ bool isUnsuccessfulStatusCode(int code) {
   return 400 <= code && code < 600;
 }
 
-SnackBar generateAsyncSnackBar({
-  required BuildContext context,
-  required bool done,
-  required Text text,
-  required Icon icon,
-  required Color? foreColor,
-  SnackBarAction? action,
-}) {
-  return SnackBar(
-    content: Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 18.0),
-          child: Stack(
-            children: [
-              CircularProgressIndicator(value: done ? 1 : null),
-              Positioned.fill(
-                child: Align(
-                  child: IconTheme(
-                    data: IconThemeData(color: foreColor),
-                    child: icon,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        text,
-      ],
-    ),
-    action: action,
-    duration: done ? const Duration(seconds: 4) : const Duration(days: 1),
-  );
-}
-
 List<Tuple2<Type, StackTrace>> collectStackTraces(dynamic error) {
   final list = <Tuple2<Type, StackTrace>>[
     if (error.stackTrace is StackTrace)

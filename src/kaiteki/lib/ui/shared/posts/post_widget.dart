@@ -27,7 +27,6 @@ import 'package:kaiteki/ui/shared/posts/subject_bar.dart';
 import 'package:kaiteki/ui/shortcuts/activators.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
 import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki_material/kaiteki_material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
@@ -388,16 +387,10 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
-              children: [
-                const TextInheritedIconTheme(child: Icon(Icons.check_rounded)),
-                const SizedBox(width: 8),
-                Text(
-                  _post.state.bookmarked
-                      ? l10n.postBookmarkRemoved
-                      : l10n.postBookmarkAdded,
-                ),
-              ],
+            content: Text(
+              _post.state.bookmarked
+                  ? l10n.postBookmarkRemoved
+                  : l10n.postBookmarkAdded,
             ),
           ),
         );
