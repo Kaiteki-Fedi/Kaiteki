@@ -17,10 +17,10 @@ import 'package:kaiteki/ui/auth/login/pages/instance_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/mfa_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/oauth_page.dart';
 import 'package:kaiteki/ui/auth/login/pages/user_page.dart';
-import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
 import 'package:kaiteki/ui/shared/common.dart';
 import 'package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki_material/kaiteki_material.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
