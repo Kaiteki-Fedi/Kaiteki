@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kaiteki/di.dart';
+import 'package:kaiteki/services/updates.dart';
 import 'package:kaiteki/ui/settings/locale_list_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -38,9 +39,44 @@ class SettingsScreen extends StatelessWidget {
               title: Text(l10n.settingsDebugMaintenance),
               onTap: () => context.push("/settings/debug"),
             ),
+            const CheckForUpdatesListTile(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class CheckForUpdatesListTile extends ConsumerWidget {
+  const CheckForUpdatesListTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: const Icon(Icons.update_rounded),
+      title: const Text("Check for updates"),
+      onTap: () async {
+        final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+        final controller = scaffoldMessenger.showSnackBar(
+          const SnackBar(
+            content: Text("Checking for new updates..."),
+            duration: Duration(days: 1),
+          ),
+        );
+
+        final release = await ref.refresh(updateServiceProvider.future);
+
+        controller.close();
+
+        if (release == null) {
+          scaffoldMessenger.showSnackBar(
+            const SnackBar(content: Text("No new updates found.")),
+          );
+        }
+      },
     );
   }
 }

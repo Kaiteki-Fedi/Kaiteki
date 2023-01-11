@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:animations/animations.dart';
 import 'package:breakpoint/breakpoint.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
@@ -11,6 +16,7 @@ import 'package:kaiteki/fediverse/model/model.dart';
 import 'package:kaiteki/fediverse/services/notifications.dart';
 import 'package:kaiteki/platform_checks.dart';
 import 'package:kaiteki/preferences/app_experiment.dart';
+import 'package:kaiteki/services/updates.dart';
 import 'package:kaiteki/theming/kaiteki/text_theme.dart';
 import 'package:kaiteki/ui/main/drawer.dart';
 import 'package:kaiteki/ui/main/fab_data.dart';
@@ -29,7 +35,11 @@ import 'package:kaiteki/ui/main/views/videos.dart';
 import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
 import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
 import 'package:kaiteki/ui/shortcuts/intents.dart';
+import 'package:kaiteki/ui/update/dismiss_update_dialog.dart';
 import 'package:kaiteki/utils/extensions.dart';
+import 'package:kaiteki_material/kaiteki_material.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path/path.dart' as path;
 
 class MainScreen extends ConsumerStatefulWidget {
   @visibleForTesting
@@ -129,6 +139,109 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         "compose",
         params: ref.accountRouterParams,
       );
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(updateServiceProvider.future).then((release) {
+      if (release == null) return;
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      scaffoldMessenger.showMaterialBanner(
+        MaterialBanner(
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            child: Icon(
+              Icons.update_rounded,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
+          forceActionsBelow: true,
+          actions: [
+            TextButton(
+              onPressed: () async {
+                final result = await showDialog(
+                  context: context,
+                  builder: (_) => const DismissUpdateDialog(),
+                );
+                if (result is bool) {
+                  scaffoldMessenger.hideCurrentMaterialBanner();
+                }
+              },
+              child: Text(
+                context.materialL10n.modalBarrierDismissLabel,
+              ),
+            ),
+            AsyncButton.progress(
+              onPressed: () async* {
+                if (kIsWeb) return; // Web doesn't update
+                if (Platform.isAndroid) {
+                  final info = await DeviceInfoPlugin().androidInfo;
+                  final abi = info.supportedAbis.first.split("-").first;
+                  final KaitekiReleaseUrlType urlType;
+
+                  switch (abi) {
+                    case "arm64":
+                      urlType = KaitekiReleaseUrlType.androidApkArm64;
+                      break;
+                    case "armeabi":
+                      urlType = KaitekiReleaseUrlType.androidApkArm32;
+                      break;
+                    default:
+                      throw Exception("Unknown ABI $abi");
+                  }
+
+                  final fileUrl = release.urls[urlType];
+                  if (fileUrl == null) {
+                    throw Exception("Release had no URLs for $urlType");
+                  }
+
+                  final filePath = path.join(
+                    Directory.systemTemp.path,
+                    "update.apk",
+                  );
+                  final file = File(filePath);
+                  IOSink? sink;
+
+                  try {
+                    final response = await http.Request("GET", fileUrl).send();
+                    var received = 0;
+                    if (response.statusCode == 200) {
+                      sink = file.openWrite();
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Downloading update...")),
+                      );
+
+                      await for (final chunk in response.stream) {
+                        sink.add(chunk);
+                        yield (received += chunk.length) /
+                            response.contentLength!;
+                      }
+                    }
+                  } finally {
+                    sink?.close();
+                  }
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Installing update...")),
+                  );
+
+                  final result = await OpenFilex.open(
+                    filePath,
+                    type: "application/vnd.android.package-archive",
+                  );
+
+                  if (result.type != ResultType.done) {}
+                }
+              },
+              child: Text("Update"),
+            ),
+          ],
+          content: Text("Update ${release.versionName} is available"),
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

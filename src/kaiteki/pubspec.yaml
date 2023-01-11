@@ -39,6 +39,7 @@ dependencies:
   flutter_local_notifications: ^13.0.0
   flutter_localizations:
     sdk: flutter
+  flutter_markdown: ^0.6.13
   flutter_native_splash: ^2.2.8
   flutter_riverpod: ^2.0.2
   flutter_simple_treeview: ^3.0.1
@@ -63,6 +64,7 @@ dependencies:
   meta: ^1.8.0
   oauth1:
     git: https://github.com/Kaiteki-Fedi/dart-oauth1.git
+  open_filex: ^4.3.2
   page_view_dot_indicator: ^2.0.0
   path: ^1.8.1
   path_provider: ^2.0.11

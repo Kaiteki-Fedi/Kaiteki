@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:html/dom.dart';
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/adapter.dart';
 import 'package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart';
 import 'package:kaiteki/fediverse/backends/misskey/adapter.dart';
 import 'package:kaiteki/fediverse/model/chat_message.dart';
