@@ -242,15 +242,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-web
     if: github.event_name != 'pull_request'
-	concurrency:
-	  group: "pages"
-	  cancel-in-progress: true
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true
     steps:
-    - name: Download web artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: web
-        path: ./web-publish
+      - name: Download web artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: web
+          path: ./web-publish
 
       - name: Setup Pages
         uses: actions/configure-pages@v2deployment
