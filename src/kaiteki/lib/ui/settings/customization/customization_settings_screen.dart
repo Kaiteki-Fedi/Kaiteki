@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/settings/customization/customization_basic_page.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/settings/customization/customization_basic_page.dart";
 
 class CustomizationSettingsScreen extends StatefulWidget {
   const CustomizationSettingsScreen({super.key});

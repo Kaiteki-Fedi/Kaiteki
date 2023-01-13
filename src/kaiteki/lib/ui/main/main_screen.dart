@@ -1,35 +1,35 @@
-import 'package:animations/animations.dart';
-import 'package:breakpoint/breakpoint.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
-import 'package:kaiteki/fediverse/interfaces/search_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/services/notifications.dart';
-import 'package:kaiteki/platform_checks.dart';
-import 'package:kaiteki/preferences/app_experiment.dart';
-import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/ui/main/drawer.dart';
-import 'package:kaiteki/ui/main/fab_data.dart';
-import 'package:kaiteki/ui/main/navigation/navigation_bar.dart';
-import 'package:kaiteki/ui/main/navigation/navigation_rail.dart';
-import 'package:kaiteki/ui/main/pages/bookmarks.dart';
-import 'package:kaiteki/ui/main/pages/chats.dart';
-import 'package:kaiteki/ui/main/pages/notifications.dart';
-import 'package:kaiteki/ui/main/pages/timeline.dart';
-import 'package:kaiteki/ui/main/tab.dart';
-import 'package:kaiteki/ui/main/tab_kind.dart';
-import 'package:kaiteki/ui/main/views/catalog.dart';
-import 'package:kaiteki/ui/main/views/deck.dart';
-import 'package:kaiteki/ui/main/views/fox.dart';
-import 'package:kaiteki/ui/main/views/videos.dart';
-import 'package:kaiteki/ui/shared/account_switcher_widget.dart';
-import 'package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart';
-import 'package:kaiteki/ui/shortcuts/intents.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:animations/animations.dart";
+import "package:breakpoint/breakpoint.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/constants.dart" as consts;
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/notification_support.dart";
+import "package:kaiteki/fediverse/interfaces/search_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/services/notifications.dart";
+import "package:kaiteki/platform_checks.dart";
+import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/main/drawer.dart";
+import "package:kaiteki/ui/main/fab_data.dart";
+import "package:kaiteki/ui/main/navigation/navigation_bar.dart";
+import "package:kaiteki/ui/main/navigation/navigation_rail.dart";
+import "package:kaiteki/ui/main/pages/bookmarks.dart";
+import "package:kaiteki/ui/main/pages/chats.dart";
+import "package:kaiteki/ui/main/pages/notifications.dart";
+import "package:kaiteki/ui/main/pages/timeline.dart";
+import "package:kaiteki/ui/main/tab.dart";
+import "package:kaiteki/ui/main/tab_kind.dart";
+import "package:kaiteki/ui/main/views/catalog.dart";
+import "package:kaiteki/ui/main/views/deck.dart";
+import "package:kaiteki/ui/main/views/fox.dart";
+import "package:kaiteki/ui/main/views/videos.dart";
+import "package:kaiteki/ui/shared/account_switcher_widget.dart";
+import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
+import "package:kaiteki/ui/shortcuts/intents.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class MainScreen extends ConsumerStatefulWidget {
   @visibleForTesting
@@ -90,14 +90,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   int? _fetchNotificationCount() {
-    final account = ref.watch(accountProvider)!;
+    final account = ref.watch(accountProvider);
 
+    if (account == null) return null;
     if (account.adapter is! NotificationSupport) return null;
 
-    final notifications = ref.watch(
-      notificationServiceProvider(account.key),
-    );
-
+    final notifications = ref.watch(notificationServiceProvider(account.key));
     return notifications.valueOrNull?.where((n) => n.unread != false).length;
   }
 

@@ -1,7 +1,7 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:kaiteki/fediverse/backends/pleroma/client.dart';
-import 'package:test/test.dart';
+import "package:kaiteki/fediverse/backends/pleroma/client.dart";
+import "package:test/test.dart";
 
 void main() {
   late PleromaClient client;

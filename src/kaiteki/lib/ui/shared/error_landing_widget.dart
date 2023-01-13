@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class ErrorLandingWidget extends StatelessWidget {
-  final dynamic error;
-  final dynamic stackTrace;
+  final Object error;
+  final StackTrace? stackTrace;
   final VoidCallback? onRetry;
 
   const ErrorLandingWidget({
@@ -19,7 +19,7 @@ class ErrorLandingWidget extends StatelessWidget {
     AsyncSnapshot snapshot, {
     super.key,
     this.onRetry,
-  })  : error = snapshot.error,
+  })  : error = snapshot.error!,
         stackTrace = snapshot.stackTrace;
 
   @override

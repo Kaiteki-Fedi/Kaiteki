@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/theming/kaiteki/colors.dart';
-import 'package:kaiteki/ui/shared/posts/count_button.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/ui/shared/posts/count_button.dart";
 
 class InteractionBar extends StatelessWidget {
   const InteractionBar({
@@ -74,7 +74,6 @@ class InteractionBar extends StatelessWidget {
       PopupMenuButton(
         icon: const Icon(Icons.more_horiz),
         itemBuilder: buildActions,
-        onSelected: (callback) => (callback as VoidCallback).call(),
         splashRadius: 18,
       ),
     ];

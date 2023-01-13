@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 
 /// A widget that displays an emoji.
 class EmojiWidget extends StatelessWidget {

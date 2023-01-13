@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart'
+import "package:flutter/material.dart"
     show DoNothingAndStopPropagationTextIntent;
-import 'package:flutter/widgets.dart'
+import "package:flutter/widgets.dart"
     show Intent, ShortcutActivator, WidgetsApp;
-import 'package:kaiteki/ui/shortcuts/activators.dart';
-import 'package:kaiteki/ui/shortcuts/intents.dart';
+import "package:kaiteki/ui/shortcuts/activators.dart";
+import "package:kaiteki/ui/shortcuts/intents.dart";
 
 final shortcuts = <ShortcutActivator, Intent>{
   ...WidgetsApp.defaultShortcuts,

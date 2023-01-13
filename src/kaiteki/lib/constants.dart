@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart' show BoxConstraints;
+import "package:flutter/foundation.dart";
+import "package:flutter/rendering.dart" show BoxConstraints;
 
 const String appName = "Kaiteki";
 const String appWebsite = "https://craftplacer.moe/projects/kaiteki";

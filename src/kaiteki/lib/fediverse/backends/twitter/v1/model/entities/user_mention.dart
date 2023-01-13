@@ -1,7 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'user_mention.g.dart';
+part "user_mention.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class UserMention extends Entity {
@@ -18,8 +19,7 @@ class UserMention extends Entity {
     required List<int> indices,
   }) : super(indices);
 
-  factory UserMention.fromJson(Map<String, dynamic> json) =>
-      _$UserMentionFromJson(json);
+  factory UserMention.fromJson(JsonMap json) => _$UserMentionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserMentionToJson(this);
+  JsonMap toJson() => _$UserMentionToJson(this);
 }

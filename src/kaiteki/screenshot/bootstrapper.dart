@@ -1,19 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/model/auth/account.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/preferences/app_preferences.dart';
-import 'package:kaiteki/theming/default/themes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:kaiteki/account_manager.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/theming/default/themes.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
-import 'dummy_repository.dart';
-import 'example_data.dart';
-import 'mastodon.dart';
+import "dummy_repository.dart";
+import "example_data.dart";
+import "mastodon.dart";
 
 class Bootstrapper {
   final BackendAdapter adapter;
@@ -52,6 +52,7 @@ class Bootstrapper {
   }
 
   Widget wrap(Widget child) {
+    final locale = this.locale;
     return ProviderScope(
       overrides: [
         accountManagerProvider.overrideWith((_) => accountManager),
@@ -71,7 +72,7 @@ class Bootstrapper {
           useInheritedMediaQuery: true,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: locale != null ? Locale(locale!) : const Locale("en"),
+          locale: locale != null ? Locale(locale) : const Locale("en"),
           theme: getDefaultTheme(Brightness.light, true),
         ),
       ),

@@ -1,4 +1,4 @@
-import 'package:kaiteki/fediverse/model/model.dart';
+import "package:kaiteki/fediverse/model/model.dart";
 
 abstract class AdapterCapabilities {
   /// Specifies what the adapter supports post scopes (i.e. visibilities).

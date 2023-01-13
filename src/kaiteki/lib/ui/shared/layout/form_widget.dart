@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart' as consts;
+import "package:flutter/material.dart";
+import "package:kaiteki/constants.dart" as consts;
 
 typedef FormWidgetBuilder = Widget Function(
   BuildContext context,

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/settings/locale_list_tile.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/settings/locale_list_tile.dart";
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

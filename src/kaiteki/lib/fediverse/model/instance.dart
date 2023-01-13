@@ -1,4 +1,4 @@
-import 'package:kaiteki/fediverse/model/adapted_entity.dart';
+import "package:kaiteki/fediverse/model/adapted_entity.dart";
 
 class Instance<T> extends AdaptedEntity<T> {
   final String name;

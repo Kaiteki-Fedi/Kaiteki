@@ -1,7 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'media.g.dart';
+part "media.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Media extends Entity {
@@ -40,7 +41,7 @@ class Media extends Entity {
     required List<int> indices,
   }) : super(indices);
 
-  factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
+  factory Media.fromJson(JsonMap json) => _$MediaFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MediaToJson(this);
+  JsonMap toJson() => _$MediaToJson(this);
 }

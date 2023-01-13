@@ -1,33 +1,40 @@
-import 'package:breakpoint/breakpoint.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:html/dom.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart';
-import 'package:kaiteki/fediverse/backends/misskey/adapter.dart';
-import 'package:kaiteki/fediverse/model/chat_message.dart';
-import 'package:kaiteki/fediverse/model/post/post.dart';
-import 'package:kaiteki/fediverse/model/user/reference.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:kaiteki/utils/helpers.dart';
-import 'package:kaiteki/utils/text/parsers.dart';
-import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:tuple/tuple.dart';
+import "package:breakpoint/breakpoint.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:html/dom.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
+import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
+import "package:kaiteki/fediverse/model/chat_message.dart";
+import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/fediverse/model/user/reference.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/utils/helpers.dart";
+import "package:kaiteki/utils/text/parsers.dart";
+import "package:kaiteki/utils/text/text_renderer.dart";
+import "package:kaiteki/utils/utils.dart";
+import "package:tuple/tuple.dart";
 
-export 'package:kaiteki/utils/extensions/build_context.dart';
-export 'package:kaiteki/utils/extensions/duration.dart';
-export 'package:kaiteki/utils/extensions/enum.dart';
-export 'package:kaiteki/utils/extensions/iterable.dart';
-export 'package:kaiteki/utils/extensions/m3.dart';
-export 'package:kaiteki/utils/extensions/string.dart';
+export "package:kaiteki/utils/extensions/build_context.dart";
+export "package:kaiteki/utils/extensions/duration.dart";
+export "package:kaiteki/utils/extensions/enum.dart";
+export "package:kaiteki/utils/extensions/iterable.dart";
+export "package:kaiteki/utils/extensions/m3.dart";
+export "package:kaiteki/utils/extensions/string.dart";
 
 extension ObjectExtensions<T> on T? {
   S? nullTransform<S>(S Function(T object) function) {
     final value = this;
     if (value == null) return null;
     return function.call(value);
+  }
+
+  T inlineBang(String description) {
+    final value = this;
+    if (value == null) throw Exception(description);
+    return value;
   }
 }
 
@@ -265,7 +272,7 @@ extension QueryExtension on Map<String, String> {
 extension UriExtensions on Uri {
   Tuple2<String, String> get fediverseHandle {
     var username = pathSegments.last;
-    if (username[0] == '@') {
+    if (username[0] == "@") {
       username = username.substring(1);
     }
     return Tuple2(host, username);
@@ -278,23 +285,23 @@ extension ListExtensions<T> on List<T> {
 
     return List<T>.generate(
       length * 2 - 1,
-      (i) => i % 2 == 0 ? this[i ~/ 2] : separator,
+      (i) => i.isEven ? this[i ~/ 2] : separator,
     );
   }
 }
 
 extension NullableObjectExtensions on Object? {}
 
-extension FunctionExtensions<T> on T Function(Map<String, dynamic>) {
+extension FunctionExtensions<T> on T Function(JsonMap) {
   T Function(Object?) get generic {
-    return (obj) => this(obj as Map<String, dynamic>);
+    return (obj) => this(obj! as JsonMap);
   }
 
   List<T>? Function(Object?) get genericList {
     return (obj) {
       if (obj == null) return null;
       final list = obj as List<dynamic>;
-      final castedList = list.cast<Map<String, dynamic>>();
+      final castedList = list.cast<JsonMap>();
       return castedList.map(this).toList();
     };
   }

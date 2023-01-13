@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'timeline.g.dart';
+part "timeline.g.dart";
 
 @JsonSerializable(includeIfNull: false, createFactory: false)
 class MisskeyTimelineRequest {
@@ -28,5 +29,5 @@ class MisskeyTimelineRequest {
     this.withFiles,
   });
 
-  Map<String, dynamic> toJson() => _$MisskeyTimelineRequestToJson(this);
+  JsonMap toJson() => _$MisskeyTimelineRequestToJson(this);
 }

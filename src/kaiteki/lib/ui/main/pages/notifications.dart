@@ -1,18 +1,18 @@
-import 'package:animations/animations.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' hide Notification;
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
-import 'package:kaiteki/fediverse/model/notification.dart';
-import 'package:kaiteki/fediverse/services/notifications.dart';
-import 'package:kaiteki/theming/kaiteki/colors.dart';
-import 'package:kaiteki/ui/animation_functions.dart' as animations;
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:animations/animations.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart" hide Notification;
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/notification_support.dart";
+import "package:kaiteki/fediverse/model/notification.dart";
+import "package:kaiteki/fediverse/services/notifications.dart";
+import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/ui/animation_functions.dart" as animations;
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
@@ -24,7 +24,10 @@ class NotificationsPage extends ConsumerStatefulWidget {
 class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider)!;
+    final account = ref.watch(accountProvider);
+
+    if (account == null) return IconLandingWidget.notSignedIn();
+
     if (account.adapter is! NotificationSupport) {
       return const Center(
         child: IconLandingWidget(
@@ -118,7 +121,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                               final messenger = ScaffoldMessenger.of(context);
                               service
                                   .markAllAsRead()
-                                  .onError((error, stackTrace) {
+                                  .onError<Object>((error, stackTrace) {
                                 messenger.showSnackBar(
                                   SnackBar(
                                     content: const Text(

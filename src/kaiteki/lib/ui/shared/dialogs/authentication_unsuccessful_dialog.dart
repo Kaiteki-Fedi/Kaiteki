@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
-import 'package:kaiteki/ui/shared/dialogs/exception_dialog.dart';
-import 'package:tuple/tuple.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/constants.dart";
+import "package:kaiteki/exceptions/instance_unreachable_exception.dart";
+import "package:kaiteki/ui/shared/dialogs/exception_dialog.dart";
+import "package:tuple/tuple.dart";
 
 class AuthenticationUnsuccessfulDialog extends StatelessWidget {
-  final Tuple2<dynamic, StackTrace?> error;
+  final Tuple2<Object, StackTrace?> error;
 
   const AuthenticationUnsuccessfulDialog({super.key, required this.error});
 

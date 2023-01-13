@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:kaiteki/constants.dart' show dialogConstraints;
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shortcuts/activators.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki_material/kaiteki_material.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:kaiteki/constants.dart" show dialogConstraints;
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shortcuts/activators.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_material/kaiteki_material.dart";
 
 class KeyboardShortcutsDialog extends StatelessWidget {
   const KeyboardShortcutsDialog({super.key});

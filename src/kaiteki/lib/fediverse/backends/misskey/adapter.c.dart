@@ -1,4 +1,24 @@
-part of 'adapter.dart';
+part of "adapter.dart";
+
+final misskeyNotificationTypeRosetta = Rosetta(const {
+  misskey.NotificationType.follow: NotificationType.followed,
+  misskey.NotificationType.mention: NotificationType.mentioned,
+  misskey.NotificationType.reply: NotificationType.replied,
+  misskey.NotificationType.renote: NotificationType.repeated,
+  misskey.NotificationType.quote: NotificationType.quoted,
+  misskey.NotificationType.reaction: NotificationType.reacted,
+  misskey.NotificationType.pollEnded: NotificationType.pollEnded,
+  misskey.NotificationType.receiveFollowRequest: NotificationType.followRequest,
+  misskey.NotificationType.followRequestAccepted: NotificationType.followed,
+  misskey.NotificationType.groupInvited: NotificationType.groupInvite,
+});
+
+final misskeyVisibilityRosetta = Rosetta<String, Visibility>(const {
+  "specified": Visibility.direct,
+  "followers": Visibility.followersOnly,
+  "home": Visibility.unlisted,
+  "public": Visibility.public,
+});
 
 Post toPost(misskey.Note source, String localHost) {
   final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji).toList();
@@ -23,16 +43,16 @@ Post toPost(misskey.Note source, String localHost) {
       return Reaction(
         count: mkr.value,
         includesMe: mkr.key == source.myReaction,
-        users: [],
         emoji: getEmojiFromString(mkr.key, mappedEmoji),
       );
     }).toList(),
     replyTo: replyTo,
-    repeatOf: source.renote == null ? null : toPost(source.renote!, localHost),
+    repeatOf: source.renote.nullTransform((n) => toPost(n, localHost)),
     id: source.id,
-    visibility: toVisibility(source.visibility),
+    visibility: misskeyVisibilityRosetta.getRight(source.visibility),
     attachments: source.files?.map(toAttachment).toList(),
-    externalUrl: source.url == null ? null : Uri.parse(source.url!),
+    // FIXME(Craftplacer): Change to Uri?
+    externalUrl: source.url.nullTransform(Uri.parse),
     metrics: PostMetrics(
       repeatCount: source.renoteCount,
       replyCount: source.repliesCount,
@@ -52,17 +72,6 @@ Emoji getEmojiFromString(String key, List<CustomEmoji> mappedEmoji) {
   if (emoji == null) return UnicodeEmoji(key);
 
   return emoji;
-}
-
-Visibility toVisibility(String visibility) {
-  const stringToVisibility = {
-    "public": Visibility.public,
-    "home": Visibility.unlisted,
-    "followers": Visibility.followersOnly,
-    "specified": Visibility.direct,
-  };
-
-  return stringToVisibility[visibility]!;
 }
 
 Attachment toAttachment(misskey.DriveFile file) {
@@ -103,9 +112,9 @@ CustomEmoji toEmoji(misskey.Emoji emoji) {
 User toUser(misskey.User source, String localHost) {
   return User(
     avatarUrl: source.avatarUrl,
-    avatarBlurHash: source.avatarBlurhash,
+    avatarBlurHash: source.avatarBlurhash as String?,
     bannerUrl: source.bannerUrl,
-    bannerBlurHash: source.bannerBlurhash,
+    bannerBlurHash: source.bannerBlurhash as String?,
     description: source.description,
     displayName: source.name,
     emojis: source.emojis.map(toEmoji),
@@ -144,13 +153,16 @@ User toUserFromLite(misskey.UserLite source, String localHost) {
   );
 }
 
-Map<String, String>? _parseFields(Iterable<Map<String, dynamic>>? fields) {
-  if (fields == null) {
-    return null;
-  }
+Map<String, String>? _parseFields(Iterable<JsonMap>? fields) {
+  if (fields == null) return null;
 
   return Map<String, String>.fromEntries(
-    fields.map((o) => MapEntry(o["name"], o["value"])),
+    fields.map(
+      (e) => MapEntry(
+        e["name"] as String,
+        e["value"] as String,
+      ),
+    ),
   );
 }
 
@@ -194,32 +206,12 @@ Notification toNotification(
   misskey.Notification notification,
   String localHost,
 ) {
-  final type = const {
-    misskey.NotificationType.follow: NotificationType.followed,
-    misskey.NotificationType.mention: NotificationType.mentioned,
-    misskey.NotificationType.reply: NotificationType.replied,
-    misskey.NotificationType.renote: NotificationType.repeated,
-    misskey.NotificationType.quote: NotificationType.quoted,
-    misskey.NotificationType.reaction: NotificationType.reacted,
-    misskey.NotificationType.pollEnded: NotificationType.pollEnded,
-    misskey.NotificationType.receiveFollowRequest:
-        NotificationType.followRequest,
-    misskey.NotificationType.followRequestAccepted: NotificationType.followed,
-    misskey.NotificationType.groupInvited: NotificationType.groupInvite,
-  }[notification.type];
-
-  if (type == null) {
-    throw UnsupportedError(
-      "Kaiteki does not support ${notification.type} as notification type",
-    );
-  }
-
   final note = notification.note;
   final user = notification.user;
 
   return Notification(
     createdAt: notification.createdAt,
-    type: type,
+    type: misskeyNotificationTypeRosetta.getRight(notification.type),
     user: user == null ? null : toUserFromLite(user, localHost),
     post: note == null ? null : toPost(note, localHost),
     unread: !notification.isRead,

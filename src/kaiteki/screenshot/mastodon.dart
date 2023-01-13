@@ -1,9 +1,9 @@
-import 'package:kaiteki/fediverse/backends/mastodon/adapter.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart';
-import 'package:kaiteki/fediverse/model/post/post.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
+import "package:kaiteki/fediverse/backends/mastodon/adapter.dart";
+import "package:kaiteki/fediverse/backends/mastodon/client.dart";
+import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
+import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
 
 class TrendingMastodonAdapter extends MastodonAdapter {
   factory TrendingMastodonAdapter(String instance) {

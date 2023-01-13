@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'token_response.g.dart';
+part "token_response.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class TokenResponse {
@@ -18,8 +19,7 @@ class TokenResponse {
     required this.refreshToken,
   });
 
-  factory TokenResponse.fromJson(Map<String, dynamic> json) =>
-      _$TokenResponseFromJson(json);
+  factory TokenResponse.fromJson(JsonMap json) => _$TokenResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TokenResponseToJson(this);
+  JsonMap toJson() => _$TokenResponseToJson(this);
 }

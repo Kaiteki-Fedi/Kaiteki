@@ -1,6 +1,6 @@
-import 'package:kaiteki/fediverse/backends/mastodon/capabilities.dart';
-import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:kaiteki/fediverse/model/formatting.dart';
+import "package:kaiteki/fediverse/backends/mastodon/capabilities.dart";
+import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
+import "package:kaiteki/fediverse/model/formatting.dart";
 
 class PleromaCapabilities extends MastodonCapabilities
     implements ReactionSupportCapabilities {

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/constants.dart";
 
 const _iconSize = 192.0;
 List<UserBenefit> get benefits {

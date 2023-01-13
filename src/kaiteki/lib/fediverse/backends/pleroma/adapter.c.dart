@@ -1,4 +1,4 @@
-part of 'adapter.dart';
+part of "adapter.dart";
 
 ChatMessage toChatMessage(
   pleroma.ChatMessage message,

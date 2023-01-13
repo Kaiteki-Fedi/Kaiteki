@@ -1,7 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'media.g.dart';
+part "media.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Media {
@@ -25,7 +26,7 @@ class Media {
     this.altText,
   });
 
-  factory Media.fromJson(Map<String, dynamic> json) => _$MediaFromJson(json);
+  factory Media.fromJson(JsonMap json) => _$MediaFromJson(json);
 }
 
 @JsonEnum(fieldRename: FieldRename.snake)

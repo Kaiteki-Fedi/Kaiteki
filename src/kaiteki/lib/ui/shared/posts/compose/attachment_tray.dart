@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/ui/shared/posts/compose/attachment_tray_item.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/model/attachment.dart";
+import "package:kaiteki/ui/shared/posts/compose/attachment_tray_item.dart";
 
 class AttachmentTray extends StatelessWidget {
   final Function(int index)? onRemoveAttachment;

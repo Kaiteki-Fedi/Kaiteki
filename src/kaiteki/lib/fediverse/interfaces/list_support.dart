@@ -1,5 +1,5 @@
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
 
 abstract class ListSupport {
   Future<List<PostList>> getLists();

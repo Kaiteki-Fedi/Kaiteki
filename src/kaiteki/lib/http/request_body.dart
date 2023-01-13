@@ -1,5 +1,7 @@
-import 'dart:convert';
-import 'dart:typed_data';
+import "dart:convert";
+import "dart:typed_data";
+
+import "package:kaiteki/utils/utils.dart";
 
 /// A class that abstracts the body and content type of a HTTP request.
 class RequestBody {
@@ -58,6 +60,6 @@ class JsonRequestBody implements RequestBody {
   const JsonRequestBody._(this.body);
 }
 
-extension JsonRequestBodyExtension<T> on Map<String, dynamic> {
+extension JsonRequestBodyExtension<T> on JsonMap {
   JsonRequestBody get jsonBody => JsonRequestBody(this);
 }

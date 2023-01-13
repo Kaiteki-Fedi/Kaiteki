@@ -1,4 +1,4 @@
-part of 'adapter.dart';
+part of "adapter.dart";
 
 Post toPost(twitter.Tweet tweet) {
   final content = removeEntities(tweet.text, tweet.entities);
@@ -16,8 +16,8 @@ Post toPost(twitter.Tweet tweet) {
       repeatCount: tweet.retweetCount,
     ),
     attachments: tweet.entities.media?.map(toAttachment).toList(),
-    replyToUser: tweet.inReplyToUserIdStr?.nullTransform(ResolvableUser.fromId),
-    replyTo: tweet.inReplyToStatusIdStr?.nullTransform(ResolvablePost.fromId),
+    replyToUser: tweet.inReplyToUserIdStr.nullTransform(ResolvableUser.fromId),
+    replyTo: tweet.inReplyToStatusIdStr.nullTransform(ResolvablePost.fromId),
     mentionedUsers: tweet.entities.userMentions?.map((e) {
       return UserReference(e.idStr);
     }).toList(),
@@ -36,18 +36,20 @@ String removeEntities(
     return text;
   }
 
+  var replacedText = text;
+
   final totalEntities = entities.aggregated
     ..sort((a, b) => a.indices[0].compareTo(b.indices[0]));
 
   for (final entity in totalEntities) {
     if (entity is Media && removeMediaLinks) {
-      text = text.replaceRange(
+      replacedText = text.replaceRange(
         entity.indices[0],
         entity.indices[1],
         "",
       );
     } else if (entity is Url && expandLinks) {
-      text = text.replaceRange(
+      replacedText = text.replaceRange(
         entity.indices[0],
         entity.indices[1],
         entity.expandedUrl,
@@ -55,7 +57,7 @@ String removeEntities(
     }
   }
 
-  return text;
+  return replacedText;
 }
 
 User toUser(twitter.User user) {

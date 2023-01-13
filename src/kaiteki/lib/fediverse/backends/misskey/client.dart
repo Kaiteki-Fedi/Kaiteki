@@ -1,23 +1,24 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
+import "dart:async";
+import "dart:convert";
+import "dart:developer";
 
-import 'package:fediverse_objects/misskey.dart' as misskey;
-import 'package:http/http.dart'
+import "package:fediverse_objects/misskey.dart" as misskey;
+import "package:http/http.dart"
     show MultipartFile, MultipartRequest, Request, Response;
-import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
-import 'package:kaiteki/fediverse/backends/misskey/model/follow.dart';
-import 'package:kaiteki/fediverse/backends/misskey/model/list.dart';
-import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
-import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/create_app.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/create_note.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/generate_session.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/note_translate.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/userkey.dart';
-import 'package:kaiteki/http/http.dart';
+import "package:kaiteki/fediverse/backends/misskey/exception.dart";
+import "package:kaiteki/fediverse/backends/misskey/model/follow.dart";
+import "package:kaiteki/fediverse/backends/misskey/model/list.dart";
+import "package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart";
+import "package:kaiteki/fediverse/backends/misskey/requests/timeline.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/check_session.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/create_app.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/create_note.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/generate_session.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/note_translate.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/signin.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/userkey.dart";
+import "package:kaiteki/http/http.dart";
+import "package:kaiteki/utils/utils.dart";
 
 class MisskeyClient {
   late final KaitekiClient client;
@@ -34,7 +35,9 @@ class MisskeyClient {
 
         if (request is Request) {
           // TODO(Craftplacer): we should avoid duplicate (de-)serialization.
-          final map = request.bodyBytes.isEmpty ? {} : jsonDecode(request.body);
+          final map = request.bodyBytes.isEmpty
+              ? <String, dynamic>{}
+              : jsonDecode(request.body) as JsonMap;
           map["i"] = i;
           request.body = jsonEncode(map);
           request.headers["Content-Type"] = "application/json";
@@ -65,8 +68,8 @@ class MisskeyClient {
         .then(CreateAppResponse.fromJson.fromResponse);
   }
 
-  Future<CreateNoteResponse> createNote(
-    String visibility, {
+  Future<CreateNoteResponse> createNote({
+    required String visibility,
     List<String>? visibleUserIds,
     String? text,
     String? cw,
@@ -264,7 +267,7 @@ class MisskeyClient {
       dynamic error;
 
       try {
-        final json = jsonDecode(response.body);
+        final json = jsonDecode(response.body) as JsonMap;
         error = json["error"];
       } catch (e, s) {
         log(
@@ -278,7 +281,7 @@ class MisskeyClient {
       if (error != null) {
         throw MisskeyException(
           response.statusCode,
-          error as Map<String, dynamic>,
+          error as JsonMap,
         );
       }
     }

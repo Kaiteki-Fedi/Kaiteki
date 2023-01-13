@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/main/tab.dart';
-import 'package:kaiteki_material/kaiteki_material.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/ui/main/tab.dart";
+import "package:kaiteki_material/kaiteki_material.dart";
 
 class MainScreenNavigationBar extends StatelessWidget {
   final List<MainScreenTab> tabs;

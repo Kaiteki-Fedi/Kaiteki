@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/link_constants.dart';
-import 'package:kaiteki/utils/extensions/build_context.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/constants.dart" as consts;
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/link_constants.dart";
+import "package:kaiteki/utils/extensions/build_context.dart";
 
 class ApiTypeDialog extends StatefulWidget {
   const ApiTypeDialog({super.key});

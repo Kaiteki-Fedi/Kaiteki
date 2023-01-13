@@ -1,8 +1,9 @@
-import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:copy_with_extension/copy_with_extension.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'tweet.g.dart';
+part "tweet.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
@@ -40,9 +41,9 @@ class Tweet {
     this.source,
   });
 
-  factory Tweet.fromJson(Map<String, dynamic> json) => _$TweetFromJson(json);
+  factory Tweet.fromJson(JsonMap json) => _$TweetFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TweetToJson(this);
+  JsonMap toJson() => _$TweetToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -55,10 +56,10 @@ class TweetAttachments {
     this.mediaKeys,
   });
 
-  factory TweetAttachments.fromJson(Map<String, dynamic> json) =>
+  factory TweetAttachments.fromJson(JsonMap json) =>
       _$TweetAttachmentsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TweetAttachmentsToJson(this);
+  JsonMap toJson() => _$TweetAttachmentsToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -68,10 +69,10 @@ class ReferencedTweet {
 
   const ReferencedTweet(this.type, this.id);
 
-  factory ReferencedTweet.fromJson(Map<String, dynamic> json) =>
+  factory ReferencedTweet.fromJson(JsonMap json) =>
       _$ReferencedTweetFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ReferencedTweetToJson(this);
+  JsonMap toJson() => _$ReferencedTweetToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -88,10 +89,9 @@ class PublicMetrics {
     required this.quoteCount,
   });
 
-  factory PublicMetrics.fromJson(Map<String, dynamic> json) =>
-      _$PublicMetricsFromJson(json);
+  factory PublicMetrics.fromJson(JsonMap json) => _$PublicMetricsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PublicMetricsToJson(this);
+  JsonMap toJson() => _$PublicMetricsToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -108,10 +108,9 @@ class TweetEntities {
     this.urls,
   });
 
-  factory TweetEntities.fromJson(Map<String, dynamic> json) =>
-      _$TweetEntitiesFromJson(json);
+  factory TweetEntities.fromJson(JsonMap json) => _$TweetEntitiesFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TweetEntitiesToJson(this);
+  JsonMap toJson() => _$TweetEntitiesToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -121,10 +120,9 @@ class TweetEntity {
 
   const TweetEntity({required this.start, required this.end});
 
-  factory TweetEntity.fromJson(Map<String, dynamic> json) =>
-      _$TweetEntityFromJson(json);
+  factory TweetEntity.fromJson(JsonMap json) => _$TweetEntityFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TweetEntityToJson(this);
+  JsonMap toJson() => _$TweetEntityToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -141,11 +139,11 @@ class TweetAnnotation extends TweetEntity {
     required this.normalizedText,
   });
 
-  factory TweetAnnotation.fromJson(Map<String, dynamic> json) =>
+  factory TweetAnnotation.fromJson(JsonMap json) =>
       _$TweetAnnotationFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$TweetAnnotationToJson(this);
+  JsonMap toJson() => _$TweetAnnotationToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -154,11 +152,10 @@ class TweetTag extends TweetEntity {
 
   const TweetTag({required super.start, required super.end, required this.tag});
 
-  factory TweetTag.fromJson(Map<String, dynamic> json) =>
-      _$TweetTagFromJson(json);
+  factory TweetTag.fromJson(JsonMap json) => _$TweetTagFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$TweetTagToJson(this);
+  JsonMap toJson() => _$TweetTagToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -183,11 +180,10 @@ class TweetUrl extends TweetEntity {
     required this.description,
   });
 
-  factory TweetUrl.fromJson(Map<String, dynamic> json) =>
-      _$TweetUrlFromJson(json);
+  factory TweetUrl.fromJson(JsonMap json) => _$TweetUrlFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$TweetUrlToJson(this);
+  JsonMap toJson() => _$TweetUrlToJson(this);
 }
 
 @JsonEnum(fieldRename: FieldRename.snake)

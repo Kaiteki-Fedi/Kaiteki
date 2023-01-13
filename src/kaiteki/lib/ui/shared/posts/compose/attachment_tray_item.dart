@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/ui/shared/common.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/model/attachment.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 class AttachmentTrayItem extends StatelessWidget {
   final VoidCallback? onRemove;
@@ -83,7 +83,9 @@ class AttachmentTrayItem extends StatelessWidget {
     );
   }
 
-  List<PopupMenuEntry<AttachmentTryItemAction>> buildItemActions(context) {
+  List<PopupMenuEntry<AttachmentTryItemAction>> buildItemActions(
+    BuildContext context,
+  ) {
     return [
       PopupMenuItem(
         value: AttachmentTryItemAction.remove,

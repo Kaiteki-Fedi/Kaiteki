@@ -1,12 +1,12 @@
-import 'package:kaiteki/auth/login_typedefs.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/model/file.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/capabilities.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/model/auth/login_result.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/model/file.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
 class TimelineAdapter extends BackendAdapter {
   final Set<TimelineKind> brokenTimelines;
@@ -62,10 +62,10 @@ class TimelineAdapter extends BackendAdapter {
         Post(
           postedAt: DateTime.now(),
           author: const User(
-            displayName: 'User',
-            host: 'example.social',
-            id: '0',
-            username: 'User',
+            displayName: "User",
+            host: "example.social",
+            id: "0",
+            username: "User",
           ),
           id: DateTime.now().toIso8601String(),
           content: type.toString(),
@@ -104,7 +104,7 @@ class TimelineAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<Pagination<dynamic, User>> getFollowers(
+  Future<Pagination<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -112,7 +112,7 @@ class TimelineAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<Pagination<dynamic, User>> getFollowing(
+  Future<Pagination<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,

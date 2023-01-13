@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/constants.dart";
 
 const double _maxDialogSize = 560.0;
 
@@ -62,11 +62,10 @@ class DynamicDialogContainer extends StatelessWidget {
   BoxConstraints getConstraints(
     BuildContext context,
     BoxConstraints constraints,
+    // ignore: avoid_positional_boolean_parameters
     bool fullscreen,
   ) {
-    if (fullscreen) {
-      return constraints;
-    }
+    if (fullscreen) return constraints;
 
     const margin = 32 * 2;
     return dialogConstraints.copyWith(

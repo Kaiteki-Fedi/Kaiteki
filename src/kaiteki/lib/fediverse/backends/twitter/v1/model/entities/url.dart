@@ -1,7 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'url.g.dart';
+part "url.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Url extends Entity {
@@ -22,7 +23,7 @@ class Url extends Entity {
     required List<int> indices,
   }) : super(indices);
 
-  factory Url.fromJson(Map<String, dynamic> json) => _$UrlFromJson(json);
+  factory Url.fromJson(JsonMap json) => _$UrlFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UrlToJson(this);
+  JsonMap toJson() => _$UrlToJson(this);
 }

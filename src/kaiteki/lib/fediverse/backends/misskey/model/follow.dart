@@ -1,7 +1,8 @@
-import 'package:fediverse_objects/misskey.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:fediverse_objects/misskey.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'follow.g.dart';
+part "follow.g.dart";
 
 @JsonSerializable()
 class MisskeyFollow {
@@ -21,8 +22,7 @@ class MisskeyFollow {
     this.follower,
   });
 
-  factory MisskeyFollow.fromJson(Map<String, dynamic> json) =>
-      _$MisskeyFollowFromJson(json);
+  factory MisskeyFollow.fromJson(JsonMap json) => _$MisskeyFollowFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MisskeyFollowToJson(this);
+  JsonMap toJson() => _$MisskeyFollowToJson(this);
 }

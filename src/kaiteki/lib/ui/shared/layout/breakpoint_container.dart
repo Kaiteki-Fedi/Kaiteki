@@ -1,6 +1,6 @@
-import 'package:breakpoint/breakpoint.dart';
-import 'package:flutter/material.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:breakpoint/breakpoint.dart";
+import "package:flutter/material.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class BreakpointContainer extends StatelessWidget {
   final Breakpoint breakpoint;

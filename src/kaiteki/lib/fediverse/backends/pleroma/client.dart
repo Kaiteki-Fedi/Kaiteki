@@ -1,12 +1,13 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:fediverse_objects/mastodon.dart' show Account, Notification;
-import 'package:fediverse_objects/pleroma.dart';
-import 'package:http/http.dart' show Response;
-import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
-import 'package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart';
-import 'package:kaiteki/fediverse/backends/pleroma/responses/emoji_packs_response.dart';
-import 'package:kaiteki/http/http.dart';
+import "package:fediverse_objects/mastodon.dart" show Account, Notification;
+import "package:fediverse_objects/pleroma.dart";
+import "package:http/http.dart" show Response;
+import "package:kaiteki/fediverse/backends/mastodon/client.dart";
+import "package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart";
+import "package:kaiteki/fediverse/backends/pleroma/responses/emoji_packs_response.dart";
+import "package:kaiteki/http/http.dart";
+import "package:kaiteki/utils/utils.dart";
 
 class PleromaClient extends MastodonClient {
   PleromaClient(super.instance);
@@ -54,9 +55,10 @@ class PleromaClient extends MastodonClient {
   @override
   void checkResponse(Response response) {
     if (response.statusCode == 403) {
-      final json = jsonDecode(response.body);
+      final json = jsonDecode(response.body) as JsonMap;
       if (json["error"] == "mfa_required") {
-        throw MfaRequiredException(json["mfa_token"]);
+        // FIXME(Craftplacer): This seems weird
+        throw MfaRequiredException(json["mfa_token"] as String);
       }
     }
 

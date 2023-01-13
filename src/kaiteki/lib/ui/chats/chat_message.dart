@@ -1,11 +1,11 @@
-import 'dart:math' as math;
+import "dart:math" as math;
 
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/chat_message.dart';
-import 'package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/chat_message.dart";
+import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class ChatMessageClip extends CustomClipper<Path> {
   final ChatMessageNipPosition nipPosition;

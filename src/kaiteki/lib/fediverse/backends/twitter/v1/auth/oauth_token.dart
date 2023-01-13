@@ -3,5 +3,9 @@ class OAuthToken {
   final String tokenSecret;
   final bool callbackConfirmed;
 
-  const OAuthToken(this.token, this.tokenSecret, this.callbackConfirmed);
+  const OAuthToken({
+    required this.token,
+    required this.tokenSecret,
+    required this.callbackConfirmed,
+  });
 }

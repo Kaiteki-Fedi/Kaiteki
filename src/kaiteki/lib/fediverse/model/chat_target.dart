@@ -1,4 +1,4 @@
-import 'package:kaiteki/fediverse/model/model.dart';
+import "package:kaiteki/fediverse/model/model.dart";
 
 abstract class ChatTarget<T> {
   final T source;

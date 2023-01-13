@@ -1,7 +1,8 @@
-import 'package:fediverse_objects/misskey.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:fediverse_objects/misskey.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'create_note.g.dart';
+part "create_note.g.dart";
 
 @JsonSerializable()
 class CreateNoteResponse {
@@ -9,8 +10,8 @@ class CreateNoteResponse {
 
   const CreateNoteResponse(this.createdNote);
 
-  factory CreateNoteResponse.fromJson(Map<String, dynamic> json) =>
+  factory CreateNoteResponse.fromJson(JsonMap json) =>
       _$CreateNoteResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CreateNoteResponseToJson(this);
+  JsonMap toJson() => _$CreateNoteResponseToJson(this);
 }

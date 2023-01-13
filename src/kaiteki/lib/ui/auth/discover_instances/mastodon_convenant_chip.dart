@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/link_constants.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:mdi/mdi.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/link_constants.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:mdi/mdi.dart";
 
 class MastodonCovenantChip extends StatelessWidget {
   const MastodonCovenantChip({super.key});

@@ -1,4 +1,39 @@
-part of 'shared_adapter.dart';
+part of "shared_adapter.dart";
+
+final mastodonVisibilityRosetta = Rosetta(const {
+  "public": Visibility.public,
+  "unlisted": Visibility.unlisted,
+  "private": Visibility.followersOnly,
+  "direct": Visibility.direct
+});
+
+final mastodonNotificationTypeRosetta = Rosetta(const {
+  "favourite": NotificationType.liked,
+  "reblog": NotificationType.repeated,
+  "pleroma:emoji_reaction": NotificationType.reacted,
+  "follow": NotificationType.followed,
+  "mention": NotificationType.mentioned,
+  "follow_request": NotificationType.followRequest,
+  "poll": NotificationType.pollEnded,
+  "update": NotificationType.updated,
+  "admin.sign_up": NotificationType.signedUp,
+  "admin.report": NotificationType.reported,
+  "status": NotificationType.newPost,
+});
+
+final mastodonAttachmentTypeRosetta = Rosetta(const {
+  "image": AttachmentType.image,
+  "video": AttachmentType.video,
+  "audio": AttachmentType.audio,
+  "gifv": AttachmentType.animated,
+});
+
+final pleromaFormattingRosetta = Rosetta(const {
+  "text/plain": Formatting.plainText,
+  "text/markdown": Formatting.markdown,
+  "text/html": Formatting.html,
+  "text/bbcode": Formatting.bbCode,
+});
 
 Post toPost(mastodon.Status source, String localHost) {
   final repliedUser = getRepliedUser(source, localHost);
@@ -14,24 +49,25 @@ Post toPost(mastodon.Status source, String localHost) {
     attachments: source.mediaAttachments
         .map((a) => toAttachment(a, status: source))
         .toList(),
-    visibility: toVisibility(source.visibility),
+    visibility: mastodonVisibilityRosetta.getRight(source.visibility),
     replyTo: source.inReplyToId.nullTransform(ResolvablePost.fromId),
     replyToUser: repliedUser == null
         ? source.inReplyToAccountId.nullTransform(ResolvableUser.fromId)
         : ResolvableUser.fromData(repliedUser),
     id: source.id,
-    externalUrl: source.url == null ? null : Uri.parse(source.url!),
+    // FIXME(Craftplacer): source.url should be Uri?, not String?
+    externalUrl: source.url.nullTransform(Uri.parse),
     client: source.application?.name,
     reactions: source.pleroma?.emojiReactions
             ?.map((r) => toReaction(r, localHost))
             .toList() ??
-        [],
+        const [],
     mentionedUsers: source.mentions.map((e) {
       return UserReference.all(
         username: e.username,
         id: e.id,
         remoteUrl: e.url,
-        host: getHost(e.account),
+        host: _getHost(e.account),
       );
     }).toList(growable: false),
     metrics: PostMetrics(
@@ -50,16 +86,17 @@ Post toPost(mastodon.Status source, String localHost) {
   );
 }
 
-Poll toPoll(
-  mastodon.Poll poll,
-) {
+Poll toPoll(mastodon.Poll poll) {
   return Poll(
     id: poll.id,
     hasEnded: poll.expired,
     endedAt: poll.expiresAt!,
     source: poll,
-    options:
-        poll.options.map((o) => PollOption(o.title, o.votesCount)).toList(),
+    options: poll.options
+        .map(
+          (o) => PollOption(o.title, o.votesCount),
+        )
+        .toList(),
     hasVoted: poll.voted ?? false,
     voteCount: poll.votesCount,
     voterCount: poll.votersCount,
@@ -91,40 +128,11 @@ Notification toNotification(
 
   return Notification(
     createdAt: notification.createdAt,
-    type: toNotificationType(notification.type),
-    user: notification.account?.nullTransform((u) => toUser(u, localHost)),
-    post: notification.status?.nullTransform((p) => toPost(p, localHost)),
+    type: mastodonNotificationTypeRosetta.getRight(notification.type),
+    user: notification.account.nullTransform((u) => toUser(u, localHost)),
+    post: notification.status.nullTransform((p) => toPost(p, localHost)),
     unread: unread,
   );
-}
-
-NotificationType toNotificationType(String type) {
-  switch (type) {
-    case "favourite":
-      return NotificationType.liked;
-    case "reblog":
-      return NotificationType.repeated;
-    case "pleroma:emoji_reaction":
-      return NotificationType.reacted;
-    case "follow":
-      return NotificationType.followed;
-    case "mention":
-      return NotificationType.mentioned;
-    case "follow_request":
-      return NotificationType.followRequest;
-    case "poll":
-      return NotificationType.pollEnded;
-    case "update":
-      return NotificationType.updated;
-    case "admin.sign_up":
-      return NotificationType.signedUp;
-    case "admin.report":
-      return NotificationType.reported;
-    case "status":
-      return NotificationType.newPost;
-    default:
-      throw Exception("Unknown notification type: $type");
-  }
 }
 
 Reaction toReaction(pleroma.EmojiReaction reaction, String localHost) {
@@ -146,23 +154,12 @@ User? getRepliedUser(mastodon.Status status, String localHost) {
   if (mention == null) return null;
 
   return User(
-    host: getHost(mention.account) ?? localHost,
+    host: _getHost(mention.account) ?? localHost,
     username: mention.username,
     id: mention.id,
     displayName: mention.username,
     source: mention,
   );
-}
-
-Visibility toVisibility(String visibility) {
-  const visibilityToString = {
-    'public': Visibility.public,
-    'private': Visibility.followersOnly,
-    'direct': Visibility.direct,
-    'unlisted': Visibility.unlisted,
-  };
-
-  return visibilityToString[visibility]!;
 }
 
 Attachment toAttachment(
@@ -174,20 +171,9 @@ Attachment toAttachment(
     description: attachment.description,
     url: attachment.url,
     previewUrl: attachment.previewUrl ?? attachment.url,
-    type: toAttachmentType(attachment.type),
+    type: mastodonAttachmentTypeRosetta.getRight(attachment.type),
     isSensitive: status?.sensitive ?? false,
   );
-}
-
-AttachmentType toAttachmentType(String type) {
-  const attachmentTypeToString = {
-    'image': AttachmentType.image,
-    'video': AttachmentType.video,
-    'audio': AttachmentType.audio,
-    // 'gifv': AttachmentType.animated,
-  };
-
-  return attachmentTypeToString[type] ?? AttachmentType.file;
 }
 
 CustomEmoji toEmoji(mastodon.Emoji emoji) {
@@ -212,7 +198,7 @@ User toUser(mastodon.Account source, String localHost) {
     followerCount: source.followersCount,
     followingCount: source.followingCount,
     postCount: source.statusesCount,
-    host: getHost(source.acct) ?? localHost,
+    host: _getHost(source.acct) ?? localHost,
     details: UserDetails(fields: _parseFields(source.fields)),
     url: source.url,
     flags: UserFlags(
@@ -233,11 +219,9 @@ Map<String, String>? _parseFields(Iterable<mastodon.Field>? fields) {
   }
 }
 
-String? getHost(String acct) {
-  final split = acct.split('@');
-
+String? _getHost(String acct) {
+  final split = acct.split("@");
   if (split.length > 1) return split.last;
-
   return null;
 }
 
@@ -250,9 +234,5 @@ Instance toInstance(mastodon.Instance instance) {
 }
 
 PostList toList(mastodon.List list) {
-  return PostList(
-    source: list,
-    id: list.id,
-    name: list.title,
-  );
+  return PostList(source: list, id: list.id, name: list.title);
 }

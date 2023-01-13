@@ -1,12 +1,12 @@
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/routing/router.dart';
-import 'package:kaiteki/theming/default/extensions.dart';
-import 'package:kaiteki/theming/default/themes.dart';
-import 'package:kaiteki/ui/shortcuts/shortcuts.dart';
+import "package:dynamic_color/dynamic_color.dart";
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:kaiteki/constants.dart" as consts;
+import "package:kaiteki/di.dart";
+import "package:kaiteki/routing/router.dart";
+import "package:kaiteki/theming/default/extensions.dart";
+import "package:kaiteki/theming/default/themes.dart";
+import "package:kaiteki/ui/shortcuts/shortcuts.dart";
 
 class KaitekiApp extends ConsumerWidget {
   const KaitekiApp({super.key});

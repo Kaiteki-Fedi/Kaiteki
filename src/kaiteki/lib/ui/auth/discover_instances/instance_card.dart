@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/instances.dart';
-import 'package:kaiteki/ui/auth/discover_instances/discover_instance_details_screen.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/instances.dart";
+import "package:kaiteki/ui/auth/discover_instances/discover_instance_details_screen.dart";
 
 class InstanceCard extends StatelessWidget {
   final InstanceData data;

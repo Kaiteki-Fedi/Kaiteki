@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/search_support.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/search_support.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -75,14 +75,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     return centeredCircularProgressIndicator;
                   }
 
-                  if (snapshot.connectionState == ConnectionState.none) {
+                  final results = snapshot.data;
+
+                  if (results == null) {
                     return const IconLandingWidget(
                       icon: Icon(Icons.search),
                       text: Text("Start typing to search"),
                     );
                   }
-
-                  final results = snapshot.data!;
 
                   return TabBarView(
                     children: [
@@ -130,7 +130,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     );
   }
 
-  void _onSubmitted(query) {
+  void _onSubmitted(String query) {
     try {
       final adapter = ref.read(adapterProvider) as SearchSupport;
       setState(() {

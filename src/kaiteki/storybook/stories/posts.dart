@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/poll.dart';
-import 'package:kaiteki/ui/shared/posts/poll_widget.dart';
-import 'package:storybook_flutter/storybook_flutter.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/model/poll.dart";
+import "package:kaiteki/ui/shared/posts/poll_widget.dart";
+import "package:storybook_flutter/storybook_flutter.dart";
 
 final poll = Story(
   builder: (_) => Card(

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/default/extensions.dart';
-import 'package:kaiteki/theming/default/m2_color_schemes.dart' as m2;
-import 'package:kaiteki/theming/default/m3_color_schemes.dart' as m3;
+import "package:flutter/material.dart";
+import "package:kaiteki/theming/default/extensions.dart";
+import "package:kaiteki/theming/default/m2_color_schemes.dart" as m2;
+import "package:kaiteki/theming/default/m3_color_schemes.dart" as m3;
 
 ThemeData getDefaultTheme(Brightness brightness, bool useM3) {
   return ThemeData.from(

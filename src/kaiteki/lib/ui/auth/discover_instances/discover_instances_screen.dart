@@ -1,10 +1,10 @@
-import 'package:breakpoint/breakpoint.dart';
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/instances.dart';
-import 'package:kaiteki/ui/auth/discover_instances/instance_card.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
+import "package:breakpoint/breakpoint.dart";
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/instances.dart";
+import "package:kaiteki/ui/auth/discover_instances/instance_card.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/layout/breakpoint_container.dart";
 
 class DiscoverInstancesScreen extends StatefulWidget {
   const DiscoverInstancesScreen({super.key});

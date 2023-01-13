@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'sign_in.g.dart';
+part "sign_in.g.dart";
 
 /// <https://github.com/syuilo/misskey/blob/develop/src/server/api/private/signin.ts>
 @JsonSerializable()
@@ -17,8 +18,8 @@ class MisskeySignInRequest {
     this.token,
   });
 
-  factory MisskeySignInRequest.fromJson(Map<String, dynamic> json) =>
+  factory MisskeySignInRequest.fromJson(JsonMap json) =>
       _$MisskeySignInRequestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MisskeySignInRequestToJson(this);
+  JsonMap toJson() => _$MisskeySignInRequestToJson(this);
 }

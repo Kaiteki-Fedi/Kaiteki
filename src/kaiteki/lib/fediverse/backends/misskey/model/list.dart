@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'list.g.dart';
+part "list.g.dart";
 
 @JsonSerializable()
 class MisskeyList {
@@ -16,8 +17,7 @@ class MisskeyList {
     this.userIds,
   });
 
-  factory MisskeyList.fromJson(Map<String, dynamic> json) =>
-      _$MisskeyListFromJson(json);
+  factory MisskeyList.fromJson(JsonMap json) => _$MisskeyListFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MisskeyListToJson(this);
+  JsonMap toJson() => _$MisskeyListToJson(this);
 }

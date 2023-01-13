@@ -1,14 +1,14 @@
-import 'package:kaiteki/fediverse/model/user/reference.dart';
-import 'package:kaiteki/utils/text/elements.dart';
-import 'package:kaiteki/utils/text/parsers/text_parser.dart';
-import 'package:kaiteki/utils/text/text_renderer.dart';
+import "package:kaiteki/fediverse/model/user/reference.dart";
+import "package:kaiteki/utils/text/elements.dart";
+import "package:kaiteki/utils/text/parsers/text_parser.dart";
+import "package:kaiteki/utils/text/text_renderer.dart";
 
 class SocialTextParser implements TextParser {
-  static final _mentionPattern = RegExp(r'\B\@([\w\-]+)(?:\@([\w\-\.]+))?');
-  static final _hashtagPattern = RegExp('#([a-zA-Z0-9_]+)');
-  static final _emojiPattern = RegExp(r'(?::([^:\s]+):)');
+  static final _mentionPattern = RegExp(r"\B\@([\w\-]+)(?:\@([\w\-\.]+))?");
+  static final _hashtagPattern = RegExp("#([a-zA-Z0-9_]+)");
+  static final _emojiPattern = RegExp(r"(?::([^:\s]+):)");
   static final _urlPattern = RegExp(
-    r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)',
+    r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)",
   );
 
   const SocialTextParser();

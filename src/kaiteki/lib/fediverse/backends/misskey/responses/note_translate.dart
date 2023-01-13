@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'note_translate.g.dart';
+part "note_translate.g.dart";
 
 @JsonSerializable()
 class NoteTranslateResponse {
@@ -9,8 +10,8 @@ class NoteTranslateResponse {
 
   const NoteTranslateResponse(this.sourceLang, this.text);
 
-  factory NoteTranslateResponse.fromJson(Map<String, dynamic> json) =>
+  factory NoteTranslateResponse.fromJson(JsonMap json) =>
       _$NoteTranslateResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$NoteTranslateResponseToJson(this);
+  JsonMap toJson() => _$NoteTranslateResponseToJson(this);
 }

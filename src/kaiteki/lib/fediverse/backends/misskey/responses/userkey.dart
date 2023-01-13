@@ -1,15 +1,18 @@
-import 'package:fediverse_objects/misskey.dart';
+import "package:fediverse_objects/misskey.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
+part "userkey.g.dart";
+
+@JsonSerializable()
 class UserkeyResponse {
   final String accessToken;
   final User? user;
 
-  UserkeyResponse(this.accessToken, this.user);
+  const UserkeyResponse(this.accessToken, this.user);
 
-  factory UserkeyResponse.fromJson(Map<String, dynamic> json) {
-    return UserkeyResponse(
-      json["accessToken"],
-      json["user"] == null ? null : User.fromJson(json["user"]),
-    );
-  }
+  factory UserkeyResponse.fromJson(JsonMap json) =>
+      _$UserkeyResponseFromJson(json);
+
+  JsonMap toJson() => _$UserkeyResponseToJson(this);
 }

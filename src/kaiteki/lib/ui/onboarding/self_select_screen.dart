@@ -1,13 +1,13 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:animations/animations.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/ui/onboarding/account_setup_page.dart';
-import 'package:kaiteki/ui/onboarding/preferences_setup_page.dart';
-import 'package:kaiteki/ui/onboarding/theme_setup_page.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
+import "package:animations/animations.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/ui/onboarding/account_setup_page.dart";
+import "package:kaiteki/ui/onboarding/preferences_setup_page.dart";
+import "package:kaiteki/ui/onboarding/theme_setup_page.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:page_view_dot_indicator/page_view_dot_indicator.dart";
 
 class SelfSelectScreen extends StatefulWidget {
   const SelfSelectScreen({super.key});
@@ -17,8 +17,8 @@ class SelfSelectScreen extends StatefulWidget {
 }
 
 class _SelfSelectScreenState extends State<SelfSelectScreen> {
-  var currentPage = 0;
-  var previousPage = 0;
+  int currentPage = 0;
+  int previousPage = 0;
   bool get isLastPage => currentPage >= pages.length - 1;
 
   List<_SelfSelectPage> get pages {

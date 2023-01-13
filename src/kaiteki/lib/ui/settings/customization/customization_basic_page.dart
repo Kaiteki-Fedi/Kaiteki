@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/settings/customization/theme_selector.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/settings/customization/theme_selector.dart";
 
 class CustomizationBasicPage extends ConsumerStatefulWidget {
   const CustomizationBasicPage({super.key});

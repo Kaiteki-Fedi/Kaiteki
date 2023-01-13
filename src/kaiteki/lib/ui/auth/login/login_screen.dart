@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/ui/auth/login/login_form.dart';
-import 'package:kaiteki/ui/shared/layout/form_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/instance.dart";
+import "package:kaiteki/ui/auth/login/login_form.dart";
+import "package:kaiteki/ui/shared/layout/form_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -23,7 +23,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final instanceName = _instance?.name;
     final instanceBackgroundUrl = _instance?.backgroundUrl;
 
-    return Container(
+    return ColoredBox(
       color: Theme.of(context).canvasColor,
       child: Stack(
         children: [

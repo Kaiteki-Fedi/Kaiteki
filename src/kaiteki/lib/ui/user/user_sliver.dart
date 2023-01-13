@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
-import 'package:tuple/tuple.dart';
+import "package:flutter/material.dart";
+import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:tuple/tuple.dart";
 
 class UserSliver extends ConsumerStatefulWidget {
   final bool wide;
@@ -31,13 +31,13 @@ class UserSliver extends ConsumerStatefulWidget {
 }
 
 class UserSliverState extends ConsumerState<UserSliver> {
-  final PagingController<dynamic, User> _controller = PagingController(
+  final PagingController<String?, User> _controller = PagingController(
     firstPageKey: null,
   );
 
   late ProviderSubscription<BackendAdapter> _subscription;
 
-  Future<Pagination<dynamic, User>> Function(String?) get _source {
+  Future<Pagination<String?, User>> Function(String?) get _source {
     final adapter = _subscription.read();
 
     if (widget.showFollowing) {
@@ -103,7 +103,7 @@ class UserSliverState extends ConsumerState<UserSliver> {
         },
         animateTransitions: true,
         firstPageErrorIndicatorBuilder: (context) {
-          final t = _controller.error as Tuple2<dynamic, StackTrace>;
+          final t = _controller.error as Tuple2<Object, StackTrace>;
           return Center(
             child: ErrorLandingWidget(
               error: t.item1,

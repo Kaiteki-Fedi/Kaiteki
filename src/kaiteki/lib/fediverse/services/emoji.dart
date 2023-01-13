@@ -1,10 +1,10 @@
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
-import 'package:kaiteki/fediverse/model/emoji/category.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
+import "package:kaiteki/fediverse/model/emoji/category.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'emoji.g.dart';
+part "emoji.g.dart";
 
 @Riverpod(keepAlive: true)
 class EmojiService extends _$EmojiService {

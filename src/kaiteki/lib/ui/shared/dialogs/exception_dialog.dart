@@ -1,22 +1,23 @@
-import 'dart:io' show Platform;
+import "dart:io" show Platform;
 
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/ui/stack_trace_screen.dart';
-import 'package:tuple/tuple.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:flutter/foundation.dart" show kIsWeb;
+import "package:flutter/material.dart";
+import "package:kaiteki/app.dart";
+import "package:kaiteki/constants.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/stack_trace_screen.dart";
+import "package:tuple/tuple.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class ExceptionDialog extends StatelessWidget {
-  final dynamic exception;
+  final Object exception;
   final StackTrace? stackTrace;
 
   const ExceptionDialog({
     super.key,
     required this.exception,
     required this.stackTrace,
-  }) : assert(exception != null);
+  });
 
   Map<String, String> get details {
     return {
@@ -40,7 +41,7 @@ class ExceptionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Exception details'),
+      title: const Text("Exception details"),
       content: ConstrainedBox(
         constraints: dialogConstraints,
         child: Column(
@@ -95,7 +96,7 @@ class ExceptionDialog extends StatelessWidget {
       scrollable: true,
       actions: [
         TextButton(
-          child: const Text('Close'),
+          child: const Text("Close"),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],
@@ -143,8 +144,15 @@ ${detail.value}
     final bodyBuffer = StringBuffer() //
       ..writeln(
         "**Platform:** $_platform (`${Platform.operatingSystemVersion}`)",
-      )
-      ..writeln();
+      );
+
+    if (KaitekiApp.versionName != null) {
+      bodyBuffer.writeln(
+        "**Version:** ${KaitekiApp.versionName} (${KaitekiApp.versionCode})",
+      );
+    }
+
+    bodyBuffer.writeln();
 
     return Uri.https(
       "github.com",
@@ -174,8 +182,10 @@ ${detail.value}
 
   String? _tryGetTitle() {
     try {
-      return exception.message;
-    } on NoSuchMethodError catch (_) {
+      // ignore: avoid_dynamic_calls
+      return (exception as dynamic).message as String?;
+      // ignore: avoid_catching_errors
+    } on NoSuchMethodError {
       return null;
     }
   }

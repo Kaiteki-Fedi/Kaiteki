@@ -1,7 +1,7 @@
-import 'dart:ui' show lerpDouble;
+import "dart:ui" show lerpDouble;
 
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
 
 class KaitekiTextTheme extends ThemeExtension<KaitekiTextTheme> {
   /// Text style used for hashtags.

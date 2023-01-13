@@ -1,23 +1,23 @@
-import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
+import "dart:developer";
+import "dart:io";
+import "dart:typed_data";
+import "dart:ui" as ui;
 
-import 'package:flutter/material.dart' hide Visibility;
-import 'package:flutter/rendering.dart'
+import "package:flutter/material.dart" hide Visibility;
+import "package:flutter/rendering.dart"
     show NetworkImage, OffsetLayer, RenderObject, Size;
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/ui/main/main_screen.dart';
-import 'package:kaiteki/ui/shared/posts/compose/compose_screen.dart';
-import 'package:kaiteki/ui/user/user_screen_old.dart';
-import 'package:path/path.dart' as path;
+import "package:flutter_test/flutter_test.dart";
+import "package:integration_test/integration_test.dart";
+import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/ui/main/main_screen.dart";
+import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
+import "package:kaiteki/ui/user/user_screen_old.dart";
+import "package:path/path.dart" as path;
 
-import 'bootstrapper.dart';
-import 'example_data.dart';
+import "bootstrapper.dart";
+import "example_data.dart";
 
 class ScreenConfig {
   final Size size;
@@ -89,7 +89,7 @@ void takeScreenshots(
   String? locale,
 }) {
   testWidgets(
-    'Main screen',
+    "Main screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
       final bootstrapper = await Bootstrapper.getInstance(locale);
@@ -109,7 +109,7 @@ void takeScreenshots(
   );
 
   testWidgets(
-    'Compose screen',
+    "Compose screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
       final bootstrapper = await Bootstrapper.getInstance(locale);
@@ -125,7 +125,7 @@ void takeScreenshots(
   );
 
   testWidgets(
-    'User screen',
+    "User screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
       final bootstrapper = await Bootstrapper.getInstance(locale);

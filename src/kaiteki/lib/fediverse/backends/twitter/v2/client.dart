@@ -1,19 +1,19 @@
-import 'dart:async';
-import 'dart:convert';
+import "dart:async";
+import "dart:convert";
 
-import 'package:http/http.dart' as http show Response;
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/responses/bookmark_response.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/responses/like_response.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/responses/timeline_response.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/responses/token_response.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/responses/user_response.dart';
-import 'package:kaiteki/http/http.dart';
-import 'package:kaiteki/utils/extensions.dart';
-
-import 'model/media.dart';
+import "package:http/http.dart" as http show Response;
+import "package:kaiteki/fediverse/backends/twitter/v2/model/media.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/user.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/bookmark_response.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/like_response.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/timeline_response.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/token_response.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/user_response.dart";
+import "package:kaiteki/http/http.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/utils.dart";
 
 class TwitterClient {
   late final KaitekiClient client;
@@ -50,7 +50,12 @@ class TwitterClient {
       query: {
         if (userFields.isNotEmpty) "user.fields": userFields.join(","),
       },
-    ).then(((j) => User.fromJson(j["data"]!)).fromResponse);
+    ).then(
+      ((json) {
+        final map = json as JsonMap;
+        return User.fromJson(map["data"] as JsonMap);
+      }).fromResponse,
+    );
   }
 
   Future<TweetResponse> getTweet(
@@ -70,7 +75,12 @@ class TwitterClient {
         if (mediaFields.isNotEmpty) "media.fields": mediaFields.join(","),
       },
     ).then(
-      ((j) => TweetResponse.fromJson(j, Tweet.fromJson.generic)).fromResponse,
+      ((j) {
+        return TweetResponse.fromJson(
+          j as JsonMap,
+          Tweet.fromJson.generic,
+        );
+      }).fromResponse,
     );
   }
 
@@ -101,7 +111,12 @@ class TwitterClient {
                 "https://twitter.com/messages/compose?recipient_id=$userId"
           }.jsonBody,
         )
-        .then(((j) => Tweet.fromJson(j["data"])).fromResponse);
+        .then(
+          ((json) {
+            final map = json as JsonMap;
+            return Tweet.fromJson(map["data"] as JsonMap);
+          }).fromResponse,
+        );
   }
 
   Future<TimelineResponse> getReverseChronologicalTimeline({
@@ -169,14 +184,16 @@ class TwitterClient {
   void _checkResponse(http.Response response) {
     if (response.isSuccessful) return;
 
-    Map<String, dynamic>? json;
+    JsonMap? json;
 
     try {
-      json = jsonDecode(response.body);
+      json = jsonDecode(response.body) as JsonMap;
     } catch (_) {}
 
     if (json != null) {
-      throw Exception(json["error"] + ": " + json["error_description"]);
+      final error = json["error"] as String;
+      final errorDescription = json["error_description"] as String;
+      throw Exception("$error: $errorDescription");
     }
   }
 
@@ -199,7 +216,10 @@ class TwitterClient {
       },
     ).then(
       ((j) {
-        return TweetListResponse.fromJson(j, Tweet.fromJson.genericList);
+        return TweetListResponse.fromJson(
+          j as JsonMap,
+          Tweet.fromJson.genericList,
+        );
       }).fromResponse,
     );
   }
@@ -236,7 +256,7 @@ class TwitterClient {
         .then(
           ((j) {
             return BookmarkResponse.fromJson(
-              j,
+              j as JsonMap,
               BookmarkResponseData.fromJson.generic,
             );
           }).fromResponse,

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/link_constants.dart' show federationCovenantUrl;
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/link_constants.dart" show federationCovenantUrl;
+import "package:kaiteki/utils/extensions.dart";
 
 class FediverseCovenantChip extends StatelessWidget {
   const FediverseCovenantChip({super.key});

@@ -1,9 +1,10 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/date_format.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/user.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/date_format.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/user.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'tweet.g.dart';
+part "tweet.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Tweet {
@@ -44,7 +45,7 @@ class Tweet {
     this.retweetedStatus,
   });
 
-  factory Tweet.fromJson(Map<String, dynamic> json) => _$TweetFromJson(json);
+  factory Tweet.fromJson(JsonMap json) => _$TweetFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TweetToJson(this);
+  JsonMap toJson() => _$TweetToJson(this);
 }

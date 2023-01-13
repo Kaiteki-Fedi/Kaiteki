@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
-import 'package:kaiteki/fediverse/model/emoji/category.dart';
-import 'package:kaiteki/fediverse/services/emoji.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_selector.dart';
-import 'package:mdi/mdi.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
+import "package:kaiteki/fediverse/model/emoji/category.dart";
+import "package:kaiteki/fediverse/services/emoji.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_selector.dart";
+import "package:mdi/mdi.dart";
 
 class EmojiSelectorBottomSheet extends ConsumerStatefulWidget {
   final Widget? title;
@@ -62,10 +62,10 @@ class _EmojiSelectorBottomSheetState
         ListTile(
           leading: IconButton(
             icon: const Icon(Icons.close_rounded),
-            tooltip: 'Close',
+            tooltip: "Close",
             onPressed: () => Navigator.of(context).pop(),
           ),
-          title: widget.title ?? const Text('Select an emoji'),
+          title: widget.title ?? const Text("Select an emoji"),
           contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
         ),
         Expanded(child: _buildBody(context, tab)),

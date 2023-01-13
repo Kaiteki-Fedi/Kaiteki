@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/post/post.dart';
-import 'package:kaiteki/ui/shared/attachment_inspection_screen.dart';
+import "package:flutter/material.dart";
+import "package:flutter_blurhash/flutter_blurhash.dart";
+import "package:kaiteki/fediverse/model/attachment.dart";
+import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/ui/shared/attachment_inspection_screen.dart";
 
 class ImageAttachmentWidget extends StatelessWidget {
   final Attachment attachment;
@@ -31,9 +31,10 @@ class ImageAttachmentWidget extends StatelessWidget {
 
           double? progress;
 
-          if (loadingProgress.expectedTotalBytes != null) {
-            progress = loadingProgress.cumulativeBytesLoaded /
-                loadingProgress.expectedTotalBytes!;
+          final expectedTotalBytes = loadingProgress.expectedTotalBytes;
+          if (expectedTotalBytes != null) {
+            progress =
+                loadingProgress.cumulativeBytesLoaded / expectedTotalBytes;
           }
           final blurHash = attachment.blurHash;
           return Stack(

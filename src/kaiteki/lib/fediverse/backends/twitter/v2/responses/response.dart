@@ -1,9 +1,10 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/media.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/media.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/user.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'response.g.dart';
+part "response.g.dart";
 
 typedef TweetResponse = Response<Tweet>;
 typedef TweetListResponse = Response<List<Tweet>?>;
@@ -19,7 +20,7 @@ class Response<T> {
   const Response({required this.data, this.includes});
 
   factory Response.fromJson(
-    Map<String, dynamic> json,
+    JsonMap json,
     T Function(Object?) jsonFromT,
   ) {
     return _$ResponseFromJson(json, jsonFromT);
@@ -34,17 +35,16 @@ class ResponseIncludes {
 
   const ResponseIncludes({this.users, this.tweets, this.media});
 
-  factory ResponseIncludes.fromJson(Map<String, dynamic> json) =>
+  factory ResponseIncludes.fromJson(JsonMap json) =>
       _$ResponseIncludesFromJson(json);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class ResponseError {
   final String message;
-  final Map<String, dynamic> parameters;
+  final JsonMap parameters;
 
   const ResponseError(this.message, {this.parameters = const {}});
 
-  factory ResponseError.fromJson(Map<String, dynamic> json) =>
-      _$ResponseErrorFromJson(json);
+  factory ResponseError.fromJson(JsonMap json) => _$ResponseErrorFromJson(json);
 }

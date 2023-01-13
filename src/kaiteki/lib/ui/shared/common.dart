@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 
 const centeredCircularProgressIndicator = Center(
   child: CircularProgressIndicator(),
@@ -23,4 +23,12 @@ Future<void> showTextAlert(BuildContext context, String title, String body) {
 
 extension ColorKaitekiExtension on Color {
   TextStyle get textStyle => TextStyle(color: this);
+}
+
+double getLocalFontSize(BuildContext context) {
+  return DefaultTextStyle.of(context).style.fontSize!;
+}
+
+Color getLocalTextColor(BuildContext context) {
+  return DefaultTextStyle.of(context).style.color!;
 }

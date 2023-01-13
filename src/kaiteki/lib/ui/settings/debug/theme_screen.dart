@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/kaiteki/colors.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/theming/kaiteki/colors.dart";
 
 class ThemeScreen extends StatelessWidget {
   const ThemeScreen({super.key});

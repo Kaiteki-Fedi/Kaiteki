@@ -1,26 +1,26 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:async/async.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart' hide Visibility;
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/constants.dart' show bottomSheetConstraints;
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
-import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart';
-import 'package:kaiteki/ui/shared/enum_icon_button.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/compose/attachment_tray.dart';
-import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/ui/shortcuts/activators.dart';
-import 'package:kaiteki/ui/shortcuts/intents.dart';
-import 'package:kaiteki/ui/shortcuts/shortcuts.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:async/async.dart";
+import "package:file_picker/file_picker.dart";
+import "package:flutter/material.dart" hide Visibility;
+import "package:go_router/go_router.dart";
+import "package:kaiteki/constants.dart" show bottomSheetConstraints;
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
+import "package:kaiteki/fediverse/interfaces/preview_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/model/file.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
+import "package:kaiteki/ui/shared/enum_icon_button.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/compose/attachment_tray.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/ui/shortcuts/activators.dart";
+import "package:kaiteki/ui/shortcuts/intents.dart";
+import "package:kaiteki/ui/shortcuts/shortcuts.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 const double splashRadius = 20.0;
 
@@ -279,7 +279,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
       subject: _subjectController.text.isEmpty ? null : _subjectController.text,
       content: _bodyController.value.text,
       visibility: _visibility,
-      formatting: _formatting,
+      formatting: _formatting ?? Formatting.plainText,
       replyTo: widget.replyTo,
       attachments: attachments,
     );
@@ -326,7 +326,10 @@ class PostFormState extends ConsumerState<ComposeForm> {
           content: Text(l10n.postSubmissionFailed),
           action: SnackBarAction(
             label: l10n.whyButtonLabel,
-            onPressed: () => context.showExceptionDialog(e, s),
+            onPressed: () => context.showExceptionDialog(
+              e as Object,
+              s as StackTrace?,
+            ),
           ),
         ),
       );

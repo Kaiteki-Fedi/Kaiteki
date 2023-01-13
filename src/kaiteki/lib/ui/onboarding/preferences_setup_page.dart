@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/api_type.dart";
 
 class PreferencesSetupPage extends StatefulWidget {
   const PreferencesSetupPage({super.key});

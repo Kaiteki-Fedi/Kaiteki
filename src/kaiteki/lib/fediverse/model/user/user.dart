@@ -1,7 +1,7 @@
-import 'package:kaiteki/fediverse/model/adapted_entity.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/user/flags.dart';
-import 'package:kaiteki/fediverse/model/user/handle.dart';
+import "package:kaiteki/fediverse/model/adapted_entity.dart";
+import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/fediverse/model/user/flags.dart";
+import "package:kaiteki/fediverse/model/user/handle.dart";
 
 /// A class representing an user or account.
 class User<T> extends AdaptedEntity<T> {

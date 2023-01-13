@@ -1,35 +1,35 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/model/auth/account.dart';
-import 'package:kaiteki/preferences/app_experiment.dart';
-import 'package:kaiteki/routing/notifier.dart';
-import 'package:kaiteki/ui/account_required_screen.dart';
-import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
-import 'package:kaiteki/ui/auth/login/login_screen.dart';
-import 'package:kaiteki/ui/feedback_screen.dart';
-import 'package:kaiteki/ui/lists/lists_screen.dart';
-import 'package:kaiteki/ui/main/main_screen.dart';
-import 'package:kaiteki/ui/search/screen.dart';
-import 'package:kaiteki/ui/settings/about/about_screen.dart';
-import 'package:kaiteki/ui/settings/credits_screen.dart';
-import 'package:kaiteki/ui/settings/customization/customization_settings_screen.dart';
-import 'package:kaiteki/ui/settings/debug/theme_screen.dart';
-import 'package:kaiteki/ui/settings/debug_screen.dart';
-import 'package:kaiteki/ui/settings/experiments.dart';
-import 'package:kaiteki/ui/settings/settings_screen.dart';
-import 'package:kaiteki/ui/shared/conversation_screen.dart';
-import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
-import 'package:kaiteki/ui/shared/posts/compose/compose_screen.dart';
-import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
-import 'package:kaiteki/ui/user/user_screen.dart';
-import 'package:kaiteki/ui/user/user_screen_old.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/routing/notifier.dart";
+import "package:kaiteki/ui/account_required_screen.dart";
+import "package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart";
+import "package:kaiteki/ui/auth/login/login_screen.dart";
+import "package:kaiteki/ui/feedback_screen.dart";
+import "package:kaiteki/ui/lists/lists_screen.dart";
+import "package:kaiteki/ui/main/main_screen.dart";
+import "package:kaiteki/ui/search/screen.dart";
+import "package:kaiteki/ui/settings/about/about_screen.dart";
+import "package:kaiteki/ui/settings/credits_screen.dart";
+import "package:kaiteki/ui/settings/customization/customization_settings_screen.dart";
+import "package:kaiteki/ui/settings/debug/theme_screen.dart";
+import "package:kaiteki/ui/settings/debug_screen.dart";
+import "package:kaiteki/ui/settings/experiments.dart";
+import "package:kaiteki/ui/settings/settings_screen.dart";
+import "package:kaiteki/ui/shared/conversation_screen.dart";
+import "package:kaiteki/ui/shared/dialogs/account_list_dialog.dart";
+import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
+import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:kaiteki/ui/user/user_screen.dart";
+import "package:kaiteki/ui/user/user_screen_old.dart";
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "root");
@@ -169,7 +169,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                     builder: (context) {
                       return ComposeScreen(
                         replyTo:
-                            state.extra is Post ? state.extra as Post : null,
+                            state.extra is Post ? state.extra! as Post : null,
                       );
                     },
                   );
@@ -279,7 +279,11 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
   );
 });
 
-Widget _authenticatedBuilder(context, state, child) {
+Widget _authenticatedBuilder(
+  BuildContext context,
+  GoRouterState state,
+  Widget child,
+) {
   return Consumer(
     child: child,
     builder: (context, ref, child) {

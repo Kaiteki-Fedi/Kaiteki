@@ -1,7 +1,7 @@
-import 'package:equatable/equatable.dart';
-import 'package:kaiteki/fediverse/model/user/reference.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/text/parsers/text_parser.dart';
+import "package:equatable/equatable.dart";
+import "package:kaiteki/fediverse/model/user/reference.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/text/parsers/text_parser.dart";
 
 abstract class Element extends Equatable {
   final List<Element>? children;
@@ -28,7 +28,9 @@ class TextElement extends Element {
       return [];
     }
 
-    String? start, middle, end;
+    String? start;
+    String? middle;
+    String? end;
 
     if (index >= 1) {
       start = text.substring(0, index);

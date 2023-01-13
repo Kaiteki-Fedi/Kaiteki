@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/chat_target.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/helpers.dart';
-import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:mdi/mdi.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/chat_target.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/helpers.dart";
+import "package:kaiteki/utils/text/text_renderer.dart";
+import "package:mdi/mdi.dart";
 
 typedef ChatSelectedCallback = void Function(ChatTarget chat);
 

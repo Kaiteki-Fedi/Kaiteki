@@ -1,8 +1,8 @@
-import 'dart:collection';
+import "dart:collection";
 
-import 'package:flutter/material.dart';
-import 'package:kaiteki/preferences/app_experiment.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/preferences/app_experiment.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 const kLocale = "locale";
 const kDev = "dev";

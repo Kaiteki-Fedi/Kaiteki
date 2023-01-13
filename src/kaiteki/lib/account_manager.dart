@@ -1,15 +1,15 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/auth/account.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/repositories/repository.dart';
-import 'package:tuple/tuple.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/logger.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/repositories/repository.dart";
+import "package:tuple/tuple.dart";
 
 class AccountManager extends ChangeNotifier {
-  static final _logger = getLogger('AccountManager');
+  static final _logger = getLogger("AccountManager");
 
   Account? _currentAccount;
 
@@ -115,7 +115,7 @@ class AccountManager extends ChangeNotifier {
     final accountSecret = credentials.item2;
     final clientSecret = credentials.item3;
 
-    _logger.v('Trying to recover a ${key.type!.displayName} account');
+    _logger.v("Trying to recover a ${key.type!.displayName} account");
 
     final adapter = key.type!.createAdapter(key.host);
 

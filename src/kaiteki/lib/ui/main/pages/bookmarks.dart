@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/post_widget.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
 
 class BookmarksPage extends ConsumerStatefulWidget {
   const BookmarksPage({super.key});
@@ -77,7 +77,7 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
     }
   }
 
-  Widget _buildPost(context, item, index) {
+  Widget _buildPost(BuildContext context, Post item, int index) {
     return Consumer(
       builder: (context, ref, child) {
         return Material(

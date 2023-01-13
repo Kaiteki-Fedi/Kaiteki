@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'sign_up.g.dart';
+part "sign_up.g.dart";
 
 /// Defines the body as object for the "signup" endpoint on Misskey.
 /// Reference: https://github.com/syuilo/misskey/blob/develop/src/server/api/private/signup.ts
@@ -29,8 +30,8 @@ class MisskeySignUpRequest {
     this.recaptchaResponse,
   });
 
-  factory MisskeySignUpRequest.fromJson(Map<String, dynamic> json) =>
+  factory MisskeySignUpRequest.fromJson(JsonMap json) =>
       _$MisskeySignUpRequestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MisskeySignUpRequestToJson(this);
+  JsonMap toJson() => _$MisskeySignUpRequestToJson(this);
 }

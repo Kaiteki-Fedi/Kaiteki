@@ -1,15 +1,15 @@
-import 'package:breakpoint/breakpoint.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
-import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:breakpoint/breakpoint.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/layout/breakpoint_container.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
 
-import 'package:kaiteki/utils/threader.dart';
+import "package:kaiteki/utils/threader.dart";
 
 class ConversationScreen extends ConsumerStatefulWidget {
   final Post post;
@@ -32,6 +32,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     final adapter = ref.watch(adapterProvider);
     try {
       _threadFetchFuture = adapter.getThread(widget.post.getRoot());
+      // ignore: avoid_catching_errors
     } on UnimplementedError {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -111,7 +112,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       trailing: OutlinedButton(
         child: const Text("Show details"),
         onPressed: () => context.showExceptionDialog(
-          snapshot.error,
+          snapshot.error!,
           snapshot.stackTrace,
         ),
       ),

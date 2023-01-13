@@ -1,5 +1,5 @@
-import 'package:kaiteki/fediverse/model/post/post.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
+import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
 
 class Notification {
   final User? user;

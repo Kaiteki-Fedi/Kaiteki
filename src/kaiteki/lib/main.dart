@@ -1,21 +1,21 @@
-import 'dart:async';
-import 'dart:io';
+import "dart:async";
+import "dart:io";
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:kaiteki/account_manager.dart';
-import 'package:kaiteki/app.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/preferences/app_preferences.dart';
-import 'package:kaiteki/preferences/theme_preferences.dart';
-import 'package:kaiteki/repositories/hive_repository.dart';
-import 'package:kaiteki/theming/default/themes.dart';
-import 'package:kaiteki/ui/shared/crash_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import "package:device_info_plus/device_info_plus.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:hive_flutter/hive_flutter.dart";
+import "package:kaiteki/account_manager.dart";
+import "package:kaiteki/app.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/repositories/hive_repository.dart";
+import "package:kaiteki/theming/default/themes.dart";
+import "package:kaiteki/ui/shared/crash_screen.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 Future<bool> get _useMaterial3ByDefault async {
   if (kIsWeb || !Platform.isAndroid) return true;
@@ -80,7 +80,7 @@ Future<void> initializeHive() async {
 
 /// Initializes the account manager.
 Future<AccountManager> getAccountManager() async {
-  AccountKey fromHive(dynamic k) => AccountKey.fromUri(k);
+  AccountKey fromHive(dynamic k) => AccountKey.fromUri(k as String);
   String toHive(AccountKey k) => k.toUri().toString();
 
   final accountBox = await Hive.openBox<AccountSecret>("accountSecrets");

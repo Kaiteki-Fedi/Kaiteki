@@ -1,28 +1,28 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/foundation.dart';
-import 'package:kaiteki/auth/login_typedefs.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/capabilities.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/client.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/extensions.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/media.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart'
+import "package:flutter/foundation.dart";
+import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/capabilities.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/client.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/extensions.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/media.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/user.dart"
     show UserField;
-import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
-import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
-import 'package:kaiteki/fediverse/interfaces/search_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/model/auth/account.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:kaiteki/fediverse/capabilities.dart";
+import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
+import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
+import "package:kaiteki/fediverse/interfaces/search_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/auth/login_result.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/model/file.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 const clientId = kDebugMode
     ? "QTFFSnY5d2QwTkp3enliMHdfaXg6MTpjaQ"
@@ -425,7 +425,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  Future<Pagination<dynamic, User>> getFollowers(
+  Future<Pagination<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -435,7 +435,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  Future<Pagination<dynamic, User>> getFollowing(
+  Future<Pagination<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,

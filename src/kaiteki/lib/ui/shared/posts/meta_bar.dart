@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/post/post.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/ui/shared/users/user_badge.dart';
-import 'package:kaiteki/ui/shared/users/user_display_name_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/ui/shared/users/user_badge.dart";
+import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class MetaBar extends StatelessWidget {
   const MetaBar({

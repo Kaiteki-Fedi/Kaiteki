@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'login.g.dart';
+part "login.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake, createToJson: false)
 class LoginResponse {
@@ -20,6 +21,5 @@ class LoginResponse {
     this.tokenType,
   );
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) =>
-      _$LoginResponseFromJson(json);
+  factory LoginResponse.fromJson(JsonMap json) => _$LoginResponseFromJson(json);
 }

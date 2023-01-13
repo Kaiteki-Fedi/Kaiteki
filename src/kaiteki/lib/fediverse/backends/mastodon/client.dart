@@ -1,19 +1,20 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:fediverse_objects/mastodon.dart' hide List;
-import 'package:fediverse_objects/mastodon.dart' as mastodon show List;
-import 'package:http/http.dart' show Response;
-import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/exceptions/api_exception.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/models/pagination.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/models/search.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/responses/context.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/responses/login.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/responses/marker.dart';
-import 'package:kaiteki/http/http.dart';
-import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/link_header_parser.dart';
+import "package:fediverse_objects/mastodon.dart" hide List;
+import "package:fediverse_objects/mastodon.dart" as mastodon show List;
+import "package:http/http.dart" show Response;
+import "package:kaiteki/constants.dart" as consts;
+import "package:kaiteki/exceptions/api_exception.dart";
+import "package:kaiteki/fediverse/backends/mastodon/models/pagination.dart";
+import "package:kaiteki/fediverse/backends/mastodon/models/search.dart";
+import "package:kaiteki/fediverse/backends/mastodon/responses/context.dart";
+import "package:kaiteki/fediverse/backends/mastodon/responses/login.dart";
+import "package:kaiteki/fediverse/backends/mastodon/responses/marker.dart";
+import "package:kaiteki/http/http.dart";
+import "package:kaiteki/model/file.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/link_header_parser.dart";
+import "package:kaiteki/utils/utils.dart";
 
 class MastodonClient {
   late final KaitekiClient client;
@@ -171,13 +172,13 @@ class MastodonClient {
       HttpMethod.get,
       "api/v1/timelines/home",
       query: {
-        'local': local,
-        'remote': remote,
-        'only_media': onlyMedia,
-        'max_id': maxId,
-        'since_id': sinceId,
-        'min_id': minId,
-        'limit': limit,
+        "local": local,
+        "remote": remote,
+        "only_media": onlyMedia,
+        "max_id": maxId,
+        "since_id": sinceId,
+        "min_id": minId,
+        "limit": limit,
       },
     ).then(Status.fromJson.fromResponseList);
   }
@@ -195,13 +196,13 @@ class MastodonClient {
       HttpMethod.get,
       "api/v1/timelines/public",
       query: {
-        'local': local,
-        'remote': remote,
-        'only_media': onlyMedia,
-        'max_id': maxId,
-        'since_id': sinceId,
-        'min_id': minId,
-        'limit': limit,
+        "local": local,
+        "remote": remote,
+        "only_media": onlyMedia,
+        "max_id": maxId,
+        "since_id": sinceId,
+        "min_id": minId,
+        "limit": limit,
       },
     ).then(Status.fromJson.fromResponseList);
   }
@@ -217,10 +218,10 @@ class MastodonClient {
       HttpMethod.get,
       "api/v1/timelines/list/$listId",
       query: {
-        'max_id': maxId,
-        'since_id': sinceId,
-        'min_id': minId,
-        'limit': limit,
+        "max_id": maxId,
+        "since_id": sinceId,
+        "min_id": minId,
+        "limit": limit,
       },
     ).then(Status.fromJson.fromResponseList);
   }
@@ -290,10 +291,10 @@ class MastodonClient {
       HttpMethod.get,
       "api/v1/bookmarks",
       query: {
-        'max_id': maxId,
-        'since_id': sinceId,
-        'min_id': minId,
-        'limit': limit,
+        "max_id": maxId,
+        "since_id": sinceId,
+        "min_id": minId,
+        "limit": limit,
       },
     ).then(Status.fromJson.fromResponseList);
   }
@@ -309,10 +310,10 @@ class MastodonClient {
   void checkResponse(Response response) {
     if (response.isSuccessful) return;
 
-    dynamic json;
+    JsonMap? json;
 
     try {
-      json = jsonDecode(response.body);
+      json = jsonDecode(response.body) as JsonMap;
     } catch (_) {}
 
     if (json != null) {

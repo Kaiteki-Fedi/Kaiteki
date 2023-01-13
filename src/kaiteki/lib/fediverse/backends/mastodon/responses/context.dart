@@ -1,7 +1,8 @@
-import 'package:fediverse_objects/mastodon.dart' hide List;
-import 'package:json_annotation/json_annotation.dart';
+import "package:fediverse_objects/mastodon.dart" hide List;
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'context.g.dart';
+part "context.g.dart";
 
 @JsonSerializable(createToJson: false)
 class ContextResponse {
@@ -11,6 +12,6 @@ class ContextResponse {
 
   const ContextResponse(this.ancestors, this.descendants);
 
-  factory ContextResponse.fromJson(Map<String, dynamic> json) =>
+  factory ContextResponse.fromJson(JsonMap json) =>
       _$ContextResponseFromJson(json);
 }

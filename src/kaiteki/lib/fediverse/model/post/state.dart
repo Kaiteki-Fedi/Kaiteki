@@ -1,6 +1,6 @@
-import 'package:copy_with_extension/copy_with_extension.dart';
+import "package:copy_with_extension/copy_with_extension.dart";
 
-part 'state.g.dart';
+part "state.g.dart";
 
 /// Represents the post state for the signed-in user.
 @CopyWith()

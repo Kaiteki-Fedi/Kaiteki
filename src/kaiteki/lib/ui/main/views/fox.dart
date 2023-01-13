@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/main/pages/timeline.dart';
-import 'package:kaiteki/ui/shared/posts/compose/compose_form.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/ui/main/pages/timeline.dart";
+import "package:kaiteki/ui/shared/posts/compose/compose_form.dart";
 
 class FoxMainScreenView extends StatelessWidget {
   const FoxMainScreenView({super.key});

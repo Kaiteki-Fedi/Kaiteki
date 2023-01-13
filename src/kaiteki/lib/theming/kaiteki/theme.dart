@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/chat_message_theme.dart';
-import 'package:kaiteki/theming/toggle_button_theme.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/theming/chat_message_theme.dart";
+import "package:kaiteki/theming/toggle_button_theme.dart";
 
 class KaitekiTheme extends ThemeExtension<KaitekiTheme> {
   final ChatMessageTheme chatMessageIncoming;

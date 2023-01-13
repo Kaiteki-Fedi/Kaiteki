@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/dialogs/account_list_dialog.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/dialogs/account_list_dialog.dart";
 
 class AccountSetupPage extends ConsumerWidget {
   const AccountSetupPage({super.key});

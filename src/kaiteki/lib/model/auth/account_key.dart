@@ -1,11 +1,12 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:hive/hive.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/model/user/handle.dart';
+import "package:equatable/equatable.dart";
+import "package:flutter/foundation.dart" show immutable;
+import "package:hive/hive.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/fediverse/model/user/handle.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'account_key.g.dart';
+part "account_key.g.dart";
 
 /// A key to be used for identifying accounts.
 @immutable
@@ -42,10 +43,9 @@ class AccountKey extends Equatable {
 
   String toHandle() => "@$username@$host";
 
-  factory AccountKey.fromJson(Map<String, dynamic> json) =>
-      _$AccountKeyFromJson(json);
+  factory AccountKey.fromJson(JsonMap json) => _$AccountKeyFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AccountKeyToJson(this);
+  JsonMap toJson() => _$AccountKeyToJson(this);
 
   @override
   List<Object?> get props => [username, host, type];

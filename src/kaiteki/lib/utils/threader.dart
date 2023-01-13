@@ -1,10 +1,10 @@
-import 'dart:math' as math;
+import "dart:math" as math;
 
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 ThreadPost toThread(Iterable<Post> posts) {
   final threadPosts = posts.map((post) => ThreadPost(post.getRoot())).toList();
@@ -134,8 +134,9 @@ class ThreadPostContainer extends StatelessWidget {
   }
 
   static double getLineOpacity(int layer, {int maxLayer = 5}) {
-    layer = math.min(layer, maxLayer); // make sure maxLayer or less is taken
-    final opposite = maxLayer - layer; // flip values
+    // make sure maxLayer or less is taken
+    final correctedLayer = math.min(layer, maxLayer);
+    final opposite = maxLayer - correctedLayer; // flip values
     return 0.25 + ((opposite / maxLayer) * 0.5); // return 0.0 - 0.5
   }
 }

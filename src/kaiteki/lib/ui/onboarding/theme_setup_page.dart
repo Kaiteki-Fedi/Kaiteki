@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 
 class ThemeSetupPage extends ConsumerWidget {
   const ThemeSetupPage({super.key});

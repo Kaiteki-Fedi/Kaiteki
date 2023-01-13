@@ -1,32 +1,33 @@
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/capabilities.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/client.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/keys.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart'
+import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/capabilities.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/client.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/keys.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart"
     as twitter;
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/media.dart'
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/media.dart"
     as twitter;
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/media.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/url.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/media_upload.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/tweet.dart'
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/media.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/url.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/media_upload.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/tweet.dart"
     as twitter;
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/user.dart'
+import "package:kaiteki/fediverse/backends/twitter/v1/model/user.dart"
     as twitter;
-import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/model/auth/account.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:oauth1/oauth1.dart';
-import 'package:tuple/tuple.dart';
+import "package:kaiteki/fediverse/capabilities.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/auth/login_result.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/model/file.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:oauth1/oauth1.dart";
+import "package:tuple/tuple.dart";
 
-part 'adapter.c.dart';
+part "adapter.c.dart";
 
 class OldTwitterAdapter extends CentralizedBackendAdapter {
   final OldTwitterClient client;
@@ -65,14 +66,14 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   }) async {
     switch (type) {
       case TimelineKind.home:
-        final homeTimeine = await client.getHomeTimeline(
-          sinceId: query?.sinceId,
-          maxId: query?.untilId,
+        final timeline = await client.getHomeTimeline(
+          sinceId: query?.sinceId as String?,
+          maxId: query?.untilId as String?,
         );
-        return homeTimeine.map(toPost).toList();
+        return timeline.map(toPost).toList();
 
       default:
-        throw UnimplementedError();
+        throw UnsupportedError("$type is not supported by Twitter");
     }
   }
 
@@ -89,18 +90,18 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   @override
   Future<LoginResult> login(
     ClientSecret? clientSecret,
-    requestCredentials,
-    requestMfa,
-    requestOAuth,
+    CredentialsCallback requestCredentials,
+    MfaCallback requestMfa,
+    OAuthCallback requestOAuth,
   ) async {
     // client.authenticationData!.accessToken = token;
 
     twitter.User account;
 
     final platform = Platform(
-      'https://api.twitter.com/oauth/request_token',
-      'https://api.twitter.com/oauth/authorize',
-      'https://api.twitter.com/oauth/access_token',
+      "https://api.twitter.com/oauth/request_token",
+      "https://api.twitter.com/oauth/authorize",
+      "https://api.twitter.com/oauth/access_token",
       SignatureMethods.hmacSha1,
     );
     final clientCredentials = ClientCredentials(token, secret);
@@ -141,7 +142,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
       ..credentials = authResp.credentials
       ..clientCredentials = clientCredentials;
 
-    var username = authResp.optionalParameters['screen_name'];
+    var username = authResp.optionalParameters["screen_name"];
     try {
       account = await client.verifyCredentials();
       username ??= account.screenName;
@@ -184,7 +185,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
     return Attachment(
       type: AttachmentType.image,
       source: upload,
-      url: "", previewUrl: '', // TODO(Craftplacer): implement proper preview
+      url: "", previewUrl: "", // TODO(Craftplacer): implement proper preview
     );
   }
 
@@ -228,7 +229,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   Instance get instance => const Instance(name: "Twitter");
 
   @override
-  Future<Pagination<dynamic, User>> getFollowers(
+  Future<Pagination<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -236,7 +237,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<Pagination<dynamic, User>> getFollowing(
+  Future<Pagination<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,

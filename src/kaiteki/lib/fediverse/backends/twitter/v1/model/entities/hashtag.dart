@@ -1,7 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/entity.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'hashtag.g.dart';
+part "hashtag.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Hashtag extends Entity {
@@ -13,8 +14,7 @@ class Hashtag extends Entity {
     required List<int> indices,
   }) : super(indices);
 
-  factory Hashtag.fromJson(Map<String, dynamic> json) =>
-      _$HashtagFromJson(json);
+  factory Hashtag.fromJson(JsonMap json) => _$HashtagFromJson(json);
 
-  Map<String, dynamic> toJson() => _$HashtagToJson(this);
+  JsonMap toJson() => _$HashtagToJson(this);
 }

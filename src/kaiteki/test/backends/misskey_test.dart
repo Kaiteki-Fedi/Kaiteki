@@ -1,8 +1,8 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:kaiteki/fediverse/backends/misskey/client.dart';
-import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
-import 'package:test/test.dart';
+import "package:kaiteki/fediverse/backends/misskey/client.dart";
+import "package:kaiteki/fediverse/backends/misskey/requests/timeline.dart";
+import "package:test/test.dart";
 
 void main() {
   late MisskeyClient client;

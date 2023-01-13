@@ -1,6 +1,6 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:kaiteki/repositories/repository.dart';
+import "package:kaiteki/repositories/repository.dart";
 
 class DummyRepository<T extends Object, K> extends Repository<T, K> {
   final Map<K, T> map = {};

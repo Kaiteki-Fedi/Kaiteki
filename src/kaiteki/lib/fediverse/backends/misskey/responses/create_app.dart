@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'create_app.g.dart';
+part "create_app.g.dart";
 
 @JsonSerializable()
 class CreateAppResponse {
@@ -18,8 +19,8 @@ class CreateAppResponse {
     required this.secret,
   });
 
-  factory CreateAppResponse.fromJson(Map<String, dynamic> json) =>
+  factory CreateAppResponse.fromJson(JsonMap json) =>
       _$CreateAppResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CreateAppResponseToJson(this);
+  JsonMap toJson() => _$CreateAppResponseToJson(this);
 }

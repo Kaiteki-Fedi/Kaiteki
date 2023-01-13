@@ -1,15 +1,15 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/auth/login/constants.dart';
-import 'package:kaiteki/ui/auth/login/login_form.dart';
-import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/error_message.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:flutter_svg/flutter_svg.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/auth/login/constants.dart";
+import "package:kaiteki/ui/auth/login/login_form.dart";
+import "package:kaiteki/ui/shared/async/async_block_widget.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/error_message.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 const _instanceIconSize = 96.0;
 

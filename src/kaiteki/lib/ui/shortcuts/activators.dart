@@ -1,5 +1,5 @@
-import 'package:flutter/services.dart' show LogicalKeyboardKey;
-import 'package:flutter/widgets.dart'
+import "package:flutter/services.dart" show LogicalKeyboardKey;
+import "package:flutter/widgets.dart"
     show CharacterActivator, LogicalKeySet, ShortcutActivator, SingleActivator;
 
 /// List of [ShortcutActivator]s that should not be triggered in text input
@@ -50,7 +50,7 @@ final gotoBookmarks = LogicalKeySet(
   LogicalKeyboardKey.keyG,
   LogicalKeyboardKey.keyB,
 );
-const shortcutsHelp = CharacterActivator('?');
+const shortcutsHelp = CharacterActivator("?");
 const refresh = SingleActivator(LogicalKeyboardKey.f5);
 const refresh2 = SingleActivator(LogicalKeyboardKey.keyR, control: true);
 const refresh3 = SingleActivator(LogicalKeyboardKey.browserRefresh);

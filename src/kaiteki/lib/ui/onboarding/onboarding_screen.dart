@@ -1,14 +1,14 @@
-import 'package:animations/animations.dart';
-import 'package:async/async.dart';
-import 'package:breakpoint/breakpoint.dart';
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/onboarding/benefits.dart';
-import 'package:kaiteki/ui/onboarding/self_select_screen.dart';
-import 'package:kaiteki/utils/extensions/m3.dart';
-import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:animations/animations.dart";
+import "package:async/async.dart";
+import "package:breakpoint/breakpoint.dart";
+import "package:dynamic_color/dynamic_color.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:kaiteki/ui/onboarding/benefits.dart";
+import "package:kaiteki/ui/onboarding/self_select_screen.dart";
+import "package:kaiteki/utils/extensions/m3.dart";
+import "package:page_view_dot_indicator/page_view_dot_indicator.dart";
+import "package:url_launcher/url_launcher.dart";
 
 const transitionDuration = Duration(milliseconds: 800);
 const pageDuration = Duration(seconds: 5);
@@ -140,9 +140,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget buildHorizontalSharedAxisTransition(
-    child,
-    animation,
-    secondaryAnimation,
+    Widget child,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
   ) {
     return SharedAxisTransition(
       animation: animation,
@@ -202,6 +202,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+  // ignore: avoid_positional_boolean_parameters
   Widget buildPageIndicator(bool center) {
     return PageViewDotIndicator(
       currentItem: _currentPage,

@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/shared/timeline.dart';
-import 'package:kaiteki/ui/user/user_panel.dart';
-import 'package:kaiteki/ui/user/user_sliver.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:share_plus/share_plus.dart';
+import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/user/user_panel.dart";
+import "package:kaiteki/ui/user/user_sliver.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:share_plus/share_plus.dart";
 
 class UserScreen extends ConsumerStatefulWidget {
   final String id;
@@ -104,7 +104,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                       duration: const Duration(milliseconds: 150),
                       child: !innerBoxIsScrolled
                           ? null
-                          : user?.nullTransform(_buildAppBarUserName),
+                          : user.nullTransform(_buildAppBarUserName),
                     ),
                     pinned: true,
                     forceElevated: innerBoxIsScrolled,

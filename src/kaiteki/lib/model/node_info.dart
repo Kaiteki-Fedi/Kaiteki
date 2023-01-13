@@ -1,5 +1,6 @@
-import 'package:json_annotation/json_annotation.dart';
-part 'node_info.g.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
+part "node_info.g.dart";
 
 @JsonSerializable()
 class NodeInfo {
@@ -12,7 +13,7 @@ class NodeInfo {
   final List<Protocol> protocols;
 
   /// Free form key value pairs for software specific values. Clients should not rely on any specific key present.
-  final Map<String, dynamic> metadata;
+  final JsonMap metadata;
 
   const NodeInfo({
     required this.version,
@@ -21,10 +22,9 @@ class NodeInfo {
     this.metadata = const {},
   });
 
-  factory NodeInfo.fromJson(Map<String, dynamic> json) =>
-      _$NodeInfoFromJson(json);
+  factory NodeInfo.fromJson(JsonMap json) => _$NodeInfoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$NodeInfoToJson(this);
+  JsonMap toJson() => _$NodeInfoToJson(this);
 }
 
 @JsonSerializable()
@@ -41,10 +41,9 @@ class Software {
     this.homepage,
   });
 
-  factory Software.fromJson(Map<String, dynamic> json) =>
-      _$SoftwareFromJson(json);
+  factory Software.fromJson(JsonMap json) => _$SoftwareFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SoftwareToJson(this);
+  JsonMap toJson() => _$SoftwareToJson(this);
 }
 
 enum Protocol {

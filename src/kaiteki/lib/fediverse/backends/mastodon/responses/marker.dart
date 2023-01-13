@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'marker.g.dart';
+part "marker.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake, createToJson: false)
 class Marker {
@@ -14,7 +15,7 @@ class Marker {
     required this.updatedAt,
   });
 
-  factory Marker.fromJson(Map<String, dynamic> json) => _$MarkerFromJson(json);
+  factory Marker.fromJson(JsonMap json) => _$MarkerFromJson(json);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, createToJson: false)
@@ -24,7 +25,7 @@ class MarkerResponse {
 
   const MarkerResponse({this.notifications, this.home});
 
-  factory MarkerResponse.fromJson(Map<String, dynamic> json) =>
+  factory MarkerResponse.fromJson(JsonMap json) =>
       _$MarkerResponseFromJson(json);
 }
 

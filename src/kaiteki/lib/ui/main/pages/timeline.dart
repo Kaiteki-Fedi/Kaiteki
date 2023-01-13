@@ -1,9 +1,9 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/ui/shared/timeline.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class TimelinePage extends ConsumerStatefulWidget {
   final TimelineKind? initialTimeline;

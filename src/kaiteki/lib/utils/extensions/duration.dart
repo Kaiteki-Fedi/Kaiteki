@@ -1,5 +1,5 @@
-import 'package:flutter/widgets.dart';
-import 'package:kaiteki/di.dart';
+import "package:flutter/widgets.dart";
+import "package:kaiteki/di.dart";
 
 extension DurationExtension on Duration {
   String toStringHuman({BuildContext? context}) {

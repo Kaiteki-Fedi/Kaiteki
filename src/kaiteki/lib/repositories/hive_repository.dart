@@ -1,7 +1,7 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:hive/hive.dart';
-import 'package:kaiteki/repositories/repository.dart';
+import "package:hive/hive.dart";
+import "package:kaiteki/repositories/repository.dart";
 
 class HiveRepository<T extends Object, K> extends Repository<T, K> {
   final Box<T> box;
@@ -42,7 +42,7 @@ class HiveRepository<T extends Object, K> extends Repository<T, K> {
 
   K _convertFromHiveKey(dynamic key) {
     final converter = fromHiveKeyConverter;
-    if (converter == null) return key;
+    if (converter == null) return key as K;
     return converter(key)!;
   }
 }

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/ui/shared/posts/post_widget.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
 
 class SubjectBar extends StatelessWidget {
   final String subject;

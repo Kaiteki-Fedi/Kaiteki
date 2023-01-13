@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class CrashScreen extends StatelessWidget {
   final Object exception;

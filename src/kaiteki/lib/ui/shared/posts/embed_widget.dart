@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/embed.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/model/embed.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class EmbedWidget extends StatelessWidget {
   final Embed embed;

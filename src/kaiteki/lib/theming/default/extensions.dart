@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:kaiteki/theming/default/constants.dart';
-import 'package:kaiteki/theming/kaiteki/colors.dart';
-import 'package:kaiteki/theming/kaiteki/post.dart';
-import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/theming/kaiteki/theme.dart';
-import 'package:kaiteki_material/kaiteki_material.dart';
+import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:kaiteki/theming/default/constants.dart";
+import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/theming/kaiteki/post.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/kaiteki/theme.dart";
+import "package:kaiteki_material/kaiteki_material.dart";
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyGeneralChanges() {

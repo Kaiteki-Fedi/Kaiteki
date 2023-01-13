@@ -1,18 +1,18 @@
-import 'dart:async';
-import 'dart:developer';
+import "dart:async";
+import "dart:developer";
 
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:tuple/tuple.dart';
-import 'package:video_player/video_player.dart';
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:tuple/tuple.dart";
+import "package:video_player/video_player.dart";
 
 typedef _PostAttachmentCompound = Tuple2<Post, Attachment>;
 

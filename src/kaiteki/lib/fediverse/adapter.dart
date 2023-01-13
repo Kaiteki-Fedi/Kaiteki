@@ -1,13 +1,13 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:kaiteki/auth/login_typedefs.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/model/file.dart';
+import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/fediverse/capabilities.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/model/auth/login_result.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/model/file.dart";
 
 abstract class CentralizedBackendAdapter extends BackendAdapter {
   Instance get instance;
@@ -86,13 +86,13 @@ abstract class BackendAdapter {
 
   Future<List<User>> getRepeatees(String id);
 
-  Future<Pagination<dynamic, User>> getFollowers(
+  Future<Pagination<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
   });
 
-  Future<Pagination<dynamic, User>> getFollowing(
+  Future<Pagination<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,

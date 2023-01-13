@@ -1,10 +1,10 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:http/http.dart';
-import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/http/method.dart';
-import 'package:kaiteki/http/request_body.dart';
+import "package:flutter/foundation.dart" show kIsWeb;
+import "package:http/http.dart";
+import "package:kaiteki/constants.dart" as consts;
+import "package:kaiteki/http/method.dart";
+import "package:kaiteki/http/request_body.dart";
 
 typedef CheckResponseCallback = FutureOr<void> Function(Response response);
 typedef RequestIntercept = FutureOr<void> Function(BaseRequest request);

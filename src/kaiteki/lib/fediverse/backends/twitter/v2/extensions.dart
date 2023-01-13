@@ -1,14 +1,14 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:collection/collection.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/media.dart' as twt;
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/media.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart' as twt;
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/user.dart' as twt;
-import 'package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart';
-import 'package:kaiteki/fediverse/model/model.dart' as ktk;
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:collection/collection.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/media.dart" as twt;
+import "package:kaiteki/fediverse/backends/twitter/v2/model/media.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart" as twt;
+import "package:kaiteki/fediverse/backends/twitter/v2/model/user.dart" as twt;
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart";
+import "package:kaiteki/fediverse/model/model.dart" as ktk;
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 extension UserExtensions on twt.User {
   ktk.User toKaiteki() {
@@ -101,7 +101,7 @@ extension TweetExtensions on twt.Tweet {
             (publicMetrics?.quoteCount ?? 0),
         replyCount: publicMetrics?.replyCount ?? 0,
       ),
-      replyToUser: inReplyToUserId?.nullTransform(ResolvableUser.fromId),
+      replyToUser: inReplyToUserId.nullTransform(ResolvableUser.fromId),
       externalUrl: Uri(
         scheme: "https",
         host: "twitter.com",

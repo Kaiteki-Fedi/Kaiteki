@@ -1,6 +1,6 @@
-import 'dart:ui' show lerpDouble;
+import "dart:ui" show lerpDouble;
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class KaitekiPostTheme extends ThemeExtension<KaitekiPostTheme> {
   final EdgeInsets padding;

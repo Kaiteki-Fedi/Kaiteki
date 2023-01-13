@@ -1,5 +1,5 @@
-import 'package:equatable/equatable.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
+import "package:equatable/equatable.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
 
 class UserHandle extends Equatable {
   final String username;

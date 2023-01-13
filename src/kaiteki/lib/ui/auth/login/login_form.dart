@@ -1,28 +1,28 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:animations/animations.dart';
-import 'package:async/async.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/auth/login_functions.dart';
-import 'package:kaiteki/auth/login_typedefs.dart';
-import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/instance_prober.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/ui/auth/login/dialogs/api_type_dialog.dart';
-import 'package:kaiteki/ui/auth/login/pages/instance_page.dart';
-import 'package:kaiteki/ui/auth/login/pages/mfa_page.dart';
-import 'package:kaiteki/ui/auth/login/pages/oauth_page.dart';
-import 'package:kaiteki/ui/auth/login/pages/user_page.dart';
-import 'package:kaiteki/ui/shared/async/async_block_widget.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:tuple/tuple.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:animations/animations.dart";
+import "package:async/async.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/auth/login_functions.dart";
+import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki/constants.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/fediverse/instance_prober.dart";
+import "package:kaiteki/fediverse/model/instance.dart";
+import "package:kaiteki/ui/auth/login/dialogs/api_type_dialog.dart";
+import "package:kaiteki/ui/auth/login/pages/instance_page.dart";
+import "package:kaiteki/ui/auth/login/pages/mfa_page.dart";
+import "package:kaiteki/ui/auth/login/pages/oauth_page.dart";
+import "package:kaiteki/ui/auth/login/pages/user_page.dart";
+import "package:kaiteki/ui/shared/async/async_block_widget.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:tuple/tuple.dart";
+import "package:url_launcher/url_launcher.dart";
 
 const iconConstraint = BoxConstraints.tightFor(width: 48, height: 24);
 const fieldMargin = EdgeInsets.symmetric(vertical: 8.0);
@@ -272,7 +272,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
     }
   }
 
-  Future<void> _showError(dynamic error, StackTrace? stack) async {
+  Future<void> _showError(Object error, StackTrace? stack) async {
     await showDialog(
       context: context,
       builder: (_) => AuthenticationUnsuccessfulDialog(

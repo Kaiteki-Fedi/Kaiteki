@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
-import 'package:kaiteki/fediverse/model/chat_message.dart';
-import 'package:kaiteki/fediverse/model/chat_target.dart';
-import 'package:kaiteki/preferences/app_experiment.dart';
-import 'package:kaiteki/ui/chats/chat_message.dart';
-import 'package:kaiteki/ui/chats/chat_target_list.dart';
-import 'package:kaiteki/ui/chats/compose_message_bar.dart';
-import 'package:kaiteki/ui/shared/dialogs/find_user_dialog.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:mdi/mdi.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/chat_support.dart";
+import "package:kaiteki/fediverse/model/chat_message.dart";
+import "package:kaiteki/fediverse/model/chat_target.dart";
+import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/ui/chats/chat_message.dart";
+import "package:kaiteki/ui/chats/chat_target_list.dart";
+import "package:kaiteki/ui/chats/compose_message_bar.dart";
+import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:mdi/mdi.dart";
 
 class ChatsPage extends ConsumerStatefulWidget {
   const ChatsPage({super.key});
@@ -145,7 +145,7 @@ class ChatView extends ConsumerWidget {
               return List.generate(5, (index) {
                 return PopupMenuItem(
                   value: index,
-                  child: Text('button no $index'),
+                  child: Text("button no $index"),
                 );
               });
             },
@@ -156,11 +156,13 @@ class ChatView extends ConsumerWidget {
           child: FutureBuilder<Iterable<ChatMessage>>(
             future: adapter.getChatMessages(chat),
             builder: (context, snapshot) {
-              if (snapshot.data == null) {
+              final data = snapshot.data;
+
+              if (data == null) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              final messages = snapshot.data!;
+              final messages = data;
 
               if (messages.isEmpty) {
                 return const Center(

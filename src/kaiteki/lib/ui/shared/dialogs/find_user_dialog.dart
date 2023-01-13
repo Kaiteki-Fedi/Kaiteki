@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/search_support.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
-import 'package:kaiteki/ui/shared/search_bar.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/search_support.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:kaiteki/ui/shared/search_bar.dart";
 
 class FindUserDialog extends ConsumerStatefulWidget {
   const FindUserDialog({super.key});

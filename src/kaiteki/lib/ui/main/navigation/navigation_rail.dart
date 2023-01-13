@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/main/compose_fab.dart';
-import 'package:kaiteki/ui/main/tab.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki_material/kaiteki_material.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/main/compose_fab.dart";
+import "package:kaiteki/ui/main/tab.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_material/kaiteki_material.dart";
 
 class MainScreenNavigationRail extends ConsumerWidget {
   final List<MainScreenTab> tabs;

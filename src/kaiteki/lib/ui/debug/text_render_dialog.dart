@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart' hide Element;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:kaiteki/fediverse/model/post/post.dart';
-import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
-import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/text/elements.dart';
-import 'package:kaiteki/utils/text/parsers.dart';
+import "package:flutter/material.dart" hide Element;
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:flutter_simple_treeview/flutter_simple_treeview.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/shared/dialogs/dialog_close_button.dart";
+import "package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/text/elements.dart";
+import "package:kaiteki/utils/text/parsers.dart";
 
 class TextRenderDialog extends ConsumerStatefulWidget {
   final Post post;

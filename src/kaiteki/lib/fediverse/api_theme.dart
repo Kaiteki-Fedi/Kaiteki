@@ -1,4 +1,4 @@
-import 'package:flutter/painting.dart';
+import "package:flutter/painting.dart";
 
 class ApiTheme {
   final Color backgroundColor;
@@ -16,26 +16,26 @@ class ApiTheme {
 const mastodonTheme = ApiTheme(
   Color(0xFF1F232B),
   Color(0xFF4498DC),
-  iconAssetLocation: 'assets/icons/mastodon.png',
+  iconAssetLocation: "assets/icons/mastodon.png",
 );
 
 /// API theme for Misskey. Colors picked from https://misskey.io/preferences.
 const misskeyTheme = ApiTheme(
   Color(0xFF000000),
   Color(0xFF8DB600),
-  iconAssetLocation: 'assets/icons/misskey.png',
+  iconAssetLocation: "assets/icons/misskey.png",
 );
 
 /// API theme for Pleroma. Colors picked from https://pleroma.social/.
 const pleromaTheme = ApiTheme(
   Color(0xFF11181E),
   Color(0xFFF6A358),
-  iconAssetLocation: 'assets/icons/pleroma.png',
+  iconAssetLocation: "assets/icons/pleroma.png",
 );
 
 /// API theme for Twitter.
 const twitterTheme = ApiTheme(
   Color(0xFFF6A358),
   Color(0xFFF6A358),
-  iconAssetLocation: 'assets/icons/twitter.png',
+  iconAssetLocation: "assets/icons/twitter.png",
 );

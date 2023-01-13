@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class UserDisplayNameWidget extends ConsumerWidget {
   final User user;
@@ -61,7 +61,7 @@ class DisplayNameTuple {
     String? secondary;
     if (!isSameName) secondary = user.username;
     final prefix = secondary ?? "";
-    secondary = '$prefix@$host';
+    secondary = "$prefix@$host";
 
     return DisplayNameTuple(secondary, !isSameName);
   }

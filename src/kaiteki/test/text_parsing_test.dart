@@ -1,10 +1,10 @@
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/utils/text/elements.dart';
-import 'package:kaiteki/utils/text/parsers.dart';
-import 'package:test/test.dart';
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/utils/text/elements.dart";
+import "package:kaiteki/utils/text/parsers.dart";
+import "package:test/test.dart";
 
 void main() {
-  test('parse link', () {
+  test("parse link", () {
     const html = '<a href="https://craftplacer.moe/">look a cool site</a>';
     final expectedUri = Uri(
       scheme: "https",
@@ -15,21 +15,21 @@ void main() {
     expect(
       const HtmlTextParser().parse(html).single,
       const TypeMatcher<LinkElement>()
-          .having((e) => e.destination, 'destination', equals(expectedUri))
+          .having((e) => e.destination, "destination", equals(expectedUri))
           .having(
             (e) => e.children![0],
-            'child',
+            "child",
             const TypeMatcher<TextElement>().having(
               (t) => t.text,
-              'text',
+              "text",
               equals("look a cool site"),
             ),
           ),
     );
   });
 
-  test('parse text with styles', () {
-    const html = '<i>italic text</i><b>bold text</b>';
+  test("parse text with styles", () {
+    const html = "<i>italic text</i><b>bold text</b>";
     final elements = const HtmlTextParser().parse(html);
 
     expect(
@@ -45,15 +45,15 @@ void main() {
     );
   });
 
-  group('parse mentions', () {
+  group("parse mentions", () {
     final elements = const SocialTextParser().parse(
-      '@Craftplacer Hey are you there? '
-      '@Craftplacer@pl.craftplacer.moe maybe at your alt.'
-      '@@ @*@* @ @',
+      "@Craftplacer Hey are you there? "
+      "@Craftplacer@pl.craftplacer.moe maybe at your alt. "
+      "@@ @*@* @ @",
     );
 
     test(
-      'parse mention without host',
+      "parse mention without host",
       () => expect(
         elements[0],
         const TypeMatcher<MentionElement>()
@@ -62,7 +62,7 @@ void main() {
     );
 
     test(
-      'parse mention with host',
+      "parse mention with host",
       () => expect(
         elements[2],
         const TypeMatcher<MentionElement>()
@@ -72,9 +72,9 @@ void main() {
     );
   });
 
-  group('mixed parsing', () {
-    test('easy', () {
-      const input = '<b>@Craftplacer Hey are you there?</b>';
+  group("mixed parsing", () {
+    test("easy", () {
+      const input = "<b>@Craftplacer Hey are you there?</b>";
       final elements = const HtmlTextParser() //
           .parse(input)
           .parseWith(const SocialTextParser());
@@ -95,10 +95,10 @@ void main() {
       );
     });
 
-    test('hard', () {
-      const input = '<b><i>@Craftplacer</i> Hey are you there? '
-          'Can you visit <a href="https://craftplacer.moe/">'
-          'my website?</a></b>';
+    test("hard", () {
+      const input = "<b><i>@Craftplacer</i> Hey are you there? "
+          "Can you visit "
+          '<a href="https://craftplacer.moe/"> my website?</a></b>';
 
       final parseOne = const HtmlTextParser().parse(input);
       final parseTwo = parseOne.parseWith(const SocialTextParser());
@@ -135,7 +135,7 @@ bool search(Element element, Matcher matcher, [bool recursive = false]) {
   if (matcher.matches(element, {})) {
     return true;
   } else {
-    for (final child in element.children ?? []) {
+    for (final child in element.children ?? const <Element>[]) {
       if (search(child, matcher, true)) {
         return true;
       }

@@ -1,8 +1,9 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'timeline_response.g.dart';
+part "timeline_response.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class TimelineResponse extends Response<List<Tweet>> {
@@ -14,10 +15,10 @@ class TimelineResponse extends Response<List<Tweet>> {
     super.includes,
   });
 
-  factory TimelineResponse.fromJson(Map<String, dynamic> json) =>
+  factory TimelineResponse.fromJson(JsonMap json) =>
       _$TimelineResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TimelineResponseToJson(this);
+  JsonMap toJson() => _$TimelineResponseToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -36,8 +37,8 @@ class TimelineResponseMeta {
     required this.resultCount,
   });
 
-  factory TimelineResponseMeta.fromJson(Map<String, dynamic> json) =>
+  factory TimelineResponseMeta.fromJson(JsonMap json) =>
       _$TimelineResponseMetaFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TimelineResponseMetaToJson(this);
+  JsonMap toJson() => _$TimelineResponseMetaToJson(this);
 }

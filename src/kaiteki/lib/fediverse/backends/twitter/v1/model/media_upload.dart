@@ -1,6 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'media_upload.g.dart';
+part "media_upload.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class MediaUpload {
@@ -20,10 +21,9 @@ class MediaUpload {
     required this.image,
   });
 
-  factory MediaUpload.fromJson(Map<String, dynamic> json) =>
-      _$MediaUploadFromJson(json);
+  factory MediaUpload.fromJson(JsonMap json) => _$MediaUploadFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MediaUploadToJson(this);
+  JsonMap toJson() => _$MediaUploadToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -38,8 +38,8 @@ class MediaUploadImage {
     required this.h,
   });
 
-  factory MediaUploadImage.fromJson(Map<String, dynamic> json) =>
+  factory MediaUploadImage.fromJson(JsonMap json) =>
       _$MediaUploadImageFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MediaUploadImageToJson(this);
+  JsonMap toJson() => _$MediaUploadImageToJson(this);
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class IconLandingWidget extends StatelessWidget {
   final Widget icon;
@@ -11,6 +11,13 @@ class IconLandingWidget extends StatelessWidget {
     required this.icon,
     required this.text,
   });
+
+  factory IconLandingWidget.notSignedIn() {
+    return const IconLandingWidget(
+      icon: Icon(Icons.vpn_key_rounded),
+      text: Text("You're not signed in"),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

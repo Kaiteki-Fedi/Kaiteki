@@ -1,16 +1,16 @@
-import 'package:collection/collection.dart';
-import 'package:fediverse_objects/pleroma.dart' as pleroma;
-import 'package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart';
-import 'package:kaiteki/fediverse/backends/pleroma/capabilities.dart';
-import 'package:kaiteki/fediverse/backends/pleroma/client.dart';
-import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
-import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
-import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/notification.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:collection/collection.dart";
+import "package:fediverse_objects/pleroma.dart" as pleroma;
+import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
+import "package:kaiteki/fediverse/backends/pleroma/capabilities.dart";
+import "package:kaiteki/fediverse/backends/pleroma/client.dart";
+import "package:kaiteki/fediverse/interfaces/chat_support.dart";
+import "package:kaiteki/fediverse/interfaces/preview_support.dart";
+import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/notification.dart";
+import "package:kaiteki/utils/extensions.dart";
 
-part 'adapter.c.dart';
+part "adapter.c.dart";
 
 // TODO(Craftplacer): add missing implementations
 class PleromaAdapter //
@@ -77,7 +77,7 @@ class PleromaAdapter //
   Future<Post> getPreview(PostDraft draft) async {
     final status = await client.postStatus(
       draft.content,
-      contentType: getContentType(draft.formatting),
+      contentType: pleromaFormattingRosetta.getLeft(draft.formatting),
       pleromaPreview: true,
     );
     return toPost(status, instance);
@@ -120,7 +120,7 @@ class PleromaAdapter //
       return null;
     }
 
-    final uri = Uri.https(host, '');
+    final uri = Uri.https(host, "");
     final relative = Uri.parse(input);
 
     if (!relative.isAbsolute) {
@@ -152,7 +152,7 @@ class PleromaAdapter //
   }
 
   @override
-  Future<Pagination<dynamic, User>> getFollowers(
+  Future<Pagination<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -169,7 +169,7 @@ class PleromaAdapter //
   }
 
   @override
-  Future<Pagination<dynamic, User>> getFollowing(
+  Future<Pagination<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,

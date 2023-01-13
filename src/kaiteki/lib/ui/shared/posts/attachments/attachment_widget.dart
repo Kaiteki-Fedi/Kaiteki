@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
-import 'package:kaiteki/fediverse/model/attachment.dart';
-import 'package:kaiteki/fediverse/model/post/post.dart';
-import 'package:kaiteki/platform_checks.dart';
-import 'package:kaiteki/ui/shared/posts/attachments/fallback_attachment_widget.dart';
-import 'package:kaiteki/ui/shared/posts/attachments/image_attachment_widget.dart';
-import 'package:kaiteki/ui/shared/posts/attachments/video_attachment_widget.dart';
+import "package:flutter/material.dart";
+import "package:flutter_blurhash/flutter_blurhash.dart";
+import "package:kaiteki/fediverse/model/attachment.dart";
+import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/platform_checks.dart";
+import "package:kaiteki/ui/shared/posts/attachments/fallback_attachment_widget.dart";
+import "package:kaiteki/ui/shared/posts/attachments/image_attachment_widget.dart";
+import "package:kaiteki/ui/shared/posts/attachments/video_attachment_widget.dart";
 
 class AttachmentWidget extends StatefulWidget {
   final Attachment attachment;

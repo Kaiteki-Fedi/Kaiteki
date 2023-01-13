@@ -1,14 +1,14 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/helpers.dart';
-import 'package:kaiteki/utils/text/text_renderer.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/helpers.dart";
+import "package:kaiteki/utils/text/text_renderer.dart";
+import "package:url_launcher/url_launcher_string.dart";
 
 /// A vertical list describing the provided user.
 class UserInfoWidget extends ConsumerWidget {

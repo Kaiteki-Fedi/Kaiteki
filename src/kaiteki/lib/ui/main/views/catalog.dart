@@ -1,13 +1,13 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:tuple/tuple.dart';
+import "package:collection/collection.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:tuple/tuple.dart";
 
 class CatalogMainScreenView extends ConsumerStatefulWidget {
   const CatalogMainScreenView({super.key});

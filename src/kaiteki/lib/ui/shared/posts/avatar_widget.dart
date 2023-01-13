@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
+import "package:flutter/material.dart";
+import "package:flutter_blurhash/flutter_blurhash.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
 
 class AvatarWidget extends StatelessWidget {
   final User user;

@@ -1,17 +1,17 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/interfaces/list_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/post_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:tuple/tuple.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/interfaces/list_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:tuple/tuple.dart";
 
 class TimelineSliver extends ConsumerStatefulWidget {
   final double? maxWidth;
@@ -153,7 +153,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
         itemBuilder: _buildPost,
         animateTransitions: true,
         firstPageErrorIndicatorBuilder: (context) {
-          final t = _controller.error as Tuple2<dynamic, StackTrace>;
+          final t = _controller.error as Tuple2<Object, StackTrace>;
           return Center(
             child: ErrorLandingWidget(
               error: t.item1,
@@ -178,7 +178,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
     );
   }
 
-  Widget _buildPost(BuildContext context, item, index) {
+  Widget _buildPost(BuildContext context, Post item, int index) {
     void openPost() => context.pushNamed(
           "post",
           params: {...ref.accountRouterParams, "id": item.id},

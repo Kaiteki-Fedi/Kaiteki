@@ -1,34 +1,36 @@
-import 'package:collection/collection.dart';
-import 'package:fediverse_objects/mastodon.dart' as mastodon;
-import 'package:fediverse_objects/pleroma.dart' as pleroma;
-import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/exceptions/authentication_exception.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/adapter.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/capabilities.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
-import 'package:kaiteki/fediverse/backends/mastodon/responses/marker.dart';
-import 'package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart';
-import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
-import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
-import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
-import 'package:kaiteki/fediverse/interfaces/list_support.dart';
-import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
-import 'package:kaiteki/fediverse/interfaces/search_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/notification.dart';
+import "package:collection/collection.dart";
+import "package:fediverse_objects/mastodon.dart" as mastodon;
+import "package:fediverse_objects/pleroma.dart" as pleroma;
+import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki/constants.dart" as consts;
+import "package:kaiteki/exceptions/authentication_exception.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/backends/mastodon/adapter.dart";
+import "package:kaiteki/fediverse/backends/mastodon/capabilities.dart";
+import "package:kaiteki/fediverse/backends/mastodon/client.dart";
+import "package:kaiteki/fediverse/backends/mastodon/responses/marker.dart";
+import "package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart";
+import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
+import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
+import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
+import "package:kaiteki/fediverse/interfaces/list_support.dart";
+import "package:kaiteki/fediverse/interfaces/notification_support.dart";
+import "package:kaiteki/fediverse/interfaces/search_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/notification.dart";
 // ignore: unnecessary_import, Dart Analyzer is fucking with me
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/model/auth/account.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:tuple/tuple.dart';
+import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/auth/login_result.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/model/file.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/rosetta.dart";
+import "package:tuple/tuple.dart";
 
-part 'shared_adapter.c.dart'; // That file contains toEntity() methods
+part "shared_adapter.c.dart"; // That file contains toEntity() methods
 
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
@@ -53,9 +55,9 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<LoginResult> login(
     ClientSecret? clientSecret,
-    requestCredentials,
-    requestMfa,
-    requestOAuth,
+    CredentialsCallback requestCredentials,
+    MfaCallback requestMfa,
+    OAuthCallback requestOAuth,
   ) async {
     late final String accessToken;
     late final mastodon.Application application;
@@ -180,38 +182,18 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<Post> postStatus(PostDraft draft, {Post? parentPost}) async {
-    final visibility = const <Visibility, String>{
-      Visibility.public: "public",
-      Visibility.unlisted: "unlisted",
-      Visibility.followersOnly: "private",
-      Visibility.direct: "direct"
-    }[draft.visibility]!;
-
-    final contentType = getContentType(draft.formatting);
-
     final newPost = await client.postStatus(
       draft.content,
       pleromaPreview: false,
-      visibility: visibility,
+      visibility: mastodonVisibilityRosetta.getLeft(draft.visibility),
       spoilerText: draft.subject,
       inReplyToId: draft.replyTo?.id,
-      contentType: contentType,
+      contentType: pleromaFormattingRosetta.getLeft(draft.formatting),
       mediaIds: draft.attachments
           .map((a) => (a.source as mastodon.Attachment).id)
           .toList(),
     );
     return toPost(newPost, instance);
-  }
-
-  String? getContentType(Formatting? formatting) {
-    const formattingToMimeType = {
-      Formatting.plainText: "text/plain",
-      Formatting.markdown: "text/markdown",
-      Formatting.html: "text/html",
-      Formatting.bbCode: "text/bbcode",
-    };
-
-    return formattingToMimeType[formatting];
   }
 
   @override
@@ -491,7 +473,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Pagination<dynamic, User>> getFollowers(
+  Future<Pagination<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -507,7 +489,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Pagination<dynamic, User>> getFollowing(
+  Future<Pagination<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,

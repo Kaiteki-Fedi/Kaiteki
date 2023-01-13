@@ -1,9 +1,10 @@
-import 'package:equatable/equatable.dart';
-import 'package:hive/hive.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
+import "package:equatable/equatable.dart";
+import "package:hive/hive.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
+import "package:meta/meta.dart";
 
-part 'secret.g.dart';
+part "secret.g.dart";
 
 @immutable
 @JsonSerializable()
@@ -23,10 +24,9 @@ class AccountSecret extends Equatable {
 
   const AccountSecret(this.accessToken, [this.refreshToken, this.userId]);
 
-  factory AccountSecret.fromJson(Map<String, dynamic> json) =>
-      _$AccountSecretFromJson(json);
+  factory AccountSecret.fromJson(JsonMap json) => _$AccountSecretFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AccountSecretToJson(this);
+  JsonMap toJson() => _$AccountSecretToJson(this);
 
   @override
   List<Object?> get props => [accessToken, refreshToken, userId];
@@ -45,10 +45,9 @@ class ClientSecret extends Equatable {
 
   const ClientSecret(this.clientId, this.clientSecret);
 
-  factory ClientSecret.fromJson(Map<String, dynamic> json) =>
-      _$ClientSecretFromJson(json);
+  factory ClientSecret.fromJson(JsonMap json) => _$ClientSecretFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ClientSecretToJson(this);
+  JsonMap toJson() => _$ClientSecretToJson(this);
 
   @override
   List<Object?> get props => [clientId, clientSecret];

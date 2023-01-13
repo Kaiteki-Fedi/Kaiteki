@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/ui/main/pages/notifications.dart';
-import 'package:kaiteki/ui/shared/timeline.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/ui/main/pages/notifications.dart";
+import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class DeckMainScreenView extends StatefulWidget {
   const DeckMainScreenView({super.key});

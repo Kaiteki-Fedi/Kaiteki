@@ -1,5 +1,5 @@
-import 'dart:typed_data';
-import 'dart:ui';
+import "dart:typed_data";
+import "dart:ui";
 
 Future<Image> resize(Image image, int width, int height) async {
   final codec = await instantiateImageCodec(

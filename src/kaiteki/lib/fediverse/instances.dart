@@ -1,16 +1,17 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/services.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
+import "package:flutter/services.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'instances.g.dart';
+part "instances.g.dart";
 
 Future<List<InstanceData>> fetchInstances() async {
-  final json = await rootBundle.loadString('assets/instances.json');
+  final json = await rootBundle.loadString("assets/instances.json");
   final list = jsonDecode(json) as List<dynamic>;
   return list.map((e) {
-    return InstanceData.fromJson(e);
+    return InstanceData.fromJson(e as JsonMap);
   }).toList(growable: false);
 }
 
@@ -38,8 +39,7 @@ class InstanceData {
     this.usesMastodonCovenant = false,
   });
 
-  factory InstanceData.fromJson(Map<String, dynamic> json) =>
-      _$InstanceDataFromJson(json);
+  factory InstanceData.fromJson(JsonMap json) => _$InstanceDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$InstanceDataToJson(this);
+  JsonMap toJson() => _$InstanceDataToJson(this);
 }

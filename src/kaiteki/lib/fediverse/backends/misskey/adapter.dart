@@ -1,45 +1,47 @@
-import 'dart:async';
-import 'dart:developer';
+import "dart:async";
+import "dart:developer";
 
-import 'package:collection/collection.dart';
-import 'package:crypto/crypto.dart';
-import 'package:fediverse_objects/misskey.dart' as misskey;
-import 'package:intl/intl.dart';
-import 'package:kaiteki/auth/login_typedefs.dart';
-import 'package:kaiteki/constants.dart' as consts;
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/backends/misskey/capabilities.dart';
-import 'package:kaiteki/fediverse/backends/misskey/client.dart';
-import 'package:kaiteki/fediverse/backends/misskey/exception.dart';
-import 'package:kaiteki/fediverse/backends/misskey/model/list.dart';
-import 'package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart';
-import 'package:kaiteki/fediverse/backends/misskey/requests/timeline.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/check_session.dart';
-import 'package:kaiteki/fediverse/backends/misskey/responses/signin.dart';
-import 'package:kaiteki/fediverse/interfaces/chat_support.dart';
-import 'package:kaiteki/fediverse/interfaces/custom_emoji_support.dart';
-import 'package:kaiteki/fediverse/interfaces/list_support.dart';
-import 'package:kaiteki/fediverse/interfaces/notification_support.dart';
-import 'package:kaiteki/fediverse/interfaces/post_translation_support.dart';
-import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:kaiteki/fediverse/interfaces/search_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/fediverse/model/notification.dart';
-import 'package:kaiteki/fediverse/model/timeline_query.dart';
-import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/auth/account.dart';
-import 'package:kaiteki/model/auth/account_key.dart';
-import 'package:kaiteki/model/auth/login_result.dart';
-import 'package:kaiteki/model/auth/secret.dart';
-import 'package:kaiteki/model/file.dart';
-import 'package:kaiteki/utils/extensions/iterable.dart';
-import 'package:tuple/tuple.dart';
-import 'package:uuid/uuid.dart';
+import "package:collection/collection.dart";
+import "package:crypto/crypto.dart";
+import "package:fediverse_objects/misskey.dart" as misskey;
+import "package:intl/intl.dart";
+import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki/constants.dart" as consts;
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/fediverse/backends/misskey/capabilities.dart";
+import "package:kaiteki/fediverse/backends/misskey/client.dart";
+import "package:kaiteki/fediverse/backends/misskey/exception.dart";
+import "package:kaiteki/fediverse/backends/misskey/model/list.dart";
+import "package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart";
+import "package:kaiteki/fediverse/backends/misskey/requests/timeline.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/check_session.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/signin.dart";
+import "package:kaiteki/fediverse/interfaces/chat_support.dart";
+import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
+import "package:kaiteki/fediverse/interfaces/list_support.dart";
+import "package:kaiteki/fediverse/interfaces/notification_support.dart";
+import "package:kaiteki/fediverse/interfaces/post_translation_support.dart";
+import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
+import "package:kaiteki/fediverse/interfaces/search_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/model/notification.dart";
+import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/logger.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/auth/login_result.dart";
+import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki/model/file.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/rosetta.dart";
+import "package:kaiteki/utils/utils.dart";
+import "package:tuple/tuple.dart";
+import "package:uuid/uuid.dart";
 
-part 'adapter.c.dart';
+part "adapter.c.dart";
 
-final _logger = getLogger('MisskeyAdapter');
+final _logger = getLogger("MisskeyAdapter");
 
 // TODO(Craftplacer): add missing implementations
 class MisskeyAdapter extends DecentralizedBackendAdapter
@@ -94,7 +96,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   Future<Tuple2<misskey.User, String>?> loginAlt(
     OAuthCallback requestOAuth,
   ) async {
-    late final String appSecret, sessionToken;
+    late final String appSecret;
+    late final String sessionToken;
     final result = await requestOAuth((oauthUrl) async {
       final app = await client.createApp(
         consts.appName,
@@ -180,9 +183,9 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<LoginResult> login(
     ClientSecret? clientSecret,
-    requestCredentials,
-    requestMfa,
-    requestOAuth,
+    CredentialsCallback requestCredentials,
+    MfaCallback requestMfa,
+    OAuthCallback requestOAuth,
   ) async {
     final credentials = await authenticate(requestCredentials, requestOAuth);
 
@@ -209,15 +212,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
   @override
   Future<Post> postStatus(PostDraft draft, {Post? parentPost}) async {
-    final visibility = <Visibility, String>{
-      Visibility.direct: "specified",
-      Visibility.followersOnly: "followers",
-      Visibility.unlisted: "home",
-      Visibility.public: "public",
-    }[draft.visibility]!;
-
     final response = await client.createNote(
-      visibility,
+      visibility: misskeyVisibilityRosetta.getLeft(draft.visibility),
       text: draft.content,
       cw: draft.subject,
       replyId: draft.replyTo?.id,
@@ -244,7 +240,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
               final userIds = e.group!.userIds;
               final resolvedUsers = userIds != null && userIds.isNotEmpty
                   ? await client.showUsers(userIds.toSet())
-                  : [];
+                  : const <misskey.User>[];
               return GroupChat(
                 source: e,
                 name: e.group!.name,
@@ -360,7 +356,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     String emojiName;
 
     if (emoji is CustomEmoji) {
-      emojiName = ':${emoji.short}:';
+      emojiName = ":${emoji.short}:";
     } else if (emoji is UnicodeEmoji) {
       emojiName = emoji.emoji;
     } else {
@@ -579,7 +575,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Pagination<dynamic, User>> getFollowers(
+  Future<Pagination<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -597,7 +593,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Pagination<dynamic, User>> getFollowing(
+  Future<Pagination<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,

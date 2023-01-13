@@ -1,15 +1,15 @@
 // ignore_for_file: avoid_returning_this
 
-import 'package:collection/collection.dart';
-import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:kaiteki/fediverse/model/adapted_entity.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
+import "package:collection/collection.dart";
+import "package:copy_with_extension/copy_with_extension.dart";
+import "package:kaiteki/fediverse/model/adapted_entity.dart";
+import "package:kaiteki/fediverse/model/model.dart";
 
-export 'draft.dart';
-export 'metrics.dart';
-export 'state.dart';
+export "draft.dart";
+export "metrics.dart";
+export "state.dart";
 
-part 'post.g.dart';
+part "post.g.dart";
 
 /// A class representing a post.
 @CopyWith()

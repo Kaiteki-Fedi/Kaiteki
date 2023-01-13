@@ -1,4 +1,4 @@
-import 'package:kaiteki/fediverse/model/model.dart';
+import "package:kaiteki/fediverse/model/model.dart";
 
 const instance = Instance(
   name: "Instance",
@@ -16,7 +16,7 @@ const nyanya = User(
   displayName: "banned for being a cute neko",
   avatarUrl: "https://craftplacer.keybase.pub/cute.jpg",
   id: "CuteNeko-Account",
-  host: 'pl.kawaii.moe',
+  host: "pl.kawaii.moe",
 );
 
 const mari = User(
@@ -38,7 +38,7 @@ final posts = [
     author: nyanya,
     content: "Hello everyone! :3",
     postedAt: DateTime.now().add(const Duration(minutes: 5)),
-    id: '1',
+    id: "1",
   ),
   Post(
     id: "2",

@@ -1,7 +1,8 @@
-import 'package:fediverse_objects/misskey.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:fediverse_objects/misskey.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'check_session.g.dart';
+part "check_session.g.dart";
 
 @JsonSerializable()
 class CheckSessionResponse {
@@ -13,8 +14,8 @@ class CheckSessionResponse {
     required this.user,
   });
 
-  factory CheckSessionResponse.fromJson(Map<String, dynamic> json) =>
+  factory CheckSessionResponse.fromJson(JsonMap json) =>
       _$CheckSessionResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CheckSessionResponseToJson(this);
+  JsonMap toJson() => _$CheckSessionResponseToJson(this);
 }

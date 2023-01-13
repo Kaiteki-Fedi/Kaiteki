@@ -1,11 +1,12 @@
 // ignore_for_file: cascade_invocations, avoid_print
 
-import 'dart:convert';
-import 'dart:io';
+import "dart:convert";
+import "dart:io";
 
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
-import 'package:tuple/tuple.dart';
+import "package:http/http.dart" as http;
+import "package:kaiteki/utils/utils.dart";
+import "package:path/path.dart";
+import "package:tuple/tuple.dart";
 
 final emojiListUri = Uri.parse(
   "https://raw.githubusercontent.com/googlefonts/emoji-metadata/main/emoji_15_0_ordering.json",
@@ -24,14 +25,14 @@ typedef EmojiCompound = Tuple3<String, List<String>, List<String>>;
 
 void main(List<String> arguments) async {
   final raw = await fetchEmojiList();
-  final json = (jsonDecode(raw) as List<dynamic>).cast<Map<String, dynamic>>();
+  final json = (jsonDecode(raw) as List<dynamic>).cast<JsonMap>();
 
   final groups = <String, List<EmojiCompound>>{};
   for (final group in json) {
     var groupName = group["group"] as String;
     groupName = groupNameMap[groupName] ?? groupName;
 
-    final emojis = group["emoji"] as List<dynamic>;
+    final emojis = group["emoji"] as List<JsonMap>;
     final compounds = <EmojiCompound>[];
 
     for (final emoji in emojis) {
@@ -116,38 +117,38 @@ Future<void> generateDartFiles(
 String generateDartFile(String fieldName, List<EmojiCompound> emojis) {
   final buffer = StringBuffer();
 
-  buffer.writeln('// GENERATED CODE - DO NOT MODIFY BY HAND');
+  buffer.writeln("// GENERATED CODE - DO NOT MODIFY BY HAND");
   buffer.writeln();
   buffer.writeln(
     "import 'package:kaiteki/fediverse/model/emoji/category.dart';",
   );
   buffer.writeln("import 'package:kaiteki/fediverse/model/emoji/emoji.dart';");
   buffer.writeln();
-  buffer.writeln('final $fieldName = <EmojiCategoryItem<UnicodeEmoji>>[');
+  buffer.writeln("final $fieldName = <EmojiCategoryItem<UnicodeEmoji>>[");
   for (final compound in emojis) {
     final baseEmoji = compound.item1;
     final variants = compound.item2;
     final shortCodes = compound.item3.map((e) => '"$e"').join(", ");
 
-    buffer.writeln('  const EmojiCategoryItem(');
+    buffer.writeln("  const EmojiCategoryItem(");
 
     buffer.write('    const UnicodeEmoji("$baseEmoji", const [$shortCodes]),');
 
     if (variants.isNotEmpty) {
-      buffer.writeln(' [');
+      buffer.writeln(" [");
       for (final emoji in variants) {
         buffer.writeln(
           '      const UnicodeEmoji("$emoji", const [$shortCodes]),',
         );
       }
-      buffer.writeln('    ],');
+      buffer.writeln("    ],");
     } else {
       buffer.writeln();
     }
 
-    buffer.writeln('  ),');
+    buffer.writeln("  ),");
   }
-  buffer.writeln('];');
+  buffer.writeln("];");
 
   return buffer.toString();
 }

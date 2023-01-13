@@ -1,8 +1,8 @@
-include: package:flutter_lints/flutter.yaml
+include: package:lint/strict.yaml
 
 analyzer:
   exclude:
-    - 'lib/**/*.g.dart'
+    - '**.g.dart'
   errors:
     missing_enum_constant_in_switch: ignore
     # Ignoring TODO comments since they're obnoxious
@@ -14,51 +14,53 @@ analyzer:
 
 linter:
   rules:
-    - avoid_type_to_string
+    avoid_type_to_string: true
+    avoid_positional_boolean_parameters: false
 
     # Unnecessary code
-    - avoid_redundant_argument_values
-    - avoid_types_on_closure_parameters
-    - noop_primitive_operations
-    - unnecessary_await_in_return
-    - unnecessary_lambdas
-    - unnecessary_null_aware_assignments
-    - unnecessary_null_checks
-    - unnecessary_parenthesis
-    - unnecessary_statements
-    - omit_local_variable_types
+    avoid_redundant_argument_values: true
+    avoid_types_on_closure_parameters: true
+    noop_primitive_operations: true
+    unnecessary_await_in_return: true
+    unnecessary_lambdas: true
+    unnecessary_null_aware_assignments: true
+    unnecessary_null_checks: true
+    unnecessary_parenthesis: true
+    unnecessary_statements: true
+    omit_local_variable_types: true
 
     # Code style
-    - always_declare_return_types
-    - avoid_void_async
-    - join_return_with_assignment
-    - only_throw_errors
-    - prefer_constructors_over_static_methods
-    - prefer_final_in_for_each
-    - prefer_final_locals
-    - require_trailing_commas
-    - use_named_constants
-    - use_setters_to_change_properties
-    - use_string_buffers
-    - use_test_throws_matchers
-    - use_super_parameters
+    prefer_double_quotes: true
+    always_declare_return_types: true
+    avoid_void_async: true
+    join_return_with_assignment: true
+    only_throw_errors: true
+    prefer_constructors_over_static_methods: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    require_trailing_commas: true
+    use_named_constants: true
+    use_setters_to_change_properties: true
+    use_string_buffers: true
+    use_test_throws_matchers: true
+    use_super_parameters: true
 
     # Dart features
-    - avoid_classes_with_only_static_members
-    - avoid_returning_this
-    - cascade_invocations
-    - prefer_asserts_in_initializer_lists
-    - prefer_if_elements_to_conditional_expressions
+    avoid_classes_with_only_static_members: true
+    avoid_returning_this: true
+    cascade_invocations: true
+    prefer_asserts_in_initializer_lists: true
+    prefer_if_elements_to_conditional_expressions: true
 
     # Sorting
-    - directives_ordering
-    - sort_pub_dependencies
-    - sort_unnamed_constructors_first
+    directives_ordering: true
+    sort_pub_dependencies: true
+    sort_unnamed_constructors_first: true
 
     # Naming conventions
-    - flutter_style_todos
-    - use_to_and_as_if_applicable
+    flutter_style_todos: true
+    use_to_and_as_if_applicable: true
     
     # Flutter
-    - sized_box_shrink_expand
-    - use_decorated_box
+    sized_box_shrink_expand: true
+    use_decorated_box: true

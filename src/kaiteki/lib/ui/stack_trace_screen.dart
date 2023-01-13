@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:kaiteki/theming/kaiteki/text_theme.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
 
 class StackTraceScreen extends StatelessWidget {
   final StackTrace stackTrace;

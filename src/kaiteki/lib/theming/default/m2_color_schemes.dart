@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/theming/default/colors.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/theming/default/colors.dart";
 
 final lightColorScheme = ColorScheme.light(
   // primary

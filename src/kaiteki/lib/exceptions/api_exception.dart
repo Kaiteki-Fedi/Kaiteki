@@ -1,11 +1,12 @@
-import 'package:http/http.dart' as http;
+import "package:http/http.dart" as http;
+import "package:kaiteki/utils/utils.dart";
 
 class ApiException implements Exception {
   final int statusCode;
   final String? reasonPhrase;
 
   /// Additional data provided by the server.
-  final Map<String, dynamic>? data;
+  final JsonMap? data;
 
   ApiException(this.statusCode, {this.reasonPhrase, this.data});
 

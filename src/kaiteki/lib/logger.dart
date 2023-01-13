@@ -1,4 +1,4 @@
-import 'package:logger/logger.dart';
+import "package:logger/logger.dart";
 
 Logger getLogger(String category) {
   return Logger(printer: KaitekiLogPrinter(category));
@@ -15,10 +15,10 @@ class KaitekiLogPrinter extends LogPrinter {
     final color = PrettyPrinter.levelColors[event.level];
 
     if (event.error != null) {
-      lines.add('=====');
+      lines.add("=====");
     }
 
-    lines.add(color!('[$category] ${event.message}'));
+    lines.add(color!("[$category] ${event.message}"));
 
     if (event.error != null) {
       lines.add(event.error.toString());
@@ -27,7 +27,7 @@ class KaitekiLogPrinter extends LogPrinter {
         lines.add(event.stackTrace.toString());
       }
 
-      lines.add('=====');
+      lines.add("=====");
     }
 
     return lines;

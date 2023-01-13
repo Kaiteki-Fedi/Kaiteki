@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 
 class PlaceholderPage extends StatelessWidget {
   const PlaceholderPage({super.key});

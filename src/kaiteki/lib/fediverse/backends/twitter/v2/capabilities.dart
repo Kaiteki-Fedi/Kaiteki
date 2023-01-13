@@ -1,7 +1,7 @@
-import 'package:kaiteki/fediverse/capabilities.dart';
-import 'package:kaiteki/fediverse/model/formatting.dart';
-import 'package:kaiteki/fediverse/model/timeline_kind.dart';
-import 'package:kaiteki/fediverse/model/visibility.dart';
+import "package:kaiteki/fediverse/capabilities.dart";
+import "package:kaiteki/fediverse/model/formatting.dart";
+import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/fediverse/model/visibility.dart";
 
 class TwitterCapabilities extends AdapterCapabilities {
   const TwitterCapabilities();

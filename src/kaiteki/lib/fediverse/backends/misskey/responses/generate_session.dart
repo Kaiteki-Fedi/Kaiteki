@@ -1,9 +1,17 @@
-class GenerateSessionResponse {
-  late final String token;
-  late final String url;
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-  GenerateSessionResponse.fromJson(Map<String, dynamic> json) {
-    token = json["token"];
-    url = json["url"];
-  }
+part "generate_session.g.dart";
+
+@JsonSerializable()
+class GenerateSessionResponse {
+  final String token;
+  final String url;
+
+  const GenerateSessionResponse(this.token, this.url);
+
+  factory GenerateSessionResponse.fromJson(JsonMap json) =>
+      _$GenerateSessionResponseFromJson(json);
+
+  JsonMap toJson() => _$GenerateSessionResponseToJson(this);
 }

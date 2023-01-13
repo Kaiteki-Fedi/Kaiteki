@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart' show dialogConstraints;
-import 'package:kaiteki/di.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/constants.dart" show dialogConstraints;
+import "package:kaiteki/di.dart";
 
 class DiscardPostDialog extends StatelessWidget {
   const DiscardPostDialog({super.key});

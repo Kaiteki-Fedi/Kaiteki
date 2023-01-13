@@ -1,7 +1,7 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/model/model.dart";
 
 abstract class Resolvable<K, V> {
   final K id;

@@ -1,25 +1,25 @@
-import 'package:breakpoint/breakpoint.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/instance_prober.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/preferences/app_experiment.dart';
-import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart';
-import 'package:kaiteki/ui/shared/async/async_button.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
-import 'package:kaiteki/ui/shared/layout/breakpoint_container.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/shared/timeline.dart';
-import 'package:kaiteki/ui/user/constants.dart';
-import 'package:kaiteki/ui/user/desktop_user_header.dart';
-import 'package:kaiteki/ui/user/user_info_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:breakpoint/breakpoint.dart";
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
+import "package:kaiteki/constants.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/instance_prober.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/logger.dart";
+import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart";
+import "package:kaiteki/ui/shared/async/async_button.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/ui/shared/layout/breakpoint_container.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/user/constants.dart";
+import "package:kaiteki/ui/user/desktop_user_header.dart";
+import "package:kaiteki/ui/user/user_info_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class OldUserScreen extends ConsumerStatefulWidget {
   final String id;
@@ -48,7 +48,7 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
   late bool remoteFetchPopupIgnored;
   late String id;
 
-  static final _logger = getLogger('_UserScreenState');
+  static final _logger = getLogger("_UserScreenState");
 
   @override
   void initState() {
@@ -335,6 +335,7 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
     ];
   }
 
+  // ignore: avoid_positional_boolean_parameters
   Tab buildTab(String text, int? count, bool showCountBadges, Axis direction) {
     if (direction == Axis.horizontal) {
       return Tab(

@@ -1,4 +1,4 @@
-import 'package:kaiteki/fediverse/model/model.dart';
+import "package:kaiteki/fediverse/model/model.dart";
 
 const String exampleAvatar = "https://craftplacer.keybase.pub/cute.jpg";
 
@@ -7,7 +7,7 @@ final examplePost = Post(
   content: "Hello everyone!",
   postedAt: DateTime.now(),
   reactions: [],
-  id: 'cool-post',
+  id: "cool-post",
   visibility: Visibility.public,
 );
 
@@ -17,5 +17,5 @@ final exampleUser = User(
   avatarUrl: exampleAvatar,
   joinDate: DateTime.now(),
   id: "CuteNeko-Account",
-  host: 'cute.social',
+  host: "cute.social",
 );

@@ -1,7 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'user.g.dart';
+part "user.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class User {
@@ -42,9 +43,9 @@ class User {
     this.publicMetrics,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(JsonMap json) => _$UserFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  JsonMap toJson() => _$UserToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -61,10 +62,10 @@ class UserPublicMetrics {
     required this.listedCount,
   });
 
-  factory UserPublicMetrics.fromJson(Map<String, dynamic> json) =>
+  factory UserPublicMetrics.fromJson(JsonMap json) =>
       _$UserPublicMetricsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserPublicMetricsToJson(this);
+  JsonMap toJson() => _$UserPublicMetricsToJson(this);
 }
 
 typedef UserFields = Set<UserField>;

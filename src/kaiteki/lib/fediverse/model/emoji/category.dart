@@ -1,14 +1,14 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/activities.g.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/animals_nature.g.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/flags.g.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/food_drink.g.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/objects.g.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/people_body.g.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/smileys_emotion.g.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/symbols.g.dart';
-import 'package:kaiteki/fediverse/model/emoji/lists/travel_places.g.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/activities.g.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/animals_nature.g.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/flags.g.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/food_drink.g.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/objects.g.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/people_body.g.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/smileys_emotion.g.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/symbols.g.dart";
+import "package:kaiteki/fediverse/model/emoji/lists/travel_places.g.dart";
 
 class EmojiCategory {
   final List<EmojiCategoryItem> items;

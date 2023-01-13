@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:kaiteki/fediverse/model/chat_target.dart';
-import 'package:kaiteki/ui/chats/chat_target_tile.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:mdi/mdi.dart';
+import "package:flutter/material.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:kaiteki/fediverse/model/chat_target.dart";
+import "package:kaiteki/ui/chats/chat_target_tile.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:mdi/mdi.dart";
 
 class ChatTargetList extends StatelessWidget {
   const ChatTargetList({

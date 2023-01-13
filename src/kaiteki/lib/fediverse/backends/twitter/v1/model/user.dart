@@ -1,8 +1,9 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/date_format.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart';
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/date_format.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/entities/entities.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'user.g.dart';
+part "user.g.dart";
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class User {
@@ -72,9 +73,9 @@ class User {
     required this.entities,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(JsonMap json) => _$UserFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  JsonMap toJson() => _$UserToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -87,8 +88,7 @@ class UserEntities {
     required this.description,
   });
 
-  factory UserEntities.fromJson(Map<String, dynamic> json) =>
-      _$UserEntitiesFromJson(json);
+  factory UserEntities.fromJson(JsonMap json) => _$UserEntitiesFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserEntitiesToJson(this);
+  JsonMap toJson() => _$UserEntitiesToJson(this);
 }

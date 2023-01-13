@@ -1,18 +1,18 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' hide Element;
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/user/reference.dart';
-import 'package:kaiteki/fediverse/model/user/user.dart';
-import 'package:kaiteki/theming/kaiteki/text_theme.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/text/elements.dart';
-import 'package:kaiteki/utils/text/parsers.dart';
-import 'package:kaiteki/utils/text/unblur_on_hover.dart';
-import 'package:kaiteki/utils/utils.dart';
+import "package:collection/collection.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart" hide Element;
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/fediverse/model/user/reference.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/text/elements.dart";
+import "package:kaiteki/utils/text/parsers.dart";
+import "package:kaiteki/utils/text/unblur_on_hover.dart";
 
 typedef RegExpMatchElementBuilder = Element Function(
   RegExpMatch match,
@@ -212,7 +212,7 @@ TextSpan renderHashtag(
   return TextSpan(
     style: style,
     children: [
-      TextSpan(text: '#', style: TextStyle(color: color)),
+      TextSpan(text: "#", style: TextStyle(color: color)),
       TextSpan(text: element.name),
     ],
   );

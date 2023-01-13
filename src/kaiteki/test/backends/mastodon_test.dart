@@ -1,7 +1,7 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:kaiteki/fediverse/backends/mastodon/client.dart';
-import 'package:test/test.dart';
+import "package:kaiteki/fediverse/backends/mastodon/client.dart";
+import "package:test/test.dart";
 
 void main() {
   late MastodonClient client;

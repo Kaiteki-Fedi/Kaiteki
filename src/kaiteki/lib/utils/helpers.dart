@@ -1,9 +1,9 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/user/reference.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/user/reference.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 Future<void> resolveAndOpenUser(
   UserReference user,

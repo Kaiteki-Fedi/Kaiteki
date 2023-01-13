@@ -1,11 +1,11 @@
-import 'package:flutter/widgets.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/model/user/handle.dart';
-import 'package:kaiteki/routing/router.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import "package:flutter/widgets.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/model/user/handle.dart";
+import "package:kaiteki/routing/router.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'notifier.g.dart';
+part "notifier.g.dart";
 
 @riverpod
 class RouterNotifier extends _$RouterNotifier implements Listenable {

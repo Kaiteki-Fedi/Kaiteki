@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 typedef EnumButtonCallback<T> = void Function(T newValue);
 typedef EnumWidgetBuilder<T> = Widget Function(BuildContext context, T value);

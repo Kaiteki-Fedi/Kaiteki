@@ -1,12 +1,12 @@
-import 'dart:async';
-import 'dart:io';
+import "dart:async";
+import "dart:io";
 
-import 'package:async/async.dart';
-import 'package:flutter/material.dart' show ColorScheme;
-import 'package:flutter/services.dart';
-import 'package:kaiteki/auth/login_typedefs.dart';
-import 'package:shelf/shelf.dart';
-import 'package:shelf/shelf_io.dart';
+import "package:async/async.dart";
+import "package:flutter/material.dart" show ColorScheme;
+import "package:flutter/services.dart";
+import "package:kaiteki/auth/login_typedefs.dart";
+import "package:shelf/shelf.dart";
+import "package:shelf/shelf_io.dart";
 
 Future<Map<String, String>?> runOAuthServer(
   OAuthUrlCreatedCallback ready,
@@ -32,7 +32,7 @@ Future<Map<String, String>?> runOAuthServer(
       requestStream.stream.first,
     );
 
-    await ready(Uri.http('localhost:$port', '/'), operation.cancel);
+    await ready(Uri.http("localhost:$port", "/"), operation.cancel);
     return await operation.valueOrCancellation();
   } finally {
     server?.close();
@@ -42,7 +42,7 @@ Future<Map<String, String>?> runOAuthServer(
 
 /// Fetches the OAuth landing page as well as injects the app's current theme.
 Future<String> generateOAuthLandingPage(ColorScheme? colorScheme) async {
-  final html = await rootBundle.loadString('assets/oauth-success.html');
+  final html = await rootBundle.loadString("assets/oauth-success.html");
   const cssPlaceholder = "/* INSERT */";
 
   if (colorScheme == null) return html.replaceAll(cssPlaceholder, "");

@@ -1,33 +1,33 @@
-import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/bookmark_support.dart';
-import 'package:kaiteki/fediverse/interfaces/favorite_support.dart';
-import 'package:kaiteki/fediverse/interfaces/post_translation_support.dart';
-import 'package:kaiteki/fediverse/interfaces/reaction_support.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/fediverse/model/post/post.dart';
-import 'package:kaiteki/theming/kaiteki/colors.dart';
-import 'package:kaiteki/theming/kaiteki/post.dart';
-import 'package:kaiteki/ui/debug/text_render_dialog.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart';
-import 'package:kaiteki/ui/shared/posts/attachment_row.dart';
-import 'package:kaiteki/ui/shared/posts/avatar_widget.dart';
-import 'package:kaiteki/ui/shared/posts/embed_widget.dart';
-import 'package:kaiteki/ui/shared/posts/embedded_post.dart';
-import 'package:kaiteki/ui/shared/posts/interaction_bar.dart';
-import 'package:kaiteki/ui/shared/posts/interaction_event_bar.dart';
-import 'package:kaiteki/ui/shared/posts/meta_bar.dart';
-import 'package:kaiteki/ui/shared/posts/poll_widget.dart';
-import 'package:kaiteki/ui/shared/posts/reaction_row.dart';
-import 'package:kaiteki/ui/shared/posts/reply_bar.dart';
-import 'package:kaiteki/ui/shared/posts/subject_bar.dart';
-import 'package:kaiteki/ui/shortcuts/activators.dart';
-import 'package:kaiteki/ui/shortcuts/intents.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:dynamic_color/dynamic_color.dart";
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/constants.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
+import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
+import "package:kaiteki/fediverse/interfaces/post_translation_support.dart";
+import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
+import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/theming/kaiteki/post.dart";
+import "package:kaiteki/ui/debug/text_render_dialog.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
+import "package:kaiteki/ui/shared/posts/attachment_row.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/ui/shared/posts/embed_widget.dart";
+import "package:kaiteki/ui/shared/posts/embedded_post.dart";
+import "package:kaiteki/ui/shared/posts/interaction_bar.dart";
+import "package:kaiteki/ui/shared/posts/interaction_event_bar.dart";
+import "package:kaiteki/ui/shared/posts/meta_bar.dart";
+import "package:kaiteki/ui/shared/posts/poll_widget.dart";
+import "package:kaiteki/ui/shared/posts/reaction_row.dart";
+import "package:kaiteki/ui/shared/posts/reply_bar.dart";
+import "package:kaiteki/ui/shared/posts/subject_bar.dart";
+import "package:kaiteki/ui/shortcuts/activators.dart";
+import "package:kaiteki/ui/shortcuts/intents.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:url_launcher/url_launcher.dart";
 
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 
@@ -228,7 +228,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     return [
       if (adapter is BookmarkSupport)
         PopupMenuItem(
-          value: _onBookmark,
+          onTap: _onBookmark,
           child: ListTile(
             title: Text(
               _post.state.bookmarked
@@ -256,7 +256,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             contentPadding: EdgeInsets.zero,
             enabled: translationAvailable,
           ),
-          value: () async {
+          onTap: () async {
             final content = _post.content;
             if (content == null) return;
 
@@ -306,7 +306,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             leading: Icon(Icons.undo_rounded),
             contentPadding: EdgeInsets.zero,
           ),
-          value: () => setState(() => _translatedPost = null),
+          onTap: () => setState(() => _translatedPost = null),
         ),
       const PopupMenuDivider(),
       PopupMenuItem(
@@ -317,7 +317,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           contentPadding: EdgeInsets.zero,
           enabled: openInBrowserAvailable,
         ),
-        value: () async {
+        onTap: () async {
           final url = _post.externalUrl;
           if (url == null) return;
           await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -330,7 +330,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             leading: Icon(Icons.bug_report_rounded),
             contentPadding: EdgeInsets.zero,
           ),
-          value: () => showDialog(
+          onTap: () => showDialog(
             context: context,
             builder: (context) => TextRenderDialog(_post),
           ),

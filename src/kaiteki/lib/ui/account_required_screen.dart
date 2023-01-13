@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/layout/form_widget.dart';
-import 'package:kaiteki/utils/extensions/m3.dart';
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/layout/form_widget.dart";
+import "package:kaiteki/utils/extensions/m3.dart";
 
 class AccountRequiredScreen extends StatelessWidget {
   const AccountRequiredScreen({super.key});

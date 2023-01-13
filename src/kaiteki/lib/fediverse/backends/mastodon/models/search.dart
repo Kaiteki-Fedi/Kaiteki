@@ -1,7 +1,8 @@
-import 'package:fediverse_objects/mastodon.dart' hide List;
-import 'package:json_annotation/json_annotation.dart';
+import "package:fediverse_objects/mastodon.dart" hide List;
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'search.g.dart';
+part "search.g.dart";
 
 @JsonSerializable()
 class Search {
@@ -15,7 +16,7 @@ class Search {
     this.accounts = const [],
   });
 
-  factory Search.fromJson(Map<String, dynamic> json) => _$SearchFromJson(json);
+  factory Search.fromJson(JsonMap json) => _$SearchFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SearchToJson(this);
+  JsonMap toJson() => _$SearchToJson(this);
 }

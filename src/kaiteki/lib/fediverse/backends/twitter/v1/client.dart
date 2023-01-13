@@ -1,14 +1,14 @@
-import 'package:kaiteki/fediverse/backends/twitter/v1/auth/oauth_token.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/media_upload.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/tweet.dart';
-import 'package:kaiteki/fediverse/backends/twitter/v1/model/user.dart';
+import "package:kaiteki/fediverse/backends/twitter/v1/auth/oauth_token.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/media_upload.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/tweet.dart";
+import "package:kaiteki/fediverse/backends/twitter/v1/model/user.dart";
 
-import 'package:kaiteki/http/http.dart';
-import 'package:kaiteki/model/file.dart';
-import 'package:oauth1/oauth1.dart'
+import "package:kaiteki/http/http.dart";
+import "package:kaiteki/model/file.dart";
+import "package:oauth1/oauth1.dart"
     show ClientCredentials, Credentials, SignatureMethods;
 // ignore: implementation_imports
-import 'package:oauth1/src/authorization_header_builder.dart';
+import "package:oauth1/src/authorization_header_builder.dart";
 
 class OldTwitterClient {
   late final KaitekiClient client;
@@ -93,9 +93,9 @@ class OldTwitterClient {
     }
 
     return OAuthToken(
-      map["oauth_token"]!,
-      map["oauth_token_secret"]!,
-      map["oauth_callback_confirmed"] == "true",
+      token: map["oauth_token"]!,
+      tokenSecret: map["oauth_token_secret"]!,
+      callbackConfirmed: map["oauth_callback_confirmed"] == "true",
     );
   }
 

@@ -1,4 +1,4 @@
-import 'dart:async';
+import "dart:async";
 
 typedef MfaCallback = Future<T?> Function<T>(MfaSubmitCallback<T> onSubmit);
 typedef MfaSubmitCallback<T> = Future<T> Function(String totp);

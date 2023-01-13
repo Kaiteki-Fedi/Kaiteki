@@ -1,20 +1,21 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'package:kaiteki/exceptions/instance_unreachable_exception.dart';
-import 'package:kaiteki/fediverse/adapter.dart';
-import 'package:kaiteki/fediverse/api_type.dart';
-import 'package:kaiteki/fediverse/instances.dart';
-import 'package:kaiteki/fediverse/model/instance.dart';
-import 'package:kaiteki/logger.dart';
-import 'package:kaiteki/model/node_info.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:http/http.dart" as http;
+import "package:kaiteki/exceptions/instance_unreachable_exception.dart";
+import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
+import "package:kaiteki/fediverse/instances.dart";
+import "package:kaiteki/fediverse/model/instance.dart";
+import "package:kaiteki/logger.dart";
+import "package:kaiteki/model/node_info.dart";
+import "package:kaiteki/utils/utils.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
-part 'instance_prober.g.dart';
+part "instance_prober.g.dart";
 
-final _logger = getLogger('InstanceProber');
+final _logger = getLogger("InstanceProber");
 
 @riverpod
 Future<InstanceProbeResult> probeInstance(
@@ -56,9 +57,9 @@ Future<InstanceProbeResult> probeInstance(
   final type = result.type!;
 
   if (result.method == null) {
-    _logger.d('Detected ${type.displayName} on $host');
+    _logger.d("Detected ${type.displayName} on $host");
   } else {
-    _logger.d('Detected ${type.displayName} on $host using ${result.method}');
+    _logger.d("Detected ${type.displayName} on $host using ${result.method}");
   }
 
   if (result.instance == null) {
@@ -103,21 +104,21 @@ Future<InstanceProbeResult?> _probeKnownInstances(String host) async {
 Future<NodeInfo?> fetchNodeInfo(String host) async {
   final response = await http.get(Uri.https(host, "/.well-known/nodeinfo"));
 
-  final Map<String, dynamic> object;
+  final JsonMap object;
 
   try {
-    object = jsonDecode(response.body);
+    object = jsonDecode(response.body) as JsonMap;
   } catch (e) {
     _logger.w("Failed to read nodeinfo response: $e");
     return null;
   }
 
-  final links = (object["links"] as List<dynamic>).cast<Map<String, dynamic>>();
+  final links = (object["links"] as List<dynamic>).cast<JsonMap>();
   final supportedLink = links.firstWhere((l) {
     final rel = (l["rel"] as String).toLowerCase();
 
     return RegExp(
-      r'^https?:\/\/nodeinfo\.diaspora\.software\/ns\/schema\/2\.(0|1)$',
+      r"^https?:\/\/nodeinfo\.diaspora\.software\/ns\/schema\/2\.(0|1)$",
     ).hasMatch(rel);
   });
 
@@ -139,7 +140,7 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
     return null;
   }
 
-  return NodeInfo.fromJson(jsonDecode(nodeInfoBody));
+  return NodeInfo.fromJson(jsonDecode(nodeInfoBody) as JsonMap);
 }
 
 Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
@@ -171,7 +172,7 @@ Future<InstanceProbeResult?> _probeEndpoints(String host) async {
 
       if (adapter is! DecentralizedBackendAdapter) continue;
 
-      _logger.d('Probing for ${apiType.displayName} on $host...');
+      _logger.d("Probing for ${apiType.displayName} on $host...");
 
       final result = await adapter.probeInstance();
 
@@ -191,7 +192,7 @@ Future<InstanceProbeResult?> _probeEndpoints(String host) async {
 }
 
 Future<bool> _checkInstanceAvailability(String instance) async {
-  final uri = Uri.https(instance, '');
+  final uri = Uri.https(instance, "");
 
   try {
     final response = await http.get(uri);

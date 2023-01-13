@@ -1,16 +1,16 @@
-import 'package:animations/animations.dart';
-import 'package:flutter/material.dart';
-import 'package:fpdart/fpdart.dart' hide State;
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/fediverse/interfaces/list_support.dart';
-import 'package:kaiteki/fediverse/model/model.dart';
-import 'package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/dialogs/find_user_dialog.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/ui/shared/posts/user_list_dialog.dart';
-import 'package:kaiteki/ui/shared/timeline.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:animations/animations.dart";
+import "package:flutter/material.dart";
+import "package:fpdart/fpdart.dart" hide State;
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/list_support.dart";
+import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class ListsScreen extends ConsumerStatefulWidget {
   const ListsScreen({super.key});
@@ -30,7 +30,8 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
     ref.listenManual(
       adapterProvider,
       (_, adapter) {
-        final lists = adapter as ListSupport;
+        final lists = adapter as ListSupport?;
+        if (lists == null) return;
         setState(() {
           _future = lists.getLists();
         });

@@ -1,15 +1,16 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/shared/common.dart';
-import 'package:kaiteki/ui/shared/error_landing_widget.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:tuple/tuple.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/utils.dart";
+import "package:tuple/tuple.dart";
 
-part 'credits_screen.g.dart';
+part "credits_screen.g.dart";
 
 class CreditsScreen extends StatefulWidget {
   const CreditsScreen({super.key});
@@ -43,7 +44,11 @@ class _CreditsScreenState extends State<CreditsScreen> {
           } else if (!snapshot.hasData) {
             return centeredCircularProgressIndicator;
           } else {
-            final items = snapshot.data!;
+            final items = snapshot.data;
+
+            assert(items != null, "Credits shouldn't be empty");
+            if (items == null) return const SizedBox();
+
             return ListView.separated(
               itemBuilder: (_, i) => CreditsItemWidget(item: items[i]),
               itemCount: items.length,
@@ -56,9 +61,9 @@ class _CreditsScreenState extends State<CreditsScreen> {
   }
 
   Future<List<CreditsItem>> fetchCredits() async {
-    final json = await rootBundle.loadString('assets/credits.json');
+    final json = await rootBundle.loadString("assets/credits.json");
     return (jsonDecode(json) as List<dynamic>)
-        .cast<Map<String, dynamic>>()
+        .cast<JsonMap>()
         .map(CreditsItem.fromJson)
         .toList(growable: false);
   }
@@ -114,9 +119,13 @@ class CreditsItemWidget extends StatelessWidget {
 
     switch (role) {
       case CreditsRole.translator:
-        final language = details!;
+        final language = details;
+        if (language == null) {
+          text = const Text("Translator");
+        } else {
+          text = Text("Translator ($language)");
+        }
         icon = const Icon(Icons.translate_rounded);
-        text = Text("Translator ($language)");
         break;
 
       case CreditsRole.contributor:
@@ -185,8 +194,7 @@ class CreditsItem {
     this.roles = const [],
   });
 
-  factory CreditsItem.fromJson(Map<String, dynamic> json) =>
-      _$CreditsItemFromJson(json);
+  factory CreditsItem.fromJson(JsonMap json) => _$CreditsItemFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CreditsItemToJson(this);
+  JsonMap toJson() => _$CreditsItemToJson(this);
 }

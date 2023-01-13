@@ -1,7 +1,8 @@
-import 'package:fediverse_objects/pleroma.dart';
-import 'package:json_annotation/json_annotation.dart';
+import "package:fediverse_objects/pleroma.dart";
+import "package:json_annotation/json_annotation.dart";
+import "package:kaiteki/utils/utils.dart";
 
-part 'emoji_packs_response.g.dart';
+part "emoji_packs_response.g.dart";
 
 @JsonSerializable(createToJson: false)
 class PleromaEmojiPacksResponse {
@@ -14,6 +15,6 @@ class PleromaEmojiPacksResponse {
     required this.packs,
   });
 
-  factory PleromaEmojiPacksResponse.fromJson(Map<String, dynamic> json) =>
+  factory PleromaEmojiPacksResponse.fromJson(JsonMap json) =>
       _$PleromaEmojiPacksResponseFromJson(json);
 }

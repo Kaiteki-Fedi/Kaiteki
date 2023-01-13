@@ -1,16 +1,16 @@
-import 'dart:math' as math;
+import "dart:math" as math;
 
-import 'package:anchor_scroll_controller/anchor_scroll_controller.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:kaiteki/constants.dart';
-import 'package:kaiteki/fediverse/model/emoji/category.dart';
-import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_button.dart';
-import 'package:kaiteki/ui/shared/emoji/emoji_widget.dart';
-import 'package:kaiteki/ui/shared/icon_landing_widget.dart';
-import 'package:kaiteki/ui/shared/search_bar.dart';
+import "package:anchor_scroll_controller/anchor_scroll_controller.dart";
+import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:kaiteki/constants.dart";
+import "package:kaiteki/fediverse/model/emoji/category.dart";
+import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_button.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/shared/search_bar.dart";
 
 const _emojiSize = 32.0;
 

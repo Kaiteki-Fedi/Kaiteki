@@ -1,13 +1,13 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
-import 'package:kaiteki/di.dart';
-import 'package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart';
-import 'package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart';
-import 'package:kaiteki/ui/auth/login/constants.dart';
-import 'package:kaiteki/ui/auth/login/login_form.dart';
-import 'package:kaiteki/utils/extensions.dart';
-import 'package:kaiteki/utils/lower_case_text_formatter.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart";
+import "package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart";
+import "package:kaiteki/ui/auth/login/constants.dart";
+import "package:kaiteki/ui/auth/login/login_form.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/lower_case_text_formatter.dart";
 
 class InstancePage extends StatefulWidget {
   final FutureOr<void> Function(String instance) onNext;

@@ -1,5 +1,5 @@
-import 'package:equatable/equatable.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:equatable/equatable.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class UserReference extends Equatable {
   final String? id;
@@ -46,19 +46,19 @@ class UserReference extends Equatable {
 
   @override
   String toString() {
-    if (username != null && host != null) return '@$username@$host';
-    if (username != null) return '@$username';
+    if (username != null && host != null) return "@$username@$host";
+    if (username != null) return "@$username";
 
     if (remoteUrl != null) {
       final parsedUrl = Uri.tryParse(remoteUrl!);
       if (parsedUrl == null) return remoteUrl!;
       final handle = parsedUrl.fediverseHandle;
-      return '@${handle.item2}@${handle.item1}';
+      return "@${handle.item2}@${handle.item1}";
     }
 
     if (id != null) return id!;
 
-    return '<unknown>';
+    return "<unknown>";
   }
 
   @override

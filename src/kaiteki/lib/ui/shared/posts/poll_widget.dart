@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:kaiteki/fediverse/model/poll.dart';
-import 'package:kaiteki/utils/extensions.dart';
+import "package:flutter/material.dart";
+import "package:kaiteki/fediverse/model/poll.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class PollWidget extends StatelessWidget {
   final Poll poll;

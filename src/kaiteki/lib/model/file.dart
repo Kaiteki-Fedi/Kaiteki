@@ -1,4 +1,4 @@
-import 'package:http/http.dart' show MultipartFile;
+import "package:http/http.dart" show MultipartFile;
 
 /// A simple data compound intended for use in file transfers.
 class File {
