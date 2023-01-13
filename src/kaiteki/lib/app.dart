@@ -48,13 +48,22 @@ class KaitekiApp extends ConsumerWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           routerConfig: router,
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: locale == null ? null : Locale(locale),
+          locale: _createLocale(locale),
           theme: lightTheme,
           themeMode: themePrefs.mode,
           title: consts.appName,
           shortcuts: shortcuts,
         );
       },
+    );
+  }
+
+  Locale? _createLocale(String? locale) {
+    if (locale == null) return null;
+    final split = locale.split("-");
+    return Locale.fromSubtags(
+      languageCode: split[0],
+      scriptCode: split.length == 2 ? split[1] : null,
     );
   }
 }

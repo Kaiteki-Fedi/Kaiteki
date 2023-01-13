@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 
@@ -13,7 +14,7 @@ class LocaleListTile extends ConsumerWidget {
     return ListTile(
       leading: const Icon(Icons.public),
       title: Text(l10n.settingsLocale),
-      subtitle: Text(l10n.localeName),
+      subtitle: Text(Localizations.localeOf(context).toLanguageTag()),
       onTap: () => _onTap(context, ref),
     );
   }
@@ -55,7 +56,7 @@ class SelectLocaleDialog extends StatelessWidget {
               style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
             ),
             onPressed: () => Navigator.of(context).maybePop(
-              LocaleChoice(locale.languageCode),
+              LocaleChoice(locale.toLanguageTag()),
             ),
           ),
       ],
