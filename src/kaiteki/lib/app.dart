@@ -11,6 +11,14 @@ import 'package:kaiteki/ui/shortcuts/shortcuts.dart';
 class KaitekiApp extends ConsumerWidget {
   const KaitekiApp({super.key});
 
+  static const versionCode = bool.hasEnvironment("VERSION_CODE")
+      ? String.fromEnvironment("VERSION_CODE")
+      : null;
+
+  static const versionName = bool.hasEnvironment("VERSION_NAME")
+      ? String.fromEnvironment("VERSION_NAME")
+      : null;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(preferencesProvider.select((p) => p.locale));

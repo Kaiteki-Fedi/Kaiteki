@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kaiteki/app.dart';
 import 'package:kaiteki/constants.dart' as consts;
 import 'package:kaiteki/di.dart';
 import 'package:kaiteki/platform_checks.dart';
@@ -17,6 +18,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final badge = getBadgeKind();
+    const version = KaitekiApp.versionName;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsAbout)),
@@ -55,6 +57,13 @@ class AboutScreen extends StatelessWidget {
                         ],
                         // kDebugMode
                       ),
+                      if (version != null) ...[
+                        const SizedBox(height: 8.0),
+                        Text(
+                          "Version $version",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ],
                       Card(
                         margin: const EdgeInsets.only(
                           left: 4.0,

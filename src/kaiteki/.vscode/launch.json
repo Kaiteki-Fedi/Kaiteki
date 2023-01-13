@@ -35,6 +35,21 @@
             }
         },
         {
+            "name": "Kaiteki (debug mode with fake version)",
+            "type": "dart",
+            "request": "launch",
+            "flutterMode": "debug",
+            "args": [
+                "--dart-define=VERSION_CODE=12423231",
+                "--dart-define=VERSION_NAME=Weekly 2023-03",
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 4,
+            }
+        },
+        {
             "name": "Storybook",
             "request": "launch",
             "type": "dart",
