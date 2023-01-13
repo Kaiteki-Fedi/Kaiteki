@@ -24,14 +24,14 @@ import 'package:kaiteki/utils/extensions.dart';
 
 const double splashRadius = 20.0;
 
-class PostForm extends ConsumerStatefulWidget {
+class ComposeForm extends ConsumerStatefulWidget {
   final Post? replyTo;
   final bool enableSubject;
   final bool showPreview;
   final bool expands;
   final VoidCallback? onSubmit;
 
-  const PostForm({
+  const ComposeForm({
     super.key,
     this.replyTo,
     this.enableSubject = true,
@@ -41,10 +41,10 @@ class PostForm extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<PostForm> createState() => PostFormState();
+  ConsumerState<ComposeForm> createState() => PostFormState();
 }
 
-class PostFormState extends ConsumerState<PostForm> {
+class PostFormState extends ConsumerState<ComposeForm> {
   late final TextEditingController _bodyController =
       TextEditingController(text: initialBody)..addListener(_typingTimer.reset);
 

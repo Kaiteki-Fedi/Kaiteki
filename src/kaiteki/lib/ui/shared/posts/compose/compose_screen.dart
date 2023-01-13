@@ -4,8 +4,8 @@ import 'package:kaiteki/fediverse/interfaces/preview_support.dart';
 import 'package:kaiteki/fediverse/model/post/post.dart';
 import 'package:kaiteki/ui/shared/dialogs/dialog_close_button.dart';
 import 'package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart';
+import 'package:kaiteki/ui/shared/posts/compose/compose_form.dart';
 import 'package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart';
-import 'package:kaiteki/ui/shared/posts/compose/post_form.dart';
 import 'package:kaiteki/ui/shared/posts/compose/toggle_subject_button.dart';
 import 'package:kaiteki/utils/extensions.dart';
 
@@ -84,7 +84,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
               ),
               Expanded(
                 flex: fullscreen ? 1 : 0,
-                child: PostForm(
+                child: ComposeForm(
                   key: key,
                   enableSubject: enableSubject,
                   showPreview: showPreview,

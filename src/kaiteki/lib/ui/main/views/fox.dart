@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kaiteki/ui/main/pages/timeline.dart';
-import 'package:kaiteki/ui/shared/posts/compose/post_form.dart';
+import 'package:kaiteki/ui/shared/posts/compose/compose_form.dart';
 
 class FoxMainScreenView extends StatelessWidget {
   const FoxMainScreenView({super.key});
@@ -19,7 +19,7 @@ class FoxMainScreenView extends StatelessWidget {
                 child: const SizedBox(
                   width: 365,
                   child: SingleChildScrollView(
-                    child: Card(child: PostForm()),
+                    child: Card(child: ComposeForm()),
                   ),
                 ),
               ),
