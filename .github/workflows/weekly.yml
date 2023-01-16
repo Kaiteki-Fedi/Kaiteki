@@ -267,6 +267,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    permissions: write-all
     needs: [ "test", "package-appimage", "build-android", "build-windows" ]
     steps:
       - name: Download all artifacts
