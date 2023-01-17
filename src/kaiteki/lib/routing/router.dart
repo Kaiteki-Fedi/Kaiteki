@@ -24,6 +24,7 @@ import "package:kaiteki/ui/settings/debug/theme_screen.dart";
 import "package:kaiteki/ui/settings/debug_screen.dart";
 import "package:kaiteki/ui/settings/experiments.dart";
 import "package:kaiteki/ui/settings/settings_screen.dart";
+import "package:kaiteki/ui/settings/wellbeing/wellbeing_screen.dart";
 import "package:kaiteki/ui/shared/conversation_screen.dart";
 import "package:kaiteki/ui/shared/dialogs/account_list_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
@@ -92,6 +93,11 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             name: "experiments",
             path: "experiments",
             builder: (_, __) => const ExperimentsScreen(),
+          ),
+          GoRoute(
+            name: "wellbeing",
+            path: "wellbeing",
+            builder: (_, __) => const WellbeingScreen(),
           ),
           GoRoute(
             path: "debug",

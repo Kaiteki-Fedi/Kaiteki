@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
@@ -9,6 +10,7 @@ import "package:kaiteki/fediverse/interfaces/post_translation_support.dart";
 import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
 import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/theming/kaiteki/post.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
@@ -30,6 +32,8 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:url_launcher/url_launcher.dart";
 
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
+
+final sensitiveWords = {"cw", "mh", "ph", "pol", "suicide", "selfharm"};
 
 class PostWidget extends ConsumerStatefulWidget {
   final Post post;
@@ -104,7 +108,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       ),
       if (widget.showParentPost && _post.replyToUser != null)
         ReplyBar(post: _post),
-      PostContentWidget(
+      _PostContent(
         post: _translatedPost ?? _post,
         hideReplyee: widget.hideReplyee,
         onTap: widget.onTap,
@@ -498,50 +502,97 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   }
 }
 
-class PostContentWidget extends ConsumerStatefulWidget {
+class _PostContent extends ConsumerStatefulWidget {
   final Post post;
   final bool hideReplyee;
   final VoidCallback? onTap;
 
-  const PostContentWidget({
-    super.key,
+  const _PostContent({
     required this.post,
     required this.hideReplyee,
     this.onTap,
   });
 
   @override
-  ConsumerState<PostContentWidget> createState() => _PostContentWidgetState();
+  ConsumerState<_PostContent> createState() => _PostContentWidgetState();
 }
 
-class _PostContentWidgetState extends ConsumerState<PostContentWidget> {
+class _PostContentWidgetState extends ConsumerState<_PostContent> {
   InlineSpan? renderedContent;
   bool collapsed = false;
 
+  bool get hasContent {
+    return renderedContent != null &&
+        renderedContent!.toPlainText().trim().isNotEmpty;
+  }
+
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _renderContent();
+
+    final cwBehavior = ref.read(preferencesProvider).contentWarningBehavior;
+    final subject = widget.post.subject;
+    final hasSubject = subject != null && subject.isNotEmpty;
+
+    if (hasSubject) {
+      switch (cwBehavior) {
+        case ContentWarningBehavior.collapse:
+          collapsed = true;
+          break;
+        case ContentWarningBehavior.expanded:
+          collapsed = false;
+          break;
+        case ContentWarningBehavior.automatic:
+          final plainText = renderedContent?.toPlainText(
+            includeSemanticsLabels: false,
+            includePlaceholders: false,
+          );
+
+          final strings = [if (plainText != null) plainText, subject];
+
+          if (strings.isEmpty) break;
+
+          final words = strings
+              .map((e) => e.toLowerCase())
+              .map((e) => e.split(RegExp(r"([\s:])+")))
+              .flattened;
+
+          collapsed = sensitiveWords.any(words.contains);
+          break;
+      }
+    }
+  }
+
+  void _renderContent() {
     final post = widget.post;
 
-    if (post.content != null) {
+    if (post.content == null) {
+      renderedContent = null;
+    } else {
       renderedContent = post.renderContent(
         context,
         ref,
         hideReplyee: widget.hideReplyee,
       );
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final post = widget.post;
+    final subject = widget.post.subject;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (post.subject?.isNotEmpty == true)
+        if (subject != null && subject.isNotEmpty == true)
           SubjectBar(
             subject: post.subject!,
             collapsed: collapsed,
             onTap: () => setState(() => collapsed = !collapsed),
           ),
-        if (renderedContent != null &&
-            renderedContent!.toPlainText().trim().isNotEmpty &&
-            !collapsed)
+        if (hasContent && !collapsed)
           Padding(
             padding: kPostPadding,
             child: SelectableText.rich(

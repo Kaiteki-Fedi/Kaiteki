@@ -39,6 +39,20 @@ class AppPreferences extends ChangeNotifier {
     return UnmodifiableSetView(experimentsSet ?? const {});
   }
 
+  ContentWarningBehavior get contentWarningBehavior {
+    final value = _preferences.getString("cwBehavior");
+    if (value == null) return ContentWarningBehavior.automatic;
+    return ContentWarningBehavior.values.firstWhere((v) => v.name == value);
+  }
+
+  set contentWarningBehavior(ContentWarningBehavior value) {
+    if (contentWarningBehavior == value) return;
+
+    _preferences
+        .setString("cwBehavior", value.name)
+        .then((_) => notifyListeners());
+  }
+
   Future<void> enableExperiment(AppExperiment experiment) async {
     if (enabledExperiments.contains(experiment)) return;
     final newSet = enabledExperiments.followedBy([experiment]);
@@ -60,4 +74,13 @@ class AppPreferences extends ChangeNotifier {
   }
 
   AppPreferences(this._preferences);
+}
+
+enum ContentWarningBehavior {
+  // Post should always be collapsed
+  collapse,
+  // Post should be collapsed if it matches sensitive words
+  automatic,
+  // Post should always be expanded
+  expanded,
 }
