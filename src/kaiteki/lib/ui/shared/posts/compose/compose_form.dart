@@ -300,6 +300,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
     );
 
     final goRouter = GoRouter.of(context);
+    final accountRouterParams = ref.accountRouterParams;
 
     submitPost().then((post) {
       snackBarController.close();
@@ -311,7 +312,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
             onPressed: () {
               goRouter.pushNamed(
                 "post",
-                params: {...ref.accountRouterParams, "id": post.id},
+                params: {...accountRouterParams, "id": post.id},
                 extra: post,
               );
               messenger.hideCurrentSnackBar();
