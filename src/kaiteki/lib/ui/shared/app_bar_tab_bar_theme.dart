@@ -14,10 +14,7 @@ class AppBarTabBarTheme extends StatelessWidget {
 
     if (theme.useMaterial3) return child;
 
-    final foregroundColor = theme.colorScheme.brightness == Brightness.dark
-        ? theme.colorScheme.onSurface
-        : theme.colorScheme.onPrimary;
-
+    final foregroundColor = _getForegroundColor(context);
     return Theme(
       data: theme.copyWith(
         tabBarTheme: TabBarTheme(
@@ -33,5 +30,16 @@ class AppBarTabBarTheme extends StatelessWidget {
       ),
       child: child,
     );
+  }
+
+  Color _getForegroundColor(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final appBarForegroundColor = theme.appBarTheme.foregroundColor;
+    if (appBarForegroundColor != null) return appBarForegroundColor;
+
+    return theme.colorScheme.brightness == Brightness.dark
+        ? theme.colorScheme.onSurface
+        : theme.colorScheme.onPrimary;
   }
 }

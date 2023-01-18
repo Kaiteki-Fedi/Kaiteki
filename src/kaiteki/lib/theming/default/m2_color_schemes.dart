@@ -21,7 +21,7 @@ final _brandedDarkSurfaceColor = Color.alphaBlend(
   kaitekiPink.shade200.withOpacity(.08),
   const Color(0xFF121212),
 );
-// based on https://material.io/design/color/dark-theme.html
+// based on https://m2.material.io/design/color/dark-theme.html
 final darkColorScheme = ColorScheme.dark(
   background: _brandedDarkBackgroundColor,
   surface: _brandedDarkSurfaceColor,

@@ -1,6 +1,4 @@
 import "package:flutter/material.dart";
-import "package:google_fonts/google_fonts.dart";
-import "package:kaiteki/theming/default/constants.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/theming/kaiteki/post.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
@@ -8,31 +6,16 @@ import "package:kaiteki/theming/kaiteki/theme.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
 
 extension ThemeDataExtensions on ThemeData {
-  ThemeData applyGeneralChanges() {
-    final ktkTextTheme = KaitekiTextTheme.fromMaterialTheme(this);
-
+  ThemeData applyDefaultTweaks() {
+    final navigationBarForegroundColor =
+        colorScheme.brightness == Brightness.dark
+            ? colorScheme.onSurface
+            : colorScheme.onPrimary;
     return copyWith(
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: colorScheme.secondaryContainer,
-        foregroundColor: colorScheme.onSecondaryContainer,
-      ),
       snackBarTheme: const SnackBarThemeData(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
         behavior: SnackBarBehavior.floating,
       ),
-      dialogTheme: const DialogTheme(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
-      ),
-      dividerTheme: dividerTheme.copyWith(
-        space: 1,
-        thickness: 1,
-      ),
-      extensions: [
-        ktkTextTheme,
-        KaitekiColors.fromMaterialTheme(this),
-        KaitekiTheme.fromMaterialTheme(this),
-        KaitekiPostTheme.fallback,
-      ],
+      dividerTheme: dividerTheme.copyWith(space: 1, thickness: 1),
       tabBarTheme: TabBarTheme(
         indicator: RoundedUnderlineTabIndicator(
           borderSide: BorderSide(width: 3, color: colorScheme.primary),
@@ -42,29 +25,28 @@ extension ThemeDataExtensions on ThemeData {
         // And there @Craftplacer said, "THIS DIVIDER SUCKS"
         dividerColor: Colors.transparent,
       ),
-      textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
-      checkboxTheme: CheckboxThemeData(
-        checkColor: MaterialStateProperty.all(colorScheme.surface),
-        fillColor: MaterialStateProperty.resolveWith(
-          (s) => s.contains(MaterialState.selected)
-              ? colorScheme.secondary
-              : colorScheme.onBackground.withOpacity(.87),
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: colorScheme.brightness == Brightness.dark
+            ? colorScheme.surface
+            : colorScheme.primary,
+        selectedItemColor: navigationBarForegroundColor,
+        unselectedItemColor: navigationBarForegroundColor.withOpacity(0.76),
+        showSelectedLabels: true,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
-}
 
-TextTheme _createKaitekiTextTheme(
-  TextTheme original,
-  KaitekiTextTheme ktkTextTheme,
-) {
-  final baseTextTheme = GoogleFonts.robotoTextTheme(original);
-  return baseTextTheme.copyWith(
-    titleLarge: ktkTextTheme.kaitekiTextStyle.copyWith(
-      fontSize: baseTextTheme.titleLarge?.fontSize,
-      color: baseTextTheme.titleLarge?.color,
-    ),
-  );
+  /// Adds Kaiteki-specific extensions to the theme.
+  ThemeData addKaitekiExtensions() {
+    return copyWith(
+      extensions: [
+        ...extensions.values,
+        KaitekiTextTheme.fromMaterialTheme(this),
+        KaitekiColors.fromMaterialTheme(this),
+        KaitekiTheme.fromMaterialTheme(this),
+        KaitekiPostTheme.fallback,
+      ],
+    );
+  }
 }

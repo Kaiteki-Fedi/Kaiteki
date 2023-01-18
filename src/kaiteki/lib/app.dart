@@ -34,14 +34,14 @@ class KaitekiApp extends ConsumerWidget {
         final lightTheme = ThemeData.from(
           colorScheme: lightColorScheme,
           useMaterial3: m3,
-        ).applyGeneralChanges();
+        ).applyDefaultTweaks().addKaitekiExtensions().applyKaitekiTweaks();
 
         final darkColorScheme = (useSystemScheme ? darkDynamic : null) ??
             getColorScheme(Brightness.dark, m3);
         final darkTheme = ThemeData.from(
           colorScheme: darkColorScheme,
           useMaterial3: m3,
-        ).applyGeneralChanges();
+        ).applyDefaultTweaks().addKaitekiExtensions().applyKaitekiTweaks();
 
         return MaterialApp.router(
           darkTheme: darkTheme,

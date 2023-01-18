@@ -1,6 +1,7 @@
 import "package:animations/animations.dart";
 import "package:breakpoint/breakpoint.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" as consts;
@@ -130,6 +131,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: ElevationOverlay.applySurfaceTint(
+          Theme.of(context).colorScheme.surface,
+          Theme.of(context).colorScheme.surfaceTint,
+          3,
+        ),
+        systemNavigationBarContrastEnforced: false,
+      ),
+    );
+
     final l10n = context.l10n;
     _tabs ??= getTabs(l10n);
 
@@ -215,10 +227,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context, bool disableScrollElevation) {
+  AppBar _buildAppBar(BuildContext context, bool immerse) {
     Color? foregroundColor;
 
-    final outsideColor = _outsideColor;
+    final outsideColor = immerse ? _outsideColor : null;
     if (outsideColor != null) {
       foregroundColor = ThemeData.estimateBrightnessForColor(outsideColor)
           .inverted
@@ -234,10 +246,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         consts.appName,
         style: theme.ktkTextTheme?.kaitekiTextStyle,
       ),
-      elevation: elevation,
-      surfaceTintColor: theme.useMaterial3 ? Colors.transparent : null,
       actions: _buildAppBarActions(context),
-      scrolledUnderElevation: disableScrollElevation ? elevation : null,
+      scrolledUnderElevation: immerse ? elevation : null,
     );
   }
 

@@ -27,21 +27,11 @@ class MainScreenNavigationBar extends StatelessWidget {
       );
     }
 
-    final foregroundColor = theme.colorScheme.brightness == Brightness.dark
-        ? theme.colorScheme.onSurface
-        : theme.colorScheme.onPrimary;
     return BottomNavigationBar(
-      backgroundColor: theme.colorScheme.brightness == Brightness.dark
-          ? theme.colorScheme.surface
-          : theme.colorScheme.primary,
-      selectedItemColor: foregroundColor,
-      unselectedItemColor: foregroundColor.withOpacity(0.76),
       selectedFontSize: 12,
       showUnselectedLabels: false,
       onTap: onChangeIndex,
-      elevation: 8.0,
       currentIndex: currentIndex,
-      type: BottomNavigationBarType.fixed,
       items: _buildBottomNavigationBarItems(context),
     );
   }
@@ -64,13 +54,11 @@ class MainScreenNavigationBar extends StatelessWidget {
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
     BuildContext context,
   ) {
-    final theme = Theme.of(context);
     final bottomNavigationBarItems = <BottomNavigationBarItem>[];
     for (final tab in tabs) {
       final unreadCount = tab.fetchUnreadCount?.call();
       bottomNavigationBarItems.add(
         BottomNavigationBarItem(
-          backgroundColor: theme.colorScheme.primary,
           icon: Icon(tab.icon).wrapWithLargeBadge(unreadCount),
           activeIcon: Icon(tab.selectedIcon).wrapWithLargeBadge(unreadCount),
           label: tab.text,
