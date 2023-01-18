@@ -4,15 +4,13 @@ import "package:flutter/services.dart";
 import "package:html/dom.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
-import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
 import "package:kaiteki/fediverse/model/chat_message.dart";
 import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/utils/helpers.dart";
-import "package:kaiteki/utils/text/parsers.dart";
 import "package:kaiteki/utils/text/text_renderer.dart";
 import "package:kaiteki/utils/utils.dart";
 import "package:tuple/tuple.dart";
@@ -94,18 +92,6 @@ extension AsyncSnapshotExtensions on AsyncSnapshot {
   }
 }
 
-Set<TextParser> _getTextParsers(WidgetRef ref) {
-  const socialTextParser = SocialTextParser();
-  final adapter = ref.watch(adapterProvider);
-  if (adapter is MisskeyAdapter) {
-    return const {MfmTextParser(), socialTextParser};
-  } else if (adapter is SharedMastodonAdapter) {
-    return const {MastodonHtmlTextParser(), socialTextParser};
-  } else {
-    return const {socialTextParser};
-  }
-}
-
 enum AsyncSnapshotState { errored, loading, done }
 
 extension UserExtensions on User {
@@ -118,10 +104,8 @@ extension UserExtensions on User {
   }
 
   InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
-    final parsers = _getTextParsers(ref);
-
     return render(
-      parsers: parsers,
+      parsers: ref.read(textParserProvider),
       context,
       text,
       textContext: TextContext(
@@ -129,6 +113,7 @@ extension UserExtensions on User {
         emojis: emojis?.toList(growable: false),
       ),
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
+      textTheme: Theme.of(context).ktkTextTheme!,
     );
   }
 }
@@ -139,11 +124,10 @@ extension PostExtensions on Post {
     WidgetRef ref, {
     bool hideReplyee = false,
   }) {
-    final parsers = _getTextParsers(ref);
     final replyee = replyToUser?.data;
 
     return render(
-      parsers: parsers,
+      parsers: ref.read(textParserProvider),
       context,
       content!,
       textContext: TextContext(
@@ -155,6 +139,7 @@ extension PostExtensions on Post {
         ],
       ),
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
+      textTheme: Theme.of(context).ktkTextTheme!,
     );
   }
 
@@ -168,16 +153,15 @@ extension PostExtensions on Post {
 
 extension ChatMessageExtensions on ChatMessage {
   InlineSpan renderContent(BuildContext context, WidgetRef ref) {
-    final parsers = _getTextParsers(ref);
-
     return render(
-      parsers: parsers,
+      parsers: ref.read(textParserProvider),
       context,
       content!,
       textContext: TextContext(
         emojis: emojis.toList(growable: false),
       ),
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
+      textTheme: Theme.of(context).ktkTextTheme!,
     );
   }
 }

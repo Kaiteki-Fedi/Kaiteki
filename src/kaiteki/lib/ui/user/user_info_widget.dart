@@ -158,6 +158,7 @@ class _UserInfoFieldRow extends ConsumerWidget {
               context,
               ref,
             ),
+            textTheme: Theme.of(context).ktkTextTheme!,
           ),
         ),
       ],

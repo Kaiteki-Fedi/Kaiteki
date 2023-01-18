@@ -24,13 +24,14 @@ class TextContext {
   final List<Emoji>? emojis;
   final List<UserReference>? excludedUsers;
 
-  TextContext({this.users, this.emojis, this.excludedUsers});
+  const TextContext({this.users, this.emojis, this.excludedUsers});
 }
 
 InlineSpan render(
   BuildContext context,
   String text, {
   TextContext? textContext,
+  required KaitekiTextTheme textTheme,
   required Function(UserReference reference) onUserClick,
   Set<TextParser> parsers = const {SocialTextParser()},
 }) {
@@ -48,8 +49,8 @@ InlineSpan render(
   final renderedElements = renderChildren(
     context,
     elements,
-    textContext ?? TextContext(),
-    Theme.of(context).ktkTextTheme,
+    textContext ?? const TextContext(),
+    textTheme,
     onUserClick: onUserClick,
   );
   return TextSpan(children: renderedElements.toList(growable: false));

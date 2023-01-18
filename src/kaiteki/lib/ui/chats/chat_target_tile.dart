@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/chat_target.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
@@ -55,6 +56,7 @@ class ChatTargetTile extends ConsumerWidget {
           users: [],
           emojis: lastMessage.emojis.toList(growable: false),
         ),
+        textTheme: Theme.of(context).ktkTextTheme!,
         onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       );
 
