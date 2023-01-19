@@ -141,46 +141,53 @@ class ChatMessageWidget extends ConsumerWidget {
       rounding: 12.0,
       nipPosition: nipPosition,
     );
+    const avatarSize = 32.0;
+    const spacing = 6.0;
 
     return Row(
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: ifReverse(
         [
-          AvatarWidget(message.author, size: 32.0),
-          const SizedBox(width: 6.0),
+          AvatarWidget(message.author, size: avatarSize),
+          const SizedBox(width: spacing),
           Flexible(
             child: ClipPath(
               clipper: clip,
-              child: Container(
+              child: ColoredBox(
                 color: messageColor,
-                constraints: const BoxConstraints(maxWidth: 450),
-                padding: clip.getPadding(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (message.content != null)
-                      SelectableText.rich(
-                        TextSpan(
-                          children: [message.renderContent(context, ref)],
-                        ),
-                        style: TextStyle(color: textColor),
-                      ),
-                    // FIXME(Craftplacer): Attachment display changes are not compatible
-                    if (message.attachments.isNotEmpty == true)
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: 300,
-                        ),
-                        child: AttachmentWidget(
-                          attachment: message.attachments.first,
-                        ),
-                      ),
-                  ],
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 450),
+                  child: Padding(
+                    padding: clip.getPadding(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (message.content != null)
+                          SelectableText.rich(
+                            TextSpan(
+                              children: [message.renderContent(context, ref)],
+                            ),
+                            style: TextStyle(color: textColor),
+                          ),
+                        // FIXME(Craftplacer): Attachment display changes are not compatible
+                        if (message.attachments.isNotEmpty == true)
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxHeight: 300,
+                            ),
+                            child: AttachmentWidget(
+                              attachment: message.attachments.first,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
+          const SizedBox(width: avatarSize + spacing),
         ],
         reverse,
       ),
