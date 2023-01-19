@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/interfaces/chat_support.dart";
 import "package:kaiteki/fediverse/model/chat_message.dart";
 import "package:kaiteki/fediverse/model/chat_target.dart";
@@ -25,8 +26,6 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final adapter = ref.read(adapterProvider) as ChatSupport;
-
     if (!ref
         .watch(preferencesProvider.select((value) => value.enabledExperiments))
         .contains(AppExperiment.chats)) {
@@ -50,74 +49,82 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
       );
     }
 
-    return Row(
-      children: [
-        SizedBox(
-          width: 350,
-          child: Column(
-            children: [
-              Expanded(
-                child: FutureBuilder<Iterable<ChatTarget>>(
-                  future: adapter.getChats(),
-                  builder: (
-                    context,
-                    snapshot,
-                  ) {
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+    final adapter = ref.watch(adapterProvider);
+    if (adapter is! ChatSupport) {
+      return Center(
+        child: IconLandingWidget(
+          icon: const Icon(Icons.forum_outlined),
+          text: Text("Chats are not supported by ${adapter.type.displayName}"),
+        ),
+      );
+    }
 
-                    final chats = snapshot.data!;
+    final chatAdapter = adapter as ChatSupport;
+    final chatList = FutureBuilder<Iterable<ChatTarget>>(
+      future: chatAdapter.getChats(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-                    return Stack(
-                      children: [
-                        ChatTargetList(
-                          chats: chats.toList(growable: false),
-                          onChatSelected: (chat) {
-                            setState(() => selectedChat = chat);
-                          },
-                          selectedChatId: selectedChat?.id,
-                        ),
-                        Positioned(
-                          right: kFloatingActionButtonMargin,
-                          bottom: kFloatingActionButtonMargin,
-                          child: FloatingActionButton(
-                            onPressed: () async {
-                              await showDialog(
-                                context: context,
-                                builder: (_) => const FindUserDialog(),
-                              );
-                            },
-                            tooltip: "Start a new chat",
-                            child: const Icon(Mdi.plus),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+        final chats = snapshot.data!;
+
+        return Stack(
+          children: [
+            ChatTargetList(
+              chats: chats.toList(growable: false),
+              onChatSelected: (chat) {
+                setState(() => selectedChat = chat);
+              },
+              selectedChatId: selectedChat?.id,
+            ),
+            Positioned(
+              right: kFloatingActionButtonMargin,
+              bottom: kFloatingActionButtonMargin,
+              child: FloatingActionButton(
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (_) => const FindUserDialog(),
+                  );
+                },
+                tooltip: "Start a new chat",
+                child: const Icon(Mdi.plus),
               ),
+            ),
+          ],
+        );
+      },
+    );
+
+    final chatView = selectedChat == null
+        ? const Center(
+            child: IconLandingWidget(
+              icon: Icon(Mdi.forumOutline),
+              text: Text("Select a chat to begin"),
+            ),
+          )
+        : ChatView(chat: selectedChat!);
+
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        if (orientation == Orientation.landscape) {
+          return Row(
+            children: [
+              SizedBox(width: 350, child: chatList),
+              const VerticalDivider(),
+              Expanded(child: chatView),
             ],
-          ),
-        ),
-        VerticalDivider(
-          color: Theme.of(context).dividerColor,
-          width: 1,
-        ),
-        Expanded(
-          child: selectedChat == null
-              ? const Center(
-                  child: IconLandingWidget(
-                    icon: Icon(Mdi.forumOutline),
-                    text: Text("Select a chat to begin"),
-                  ),
-                )
-              : ChatView(
-                  chat: selectedChat!,
-                  key: ValueKey(selectedChat?.id),
-                ),
-        ),
-      ],
+          );
+        }
+
+        return selectedChat == null
+            ? chatList
+            : ChatView(
+                chat: selectedChat!,
+                onBack: () => setState(() => selectedChat = null),
+              );
+      },
     );
   }
 }
@@ -126,9 +133,11 @@ class ChatView extends ConsumerWidget {
   const ChatView({
     super.key,
     required this.chat,
+    this.onBack,
   });
 
   final ChatTarget chat;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -137,18 +146,42 @@ class ChatView extends ConsumerWidget {
 
     return Column(
       children: [
-        ListTile(
-          leading: _buildIcon(context, ref),
-          title: _buildTitle(context, ref),
-          trailing: PopupMenuButton(
-            itemBuilder: (context) {
-              return List.generate(5, (index) {
-                return PopupMenuItem(
-                  value: index,
-                  child: Text("button no $index"),
-                );
-              });
-            },
+        AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          leading: onBack.nullTransform(
+            (callback) => IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: callback,
+            ),
+          ),
+          actions: [
+            PopupMenuButton(
+              itemBuilder: (context) {
+                return List.generate(5, (index) {
+                  return PopupMenuItem(
+                    value: index,
+                    child: Text("button no $index"),
+                  );
+                });
+              },
+            ),
+          ],
+          title: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: chat is DirectChat
+                ? () => context.showUser((chat as DirectChat).recipient, ref)
+                : null,
+            child: Row(
+              children: [
+                _buildIcon(context, ref),
+                const SizedBox(width: 16),
+                DefaultTextStyle(
+                  style: Theme.of(context).textTheme.titleMedium!,
+                  child: _buildTitle(context, ref),
+                ),
+              ],
+            ),
           ),
         ),
         const Divider(height: 1),
@@ -210,11 +243,19 @@ class ChatView extends ConsumerWidget {
     return Text(chat.toString());
   }
 
-  Widget? _buildIcon(BuildContext context, WidgetRef ref) {
+  Widget _buildIcon(BuildContext context, WidgetRef ref) {
     final chat = this.chat;
     if (chat is DirectChat) {
       return AvatarWidget(chat.recipient, size: 32);
     }
-    return null;
+    if (chat is GroupChat) {
+      return CircleAvatar(
+        radius: 16,
+        child: Text(
+          chat.name!.substring(0, 1).toUpperCase(),
+        ),
+      );
+    }
+    return const SizedBox();
   }
 }
