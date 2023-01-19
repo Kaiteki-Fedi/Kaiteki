@@ -58,6 +58,7 @@ class ChatTargetTile extends ConsumerWidget {
         ),
         textTheme: Theme.of(context).ktkTextTheme!,
         onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
+        parsers: ref.read(textParserProvider),
       );
 
       return Text.rich(
