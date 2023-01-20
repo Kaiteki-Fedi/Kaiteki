@@ -59,14 +59,18 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       child: ColoredBox(color: Colors.black.withOpacity(.125)),
     );
 
-    if (user == null || user.bannerUrl == null) return placeholder;
+    if (user == null) return placeholder;
+
+    final bannerUrl = user.bannerUrl;
+    if (bannerUrl == null) return placeholder;
 
     return Image.network(
-      user.bannerUrl!,
+      bannerUrl,
       fit: BoxFit.cover,
       color: Colors.white.withOpacity(0.5),
       colorBlendMode: BlendMode.modulate,
       isAntiAlias: true,
+      errorBuilder: (_, __, ___) => placeholder,
     );
   }
 
