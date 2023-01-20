@@ -29,9 +29,8 @@ class ContentWarningBehaviorListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(
-      preferencesProvider.select((value) => value.contentWarningBehavior),
-    );
+    final preferences = ref.read(preferencesProvider);
+    final state = ref.watch(preferences.cwBehavior).value;
 
     Widget subtitle;
 
@@ -62,7 +61,9 @@ class ContentWarningBehaviorListTile extends ConsumerWidget {
     );
 
     if (choice == null) return;
-    ref.read(preferencesProvider).contentWarningBehavior = choice;
+
+    final preferences = ref.read(preferencesProvider);
+    ref.read(preferences.cwBehavior).value = choice;
   }
 }
 
@@ -71,9 +72,8 @@ class ContentWarningBehaviorDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(
-      preferencesProvider.select((value) => value.contentWarningBehavior),
-    );
+    final preferences = ref.read(preferencesProvider);
+    final state = ref.watch(preferences.cwBehavior).value;
 
     return SimpleDialog(
       title: const Text("Content warning behavior"),

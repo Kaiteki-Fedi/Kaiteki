@@ -1,79 +1,35 @@
-import "dart:collection";
-
-import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
-import "package:shared_preferences/shared_preferences.dart";
+import "package:notified_preferences/notified_preferences.dart";
 
-const kLocale = "locale";
-const kDev = "dev";
-const kEnabledExperiments = "enabledExperiments";
+class AppPreferences with NotifiedPreferences {
+  late final locale =
+      createSetting<String?>(key: "locale", initialValue: null).asProvider();
 
-class AppPreferences extends ChangeNotifier {
-  final SharedPreferences _preferences;
+  late final experiments = createSetting<List<AppExperiment>>(
+    key: "enabledExperiments",
+    initialValue: const [],
+    read: (prefs, key) {
+      final list = prefs
+          .getStringList(key)
+          ?.map((v) => AppExperiment.values.firstWhere((e) => e.name == v))
+          .toList();
+      return list ?? const [];
+    },
+    write: (prefs, key, value) async {
+      final list = value.map((e) => e.name).toList();
+      await prefs.setStringList(key, list);
+    },
+  ).asProvider();
 
-  String? get locale => _preferences.getString(kLocale);
+  late final developerMode =
+      createSetting<bool>(key: "dev", initialValue: false).asProvider();
 
-  set locale(String? locale) {
-    if (this.locale == locale) return;
-
-    if (locale == null) {
-      _preferences.remove(kLocale).then((_) => notifyListeners());
-    } else {
-      _preferences.setString(kLocale, locale).then((_) => notifyListeners());
-    }
-  }
-
-  bool get developerMode => _preferences.getBool(kDev) ?? false;
-
-  set developerMode(bool value) {
-    if (developerMode == value) return;
-
-    _preferences.setBool(kDev, value).then((_) => notifyListeners());
-  }
-
-  UnmodifiableSetView<AppExperiment> get enabledExperiments {
-    final experimentsSet = _preferences
-        .getStringList(kEnabledExperiments)
-        ?.map((v) => AppExperiment.values.firstWhere((e) => e.name == v))
-        .toSet();
-    return UnmodifiableSetView(experimentsSet ?? const {});
-  }
-
-  ContentWarningBehavior get contentWarningBehavior {
-    final value = _preferences.getString("cwBehavior");
-    if (value == null) return ContentWarningBehavior.automatic;
-    return ContentWarningBehavior.values.firstWhere((v) => v.name == value);
-  }
-
-  set contentWarningBehavior(ContentWarningBehavior value) {
-    if (contentWarningBehavior == value) return;
-
-    _preferences
-        .setString("cwBehavior", value.name)
-        .then((_) => notifyListeners());
-  }
-
-  Future<void> enableExperiment(AppExperiment experiment) async {
-    if (enabledExperiments.contains(experiment)) return;
-    final newSet = enabledExperiments.followedBy([experiment]);
-    await _preferences.setStringList(
-      kEnabledExperiments,
-      newSet.map((e) => e.name).toList(),
-    );
-    notifyListeners();
-  }
-
-  Future<void> disableExperiment(AppExperiment experiment) async {
-    if (!enabledExperiments.contains(experiment)) return;
-    final filtered = enabledExperiments.where((e) => e != experiment);
-    await _preferences.setStringList(
-      kEnabledExperiments,
-      filtered.map((e) => e.name).toList(),
-    );
-    notifyListeners();
-  }
-
-  AppPreferences(this._preferences);
+  late final cwBehavior = createEnumSetting<ContentWarningBehavior>(
+    key: "cwBehavior",
+    initialValue: ContentWarningBehavior.automatic,
+    values: ContentWarningBehavior.values,
+  ).asProvider();
 }
 
 enum ContentWarningBehavior {
@@ -83,4 +39,10 @@ enum ContentWarningBehavior {
   automatic,
   // Post should always be expanded
   expanded,
+}
+
+extension PreferenceNotifierExtensions<T> on PreferenceNotifier<T> {
+  ProviderBase<PreferenceNotifier<T>> asProvider() {
+    return ChangeNotifierProvider<PreferenceNotifier<T>>((_) => this);
+  }
 }

@@ -26,9 +26,8 @@ class LocaleListTile extends ConsumerWidget {
 
     if (locale == null) return;
 
-    final prefs = ref.read(preferencesProvider);
-    // ignore: cascade_invocations
-    prefs.locale = locale.languageCode;
+    final preferences = ref.read(preferencesProvider);
+    ref.read(preferences.locale).value = locale.languageCode;
   }
 }
 

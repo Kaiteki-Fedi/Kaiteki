@@ -19,8 +19,8 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final developerMode =
-        ref.watch(preferencesProvider.select((value) => value.developerMode));
+    final preferences = ref.read(preferencesProvider);
+    final developerMode = ref.watch(preferences.developerMode).value;
     final m3 = Theme.of(context).useMaterial3;
 
     return Scaffold(
@@ -31,9 +31,8 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
             padding: m3 ? const EdgeInsets.all(16.0) : EdgeInsets.zero,
             child: MainSwitchListTile(
               title: const Text("Enable developer mode"),
-              onChanged: (value) {
-                ref.read(preferencesProvider).developerMode = value;
-              },
+              onChanged: (value) =>
+                  ref.read(preferences.developerMode).value = value,
               value: developerMode,
               contentPadding:
                   m3 ? const EdgeInsets.symmetric(vertical: 4.0) : null,

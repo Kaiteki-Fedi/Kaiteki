@@ -56,9 +56,10 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
     _tabController = TabController(vsync: this, length: 3);
 
     id = widget.id;
+    final preferences = ref.read(preferencesProvider);
     remoteFetchPopupIgnored = !ref
-        .read(preferencesProvider)
-        .enabledExperiments
+        .watch(preferences.experiments)
+        .value
         .contains(AppExperiment.remoteUserFetching);
 
     final bannerUrl = widget.initialUser?.bannerUrl;

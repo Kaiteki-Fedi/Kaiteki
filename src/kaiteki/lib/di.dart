@@ -39,9 +39,7 @@ final themeProvider = ChangeNotifierProvider<ThemePreferences>((_) {
   throw UnimplementedError();
 });
 
-final preferencesProvider = ChangeNotifierProvider<AppPreferences>((_) {
-  throw UnimplementedError();
-});
+final preferencesProvider = Provider<AppPreferences>((_) => AppPreferences());
 
 final translatorProvider = Provider<Translator?>((_) {
   return null;

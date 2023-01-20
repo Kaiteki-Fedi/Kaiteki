@@ -82,7 +82,8 @@ class MainScreenDrawer extends ConsumerWidget {
                 onTap: () => context.push("/settings"),
               ),
               if (ref
-                  .read(preferencesProvider.select((v) => v.enabledExperiments))
+                  .watch(ref.read(preferencesProvider).experiments)
+                  .value
                   .contains(AppExperiment.feedback))
                 ListTile(
                   leading: const Icon(Icons.feedback_rounded),

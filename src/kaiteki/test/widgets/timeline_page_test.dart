@@ -16,11 +16,13 @@ import "package:shared_preferences/shared_preferences.dart";
 import "../mocks/timeline_adapter.dart";
 
 void main() {
-  late SharedPreferences preferences;
+  late AppPreferences preferences;
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    preferences = await SharedPreferences.getInstance();
+    final sharedPreferences = await SharedPreferences.getInstance();
+    preferences = AppPreferences();
+    await preferences.initialize(sharedPreferences);
   });
 
   testWidgets("TimelinePage updates Timeline correctly", (tester) async {
@@ -35,8 +37,7 @@ void main() {
                 ),
               ),
             ),
-            preferencesProvider
-                .overrideWith((ref) => AppPreferences(preferences)),
+            preferencesProvider.overrideWith((ref) => preferences),
           ],
           child: MaterialApp(
             theme: getDefaultTheme(Brightness.light, true),

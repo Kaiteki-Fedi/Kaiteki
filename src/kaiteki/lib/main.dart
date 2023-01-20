@@ -39,7 +39,9 @@ Future<void> main() async {
       sharedPrefs,
       await _useMaterial3ByDefault,
     );
-    final appPreferences = AppPreferences(sharedPrefs);
+
+    final appPreferences = AppPreferences();
+    await appPreferences.initialize(sharedPrefs);
 
     // construct app & run
     app = ProviderScope(

@@ -16,9 +16,12 @@ class ReactionRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final preferences = ref.read(preferencesProvider);
     final dense = ref
-        .watch(preferencesProvider.select((p) => p.enabledExperiments))
+        .watch(preferences.experiments)
+        .value
         .contains(AppExperiment.denseReactions);
+
     final spacing = dense ? 2.0 : 6.0;
     return Wrap(
       spacing: spacing,

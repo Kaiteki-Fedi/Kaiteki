@@ -26,9 +26,9 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!ref
-        .watch(preferencesProvider.select((value) => value.enabledExperiments))
-        .contains(AppExperiment.chats)) {
+    final preferences = ref.read(preferencesProvider);
+    final experiments = ref.watch(preferences.experiments).value;
+    if (!experiments.contains(AppExperiment.chats)) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -39,9 +39,10 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => ref
-                  .read(preferencesProvider)
-                  .enableExperiment(AppExperiment.chats),
+              onPressed: () {
+                final notifier = ref.read(preferences.experiments);
+                notifier.value = notifier.value..add(AppExperiment.chats);
+              },
               child: const Text("Enable Experiment"),
             ),
           ],

@@ -292,8 +292,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   List<Widget> _buildAppBarActions(BuildContext context) {
     final l10n = context.l10n;
-    final experiments =
-        ref.watch(preferencesProvider.select((p) => p.enabledExperiments));
+    final preferences = ref.read(preferencesProvider);
+    final experiments = ref.watch(preferences.experiments).value;
 
     return [
       if (_currentTab == TabKind.home &&

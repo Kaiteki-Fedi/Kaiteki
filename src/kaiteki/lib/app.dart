@@ -21,7 +21,9 @@ class KaitekiApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final locale = ref.watch(preferencesProvider.select((p) => p.locale));
+    final preferences = ref.read(preferencesProvider);
+    final locale = ref.watch(preferences.locale).value;
+
     final themePrefs = ref.watch(themeProvider);
     final router = ref.watch(routerProvider);
     final m3 = themePrefs.useMaterial3;

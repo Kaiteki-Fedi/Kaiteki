@@ -12,11 +12,13 @@ import "package:shared_preferences/shared_preferences.dart";
 import "../mocks/timeline_adapter.dart";
 
 void main() {
-  late SharedPreferences preferences;
+  late AppPreferences preferences;
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    preferences = await SharedPreferences.getInstance();
+    final sharedPreferences = await SharedPreferences.getInstance();
+    preferences = AppPreferences();
+    await preferences.initialize(sharedPreferences);
   });
 
   testWidgets("Timeline changed after kind switch", (tester) async {
@@ -26,8 +28,7 @@ void main() {
           adapterProvider.overrideWith(
             (ref) => TimelineAdapter(TimelineAdapterCapabilities()),
           ),
-          preferencesProvider
-              .overrideWith((ref) => AppPreferences(preferences)),
+          preferencesProvider.overrideWith((ref) => preferences),
         ],
         child: MaterialApp(
           theme: getDefaultTheme(Brightness.light, true),
@@ -66,7 +67,7 @@ void main() {
             );
           }),
           preferencesProvider.overrideWith(
-            (ref) => AppPreferences(preferences),
+            (ref) => AppPreferences(),
           ),
         ],
         child: MaterialApp(

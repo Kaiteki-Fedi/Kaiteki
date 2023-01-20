@@ -197,9 +197,10 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 // parentNavigatorKey: _authNavigatorKey,
                 path: "users/:id",
                 builder: (context, state) {
+                  final preferences = ref.read(preferencesProvider);
                   if (ref
-                      .read(preferencesProvider)
-                      .enabledExperiments
+                      .read(preferences.experiments)
+                      .value
                       .contains(AppExperiment.newUserScreen)) {
                     return UserScreen(id: state.params["id"]!);
                   }

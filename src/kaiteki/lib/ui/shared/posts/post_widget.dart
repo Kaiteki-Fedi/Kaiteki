@@ -234,6 +234,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final translationAvailable =
         adapter is PostTranslationSupport || genericTranslationAvailable;
 
+    final preferences = ref.read(preferencesProvider);
     return [
       if (adapter is BookmarkSupport)
         PopupMenuItem(
@@ -332,7 +333,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           await launchUrl(url, mode: LaunchMode.externalApplication);
         },
       ),
-      if (_post.content != null && ref.read(preferencesProvider).developerMode)
+      if (_post.content != null && ref.watch(preferences.developerMode).value)
         PopupMenuItem(
           child: const ListTile(
             title: Text("Debug text rendering"),
@@ -537,7 +538,9 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
 
     _renderContent();
 
-    final cwBehavior = ref.read(preferencesProvider).contentWarningBehavior;
+    final preferences = ref.read(preferencesProvider);
+    final cwBehavior = ref.watch(preferences.cwBehavior).value;
+
     final subject = widget.post.subject;
     final hasSubject = subject != null && subject.isNotEmpty;
 

@@ -17,8 +17,10 @@ class ReactionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final preferences = ref.read(preferencesProvider);
     final dense = ref
-        .watch(preferencesProvider.select((p) => p.enabledExperiments))
+        .watch(preferences.experiments)
+        .value
         .contains(AppExperiment.denseReactions);
     final emojiSize = dense ? 16.0 : 24.0;
 

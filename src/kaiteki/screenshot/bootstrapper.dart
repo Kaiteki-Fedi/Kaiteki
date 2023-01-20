@@ -45,8 +45,8 @@ class Bootstrapper {
     // ignore: invalid_use_of_visible_for_testing_member
     SharedPreferences.setMockInitialValues({});
     final sharedPreferences = await SharedPreferences.getInstance();
-
-    final preferences = AppPreferences(sharedPreferences);
+    final preferences = AppPreferences();
+    await preferences.initialize(sharedPreferences);
 
     return Bootstrapper._(adapter, accountManager, preferences, locale);
   }

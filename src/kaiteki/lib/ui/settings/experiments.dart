@@ -7,10 +7,10 @@ class ExperimentsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const experiments = AppExperiment.values;
-    final enabledExperiments = ref.watch(
-      preferencesProvider.select((p) => p.enabledExperiments),
-    );
+    const availableExperiments = AppExperiment.values;
+    final preferences = ref.read(preferencesProvider);
+    final enabledExperiments = ref.watch(preferences.experiments).value;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Experiments"),
@@ -38,15 +38,18 @@ class ExperimentsScreen extends ConsumerWidget {
 
           i--;
 
-          final experiment = experiments[i];
+          final experiment = availableExperiments[i];
           return SwitchListTile(
             value: enabledExperiments.contains(experiment),
             onChanged: (value) {
               final preferences = ref.read(preferencesProvider);
+              final experimentsNotifier = ref.read(preferences.experiments);
               if (value) {
-                preferences.enableExperiment(experiment);
+                experimentsNotifier.value = experimentsNotifier.value
+                  ..add(experiment);
               } else {
-                preferences.disableExperiment(experiment);
+                experimentsNotifier.value = experimentsNotifier.value
+                  ..remove(experiment);
               }
             },
             title: Text(experiment.displayName),
@@ -55,7 +58,7 @@ class ExperimentsScreen extends ConsumerWidget {
                 : Text(experiment.description!),
           );
         },
-        itemCount: experiments.length + 1,
+        itemCount: availableExperiments.length + 1,
       ),
     );
   }
