@@ -9,9 +9,11 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
 import "package:kaiteki/fediverse/interfaces/preview_support.dart";
+import "package:kaiteki/fediverse/interfaces/search_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/file.dart";
 import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/enum_icon_button.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
@@ -449,6 +451,26 @@ class PostFormState extends ConsumerState<ComposeForm> {
           splashRadius: splashRadius,
           tooltip: l10n.emojiButtonTooltip,
           onPressed: openEmojiPicker,
+        ),
+      if (adapter is SearchSupport)
+        IconButton(
+          icon: const Icon(Icons.alternate_email_rounded),
+          splashRadius: splashRadius,
+          tooltip: "Mention user",
+          onPressed: () async {
+            final user = await showDialog<User>(
+              context: context,
+              builder: (_) => const FindUserDialog(),
+            );
+
+            if (user == null) return;
+
+            final cursor = _bodyController.selection.baseOffset;
+            final prefix = _bodyController.text.substring(0, cursor);
+            final suffix = _bodyController.text.substring(cursor);
+            final handle = user.handle;
+            _bodyController.text = "$prefix$handle $suffix";
+          },
         ),
       const SizedBox(
         height: 24,
