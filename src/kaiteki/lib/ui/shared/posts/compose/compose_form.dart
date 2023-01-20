@@ -221,8 +221,8 @@ class PostFormState extends ConsumerState<ComposeForm> {
                   ..._buildActions(context),
                   const Spacer(),
                   FloatingActionButton.small(
+                    elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
                     onPressed: () => post(context, adapter),
-                    elevation: 2.0,
                     tooltip: l10n.submitButtonTooltip,
                     child: const Icon(Icons.send_rounded),
                   ),
