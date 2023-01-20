@@ -150,7 +150,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         return FadeThroughTransition(
           animation: primaryAnimation,
           secondaryAnimation: secondaryAnimation,
-          child: child,
+          child: Material(child: child),
         );
       },
       child: [
@@ -188,6 +188,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               _view == MainScreenView.videos ||
               hideNavigation;
           final hideFab = fab == null || _view == MainScreenView.videos;
+          final immerse = !hideNavigation;
 
           if (isMobile) {
             return Scaffold(
@@ -207,13 +208,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           } else {
             return Scaffold(
               backgroundColor: outsideColor,
-              appBar: _buildAppBar(context, true),
+              appBar: _buildAppBar(context, immerse),
               body: _buildDesktopView(
                 hideNavigation,
                 breakpoint.window >= WindowSize.medium &&
                     !((_view == MainScreenView.deck ||
                             _view == MainScreenView.fox) &&
                         _currentTab == TabKind.home),
+                immerse,
                 body,
               ),
               floatingActionButton: tab.hideFabWhenDesktop || hideFab
@@ -353,7 +355,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildDesktopView(bool hideNavRail, bool extendNavRail, Widget child) {
+  Widget _buildDesktopView(
+    bool hideNavRail,
+    bool extendNavRail,
+    bool immerse,
+    Widget child,
+  ) {
     final m3 = Theme.of(context).useMaterial3;
     return Row(
       children: [
@@ -361,7 +368,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           _buildNavigationRail(extendNavRail),
           if (!m3) const VerticalDivider(thickness: 1, width: 1),
         ],
-        Expanded(child: _roundWidgetM3(context, child)),
+        Expanded(child: immerse ? _roundWidget(context, child) : child),
       ],
     );
   }
@@ -394,7 +401,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  static Widget _roundWidgetM3(BuildContext context, Widget widget) {
+  static Widget _roundWidget(BuildContext context, Widget widget) {
     if (!Theme.of(context).useMaterial3) return widget;
 
     const radius = Radius.circular(16.0);
