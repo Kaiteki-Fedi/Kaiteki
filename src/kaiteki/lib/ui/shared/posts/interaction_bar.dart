@@ -3,7 +3,7 @@ import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
 
-class InteractionBar extends StatelessWidget {
+class InteractionBar extends StatefulWidget {
   const InteractionBar({
     super.key,
     required this.metrics,
@@ -36,53 +36,61 @@ class InteractionBar extends StatelessWidget {
   final List<PopupMenuEntry> Function(BuildContext) buildActions;
 
   @override
+  State<InteractionBar> createState() => InteractionBarState();
+}
+
+class InteractionBarState extends State<InteractionBar> {
+  final _popupMenuButtonKey = GlobalKey<PopupMenuButtonState>();
+
+  void showMenu() => _popupMenuButtonKey.currentState!.showButtonMenu();
+
+  @override
   Widget build(BuildContext context) {
     final buttons = [
       CountButton(
-        count: metrics.replyCount,
+        count: widget.metrics.replyCount,
         focusNode: FocusNode(skipTraversal: true),
         icon: const Icon(Icons.reply_rounded),
-        onTap: onReply,
+        onTap: widget.onReply,
       ),
-      if (repeated != null)
+      if (widget.repeated != null)
         CountButton(
-          active: repeated!,
+          active: widget.repeated ?? false,
           activeColor: Theme.of(context).ktkColors?.repeatColor,
-          count: metrics.repeatCount,
+          count: widget.metrics.repeatCount,
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.repeat_rounded),
-          onTap: onRepeat,
-          onLongPress: onShowRepeatees,
+          onTap: widget.onRepeat,
+          onLongPress: widget.onShowRepeatees,
         ),
-      if (favorited != null)
+      if (widget.favorited != null)
         CountButton(
-          active: favorited!,
+          active: widget.favorited ?? false,
           activeColor: Theme.of(context).ktkColors?.favoriteColor,
           activeIcon: const Icon(Icons.star_rounded),
-          count: metrics.likeCount,
+          count: widget.metrics.likeCount,
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.star_border_rounded),
-          onTap: onFavorite,
-          onLongPress: onShowFavoritees,
+          onTap: widget.onFavorite,
+          onLongPress: widget.onShowFavoritees,
         ),
-      if (reacted != null)
+      if (widget.reacted != null)
         CountButton(
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.mood_rounded),
-          onTap: onReact,
+          onTap: widget.onReact,
         ),
       PopupMenuButton(
+        key: _popupMenuButtonKey,
         icon: const Icon(Icons.more_horiz),
-        itemBuilder: buildActions,
-        splashRadius: 18,
+        itemBuilder: widget.buildActions,
+        splashRadius: 24,
       ),
     ];
 
-    // Added Material for fixing bork with Hero *shrug*
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 400),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           for (final button in buttons) Flexible(child: button),
         ],

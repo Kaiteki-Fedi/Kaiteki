@@ -66,6 +66,7 @@ class PostWidget extends ConsumerStatefulWidget {
 class _PostWidgetState extends ConsumerState<PostWidget> {
   late Post _post;
   Post? _translatedPost;
+  final _interactionBarKey = GlobalKey<InteractionBarState>();
 
   @override
   void initState() {
@@ -183,7 +184,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         favorite: FavoriteIntent(),
         bookmark: BookmarkIntent(),
         // react: ReactIntent(),
-        menu: MenuIntent(),
+        menu: OpenMenuIntent(),
       },
       actions: {
         ReplyIntent: CallbackAction(onInvoke: (_) => _onReply),
@@ -191,6 +192,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         RepeatIntent: CallbackAction(onInvoke: (_) => _onRepeat()),
         BookmarkIntent: CallbackAction(onInvoke: (_) => _onBookmark()),
         ReactIntent: CallbackAction(onInvoke: (_) => _onReact()),
+        OpenMenuIntent: CallbackAction(
+          onInvoke: (_) => _interactionBarKey.currentState?.showMenu(),
+        ),
       },
       child: Padding(
         padding: theme.padding,
@@ -201,6 +205,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
               AvatarWidget(
                 _post.author,
                 onTap: () => context.showUser(_post.author, ref),
+                focusNode: FocusNode(skipTraversal: true),
               ),
               SizedBox(width: theme.avatarSpacing),
             ],

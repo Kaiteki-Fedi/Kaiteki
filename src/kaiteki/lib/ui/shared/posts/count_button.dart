@@ -3,8 +3,8 @@ import "package:intl/intl.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 
 class CountButton extends StatelessWidget {
+  final bool enabled;
   final bool active;
-  final bool disabled;
 
   final int? count;
   final Color? activeColor;
@@ -19,23 +19,22 @@ class CountButton extends StatelessWidget {
 
   const CountButton({
     super.key,
-    this.active = false,
-    this.count = 0,
-    this.color,
-    this.activeColor,
     required this.icon,
+    this.activeColor,
     this.activeIcon,
-    this.onTap,
-    this.disabled = false,
+    this.color,
+    this.count = 0,
+    this.enabled = true,
+    this.active = false,
     this.focusNode,
     this.onLongPress,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final callback = active ? (onTap ?? () {}) : (disabled ? null : onTap);
+    final callback = enabled ? onTap : null;
     final color = _getColor(context);
-    final currentIcon = active ? (activeIcon ?? icon) : icon;
     final count = this.count;
 
     final hasNumber = count != null && count >= 1;
@@ -43,63 +42,61 @@ class CountButton extends StatelessWidget {
         .format(count ?? 0)
         .toLowerCase();
 
-    return Row(
-      children: [
-        GestureDetector(
-          onLongPress: onLongPress,
-          child: IconButton(
-            icon: currentIcon,
-            color: color,
-            onPressed: callback,
-            enableFeedback: !disabled,
-            focusNode: focusNode,
-            splashRadius: 18,
-            padding: EdgeInsets.zero,
-          ),
-        ),
-        if (hasNumber)
-          Expanded(
-            child: DefaultTextStyle.merge(
-              style: Theme.of(context).ktkTextTheme!.countTextStyle.copyWith(
-                    color: color,
-                  ),
-              child: Text(
-                shortenedCount,
-                maxLines: 1,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-              ),
+    return InkWell(
+      onTap: callback,
+      onLongPress: onLongPress,
+      enableFeedback: enabled,
+      focusNode: focusNode,
+      customBorder: Theme.of(context).useMaterial3
+          ? const StadiumBorder()
+          : RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
             ),
-          ),
-      ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            IconTheme(
+              data: IconThemeData(color: color),
+              child: _buildIcon(),
+            ),
+            if (hasNumber) ...[
+              const SizedBox(width: 8),
+              Expanded(
+                child: DefaultTextStyle.merge(
+                  style:
+                      Theme.of(context).ktkTextTheme!.countTextStyle.copyWith(
+                            color: color,
+                          ),
+                  child: Text(
+                    shortenedCount,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                  ),
+                ),
+              ),
+            ]
+          ],
+        ),
+      ),
     );
+  }
 
-    // if (hasNumber) {
-    //   return IconButton(
-    //     icon: currentIcon,
-    //     color: iconColor,
-    //     onPressed: callback,
-    //     enableFeedback: !disabled,
-    //     focusNode: focusNode,
-    //     splashRadius: 18,
-    //   );
-    // } else {
-    //   return TextButton.icon(
-    //     icon: currentIcon,
-    //     onPressed: callback,
-    //     style: ButtonStyle(
-    //       foregroundColor: MaterialStateProperty.all<Color>(iconColor),
-    //     ),
-    //     label: Text(count.toString()),
-    //     focusNode: focusNode,
-    //   );
-    // }
+  Widget _buildIcon() {
+    final activeIcon = this.activeIcon;
+    if (activeIcon != null && active) return activeIcon;
+    return icon;
   }
 
   Color _getColor(BuildContext context) {
-    if (disabled || onTap == null) return Theme.of(context).disabledColor;
-    final inactiveColor = color ?? Theme.of(context).colorScheme.onBackground;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    if (!enabled || onTap == null) return colorScheme.outlineVariant;
+
+    final inactiveColor = color ?? colorScheme.onBackground;
     if (active) return activeColor ?? inactiveColor;
+
     return inactiveColor;
   }
 }

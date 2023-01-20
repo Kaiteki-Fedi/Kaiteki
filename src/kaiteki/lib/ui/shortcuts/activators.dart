@@ -12,6 +12,8 @@ final propagatingTextFieldActivators = <ShortcutActivator>[
   gotoSettings
 ];
 
+const openMenu = SingleActivator(LogicalKeyboardKey.contextMenu);
+
 const newPost = SingleActivator(
   LogicalKeyboardKey.keyN,
   includeRepeats: false,

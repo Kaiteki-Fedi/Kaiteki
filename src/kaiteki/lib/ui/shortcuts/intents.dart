@@ -24,8 +24,8 @@ class ReactIntent extends Intent {
   const ReactIntent();
 }
 
-class MenuIntent extends Intent {
-  const MenuIntent();
+class OpenMenuIntent extends Intent {
+  const OpenMenuIntent();
 }
 
 class SendIntent extends Intent {
