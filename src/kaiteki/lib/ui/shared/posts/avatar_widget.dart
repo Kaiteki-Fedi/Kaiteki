@@ -7,6 +7,7 @@ class AvatarWidget extends StatelessWidget {
   final double? size;
   final VoidCallback? onTap;
   final BorderRadius? radius;
+  final FocusNode? focusNode;
 
   const AvatarWidget(
     this.user, {
@@ -14,6 +15,7 @@ class AvatarWidget extends StatelessWidget {
     this.size = 48,
     this.onTap,
     this.radius,
+    this.focusNode,
   });
 
   @override
@@ -42,7 +44,7 @@ class AvatarWidget extends StatelessWidget {
     }
 
     if (onTap != null) {
-      avatar = InkWell(onTap: onTap, child: avatar);
+      avatar = InkWell(onTap: onTap, focusNode: focusNode, child: avatar);
     }
 
     final borderRadius = radius;
