@@ -52,6 +52,10 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
             );
           }
 
+          final closeButton = (ModalRoute.of(context)?.canPop ?? false)
+              ? DialogCloseButton(tooltip: l10n.discardButtonTooltip)
+              : null;
+
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -68,13 +72,10 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
                       value: enableSubject,
                       onChanged: toggleSubject,
                     ),
-                  if (!fullscreen)
-                    DialogCloseButton(tooltip: l10n.discardButtonTooltip),
+                  if (!fullscreen && closeButton != null) closeButton,
                 ],
                 automaticallyImplyLeading: false,
-                leading: fullscreen
-                    ? DialogCloseButton(tooltip: l10n.discardButtonTooltip)
-                    : null,
+                leading: fullscreen && closeButton != null ? closeButton : null,
                 foregroundColor: Theme.of(context).colorScheme.onBackground,
                 title: replyTextSpan == null
                     ? Text(l10n.composeDialogTitle)
