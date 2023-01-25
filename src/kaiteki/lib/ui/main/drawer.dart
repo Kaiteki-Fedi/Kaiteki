@@ -4,6 +4,7 @@ import "package:kaiteki/constants.dart" show appName;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/interfaces/list_support.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/utils/extensions.dart";
 
@@ -16,6 +17,11 @@ class MainScreenDrawer extends ConsumerWidget {
     final account = ref.watch(accountProvider)!;
     final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
     final adapter = ref.watch(adapterProvider);
+    final feedbackEnabled = ref
+        .watch(preferences.experiments)
+        .value
+        .contains(AppExperiment.feedback);
+
     return Drawer(
       child: SafeArea(
         child: SingleChildScrollView(
@@ -81,10 +87,7 @@ class MainScreenDrawer extends ConsumerWidget {
                 title: Text(l10n.settings),
                 onTap: () => context.push("/settings"),
               ),
-              if (ref
-                  .watch(ref.read(preferencesProvider).experiments)
-                  .value
-                  .contains(AppExperiment.feedback))
+              if (feedbackEnabled)
                 ListTile(
                   leading: const Icon(Icons.feedback_rounded),
                   title: const Text("Send Feedback"),

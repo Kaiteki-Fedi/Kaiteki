@@ -5,6 +5,7 @@ import "package:kaiteki/fediverse/interfaces/chat_support.dart";
 import "package:kaiteki/fediverse/model/chat_message.dart";
 import "package:kaiteki/fediverse/model/chat_target.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/chats/chat_message.dart";
 import "package:kaiteki/ui/chats/chat_target_list.dart";
 import "package:kaiteki/ui/chats/compose_message_bar.dart";
@@ -26,7 +27,6 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final preferences = ref.read(preferencesProvider);
     final experiments = ref.watch(preferences.experiments).value;
     if (!experiments.contains(AppExperiment.chats)) {
       return Center(

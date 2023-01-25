@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 
 class ExperimentsScreen extends ConsumerWidget {
   const ExperimentsScreen({super.key});
@@ -8,7 +9,6 @@ class ExperimentsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const availableExperiments = AppExperiment.values;
-    final preferences = ref.read(preferencesProvider);
     final enabledExperiments = ref.watch(preferences.experiments).value;
 
     return Scaffold(
@@ -42,14 +42,12 @@ class ExperimentsScreen extends ConsumerWidget {
           return SwitchListTile(
             value: enabledExperiments.contains(experiment),
             onChanged: (value) {
-              final preferences = ref.read(preferencesProvider);
-              final experimentsNotifier = ref.read(preferences.experiments);
+              final notifier = ref.read(preferences.experiments);
+              final experiments = notifier.value.toList();
               if (value) {
-                experimentsNotifier.value = experimentsNotifier.value
-                  ..add(experiment);
+                notifier.value = experiments..add(experiment);
               } else {
-                experimentsNotifier.value = experimentsNotifier.value
-                  ..remove(experiment);
+                notifier.value = experiments..remove(experiment);
               }
             },
             title: Text(experiment.displayName),

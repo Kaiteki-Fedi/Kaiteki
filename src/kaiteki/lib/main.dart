@@ -10,7 +10,6 @@ import "package:kaiteki/app.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/repositories/hive_repository.dart";
 import "package:kaiteki/theming/default/themes.dart";
@@ -40,14 +39,11 @@ Future<void> main() async {
       await _useMaterial3ByDefault,
     );
 
-    final appPreferences = AppPreferences();
-    await appPreferences.initialize(sharedPrefs);
-
     // construct app & run
     app = ProviderScope(
       overrides: [
         themeProvider.overrideWith((_) => themePreferences),
-        preferencesProvider.overrideWith((_) => appPreferences),
+        sharedPreferencesProvider.overrideWith((_) => sharedPrefs),
         accountManagerProvider.overrideWith((_) => accountManager),
       ],
       child: const KaitekiApp(),

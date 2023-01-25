@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
+import "package:kaiteki/preferences/content_warning_behavior.dart";
 
 class WellbeingScreen extends StatelessWidget {
   const WellbeingScreen({super.key});
@@ -29,7 +30,6 @@ class ContentWarningBehaviorListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final preferences = ref.read(preferencesProvider);
     final state = ref.watch(preferences.cwBehavior).value;
 
     Widget subtitle;
@@ -62,7 +62,6 @@ class ContentWarningBehaviorListTile extends ConsumerWidget {
 
     if (choice == null) return;
 
-    final preferences = ref.read(preferencesProvider);
     ref.read(preferences.cwBehavior).value = choice;
   }
 }
@@ -72,7 +71,6 @@ class ContentWarningBehaviorDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final preferences = ref.read(preferencesProvider);
     final state = ref.watch(preferences.cwBehavior).value;
 
     return SimpleDialog(

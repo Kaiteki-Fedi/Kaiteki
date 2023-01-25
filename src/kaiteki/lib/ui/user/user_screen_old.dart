@@ -8,6 +8,7 @@ import "package:kaiteki/fediverse/instance_prober.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/logger.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart";
 import "package:kaiteki/ui/shared/async/async_button.dart";
@@ -56,7 +57,6 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
     _tabController = TabController(vsync: this, length: 3);
 
     id = widget.id;
-    final preferences = ref.read(preferencesProvider);
     remoteFetchPopupIgnored = !ref
         .watch(preferences.experiments)
         .value

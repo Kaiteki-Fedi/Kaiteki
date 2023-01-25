@@ -7,7 +7,6 @@ import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
@@ -18,7 +17,7 @@ import "mastodon.dart";
 class Bootstrapper {
   final BackendAdapter adapter;
   final AccountManager accountManager;
-  final AppPreferences preferences;
+  final SharedPreferences preferences;
   final String? locale;
 
   const Bootstrapper._(
@@ -44,9 +43,7 @@ class Bootstrapper {
 
     // ignore: invalid_use_of_visible_for_testing_member
     SharedPreferences.setMockInitialValues({});
-    final sharedPreferences = await SharedPreferences.getInstance();
-    final preferences = AppPreferences();
-    await preferences.initialize(sharedPreferences);
+    final preferences = await SharedPreferences.getInstance();
 
     return Bootstrapper._(adapter, accountManager, preferences, locale);
   }
@@ -57,7 +54,7 @@ class Bootstrapper {
       overrides: [
         accountManagerProvider.overrideWith((_) => accountManager),
         adapterProvider.overrideWith((_) => adapter),
-        preferencesProvider.overrideWith((ref) => preferences),
+        sharedPreferencesProvider.overrideWith((_) => preferences),
       ],
       child: MediaQuery(
         data: const MediaQueryData(devicePixelRatio: 2.0),

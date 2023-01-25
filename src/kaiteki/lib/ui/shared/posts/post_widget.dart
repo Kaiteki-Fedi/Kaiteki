@@ -10,7 +10,8 @@ import "package:kaiteki/fediverse/interfaces/post_translation_support.dart";
 import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
 import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 import "package:kaiteki/fediverse/model/post/post.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
+import "package:kaiteki/preferences/content_warning_behavior.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/theming/kaiteki/post.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
@@ -234,7 +235,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final translationAvailable =
         adapter is PostTranslationSupport || genericTranslationAvailable;
 
-    final preferences = ref.read(preferencesProvider);
     return [
       if (adapter is BookmarkSupport)
         PopupMenuItem(
@@ -538,7 +538,6 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
 
     _renderContent();
 
-    final preferences = ref.read(preferencesProvider);
     final cwBehavior = ref.watch(preferences.cwBehavior).value;
 
     final subject = widget.post.subject;

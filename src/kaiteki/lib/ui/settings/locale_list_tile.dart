@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 
 class LocaleListTile extends ConsumerWidget {
@@ -26,7 +27,6 @@ class LocaleListTile extends ConsumerWidget {
 
     if (locale == null) return;
 
-    final preferences = ref.read(preferencesProvider);
     ref.read(preferences.locale).value = locale.languageCode;
   }
 }

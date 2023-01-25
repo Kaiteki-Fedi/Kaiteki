@@ -3,7 +3,6 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/timeline_kind.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
@@ -12,13 +11,11 @@ import "package:shared_preferences/shared_preferences.dart";
 import "../mocks/timeline_adapter.dart";
 
 void main() {
-  late AppPreferences preferences;
+  late SharedPreferences sharedPreferences;
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    final sharedPreferences = await SharedPreferences.getInstance();
-    preferences = AppPreferences();
-    await preferences.initialize(sharedPreferences);
+    sharedPreferences = await SharedPreferences.getInstance();
   });
 
   testWidgets("Timeline changed after kind switch", (tester) async {
@@ -28,7 +25,7 @@ void main() {
           adapterProvider.overrideWith(
             (ref) => TimelineAdapter(TimelineAdapterCapabilities()),
           ),
-          preferencesProvider.overrideWith((ref) => preferences),
+          sharedPreferencesProvider.overrideWith((_) => sharedPreferences),
         ],
         child: MaterialApp(
           theme: getDefaultTheme(Brightness.light, true),
@@ -66,9 +63,7 @@ void main() {
               {TimelineKind.federated, TimelineKind.hybrid},
             );
           }),
-          preferencesProvider.overrideWith(
-            (ref) => AppPreferences(),
-          ),
+          sharedPreferencesProvider.overrideWith((_) => sharedPreferences),
         ],
         child: MaterialApp(
           theme: getDefaultTheme(Brightness.light, true),

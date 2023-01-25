@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/auth/login_functions.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/onboarding/onboarding_screen.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
@@ -19,7 +20,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final preferences = ref.read(preferencesProvider);
     final developerMode = ref.watch(preferences.developerMode).value;
     final m3 = Theme.of(context).useMaterial3;
 

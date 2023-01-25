@@ -12,6 +12,7 @@ import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/main/drawer.dart";
 import "package:kaiteki/ui/main/fab_data.dart";
@@ -292,7 +293,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   List<Widget> _buildAppBarActions(BuildContext context) {
     final l10n = context.l10n;
-    final preferences = ref.read(preferencesProvider);
     final experiments = ref.watch(preferences.experiments).value;
 
     return [

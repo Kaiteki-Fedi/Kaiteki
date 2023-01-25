@@ -1,48 +1,40 @@
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
-import "package:notified_preferences/notified_preferences.dart";
+import "package:kaiteki/preferences/content_warning_behavior.dart";
+import "package:kaiteki/preferences/notified_preferences_riverpod.dart";
 
-class AppPreferences with NotifiedPreferences {
-  late final locale =
-      createSetting<String?>(key: "locale", initialValue: null).asProvider();
+final locale = createSettingProvider<String?>(
+  key: "locale",
+  initialValue: null,
+  provider: sharedPreferencesProvider,
+);
 
-  late final experiments = createSetting<List<AppExperiment>>(
-    key: "enabledExperiments",
-    initialValue: const [],
-    read: (prefs, key) {
-      final list = prefs
-          .getStringList(key)
-          ?.map((v) => AppExperiment.values.firstWhere((e) => e.name == v))
-          .toList();
-      return list ?? const [];
-    },
-    write: (prefs, key, value) async {
-      final list = value.map((e) => e.name).toList();
-      await prefs.setStringList(key, list);
-    },
-  ).asProvider();
+final experiments = createSettingProvider<List<AppExperiment>>(
+  key: "enabledExperiments",
+  initialValue: const [],
+  read: (prefs, key) {
+    final list = prefs
+        .getStringList(key)
+        ?.map((v) => AppExperiment.values.firstWhere((e) => e.name == v))
+        .toList();
+    return list ?? const [];
+  },
+  write: (prefs, key, value) async {
+    final list = value.map((e) => e.name).toList();
+    await prefs.setStringList(key, list);
+  },
+  provider: sharedPreferencesProvider,
+);
 
-  late final developerMode =
-      createSetting<bool>(key: "dev", initialValue: false).asProvider();
+final developerMode = createSettingProvider<bool>(
+  key: "dev",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
 
-  late final cwBehavior = createEnumSetting<ContentWarningBehavior>(
-    key: "cwBehavior",
-    initialValue: ContentWarningBehavior.automatic,
-    values: ContentWarningBehavior.values,
-  ).asProvider();
-}
-
-enum ContentWarningBehavior {
-  // Post should always be collapsed
-  collapse,
-  // Post should be collapsed if it matches sensitive words
-  automatic,
-  // Post should always be expanded
-  expanded,
-}
-
-extension PreferenceNotifierExtensions<T> on PreferenceNotifier<T> {
-  ProviderBase<PreferenceNotifier<T>> asProvider() {
-    return ChangeNotifierProvider<PreferenceNotifier<T>>((_) => this);
-  }
-}
+final cwBehavior = createEnumSettingProvider<ContentWarningBehavior>(
+  key: "cwBehavior",
+  initialValue: ContentWarningBehavior.automatic,
+  values: ContentWarningBehavior.values,
+  provider: sharedPreferencesProvider,
+);

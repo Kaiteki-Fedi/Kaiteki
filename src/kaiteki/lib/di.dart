@@ -6,7 +6,6 @@ import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
 import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
 import "package:kaiteki/model/auth/account.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
@@ -14,10 +13,15 @@ import "package:kaiteki/utils/text/parsers/html_text_parser.dart";
 import "package:kaiteki/utils/text/parsers/mfm_text_parser.dart";
 import "package:kaiteki/utils/text/parsers/social_text_parser.dart";
 import "package:kaiteki/utils/text/parsers/text_parser.dart";
+import "package:shared_preferences/shared_preferences.dart";
 
 export "package:flutter_riverpod/flutter_riverpod.dart";
 
 final accountManagerProvider = ChangeNotifierProvider<AccountManager>((_) {
+  throw UnimplementedError();
+});
+
+final sharedPreferencesProvider = Provider<SharedPreferences>((_) {
   throw UnimplementedError();
 });
 
@@ -38,8 +42,6 @@ final adapterProvider = Provider<BackendAdapter>(
 final themeProvider = ChangeNotifierProvider<ThemePreferences>((_) {
   throw UnimplementedError();
 });
-
-final preferencesProvider = Provider<AppPreferences>((_) => AppPreferences());
 
 final translatorProvider = Provider<Translator?>((_) {
   return null;

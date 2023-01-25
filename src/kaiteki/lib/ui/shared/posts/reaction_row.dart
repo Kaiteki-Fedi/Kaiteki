@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/reaction.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/shared/posts/reaction_button.dart";
 
 class ReactionRow extends ConsumerWidget {
@@ -16,7 +17,6 @@ class ReactionRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final preferences = ref.read(preferencesProvider);
     final dense = ref
         .watch(preferences.experiments)
         .value

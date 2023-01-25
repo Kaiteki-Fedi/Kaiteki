@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/routing/router.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/theming/default/themes.dart";
@@ -21,29 +22,28 @@ class KaitekiApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final preferences = ref.read(preferencesProvider);
-    final locale = ref.watch(preferences.locale).value;
-
     final themePrefs = ref.watch(themeProvider);
     final router = ref.watch(routerProvider);
-    final m3 = themePrefs.useMaterial3;
+    final locale = ref.watch(preferences.locale).value;
+
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         final useSystemScheme = themePrefs.useSystemColorScheme == true;
+        final useMaterial3 = themePrefs.useMaterial3;
 
-        final lightColorScheme = (useSystemScheme ? lightDynamic : null) ??
-            getColorScheme(Brightness.light, m3);
-        final lightTheme = ThemeData.from(
-          colorScheme: lightColorScheme,
-          useMaterial3: m3,
-        ).applyDefaultTweaks().addKaitekiExtensions().applyKaitekiTweaks();
+        final darkTheme = _createTheme(
+          Brightness.dark,
+          darkDynamic,
+          useSystemScheme: useSystemScheme,
+          useMaterial3: useMaterial3,
+        );
 
-        final darkColorScheme = (useSystemScheme ? darkDynamic : null) ??
-            getColorScheme(Brightness.dark, m3);
-        final darkTheme = ThemeData.from(
-          colorScheme: darkColorScheme,
-          useMaterial3: m3,
-        ).applyDefaultTweaks().addKaitekiExtensions().applyKaitekiTweaks();
+        final lightTheme = _createTheme(
+          Brightness.light,
+          lightDynamic,
+          useSystemScheme: useSystemScheme,
+          useMaterial3: useMaterial3,
+        );
 
         return MaterialApp.router(
           darkTheme: darkTheme,
@@ -58,6 +58,27 @@ class KaitekiApp extends ConsumerWidget {
         );
       },
     );
+  }
+
+  ThemeData _createTheme(
+    Brightness brightness,
+    ColorScheme? systemColorScheme, {
+    required bool useSystemScheme,
+    required bool useMaterial3,
+  }) {
+    ColorScheme? colorScheme;
+
+    if (useSystemScheme) colorScheme = systemColorScheme;
+
+    colorScheme ??= getColorScheme(brightness, useMaterial3);
+
+    final theme =
+        ThemeData.from(colorScheme: colorScheme, useMaterial3: useMaterial3)
+            .applyDefaultTweaks()
+            .addKaitekiExtensions()
+            .applyKaitekiTweaks();
+
+    return theme;
   }
 
   Locale? _createLocale(String? locale) {
