@@ -6,7 +6,7 @@ import "package:kaiteki/theming/kaiteki/theme.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
 
 extension ThemeDataExtensions on ThemeData {
-  ThemeData applyDefaultTweaks() {
+  ThemeData applyDefaultTweaks({bool useNaturalBadgeColors = false}) {
     final navigationBarForegroundColor =
         colorScheme.brightness == Brightness.dark
             ? colorScheme.onSurface
@@ -14,6 +14,11 @@ extension ThemeDataExtensions on ThemeData {
     return copyWith(
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
+      ),
+      badgeTheme: BadgeThemeData(
+        backgroundColor:
+            useNaturalBadgeColors ? colorScheme.inverseSurface : null,
+        textColor: useNaturalBadgeColors ? colorScheme.onInverseSurface : null,
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         extendedTextStyle: textTheme.labelLarge ?? const TextStyle(),

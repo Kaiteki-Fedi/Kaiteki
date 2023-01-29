@@ -1,44 +1,28 @@
 import "package:flutter/material.dart";
-import "package:shared_preferences/shared_preferences.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/notified_preferences_riverpod.dart";
 
-const kModeKey = "themeMode";
-const kUseMaterial3Key = "m3";
-const kUseSystemSchemeKey = "systemScheme";
+final useSystemColorScheme = createSettingProvider<bool>(
+  key: "useSystemColorScheme",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
 
-class ThemePreferences extends ChangeNotifier {
-  final SharedPreferences _preferences;
+final useMaterial3 = createSettingProvider<bool>(
+  key: "useMaterial3",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
 
-  ThemeMode get mode {
-    final modeValue = _preferences.getString(kModeKey);
-    if (modeValue == null) return ThemeMode.system;
-    return ThemeMode.values.firstWhere((v) => v.name == modeValue);
-  }
+final themeMode = createEnumSettingProvider<ThemeMode>(
+  key: "themeMode",
+  initialValue: ThemeMode.system,
+  values: ThemeMode.values,
+  provider: sharedPreferencesProvider,
+);
 
-  set mode(ThemeMode value) {
-    if (mode == value) return;
-
-    _preferences.setString(kModeKey, value.name).then((_) => notifyListeners());
-  }
-
-  bool get useMaterial3 =>
-      _preferences.getBool(kUseMaterial3Key) ?? material3Default;
-
-  set useMaterial3(bool value) {
-    if (useMaterial3 == value) return;
-    _preferences.setBool(kUseMaterial3Key, value);
-    notifyListeners();
-  }
-
-  bool get useSystemColorScheme =>
-      _preferences.getBool(kUseSystemSchemeKey) ?? true;
-
-  set useSystemColorScheme(bool value) {
-    if (useSystemColorScheme == value) return;
-    _preferences.setBool(kUseSystemSchemeKey, value);
-    notifyListeners();
-  }
-
-  final bool material3Default;
-
-  ThemePreferences(this._preferences, this.material3Default);
-}
+final useNaturalBadgeColors = createSettingProvider<bool>(
+  key: "useNaturalBadgeColors",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);

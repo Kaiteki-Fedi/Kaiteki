@@ -2,6 +2,11 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/content_warning_behavior.dart";
+import "package:kaiteki/preferences/theme_preferences.dart" as preferences;
+import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
+import "package:kaiteki/ui/settings/section_header.dart";
+import "package:kaiteki/ui/settings/settings_container.dart";
+import "package:kaiteki/ui/settings/settings_section.dart";
 
 class WellbeingScreen extends StatelessWidget {
   const WellbeingScreen({super.key});
@@ -13,10 +18,34 @@ class WellbeingScreen extends StatelessWidget {
         title: const Text("Wellbeing"),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: const [
-            ContentWarningBehaviorListTile(),
-          ],
+        child: SettingsContainer(
+          child: Column(
+            children: [
+              SettingsSection(
+                children: [
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.pin_outlined),
+                    title: const Text("Hide post metrics"),
+                    subtitle: const Text(
+                      "Hides the amount of replies, favorites, repeats a post has",
+                    ),
+                    provider: preferences.hidePostMetrics,
+                  ),
+                  const ContentWarningBehaviorListTile(),
+                ],
+              ),
+              SettingsSection(
+                title: const SectionHeader("Badges"),
+                children: [
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.looks_one_rounded),
+                    title: const Text("Use neutral badge colors"),
+                    provider: preferences.useNaturalBadgeColors,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

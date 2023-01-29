@@ -4,6 +4,7 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
+import "package:kaiteki/preferences/theme_preferences.dart" as preferences;
 import "package:kaiteki/routing/router.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/theming/default/themes.dart";
@@ -22,27 +23,31 @@ class KaitekiApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themePrefs = ref.watch(themeProvider);
+    final themeMode = ref.watch(preferences.themeMode).value;
+    final useMaterial3 = ref.watch(preferences.useMaterial3).value;
+    final useSystemColorScheme =
+        ref.watch(preferences.useSystemColorScheme).value;
+    final useNaturalBadgeColors =
+        ref.watch(preferences.useNaturalBadgeColors).value;
     final router = ref.watch(routerProvider);
     final locale = ref.watch(preferences.locale).value;
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        final useSystemScheme = themePrefs.useSystemColorScheme == true;
-        final useMaterial3 = themePrefs.useMaterial3;
-
         final darkTheme = _createTheme(
           Brightness.dark,
           darkDynamic,
-          useSystemScheme: useSystemScheme,
+          useSystemScheme: useSystemColorScheme,
           useMaterial3: useMaterial3,
+          useNaturalBadgeColors: useNaturalBadgeColors,
         );
 
         final lightTheme = _createTheme(
           Brightness.light,
           lightDynamic,
-          useSystemScheme: useSystemScheme,
+          useSystemScheme: useSystemColorScheme,
           useMaterial3: useMaterial3,
+          useNaturalBadgeColors: useNaturalBadgeColors,
         );
 
         return MaterialApp.router(
@@ -52,7 +57,7 @@ class KaitekiApp extends ConsumerWidget {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: _createLocale(locale),
           theme: lightTheme,
-          themeMode: themePrefs.mode,
+          themeMode: themeMode,
           title: consts.appName,
           shortcuts: shortcuts,
         );
@@ -65,6 +70,7 @@ class KaitekiApp extends ConsumerWidget {
     ColorScheme? systemColorScheme, {
     required bool useSystemScheme,
     required bool useMaterial3,
+    required bool useNaturalBadgeColors,
   }) {
     ColorScheme? colorScheme;
 
@@ -74,7 +80,7 @@ class KaitekiApp extends ConsumerWidget {
 
     final theme =
         ThemeData.from(colorScheme: colorScheme, useMaterial3: useMaterial3)
-            .applyDefaultTweaks()
+            .applyDefaultTweaks(useNaturalBadgeColors: useNaturalBadgeColors)
             .addKaitekiExtensions()
             .applyKaitekiTweaks();
 

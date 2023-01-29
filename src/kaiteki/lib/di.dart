@@ -6,7 +6,6 @@ import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
 import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
 import "package:kaiteki/model/auth/account.dart";
-import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
 import "package:kaiteki/utils/text/parsers/html_text_parser.dart";
@@ -38,10 +37,6 @@ final adapterProvider = Provider<BackendAdapter>(
   (ref) => ref.watch(accountProvider)!.adapter,
   dependencies: [accountProvider],
 );
-
-final themeProvider = ChangeNotifierProvider<ThemePreferences>((_) {
-  throw UnimplementedError();
-});
 
 final translatorProvider = Provider<Translator?>((_) {
   return null;

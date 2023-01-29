@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:intl/intl.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 
-class CountButton extends StatelessWidget {
+class CountButton extends ConsumerWidget {
   final bool enabled;
   final bool active;
 
@@ -32,7 +34,7 @@ class CountButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final callback = enabled ? onTap : null;
     final color = _getColor(context);
     final count = this.count;
@@ -41,6 +43,8 @@ class CountButton extends StatelessWidget {
     final shortenedCount = NumberFormat.compact() //
         .format(count ?? 0)
         .toLowerCase();
+
+    final showCount = hasNumber && !ref.watch(hidePostMetrics).value;
 
     return InkWell(
       onTap: callback,
@@ -60,7 +64,7 @@ class CountButton extends StatelessWidget {
               data: IconThemeData(color: color),
               child: _buildIcon(),
             ),
-            if (hasNumber) ...[
+            if (showCount) ...[
               const SizedBox(width: 8),
               Expanded(
                 child: DefaultTextStyle.merge(

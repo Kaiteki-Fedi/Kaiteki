@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/settings/customization/theme_selector.dart";
+import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
@@ -17,7 +19,6 @@ class _CustomizationBasicPageState
     extends ConsumerState<CustomizationBasicPage> {
   @override
   Widget build(BuildContext context) {
-    final prefs = ref.watch(themeProvider);
     final l10n = context.l10n;
 
     return SingleChildScrollView(
@@ -31,24 +32,20 @@ class _CustomizationBasicPageState
               useCard: false,
               children: [
                 ThemeSelector(
-                  theme: prefs.mode,
-                  onSelected: (mode) => prefs.mode = mode,
+                  theme: ref.watch(themeMode).value,
+                  onSelected: (value) => ref.read(themeMode).value = value,
                 ),
               ],
             ),
             SettingsSection(
               children: [
-                SwitchListTile(
-                  value: prefs.useMaterial3,
+                PreferenceSwitchListTile(
+                  provider: useMaterial3,
                   title: Text(l10n.useMaterialYou),
-                  onChanged: (value) =>
-                      setState(() => prefs.useMaterial3 = value),
                 ),
-                SwitchListTile(
-                  value: prefs.useSystemColorScheme,
+                PreferenceSwitchListTile(
+                  provider: useSystemColorScheme,
                   title: Text(l10n.useSystemColorScheme),
-                  onChanged: (value) =>
-                      setState(() => prefs.useSystemColorScheme = value),
                 ),
               ],
             ),

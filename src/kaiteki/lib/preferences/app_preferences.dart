@@ -38,3 +38,9 @@ final cwBehavior = createEnumSettingProvider<ContentWarningBehavior>(
   values: ContentWarningBehavior.values,
   provider: sharedPreferencesProvider,
 );
+
+final hidePostMetrics = createSettingProvider<bool>(
+  key: "hidePostMetrics",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
