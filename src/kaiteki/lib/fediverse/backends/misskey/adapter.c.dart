@@ -196,10 +196,10 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
 
   return Instance(
     name: instance.name,
-    iconUrl: instance.iconUrl == null
-        ? null
-        : instanceUri.resolve(instance.iconUrl!).toString(),
-    mascotUrl: instanceUri.resolve(instance.mascotImageUrl).toString(),
+    iconUrl: instance.iconUrl
+        .nullTransform((e) => instanceUri.resolve(e).toString()),
+    mascotUrl: instance.mascotImageUrl
+        .nullTransform((e) => instanceUri.resolve(e).toString()),
     backgroundUrl: instance.bannerUrl,
     source: instance,
   );
