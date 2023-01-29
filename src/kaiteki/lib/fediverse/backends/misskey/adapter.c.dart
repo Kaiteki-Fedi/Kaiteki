@@ -263,7 +263,10 @@ Uri buildEmojiUriManual(String localHost, String name, String? remoteHost) {
     host: localHost,
     pathSegments: [
       "emoji",
-      if (remoteHost == null) "$name.webp" else "$name@$remoteHost.webp",
+      if (remoteHost == null || localHost == remoteHost)
+        "$name.webp"
+      else
+        "$name@$remoteHost.webp",
     ],
   );
 }
