@@ -7,7 +7,12 @@ import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/utils/helpers.dart";
 import "package:kaiteki/utils/text/text_renderer.dart";
 
-Emoji? resolveEmoji(String input, WidgetRef ref, [List<Emoji>? emojis]) {
+Emoji? resolveEmoji(
+  String input,
+  WidgetRef ref, [
+  String? remoteHost,
+  List<Emoji>? emojis,
+]) {
   final adapter = ref.read(adapterProvider);
 
   if (emojis != null) {
@@ -15,7 +20,7 @@ Emoji? resolveEmoji(String input, WidgetRef ref, [List<Emoji>? emojis]) {
   }
 
   if (adapter is MisskeyAdapter) {
-    final url = buildEmojiUri(adapter.instance, input);
+    final url = buildEmojiUriManual(adapter.instance, input, remoteHost);
     return CustomEmoji(short: input, url: url);
   }
 
@@ -35,7 +40,7 @@ extension PostRenderExtensions on Post {
       context,
       content!,
       textContext: TextContext(
-        emojiResolver: (e) => resolveEmoji(e, ref, emojis),
+        emojiResolver: (e) => resolveEmoji(e, ref, author.host, emojis),
         users: mentionedUsers,
         excludedUsers: [
           if (hideReplyee && replyee != null)
@@ -55,7 +60,7 @@ extension ChatMessageRenderExtensions on ChatMessage {
       context,
       content!,
       textContext: TextContext(
-        emojiResolver: (e) => resolveEmoji(e, ref, emojis),
+        emojiResolver: (e) => resolveEmoji(e, ref, author.host, emojis),
       ),
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       textTheme: Theme.of(context).ktkTextTheme!,
@@ -79,7 +84,7 @@ extension UserRenderExtensions on User {
       text,
       textContext: TextContext(
         users: [],
-        emojiResolver: (e) => resolveEmoji(e, ref, emojis),
+        emojiResolver: (e) => resolveEmoji(e, ref, host, emojis),
       ),
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       textTheme: Theme.of(context).ktkTextTheme!,

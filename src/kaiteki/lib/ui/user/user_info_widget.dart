@@ -153,7 +153,8 @@ class _UserInfoFieldRow extends ConsumerWidget {
             context,
             field.value,
             textContext: TextContext(
-              emojiResolver: (e) => resolveEmoji(e, ref, emojis),
+              // FIXME(Craftplacer): Missing remoteHost
+              emojiResolver: (e) => resolveEmoji(e, ref, null, emojis),
             ),
             onUserClick: (reference) => resolveAndOpenUser(
               reference,

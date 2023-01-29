@@ -242,16 +242,28 @@ PostList toList(MisskeyList list) {
 }
 
 Uri buildEmojiUri(String localHost, String emoji) {
+  assert(!(emoji.startsWith(":") || emoji.endsWith(":")));
   final emojiSplit = emoji.split("@");
   return Uri(
     scheme: "https",
     host: localHost,
     pathSegments: [
       "emoji",
-      if (emojiSplit.length <= 1 || emojiSplit[1] == ".")
+      if (emojiSplit.length == 1 || emojiSplit[1] == ".")
         "${emojiSplit[0]}.webp"
       else
         "$emoji.webp",
+    ],
+  );
+}
+
+Uri buildEmojiUriManual(String localHost, String name, String? remoteHost) {
+  return Uri(
+    scheme: "https",
+    host: localHost,
+    pathSegments: [
+      "emoji",
+      if (remoteHost == null) "$name.webp" else "$name@$remoteHost.webp",
     ],
   );
 }
