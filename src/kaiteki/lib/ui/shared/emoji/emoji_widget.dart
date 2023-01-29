@@ -25,7 +25,7 @@ class EmojiWidget extends StatelessWidget {
 
   Widget buildCustomEmoji(CustomEmoji customEmoji) {
     return Image.network(
-      customEmoji.url,
+      customEmoji.url.toString(),
       width: size,
       height: size,
       fit: BoxFit.contain,

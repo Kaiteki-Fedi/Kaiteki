@@ -59,4 +59,7 @@ enum NotificationType {
 
   /// Someone has made a new post
   newPost,
+
+  // Kaiteki received a notification type that it does not support
+  unsupported,
 }

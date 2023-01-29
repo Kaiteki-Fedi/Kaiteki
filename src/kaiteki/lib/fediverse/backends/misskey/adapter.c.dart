@@ -11,6 +11,7 @@ final misskeyNotificationTypeRosetta = Rosetta(const {
   misskey.NotificationType.receiveFollowRequest: NotificationType.followRequest,
   misskey.NotificationType.followRequestAccepted: NotificationType.followed,
   misskey.NotificationType.groupInvited: NotificationType.groupInvite,
+  misskey.NotificationType.achievementEarned: NotificationType.unsupported,
 });
 
 final misskeyVisibilityRosetta = Rosetta<String, Visibility>(const {
@@ -21,7 +22,7 @@ final misskeyVisibilityRosetta = Rosetta<String, Visibility>(const {
 });
 
 Post toPost(misskey.Note source, String localHost) {
-  final mappedEmoji = source.emojis.map<CustomEmoji>(toEmoji).toList();
+  final mappedEmoji = source.emojis?.map<CustomEmoji>(toEmoji).toList();
   final sourceReply = source.reply;
   final sourceReplyId = source.replyId;
 
@@ -40,10 +41,22 @@ Post toPost(misskey.Note source, String localHost) {
     content: source.text,
     emojis: mappedEmoji,
     reactions: source.reactions.entries.map((mkr) {
+      final Emoji emoji;
+
+      if (mappedEmoji != null) {
+        emoji = getEmojiFromString(mkr.key, mappedEmoji);
+      } else if (isCustomEmoji(mkr.key)) {
+        final emojiName = mkr.key.substring(1, mkr.key.length - 1);
+        final emojiUrl = buildEmojiUri(localHost, emojiName);
+        emoji = CustomEmoji(short: mkr.key, url: emojiUrl);
+      } else {
+        emoji = UnicodeEmoji(mkr.key);
+      }
+
       return Reaction(
         count: mkr.value,
         includesMe: mkr.key == source.myReaction,
-        emoji: getEmojiFromString(mkr.key, mappedEmoji),
+        emoji: emoji,
       );
     }).toList(),
     replyTo: replyTo,
@@ -59,6 +72,9 @@ Post toPost(misskey.Note source, String localHost) {
     ),
   );
 }
+
+bool isCustomEmoji(String input) =>
+    input.length >= 3 && input.startsWith(":") && input.endsWith(":");
 
 Emoji getEmojiFromString(String key, List<CustomEmoji> mappedEmoji) {
   final emoji = mappedEmoji.firstWhereOrNull(
@@ -104,7 +120,7 @@ Attachment toAttachment(misskey.DriveFile file) {
 CustomEmoji toEmoji(misskey.Emoji emoji) {
   return CustomEmoji(
     short: emoji.name,
-    url: emoji.url,
+    url: Uri.parse(emoji.url),
     aliases: emoji.aliases,
   );
 }
@@ -117,7 +133,7 @@ User toUser(misskey.User source, String localHost) {
     bannerBlurHash: source.bannerBlurhash as String?,
     description: source.description,
     displayName: source.name,
-    emojis: source.emojis.map(toEmoji),
+    emojis: source.emojis?.map(toEmoji).toList(),
     host: source.host ?? localHost,
     id: source.id,
     joinDate: source.createdAt,
@@ -139,7 +155,7 @@ User toUserFromLite(misskey.UserLite source, String localHost) {
     avatarUrl: source.avatarUrl,
     // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
     displayName: source.name ?? source.username,
-    emojis: source.emojis.map(toEmoji),
+    emojis: source.emojis?.map(toEmoji).toList(),
     host: source.host ?? localHost,
     id: source.id,
     source: source,
@@ -183,9 +199,7 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
     iconUrl: instance.iconUrl == null
         ? null
         : instanceUri.resolve(instance.iconUrl!).toString(),
-    mascotUrl: instance.mascotImageUrl == null
-        ? null
-        : instanceUri.resolve(instance.mascotImageUrl!).toString(),
+    mascotUrl: instanceUri.resolve(instance.mascotImageUrl).toString(),
     backgroundUrl: instance.bannerUrl,
     source: instance,
   );
@@ -224,5 +238,20 @@ PostList toList(MisskeyList list) {
     name: list.name,
     createdAt: list.createdAt,
     source: list.createdAt,
+  );
+}
+
+Uri buildEmojiUri(String localHost, String emoji) {
+  final emojiSplit = emoji.split("@");
+  return Uri(
+    scheme: "https",
+    host: localHost,
+    pathSegments: [
+      "emoji",
+      if (emojiSplit.length <= 1 || emojiSplit[1] == ".")
+        "${emojiSplit[0]}.webp"
+      else
+        "$emoji.webp",
+    ],
   );
 }

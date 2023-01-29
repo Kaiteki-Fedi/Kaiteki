@@ -151,7 +151,12 @@ Future<void> precacheImages(BuildContext context) async {
     ...users.map((u) => u.bannerUrl),
     ...users.map((u) => u.avatarUrl),
     ...posts.expand<String?>(
-      (p) => p.emojis?.whereType<CustomEmoji>().map((e) => e.url) ?? [],
+      (p) {
+        return p.emojis
+                ?.whereType<CustomEmoji>()
+                .map((e) => e.url.toString()) ??
+            [];
+      },
     ),
   ];
 

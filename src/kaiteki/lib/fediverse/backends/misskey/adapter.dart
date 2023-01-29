@@ -382,7 +382,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<List<EmojiCategory>> getEmojis() async {
     final instanceMeta = await client.getMeta();
-    final emojiCategories = instanceMeta.emojis.groupBy((e) => e.category);
+    var emojis = instanceMeta.emojis;
+
+    emojis ??= (await client.getEmojis()).emojis;
+
+    final emojiCategories = emojis.groupBy((e) => e.category);
     return emojiCategories.entries
         .map(
           (kv) => EmojiCategory(

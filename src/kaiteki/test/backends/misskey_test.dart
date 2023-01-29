@@ -12,7 +12,7 @@ void main() {
   test("fetch instance meta", () async {
     final meta = await client.getMeta(detail: true);
     log(
-      "We are testing on ${meta.name}, an instance run by ${meta.maintainerName} (${meta.maintainerEmail}), running Misskey ${meta.version} with ${meta.emojis.length} emoji.",
+      "We are testing on ${meta.name}, an instance run by ${meta.maintainerName} (${meta.maintainerEmail}), running Misskey ${meta.version}.",
     );
   });
   test("fetch global timeline", () async {

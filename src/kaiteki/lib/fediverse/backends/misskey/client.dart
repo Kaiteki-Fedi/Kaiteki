@@ -13,6 +13,7 @@ import "package:kaiteki/fediverse/backends/misskey/requests/timeline.dart";
 import "package:kaiteki/fediverse/backends/misskey/responses/check_session.dart";
 import "package:kaiteki/fediverse/backends/misskey/responses/create_app.dart";
 import "package:kaiteki/fediverse/backends/misskey/responses/create_note.dart";
+import "package:kaiteki/fediverse/backends/misskey/responses/emojis.dart";
 import "package:kaiteki/fediverse/backends/misskey/responses/generate_session.dart";
 import "package:kaiteki/fediverse/backends/misskey/responses/note_translate.dart";
 import "package:kaiteki/fediverse/backends/misskey/responses/signin.dart";
@@ -645,4 +646,8 @@ class MisskeyClient {
         )
         .then(NoteTranslateResponse.fromJson.fromResponse);
   }
+
+  Future<EmojisResponse> getEmojis() async => client
+      .sendRequest(HttpMethod.post, "api/emojis")
+      .then(EmojisResponse.fromJson.fromResponse);
 }

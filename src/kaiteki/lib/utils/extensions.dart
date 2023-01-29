@@ -4,14 +4,10 @@ import "package:flutter/services.dart";
 import "package:html/dom.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/model/chat_message.dart";
 import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/model/auth/account_key.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
-import "package:kaiteki/utils/helpers.dart";
-import "package:kaiteki/utils/text/text_renderer.dart";
 import "package:kaiteki/utils/utils.dart";
 import "package:tuple/tuple.dart";
 
@@ -21,6 +17,7 @@ export "package:kaiteki/utils/extensions/enum.dart";
 export "package:kaiteki/utils/extensions/iterable.dart";
 export "package:kaiteki/utils/extensions/m3.dart";
 export "package:kaiteki/utils/extensions/string.dart";
+export "package:kaiteki/utils/text/rendering_extensions.dart";
 
 extension ObjectExtensions<T> on T? {
   S? nullTransform<S>(S Function(T object) function) {
@@ -94,75 +91,12 @@ extension AsyncSnapshotExtensions on AsyncSnapshot {
 
 enum AsyncSnapshotState { errored, loading, done }
 
-extension UserExtensions on User {
-  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
-    return renderText(context, ref, displayName!);
-  }
-
-  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
-    return renderText(context, ref, description!);
-  }
-
-  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
-    return render(
-      parsers: ref.read(textParserProvider),
-      context,
-      text,
-      textContext: TextContext(
-        users: [],
-        emojis: emojis?.toList(growable: false),
-      ),
-      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
-      textTheme: Theme.of(context).ktkTextTheme!,
-    );
-  }
-}
-
 extension PostExtensions on Post {
-  InlineSpan renderContent(
-    BuildContext context,
-    WidgetRef ref, {
-    bool hideReplyee = false,
-  }) {
-    final replyee = replyToUser?.data;
-
-    return render(
-      parsers: ref.read(textParserProvider),
-      context,
-      content!,
-      textContext: TextContext(
-        emojis: emojis?.toList(growable: false),
-        users: mentionedUsers,
-        excludedUsers: [
-          if (hideReplyee && replyee != null)
-            UserReference.handle(replyee.username, replyee.host)
-        ],
-      ),
-      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
-      textTheme: Theme.of(context).ktkTextTheme!,
-    );
-  }
-
   Post getRoot() => _getRoot(this);
 
   Post _getRoot(Post post) {
     final repeatChild = post.repeatOf;
     return repeatChild == null ? post : _getRoot(repeatChild);
-  }
-}
-
-extension ChatMessageExtensions on ChatMessage {
-  InlineSpan renderContent(BuildContext context, WidgetRef ref) {
-    return render(
-      parsers: ref.read(textParserProvider),
-      context,
-      content!,
-      textContext: TextContext(
-        emojis: emojis.toList(growable: false),
-      ),
-      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
-      textTheme: Theme.of(context).ktkTextTheme!,
-    );
   }
 }
 

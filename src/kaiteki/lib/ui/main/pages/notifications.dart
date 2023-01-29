@@ -187,6 +187,7 @@ class NotificationWidget extends ConsumerWidget {
     final color = _getColor(context);
     final icon = _getNotificationIcon(notification.type);
     final post = notification.post;
+    final user = notification.user;
     return InkWell(
       onTap: () => _onTap(context, ref),
       child: Padding(
@@ -196,10 +197,10 @@ class NotificationWidget extends ConsumerWidget {
           children: [
             Stack(
               children: [
-                AvatarWidget(
-                  notification.user!,
-                  size: 40,
-                ),
+                if (user != null)
+                  AvatarWidget(user, size: 40)
+                else
+                  const SizedBox(width: 40),
                 Positioned(
                   right: 0,
                   bottom: 0,
@@ -239,15 +240,15 @@ class NotificationWidget extends ConsumerWidget {
                         child: Text.rich(
                           TextSpan(
                             children: [
-                              TextSpan(
-                                children: [
-                                  notification.user!
-                                      .renderDisplayName(context, ref)
-                                ],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
+                              if (user != null)
+                                TextSpan(
+                                  children: [
+                                    user.renderDisplayName(context, ref)
+                                  ],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
                               TextSpan(
                                 text: _getTitle(context, notification.type),
                               ),
@@ -349,6 +350,9 @@ class NotificationWidget extends ConsumerWidget {
 
       case NotificationType.newPost:
         return Icons.post_add_rounded;
+
+      case NotificationType.unsupported:
+        return Icons.question_mark;
     }
   }
 
@@ -383,6 +387,9 @@ class NotificationWidget extends ConsumerWidget {
       case NotificationType.groupInvite:
       case NotificationType.signedUp:
         return colorScheme.tertiary;
+
+      case NotificationType.unsupported:
+        return colorScheme.outline;
     }
   }
 
@@ -400,7 +407,6 @@ class NotificationWidget extends ConsumerWidget {
         return " mentioned you";
       case NotificationType.followRequest:
         return " wants to follow you";
-
       case NotificationType.groupInvite:
         return " invited you to a group";
       case NotificationType.pollEnded:
@@ -417,6 +423,8 @@ class NotificationWidget extends ConsumerWidget {
         return " has joined the instance";
       case NotificationType.newPost:
         return " made a new post";
+      case NotificationType.unsupported:
+        return "Unsupported notification";
     }
   }
 

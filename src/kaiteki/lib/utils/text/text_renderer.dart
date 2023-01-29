@@ -1,4 +1,3 @@
-import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Element;
 import "package:kaiteki/di.dart";
@@ -19,12 +18,14 @@ typedef RegExpMatchElementBuilder = Element Function(
   String text,
 );
 
+typedef EmojiResolver = Emoji? Function(String name);
+
 class TextContext {
   final List<UserReference>? users;
-  final List<Emoji>? emojis;
   final List<UserReference>? excludedUsers;
+  final EmojiResolver? emojiResolver;
 
-  const TextContext({this.users, this.emojis, this.excludedUsers});
+  const TextContext({this.users, this.emojiResolver, this.excludedUsers});
 }
 
 InlineSpan render(
@@ -242,11 +243,10 @@ InlineSpan renderEmoji(
   EmojiElement element, {
   double? scale,
 }) {
-  final emoji = textContext.emojis?.firstWhereOrNull((e) {
-    return e.short == element.name;
-  });
+  final name = element.name;
+  final emoji = textContext.emojiResolver?.call(name);
 
-  if (emoji == null) return TextSpan(text: ":${element.name}:");
+  if (emoji == null) return TextSpan(text: ":$name:");
 
   // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
   return WidgetSpan(

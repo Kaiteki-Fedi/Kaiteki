@@ -53,8 +53,7 @@ class ChatTargetTile extends ConsumerWidget {
         context,
         content,
         textContext: TextContext(
-          users: [],
-          emojis: lastMessage.emojis.toList(growable: false),
+          emojiResolver: (e) => resolveEmoji(e, ref, lastMessage.emojis),
         ),
         textTheme: Theme.of(context).ktkTextTheme!,
         onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),

@@ -28,7 +28,7 @@ class CustomEmoji extends Emoji {
   @override
   final String short;
 
-  final String url;
+  final Uri url;
 
   final String? instance;
 

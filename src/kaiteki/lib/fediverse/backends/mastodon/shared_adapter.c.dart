@@ -178,7 +178,7 @@ Attachment toAttachment(
 
 CustomEmoji toEmoji(mastodon.Emoji emoji) {
   return CustomEmoji(
-    url: emoji.staticUrl,
+    url: Uri.parse(emoji.staticUrl),
     short: emoji.shortcode,
     aliases: emoji.tags?.toList(),
   );
@@ -194,7 +194,7 @@ User toUser(mastodon.Account source, String localHost) {
     joinDate: source.createdAt,
     id: source.id,
     description: source.note,
-    emojis: source.emojis.map(toEmoji),
+    emojis: source.emojis.map(toEmoji).toList(),
     followerCount: source.followersCount,
     followingCount: source.followingCount,
     postCount: source.statusesCount,

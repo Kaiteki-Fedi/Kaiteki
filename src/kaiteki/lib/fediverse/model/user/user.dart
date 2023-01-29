@@ -29,7 +29,7 @@ class User<T> extends AdaptedEntity<T> {
   final String id;
 
   /// The emojis used to display this user.
-  final Iterable<Emoji>? emojis;
+  final List<Emoji>? emojis;
 
   final String? description;
 

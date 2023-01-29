@@ -152,7 +152,9 @@ class _UserInfoFieldRow extends ConsumerWidget {
           render(
             context,
             field.value,
-            textContext: TextContext(emojis: emojis),
+            textContext: TextContext(
+              emojiResolver: (e) => resolveEmoji(e, ref, emojis),
+            ),
             onUserClick: (reference) => resolveAndOpenUser(
               reference,
               context,
