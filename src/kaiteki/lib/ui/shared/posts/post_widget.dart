@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:intl/intl.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
@@ -15,6 +16,7 @@ import "package:kaiteki/preferences/content_warning_behavior.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/theming/kaiteki/post.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/attachment_row.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
@@ -24,6 +26,7 @@ import "package:kaiteki/ui/shared/posts/interaction_bar.dart";
 import "package:kaiteki/ui/shared/posts/interaction_event_bar.dart";
 import "package:kaiteki/ui/shared/posts/meta_bar.dart";
 import "package:kaiteki/ui/shared/posts/poll_widget.dart";
+import "package:kaiteki/ui/shared/posts/post_metrics_bar.dart";
 import "package:kaiteki/ui/shared/posts/reaction_row.dart";
 import "package:kaiteki/ui/shared/posts/reply_bar.dart";
 import "package:kaiteki/ui/shared/posts/subject_bar.dart";
@@ -43,7 +46,7 @@ class PostWidget extends ConsumerStatefulWidget {
   final bool wide;
   final bool hideReplyee;
   final bool hideAvatar;
-  final bool expand;
+  final bool expanded;
 
   /// onTap callback for content text
   final VoidCallback? onTap;
@@ -56,7 +59,7 @@ class PostWidget extends ConsumerStatefulWidget {
     this.wide = false,
     this.hideReplyee = false,
     this.hideAvatar = false,
-    this.expand = false,
+    this.expanded = false,
     this.onTap,
   });
 
@@ -78,6 +81,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final wide = widget.expanded || widget.wide;
 
     if (_post.repeatOf != null) {
       return Column(
@@ -94,7 +98,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           PostWidget(
             _post.repeatOf!,
             showActions: widget.showActions,
-            wide: widget.wide,
+            wide: wide,
           ),
         ],
       );
@@ -106,7 +110,10 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final children = [
       MetaBar(
         post: _post,
-        showAvatar: !widget.hideAvatar && widget.wide,
+        showAvatar: !widget.hideAvatar && wide,
+        showTime: !widget.expanded,
+        showVisibility: !widget.expanded,
+        twolineAuthor: widget.expanded,
       ),
       if (widget.showParentPost && _post.replyToUser != null)
         ReplyBar(post: _post),
@@ -114,6 +121,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         post: _translatedPost ?? _post,
         hideReplyee: widget.hideReplyee,
         onTap: widget.onTap,
+        style:
+            widget.expanded ? Theme.of(context).textTheme.headlineSmall : null,
       ),
       if (_post.embeds.isNotEmpty)
         Card(
@@ -142,42 +151,19 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         spacer,
         AttachmentRow(post: _post),
       ],
-      if (widget.expand && _post.client != null)
-        Text(
-          _post.client!,
-          style: TextStyle(color: Theme.of(context).disabledColor),
-        ),
       if (_post.reactions.isNotEmpty) ...[
         spacer,
         ReactionRow(_post.reactions, (r) => _onChangeReaction(r.emoji)),
       ],
-      if (widget.showActions) ...[
-        spacer,
-        InteractionBar(
-          metrics: _post.metrics,
-          onReply: _onReply,
-          onFavorite: _onFavorite,
-          onRepeat: _onRepeat,
-          onReact: _onReact,
-          favorited: adapter is FavoriteSupport //
-              ? _post.state.favorited
-              : null,
-          onShowFavoritees: () => context.pushNamed(
-            "postFavorites",
-            params: {...ref.accountRouterParams, "id": _post.id},
-          ),
-          onShowRepeatees: () => context.pushNamed(
-            "postRepeats",
-            params: {...ref.accountRouterParams, "id": _post.id},
-          ),
-          repeated: _post.state.repeated,
-          reacted: adapter is ReactionSupport ? false : null,
-          buildActions: _buildActions,
-        )
-      ],
     ];
 
     final theme = Theme.of(context).ktkPostTheme!;
+    final leftPostContentInset = theme.avatarSpacing + 48;
+    final outlineColor = Theme.of(context).colorScheme.outline;
+    final outlineTextStyle = outlineColor.textStyle;
+
+    final clientText = _buildExpandedMetaBeta();
+
     return FocusableActionDetector(
       shortcuts: const {
         reply: ReplyIntent(),
@@ -198,25 +184,101 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         ),
       },
       child: Padding(
-        padding: theme.padding,
-        child: Row(
+        padding: theme.padding.copyWith(bottom: 0.0),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (!widget.wide && !widget.hideAvatar) ...[
-              AvatarWidget(
-                _post.author,
-                onTap: () => context.showUser(_post.author, ref),
-                focusNode: FocusNode(skipTraversal: true),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (!wide && !widget.hideAvatar) ...[
+                  AvatarWidget(
+                    _post.author,
+                    onTap: () => context.showUser(_post.author, ref),
+                    focusNode: FocusNode(skipTraversal: true),
+                  ),
+                  SizedBox(width: theme.avatarSpacing),
+                ],
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: children,
+                  ),
+                )
+              ],
+            ),
+            if (widget.expanded) const Divider(height: 25),
+            if (widget.expanded)
+              OverflowBar(
+                spacing: 16.0,
+                overflowSpacing: 8.0,
+                children: [
+                  Text(
+                    DateFormat.yMMMMd(
+                      Localizations.localeOf(context).toString(),
+                    ).add_jm().format(_post.postedAt),
+                    style: outlineTextStyle,
+                  ),
+                  if (_post.visibility != null)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _post.visibility!.toIconData(),
+                          size: 16,
+                          color: outlineColor,
+                        ),
+                        const SizedBox(width: 3.0),
+                        Text(
+                          _post.visibility!.toDisplayString(l10n),
+                          style: outlineTextStyle,
+                        ),
+                      ],
+                    ),
+                  if (clientText != null) clientText,
+                ],
               ),
-              SizedBox(width: theme.avatarSpacing),
+            if (widget.expanded) const Divider(height: 25),
+            if (widget.expanded) PostMetricBar(_post.metrics),
+            if (widget.showActions) ...[
+              if (widget.expanded)
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 12.0,
+                    bottom: kPostPadding.bottom,
+                  ),
+                  child: const Divider(height: 1),
+                ),
+              Padding(
+                padding: widget.expanded
+                    ? EdgeInsets.zero
+                    : EdgeInsets.only(left: leftPostContentInset - 8),
+                child: InteractionBar(
+                  metrics: _post.metrics,
+                  onReply: _onReply,
+                  onFavorite: _onFavorite,
+                  onRepeat: _onRepeat,
+                  onReact: _onReact,
+                  showLabels: !widget.expanded,
+                  spread: widget.expanded,
+                  favorited: adapter is FavoriteSupport //
+                      ? _post.state.favorited
+                      : null,
+                  onShowFavoritees: () => context.pushNamed(
+                    "postFavorites",
+                    params: {...ref.accountRouterParams, "id": _post.id},
+                  ),
+                  onShowRepeatees: () => context.pushNamed(
+                    "postRepeats",
+                    params: {...ref.accountRouterParams, "id": _post.id},
+                  ),
+                  repeated: _post.state.repeated,
+                  reacted: adapter is ReactionSupport ? false : null,
+                  buildActions: _buildActions,
+                ),
+              )
             ],
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: children,
-              ),
-            )
           ],
         ),
       ),
@@ -224,16 +286,11 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   }
 
   List<PopupMenuEntry> _buildActions(BuildContext context) {
-    final openInBrowserAvailable = _post.externalUrl != null;
     final l10n = context.l10n;
     final adapter = ref.read(adapterProvider);
 
-    final translator = ref.read(translatorProvider);
-    final langId = ref.read(languageIdentificatorProvider);
-
-    final genericTranslationAvailable = translator != null && langId != null;
-    final translationAvailable =
-        adapter is PostTranslationSupport || genericTranslationAvailable;
+    final openInBrowserAvailable = _post.externalUrl != null;
+    final translationAvailable = _isTranslationAvailable(ref);
 
     return [
       if (adapter is BookmarkSupport)
@@ -260,54 +317,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       if (_translatedPost == null)
         PopupMenuItem(
           enabled: translationAvailable,
+          onTap: _onTranslate,
           child: ListTile(
             title: const Text("Translate"),
             leading: const Icon(Icons.translate_rounded),
             contentPadding: EdgeInsets.zero,
             enabled: translationAvailable,
           ),
-          onTap: () async {
-            final content = _post.content;
-            if (content == null) return;
-
-            if (adapter is PostTranslationSupport) {
-              final displayLang = Localizations.localeOf(context).languageCode;
-              final translationAdapter = adapter as PostTranslationSupport;
-
-              final translatedPost = await translationAdapter.translatePost(
-                _post,
-                displayLang,
-              );
-
-              setState(() => _translatedPost = translatedPost);
-            } else if (genericTranslationAvailable) {
-              final displayLang = Localizations.localeOf(context).languageCode;
-              final sourceLang = await langId.identifyLanguage(content);
-
-              if (sourceLang == null &&
-                  !translator.supportsLanguageDetection &&
-                  mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Could not determine source language."),
-                  ),
-                );
-                return;
-              }
-
-              final translatedContent = await translator.translate(
-                _post.content!,
-                displayLang,
-                sourceLang,
-              );
-
-              setState(
-                () => _translatedPost = _post.copyWith(
-                  content: translatedContent,
-                ),
-              );
-            }
-          },
         )
       else
         PopupMenuItem(
@@ -348,12 +364,71 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     ];
   }
 
+  bool _isTranslationAvailable(WidgetRef ref) {
+    final translator = ref.read(translatorProvider);
+    final langId = ref.read(languageIdentificatorProvider);
+    final serviceAvailable = translator != null && langId != null;
+    if (serviceAvailable) return true;
+
+    return ref.read(adapterProvider) is PostTranslationSupport;
+  }
+
   void _onReply() {
     context.pushNamed(
       "compose",
       params: ref.accountRouterParams,
       extra: _post,
     );
+  }
+
+  Future<void> _onTranslate() async {
+    final content = _post.content;
+    if (content == null) return;
+
+    final adapter = ref.read(adapterProvider);
+    if (adapter is PostTranslationSupport) {
+      final displayLang = Localizations.localeOf(context).languageCode;
+      final translationAdapter = adapter as PostTranslationSupport;
+
+      final translatedPost = await translationAdapter.translatePost(
+        _post,
+        displayLang,
+      );
+
+      setState(() => _translatedPost = translatedPost);
+      return;
+    }
+
+    final translator = ref.read(translatorProvider);
+    final langId = ref.read(languageIdentificatorProvider);
+    if (translator != null && langId != null) {
+      final displayLang = Localizations.localeOf(context).languageCode;
+      final sourceLang = await langId.identifyLanguage(content);
+
+      if (sourceLang == null &&
+          !translator.supportsLanguageDetection &&
+          mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Could not determine source language."),
+          ),
+        );
+        return;
+      }
+
+      final translatedContent = await translator.translate(
+        _post.content!,
+        displayLang,
+        sourceLang,
+      );
+
+      setState(
+        () => _translatedPost = _post.copyWith(
+          content: translatedContent,
+        ),
+      );
+      return;
+    }
   }
 
   Future<void> _onFavorite() async {
@@ -506,17 +581,30 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
     _onChangeReaction(emoji);
   }
+
+  Widget? _buildExpandedMetaBeta() {
+    final client = _post.client;
+
+    if (client == null) return null;
+
+    return Text(
+      client,
+      style: Theme.of(context).colorScheme.outline.textStyle,
+    );
+  }
 }
 
 class _PostContent extends ConsumerStatefulWidget {
   final Post post;
   final bool hideReplyee;
   final VoidCallback? onTap;
+  final TextStyle? style;
 
   const _PostContent({
     required this.post,
     required this.hideReplyee,
     this.onTap,
+    this.style,
   });
 
   @override
@@ -606,6 +694,7 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
               TextSpan(children: [renderedContent!]),
               // FIXME(Craftplacer): https://github.com/flutter/flutter/issues/53797
               onTap: widget.onTap,
+              style: widget.style,
             ),
           ),
       ],

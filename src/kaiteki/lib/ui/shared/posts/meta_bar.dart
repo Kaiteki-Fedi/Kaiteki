@@ -11,11 +11,17 @@ class MetaBar extends StatelessWidget {
   const MetaBar({
     super.key,
     required Post post,
+    this.twolineAuthor = false,
     this.showAvatar = false,
+    this.showTime = true,
+    this.showVisibility = true,
   }) : _post = post;
 
   final Post _post;
   final bool showAvatar;
+  final bool showTime;
+  final bool showVisibility;
+  final bool twolineAuthor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +30,7 @@ class MetaBar extends StatelessWidget {
       child: Row(
         children: [
           ...buildLeft(context),
+          const SizedBox(width: 8),
           ...buildRight(context),
         ],
       ),
@@ -40,7 +47,12 @@ class MetaBar extends StatelessWidget {
       Expanded(
         child: Row(
           children: [
-            Flexible(child: UserDisplayNameWidget(_post.author)),
+            Flexible(
+              child: UserDisplayNameWidget(
+                _post.author,
+                orientation: twolineAuthor ? Axis.vertical : null,
+              ),
+            ),
             if (_post.author.flags?.isAdministrator == true) ...[
               const SizedBox(width: 8),
               const AdministratorUserBadge(),
@@ -78,16 +90,17 @@ class MetaBar extends StatelessWidget {
             ),
           ),
         ),
-      Tooltip(
-        message: _post.postedAt.toString(),
-        child: Text(
-          DateTime.now().difference(_post.postedAt).toStringHuman(
-                context: context,
-              ),
-          style: secondaryTextTheme,
+      if (showTime)
+        Tooltip(
+          message: _post.postedAt.toString(),
+          child: Text(
+            DateTime.now().difference(_post.postedAt).toStringHuman(
+                  context: context,
+                ),
+            style: secondaryTextTheme,
+          ),
         ),
-      ),
-      if (visibility != null)
+      if (visibility != null && showVisibility)
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: Tooltip(

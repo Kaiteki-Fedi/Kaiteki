@@ -96,7 +96,7 @@ extension TweetExtensions on twt.Tweet {
           ? reply?.id.nullTransform(ResolvablePost.fromId)
           : ResolvablePost.fromData(replyPost),
       metrics: PostMetrics(
-        likeCount: publicMetrics?.likeCount ?? 0,
+        favoriteCount: publicMetrics?.likeCount ?? 0,
         repeatCount: (publicMetrics?.retweetCount ?? 0) +
             (publicMetrics?.quoteCount ?? 0),
         replyCount: publicMetrics?.replyCount ?? 0,

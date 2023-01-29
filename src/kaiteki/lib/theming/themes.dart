@@ -8,6 +8,7 @@ final birdDarkTheme = ThemeData.from(
     background: Color(0xFF15202B),
     surface: Color(0xFF1E2732),
     surfaceVariant: Color(0xFF1E2732),
+    outline: Color(0xFF8b98a5),
     outlineVariant: Color(0xFF38444d),
     error: Color(0xFFF4212E),
     onError: Colors.white,

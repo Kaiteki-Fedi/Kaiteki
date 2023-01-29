@@ -18,6 +18,8 @@ class CountButton extends ConsumerWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final FocusNode? focusNode;
+  final bool showNumber;
+  final bool expanded;
 
   const CountButton({
     super.key,
@@ -31,6 +33,8 @@ class CountButton extends ConsumerWidget {
     this.focusNode,
     this.onLongPress,
     this.onTap,
+    this.showNumber = true,
+    this.expanded = true,
   });
 
   @override
@@ -44,45 +48,50 @@ class CountButton extends ConsumerWidget {
         .format(count ?? 0)
         .toLowerCase();
 
-    final showCount = hasNumber && !ref.watch(hidePostMetrics).value;
+    final showCount =
+        showNumber && hasNumber && !ref.watch(hidePostMetrics).value;
 
-    return InkWell(
-      onTap: callback,
+    final icon = IconTheme(
+      data: IconThemeData(color: color),
+      child: _buildIcon(),
+    );
+
+    return RawMaterialButton(
+      onPressed: callback,
       onLongPress: onLongPress,
       enableFeedback: enabled,
       focusNode: focusNode,
-      customBorder: Theme.of(context).useMaterial3
-          ? const StadiumBorder()
-          : RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-            ),
+      constraints: BoxConstraints(
+        minWidth: (expanded && showCount) ? 88.0 : 0.0,
+        minHeight: 36.0,
+      ),
+      shape: const StadiumBorder(),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            IconTheme(
-              data: IconThemeData(color: color),
-              child: _buildIcon(),
-            ),
-            if (showCount) ...[
-              const SizedBox(width: 8),
-              Expanded(
-                child: DefaultTextStyle.merge(
-                  style:
-                      Theme.of(context).ktkTextTheme!.countTextStyle.copyWith(
-                            color: color,
-                          ),
-                  child: Text(
-                    shortenedCount,
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                  ),
-                ),
+        child: !expanded
+            ? icon
+            : Row(
+                children: [
+                  icon,
+                  if (showCount) ...[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: DefaultTextStyle.merge(
+                        style: Theme.of(context)
+                            .ktkTextTheme!
+                            .countTextStyle
+                            .copyWith(color: color),
+                        child: Text(
+                          shortenedCount,
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                          softWrap: false,
+                        ),
+                      ),
+                    ),
+                  ]
+                ],
               ),
-            ]
-          ],
-        ),
       ),
     );
   }
@@ -98,7 +107,7 @@ class CountButton extends ConsumerWidget {
 
     if (!enabled || onTap == null) return colorScheme.outlineVariant;
 
-    final inactiveColor = color ?? colorScheme.onBackground;
+    final inactiveColor = color ?? colorScheme.outline;
     if (active) return activeColor ?? inactiveColor;
 
     return inactiveColor;

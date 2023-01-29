@@ -24,6 +24,7 @@ class ReplyBar extends ConsumerWidget {
     final disabledColor = Theme.of(context).disabledColor;
     final l10n = context.l10n;
     final adapter = ref.watch(adapterProvider);
+    final userTextStyle = Theme.of(context).ktkTextTheme!.linkTextStyle;
 
     return Padding(
       padding: kPostPadding,
@@ -37,14 +38,11 @@ class ReplyBar extends ConsumerWidget {
           builder: (context, snapshot) {
             final span = snapshot.hasData
                 ? snapshot.data!.renderDisplayName(context, ref)
-                : TextSpan(
-                    text: _getText(),
-                    style: Theme.of(context).ktkTextTheme!.linkTextStyle,
-                  );
+                : TextSpan(text: _getText());
 
             return Text.rich(
               TextSpan(
-                style: textStyle,
+                style: userTextStyle,
                 children: [
                   // TODO(Craftplacer): refactor the following widget pattern to a future "IconSpan"
                   WidgetSpan(

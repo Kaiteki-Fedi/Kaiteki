@@ -12,7 +12,7 @@ Post toPost(twitter.Tweet tweet) {
     source: tweet,
     content: content,
     metrics: PostMetrics(
-      likeCount: tweet.favoriteCount,
+      favoriteCount: tweet.favoriteCount,
       repeatCount: tweet.retweetCount,
     ),
     attachments: tweet.entities.media?.map(toAttachment).toList(),

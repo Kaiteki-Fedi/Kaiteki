@@ -71,7 +71,7 @@ Post toPost(mastodon.Status source, String localHost) {
       );
     }).toList(growable: false),
     metrics: PostMetrics(
-      likeCount: source.favouritesCount,
+      favoriteCount: source.favouritesCount,
       repeatCount: source.reblogsCount,
       replyCount: source.repliesCount,
     ),

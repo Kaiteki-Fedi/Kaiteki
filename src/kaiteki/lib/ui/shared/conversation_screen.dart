@@ -1,15 +1,10 @@
-import "package:breakpoint/breakpoint.dart";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/shared/common.dart";
-import "package:kaiteki/ui/shared/layout/breakpoint_container.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-
-import "package:kaiteki/utils/threader.dart";
 
 class ConversationScreen extends ConsumerStatefulWidget {
   final Post post;
@@ -22,7 +17,7 @@ class ConversationScreen extends ConsumerStatefulWidget {
 
 class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   Future<Iterable<Post>>? _threadFetchFuture;
-  Future<ThreadPost>? _threadedFuture;
+  // Future<ThreadPost>? _threadedFuture;
   bool showThreaded = true;
 
   @override
@@ -52,57 +47,42 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.conversationTitle),
-        actions: [
-          IconButton(
-            icon: Icon(
-              showThreaded
-                  ? Icons.view_timeline_rounded
-                  : Icons.article_rounded,
-            ),
-            onPressed: () {
-              setState(() {
-                showThreaded = !showThreaded;
-              });
-            },
-          ),
-        ],
       ),
-      body: BreakpointBuilder(
-        builder: (context, breakpoint) {
-          return BreakpointContainer(
-            breakpoint: breakpoint,
-            child: showThreaded ? buildThreaded(context) : buildFlat(context),
-          );
-        },
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: buildFlat(context),
+        ),
       ),
     );
   }
 
-  Widget buildThreaded(BuildContext context) {
-    _threadedFuture ??= _threadFetchFuture?.then((thread) {
-      return compute(toThread, thread.toList(growable: false));
-    });
+  // Widget buildThreaded(BuildContext context) {
+  //   _threadedFuture ??= _threadFetchFuture?.then((thread) {
+  //     return compute(toThread, thread.toList(growable: false));
+  //   });
 
-    return FutureBuilder<ThreadPost>(
-      future: _threadedFuture,
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          return SingleChildScrollView(
-            child: ThreadPostContainer(snapshot.data!),
-          );
-        } else if (snapshot.hasError) {
-          return Column(
-            children: [
-              PostWidget(widget.post, expand: true),
-              _buildErrorListTile(context, snapshot),
-            ],
-          );
-        } else {
-          return centeredCircularProgressIndicator;
-        }
-      },
-    );
-  }
+  //   return FutureBuilder<ThreadPost>(
+  //     future: _threadedFuture,
+  //     builder: (_, snapshot) {
+  //       if (snapshot.hasData) {
+  //         return SingleChildScrollView(
+  //           child: ThreadPostContainer(snapshot.data!),
+  //         );
+  //       } else if (snapshot.hasError) {
+  //         return Column(
+  //           children: [
+  //             PostWidget(widget.post, expanded: true),
+  //             _buildErrorListTile(context, snapshot),
+  //           ],
+  //         );
+  //       } else {
+  //         return centeredCircularProgressIndicator;
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget _buildErrorListTile(BuildContext context, AsyncSnapshot snapshot) {
     final l10n = context.l10n;
@@ -130,7 +110,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
               final post = snapshot.data!.elementAt(index);
               return PostWidget(
                 post,
-                expand: index == 0,
+                expanded: index == 0,
               );
             },
             separatorBuilder: (_, __) => const Divider(height: 1),
@@ -138,7 +118,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         } else if (snapshot.hasError) {
           return Column(
             children: [
-              PostWidget(widget.post, expand: true),
+              PostWidget(widget.post, expanded: true),
               _buildErrorListTile(context, snapshot),
             ],
           );

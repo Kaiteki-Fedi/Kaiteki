@@ -17,6 +17,8 @@ class InteractionBar extends StatefulWidget {
     required this.buildActions,
     this.onShowFavoritees,
     this.onShowRepeatees,
+    this.showLabels = true,
+    this.spread = false,
   });
 
   final PostMetrics metrics;
@@ -30,7 +32,8 @@ class InteractionBar extends StatefulWidget {
   final VoidCallback? onShowRepeatees;
 
   final bool? repeated;
-
+  final bool showLabels;
+  final bool spread;
   final VoidCallback? onReact;
   final bool? reacted;
   final List<PopupMenuEntry> Function(BuildContext) buildActions;
@@ -52,6 +55,7 @@ class InteractionBarState extends State<InteractionBar> {
         focusNode: FocusNode(skipTraversal: true),
         icon: const Icon(Icons.reply_rounded),
         onTap: widget.onReply,
+        showNumber: widget.showLabels,
       ),
       if (widget.repeated != null)
         CountButton(
@@ -62,39 +66,52 @@ class InteractionBarState extends State<InteractionBar> {
           icon: const Icon(Icons.repeat_rounded),
           onTap: widget.onRepeat,
           onLongPress: widget.onShowRepeatees,
+          showNumber: widget.showLabels,
         ),
       if (widget.favorited != null)
         CountButton(
           active: widget.favorited ?? false,
           activeColor: Theme.of(context).ktkColors?.favoriteColor,
           activeIcon: const Icon(Icons.star_rounded),
-          count: widget.metrics.likeCount,
+          count: widget.metrics.favoriteCount,
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.star_border_rounded),
           onTap: widget.onFavorite,
           onLongPress: widget.onShowFavoritees,
+          showNumber: widget.showLabels,
         ),
       if (widget.reacted != null)
         CountButton(
           focusNode: FocusNode(skipTraversal: true),
           icon: const Icon(Icons.mood_rounded),
           onTap: widget.onReact,
+          showNumber: widget.showLabels,
         ),
       PopupMenuButton(
         key: _popupMenuButtonKey,
         icon: const Icon(Icons.more_horiz),
         itemBuilder: widget.buildActions,
         splashRadius: 24,
+        color: Theme.of(context).colorScheme.outline,
       ),
     ];
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 400),
-      child: Row(
-        children: [
-          for (final button in buttons) Flexible(child: button),
-        ],
-      ),
-    );
+    return widget.spread
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: buttons,
+          )
+        : ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Row(
+              children: [
+                for (final button in buttons)
+                  if (button is CountButton)
+                    Flexible(child: button)
+                  else
+                    button,
+              ],
+            ),
+          );
   }
 }
