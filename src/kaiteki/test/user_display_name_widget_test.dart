@@ -12,7 +12,7 @@ void main() {
     );
 
     final content = DisplayNameTuple.fromUser(user);
-    expect(content.secondary, equals("alice@example.org"));
+    expect(content.secondary, equals("@alice@example.org"));
     expect(content.separate, isTrue);
   });
 
