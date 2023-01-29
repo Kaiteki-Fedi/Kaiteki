@@ -1,7 +1,7 @@
 enum AppExperiment {
   remoteUserFetching(
     "Fetch users from remote instances",
-    "Allows querying the remote instance for user details, bypassing how up-to-date the current instance is.",
+    "Allows querying the remote instance for user details",
   ),
   timelineViews("Timeline views"),
   denseReactions(

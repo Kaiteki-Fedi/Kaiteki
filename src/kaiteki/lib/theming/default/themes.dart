@@ -32,6 +32,7 @@ extension ThemeDataExtensions on ThemeData {
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: colorScheme.secondaryContainer,
         foregroundColor: colorScheme.onSecondaryContainer,
+        extendedTextStyle: textTheme.labelLarge,
       ),
       snackBarTheme: const SnackBarThemeData(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),

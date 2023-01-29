@@ -49,7 +49,7 @@ class ExceptionDialog extends StatelessWidget {
             for (var detail in details.entries)
               ListTile(
                 title: Text(detail.key),
-                subtitle: Text(detail.value),
+                subtitle: SelectableText(detail.value),
                 contentPadding: EdgeInsets.zero,
               ),
             const Divider(height: 17),
@@ -104,10 +104,7 @@ class ExceptionDialog extends StatelessWidget {
   }
 
   Future<void> onReportIssue() async {
-    await launchUrl(
-      generateIssueUrlForm(),
-      mode: LaunchMode.externalApplication,
-    );
+    await launchUrl(generateIssueUrlForm());
   }
 
   Uri generateIssueUrlPlain() {

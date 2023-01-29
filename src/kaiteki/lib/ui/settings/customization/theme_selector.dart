@@ -21,6 +21,8 @@ class ThemeSelector extends StatelessWidget {
     final defaultDarkTheme = getDefaultTheme(Brightness.dark, m3);
     final defaultLightTheme = getDefaultTheme(Brightness.dark, m3);
     return Wrap(
+      runSpacing: 8.0,
+      spacing: 8.0,
       children: [
         ThemePreview(
           name: _themeToString(context, ThemeMode.system),

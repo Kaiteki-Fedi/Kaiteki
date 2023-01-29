@@ -17,7 +17,7 @@ class ThemePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final borderRadius = BorderRadius.circular(8.0);
+    final borderRadius = BorderRadius.circular(4.0);
 
     final selectedDecoration = BoxDecoration(
       border: Border.all(
@@ -27,13 +27,15 @@ class ThemePreview extends StatelessWidget {
       borderRadius: borderRadius,
     );
 
+    final useMaterial3 = Theme.of(context).useMaterial3;
     return Tooltip(
       message: name,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
+        margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
-        elevation: 4,
-        color: colorScheme.surface,
+        elevation: useMaterial3 ? 0.0 : null,
+        color: useMaterial3 ? colorScheme.surfaceVariant : colorScheme.surface,
         child: InkWell(
           onTap: onTap,
           child: DecoratedBox(

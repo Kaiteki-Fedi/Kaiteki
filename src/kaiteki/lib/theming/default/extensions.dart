@@ -15,6 +15,9 @@ extension ThemeDataExtensions on ThemeData {
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        extendedTextStyle: textTheme.labelLarge ?? const TextStyle(),
+      ),
       dividerTheme: dividerTheme.copyWith(space: 1, thickness: 1),
       tabBarTheme: TabBarTheme(
         indicator: RoundedUnderlineTabIndicator(

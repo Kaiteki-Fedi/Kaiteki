@@ -1,25 +1,25 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/ui/settings/section_header.dart";
+import "package:kaiteki/ui/settings/settings_container.dart";
+import "package:kaiteki/ui/settings/settings_section.dart";
 
 class ThemeScreen extends StatelessWidget {
   const ThemeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const padding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0);
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(title: const Text("Theme")),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const ListTile(title: Text("Material colors")),
-            Card(
-              margin: padding,
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: SettingsContainer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SettingsSection(
+                title: const SectionHeader("Material colors"),
+                divideChildren: false,
                 children: [
                   _ColorPatch(
                     "Background",
@@ -118,33 +118,37 @@ class ThemeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            const ListTile(title: Text("Custom Kaiteki colors")),
-            ListTile(
-              leading: Icon(
-                Icons.star_rounded,
-                color: Theme.of(context).ktkColors?.favoriteColor,
-                size: 24,
+              SettingsSection(
+                title: const SectionHeader("Kaiteki colors"),
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.star_rounded,
+                      color: Theme.of(context).ktkColors?.favoriteColor,
+                      size: 24,
+                    ),
+                    title: const Text("Favorite"),
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.repeat_rounded,
+                      color: Theme.of(context).ktkColors?.repeatColor,
+                      size: 24,
+                    ),
+                    title: const Text("Repeat"),
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.bookmark_rounded,
+                      color: Theme.of(context).ktkColors?.bookmarkColor,
+                      size: 24,
+                    ),
+                    title: const Text("Bookmark"),
+                  ),
+                ],
               ),
-              title: const Text("Favorite"),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.repeat_rounded,
-                color: Theme.of(context).ktkColors?.repeatColor,
-                size: 24,
-              ),
-              title: const Text("Repeat"),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.bookmark_rounded,
-                color: Theme.of(context).ktkColors?.bookmarkColor,
-                size: 24,
-              ),
-              title: const Text("Bookmark"),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
