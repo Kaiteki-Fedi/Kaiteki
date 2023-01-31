@@ -28,10 +28,7 @@ dependencies:
   copy_with_extension: ^5.0.0
   crypto: ^3.0.1
   device_info_plus: ^8.0.0
-  dynamic_color:
-    git:
-      url: https://github.com/Craftplacer/material-dynamic-color-flutter.git
-      ref: android-accent-color
+  dynamic_color: ^1.6.0
   equatable: ^2.0.5
   fediverse_objects:
     git: https://github.com/Kaiteki-Fedi/fediverse_objects.git
