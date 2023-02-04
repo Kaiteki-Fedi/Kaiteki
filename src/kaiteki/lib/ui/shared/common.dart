@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 
+export "package:kaiteki/common.dart";
+
 const centeredCircularProgressIndicator = Center(
   child: CircularProgressIndicator(),
 );
