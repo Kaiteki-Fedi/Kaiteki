@@ -29,13 +29,21 @@ class UserDisplayNameWidget extends ConsumerWidget {
           style: primaryTextStyle,
         )
       else
-        Text(user.username, style: primaryTextStyle),
+        Text(
+          user.username,
+          style: primaryTextStyle,
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
+        ),
       SizedBox(width: textSpacing),
       if (content.secondary != null)
         Text(
           content.secondary!,
           style: TextStyle(color: Theme.of(context).disabledColor),
           overflow: TextOverflow.fade,
+          maxLines: 1,
+          softWrap: false,
         ),
     ]);
   }
