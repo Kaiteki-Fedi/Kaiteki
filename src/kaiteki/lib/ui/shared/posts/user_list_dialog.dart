@@ -118,6 +118,7 @@ class UserListTile extends ConsumerWidget {
                     ),
                   ),
                   Expanded(child: UserDisplayNameWidget(user)),
+                  if (trailing.isNotEmpty) const SizedBox(width: 8),
                   ...trailing,
                 ],
               ),
