@@ -7,7 +7,7 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/text/elements.dart";
 import "package:kaiteki/utils/text/parsers.dart";
 
-typedef HtmlElementConstructor = List<Element> Function(
+typedef HtmlElementConstructor = List<Element>? Function(
   dom.Element element,
   List<Element> subElements,
 );
@@ -47,7 +47,11 @@ class HtmlTextParser implements TextParser {
       final tag = node.localName!.toLowerCase();
       final constructor = htmlConstructors[tag];
       if (constructor != null) {
-        return constructor.call(node, renderedSubNodes);
+        final rendered = constructor.call(node, renderedSubNodes);
+        if (rendered != null) return rendered;
+        _logger.w(
+          "Couldn't render HTML tag ($tag), returning it as TextElement.",
+        );
       } else {
         _logger.w("Unhandled HTML tag ($tag), returning it as TextElement.");
       }
@@ -65,11 +69,13 @@ class HtmlTextParser implements TextParser {
 
   Element? renderNodeOverride(dom.Node node) => null;
 
-  static List<Element> _renderLink(
+  static List<Element>? _renderLink(
     dom.Element element,
     List<Element> subElements,
   ) {
-    final uri = Uri.parse(element.attributes["href"]!);
+    final href = element.attributes["href"];
+    if (href == null) return null;
+    final uri = Uri.parse(href);
     return [LinkElement(uri, children: subElements)];
   }
 
