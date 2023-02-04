@@ -1,0 +1,1 @@
+<p><i>Kaiteki</i> 是一个跨平台的社交网站客户端。它目前支持Mastodon、Pleroma、Misskey和Twitter。未来的后端可能会跟进。</p>

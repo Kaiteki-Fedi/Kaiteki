@@ -1,0 +1,11 @@
+enhancement:
+  - 'Feature request'
+    
+api:misskey:
+  - 'misskey'
+    
+api:pleroma:
+  - 'pleroma'
+    
+api:mastodon:
+  - 'mastodon'
