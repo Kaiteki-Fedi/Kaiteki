@@ -37,7 +37,7 @@ class UserSliverState extends ConsumerState<UserSliver> {
 
   late ProviderSubscription<BackendAdapter> _subscription;
 
-  Future<Pagination<String?, User>> Function(String?) get _source {
+  Future<PaginatedList<String?, User>> Function(String?) get _source {
     final adapter = _subscription.read();
 
     if (widget.showFollowing) {

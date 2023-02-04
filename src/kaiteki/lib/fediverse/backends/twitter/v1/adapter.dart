@@ -229,7 +229,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   Instance get instance => const Instance(name: "Twitter");
 
   @override
-  Future<Pagination<String?, User>> getFollowers(
+  Future<PaginatedList<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -237,10 +237,16 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<Pagination<String?, User>> getFollowing(
+  Future<PaginatedList<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,
   }) =>
       throw UnimplementedError();
+
+  @override
+  Future<void> deleteAccount(String password) {
+    // TODO: implement deleteAccount
+    throw UnimplementedError();
+  }
 }

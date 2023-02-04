@@ -11,6 +11,8 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/routing/notifier.dart";
+import "package:kaiteki/ui/account/mute_screen.dart";
+import "package:kaiteki/ui/account/settings_screen.dart";
 import "package:kaiteki/ui/account_required_screen.dart";
 import "package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
@@ -273,6 +275,18 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                         ),
                       );
                     },
+                  ),
+                ],
+              ),
+              GoRoute(
+                name: "accountSettings",
+                path: "settings",
+                builder: (_, __) => const AccountSettingsScreen(),
+                routes: [
+                  GoRoute(
+                    name: "accountMutes",
+                    path: "mutes",
+                    builder: (_, __) => const MutesScreen(),
                   ),
                 ],
               ),

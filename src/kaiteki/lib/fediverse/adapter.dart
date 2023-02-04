@@ -86,13 +86,16 @@ abstract class BackendAdapter {
 
   Future<List<User>> getRepeatees(String id);
 
-  Future<Pagination<String?, User>> getFollowers(
+  /// Deletes the user's account.
+  Future<void> deleteAccount(String password);
+
+  Future<PaginatedList<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
   });
 
-  Future<Pagination<String?, User>> getFollowing(
+  Future<PaginatedList<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,

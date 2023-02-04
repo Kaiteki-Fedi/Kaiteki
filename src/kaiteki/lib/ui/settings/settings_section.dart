@@ -30,6 +30,7 @@ class SettingsSection extends StatelessWidget {
           : this.children,
     );
 
+    const margin = EdgeInsets.all(16.0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -40,15 +41,12 @@ class SettingsSection extends StatelessWidget {
           ),
         if (useCard)
           Card(
-            margin: const EdgeInsets.all(16.0),
+            margin: margin,
             clipBehavior: Clip.antiAlias,
             child: children,
           )
         else
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: children,
-          ),
+          Padding(padding: margin, child: children),
       ],
     );
   }

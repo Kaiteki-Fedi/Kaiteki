@@ -135,6 +135,11 @@ class PleromaAdapter //
   PleromaCapabilities get capabilities => const PleromaCapabilities();
 
   @override
+  Future<void> deleteAccount(String password) async {
+    await client.deleteAccount(password);
+  }
+
+  @override
   Future<void> markAllNotificationsAsRead() async {
     final notifications = await client.getNotifications();
     final lastNotification = notifications.firstOrNull;
@@ -149,39 +154,5 @@ class PleromaAdapter //
   Future<void> markNotificationAsRead(Notification notification) {
     // TODO(Craftplacer): implement markNotificationAsRead
     throw UnimplementedError();
-  }
-
-  @override
-  Future<Pagination<String?, User>> getFollowers(
-    String userId, {
-    String? sinceId,
-    String? untilId,
-  }) async {
-    final accounts = await client.getAccountFollowersPleroma(
-      userId,
-      maxId: untilId,
-    );
-    return Pagination(
-      accounts.map((e) => toUser(e, instance)).toList(),
-      null,
-      accounts.lastOrNull?.id,
-    );
-  }
-
-  @override
-  Future<Pagination<String?, User>> getFollowing(
-    String userId, {
-    String? sinceId,
-    String? untilId,
-  }) async {
-    final accounts = await client.getAccountFollowingPleroma(
-      userId,
-      maxId: untilId,
-    );
-    return Pagination(
-      accounts.map((e) => toUser(e, instance)).toList(),
-      null,
-      accounts.lastOrNull?.id,
-    );
   }
 }

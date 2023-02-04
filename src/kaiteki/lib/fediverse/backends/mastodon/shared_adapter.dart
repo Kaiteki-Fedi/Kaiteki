@@ -14,6 +14,7 @@ import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
 import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
 import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
 import "package:kaiteki/fediverse/interfaces/list_support.dart";
+import "package:kaiteki/fediverse/interfaces/mute_support.dart";
 import "package:kaiteki/fediverse/interfaces/notification_support.dart";
 import "package:kaiteki/fediverse/interfaces/search_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
@@ -42,7 +43,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         BookmarkSupport,
         NotificationSupport,
         SearchSupport,
-        ListSupport {
+        ListSupport,
+        MuteSupport {
   final T client;
 
   SharedMastodonAdapter(this.client);
@@ -473,7 +475,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Pagination<String?, User>> getFollowers(
+  Future<PaginatedList<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -481,24 +483,51 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     final pagination = await client.getAccountFollowers(
       userId,
     );
-    return Pagination(
+    return PaginatedList(
       pagination.data.map((e) => toUser(e, instance)).toList(),
-      null,
-      pagination.next?.queryParameters["max_id"],
+      pagination.previousParams?["since_id"],
+      pagination.nextParams?["max_id"],
     );
   }
 
   @override
-  Future<Pagination<String?, User>> getFollowing(
+  Future<PaginatedList<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,
   }) async {
     final pagination = await client.getAccountFollowing(userId);
-    return Pagination(
+    return PaginatedList(
       pagination.data.map((e) => toUser(e, instance)).toList(),
-      null,
-      pagination.next?.queryParameters["max_id"],
+      pagination.previousParams?["since_id"],
+      pagination.nextParams?["max_id"],
     );
+  }
+
+  @override
+  Future<PaginatedSet<String, User>> getMutedUsers({
+    String? previousId,
+    String? nextId,
+  }) async {
+    final pagination = await client.getMutedAccounts(
+      sinceId: previousId,
+      maxId: nextId,
+    );
+
+    return PaginatedSet(
+      pagination.data.map((e) => toUser(e, instance)).toSet(),
+      pagination.previousParams?["since_id"],
+      pagination.nextParams?["max_id"],
+    );
+  }
+
+  @override
+  Future<void> muteUser(String userId) async {
+    await client.muteAccount(userId);
+  }
+
+  @override
+  Future<void> unmuteUser(String userId) async {
+    await client.unmuteAccount(userId);
   }
 }

@@ -118,7 +118,7 @@ class DummyAdapter extends BackendAdapter {
   ) {}
 
   @override
-  Future<Pagination<String?, User>> getFollowers(
+  Future<PaginatedList<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -126,12 +126,18 @@ class DummyAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<Pagination<String?, User>> getFollowing(
+  Future<PaginatedList<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,
   }) =>
       throw UnimplementedError();
+
+  @override
+  Future<void> deleteAccount(String password) {
+    // TODO: implement deleteAccount
+    throw UnimplementedError();
+  }
 }
 
 class DummyAdapterCapability extends AdapterCapabilities {

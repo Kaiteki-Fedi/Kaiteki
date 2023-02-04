@@ -1,7 +1,7 @@
 class MastodonPagination<T> {
   final T data;
-  final Uri? next;
-  final Uri? previous;
+  final Map<String, String>? previousParams;
+  final Map<String, String>? nextParams;
 
-  const MastodonPagination(this.data, this.next, this.previous);
+  const MastodonPagination(this.data, this.previousParams, this.nextParams);
 }

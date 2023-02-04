@@ -579,7 +579,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Pagination<String?, User>> getFollowers(
+  Future<PaginatedList<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -589,7 +589,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       sinceId: sinceId,
       untilId: untilId,
     );
-    return Pagination(
+    return PaginatedList(
       users.map((e) => toUser(e.follower!, instance)).toList(),
       null,
       users.last.followerId,
@@ -597,7 +597,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Pagination<String?, User>> getFollowing(
+  Future<PaginatedList<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -607,7 +607,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       sinceId: sinceId,
       untilId: untilId,
     );
-    return Pagination(
+    return PaginatedList(
       users.map((e) => toUser(e.followee!, instance)).toList(),
       null,
       users.last.followeeId,
@@ -618,5 +618,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   Future<Post> translatePost(Post post, String targetLanguage) async {
     final response = await client.translateNote(post.id, targetLanguage);
     return post.copyWith(content: response.text);
+  }
+
+  @override
+  Future<void> deleteAccount(String password) {
+    // TODO(Craftplacer): implement deleteAccount
+    throw UnimplementedError();
   }
 }

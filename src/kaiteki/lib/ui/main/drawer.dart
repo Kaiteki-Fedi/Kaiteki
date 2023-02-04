@@ -78,8 +78,10 @@ class MainScreenDrawer extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.manage_accounts_rounded),
                 title: Text(l10n.accountSettingsTitle),
-                // onTap: () => context.push("/$handle/settings"),
-                enabled: false,
+                onTap: () => context.pushNamed(
+                  "accountSettings",
+                  params: ref.accountRouterParams,
+                ),
               ),
               const Divider(),
               ListTile(

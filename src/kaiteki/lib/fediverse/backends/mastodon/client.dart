@@ -1,5 +1,6 @@
 import "dart:convert";
 
+import "package:collection/collection.dart";
 import "package:fediverse_objects/mastodon.dart" hide List;
 import "package:fediverse_objects/mastodon.dart" as mastodon show List;
 import "package:http/http.dart" show Response;
@@ -484,17 +485,8 @@ class MastodonClient {
     );
 
     final accounts = Account.fromJson.fromResponseList(response);
-    final links = parseLinkHeader(response.headers["Link"]!);
-
-    final previous = links.firstWhere(
-      (element) => element.parameters["rel"] == '"prev"',
-    );
-
-    final next = links.firstWhere(
-      (element) => element.parameters["rel"] == '"next"',
-    );
-
-    return MastodonPagination(accounts, previous.reference, next.reference);
+    final linkHeader = response.headers["Link"];
+    return _createPagination(accounts, linkHeader);
   }
 
   Future<MastodonPagination<List<Account>>> getAccountFollowers(
@@ -515,16 +507,50 @@ class MastodonClient {
 
     final accounts = Account.fromJson.fromResponseList(response);
     final linkHeader = response.headers["Link"];
+    return _createPagination(accounts, linkHeader);
+  }
+
+  MastodonPagination<List<T>> _createPagination<T>(
+    List<T> data,
+    String? linkHeader,
+  ) {
     final links = linkHeader.nullTransform(parseLinkHeader);
 
-    final previous = links?.firstWhere(
-      (element) => element.parameters["rel"] == '"prev"',
-    );
+    final previousParams = links
+        ?.firstWhereOrNull((element) => element.parameters["rel"] == '"prev"')
+        ?.reference
+        .queryParameters;
 
-    final next = links?.firstWhere(
-      (element) => element.parameters["rel"] == '"next"',
-    );
+    final nextParams = links
+        ?.firstWhereOrNull((element) => element.parameters["rel"] == '"next"')
+        ?.reference
+        .queryParameters;
 
-    return MastodonPagination(accounts, previous?.reference, next?.reference);
+    return MastodonPagination(data, previousParams, nextParams);
   }
+
+  Future<MastodonPagination<List<Account>>> getMutedAccounts({
+    String? maxId,
+    String? sinceId,
+    String? minId,
+  }) async {
+    final response = await client.sendRequest(
+      HttpMethod.get,
+      "api/v1/mutes",
+      query: {
+        if (maxId != null) "max_id": maxId,
+        if (sinceId != null) "since_id": sinceId,
+        if (minId != null) "min_id": minId,
+      },
+    );
+    final accounts = Account.fromJson.fromResponseList(response);
+    final linkHeader = response.headers["link"];
+    return _createPagination(accounts, linkHeader);
+  }
+
+  Future<void> muteAccount(String id) async =>
+      client.sendRequest(HttpMethod.post, "api/v1/accounts/$id/mute");
+
+  Future<void> unmuteAccount(String id) async =>
+      client.sendRequest(HttpMethod.post, "api/v1/accounts/$id/unmute");
 }

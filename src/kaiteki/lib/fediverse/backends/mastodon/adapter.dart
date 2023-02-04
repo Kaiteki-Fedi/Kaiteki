@@ -30,6 +30,12 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
   }
 
   @override
+  Future<void> deleteAccount(String password) {
+    // TODO(Craftplacer): implement deleteAccount
+    throw UnimplementedError();
+  }
+
+  @override
   Future<void> markAllNotificationsAsRead() async {
     throw UnimplementedError();
   }

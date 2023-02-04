@@ -104,7 +104,7 @@ class TimelineAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<Pagination<String?, User>> getFollowers(
+  Future<PaginatedList<String?, User>> getFollowers(
     String userId, {
     String? sinceId,
     String? untilId,
@@ -112,12 +112,18 @@ class TimelineAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<Pagination<String?, User>> getFollowing(
+  Future<PaginatedList<String?, User>> getFollowing(
     String userId, {
     String? sinceId,
     String? untilId,
   }) =>
       throw UnimplementedError();
+
+  @override
+  Future<void> deleteAccount(String password) {
+    // TODO: implement deleteAccount
+    throw UnimplementedError();
+  }
 }
 
 class TimelineAdapterCapabilities extends AdapterCapabilities {
