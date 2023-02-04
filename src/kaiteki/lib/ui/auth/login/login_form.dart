@@ -157,7 +157,7 @@ class LoginFormState extends ConsumerState<LoginForm> {
           final canLaunch = await canLaunchUrl(generatedUrl);
           if (!canLaunch) throw Exception("Invalid URL");
 
-          await launchUrl(generatedUrl);
+          await launchUrl(generatedUrl, mode: LaunchMode.externalApplication);
           setState(() => _oAuth = cancel);
         },
         successPage,
