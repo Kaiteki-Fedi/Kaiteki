@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/layout/form_widget.dart";
-import "package:kaiteki/utils/extensions/m3.dart";
 
 class AccountRequiredScreen extends StatelessWidget {
   const AccountRequiredScreen({super.key});
@@ -22,18 +21,16 @@ class AccountRequiredScreen extends StatelessWidget {
               Text(l10n.accountRequiredToContinue),
               Expanded(
                 child: Center(
-                  child: ElevatedButton.icon(
+                  child: FilledButton.icon(
                     icon: const Icon(Icons.person_add_rounded),
                     label: Text(l10n.addAccountButtonLabel),
-                    style: Theme.of(context).filledButtonStyle.copyWith(
-                          visualDensity: VisualDensity.comfortable,
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 28,
-                            ),
-                          ),
-                        ),
+                    style: FilledButton.styleFrom(
+                      visualDensity: VisualDensity.comfortable,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 14,
+                        horizontal: 28,
+                      ),
+                    ),
                     onPressed: () => context.pushNamed("login"),
                   ),
                 ),

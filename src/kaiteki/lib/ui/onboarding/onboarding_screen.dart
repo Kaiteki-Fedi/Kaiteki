@@ -6,7 +6,6 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/onboarding/benefits.dart";
 import "package:kaiteki/ui/onboarding/self_select_screen.dart";
-import "package:kaiteki/utils/extensions/m3.dart";
 import "package:page_view_dot_indicator/page_view_dot_indicator.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -119,9 +118,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     closedShape: const StadiumBorder(),
                     closedColor:
                         Theme.of(context).colorScheme.secondaryContainer,
-                    closedBuilder: (_, callback) => ElevatedButton(
+                    closedBuilder: (_, callback) => FilledButton.tonal(
                       onPressed: callback,
-                      style: Theme.of(context).filledTonalButtonStyle,
                       child: const Text("Get started"),
                     ),
                     openBuilder: (_, action) => const SelfSelectScreen(),
@@ -186,9 +184,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 transitionDuration: const Duration(milliseconds: 600),
                 closedShape: const StadiumBorder(),
                 closedColor: Theme.of(context).colorScheme.secondaryContainer,
-                closedBuilder: (_, callback) => ElevatedButton(
+                closedBuilder: (_, callback) => FilledButton.tonal(
                   onPressed: callback,
-                  style: Theme.of(context).filledTonalButtonStyle,
                   child: const Text("Get started"),
                 ),
                 openBuilder: (_, action) => const SelfSelectScreen(),

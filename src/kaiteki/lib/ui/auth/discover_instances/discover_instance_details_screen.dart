@@ -93,15 +93,15 @@ class DiscoverInstanceDetailsScreen extends ConsumerWidget {
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   children: [
-                    ElevatedButton(
+                    FilledButton(
                       onPressed: () {
                         Navigator.of(context).pop(
                           DiscoverInstanceScreenResult(data.host, false),
                         );
                       },
-                      style: Theme.of(context).filledButtonStyle.copyWith(
-                            visualDensity: VisualDensity.comfortable,
-                          ),
+                      style: FilledButton.styleFrom(
+                        visualDensity: VisualDensity.comfortable,
+                      ),
                       child: Text(l10n.loginButtonLabel),
                     ),
                   ],

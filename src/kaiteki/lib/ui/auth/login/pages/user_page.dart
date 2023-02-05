@@ -9,7 +9,6 @@ import "package:kaiteki/ui/auth/login/login_form.dart";
 import "package:kaiteki/ui/shared/async/async_block_widget.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_message.dart";
-import "package:kaiteki/utils/extensions.dart";
 
 const _instanceIconSize = 96.0;
 
@@ -88,11 +87,8 @@ class _UserPageState extends State<UserPage> {
                           ),
                         ),
                         const Spacer(),
-                        ElevatedButton(
+                        FilledButton(
                           onPressed: _onLogin,
-                          style: Theme.of(context).filledButtonStyle.copyWith(
-                                visualDensity: VisualDensity.comfortable,
-                              ),
                           child: Text(l10n.loginButtonLabel),
                         ),
                       ],

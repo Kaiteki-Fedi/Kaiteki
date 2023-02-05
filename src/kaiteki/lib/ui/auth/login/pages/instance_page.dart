@@ -6,7 +6,6 @@ import "package:kaiteki/ui/auth/discover_instances/discover_instance_screen_resu
 import "package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart";
 import "package:kaiteki/ui/auth/login/constants.dart";
 import "package:kaiteki/ui/auth/login/login_form.dart";
-import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/lower_case_text_formatter.dart";
 
 class InstancePage extends StatefulWidget {
@@ -106,11 +105,11 @@ class _InstancePageState extends State<InstancePage> {
                         ),
                         child: Text(l10n.registerButtonLabel),
                       ),
-                    ElevatedButton(
+                    FilledButton(
                       onPressed: widget.enabled ? _onNext : null,
-                      style: Theme.of(context).filledButtonStyle.copyWith(
-                            visualDensity: VisualDensity.comfortable,
-                          ),
+                      style: FilledButton.styleFrom(
+                        visualDensity: VisualDensity.comfortable,
+                      ),
                       child: Text(l10n.nextButtonLabel),
                     ),
                   ],
