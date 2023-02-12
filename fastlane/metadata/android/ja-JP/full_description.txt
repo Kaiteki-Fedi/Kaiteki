@@ -1,0 +1,1 @@
+<p><i>Kaiteki</i> は、クロスプラットフォームのSNSクライアントです。現在、Mastodon、Pleroma、MisskeyとTwitter をサポートしていて、将来的に対応するバックエンドソフトの追加も視野に入れています。</p>
