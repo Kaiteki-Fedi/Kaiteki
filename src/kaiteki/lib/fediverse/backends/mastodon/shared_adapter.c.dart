@@ -4,7 +4,8 @@ final mastodonVisibilityRosetta = Rosetta(const {
   "public": Visibility.public,
   "unlisted": Visibility.unlisted,
   "private": Visibility.followersOnly,
-  "direct": Visibility.direct
+  "direct": Visibility.direct,
+  "local": Visibility.local,
 });
 
 final mastodonNotificationTypeRosetta = Rosetta(const {
@@ -200,7 +201,7 @@ User toUser(mastodon.Account source, String localHost) {
     postCount: source.statusesCount,
     host: _getHost(source.acct) ?? localHost,
     details: UserDetails(fields: _parseFields(source.fields)),
-    url: source.url,
+    url: source.url.nullTransform(Uri.parse),
     flags: UserFlags(
       isBot: source.bot ?? false,
       isModerator: source.pleroma?.isModerator ?? false,
