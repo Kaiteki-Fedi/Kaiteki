@@ -1,17 +1,19 @@
 enum Visibility {
-  /// This [Post] is federated to every instance.
+  /// This [Post] federates to every instance.
   public,
 
-  /// This [Post] is federated to every instance, but won't show up in public
-  /// timelines.
+  /// This [Post] is not visible in public timelines.
   unlisted,
 
-  /// This [Post] is federated only to followers of the author.
+  /// This [Post] is only visible to author's followers.
   followersOnly,
 
-  /// This [Post] is federated only to mentioned users.
+  /// This [Post] is only visible to mentioned users.
   direct,
 
-  /// This [Post] is visible to the author's circle.
+  /// This [Post] is only visible to the author's circle.
   circle,
+
+  /// This [Post] does not federate.
+  local,
 }

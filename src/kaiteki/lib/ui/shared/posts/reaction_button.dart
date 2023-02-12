@@ -79,7 +79,7 @@ class ReactionButton extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             EmojiWidget(
-              emoji: reaction.emoji,
+              reaction.emoji,
               size: emojiSize,
             ),
             const SizedBox(width: 3),

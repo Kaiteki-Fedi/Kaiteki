@@ -5,7 +5,7 @@ import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
-import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -250,15 +250,7 @@ InlineSpan renderEmoji(
 
   // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
   return WidgetSpan(
-    child: Builder(
-      builder: (context) {
-        final inheritedFontSize = getLocalFontSize(context);
-        return EmojiWidget(
-          emoji: emoji,
-          size: inheritedFontSize * (scale ?? 1.0),
-        );
-      },
-    ),
+    child: TextInheritedEmojiTheme(child: EmojiWidget(emoji)),
     baseline: TextBaseline.alphabetic,
     alignment: PlaceholderAlignment.middle,
   );

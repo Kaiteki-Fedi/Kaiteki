@@ -175,7 +175,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
                         children: [
                           TextField(
                             decoration: InputDecoration(
-                              hintText: l10n.composeSubjectHint,
+                                      hintText: l10n.composeContentWarningHint,
                               border: InputBorder.none,
                             ),
                             controller: _subjectController,

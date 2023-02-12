@@ -19,8 +19,8 @@ class ToggleSubjectButton extends StatelessWidget {
       isSelected: value,
       icon: const Icon(Icons.short_text_rounded),
       tooltip: value
-          ? l10n.subjectButtonLabelDisable
-          : l10n.subjectButtonLabelEnable,
+          ? l10n.contentWarningButtonLabelDisable
+          : l10n.contentWarningButtonLabelEnable,
     );
   }
 }

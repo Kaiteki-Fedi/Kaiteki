@@ -121,7 +121,7 @@ class DesktopUserHeader extends StatelessWidget {
         child: AvatarWidget(
           user!,
           size: null,
-          radius: borderRadius,
+          shape: RoundedRectangleBorder(borderRadius: borderRadius),
         ),
       ),
     );
