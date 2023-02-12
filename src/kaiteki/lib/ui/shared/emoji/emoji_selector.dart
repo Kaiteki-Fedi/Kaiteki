@@ -268,8 +268,9 @@ class _EmojiSelectorState extends State<EmojiSelector>
     assert(category.items.isNotEmpty, "Cannot display empty emoji category");
 
     return EmojiWidget(
-      emoji: category.items[0].emoji,
+      category.items[0].emoji,
       size: 24,
+      square: true,
     );
   }
 

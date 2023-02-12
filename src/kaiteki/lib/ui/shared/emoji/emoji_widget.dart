@@ -1,32 +1,48 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
+
+const _defaultEmojiSize = 24.0;
 
 /// A widget that displays an emoji.
 class EmojiWidget extends StatelessWidget {
   final Emoji emoji;
-  final double size;
+  final double? size;
+  final bool? square;
 
-  const EmojiWidget({
+  const EmojiWidget(
+    this.emoji, {
     super.key,
-    required this.emoji,
-    required this.size,
+    this.size,
+    this.square,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (emoji is CustomEmoji) return buildCustomEmoji(emoji as CustomEmoji);
+    final theme = Theme.of(context).extension<EmojiTheme>();
+    final size = this.size ?? theme?.size ?? _defaultEmojiSize;
 
-    if (emoji is UnicodeEmoji) return buildUnicodeEmoji(emoji as UnicodeEmoji);
+    if (emoji is CustomEmoji) {
+      return buildCustomEmoji(context, emoji as CustomEmoji);
+    }
 
-    throw UnimplementedError(
-      "There's no implementation for $emoji in EmojiWidget. Can't build.",
-    );
+    if (emoji is UnicodeEmoji) {
+      return buildUnicodeEmoji(context, emoji as UnicodeEmoji);
+    }
+
+    assert(true);
+
+    return PlaceholderEmoji(size: size);
   }
 
-  Widget buildCustomEmoji(CustomEmoji customEmoji) {
+  Widget buildCustomEmoji(BuildContext context, CustomEmoji customEmoji) {
+    final theme = Theme.of(context).extension<EmojiTheme>();
+    final square = this.square ?? theme?.square ?? true;
+    final size = this.size ?? theme?.size ?? _defaultEmojiSize;
+
     return Image.network(
       customEmoji.url.toString(),
-      width: size,
+      width: square ? size : null,
       height: size,
       fit: BoxFit.contain,
       // cacheHeight: size.toInt(),
@@ -38,11 +54,14 @@ class EmojiWidget extends StatelessWidget {
     );
   }
 
-  Widget buildUnicodeEmoji(UnicodeEmoji unicodeEmoji) {
+  Widget buildUnicodeEmoji(BuildContext context, UnicodeEmoji unicodeEmoji) {
     const textStyle = TextStyle(
       fontFamily: "Noto Color Emoji",
       fontFamilyFallback: ["Segoe UI Emoji"],
     );
+
+    final theme = Theme.of(context).extension<EmojiTheme>();
+    final size = this.size ?? theme!.size;
 
     return SizedBox(
       width: size,
@@ -60,31 +79,16 @@ class EmojiWidget extends StatelessWidget {
 class PlaceholderEmoji extends StatelessWidget {
   final double size;
 
-  const PlaceholderEmoji({super.key, required this.size});
+  const PlaceholderEmoji({required this.size, super.key});
 
   @override
   Widget build(BuildContext context) {
-    const padding = 0.0;
-    final finalSize = size - (padding * 2);
-
-    // return DecoratedBox(
-    //   decoration: BoxDecoration(
-    //     shape: BoxShape.circle,
-    //     color: Theme.of(context).disabledColor,
-    //   ),
-    //   child: SizedBox.square(dimension: size),
-    // );
-
-    return Padding(
-      // ignore: use_named_constants
-      padding: const EdgeInsets.all(padding),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6.0),
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(.125),
-        ),
-        child: SizedBox.square(dimension: finalSize),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6.0),
+        color: Theme.of(context).colorScheme.onSurface.withOpacity(.125),
       ),
+      child: SizedBox.square(dimension: size),
     );
   }
 }

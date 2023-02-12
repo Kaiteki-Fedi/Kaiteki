@@ -58,6 +58,7 @@ dependencies:
     git: https://github.com/Kaiteki-Fedi/kaiteki_material.git
   logger: ^1.0.0
   mdi: ^5.0.0-nullsafety.0
+  mek_data_class: ^1.0.0
   meta: ^1.8.0
   notified_preferences: ^2.0.0
   oauth1:

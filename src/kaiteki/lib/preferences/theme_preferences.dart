@@ -26,3 +26,21 @@ final useNaturalBadgeColors = createSettingProvider<bool>(
   initialValue: false,
   provider: sharedPreferencesProvider,
 );
+
+final squareEmojis = createSettingProvider<bool>(
+  key: "squareEmojis",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final emojiScale = createSettingProvider<double>(
+  key: "emojiScale",
+  initialValue: 1.5,
+  provider: sharedPreferencesProvider,
+);
+
+final avatarCornerRadius = createSettingProvider<double>(
+  key: "avatarCornerRadius",
+  initialValue: double.infinity,
+  provider: sharedPreferencesProvider,
+);

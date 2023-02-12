@@ -6,7 +6,7 @@ class AvatarWidget extends StatelessWidget {
   final User user;
   final double? size;
   final VoidCallback? onTap;
-  final BorderRadius? radius;
+  final ShapeBorder? shape;
   final FocusNode? focusNode;
 
   const AvatarWidget(
@@ -14,7 +14,7 @@ class AvatarWidget extends StatelessWidget {
     super.key,
     this.size = 48,
     this.onTap,
-    this.radius,
+    this.shape,
     this.focusNode,
   });
 
@@ -47,13 +47,13 @@ class AvatarWidget extends StatelessWidget {
       avatar = InkWell(onTap: onTap, focusNode: focusNode, child: avatar);
     }
 
-    final borderRadius = radius;
+    final shape = this.shape ??
+        Theme.of(context).extension<AvatarTheme>()?.shape ??
+        const CircleBorder();
     // ignore: join_return_with_assignment
     avatar = Material(
       clipBehavior: Clip.antiAlias,
-      shape: borderRadius == null
-          ? const CircleBorder()
-          : RoundedRectangleBorder(borderRadius: borderRadius),
+      shape: shape,
       color: Theme.of(context).colorScheme.surfaceVariant,
       child: avatar,
     );
@@ -107,6 +107,26 @@ class FallbackAvatar extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class AvatarTheme extends ThemeExtension<AvatarTheme> {
+  final ShapeBorder? shape;
+
+  const AvatarTheme({this.shape});
+
+  @override
+  AvatarTheme copyWith({ShapeBorder? shape}) {
+    return AvatarTheme(
+      shape: shape ?? this.shape,
+    );
+  }
+
+  @override
+  AvatarTheme lerp(covariant AvatarTheme? other, double t) {
+    return AvatarTheme(
+      shape: ShapeBorder.lerp(shape, other?.shape, t),
     );
   }
 }

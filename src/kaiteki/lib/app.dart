@@ -24,31 +24,15 @@ class KaitekiApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(preferences.themeMode).value;
-    final useMaterial3 = ref.watch(preferences.useMaterial3).value;
-    final useSystemColorScheme =
-        ref.watch(preferences.useSystemColorScheme).value;
-    final useNaturalBadgeColors =
-        ref.watch(preferences.useNaturalBadgeColors).value;
     final router = ref.watch(routerProvider);
     final locale = ref.watch(preferences.locale).value;
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        final darkTheme = _createTheme(
-          Brightness.dark,
-          darkDynamic,
-          useSystemScheme: useSystemColorScheme,
-          useMaterial3: useMaterial3,
-          useNaturalBadgeColors: useNaturalBadgeColors,
-        );
-
-        final lightTheme = _createTheme(
-          Brightness.light,
-          lightDynamic,
-          useSystemScheme: useSystemColorScheme,
-          useMaterial3: useMaterial3,
-          useNaturalBadgeColors: useNaturalBadgeColors,
-        );
+        final darkTheme =
+            _buildTheme(context, ref, Brightness.dark, darkDynamic);
+        final lightTheme =
+            _buildTheme(context, ref, Brightness.light, lightDynamic);
 
         return MaterialApp.router(
           darkTheme: darkTheme,
@@ -65,24 +49,55 @@ class KaitekiApp extends ConsumerWidget {
     );
   }
 
-  ThemeData _createTheme(
+  ThemeData _buildTheme(
+    BuildContext context,
+    WidgetRef ref,
     Brightness brightness,
-    ColorScheme? systemColorScheme, {
-    required bool useSystemScheme,
-    required bool useMaterial3,
-    required bool useNaturalBadgeColors,
-  }) {
+    ColorScheme? systemColorScheme,
+  ) {
     ColorScheme? colorScheme;
+    final useMaterial3 = ref.watch(preferences.useMaterial3).value;
+    final useSystemColorScheme =
+        ref.watch(preferences.useSystemColorScheme).value;
 
-    if (useSystemScheme) colorScheme = systemColorScheme;
+    if (useSystemColorScheme) colorScheme = systemColorScheme;
 
     colorScheme ??= getColorScheme(brightness, useMaterial3);
 
+    final avatarCornerRadius = ref.watch(preferences.avatarCornerRadius).value;
+    ShapeBorder avatarShape;
+
+    if (avatarCornerRadius <= 0) {
+      avatarShape = const Border();
+    } else if (avatarCornerRadius >= double.infinity) {
+      avatarShape = const CircleBorder();
+    } else {
+      avatarShape = RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(avatarCornerRadius),
+      );
+    }
+
     final theme =
         ThemeData.from(colorScheme: colorScheme, useMaterial3: useMaterial3)
-            .applyDefaultTweaks(useNaturalBadgeColors: useNaturalBadgeColors)
-            .addKaitekiExtensions()
+            .applyDefaultTweaks(
+              useNaturalBadgeColors:
+                  ref.watch(preferences.useNaturalBadgeColors).value,
+            )
+            .addKaitekiExtensions(
+              squareEmoji: ref.watch(preferences.squareEmojis).value,
+              avatarShape: avatarShape,
+            )
             .applyKaitekiTweaks();
+
+    // ignore: join_return_with_assignment
+    // theme = theme.copyWith(
+    //   snackBarTheme: MediaQuery.of(context).size.width >= 600
+    //       ? theme.snackBarTheme.copyWith(
+    //           width: 200,
+    //           behavior: SnackBarBehavior.floating,
+    //         )
+    //       : null,
+    // );
 
     return theme;
   }

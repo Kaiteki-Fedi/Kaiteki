@@ -3,6 +3,8 @@ import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/theming/kaiteki/post.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/theming/kaiteki/theme.dart";
+import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
 
 extension ThemeDataExtensions on ThemeData {
@@ -46,7 +48,10 @@ extension ThemeDataExtensions on ThemeData {
   }
 
   /// Adds Kaiteki-specific extensions to the theme.
-  ThemeData addKaitekiExtensions() {
+  ThemeData addKaitekiExtensions({
+    bool? squareEmoji,
+    ShapeBorder? avatarShape,
+  }) {
     return copyWith(
       extensions: [
         ...extensions.values,
@@ -54,6 +59,8 @@ extension ThemeDataExtensions on ThemeData {
         KaitekiColors.fromMaterialTheme(this),
         KaitekiTheme.fromMaterialTheme(this),
         KaitekiPostTheme.fallback,
+        EmojiTheme(square: squareEmoji ?? true),
+        AvatarTheme(shape: avatarShape ?? const CircleBorder()),
       ],
     );
   }

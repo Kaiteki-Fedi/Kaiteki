@@ -4,22 +4,23 @@ import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 
 class EmojiButton extends StatelessWidget {
   final Emoji emoji;
-  final double size;
+  final double? size;
+  final bool? square;
   final VoidCallback? onTap;
 
   const EmojiButton(
     this.emoji, {
     super.key,
-    required this.size,
+    this.size,
+    this.square,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: EmojiWidget(emoji: emoji, size: size),
+      icon: EmojiWidget(emoji, size: size, square: square),
       onPressed: onTap,
-      splashRadius: size * 0.75,
       iconSize: size,
     );
   }
