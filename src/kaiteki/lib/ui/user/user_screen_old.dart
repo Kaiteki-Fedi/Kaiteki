@@ -476,7 +476,9 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
       IconButton(
         tooltip: l10n.openInBrowserLabel,
         icon: const Icon(Icons.open_in_new_rounded),
-        onPressed: url == null ? null : () => context.launchUrl(url),
+        onPressed: url.nullTransform(
+          (url) => () => context.launchUrl(url.toString()),
+        ),
       ),
     ];
   }

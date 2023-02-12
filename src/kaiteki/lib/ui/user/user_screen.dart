@@ -96,7 +96,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                           PopupMenuItem(
                             onTap: () async {
                               final url = user?.url;
-                              if (url != null) await Share.share(url);
+                              if (url == null) return;
+                              await Share.share(url.toString());
                             },
                             enabled: user?.url != null,
                             child: const Text("Share"),
@@ -146,10 +147,10 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                   CustomSliverPersistentHeader(
                     child: Material(
                       color: Theme.of(context).colorScheme.surface,
-                      child: Column(
+                      child: const Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: const [
+                        children: [
                           TabBar(
                             //isScrollable: true,
                             tabs: [
