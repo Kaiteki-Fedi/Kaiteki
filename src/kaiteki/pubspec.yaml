@@ -55,7 +55,9 @@ dependencies:
   intl: ^0.17.0
   json_annotation: any
   kaiteki_material:
-    git: https://github.com/Kaiteki-Fedi/kaiteki_material.git
+    git:
+      url: https://github.com/Kaiteki-Fedi/kaiteki_material.git
+      ref: beta
   logger: ^1.0.0
   mdi: ^5.0.0-nullsafety.0
   mek_data_class: ^1.0.0
