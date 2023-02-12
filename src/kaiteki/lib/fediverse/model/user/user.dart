@@ -45,7 +45,7 @@ class User<T> extends AdaptedEntity<T> {
   final UserDetails details;
 
   /// External URL to the profile of this [User].
-  final String? url;
+  final Uri? url;
 
   final UserFlags? flags;
 

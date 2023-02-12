@@ -120,7 +120,7 @@ class PleromaAdapter //
       return null;
     }
 
-    final uri = Uri.https(host, "");
+    final uri = Uri.https(host);
     final relative = Uri.parse(input);
 
     if (!relative.isAbsolute) {

@@ -25,7 +25,11 @@ extension UserExtensions on twt.User {
         location: location,
         website: url,
       ),
-      url: "https://twitter.com/$username",
+      url: Uri(
+        scheme: "https",
+        host: "twitter.com",
+        pathSegments: [username],
+      ),
       followerCount: publicMetrics?.followersCount,
       followingCount: publicMetrics?.followingCount,
       postCount: publicMetrics?.tweetCount,
