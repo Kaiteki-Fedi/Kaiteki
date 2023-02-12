@@ -26,9 +26,9 @@ class FormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        if (orientation == Orientation.landscape) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (contentWidth <= constraints.maxWidth) {
           return Center(
             child: Card(
               clipBehavior: Clip.antiAlias,
