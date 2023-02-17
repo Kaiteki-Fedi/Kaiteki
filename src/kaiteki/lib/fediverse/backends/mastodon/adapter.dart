@@ -37,7 +37,9 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
 
   @override
   Future<void> markAllNotificationsAsRead() async {
-    throw UnimplementedError();
+    // HACK(Craftplacer): refetching latest notifcation will mark previously unfetched notifications as read as well
+    final latest = await client.getNotifications(limit: 1);
+    await client.setMarkerPosition(notifications: latest.first.id);
   }
 
   @override

@@ -254,9 +254,22 @@ class MastodonClient {
         .then(Status.fromJson.fromResponse);
   }
 
-  Future<List<Notification>> getNotifications() => client
-      .sendRequest(HttpMethod.get, "api/v1/notifications")
-      .then(Notification.fromJson.fromResponseList);
+  Future<List<Notification>> getNotifications({
+    String? maxId,
+    String? sinceId,
+    String? minId,
+    int? limit,
+  }) async =>
+      client.sendRequest(
+        HttpMethod.get,
+        "api/v1/notifications",
+        query: {
+          "max_id": maxId,
+          "since_id": sinceId,
+          "min_id": minId,
+          "limit": limit,
+        },
+      ).then(Notification.fromJson.fromResponseList);
 
   Future<ContextResponse> getStatusContext(String id) => client
       .sendRequest(HttpMethod.get, "api/v1/statuses/$id/context")
@@ -553,4 +566,17 @@ class MastodonClient {
 
   Future<void> unmuteAccount(String id) async =>
       client.sendRequest(HttpMethod.post, "api/v1/accounts/$id/unmute");
+
+  Future<MarkerResponse> setMarkerPosition({String? notifications}) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/markers",
+          body: {
+            if (notifications != null)
+              "notifications": {"last_read_id": notifications},
+          }.jsonBody,
+        )
+        .then(MarkerResponse.fromJson.fromResponse);
+  }
 }
