@@ -6,12 +6,13 @@ import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
 import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
 import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/text/parsers/html_text_parser.dart";
+import "package:kaiteki/text/parsers/md_text_parser.dart";
+import "package:kaiteki/text/parsers/mfm_text_parser.dart";
+import "package:kaiteki/text/parsers/social_text_parser.dart";
+import "package:kaiteki/text/parsers/text_parser.dart";
 import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
-import "package:kaiteki/utils/text/parsers/html_text_parser.dart";
-import "package:kaiteki/utils/text/parsers/mfm_text_parser.dart";
-import "package:kaiteki/utils/text/parsers/social_text_parser.dart";
-import "package:kaiteki/utils/text/parsers/text_parser.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 export "package:flutter_riverpod/flutter_riverpod.dart";
@@ -50,7 +51,7 @@ final textParserProvider = Provider<Set<TextParser>>(
     const socialTextParser = SocialTextParser();
     final adapter = ref.watch(adapterProvider);
     if (adapter is MisskeyAdapter) {
-      return const {MfmTextParser(), socialTextParser};
+      return const {MarkdownTextParser(), MfmTextParser(), socialTextParser};
     } else if (adapter is SharedMastodonAdapter) {
       return const {MastodonHtmlTextParser(), socialTextParser};
     } else {

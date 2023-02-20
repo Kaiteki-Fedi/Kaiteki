@@ -3,9 +3,9 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
 import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/utils/helpers.dart";
-import "package:kaiteki/utils/text/text_renderer.dart";
 
 Emoji? resolveEmoji(
   String input,
@@ -31,7 +31,7 @@ extension PostRenderExtensions on Post {
   InlineSpan renderContent(
     BuildContext context,
     WidgetRef ref, {
-    bool hideReplyee = false,
+    bool showReplyees = true,
   }) {
     final replyee = replyToUser?.data;
 
@@ -43,7 +43,7 @@ extension PostRenderExtensions on Post {
         emojiResolver: (e) => resolveEmoji(e, ref, author.host, emojis),
         users: mentionedUsers,
         excludedUsers: [
-          if (hideReplyee && replyee != null)
+          if (!showReplyees && replyee != null)
             UserReference.handle(replyee.username, replyee.host)
         ],
       ),

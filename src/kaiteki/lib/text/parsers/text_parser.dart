@@ -1,5 +1,5 @@
+import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki/utils/text/elements.dart";
 
 abstract class TextParser {
   List<Element> parse(String text, [List<Element>? children]);

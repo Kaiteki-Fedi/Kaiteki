@@ -1,6 +1,6 @@
-import "package:kaiteki/utils/text/elements.dart";
-import "package:kaiteki/utils/text/parsers/text_parser.dart";
-import "package:kaiteki/utils/text/text_renderer.dart";
+import "package:kaiteki/text/elements.dart";
+import "package:kaiteki/text/parsers/text_parser.dart";
+import "package:kaiteki/text/text_renderer.dart";
 
 class MfmTextParser implements TextParser {
   static final _mfmPattern = RegExp(r"\$\[(?:(\w+)(?:\.(.*?))?\s(.+?))\]");

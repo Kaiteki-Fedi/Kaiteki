@@ -44,8 +44,10 @@ class PostWidget extends ConsumerStatefulWidget {
   final bool showParentPost;
   final bool showActions;
   final bool wide;
-  final bool hideReplyee;
-  final bool hideAvatar;
+  final bool showReplyee;
+  final bool showAvatar;
+  final bool? showTime;
+  final bool? showVisibility;
   final bool expanded;
 
   /// onTap callback for content text
@@ -57,8 +59,10 @@ class PostWidget extends ConsumerStatefulWidget {
     this.showParentPost = true,
     this.showActions = true,
     this.wide = false,
-    this.hideReplyee = false,
-    this.hideAvatar = false,
+    this.showReplyee = true,
+    this.showAvatar = true,
+    this.showVisibility,
+    this.showTime,
     this.expanded = false,
     this.onTap,
   });
@@ -110,16 +114,16 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final children = [
       MetaBar(
         post: _post,
-        showAvatar: !widget.hideAvatar && wide,
-        showTime: !widget.expanded,
-        showVisibility: !widget.expanded,
+        showAvatar: widget.showAvatar && wide,
+        showTime: widget.showTime ?? !widget.expanded,
+        showVisibility: widget.showVisibility ?? !widget.expanded,
         twolineAuthor: widget.expanded,
       ),
       if (widget.showParentPost && _post.replyToUser != null)
         ReplyBar(post: _post),
       _PostContent(
         post: _translatedPost ?? _post,
-        hideReplyee: widget.hideReplyee,
+        showReplyee: widget.showReplyee,
         onTap: widget.onTap,
         style:
             widget.expanded ? Theme.of(context).textTheme.headlineSmall : null,
@@ -191,7 +195,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (!wide && !widget.hideAvatar) ...[
+                  if (!wide && widget.showAvatar) ...[
                   AvatarWidget(
                     _post.author,
                     onTap: () => context.showUser(_post.author, ref),
@@ -596,13 +600,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
 class _PostContent extends ConsumerStatefulWidget {
   final Post post;
-  final bool hideReplyee;
+  final bool showReplyee;
   final VoidCallback? onTap;
   final TextStyle? style;
 
   const _PostContent({
     required this.post,
-    required this.hideReplyee,
+    required this.showReplyee,
     this.onTap,
     this.style,
   });
@@ -669,7 +673,7 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
       renderedContent = post.renderContent(
         context,
         ref,
-        hideReplyee: widget.hideReplyee,
+        showReplyees: widget.showReplyee,
       );
     }
   }

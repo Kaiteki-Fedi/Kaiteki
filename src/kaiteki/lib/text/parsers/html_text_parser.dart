@@ -3,9 +3,9 @@ import "package:html/dom.dart" as dom;
 import "package:html/parser.dart" show parseFragment;
 import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/logger.dart";
+import "package:kaiteki/text/elements.dart";
+import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki/utils/text/elements.dart";
-import "package:kaiteki/utils/text/parsers.dart";
 
 typedef HtmlElementConstructor = List<Element>? Function(
   dom.Element element,
@@ -23,13 +23,15 @@ class HtmlTextParser implements TextParser {
 
   static const Map<String, HtmlElementConstructor> htmlConstructors = {
     "a": _renderLink,
-    "br": _renderBreakLine,
-    "pre": _renderCodeFont,
-    "code": _renderCodeFont,
-    "p": _renderParagraph,
-    "i": _renderItalic,
     "b": _renderBold,
+    "br": _renderBreakLine,
+    "code": _renderCodeFont,
+    "em": _renderItalic,
+    "i": _renderItalic,
+    "p": _renderParagraph,
+    "pre": _renderCodeFont,
     "span": _renderNoop,
+    "strong": _renderBold,
   };
 
   const HtmlTextParser();

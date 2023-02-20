@@ -11,12 +11,12 @@ import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/utils/utils.dart";
 import "package:tuple/tuple.dart";
 
+export "package:kaiteki/text/rendering_extensions.dart";
 export "package:kaiteki/utils/extensions/build_context.dart";
 export "package:kaiteki/utils/extensions/duration.dart";
 export "package:kaiteki/utils/extensions/enum.dart";
 export "package:kaiteki/utils/extensions/iterable.dart";
 export "package:kaiteki/utils/extensions/string.dart";
-export "package:kaiteki/utils/text/rendering_extensions.dart";
 
 extension ObjectExtensions<T> on T? {
   S? nullTransform<S>(S Function(T object) function) {
