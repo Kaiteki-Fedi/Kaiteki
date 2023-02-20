@@ -6,7 +6,7 @@ part of 'mutes.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+String _$mutesServiceHash() => r'f9f50d1f9e4830e1d6c54a89701e3b4d18f8fce4';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,21 +29,75 @@ class _SystemHash {
   }
 }
 
-String _$MutesServiceHash() => r'f9f50d1f9e4830e1d6c54a89701e3b4d18f8fce4';
+abstract class _$MutesService
+    extends BuildlessAsyncNotifier<PaginationState<User<dynamic>>> {
+  late final AccountKey key;
+
+  FutureOr<PaginationState<User<dynamic>>> build(
+    AccountKey key,
+  );
+}
+
+/// See also [MutesService].
+@ProviderFor(MutesService)
+const mutesServiceProvider = MutesServiceFamily();
+
+/// See also [MutesService].
+class MutesServiceFamily
+    extends Family<AsyncValue<PaginationState<User<dynamic>>>> {
+  /// See also [MutesService].
+  const MutesServiceFamily();
+
+  /// See also [MutesService].
+  MutesServiceProvider call(
+    AccountKey key,
+  ) {
+    return MutesServiceProvider(
+      key,
+    );
+  }
+
+  @override
+  MutesServiceProvider getProviderOverride(
+    covariant MutesServiceProvider provider,
+  ) {
+    return call(
+      provider.key,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'mutesServiceProvider';
+}
 
 /// See also [MutesService].
 class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
     PaginationState<User<dynamic>>> {
+  /// See also [MutesService].
   MutesServiceProvider(
     this.key,
-  ) : super(
+  ) : super.internal(
           () => MutesService()..key = key,
           from: mutesServiceProvider,
           name: r'mutesServiceProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$MutesServiceHash,
+                  : _$mutesServiceHash,
+          dependencies: MutesServiceFamily._dependencies,
+          allTransitiveDependencies:
+              MutesServiceFamily._allTransitiveDependencies,
         );
 
   final AccountKey key;
@@ -63,57 +117,11 @@ class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
 
   @override
   FutureOr<PaginationState<User<dynamic>>> runNotifierBuild(
-    covariant _$MutesService notifier,
+    covariant MutesService notifier,
   ) {
     return notifier.build(
       key,
     );
   }
 }
-
-typedef MutesServiceRef
-    = AsyncNotifierProviderRef<PaginationState<User<dynamic>>>;
-
-/// See also [MutesService].
-final mutesServiceProvider = MutesServiceFamily();
-
-class MutesServiceFamily
-    extends Family<AsyncValue<PaginationState<User<dynamic>>>> {
-  MutesServiceFamily();
-
-  MutesServiceProvider call(
-    AccountKey key,
-  ) {
-    return MutesServiceProvider(
-      key,
-    );
-  }
-
-  @override
-  AsyncNotifierProviderImpl<MutesService, PaginationState<User<dynamic>>>
-      getProviderOverride(
-    covariant MutesServiceProvider provider,
-  ) {
-    return call(
-      provider.key,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'mutesServiceProvider';
-}
-
-abstract class _$MutesService
-    extends BuildlessAsyncNotifier<PaginationState<User<dynamic>>> {
-  late final AccountKey key;
-
-  FutureOr<PaginationState<User<dynamic>>> build(
-    AccountKey key,
-  );
-}
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

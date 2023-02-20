@@ -192,7 +192,7 @@ Future<InstanceProbeResult?> _probeEndpoints(String host) async {
 }
 
 Future<bool> _checkInstanceAvailability(String instance) async {
-  final uri = Uri.https(instance, "");
+  final uri = Uri.https(instance);
 
   try {
     final response = await http.get(uri);

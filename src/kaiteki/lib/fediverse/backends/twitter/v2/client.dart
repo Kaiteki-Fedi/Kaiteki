@@ -1,7 +1,9 @@
 import "dart:async";
 import "dart:convert";
+import "dart:developer";
 
 import "package:http/http.dart" as http show Response;
+import "package:kaiteki/exceptions/http_exception.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/model/media.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/model/tweet.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/model/user.dart";
@@ -184,16 +186,26 @@ class TwitterClient {
   void _checkResponse(http.Response response) {
     if (response.isSuccessful) return;
 
-    JsonMap? json;
+    String? error;
+    String? description;
 
     try {
-      json = jsonDecode(response.body) as JsonMap;
-    } catch (_) {}
+      final json = jsonDecode(response.body) as JsonMap;
+      error = json["error"] as String;
+      description = json["error_description"] as String;
+    } catch (e, s) {
+      log(
+        "Error while parsing error response: ${response.body}",
+        name: "TwitterClient",
+        error: e,
+        stackTrace: s,
+      );
+    }
 
-    if (json != null) {
-      final error = json["error"] as String;
-      final errorDescription = json["error_description"] as String;
-      throw Exception("$error: $errorDescription");
+    if (error == null || description == null) {
+      throw HttpException.fromResponse(response);
+    } else {
+      throw Exception("$error: $description");
     }
   }
 

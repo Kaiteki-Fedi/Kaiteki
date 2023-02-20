@@ -6,7 +6,7 @@ part of 'emoji.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+String _$emojiServiceHash() => r'f49fb3422094cdee597f163a27acb60f264ce4db';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,21 +29,74 @@ class _SystemHash {
   }
 }
 
-String _$EmojiServiceHash() => r'f49fb3422094cdee597f163a27acb60f264ce4db';
+abstract class _$EmojiService
+    extends BuildlessAsyncNotifier<List<EmojiCategory>> {
+  late final AccountKey key;
+
+  FutureOr<List<EmojiCategory>> build(
+    AccountKey key,
+  );
+}
+
+/// See also [EmojiService].
+@ProviderFor(EmojiService)
+const emojiServiceProvider = EmojiServiceFamily();
+
+/// See also [EmojiService].
+class EmojiServiceFamily extends Family<AsyncValue<List<EmojiCategory>>> {
+  /// See also [EmojiService].
+  const EmojiServiceFamily();
+
+  /// See also [EmojiService].
+  EmojiServiceProvider call(
+    AccountKey key,
+  ) {
+    return EmojiServiceProvider(
+      key,
+    );
+  }
+
+  @override
+  EmojiServiceProvider getProviderOverride(
+    covariant EmojiServiceProvider provider,
+  ) {
+    return call(
+      provider.key,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'emojiServiceProvider';
+}
 
 /// See also [EmojiService].
 class EmojiServiceProvider
     extends AsyncNotifierProviderImpl<EmojiService, List<EmojiCategory>> {
+  /// See also [EmojiService].
   EmojiServiceProvider(
     this.key,
-  ) : super(
+  ) : super.internal(
           () => EmojiService()..key = key,
           from: emojiServiceProvider,
           name: r'emojiServiceProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$EmojiServiceHash,
+                  : _$emojiServiceHash,
+          dependencies: EmojiServiceFamily._dependencies,
+          allTransitiveDependencies:
+              EmojiServiceFamily._allTransitiveDependencies,
         );
 
   final AccountKey key;
@@ -63,55 +116,11 @@ class EmojiServiceProvider
 
   @override
   FutureOr<List<EmojiCategory>> runNotifierBuild(
-    covariant _$EmojiService notifier,
+    covariant EmojiService notifier,
   ) {
     return notifier.build(
       key,
     );
   }
 }
-
-typedef EmojiServiceRef = AsyncNotifierProviderRef<List<EmojiCategory>>;
-
-/// See also [EmojiService].
-final emojiServiceProvider = EmojiServiceFamily();
-
-class EmojiServiceFamily extends Family<AsyncValue<List<EmojiCategory>>> {
-  EmojiServiceFamily();
-
-  EmojiServiceProvider call(
-    AccountKey key,
-  ) {
-    return EmojiServiceProvider(
-      key,
-    );
-  }
-
-  @override
-  AsyncNotifierProviderImpl<EmojiService, List<EmojiCategory>>
-      getProviderOverride(
-    covariant EmojiServiceProvider provider,
-  ) {
-    return call(
-      provider.key,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'emojiServiceProvider';
-}
-
-abstract class _$EmojiService
-    extends BuildlessAsyncNotifier<List<EmojiCategory>> {
-  late final AccountKey key;
-
-  FutureOr<List<EmojiCategory>> build(
-    AccountKey key,
-  );
-}
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

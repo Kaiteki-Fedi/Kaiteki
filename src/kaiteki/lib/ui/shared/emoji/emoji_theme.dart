@@ -4,13 +4,9 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:mek_data_class/mek_data_class.dart";
-
-part "emoji_theme.g.dart";
 
 @immutable
-@DataClass(copyable: true)
-class EmojiTheme extends ThemeExtension<EmojiTheme> with _$EmojiTheme {
+class EmojiTheme extends ThemeExtension<EmojiTheme> {
   // The size of the emoji.
   final double size;
 
@@ -26,6 +22,14 @@ class EmojiTheme extends ThemeExtension<EmojiTheme> with _$EmojiTheme {
     return EmojiTheme(
       size: lerpDouble(size, other.size, t)!,
       square: t >= 0.5 ? other.square : square,
+    );
+  }
+
+  @override
+  ThemeExtension<EmojiTheme> copyWith({double? size, bool? square}) {
+    return EmojiTheme(
+      size: size ?? this.size,
+      square: square ?? this.square,
     );
   }
 }

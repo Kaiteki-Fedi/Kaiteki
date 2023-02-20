@@ -5,7 +5,7 @@ import "package:fediverse_objects/mastodon.dart" hide List;
 import "package:fediverse_objects/mastodon.dart" as mastodon show List;
 import "package:http/http.dart" show Response;
 import "package:kaiteki/constants.dart" as consts;
-import "package:kaiteki/exceptions/api_exception.dart";
+import "package:kaiteki/exceptions/http_exception.dart";
 import "package:kaiteki/fediverse/backends/mastodon/models/pagination.dart";
 import "package:kaiteki/fediverse/backends/mastodon/models/search.dart";
 import "package:kaiteki/fediverse/backends/mastodon/responses/context.dart";
@@ -331,10 +331,9 @@ class MastodonClient {
     } catch (_) {}
 
     if (json != null) {
-      throw ApiException(
+      throw HttpException(
         response.statusCode,
         reasonPhrase: json["error"] as String? ?? response.reasonPhrase,
-        data: json,
       );
     }
   }

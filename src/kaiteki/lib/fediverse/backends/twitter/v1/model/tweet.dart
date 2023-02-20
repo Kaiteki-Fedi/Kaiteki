@@ -11,7 +11,7 @@ class Tweet {
   @JsonKey(name: "created_at")
   final String createdAtStr;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   DateTime get createdAt => twitterDateFormat.parse(createdAtStr);
 
   final bool favorited;

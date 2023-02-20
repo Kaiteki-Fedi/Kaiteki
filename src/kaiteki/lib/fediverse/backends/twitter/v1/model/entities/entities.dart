@@ -19,7 +19,7 @@ class Entities {
 
   final List<Url>? urls;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<Entity> get aggregated {
     return <Entity>[
       if (media != null) ...media!,

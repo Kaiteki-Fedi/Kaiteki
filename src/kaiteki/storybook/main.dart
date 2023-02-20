@@ -22,7 +22,6 @@ class KaitekiStorybook extends StatelessWidget {
         theme: getDefaultTheme(Brightness.light, true),
         darkTheme: getDefaultTheme(Brightness.dark, true),
         debugShowCheckedModeBanner: false,
-        useInheritedMediaQuery: true,
         home: Builder(
           builder: (context) => Scaffold(
             // backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -46,9 +45,9 @@ class KaitekiStorybook extends StatelessWidget {
 
 final userBadges = Story(
   name: "User badges",
-  builder: (_) => Row(
+  builder: (_) => const Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: const [
+    children: [
       BotUserBadge(),
       SizedBox(width: 8),
       ModeratorUserBadge(),

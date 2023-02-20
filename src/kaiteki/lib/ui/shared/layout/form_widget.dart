@@ -31,12 +31,15 @@ class FormWidget extends StatelessWidget {
         if (contentWidth <= constraints.maxWidth) {
           return Center(
             child: Card(
+              margin: EdgeInsets.zero,
               clipBehavior: Clip.antiAlias,
-              child: Container(
+              child: SizedBox(
                 width: contentWidth,
                 height: contentHeight,
-                padding: padding,
-                child: builder.call(context, false),
+                child: Padding(
+                  padding: padding,
+                  child: builder.call(context, false),
+                ),
               ),
             ),
           );

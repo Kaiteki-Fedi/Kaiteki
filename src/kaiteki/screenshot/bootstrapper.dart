@@ -66,7 +66,6 @@ class Bootstrapper {
             ),
           ),
           debugShowCheckedModeBanner: false,
-          useInheritedMediaQuery: true,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: locale != null ? Locale(locale) : const Locale("en"),

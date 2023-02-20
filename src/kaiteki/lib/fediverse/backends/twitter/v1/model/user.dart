@@ -18,7 +18,7 @@ class User {
   @JsonKey(name: "created_at")
   final String createdAtStr;
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   DateTime get createdAt => twitterDateFormat.parse(createdAtStr);
 
   /// A URL provided by the user in association with their profile.

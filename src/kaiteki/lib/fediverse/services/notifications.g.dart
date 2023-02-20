@@ -6,7 +6,8 @@ part of 'notifications.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+String _$notificationServiceHash() =>
+    r'7c1059c06e5a9217672d2d31d3dcca09c884059a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,22 +30,74 @@ class _SystemHash {
   }
 }
 
-String _$NotificationServiceHash() =>
-    r'7c1059c06e5a9217672d2d31d3dcca09c884059a';
+abstract class _$NotificationService
+    extends BuildlessAsyncNotifier<List<Notification>> {
+  late final AccountKey key;
+
+  FutureOr<List<Notification>> build(
+    AccountKey key,
+  );
+}
+
+/// See also [NotificationService].
+@ProviderFor(NotificationService)
+const notificationServiceProvider = NotificationServiceFamily();
+
+/// See also [NotificationService].
+class NotificationServiceFamily extends Family<AsyncValue<List<Notification>>> {
+  /// See also [NotificationService].
+  const NotificationServiceFamily();
+
+  /// See also [NotificationService].
+  NotificationServiceProvider call(
+    AccountKey key,
+  ) {
+    return NotificationServiceProvider(
+      key,
+    );
+  }
+
+  @override
+  NotificationServiceProvider getProviderOverride(
+    covariant NotificationServiceProvider provider,
+  ) {
+    return call(
+      provider.key,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'notificationServiceProvider';
+}
 
 /// See also [NotificationService].
 class NotificationServiceProvider
     extends AsyncNotifierProviderImpl<NotificationService, List<Notification>> {
+  /// See also [NotificationService].
   NotificationServiceProvider(
     this.key,
-  ) : super(
+  ) : super.internal(
           () => NotificationService()..key = key,
           from: notificationServiceProvider,
           name: r'notificationServiceProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$NotificationServiceHash,
+                  : _$notificationServiceHash,
+          dependencies: NotificationServiceFamily._dependencies,
+          allTransitiveDependencies:
+              NotificationServiceFamily._allTransitiveDependencies,
         );
 
   final AccountKey key;
@@ -64,55 +117,11 @@ class NotificationServiceProvider
 
   @override
   FutureOr<List<Notification>> runNotifierBuild(
-    covariant _$NotificationService notifier,
+    covariant NotificationService notifier,
   ) {
     return notifier.build(
       key,
     );
   }
 }
-
-typedef NotificationServiceRef = AsyncNotifierProviderRef<List<Notification>>;
-
-/// See also [NotificationService].
-final notificationServiceProvider = NotificationServiceFamily();
-
-class NotificationServiceFamily extends Family<AsyncValue<List<Notification>>> {
-  NotificationServiceFamily();
-
-  NotificationServiceProvider call(
-    AccountKey key,
-  ) {
-    return NotificationServiceProvider(
-      key,
-    );
-  }
-
-  @override
-  AsyncNotifierProviderImpl<NotificationService, List<Notification>>
-      getProviderOverride(
-    covariant NotificationServiceProvider provider,
-  ) {
-    return call(
-      provider.key,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'notificationServiceProvider';
-}
-
-abstract class _$NotificationService
-    extends BuildlessAsyncNotifier<List<Notification>> {
-  late final AccountKey key;
-
-  FutureOr<List<Notification>> build(
-    AccountKey key,
-  );
-}
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

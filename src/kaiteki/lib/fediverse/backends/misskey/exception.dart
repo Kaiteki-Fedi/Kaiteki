@@ -1,7 +1,7 @@
-import "package:kaiteki/exceptions/api_exception.dart";
+import "package:kaiteki/exceptions/http_exception.dart";
 import "package:kaiteki/utils/utils.dart";
 
-class MisskeyException extends ApiException {
+class MisskeyException extends HttpException {
   final JsonMap _error;
 
   String get code => _error["code"] as String;

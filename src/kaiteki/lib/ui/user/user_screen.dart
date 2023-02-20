@@ -147,7 +147,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                   CustomSliverPersistentHeader(
                     child: Material(
                       color: Theme.of(context).colorScheme.surface,
-                      child: Column(
+                      child: const Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [

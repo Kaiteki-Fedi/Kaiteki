@@ -245,8 +245,5 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<void> deleteAccount(String password) {
-    // TODO: implement deleteAccount
-    throw UnimplementedError();
-  }
+  Future<void> deleteAccount(String password) => throw UnimplementedError();
 }

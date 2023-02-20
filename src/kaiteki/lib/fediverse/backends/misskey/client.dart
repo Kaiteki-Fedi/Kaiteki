@@ -5,6 +5,7 @@ import "dart:developer";
 import "package:fediverse_objects/misskey.dart" as misskey;
 import "package:http/http.dart"
     show MultipartFile, MultipartRequest, Request, Response;
+import "package:kaiteki/exceptions/http_exception.dart";
 import "package:kaiteki/fediverse/backends/misskey/exception.dart";
 import "package:kaiteki/fediverse/backends/misskey/model/follow.dart";
 import "package:kaiteki/fediverse/backends/misskey/model/list.dart";
@@ -263,29 +264,31 @@ class MisskeyClient {
   }
 
   Future<void> _checkResponse(Response response) async {
-    if (!response.isSuccessful) {
-      // HACK(Craftplacer): I threw out the usual JSON deserialization pattern from Kaiteki because adding more error-prone code (that is Misskey's fucked API schemas) to error handling is just plain stupid.
-      dynamic error;
+    if (response.isSuccessful) return;
 
-      try {
-        final json = jsonDecode(response.body) as JsonMap;
-        error = json["error"];
-      } catch (e, s) {
-        log(
-          "Failed to parse error JSON",
-          error: e,
-          stackTrace: s,
-          name: "MisskeyClient",
-        );
-      }
+    // HACK(Craftplacer): I threw out the usual JSON deserialization pattern from Kaiteki because adding more error-prone code (that is Misskey's fucked API schemas) to error handling is just plain stupid.
+    dynamic error;
 
-      if (error != null) {
-        throw MisskeyException(
-          response.statusCode,
-          error as JsonMap,
-        );
-      }
+    try {
+      final json = jsonDecode(response.body) as JsonMap;
+      error = json["error"];
+    } catch (e, s) {
+      log(
+        "Failed to parse error JSON",
+        error: e,
+        stackTrace: s,
+        name: "MisskeyClient",
+      );
     }
+
+    if (error is JsonMap) {
+      throw MisskeyException(
+        response.statusCode,
+        error,
+      );
+    }
+
+    throw HttpException.fromResponse(response);
   }
 
   /// Gets your account information.

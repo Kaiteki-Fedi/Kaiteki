@@ -6,7 +6,7 @@ part of 'users.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+String _$usersServiceHash() => r'631460631420ad196db95a548ee5e2272b9cc151';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,15 +29,69 @@ class _SystemHash {
   }
 }
 
-String _$UsersServiceHash() => r'631460631420ad196db95a548ee5e2272b9cc151';
+abstract class _$UsersService extends BuildlessAsyncNotifier<User<dynamic>> {
+  late final AccountKey key;
+  late final String id;
+
+  FutureOr<User<dynamic>> build(
+    AccountKey key,
+    String id,
+  );
+}
+
+/// See also [UsersService].
+@ProviderFor(UsersService)
+const usersServiceProvider = UsersServiceFamily();
+
+/// See also [UsersService].
+class UsersServiceFamily extends Family<AsyncValue<User<dynamic>>> {
+  /// See also [UsersService].
+  const UsersServiceFamily();
+
+  /// See also [UsersService].
+  UsersServiceProvider call(
+    AccountKey key,
+    String id,
+  ) {
+    return UsersServiceProvider(
+      key,
+      id,
+    );
+  }
+
+  @override
+  UsersServiceProvider getProviderOverride(
+    covariant UsersServiceProvider provider,
+  ) {
+    return call(
+      provider.key,
+      provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'usersServiceProvider';
+}
 
 /// See also [UsersService].
 class UsersServiceProvider
     extends AsyncNotifierProviderImpl<UsersService, User<dynamic>> {
+  /// See also [UsersService].
   UsersServiceProvider(
     this.key,
     this.id,
-  ) : super(
+  ) : super.internal(
           () => UsersService()
             ..key = key
             ..id = id,
@@ -46,7 +100,10 @@ class UsersServiceProvider
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$UsersServiceHash,
+                  : _$usersServiceHash,
+          dependencies: UsersServiceFamily._dependencies,
+          allTransitiveDependencies:
+              UsersServiceFamily._allTransitiveDependencies,
         );
 
   final AccountKey key;
@@ -68,7 +125,7 @@ class UsersServiceProvider
 
   @override
   FutureOr<User<dynamic>> runNotifierBuild(
-    covariant _$UsersService notifier,
+    covariant UsersService notifier,
   ) {
     return notifier.build(
       key,
@@ -76,51 +133,4 @@ class UsersServiceProvider
     );
   }
 }
-
-typedef UsersServiceRef = AsyncNotifierProviderRef<User<dynamic>>;
-
-/// See also [UsersService].
-final usersServiceProvider = UsersServiceFamily();
-
-class UsersServiceFamily extends Family<AsyncValue<User<dynamic>>> {
-  UsersServiceFamily();
-
-  UsersServiceProvider call(
-    AccountKey key,
-    String id,
-  ) {
-    return UsersServiceProvider(
-      key,
-      id,
-    );
-  }
-
-  @override
-  AsyncNotifierProviderImpl<UsersService, User<dynamic>> getProviderOverride(
-    covariant UsersServiceProvider provider,
-  ) {
-    return call(
-      provider.key,
-      provider.id,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'usersServiceProvider';
-}
-
-abstract class _$UsersService extends BuildlessAsyncNotifier<User<dynamic>> {
-  late final AccountKey key;
-  late final String id;
-
-  FutureOr<User<dynamic>> build(
-    AccountKey key,
-    String id,
-  );
-}
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

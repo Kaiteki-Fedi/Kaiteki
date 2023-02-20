@@ -11,7 +11,6 @@ import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart";
-import "package:kaiteki/ui/shared/async/async_button.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/layout/breakpoint_container.dart";
@@ -21,6 +20,7 @@ import "package:kaiteki/ui/user/constants.dart";
 import "package:kaiteki/ui/user/desktop_user_header.dart";
 import "package:kaiteki/ui/user/user_info_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_material/kaiteki_material.dart";
 
 class OldUserScreen extends ConsumerStatefulWidget {
   final String id;

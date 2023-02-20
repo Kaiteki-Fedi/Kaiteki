@@ -6,7 +6,7 @@ part of 'instance_prober.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+String _$probeInstanceHash() => r'2e4a8d040a0a93d901647dbdcb582c60948bce61';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,14 +29,57 @@ class _SystemHash {
   }
 }
 
-String _$probeInstanceHash() => r'2e4a8d040a0a93d901647dbdcb582c60948bce61';
+typedef ProbeInstanceRef = AutoDisposeFutureProviderRef<InstanceProbeResult>;
+
+/// See also [probeInstance].
+@ProviderFor(probeInstance)
+const probeInstanceProvider = ProbeInstanceFamily();
+
+/// See also [probeInstance].
+class ProbeInstanceFamily extends Family<AsyncValue<InstanceProbeResult>> {
+  /// See also [probeInstance].
+  const ProbeInstanceFamily();
+
+  /// See also [probeInstance].
+  ProbeInstanceProvider call(
+    String host,
+  ) {
+    return ProbeInstanceProvider(
+      host,
+    );
+  }
+
+  @override
+  ProbeInstanceProvider getProviderOverride(
+    covariant ProbeInstanceProvider provider,
+  ) {
+    return call(
+      provider.host,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'probeInstanceProvider';
+}
 
 /// See also [probeInstance].
 class ProbeInstanceProvider
     extends AutoDisposeFutureProvider<InstanceProbeResult> {
+  /// See also [probeInstance].
   ProbeInstanceProvider(
     this.host,
-  ) : super(
+  ) : super.internal(
           (ref) => probeInstance(
             ref,
             host,
@@ -47,6 +90,9 @@ class ProbeInstanceProvider
               const bool.fromEnvironment('dart.vm.product')
                   ? null
                   : _$probeInstanceHash,
+          dependencies: ProbeInstanceFamily._dependencies,
+          allTransitiveDependencies:
+              ProbeInstanceFamily._allTransitiveDependencies,
         );
 
   final String host;
@@ -64,38 +110,4 @@ class ProbeInstanceProvider
     return _SystemHash.finish(hash);
   }
 }
-
-typedef ProbeInstanceRef = AutoDisposeFutureProviderRef<InstanceProbeResult>;
-
-/// See also [probeInstance].
-final probeInstanceProvider = ProbeInstanceFamily();
-
-class ProbeInstanceFamily extends Family<AsyncValue<InstanceProbeResult>> {
-  ProbeInstanceFamily();
-
-  ProbeInstanceProvider call(
-    String host,
-  ) {
-    return ProbeInstanceProvider(
-      host,
-    );
-  }
-
-  @override
-  AutoDisposeFutureProvider<InstanceProbeResult> getProviderOverride(
-    covariant ProbeInstanceProvider provider,
-  ) {
-    return call(
-      provider.host,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'probeInstanceProvider';
-}
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
