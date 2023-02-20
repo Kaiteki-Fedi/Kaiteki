@@ -2,6 +2,12 @@ name: Error report
 description: Report an error that occured in Kaiteki 
 labels: ["bug", "needs-triage"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Warning**
+        > Please check for existing issues that already cover the error you are facing.
+  
   # - type: dropdown
   #   id: platform
   #   attributes:
@@ -9,7 +15,7 @@ body:
   #     options: [ "Web", "Windows", "Android", "Linux" ]
   #   validations:
   #     required: true
-      
+  
   - type: input
     id: type
     attributes:
