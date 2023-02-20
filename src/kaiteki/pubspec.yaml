@@ -57,8 +57,8 @@ dependencies:
   kaiteki_material:
     git:
       url: https://github.com/Kaiteki-Fedi/kaiteki_material.git
-      ref: beta
   logger: ^1.0.0
+  markdown: ^7.0.1
   mdi: ^5.0.0-nullsafety.0
   mek_data_class: ^1.0.0
   meta: ^1.8.0
