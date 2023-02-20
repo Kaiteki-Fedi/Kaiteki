@@ -30,7 +30,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'beta'
+          channel: 'master'
           cache: true
   
       - name: Get packages
@@ -62,7 +62,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'beta'
+          channel: 'master'
           cache: true
         
       - name: Update Linux repos
@@ -140,7 +140,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'beta'
+          channel: 'master'
           cache: true
 
       - name: Get packages
@@ -186,7 +186,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'beta'
+          channel: 'master'
           cache: true
         
       - name: Enable Windows Desktop
@@ -219,7 +219,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'beta'
+          channel: 'master'
           cache: true
 
       - name: Enable web

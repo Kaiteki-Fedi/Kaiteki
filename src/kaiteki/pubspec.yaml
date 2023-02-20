@@ -52,7 +52,7 @@ dependencies:
   html: ^0.15.0
   http: ^0.13.1
   infinite_scroll_pagination: ^3.1.0
-  intl: ^0.17.0
+  intl: ^0.18.0
   json_annotation: any
   kaiteki_material:
     git:

@@ -3,7 +3,8 @@
 ## Prerequisites
 
 - [Flutter](https://docs.flutter.dev/get-started/install)
-  - Kaiteki is running on the Flutter **beta** branch. Prefer checking the [SDK releases page](https://docs.flutter.dev/development/tools/sdk/releases).
+  - Kaiteki is running on the Flutter **master** branch. Prefer checking the [SDK releases page](https://docs.flutter.dev/development/tools/sdk/releases).
+  - Change the branch of your Flutter SDK installation with `flutter channel master` and then `flutter upgrade`.
 - A supported IDE like [Visual Studio Code](https://code.visualstudio.com/), [IntelliJ](https://www.jetbrains.com/idea/), or [Android Studio](https://developer.android.com/studio/) *(optional)*
 - Build tools for the platform you want to compile for
   - **Android:** See Flutter "Getting Started" guide for setting up the Android SDK, otherwise download <https://developer.android.com/studio#command-line-tools-only> and set SDK path with `flutter config --android-studio-dir`
