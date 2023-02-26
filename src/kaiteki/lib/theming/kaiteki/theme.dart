@@ -6,13 +6,11 @@ class KaitekiTheme extends ThemeExtension<KaitekiTheme> {
   final ChatMessageTheme chatMessageIncoming;
   final ChatMessageTheme chatMessageOutgoing;
   final double chatMessageRounding;
-  final ToggleButtonTheme reactionButtonTheme;
 
   const KaitekiTheme({
     required this.chatMessageIncoming,
     required this.chatMessageOutgoing,
     required this.chatMessageRounding,
-    required this.reactionButtonTheme,
   });
 
   factory KaitekiTheme.fromMaterialTheme(ThemeData theme) {
@@ -21,7 +19,6 @@ class KaitekiTheme extends ThemeExtension<KaitekiTheme> {
       chatMessageIncoming: chatMessageTheme,
       chatMessageOutgoing: chatMessageTheme,
       chatMessageRounding: 8,
-      reactionButtonTheme: ToggleButtonTheme.from(theme),
     );
   }
 
@@ -36,7 +33,6 @@ class KaitekiTheme extends ThemeExtension<KaitekiTheme> {
       chatMessageIncoming: chatMessageIncoming ?? this.chatMessageIncoming,
       chatMessageOutgoing: chatMessageOutgoing ?? this.chatMessageOutgoing,
       chatMessageRounding: chatMessageRounding ?? this.chatMessageRounding,
-      reactionButtonTheme: reactionButtonTheme ?? this.reactionButtonTheme,
     );
   }
 
@@ -49,7 +45,6 @@ class KaitekiTheme extends ThemeExtension<KaitekiTheme> {
       chatMessageIncoming: chatMessageIncoming,
       chatMessageOutgoing: chatMessageOutgoing,
       chatMessageRounding: chatMessageRounding,
-      reactionButtonTheme: reactionButtonTheme,
     );
   }
 }
