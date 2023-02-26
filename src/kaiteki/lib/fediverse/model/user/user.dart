@@ -14,7 +14,7 @@ class User<T> extends AdaptedEntity<T> {
   final String? displayName;
 
   /// The URL of the user's avatar. Null, if the user didn't set one.
-  final String? avatarUrl;
+  final Uri? avatarUrl;
 
   /// The blur hash of the user's banner.
   final String? avatarBlurHash;

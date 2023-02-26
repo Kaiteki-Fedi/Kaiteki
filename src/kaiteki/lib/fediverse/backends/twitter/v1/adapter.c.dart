@@ -69,7 +69,7 @@ User toUser(twitter.User user) {
     source: user,
     username: user.screenName,
     description: user.description,
-    avatarUrl: user.profileImageUrlHttps,
+    avatarUrl: user.profileImageUrlHttps.nullTransform(Uri.parse),
     bannerUrl: user.profileBannerUrl,
     postCount: user.statusesCount,
     details: UserDetails(

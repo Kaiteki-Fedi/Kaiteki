@@ -163,7 +163,7 @@ Future<void> precacheImages(BuildContext context) async {
   for (final url in urls) {
     if (url == null) continue;
     log("Precaching $url...");
-    await precacheImage(NetworkImage(url), context);
+    await precacheImage(NetworkImage(url.toString()), context);
     log("Cached $url...");
   }
 }

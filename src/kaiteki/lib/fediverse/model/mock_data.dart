@@ -14,7 +14,7 @@ final examplePost = Post(
 final exampleUser = User(
   username: "NyaNya",
   displayName: "banned for being a cute neko",
-  avatarUrl: exampleAvatar,
+  avatarUrl: Uri.parse(exampleAvatar),
   joinDate: DateTime.now(),
   id: "CuteNeko-Account",
   host: "cute.social",

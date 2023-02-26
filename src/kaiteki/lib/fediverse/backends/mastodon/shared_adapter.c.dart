@@ -191,7 +191,7 @@ User toUser(mastodon.Account source, String localHost) {
     displayName: source.displayName,
     username: source.username,
     bannerUrl: source.header,
-    avatarUrl: source.avatar,
+    avatarUrl: source.avatar.nullTransform(Uri.parse),
     joinDate: source.createdAt,
     id: source.id,
     description: source.note,

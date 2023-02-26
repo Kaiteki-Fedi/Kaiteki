@@ -11,20 +11,20 @@ const alice = User(
   host: "cats.social",
 );
 
-const nyanya = User(
+final nyanya = User(
   username: "NyaNya",
   displayName: "banned for being a cute neko",
-  avatarUrl: "https://craftplacer.keybase.pub/cute.jpg",
+  avatarUrl: Uri.parse("https://craftplacer.keybase.pub/cute.jpg"),
   id: "CuteNeko-Account",
   host: "pl.kawaii.moe",
 );
 
-const mari = User(
+final mari = User(
   id: "ezio",
   username: "ezio",
   host: "akko.wtf",
   displayName: "Mari",
-  avatarUrl: "https://files.catbox.moe/lla7hk.png",
+  avatarUrl: Uri.parse("https://files.catbox.moe/lla7hk.png"),
 );
 
 final posts = [

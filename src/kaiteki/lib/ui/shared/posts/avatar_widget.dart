@@ -1,16 +1,29 @@
 import "package:flutter/material.dart";
 import "package:flutter_blurhash/flutter_blurhash.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class AvatarWidget extends StatelessWidget {
-  final User user;
+  final Uri? url;
+  final String? blurHash;
   final double? size;
   final VoidCallback? onTap;
   final ShapeBorder? shape;
   final FocusNode? focusNode;
 
-  const AvatarWidget(
-    this.user, {
+  AvatarWidget(
+    User user, {
+    super.key,
+    this.size = 48,
+    this.onTap,
+    this.shape,
+    this.focusNode,
+  })  : url = user.avatarUrl,
+        blurHash = user.avatarBlurHash;
+
+  const AvatarWidget.url(
+    this.url, {
+    this.blurHash,
     super.key,
     this.size = 48,
     this.onTap,
@@ -21,7 +34,7 @@ class AvatarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = this.size;
-    final url = user.avatarUrl;
+    final url = this.url;
 
     Widget avatar;
     final Widget fallback = SizedBox(
@@ -34,7 +47,7 @@ class AvatarWidget extends StatelessWidget {
       avatar = fallback;
     } else {
       avatar = Image.network(
-        url,
+        url.toString(),
         frameBuilder: _frameBuilder,
         width: size,
         height: size,
@@ -69,19 +82,16 @@ class AvatarWidget extends StatelessWidget {
   ) {
     if (wasSynchronouslyLoaded) return child;
 
-    final blurHash = user.avatarBlurHash;
+    final blurHash = this.blurHash;
+
+    final blurHashWidget = blurHash.nullTransform(
+      (e) => BlurHash(hash: e, color: Colors.transparent),
+    );
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 150),
       child: frame == null
-          ? SizedBox.square(
-              dimension: size,
-              child: blurHash != null
-                  ? BlurHash(
-                      color: Colors.transparent,
-                      hash: blurHash,
-                    )
-                  : null,
-            )
+          ? SizedBox.square(dimension: size, child: blurHashWidget)
           : SizedBox(child: child),
     );
   }

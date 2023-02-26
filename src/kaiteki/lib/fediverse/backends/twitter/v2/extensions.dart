@@ -18,7 +18,7 @@ extension UserExtensions on twt.User {
       username: username,
       displayName: name,
       host: "twitter.com",
-      avatarUrl: profileImageUrl,
+      avatarUrl: profileImageUrl.nullTransform(Uri.parse),
       joinDate: createdAt,
       description: description,
       details: ktk.UserDetails(

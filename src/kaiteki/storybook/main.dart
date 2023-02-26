@@ -59,13 +59,13 @@ final userBadges = Story(
 
 final avatars = Story(
   name: "Avatars",
-  builder: (_) => const AvatarWidget(
+  builder: (_) => AvatarWidget(
     User(
       username: "",
       id: "",
       host: "somewhere",
       displayName: null,
-      avatarUrl: exampleAvatar,
+      avatarUrl: Uri.parse(exampleAvatar),
       avatarBlurHash: "UgQ9[\$WB~Xt7?uoyIUWVxbWBkBoLf+aeoeae",
     ),
   ),

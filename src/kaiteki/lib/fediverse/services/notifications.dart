@@ -57,7 +57,7 @@ class NativeNotificationPoster {
     ByteArrayAndroidBitmap? bitmap;
 
     if (notification.user != null) {
-      final response = await get(Uri.parse(notification.user!.avatarUrl!));
+      final response = await get(notification.user!.avatarUrl!);
       var image = await decodeImageFromList(response.bodyBytes);
       image = await resize(image, 64, 64);
       bitmap = ByteArrayAndroidBitmap(
@@ -90,7 +90,7 @@ class NativeNotificationPoster {
     LinuxNotificationIcon? icon;
 
     if (notification.user != null) {
-      final response = await get(Uri.parse(notification.user!.avatarUrl!));
+      final response = await get(notification.user!.avatarUrl!);
       var image = await decodeImageFromList(response.bodyBytes);
       image = await resize(image, 64, 64);
       icon = ByteDataLinuxIcon(
