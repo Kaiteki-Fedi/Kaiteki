@@ -323,7 +323,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           enabled: translationAvailable,
           onTap: _onTranslate,
           child: ListTile(
-            title: const Text("Translate"),
+            title: Text(context.l10n.translateButton),
             leading: const Icon(Icons.translate_rounded),
             contentPadding: EdgeInsets.zero,
             enabled: translationAvailable,
@@ -331,9 +331,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         )
       else
         PopupMenuItem(
-          child: const ListTile(
-            title: Text("Show original text"),
-            leading: Icon(Icons.undo_rounded),
+          child: ListTile(
+            title: Text(context.l10n.undoTranslateButton),
+            leading: const Icon(Icons.undo_rounded),
             contentPadding: EdgeInsets.zero,
           ),
           onTap: () => setState(() => _translatedPost = null),
