@@ -86,15 +86,20 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
   Widget _buildTab(BuildContext context, TimelineKind kind, bool showLabel) {
     final l10n = context.l10n;
 
-    return Tab(
-      icon: Row(
-        children: [
-          Icon(kind.getIconData()),
-          if (showLabel) ...[
-            const SizedBox(width: 8),
-            Text(kind.getDisplayName(l10n)),
-          ],
-        ],
+    return Semantics(
+      label: kind.getDisplayName(l10n),
+      child: Tab(
+        icon: ExcludeSemantics(
+          child: Row(
+            children: [
+              Icon(kind.getIconData()),
+              if (showLabel) ...[
+                const SizedBox(width: 8),
+                Text(kind.getDisplayName(l10n)),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }
