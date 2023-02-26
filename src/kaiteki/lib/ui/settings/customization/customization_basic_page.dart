@@ -51,7 +51,16 @@ class _CustomizationBasicPageState
               ],
             ),
             SettingsSection(
-              title: const SectionHeader("Emojis"),
+              title: const SectionHeader("Posts"),
+              children: [
+                PreferenceSwitchListTile(
+                  provider: showUserBadges,
+                  title: const Text("Show user badges"),
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: SectionHeader(context.l10n.settingsEmojisHeader),
               children: [
                 PreferenceSliderListTile.values(
                   provider: emojiScale,

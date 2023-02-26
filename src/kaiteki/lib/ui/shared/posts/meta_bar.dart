@@ -7,7 +7,7 @@ import "package:kaiteki/ui/shared/users/user_badge.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 
-class MetaBar extends StatelessWidget {
+class MetaBar extends ConsumerWidget {
   const MetaBar({
     super.key,
     required Post post,
@@ -15,21 +15,23 @@ class MetaBar extends StatelessWidget {
     this.showAvatar = false,
     this.showTime = true,
     this.showVisibility = true,
+    this.showLanguage = true,
   }) : _post = post;
 
   final Post _post;
   final bool showAvatar;
   final bool showTime;
   final bool showVisibility;
+  final bool showLanguage;
   final bool twolineAuthor;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: kPostPadding.copyWith(top: 0),
       child: Row(
         children: [
-          ...buildLeft(context),
+          ...buildLeft(context, ref),
           const SizedBox(width: 8),
           ...buildRight(context),
         ],
@@ -37,7 +39,10 @@ class MetaBar extends StatelessWidget {
     );
   }
 
-  List<Widget> buildLeft(BuildContext context) {
+  List<Widget> buildLeft(BuildContext context, WidgetRef ref) {
+    final isAdministrator = _post.author.flags?.isAdministrator ?? false;
+    final isModerator = _post.author.flags?.isModerator ?? false;
+    final isBot = _post.author.flags?.isBot ?? false;
     return [
       if (showAvatar)
         Padding(
@@ -53,17 +58,19 @@ class MetaBar extends StatelessWidget {
                 orientation: twolineAuthor ? Axis.vertical : null,
               ),
             ),
-            if (_post.author.flags?.isAdministrator == true) ...[
-              const SizedBox(width: 8),
-              const AdministratorUserBadge(),
-            ],
-            if (_post.author.flags?.isModerator == true) ...[
-              const SizedBox(width: 8),
-              const ModeratorUserBadge(),
-            ],
-            if (_post.author.flags?.isBot == true) ...[
-              const SizedBox(width: 8),
-              const BotUserBadge(),
+            if (ref.watch(showUserBadges).value) ...[
+              if (isAdministrator) ...[
+                const SizedBox(width: 8),
+                const AdministratorUserBadge(),
+              ],
+              if (isModerator) ...[
+                const SizedBox(width: 8),
+                const ModeratorUserBadge(),
+              ],
+              if (isBot) ...[
+                const SizedBox(width: 8),
+                const BotUserBadge(),
+              ],
             ],
           ],
         ),
@@ -77,6 +84,9 @@ class MetaBar extends StatelessWidget {
     final secondaryTextTheme = TextStyle(color: secondaryColor);
     final l10n = context.l10n;
 
+    const iconSize = 18.0;
+
+    final language = _post.language;
     return [
       if (_post.state.pinned)
         Padding(
@@ -85,19 +95,32 @@ class MetaBar extends StatelessWidget {
             message: l10n.postPinned,
             child: Icon(
               Icons.push_pin_rounded,
-              size: 20,
+              size: iconSize,
               color: secondaryColor,
             ),
           ),
         ),
-      if (showTime)
-        Tooltip(
-          message: _post.postedAt.toString(),
+      if (showLanguage && language != null)
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
           child: Text(
-            DateTime.now().difference(_post.postedAt).toStringHuman(
-                  context: context,
+            language,
+            style: Theme.of(context).ktkTextTheme?.monospaceTextStyle.copyWith(
+                  color: secondaryColor,
                 ),
-            style: secondaryTextTheme,
+          ),
+        ),
+      if (showTime)
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Tooltip(
+            message: _post.postedAt.toString(),
+            child: Text(
+              DateTime.now().difference(_post.postedAt).toStringHuman(
+                    context: context,
+                  ),
+              style: secondaryTextTheme,
+            ),
           ),
         ),
       if (visibility != null && showVisibility)
@@ -107,7 +130,7 @@ class MetaBar extends StatelessWidget {
             message: visibility.toDisplayString(l10n),
             child: Icon(
               visibility.toIconData(),
-              size: 20,
+              size: iconSize,
               color: secondaryColor,
             ),
           ),

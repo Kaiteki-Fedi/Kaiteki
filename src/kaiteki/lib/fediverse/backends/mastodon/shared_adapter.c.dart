@@ -63,6 +63,7 @@ Post toPost(mastodon.Status source, String localHost) {
             ?.map((r) => toReaction(r, localHost))
             .toList() ??
         const [],
+    language: source.language,
     mentionedUsers: source.mentions.map((e) {
       return UserReference.all(
         username: e.username,

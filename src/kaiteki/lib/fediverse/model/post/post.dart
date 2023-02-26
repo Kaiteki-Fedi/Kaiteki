@@ -52,6 +52,7 @@ class Post<T> extends AdaptedEntity<T> {
   final List<UserReference>? mentionedUsers;
 
   final Uri? externalUrl;
+  final String? language;
 
   Post({
     super.source,
@@ -77,6 +78,7 @@ class Post<T> extends AdaptedEntity<T> {
     this.visibility,
     this.client,
     this.poll,
+    this.language,
   });
 
   Post addOrCreateReaction(

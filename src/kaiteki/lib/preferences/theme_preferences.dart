@@ -44,3 +44,9 @@ final avatarCornerRadius = createSettingProvider<double>(
   initialValue: double.infinity,
   provider: sharedPreferencesProvider,
 );
+
+final showUserBadges = createSettingProvider<bool>(
+  key: "showUserBadges",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);

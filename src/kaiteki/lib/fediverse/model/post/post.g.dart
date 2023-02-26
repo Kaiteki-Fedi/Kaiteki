@@ -53,6 +53,8 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> poll(Poll<dynamic>? poll);
 
+  Post<T> language(String? language);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Post<T>(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -83,6 +85,7 @@ abstract class _$PostCWProxy<T> {
     Visibility? visibility,
     String? client,
     Poll<dynamic>? poll,
+    String? language,
   });
 }
 
@@ -165,6 +168,9 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   Post<T> poll(Poll<dynamic>? poll) => this(poll: poll);
 
   @override
+  Post<T> language(String? language) => this(language: language);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Post<T>(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -196,6 +202,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
     Object? visibility = const $CopyWithPlaceholder(),
     Object? client = const $CopyWithPlaceholder(),
     Object? poll = const $CopyWithPlaceholder(),
+    Object? language = const $CopyWithPlaceholder(),
   }) {
     return Post<T>(
       source: source == const $CopyWithPlaceholder()
@@ -298,6 +305,10 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
           ? _value.poll
           // ignore: cast_nullable_to_non_nullable
           : poll as Poll<dynamic>?,
+      language: language == const $CopyWithPlaceholder()
+          ? _value.language
+          // ignore: cast_nullable_to_non_nullable
+          : language as String?,
     );
   }
 }

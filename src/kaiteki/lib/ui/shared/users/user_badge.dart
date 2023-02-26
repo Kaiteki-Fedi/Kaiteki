@@ -1,4 +1,7 @@
+import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class UserBadge extends StatelessWidget {
   final String label;
@@ -8,22 +11,35 @@ class UserBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var color = Color.lerp(
+      this.color,
+      Theme.of(context).colorScheme.onBackground,
+      0.5,
+    )!;
+
+    if (Theme.of(context).useMaterial3) {
+      final palette = createCustomColorPalette(
+        color.harmonizeWith(Theme.of(context).colorScheme.primary),
+        Theme.of(context).colorScheme.brightness,
+      );
+
+      color = palette.color;
+    }
+
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: color.withOpacity(0.25),
-        borderRadius: BorderRadius.circular(3),
+        borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: color),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 4.0,
-          vertical: 2.0,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
         child: Text(
           label.toUpperCase(),
-          style: TextStyle(
-            fontWeight: FontWeight.w900,
-            fontSize: DefaultTextStyle.of(context).style.fontSize! * 0.8,
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall
+              .fallback
+              .copyWith(color: color),
         ),
       ),
     );
