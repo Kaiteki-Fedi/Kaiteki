@@ -172,16 +172,22 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 children: [
                   CustomScrollView(
                     slivers: [
-                      SliverToBoxAdapter(
-                        child: CheckboxListTile(
-                          value: includeReplies,
-                          onChanged: (value) =>
-                              ref.read(_showReplies.notifier).state = value!,
-                          title: const Text("Show replies"),
-                          controlAffinity: ListTileControlAffinity.leading,
+                      SliverPadding(
+                        padding: const EdgeInsets.all(8),
+                        sliver: SliverToBoxAdapter(
+                          child: Row(
+                            children: [
+                              FilterChip(
+                                selected: includeReplies,
+                                onSelected: (value) => ref
+                                    .read(_showReplies.notifier)
+                                    .state = value,
+                                label: const Text("Replies"),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      const SliverToBoxAdapter(child: Divider()),
                       TimelineSliver.user(
                         userId: widget.id,
                         includeReplies: includeReplies,
