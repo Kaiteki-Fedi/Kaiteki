@@ -34,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.favorite_rounded),
-                    title: const Text("Wellbeing"),
+                    title: Text(context.l10n.settingsWellbeing),
                     onTap: () => context.push("/settings/wellbeing"),
                   ),
                 ],
