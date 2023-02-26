@@ -152,8 +152,9 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
     "pleroma": ApiType.pleroma,
     "misskey": ApiType.misskey,
     "foundkey": ApiType.misskey,
-    "calckey": ApiType
-        .misskey, // TODO(thatonecalculator): change to ApiType.calckey once implemented
+    "akkoma": ApiType.pleroma,
+    // TODO(thatonecalculator): change to ApiType.calckey once implemented
+    "calckey": ApiType.misskey,
   }[nodeInfo.software.name];
 
   if (apiType == null) return null;
