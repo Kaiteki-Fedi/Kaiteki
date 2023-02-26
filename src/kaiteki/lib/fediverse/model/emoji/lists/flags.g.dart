@@ -5,810 +5,810 @@ import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 final flags = <EmojiCategoryItem<UnicodeEmoji>>[
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏁", const [":chequered-flag:"]),
+    UnicodeEmoji("🏁", [":chequered-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚩", const [":triangular-flag:"]),
+    UnicodeEmoji("🚩", [":triangular-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎌", const [":crossed-flags:"]),
+    UnicodeEmoji("🎌", [":crossed-flags:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏴", const [":black-flag:"]),
+    UnicodeEmoji("🏴", [":black-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏳️", const [":white-flag:"]),
+    UnicodeEmoji("🏳️", [":white-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏳️‍🌈", const [":rainbow-flag:"]),
+    UnicodeEmoji("🏳️‍🌈", [":rainbow-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏳️‍⚧️", const [":trans-flag:"]),
+    UnicodeEmoji("🏳️‍⚧️", [":trans-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏴‍☠️", const [":pirate-flag:"]),
+    UnicodeEmoji("🏴‍☠️", [":pirate-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇨", const [":Ascension-Island-flag:"]),
+    UnicodeEmoji("🇦🇨", [":Ascension-Island-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇩", const [":Andorra-flag:"]),
+    UnicodeEmoji("🇦🇩", [":Andorra-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇪", const [":United-Arab-Emirates-flag:"]),
+    UnicodeEmoji("🇦🇪", [":United-Arab-Emirates-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇫", const [":Afghanistan-flag:"]),
+    UnicodeEmoji("🇦🇫", [":Afghanistan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇬", const [":Antigua-Barbuda-flag:"]),
+    UnicodeEmoji("🇦🇬", [":Antigua-Barbuda-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇮", const [":Anguilla-flag:"]),
+    UnicodeEmoji("🇦🇮", [":Anguilla-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇱", const [":Albania-flag:"]),
+    UnicodeEmoji("🇦🇱", [":Albania-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇲", const [":Armenia-flag:"]),
+    UnicodeEmoji("🇦🇲", [":Armenia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇴", const [":Angola-flag:"]),
+    UnicodeEmoji("🇦🇴", [":Angola-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇶", const [":Antarctica-flag:"]),
+    UnicodeEmoji("🇦🇶", [":Antarctica-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇷", const [":Argentina-flag:"]),
+    UnicodeEmoji("🇦🇷", [":Argentina-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇸", const [":American-Samoa-flag:"]),
+    UnicodeEmoji("🇦🇸", [":American-Samoa-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇹", const [":Austria-flag:"]),
+    UnicodeEmoji("🇦🇹", [":Austria-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇺", const [":Australia-flag:"]),
+    UnicodeEmoji("🇦🇺", [":Australia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇼", const [":Aruba-flag:"]),
+    UnicodeEmoji("🇦🇼", [":Aruba-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇽", const [":Åland-Islands-flag:"]),
+    UnicodeEmoji("🇦🇽", [":Åland-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇦🇿", const [":Azerbaijan-flag:"]),
+    UnicodeEmoji("🇦🇿", [":Azerbaijan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇦", const [":Bosnia-Herzegovina-flag:"]),
+    UnicodeEmoji("🇧🇦", [":Bosnia-Herzegovina-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇧", const [":Barbados-flag:"]),
+    UnicodeEmoji("🇧🇧", [":Barbados-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇩", const [":Bangladesh-flag:"]),
+    UnicodeEmoji("🇧🇩", [":Bangladesh-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇪", const [":Belgium-flag:"]),
+    UnicodeEmoji("🇧🇪", [":Belgium-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇫", const [":Burkina-Faso-flag:"]),
+    UnicodeEmoji("🇧🇫", [":Burkina-Faso-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇬", const [":Bulgaria-flag:"]),
+    UnicodeEmoji("🇧🇬", [":Bulgaria-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇭", const [":Bahrain-flag:"]),
+    UnicodeEmoji("🇧🇭", [":Bahrain-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇮", const [":Burundi-flag:"]),
+    UnicodeEmoji("🇧🇮", [":Burundi-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇯", const [":Benin-flag:"]),
+    UnicodeEmoji("🇧🇯", [":Benin-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇱", const [":St-Barthélemy-flag:"]),
+    UnicodeEmoji("🇧🇱", [":St-Barthélemy-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇲", const [":Bermuda-flag:"]),
+    UnicodeEmoji("🇧🇲", [":Bermuda-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇳", const [":Brunei-flag:"]),
+    UnicodeEmoji("🇧🇳", [":Brunei-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇴", const [":Bolivia-flag:"]),
+    UnicodeEmoji("🇧🇴", [":Bolivia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇶", const [":Caribbean-Netherlands-flag:"]),
+    UnicodeEmoji("🇧🇶", [":Caribbean-Netherlands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇷", const [":Brazil-flag:"]),
+    UnicodeEmoji("🇧🇷", [":Brazil-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇸", const [":Bahamas-flag:"]),
+    UnicodeEmoji("🇧🇸", [":Bahamas-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇹", const [":Bhutan-flag:"]),
+    UnicodeEmoji("🇧🇹", [":Bhutan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇻", const [":Bouvet-Island-flag:"]),
+    UnicodeEmoji("🇧🇻", [":Bouvet-Island-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇼", const [":Botswana-flag:"]),
+    UnicodeEmoji("🇧🇼", [":Botswana-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇾", const [":Belarus-flag:"]),
+    UnicodeEmoji("🇧🇾", [":Belarus-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇧🇿", const [":Belize-flag:"]),
+    UnicodeEmoji("🇧🇿", [":Belize-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇦", const [":Canada-flag:"]),
+    UnicodeEmoji("🇨🇦", [":Canada-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇨", const [":Cocos-Islands-flag:"]),
+    UnicodeEmoji("🇨🇨", [":Cocos-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇩", const [":Congo-Kinshasa-flag:"]),
+    UnicodeEmoji("🇨🇩", [":Congo-Kinshasa-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇫", const [":Central-African-Republic-flag:"]),
+    UnicodeEmoji("🇨🇫", [":Central-African-Republic-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇬", const [":Congo-Brazzaville-flag:"]),
+    UnicodeEmoji("🇨🇬", [":Congo-Brazzaville-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇭", const [":Switzerland-flag:"]),
+    UnicodeEmoji("🇨🇭", [":Switzerland-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇮", const [":Côte-d’Ivoire-flag:"]),
+    UnicodeEmoji("🇨🇮", [":Côte-d’Ivoire-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇰", const [":Cook-Islands-flag:"]),
+    UnicodeEmoji("🇨🇰", [":Cook-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇱", const [":Chile-flag:"]),
+    UnicodeEmoji("🇨🇱", [":Chile-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇲", const [":Cameroon-flag:"]),
+    UnicodeEmoji("🇨🇲", [":Cameroon-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇳", const [":China-flag:"]),
+    UnicodeEmoji("🇨🇳", [":China-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇴", const [":Colombia-flag:"]),
+    UnicodeEmoji("🇨🇴", [":Colombia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇵", const [":Clipperton-Island-flag:"]),
+    UnicodeEmoji("🇨🇵", [":Clipperton-Island-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇷", const [":Costa-Rica-flag:"]),
+    UnicodeEmoji("🇨🇷", [":Costa-Rica-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇺", const [":Cuba-flag:"]),
+    UnicodeEmoji("🇨🇺", [":Cuba-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇻", const [":Cape-Verde-flag:"]),
+    UnicodeEmoji("🇨🇻", [":Cape-Verde-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇼", const [":Curaçao-flag:"]),
+    UnicodeEmoji("🇨🇼", [":Curaçao-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇽", const [":Christmas-Island-flag:"]),
+    UnicodeEmoji("🇨🇽", [":Christmas-Island-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇾", const [":Cyprus-flag:"]),
+    UnicodeEmoji("🇨🇾", [":Cyprus-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇨🇿", const [":Czechia-flag:"]),
+    UnicodeEmoji("🇨🇿", [":Czechia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇩🇪", const [":Germany-flag:"]),
+    UnicodeEmoji("🇩🇪", [":Germany-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇩🇬", const [":Diego-Garcia-flag:"]),
+    UnicodeEmoji("🇩🇬", [":Diego-Garcia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇩🇯", const [":Djibouti-flag:"]),
+    UnicodeEmoji("🇩🇯", [":Djibouti-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇩🇰", const [":Denmark-flag:"]),
+    UnicodeEmoji("🇩🇰", [":Denmark-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇩🇲", const [":Dominica-flag:"]),
+    UnicodeEmoji("🇩🇲", [":Dominica-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇩🇴", const [":Dominican Republic-flag:"]),
+    UnicodeEmoji("🇩🇴", [":Dominican Republic-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇩🇿", const [":Algeria-flag:"]),
+    UnicodeEmoji("🇩🇿", [":Algeria-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇦", const [":Ceuta-Melilla-flag:"]),
+    UnicodeEmoji("🇪🇦", [":Ceuta-Melilla-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇨", const [":Ecuador-flag:"]),
+    UnicodeEmoji("🇪🇨", [":Ecuador-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇪", const [":Estonia-flag:"]),
+    UnicodeEmoji("🇪🇪", [":Estonia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇬", const [":Egypt-flag:"]),
+    UnicodeEmoji("🇪🇬", [":Egypt-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇭", const [":Western-Sahara-flag:"]),
+    UnicodeEmoji("🇪🇭", [":Western-Sahara-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇷", const [":Eritrea-flag:"]),
+    UnicodeEmoji("🇪🇷", [":Eritrea-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇸", const [":Spain-flag:"]),
+    UnicodeEmoji("🇪🇸", [":Spain-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇹", const [":Ethiopia-flag:"]),
+    UnicodeEmoji("🇪🇹", [":Ethiopia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇪🇺", const [":European-Union-flag:"]),
+    UnicodeEmoji("🇪🇺", [":European-Union-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇫🇮", const [":Finland-flag:"]),
+    UnicodeEmoji("🇫🇮", [":Finland-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇫🇯", const [":Fiji-flag:"]),
+    UnicodeEmoji("🇫🇯", [":Fiji-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇫🇰", const [":Falkland-Islands-flag:"]),
+    UnicodeEmoji("🇫🇰", [":Falkland-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇫🇲", const [":Micronesia-flag:"]),
+    UnicodeEmoji("🇫🇲", [":Micronesia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇫🇴", const [":Faroe-Islands-flag:"]),
+    UnicodeEmoji("🇫🇴", [":Faroe-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇫🇷", const [":France-flag:"]),
+    UnicodeEmoji("🇫🇷", [":France-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇦", const [":Gabon-flag:"]),
+    UnicodeEmoji("🇬🇦", [":Gabon-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇧", const [":United-Kingdom-flag:"]),
+    UnicodeEmoji("🇬🇧", [":United-Kingdom-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇩", const [":Grenada-flag:"]),
+    UnicodeEmoji("🇬🇩", [":Grenada-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇪", const [":Georgia-flag:"]),
+    UnicodeEmoji("🇬🇪", [":Georgia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇫", const [":French Guiana-flag:"]),
+    UnicodeEmoji("🇬🇫", [":French Guiana-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇬", const [":Guernsey-flag:"]),
+    UnicodeEmoji("🇬🇬", [":Guernsey-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇭", const [":Ghana-flag:"]),
+    UnicodeEmoji("🇬🇭", [":Ghana-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇮", const [":Gibraltar-flag:"]),
+    UnicodeEmoji("🇬🇮", [":Gibraltar-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇱", const [":Greenland-flag:"]),
+    UnicodeEmoji("🇬🇱", [":Greenland-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇲", const [":Gambia-flag:"]),
+    UnicodeEmoji("🇬🇲", [":Gambia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇳", const [":Guinea-flag:"]),
+    UnicodeEmoji("🇬🇳", [":Guinea-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇵", const [":Guadeloupe-flag:"]),
+    UnicodeEmoji("🇬🇵", [":Guadeloupe-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇶", const [":Equatorial-Guinea-flag:"]),
+    UnicodeEmoji("🇬🇶", [":Equatorial-Guinea-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇷", const [":Greece-flag:"]),
+    UnicodeEmoji("🇬🇷", [":Greece-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇸", const [":South-Georgia-South-flag:"]),
+    UnicodeEmoji("🇬🇸", [":South-Georgia-South-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇹", const [":Guatemala-flag:"]),
+    UnicodeEmoji("🇬🇹", [":Guatemala-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇺", const [":Guam-flag:"]),
+    UnicodeEmoji("🇬🇺", [":Guam-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇼", const [":Guinea-Bissau-flag:"]),
+    UnicodeEmoji("🇬🇼", [":Guinea-Bissau-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇬🇾", const [":Guyana-flag:"]),
+    UnicodeEmoji("🇬🇾", [":Guyana-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇭🇰", const [":Hong-Kong-SAR-China-flag:"]),
+    UnicodeEmoji("🇭🇰", [":Hong-Kong-SAR-China-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇭🇲", const [":Heard-McDonald Islands-flag:"]),
+    UnicodeEmoji("🇭🇲", [":Heard-McDonald Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇭🇳", const [":Honduras-flag:"]),
+    UnicodeEmoji("🇭🇳", [":Honduras-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇭🇷", const [":Croatia-flag:"]),
+    UnicodeEmoji("🇭🇷", [":Croatia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇭🇹", const [":Haiti-flag:"]),
+    UnicodeEmoji("🇭🇹", [":Haiti-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇭🇺", const [":Hungary-flag:"]),
+    UnicodeEmoji("🇭🇺", [":Hungary-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇨", const [":Canary-Islands-flag:"]),
+    UnicodeEmoji("🇮🇨", [":Canary-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇩", const [":Indonesia-flag:"]),
+    UnicodeEmoji("🇮🇩", [":Indonesia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇪", const [":Ireland-flag:"]),
+    UnicodeEmoji("🇮🇪", [":Ireland-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇱", const [":Israel-flag:"]),
+    UnicodeEmoji("🇮🇱", [":Israel-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇲", const [":Isle-of-Man-flag:"]),
+    UnicodeEmoji("🇮🇲", [":Isle-of-Man-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇳", const [":India-flag:"]),
+    UnicodeEmoji("🇮🇳", [":India-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇴", const [":British-Indian-Ocean-Territory-flag:"]),
+    UnicodeEmoji("🇮🇴", [":British-Indian-Ocean-Territory-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇶", const [":Iraq-flag:"]),
+    UnicodeEmoji("🇮🇶", [":Iraq-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇷", const [":Iran-flag:"]),
+    UnicodeEmoji("🇮🇷", [":Iran-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇸", const [":Iceland-flag:"]),
+    UnicodeEmoji("🇮🇸", [":Iceland-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇮🇹", const [":Italy-flag:"]),
+    UnicodeEmoji("🇮🇹", [":Italy-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇯🇪", const [":Jersey-flag:"]),
+    UnicodeEmoji("🇯🇪", [":Jersey-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇯🇲", const [":Jamaica-flag:"]),
+    UnicodeEmoji("🇯🇲", [":Jamaica-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇯🇴", const [":Jordan-flag:"]),
+    UnicodeEmoji("🇯🇴", [":Jordan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇯🇵", const [":Japan-flag:"]),
+    UnicodeEmoji("🇯🇵", [":Japan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇪", const [":Kenya-flag:"]),
+    UnicodeEmoji("🇰🇪", [":Kenya-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇬", const [":Kyrgyzstan-flag:"]),
+    UnicodeEmoji("🇰🇬", [":Kyrgyzstan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇭", const [":Cambodia-flag:"]),
+    UnicodeEmoji("🇰🇭", [":Cambodia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇮", const [":Kiribati-flag:"]),
+    UnicodeEmoji("🇰🇮", [":Kiribati-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇲", const [":Comoros-flag:"]),
+    UnicodeEmoji("🇰🇲", [":Comoros-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇳", const [":St. Kitts & Nevis-flag:"]),
+    UnicodeEmoji("🇰🇳", [":St. Kitts & Nevis-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇵", const [":North Korea-flag:"]),
+    UnicodeEmoji("🇰🇵", [":North Korea-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇷", const [":South Korea-flag:"]),
+    UnicodeEmoji("🇰🇷", [":South Korea-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇼", const [":Kuwait-flag:"]),
+    UnicodeEmoji("🇰🇼", [":Kuwait-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇾", const [":Cayman Islands-flag:"]),
+    UnicodeEmoji("🇰🇾", [":Cayman Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇰🇿", const [":Kazakhstan-flag:"]),
+    UnicodeEmoji("🇰🇿", [":Kazakhstan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇦", const [":Laos-flag:"]),
+    UnicodeEmoji("🇱🇦", [":Laos-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇧", const [":Lebanon-flag:"]),
+    UnicodeEmoji("🇱🇧", [":Lebanon-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇨", const [":St. Lucia-flag:"]),
+    UnicodeEmoji("🇱🇨", [":St. Lucia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇮", const [":Liechtenstein-flag:"]),
+    UnicodeEmoji("🇱🇮", [":Liechtenstein-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇰", const [":Sri Lanka-flag:"]),
+    UnicodeEmoji("🇱🇰", [":Sri Lanka-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇷", const [":Liberia-flag:"]),
+    UnicodeEmoji("🇱🇷", [":Liberia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇸", const [":Lesotho-flag:"]),
+    UnicodeEmoji("🇱🇸", [":Lesotho-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇹", const [":Lithuania-flag:"]),
+    UnicodeEmoji("🇱🇹", [":Lithuania-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇺", const [":Luxembourg-flag:"]),
+    UnicodeEmoji("🇱🇺", [":Luxembourg-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇻", const [":Latvia-flag:"]),
+    UnicodeEmoji("🇱🇻", [":Latvia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇱🇾", const [":Libya-flag:"]),
+    UnicodeEmoji("🇱🇾", [":Libya-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇦", const [":Morocco-flag:"]),
+    UnicodeEmoji("🇲🇦", [":Morocco-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇨", const [":Monaco-flag:"]),
+    UnicodeEmoji("🇲🇨", [":Monaco-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇩", const [":Moldova-flag:"]),
+    UnicodeEmoji("🇲🇩", [":Moldova-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇪", const [":Montenegro-flag:"]),
+    UnicodeEmoji("🇲🇪", [":Montenegro-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇫", const [":St-Martin-flag:"]),
+    UnicodeEmoji("🇲🇫", [":St-Martin-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇬", const [":Madagascar-flag:"]),
+    UnicodeEmoji("🇲🇬", [":Madagascar-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇭", const [":Marshall-Islands-flag:"]),
+    UnicodeEmoji("🇲🇭", [":Marshall-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇰", const [":Macedonia-flag:"]),
+    UnicodeEmoji("🇲🇰", [":Macedonia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇱", const [":Mali-flag:"]),
+    UnicodeEmoji("🇲🇱", [":Mali-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇲", const [":Myanmar-flag:"]),
+    UnicodeEmoji("🇲🇲", [":Myanmar-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇳", const [":Mongolia-flag:"]),
+    UnicodeEmoji("🇲🇳", [":Mongolia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇴", const [":Macau-SAR-China-flag:"]),
+    UnicodeEmoji("🇲🇴", [":Macau-SAR-China-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇵", const [":Northern-Mariana-Islands-flag:"]),
+    UnicodeEmoji("🇲🇵", [":Northern-Mariana-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇶", const [":Martinique-flag:"]),
+    UnicodeEmoji("🇲🇶", [":Martinique-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇷", const [":Mauritania-flag:"]),
+    UnicodeEmoji("🇲🇷", [":Mauritania-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇸", const [":Montserrat-flag:"]),
+    UnicodeEmoji("🇲🇸", [":Montserrat-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇹", const [":Malta-flag:"]),
+    UnicodeEmoji("🇲🇹", [":Malta-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇺", const [":Mauritius-flag:"]),
+    UnicodeEmoji("🇲🇺", [":Mauritius-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇻", const [":Maldives-flag:"]),
+    UnicodeEmoji("🇲🇻", [":Maldives-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇼", const [":Malawi-flag:"]),
+    UnicodeEmoji("🇲🇼", [":Malawi-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇽", const [":Mexico-flag:"]),
+    UnicodeEmoji("🇲🇽", [":Mexico-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇾", const [":Malaysia-flag:"]),
+    UnicodeEmoji("🇲🇾", [":Malaysia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇲🇿", const [":Mozambique-flag:"]),
+    UnicodeEmoji("🇲🇿", [":Mozambique-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇦", const [":Namibia-flag:"]),
+    UnicodeEmoji("🇳🇦", [":Namibia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇨", const [":New-Caledonia-flag:"]),
+    UnicodeEmoji("🇳🇨", [":New-Caledonia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇪", const [":Niger-flag:"]),
+    UnicodeEmoji("🇳🇪", [":Niger-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇫", const [":Norfolk-Island-flag:"]),
+    UnicodeEmoji("🇳🇫", [":Norfolk-Island-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇬", const [":Nigeria-flag:"]),
+    UnicodeEmoji("🇳🇬", [":Nigeria-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇮", const [":Nicaragua-flag:"]),
+    UnicodeEmoji("🇳🇮", [":Nicaragua-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇱", const [":Netherlands-flag:"]),
+    UnicodeEmoji("🇳🇱", [":Netherlands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇴", const [":Norway-flag:"]),
+    UnicodeEmoji("🇳🇴", [":Norway-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇵", const [":Nepal-flag:"]),
+    UnicodeEmoji("🇳🇵", [":Nepal-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇷", const [":Nauru-flag:"]),
+    UnicodeEmoji("🇳🇷", [":Nauru-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇺", const [":Niue-flag:"]),
+    UnicodeEmoji("🇳🇺", [":Niue-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇳🇿", const [":New-Zealand-flag:"]),
+    UnicodeEmoji("🇳🇿", [":New-Zealand-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇴🇲", const [":Oman-flag:"]),
+    UnicodeEmoji("🇴🇲", [":Oman-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇦", const [":Panama-flag:"]),
+    UnicodeEmoji("🇵🇦", [":Panama-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇪", const [":Peru-flag:"]),
+    UnicodeEmoji("🇵🇪", [":Peru-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇫", const [":French-Polynesia-flag:"]),
+    UnicodeEmoji("🇵🇫", [":French-Polynesia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇬", const [":Papua-New-Guinea-flag:"]),
+    UnicodeEmoji("🇵🇬", [":Papua-New-Guinea-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇭", const [":Philippines-flag:"]),
+    UnicodeEmoji("🇵🇭", [":Philippines-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇰", const [":Pakistan-flag:"]),
+    UnicodeEmoji("🇵🇰", [":Pakistan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇱", const [":Poland-flag:"]),
+    UnicodeEmoji("🇵🇱", [":Poland-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇲", const [":St-Pierre-Miquelon-flag:"]),
+    UnicodeEmoji("🇵🇲", [":St-Pierre-Miquelon-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇳", const [":Pitcairn-Islands-flag:"]),
+    UnicodeEmoji("🇵🇳", [":Pitcairn-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇷", const [":Puerto-Rico-flag:"]),
+    UnicodeEmoji("🇵🇷", [":Puerto-Rico-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇸", const [":Palestinian-Territories-flag:"]),
+    UnicodeEmoji("🇵🇸", [":Palestinian-Territories-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇹", const [":Portugal-flag:"]),
+    UnicodeEmoji("🇵🇹", [":Portugal-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇼", const [":Palau-flag:"]),
+    UnicodeEmoji("🇵🇼", [":Palau-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇵🇾", const [":Paraguay-flag:"]),
+    UnicodeEmoji("🇵🇾", [":Paraguay-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇶🇦", const [":Qatar-flag:"]),
+    UnicodeEmoji("🇶🇦", [":Qatar-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇷🇪", const [":Réunion-flag:"]),
+    UnicodeEmoji("🇷🇪", [":Réunion-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇷🇴", const [":Romania-flag:"]),
+    UnicodeEmoji("🇷🇴", [":Romania-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇷🇸", const [":Serbia-flag:"]),
+    UnicodeEmoji("🇷🇸", [":Serbia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇷🇺", const [":Russia-flag:"]),
+    UnicodeEmoji("🇷🇺", [":Russia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇷🇼", const [":Rwanda-flag:"]),
+    UnicodeEmoji("🇷🇼", [":Rwanda-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇦", const [":Saudi-Arabia-flag:"]),
+    UnicodeEmoji("🇸🇦", [":Saudi-Arabia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇧", const [":Solomon-Islands-flag:"]),
+    UnicodeEmoji("🇸🇧", [":Solomon-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇨", const [":Seychelles-flag:"]),
+    UnicodeEmoji("🇸🇨", [":Seychelles-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇩", const [":Sudan-flag:"]),
+    UnicodeEmoji("🇸🇩", [":Sudan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇪", const [":Sweden-flag:"]),
+    UnicodeEmoji("🇸🇪", [":Sweden-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇬", const [":Singapore-flag:"]),
+    UnicodeEmoji("🇸🇬", [":Singapore-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇭", const [":St-Helena-flag:"]),
+    UnicodeEmoji("🇸🇭", [":St-Helena-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇮", const [":Slovenia-flag:"]),
+    UnicodeEmoji("🇸🇮", [":Slovenia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇯", const [":Svalbard-Jan Mayen-flag:"]),
+    UnicodeEmoji("🇸🇯", [":Svalbard-Jan Mayen-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇰", const [":Slovakia-flag:"]),
+    UnicodeEmoji("🇸🇰", [":Slovakia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇱", const [":Sierra-Leone-flag:"]),
+    UnicodeEmoji("🇸🇱", [":Sierra-Leone-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇲", const [":San-Marino-flag:"]),
+    UnicodeEmoji("🇸🇲", [":San-Marino-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇳", const [":Senegal-flag:"]),
+    UnicodeEmoji("🇸🇳", [":Senegal-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇴", const [":Somalia-flag:"]),
+    UnicodeEmoji("🇸🇴", [":Somalia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇷", const [":Suriname-flag:"]),
+    UnicodeEmoji("🇸🇷", [":Suriname-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇸", const [":South-Sudan-flag:"]),
+    UnicodeEmoji("🇸🇸", [":South-Sudan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇹", const [":São-Tomé-Príncipe-flag:"]),
+    UnicodeEmoji("🇸🇹", [":São-Tomé-Príncipe-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇻", const [":El-Salvador-flag:"]),
+    UnicodeEmoji("🇸🇻", [":El-Salvador-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇽", const [":Sint-Maarten-flag:"]),
+    UnicodeEmoji("🇸🇽", [":Sint-Maarten-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇾", const [":Syria-flag:"]),
+    UnicodeEmoji("🇸🇾", [":Syria-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇸🇿", const [":Swaziland-flag:"]),
+    UnicodeEmoji("🇸🇿", [":Swaziland-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇦", const [":Tristan-da-Cunha-flag:"]),
+    UnicodeEmoji("🇹🇦", [":Tristan-da-Cunha-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇨", const [":Turks-Caicos Islands-flag:"]),
+    UnicodeEmoji("🇹🇨", [":Turks-Caicos Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇩", const [":Chad-flag:"]),
+    UnicodeEmoji("🇹🇩", [":Chad-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇫", const [":French-Southern-Territories-flag:"]),
+    UnicodeEmoji("🇹🇫", [":French-Southern-Territories-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇬", const [":Togo-flag:"]),
+    UnicodeEmoji("🇹🇬", [":Togo-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇭", const [":Thailand-flag:"]),
+    UnicodeEmoji("🇹🇭", [":Thailand-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇯", const [":Tajikistan-flag:"]),
+    UnicodeEmoji("🇹🇯", [":Tajikistan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇰", const [":Tokelau-flag:"]),
+    UnicodeEmoji("🇹🇰", [":Tokelau-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇱", const [":Timor-Leste-flag:"]),
+    UnicodeEmoji("🇹🇱", [":Timor-Leste-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇲", const [":Turkmenistan-flag:"]),
+    UnicodeEmoji("🇹🇲", [":Turkmenistan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇳", const [":Tunisia-flag:"]),
+    UnicodeEmoji("🇹🇳", [":Tunisia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇴", const [":Tonga-flag:"]),
+    UnicodeEmoji("🇹🇴", [":Tonga-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇷", const [":Turkey-flag:"]),
+    UnicodeEmoji("🇹🇷", [":Turkey-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇹", const [":Trinidad-Tobago-flag:"]),
+    UnicodeEmoji("🇹🇹", [":Trinidad-Tobago-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇻", const [":Tuvalu-flag:"]),
+    UnicodeEmoji("🇹🇻", [":Tuvalu-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇼", const [":Taiwan-flag:"]),
+    UnicodeEmoji("🇹🇼", [":Taiwan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇹🇿", const [":Tanzania-flag:"]),
+    UnicodeEmoji("🇹🇿", [":Tanzania-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇺🇦", const [":Ukraine-flag:"]),
+    UnicodeEmoji("🇺🇦", [":Ukraine-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇺🇬", const [":Uganda-flag:"]),
+    UnicodeEmoji("🇺🇬", [":Uganda-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇺🇲", const [":US-Outlying Islands-flag:"]),
+    UnicodeEmoji("🇺🇲", [":US-Outlying Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇺🇳", const [":United-Nations-flag:"]),
+    UnicodeEmoji("🇺🇳", [":United-Nations-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇺🇸", const [":United-States-flag:"]),
+    UnicodeEmoji("🇺🇸", [":United-States-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇺🇾", const [":Uruguay-flag:"]),
+    UnicodeEmoji("🇺🇾", [":Uruguay-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇺🇿", const [":Uzbekistan-flag:"]),
+    UnicodeEmoji("🇺🇿", [":Uzbekistan-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇻🇦", const [":Vatican City-flag:"]),
+    UnicodeEmoji("🇻🇦", [":Vatican City-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇻🇨", const [":St-Vincent-Grenadines-flag:"]),
+    UnicodeEmoji("🇻🇨", [":St-Vincent-Grenadines-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇻🇪", const [":Venezuela-flag:"]),
+    UnicodeEmoji("🇻🇪", [":Venezuela-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇻🇬", const [":British-Virgin Islands-flag:"]),
+    UnicodeEmoji("🇻🇬", [":British-Virgin Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇻🇮", const [":US-Virgin-Islands-flag:"]),
+    UnicodeEmoji("🇻🇮", [":US-Virgin-Islands-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇻🇳", const [":Vietnam-flag:"]),
+    UnicodeEmoji("🇻🇳", [":Vietnam-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇻🇺", const [":Vanuatu-flag:"]),
+    UnicodeEmoji("🇻🇺", [":Vanuatu-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇼🇫", const [":Wallis-Futuna-flag:"]),
+    UnicodeEmoji("🇼🇫", [":Wallis-Futuna-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇼🇸", const [":Samoa-flag:"]),
+    UnicodeEmoji("🇼🇸", [":Samoa-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇽🇰", const [":Kosovo-flag:"]),
+    UnicodeEmoji("🇽🇰", [":Kosovo-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇾🇪", const [":Yemen-flag:"]),
+    UnicodeEmoji("🇾🇪", [":Yemen-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇾🇹", const [":Mayotte-flag:"]),
+    UnicodeEmoji("🇾🇹", [":Mayotte-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇿🇦", const [":South-Africa-flag:"]),
+    UnicodeEmoji("🇿🇦", [":South-Africa-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇿🇲", const [":Zambia-flag:"]),
+    UnicodeEmoji("🇿🇲", [":Zambia-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🇿🇼", const [":Zimbabwe-flag:"]),
+    UnicodeEmoji("🇿🇼", [":Zimbabwe-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏴󠁧󠁢󠁥󠁮󠁧󠁿", const [":England-flag:"]),
+    UnicodeEmoji("🏴󠁧󠁢󠁥󠁮󠁧󠁿", [":England-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏴󠁧󠁢󠁳󠁣󠁴󠁿", const [":Scotland-flag:"]),
+    UnicodeEmoji("🏴󠁧󠁢󠁳󠁣󠁴󠁿", [":Scotland-flag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏴󠁧󠁢󠁷󠁬󠁳󠁿", const [":Wales-flag:"]),
+    UnicodeEmoji("🏴󠁧󠁢󠁷󠁬󠁳󠁿", [":Wales-flag:"]),
   ),
 ];

@@ -5,786 +5,786 @@ import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 final objects = <EmojiCategoryItem<UnicodeEmoji>>[
   const EmojiCategoryItem(
-    const UnicodeEmoji("📱", const [":mobile-phone:"]),
+    UnicodeEmoji("📱", [":mobile-phone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("☎️", const [":telephone:"]),
+    UnicodeEmoji("☎️", [":telephone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📞", const [":telephone-receiver:"]),
+    UnicodeEmoji("📞", [":telephone-receiver:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📟", const [":pager:"]),
+    UnicodeEmoji("📟", [":pager:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📠", const [":fax-machine:"]),
+    UnicodeEmoji("📠", [":fax-machine:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔌", const [":electric-plug:"]),
+    UnicodeEmoji("🔌", [":electric-plug:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔋", const [":battery-full:"]),
+    UnicodeEmoji("🔋", [":battery-full:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪫", const [":battery-low:"]),
+    UnicodeEmoji("🪫", [":battery-low:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖲️", const [":trackball:"]),
+    UnicodeEmoji("🖲️", [":trackball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💽", const [":computer-disk:"]),
+    UnicodeEmoji("💽", [":computer-disk:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💾", const [":floppy-disk:"]),
+    UnicodeEmoji("💾", [":floppy-disk:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💿", const [":optical-disk:"]),
+    UnicodeEmoji("💿", [":optical-disk:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📀", const [":dvd:"]),
+    UnicodeEmoji("📀", [":dvd:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖥️", const [":desktop-computer:"]),
+    UnicodeEmoji("🖥️", [":desktop-computer:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💻", const [":laptop-computer:"]),
+    UnicodeEmoji("💻", [":laptop-computer:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⌨️", const [":keyboard:"]),
+    UnicodeEmoji("⌨️", [":keyboard:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖨️", const [":printer:"]),
+    UnicodeEmoji("🖨️", [":printer:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖱️", const [":computer-mouse:"]),
+    UnicodeEmoji("🖱️", [":computer-mouse:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪙", const [":coin:"]),
+    UnicodeEmoji("🪙", [":coin:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💸", const [":money-with-wings:"]),
+    UnicodeEmoji("💸", [":money-with-wings:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💵", const [":dollar:"]),
+    UnicodeEmoji("💵", [":dollar:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💴", const [":yen:"]),
+    UnicodeEmoji("💴", [":yen:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💶", const [":euro:"]),
+    UnicodeEmoji("💶", [":euro:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💷", const [":pound:"]),
+    UnicodeEmoji("💷", [":pound:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💳", const [":credit-card:"]),
+    UnicodeEmoji("💳", [":credit-card:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💰", const [":money-bag:"]),
+    UnicodeEmoji("💰", [":money-bag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧾", const [":receipt:"]),
+    UnicodeEmoji("🧾", [":receipt:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧮", const [":abacus:"]),
+    UnicodeEmoji("🧮", [":abacus:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚖️", const [":balance-scale:"]),
+    UnicodeEmoji("⚖️", [":balance-scale:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛒", const [":shopping-cart:"]),
+    UnicodeEmoji("🛒", [":shopping-cart:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛍️", const [":shopping-bags:"]),
+    UnicodeEmoji("🛍️", [":shopping-bags:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕯️", const [":candle:"]),
+    UnicodeEmoji("🕯️", [":candle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💡", const [":light-bulb:"]),
+    UnicodeEmoji("💡", [":light-bulb:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔦", const [":flashlight:"]),
+    UnicodeEmoji("🔦", [":flashlight:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏮", const [":red-paper-lantern:"]),
+    UnicodeEmoji("🏮", [":red-paper-lantern:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧱", const [":bricks:"]),
+    UnicodeEmoji("🧱", [":bricks:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪟", const [":window:"]),
+    UnicodeEmoji("🪟", [":window:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪞", const [":mirror:"]),
+    UnicodeEmoji("🪞", [":mirror:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚪", const [":door:"]),
+    UnicodeEmoji("🚪", [":door:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪑", const [":chair:"]),
+    UnicodeEmoji("🪑", [":chair:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛏️", const [":bed:"]),
+    UnicodeEmoji("🛏️", [":bed:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛋️", const [":couch-and-lamp:"]),
+    UnicodeEmoji("🛋️", [":couch-and-lamp:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚿", const [":shower:"]),
+    UnicodeEmoji("🚿", [":shower:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛁", const [":bathtub:"]),
+    UnicodeEmoji("🛁", [":bathtub:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚽", const [":toilet:"]),
+    UnicodeEmoji("🚽", [":toilet:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧻", const [":roll-of-paper:"]),
+    UnicodeEmoji("🧻", [":roll-of-paper:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪠", const [":plunger:"]),
+    UnicodeEmoji("🪠", [":plunger:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧸", const [":teddy-bear:"]),
+    UnicodeEmoji("🧸", [":teddy-bear:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪆", const [":nesting-doll:"]),
+    UnicodeEmoji("🪆", [":nesting-doll:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧷", const [":safety-pin:"]),
+    UnicodeEmoji("🧷", [":safety-pin:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪢", const [":knot:"]),
+    UnicodeEmoji("🪢", [":knot:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧹", const [":broom:"]),
+    UnicodeEmoji("🧹", [":broom:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧴", const [":lotion-bottle:"]),
+    UnicodeEmoji("🧴", [":lotion-bottle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧽", const [":sponge:"]),
+    UnicodeEmoji("🧽", [":sponge:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧼", const [":soap:"]),
+    UnicodeEmoji("🧼", [":soap:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪥", const [":toothbrush:"]),
+    UnicodeEmoji("🪥", [":toothbrush:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪒", const [":razor:"]),
+    UnicodeEmoji("🪒", [":razor:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪮", const [":hair-pick:"]),
+    UnicodeEmoji("🪮", [":hair-pick:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧺", const [":basket:"]),
+    UnicodeEmoji("🧺", [":basket:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧦", const [":socks:"]),
+    UnicodeEmoji("🧦", [":socks:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧤", const [":gloves:"]),
+    UnicodeEmoji("🧤", [":gloves:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧣", const [":scarf:"]),
+    UnicodeEmoji("🧣", [":scarf:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👖", const [":jeans:"]),
+    UnicodeEmoji("👖", [":jeans:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👕", const [":t-shirt:"]),
+    UnicodeEmoji("👕", [":t-shirt:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎽", const [":running-shirt:"]),
+    UnicodeEmoji("🎽", [":running-shirt:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👚", const [":woman’s-clothes:"]),
+    UnicodeEmoji("👚", [":woman’s-clothes:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👔", const [":necktie:"]),
+    UnicodeEmoji("👔", [":necktie:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👗", const [":dress:"]),
+    UnicodeEmoji("👗", [":dress:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👘", const [":kimono:"]),
+    UnicodeEmoji("👘", [":kimono:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥻", const [":sari:"]),
+    UnicodeEmoji("🥻", [":sari:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩱", const [":one-piece-swimsuit:"]),
+    UnicodeEmoji("🩱", [":one-piece-swimsuit:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👙", const [":bikini:"]),
+    UnicodeEmoji("👙", [":bikini:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩳", const [":shorts:"]),
+    UnicodeEmoji("🩳", [":shorts:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩲", const [":swim-brief:"]),
+    UnicodeEmoji("🩲", [":swim-brief:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧥", const [":coat:"]),
+    UnicodeEmoji("🧥", [":coat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥼", const [":lab-coat:"]),
+    UnicodeEmoji("🥼", [":lab-coat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🦺", const [":safety-vest:"]),
+    UnicodeEmoji("🦺", [":safety-vest:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛑️", const [":rescue-worker’s-helmet:"]),
+    UnicodeEmoji("⛑️", [":rescue-worker’s-helmet:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪖", const [":military-helmet:"]),
+    UnicodeEmoji("🪖", [":military-helmet:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎓", const [":graduation-cap:"]),
+    UnicodeEmoji("🎓", [":graduation-cap:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎩", const [":top-hat:"]),
+    UnicodeEmoji("🎩", [":top-hat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👒", const [":woman’s-hat:"]),
+    UnicodeEmoji("👒", [":woman’s-hat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧢", const [":billed-cap:"]),
+    UnicodeEmoji("🧢", [":billed-cap:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👑", const [":crown:"]),
+    UnicodeEmoji("👑", [":crown:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪭", const [":fan:"]),
+    UnicodeEmoji("🪭", [":fan:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎒", const [":school-backpack:"]),
+    UnicodeEmoji("🎒", [":school-backpack:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👝", const [":clutch-bag:"]),
+    UnicodeEmoji("👝", [":clutch-bag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👛", const [":purse:"]),
+    UnicodeEmoji("👛", [":purse:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👜", const [":handbag:"]),
+    UnicodeEmoji("👜", [":handbag:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💼", const [":briefcase:"]),
+    UnicodeEmoji("💼", [":briefcase:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧳", const [":luggage:"]),
+    UnicodeEmoji("🧳", [":luggage:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("☂️", const [":umbrella:"]),
+    UnicodeEmoji("☂️", [":umbrella:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌂", const [":closed-umbrella:"]),
+    UnicodeEmoji("🌂", [":closed-umbrella:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💍", const [":ring:"]),
+    UnicodeEmoji("💍", [":ring:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💎", const [":gem-stone:"]),
+    UnicodeEmoji("💎", [":gem-stone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💄", const [":lipstick:"]),
+    UnicodeEmoji("💄", [":lipstick:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👠", const [":high-heeled-shoe:"]),
+    UnicodeEmoji("👠", [":high-heeled-shoe:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👟", const [":running-shoe:"]),
+    UnicodeEmoji("👟", [":running-shoe:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👞", const [":man’s-shoe:"]),
+    UnicodeEmoji("👞", [":man’s-shoe:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥿", const [":flat-shoe:"]),
+    UnicodeEmoji("🥿", [":flat-shoe:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩴", const [":flip-flop:", ":thong-sandal:"]),
+    UnicodeEmoji("🩴", [":flip-flop:", ":thong-sandal:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👡", const [":sandal:"]),
+    UnicodeEmoji("👡", [":sandal:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👢", const [":boot:"]),
+    UnicodeEmoji("👢", [":boot:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥾", const [":hiking-boot:"]),
+    UnicodeEmoji("🥾", [":hiking-boot:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🦯", const [":probing-cane:"]),
+    UnicodeEmoji("🦯", [":probing-cane:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕶️", const [":sunglasses:"]),
+    UnicodeEmoji("🕶️", [":sunglasses:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👓", const [":glasses:"]),
+    UnicodeEmoji("👓", [":glasses:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥽", const [":goggles:"]),
+    UnicodeEmoji("🥽", [":goggles:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚗️", const [":alembic:"]),
+    UnicodeEmoji("⚗️", [":alembic:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧫", const [":petri-dish:"]),
+    UnicodeEmoji("🧫", [":petri-dish:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧪", const [":test-tube:"]),
+    UnicodeEmoji("🧪", [":test-tube:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌡️", const [":thermometer:"]),
+    UnicodeEmoji("🌡️", [":thermometer:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💉", const [":syringe:"]),
+    UnicodeEmoji("💉", [":syringe:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💊", const [":pill:"]),
+    UnicodeEmoji("💊", [":pill:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩹", const [":adhesive-bandage:"]),
+    UnicodeEmoji("🩹", [":adhesive-bandage:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩺", const [":stethoscope:"]),
+    UnicodeEmoji("🩺", [":stethoscope:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩻", const [":x-ray:"]),
+    UnicodeEmoji("🩻", [":x-ray:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧬", const [":dna:"]),
+    UnicodeEmoji("🧬", [":dna:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔭", const [":telescope:"]),
+    UnicodeEmoji("🔭", [":telescope:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔬", const [":microscope:"]),
+    UnicodeEmoji("🔬", [":microscope:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📡", const [":satellite-antenna:"]),
+    UnicodeEmoji("📡", [":satellite-antenna:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛰️", const [":satellite:"]),
+    UnicodeEmoji("🛰️", [":satellite:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧯", const [":fire-extinguisher:"]),
+    UnicodeEmoji("🧯", [":fire-extinguisher:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪓", const [":axe:"]),
+    UnicodeEmoji("🪓", [":axe:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪜", const [":ladder:"]),
+    UnicodeEmoji("🪜", [":ladder:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪣", const [":bucket:"]),
+    UnicodeEmoji("🪣", [":bucket:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪝", const [":hook:"]),
+    UnicodeEmoji("🪝", [":hook:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧲", const [":magnet:"]),
+    UnicodeEmoji("🧲", [":magnet:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧰", const [":toolbox:"]),
+    UnicodeEmoji("🧰", [":toolbox:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗜️", const [":clamp:"]),
+    UnicodeEmoji("🗜️", [":clamp:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔩", const [":nut-and-bolt:"]),
+    UnicodeEmoji("🔩", [":nut-and-bolt:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪛", const [":screwdriver:"]),
+    UnicodeEmoji("🪛", [":screwdriver:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪚", const [":saw:"]),
+    UnicodeEmoji("🪚", [":saw:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔧", const [":wrench:"]),
+    UnicodeEmoji("🔧", [":wrench:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔨", const [":hammer:"]),
+    UnicodeEmoji("🔨", [":hammer:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚒️", const [":hammer-and-pick:"]),
+    UnicodeEmoji("⚒️", [":hammer-and-pick:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛠️", const [":hammer-and-wrench:"]),
+    UnicodeEmoji("🛠️", [":hammer-and-wrench:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛏️", const [":pick:"]),
+    UnicodeEmoji("⛏️", [":pick:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚙️", const [":gear:"]),
+    UnicodeEmoji("⚙️", [":gear:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔗", const [":link:"]),
+    UnicodeEmoji("🔗", [":link:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛓️", const [":chains:"]),
+    UnicodeEmoji("⛓️", [":chains:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📎", const [":paperclip:"]),
+    UnicodeEmoji("📎", [":paperclip:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖇️", const [":linked-paperclips:"]),
+    UnicodeEmoji("🖇️", [":linked-paperclips:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📏", const [":straight-ruler:"]),
+    UnicodeEmoji("📏", [":straight-ruler:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📐", const [":triangular-ruler:"]),
+    UnicodeEmoji("📐", [":triangular-ruler:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖌️", const [":paintbrush:"]),
+    UnicodeEmoji("🖌️", [":paintbrush:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖍️", const [":crayon:"]),
+    UnicodeEmoji("🖍️", [":crayon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖊️", const [":pen:"]),
+    UnicodeEmoji("🖊️", [":pen:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖋️", const [":fountain-pen:"]),
+    UnicodeEmoji("🖋️", [":fountain-pen:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("✒️", const [":black-nib:"]),
+    UnicodeEmoji("✒️", [":black-nib:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("✏️", const [":pencil:"]),
+    UnicodeEmoji("✏️", [":pencil:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📝", const [":memo:"]),
+    UnicodeEmoji("📝", [":memo:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📖", const [":open-book:"]),
+    UnicodeEmoji("📖", [":open-book:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📚", const [":books:"]),
+    UnicodeEmoji("📚", [":books:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📒", const [":ledger:"]),
+    UnicodeEmoji("📒", [":ledger:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📔", const [":notebook-with-decorative-cover:"]),
+    UnicodeEmoji("📔", [":notebook-with-decorative-cover:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📕", const [":closed-book:"]),
+    UnicodeEmoji("📕", [":closed-book:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📓", const [":notebook:"]),
+    UnicodeEmoji("📓", [":notebook:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📗", const [":green-book:"]),
+    UnicodeEmoji("📗", [":green-book:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📘", const [":blue-book:"]),
+    UnicodeEmoji("📘", [":blue-book:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📙", const [":orange-book:"]),
+    UnicodeEmoji("📙", [":orange-book:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔖", const [":bookmark:"]),
+    UnicodeEmoji("🔖", [":bookmark:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗒️", const [":spiral-notepad:"]),
+    UnicodeEmoji("🗒️", [":spiral-notepad:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📄", const [":page-facing-up:"]),
+    UnicodeEmoji("📄", [":page-facing-up:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📃", const [":page-with-curl:"]),
+    UnicodeEmoji("📃", [":page-with-curl:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📋", const [":clipboard:"]),
+    UnicodeEmoji("📋", [":clipboard:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📑", const [":bookmark-tabs:"]),
+    UnicodeEmoji("📑", [":bookmark-tabs:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📂", const [":open-file-folder:"]),
+    UnicodeEmoji("📂", [":open-file-folder:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📁", const [":file-folder:"]),
+    UnicodeEmoji("📁", [":file-folder:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗂️", const [":card-index-dividers:"]),
+    UnicodeEmoji("🗂️", [":card-index-dividers:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗃️", const [":card-file-box:"]),
+    UnicodeEmoji("🗃️", [":card-file-box:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗄️", const [":file-cabinet:"]),
+    UnicodeEmoji("🗄️", [":file-cabinet:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📊", const [":bar-chart:"]),
+    UnicodeEmoji("📊", [":bar-chart:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📈", const [":chart-increasing:"]),
+    UnicodeEmoji("📈", [":chart-increasing:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📉", const [":chart-decreasing:"]),
+    UnicodeEmoji("📉", [":chart-decreasing:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📇", const [":card-index:"]),
+    UnicodeEmoji("📇", [":card-index:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪪", const [":id:"]),
+    UnicodeEmoji("🪪", [":id:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📌", const [":pushpin:"]),
+    UnicodeEmoji("📌", [":pushpin:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📍", const [":round-pushpin:"]),
+    UnicodeEmoji("📍", [":round-pushpin:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("✂️", const [":scissors:"]),
+    UnicodeEmoji("✂️", [":scissors:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗑️", const [":wastebasket:"]),
+    UnicodeEmoji("🗑️", [":wastebasket:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📰", const [":newspaper:"]),
+    UnicodeEmoji("📰", [":newspaper:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗞️", const [":rolled-up-newspaper:"]),
+    UnicodeEmoji("🗞️", [":rolled-up-newspaper:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏷️", const [":label:"]),
+    UnicodeEmoji("🏷️", [":label:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📦", const [":package:"]),
+    UnicodeEmoji("📦", [":package:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📫", const [":closed-mailbox-with-raised:"]),
+    UnicodeEmoji("📫", [":closed-mailbox-with-raised:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📪", const [":closed-mailbox-with-lowered:"]),
+    UnicodeEmoji("📪", [":closed-mailbox-with-lowered:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📬", const [":open-mailbox-with-raised:"]),
+    UnicodeEmoji("📬", [":open-mailbox-with-raised:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📭", const [":open-mailbox-with-lowered:"]),
+    UnicodeEmoji("📭", [":open-mailbox-with-lowered:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📮", const [":postbox:"]),
+    UnicodeEmoji("📮", [":postbox:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("✉️", const [":envelope:"]),
+    UnicodeEmoji("✉️", [":envelope:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📧", const [":e-mail:"]),
+    UnicodeEmoji("📧", [":e-mail:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📩", const [":envelope-with-arrow:"]),
+    UnicodeEmoji("📩", [":envelope-with-arrow:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📨", const [":incoming-envelope:"]),
+    UnicodeEmoji("📨", [":incoming-envelope:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💌", const [":love-letter:"]),
+    UnicodeEmoji("💌", [":love-letter:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📤", const [":outbox-tray:"]),
+    UnicodeEmoji("📤", [":outbox-tray:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📥", const [":inbox-tray:"]),
+    UnicodeEmoji("📥", [":inbox-tray:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗳️", const [":ballot-box:"]),
+    UnicodeEmoji("🗳️", [":ballot-box:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕛", const [":twelve-o-clock:"]),
+    UnicodeEmoji("🕛", [":twelve-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕧", const [":twelve-thirty:"]),
+    UnicodeEmoji("🕧", [":twelve-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕐", const [":one-o-clock:"]),
+    UnicodeEmoji("🕐", [":one-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕜", const [":one-thirty:"]),
+    UnicodeEmoji("🕜", [":one-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕑", const [":two-o-clock:"]),
+    UnicodeEmoji("🕑", [":two-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕝", const [":two-thirty:"]),
+    UnicodeEmoji("🕝", [":two-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕒", const [":three-o-clock:"]),
+    UnicodeEmoji("🕒", [":three-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕞", const [":three-thirty:"]),
+    UnicodeEmoji("🕞", [":three-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕓", const [":four-o-clock:"]),
+    UnicodeEmoji("🕓", [":four-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕟", const [":four-thirty:"]),
+    UnicodeEmoji("🕟", [":four-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕔", const [":five-o-clock:"]),
+    UnicodeEmoji("🕔", [":five-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕠", const [":five-thirty:"]),
+    UnicodeEmoji("🕠", [":five-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕕", const [":six-o-clock:"]),
+    UnicodeEmoji("🕕", [":six-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕡", const [":six-thirty:"]),
+    UnicodeEmoji("🕡", [":six-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕖", const [":seven-o-clock:"]),
+    UnicodeEmoji("🕖", [":seven-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕢", const [":seven-thirty:"]),
+    UnicodeEmoji("🕢", [":seven-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕗", const [":eight-o-clock:"]),
+    UnicodeEmoji("🕗", [":eight-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕣", const [":eight-thirty:"]),
+    UnicodeEmoji("🕣", [":eight-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕘", const [":nine-o-clock:"]),
+    UnicodeEmoji("🕘", [":nine-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕤", const [":nine-thirty:"]),
+    UnicodeEmoji("🕤", [":nine-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕙", const [":ten-o-clock:"]),
+    UnicodeEmoji("🕙", [":ten-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕥", const [":ten-thirty:"]),
+    UnicodeEmoji("🕥", [":ten-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕚", const [":eleven-o-clock:"]),
+    UnicodeEmoji("🕚", [":eleven-o-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕦", const [":eleven-thirty:"]),
+    UnicodeEmoji("🕦", [":eleven-thirty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⏱️", const [":stopwatch:"]),
+    UnicodeEmoji("⏱️", [":stopwatch:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⌚", const [":watch:"]),
+    UnicodeEmoji("⌚", [":watch:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕰️", const [":mantelpiece-clock:"]),
+    UnicodeEmoji("🕰️", [":mantelpiece-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⌛", const [":hourglass-done:"]),
+    UnicodeEmoji("⌛", [":hourglass-done:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⏳", const [":hourglass-not-done:"]),
+    UnicodeEmoji("⏳", [":hourglass-not-done:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⏲️", const [":timer-clock:"]),
+    UnicodeEmoji("⏲️", [":timer-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⏰", const [":alarm-clock:"]),
+    UnicodeEmoji("⏰", [":alarm-clock:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📅", const [":calendar:"]),
+    UnicodeEmoji("📅", [":calendar:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📆", const [":tear-off-calendar:"]),
+    UnicodeEmoji("📆", [":tear-off-calendar:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗓️", const [":spiral-calendar:"]),
+    UnicodeEmoji("🗓️", [":spiral-calendar:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪧", const [":placard:"]),
+    UnicodeEmoji("🪧", [":placard:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛎️", const [":bellhop-bell:"]),
+    UnicodeEmoji("🛎️", [":bellhop-bell:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔔", const [":bell:"]),
+    UnicodeEmoji("🔔", [":bell:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📯", const [":postal-horn:"]),
+    UnicodeEmoji("📯", [":postal-horn:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📢", const [":loudspeaker:"]),
+    UnicodeEmoji("📢", [":loudspeaker:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📣", const [":megaphone:"]),
+    UnicodeEmoji("📣", [":megaphone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔍", const [":magnifying-glass-tilted-left:"]),
+    UnicodeEmoji("🔍", [":magnifying-glass-tilted-left:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔎", const [":magnifying-glass-tilted-right:"]),
+    UnicodeEmoji("🔎", [":magnifying-glass-tilted-right:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔮", const [":crystal-ball:"]),
+    UnicodeEmoji("🔮", [":crystal-ball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧿", const [":evil-eye:", ":nazar-amulet:"]),
+    UnicodeEmoji("🧿", [":evil-eye:", ":nazar-amulet:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪬", const [":hamsa:"]),
+    UnicodeEmoji("🪬", [":hamsa:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📿", const [":prayer-beads:"]),
+    UnicodeEmoji("📿", [":prayer-beads:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏺", const [":amphora:"]),
+    UnicodeEmoji("🏺", [":amphora:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚱️", const [":urn:"]),
+    UnicodeEmoji("⚱️", [":urn:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚰️", const [":coffin:"]),
+    UnicodeEmoji("⚰️", [":coffin:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪦", const [":headstone:"]),
+    UnicodeEmoji("🪦", [":headstone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚬", const [":cigarette:"]),
+    UnicodeEmoji("🚬", [":cigarette:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💣", const [":bomb:"]),
+    UnicodeEmoji("💣", [":bomb:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪤", const [":mouse-trap:"]),
+    UnicodeEmoji("🪤", [":mouse-trap:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📜", const [":scroll:"]),
+    UnicodeEmoji("📜", [":scroll:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚔️", const [":crossed-swords:"]),
+    UnicodeEmoji("⚔️", [":crossed-swords:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗡️", const [":dagger:"]),
+    UnicodeEmoji("🗡️", [":dagger:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛡️", const [":shield:"]),
+    UnicodeEmoji("🛡️", [":shield:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗝️", const [":old-key:"]),
+    UnicodeEmoji("🗝️", [":old-key:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔑", const [":key:"]),
+    UnicodeEmoji("🔑", [":key:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔐", const [":lock-with-key:"]),
+    UnicodeEmoji("🔐", [":lock-with-key:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔏", const [":lock-with-pen:"]),
+    UnicodeEmoji("🔏", [":lock-with-pen:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔒", const [":locked:"]),
+    UnicodeEmoji("🔒", [":locked:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔓", const [":unlocked:"]),
+    UnicodeEmoji("🔓", [":unlocked:"]),
   ),
 ];

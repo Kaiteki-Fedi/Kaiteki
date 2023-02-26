@@ -5,348 +5,348 @@ import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 final activities = <EmojiCategoryItem<UnicodeEmoji>>[
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎉", const [":party-popper:"]),
+    UnicodeEmoji("🎉", [":party-popper:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎊", const [":confetti-ball:"]),
+    UnicodeEmoji("🎊", [":confetti-ball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎈", const [":balloon:"]),
+    UnicodeEmoji("🎈", [":balloon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎂", const [":birthday-cake:"]),
+    UnicodeEmoji("🎂", [":birthday-cake:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎀", const [":ribbon:"]),
+    UnicodeEmoji("🎀", [":ribbon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎁", const [":wrapped-gift:"]),
+    UnicodeEmoji("🎁", [":wrapped-gift:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎇", const [":sparkler:"]),
+    UnicodeEmoji("🎇", [":sparkler:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎆", const [":fireworks:"]),
+    UnicodeEmoji("🎆", [":fireworks:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧨", const [":firecracker:"]),
+    UnicodeEmoji("🧨", [":firecracker:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧧", const [":red-envelope:"]),
+    UnicodeEmoji("🧧", [":red-envelope:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪔", const [":diya-lamp:"]),
+    UnicodeEmoji("🪔", [":diya-lamp:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪅", const [":piñata:"]),
+    UnicodeEmoji("🪅", [":piñata:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪩", const [":mirror-ball:", ":disco-ball:"]),
+    UnicodeEmoji("🪩", [":mirror-ball:", ":disco-ball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎐", const [":wind-chime:"]),
+    UnicodeEmoji("🎐", [":wind-chime:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎏", const [":carp-streamer:"]),
+    UnicodeEmoji("🎏", [":carp-streamer:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎎", const [":Japanese-dolls:"]),
+    UnicodeEmoji("🎎", [":Japanese-dolls:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎑", const [":moon-viewing-ceremony:"]),
+    UnicodeEmoji("🎑", [":moon-viewing-ceremony:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎍", const [":pine-decoration:"]),
+    UnicodeEmoji("🎍", [":pine-decoration:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎋", const [":tanabata-tree:"]),
+    UnicodeEmoji("🎋", [":tanabata-tree:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎄", const [":Christmas-tree:"]),
+    UnicodeEmoji("🎄", [":Christmas-tree:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎃", const [":jack-o-lantern:"]),
+    UnicodeEmoji("🎃", [":jack-o-lantern:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎗️", const [":reminder-ribbon:"]),
+    UnicodeEmoji("🎗️", [":reminder-ribbon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥇", const [":gold-medal:", ":1st-place-medal:"]),
+    UnicodeEmoji("🥇", [":gold-medal:", ":1st-place-medal:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥈", const [":silver-medal:", ":2nd-place-medal:"]),
+    UnicodeEmoji("🥈", [":silver-medal:", ":2nd-place-medal:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥉", const [":bronze-medal:", ":3rd-place-medal:"]),
+    UnicodeEmoji("🥉", [":bronze-medal:", ":3rd-place-medal:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏅", const [":medal:"]),
+    UnicodeEmoji("🏅", [":medal:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎖️", const [":military-medal:"]),
+    UnicodeEmoji("🎖️", [":military-medal:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏆", const [":trophy:"]),
+    UnicodeEmoji("🏆", [":trophy:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📢", const [":loudspeaker:"]),
+    UnicodeEmoji("📢", [":loudspeaker:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚽", const [":soccer-ball:"]),
+    UnicodeEmoji("⚽", [":soccer-ball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚾", const [":baseball:"]),
+    UnicodeEmoji("⚾", [":baseball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥎", const [":softball:"]),
+    UnicodeEmoji("🥎", [":softball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏀", const [":basketball:"]),
+    UnicodeEmoji("🏀", [":basketball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏐", const [":volleyball:"]),
+    UnicodeEmoji("🏐", [":volleyball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏈", const [":american-football:"]),
+    UnicodeEmoji("🏈", [":american-football:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏉", const [":rugby-football:"]),
+    UnicodeEmoji("🏉", [":rugby-football:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥅", const [":goal-net:"]),
+    UnicodeEmoji("🥅", [":goal-net:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎾", const [":tennis:"]),
+    UnicodeEmoji("🎾", [":tennis:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏸", const [":badminton:"]),
+    UnicodeEmoji("🏸", [":badminton:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥍", const [":lacrosse:"]),
+    UnicodeEmoji("🥍", [":lacrosse:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏏", const [":cricket-game:"]),
+    UnicodeEmoji("🏏", [":cricket-game:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏑", const [":field-hockey:"]),
+    UnicodeEmoji("🏑", [":field-hockey:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏒", const [":ice-hockey:"]),
+    UnicodeEmoji("🏒", [":ice-hockey:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥌", const [":curling-stone:"]),
+    UnicodeEmoji("🥌", [":curling-stone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛷", const [":sled:"]),
+    UnicodeEmoji("🛷", [":sled:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎿", const [":skis:"]),
+    UnicodeEmoji("🎿", [":skis:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛸️", const [":ice-skate:"]),
+    UnicodeEmoji("⛸️", [":ice-skate:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛼", const [":roller-skates:"]),
+    UnicodeEmoji("🛼", [":roller-skates:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩰", const [":ballet-shoes:"]),
+    UnicodeEmoji("🩰", [":ballet-shoes:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛹", const [":skateboard:"]),
+    UnicodeEmoji("🛹", [":skateboard:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛳", const [":flag-in-hole:"]),
+    UnicodeEmoji("⛳", [":flag-in-hole:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎯", const [":direct-hit:", ":target:"]),
+    UnicodeEmoji("🎯", [":direct-hit:", ":target:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏹", const [":bow-and-arrow:"]),
+    UnicodeEmoji("🏹", [":bow-and-arrow:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥏", const [":flying-disc:"]),
+    UnicodeEmoji("🥏", [":flying-disc:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪃", const [":boomerang:"]),
+    UnicodeEmoji("🪃", [":boomerang:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪁", const [":kite:"]),
+    UnicodeEmoji("🪁", [":kite:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎣", const [":fishing-pole:"]),
+    UnicodeEmoji("🎣", [":fishing-pole:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🤿", const [":diving-mask:"]),
+    UnicodeEmoji("🤿", [":diving-mask:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩱", const [":one-piece-swimsuit:"]),
+    UnicodeEmoji("🩱", [":one-piece-swimsuit:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎽", const [":running-shirt:"]),
+    UnicodeEmoji("🎽", [":running-shirt:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥋", const [":martial-arts-uniform:"]),
+    UnicodeEmoji("🥋", [":martial-arts-uniform:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥊", const [":boxing-glove:"]),
+    UnicodeEmoji("🥊", [":boxing-glove:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎱", const [":8-ball:"]),
+    UnicodeEmoji("🎱", [":8-ball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏓", const [":ping-pong:"]),
+    UnicodeEmoji("🏓", [":ping-pong:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎳", const [":bowling:"]),
+    UnicodeEmoji("🎳", [":bowling:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("♟️", const [":chess-pawn:"]),
+    UnicodeEmoji("♟️", [":chess-pawn:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪀", const [":yo-yo:"]),
+    UnicodeEmoji("🪀", [":yo-yo:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧩", const [":jigsaw:"]),
+    UnicodeEmoji("🧩", [":jigsaw:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎮", const [":video-game:"]),
+    UnicodeEmoji("🎮", [":video-game:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕹️", const [":joystick:"]),
+    UnicodeEmoji("🕹️", [":joystick:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("👾", const [":alien-monster:"]),
+    UnicodeEmoji("👾", [":alien-monster:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔫", const [":pistol:"]),
+    UnicodeEmoji("🔫", [":pistol:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎲", const [":die:"]),
+    UnicodeEmoji("🎲", [":die:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎰", const [":slot-machine:"]),
+    UnicodeEmoji("🎰", [":slot-machine:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎴", const [":flower-playing-cards:"]),
+    UnicodeEmoji("🎴", [":flower-playing-cards:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🀄", const [":mahjong-red-dragon:"]),
+    UnicodeEmoji("🀄", [":mahjong-red-dragon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🃏", const [":joker:"]),
+    UnicodeEmoji("🃏", [":joker:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪄", const [":wand:"]),
+    UnicodeEmoji("🪄", [":wand:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎩", const [":game-die:"]),
+    UnicodeEmoji("🎩", [":game-die:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📷", const [":camera:"]),
+    UnicodeEmoji("📷", [":camera:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📸", const [":camera-flash:"]),
+    UnicodeEmoji("📸", [":camera-flash:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖼️", const [":framed-picture:"]),
+    UnicodeEmoji("🖼️", [":framed-picture:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎨", const [":artist-palette:"]),
+    UnicodeEmoji("🎨", [":artist-palette:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖌️", const [":paintbrush:"]),
+    UnicodeEmoji("🖌️", [":paintbrush:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🖍️", const [":crayon:"]),
+    UnicodeEmoji("🖍️", [":crayon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪡", const [":needle:"]),
+    UnicodeEmoji("🪡", [":needle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧵", const [":thread:"]),
+    UnicodeEmoji("🧵", [":thread:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧶", const [":yarn:"]),
+    UnicodeEmoji("🧶", [":yarn:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎹", const [":piano:", ":musical-keyboard:"]),
+    UnicodeEmoji("🎹", [":piano:", ":musical-keyboard:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎷", const [":saxophone:"]),
+    UnicodeEmoji("🎷", [":saxophone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎺", const [":trumpet:"]),
+    UnicodeEmoji("🎺", [":trumpet:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎸", const [":guitar:"]),
+    UnicodeEmoji("🎸", [":guitar:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪕", const [":banjo:"]),
+    UnicodeEmoji("🪕", [":banjo:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎻", const [":violin:"]),
+    UnicodeEmoji("🎻", [":violin:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪘", const [":long-drum:"]),
+    UnicodeEmoji("🪘", [":long-drum:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥁", const [":drum:"]),
+    UnicodeEmoji("🥁", [":drum:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪇", const [":maracas:"]),
+    UnicodeEmoji("🪇", [":maracas:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪈", const [":flute:"]),
+    UnicodeEmoji("🪈", [":flute:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🪗", const [":accordion:"]),
+    UnicodeEmoji("🪗", [":accordion:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎤", const [":microphone:"]),
+    UnicodeEmoji("🎤", [":microphone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎧", const [":headphone:"]),
+    UnicodeEmoji("🎧", [":headphone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎚️", const [":level-slider:"]),
+    UnicodeEmoji("🎚️", [":level-slider:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎛️", const [":control-knobs:"]),
+    UnicodeEmoji("🎛️", [":control-knobs:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎙️", const [":studio-microphone:"]),
+    UnicodeEmoji("🎙️", [":studio-microphone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📻", const [":radio:"]),
+    UnicodeEmoji("📻", [":radio:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📺", const [":television:"]),
+    UnicodeEmoji("📺", [":television:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📼", const [":videocassette:"]),
+    UnicodeEmoji("📼", [":videocassette:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📹", const [":video-camera:"]),
+    UnicodeEmoji("📹", [":video-camera:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("📽️", const [":film-projector:"]),
+    UnicodeEmoji("📽️", [":film-projector:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎥", const [":movie-camera:"]),
+    UnicodeEmoji("🎥", [":movie-camera:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎞️", const [":film:"]),
+    UnicodeEmoji("🎞️", [":film:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎬", const [":clapper:"]),
+    UnicodeEmoji("🎬", [":clapper:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎭", const [":performing-arts:"]),
+    UnicodeEmoji("🎭", [":performing-arts:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎫", const [":ticket:"]),
+    UnicodeEmoji("🎫", [":ticket:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎟️", const [":admission-tickets:"]),
+    UnicodeEmoji("🎟️", [":admission-tickets:"]),
   ),
 ];

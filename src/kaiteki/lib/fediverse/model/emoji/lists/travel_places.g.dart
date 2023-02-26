@@ -5,369 +5,369 @@ import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 final travelPlaces = <EmojiCategoryItem<UnicodeEmoji>>[
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛑", const [":stop-sign:"]),
+    UnicodeEmoji("🛑", [":stop-sign:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚧", const [":construction:"]),
+    UnicodeEmoji("🚧", [":construction:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚨", const [":police-car-light:"]),
+    UnicodeEmoji("🚨", [":police-car-light:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛽", const [":fuel-pump:"]),
+    UnicodeEmoji("⛽", [":fuel-pump:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛢️", const [":oil-drum:"]),
+    UnicodeEmoji("🛢️", [":oil-drum:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧭", const [":compass:"]),
+    UnicodeEmoji("🧭", [":compass:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛞", const [":wheel:"]),
+    UnicodeEmoji("🛞", [":wheel:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛟", const [":ring-buoy:"]),
+    UnicodeEmoji("🛟", [":ring-buoy:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⚓", const [":anchor:"]),
+    UnicodeEmoji("⚓", [":anchor:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚏", const [":bus-stop:"]),
+    UnicodeEmoji("🚏", [":bus-stop:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚇", const [":metro:"]),
+    UnicodeEmoji("🚇", [":metro:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚥", const [":horizontal-traffic-light:"]),
+    UnicodeEmoji("🚥", [":horizontal-traffic-light:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚦", const [":vertical-traffic-light:"]),
+    UnicodeEmoji("🚦", [":vertical-traffic-light:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛴", const [":kick-scooter:"]),
+    UnicodeEmoji("🛴", [":kick-scooter:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🦽", const [":manual-wheelchair:"]),
+    UnicodeEmoji("🦽", [":manual-wheelchair:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🦼", const [":motorized-wheelchair:"]),
+    UnicodeEmoji("🦼", [":motorized-wheelchair:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🩼", const [":crutch:"]),
+    UnicodeEmoji("🩼", [":crutch:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚲", const [":bicycle:"]),
+    UnicodeEmoji("🚲", [":bicycle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛵", const [":motor-scooter:"]),
+    UnicodeEmoji("🛵", [":motor-scooter:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏍️", const [":motorcycle:"]),
+    UnicodeEmoji("🏍️", [":motorcycle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚙", const [":sport-utility-vehicle:"]),
+    UnicodeEmoji("🚙", [":sport-utility-vehicle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚗", const [":automobile:"]),
+    UnicodeEmoji("🚗", [":automobile:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛻", const [":pickup-truck:"]),
+    UnicodeEmoji("🛻", [":pickup-truck:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚐", const [":minibus:"]),
+    UnicodeEmoji("🚐", [":minibus:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚚", const [":delivery-truck:"]),
+    UnicodeEmoji("🚚", [":delivery-truck:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚛", const [":articulated-lorry:"]),
+    UnicodeEmoji("🚛", [":articulated-lorry:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚜", const [":tractor:"]),
+    UnicodeEmoji("🚜", [":tractor:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏎️", const [":racing-car:"]),
+    UnicodeEmoji("🏎️", [":racing-car:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚒", const [":fire-engine:"]),
+    UnicodeEmoji("🚒", [":fire-engine:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚑", const [":ambulance:"]),
+    UnicodeEmoji("🚑", [":ambulance:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚓", const [":police-car:"]),
+    UnicodeEmoji("🚓", [":police-car:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚕", const [":taxi:"]),
+    UnicodeEmoji("🚕", [":taxi:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛺", const [":auto-rickshaw:"]),
+    UnicodeEmoji("🛺", [":auto-rickshaw:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚌", const [":bus:"]),
+    UnicodeEmoji("🚌", [":bus:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚈", const [":light-rail:"]),
+    UnicodeEmoji("🚈", [":light-rail:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚝", const [":monorail:"]),
+    UnicodeEmoji("🚝", [":monorail:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚅", const [":bullet-train:"]),
+    UnicodeEmoji("🚅", [":bullet-train:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚄", const [":high-speed-train:"]),
+    UnicodeEmoji("🚄", [":high-speed-train:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚂", const [":locomotive:"]),
+    UnicodeEmoji("🚂", [":locomotive:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚃", const [":railway-car:"]),
+    UnicodeEmoji("🚃", [":railway-car:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚋", const [":tram-car:"]),
+    UnicodeEmoji("🚋", [":tram-car:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚎", const [":trolleybus:"]),
+    UnicodeEmoji("🚎", [":trolleybus:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚞", const [":mountain-railway:"]),
+    UnicodeEmoji("🚞", [":mountain-railway:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚊", const [":tram:"]),
+    UnicodeEmoji("🚊", [":tram:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚉", const [":station:"]),
+    UnicodeEmoji("🚉", [":station:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚍", const [":bus-front:"]),
+    UnicodeEmoji("🚍", [":bus-front:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚔", const [":police-car-front:"]),
+    UnicodeEmoji("🚔", [":police-car-front:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚘", const [":automobile-front:"]),
+    UnicodeEmoji("🚘", [":automobile-front:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚖", const [":taxi-front:"]),
+    UnicodeEmoji("🚖", [":taxi-front:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚆", const [":train:"]),
+    UnicodeEmoji("🚆", [":train:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚢", const [":ship:"]),
+    UnicodeEmoji("🚢", [":ship:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛳️", const [":passenger-ship:"]),
+    UnicodeEmoji("🛳️", [":passenger-ship:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛥️", const [":motor-boat:"]),
+    UnicodeEmoji("🛥️", [":motor-boat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚤", const [":speedboat:"]),
+    UnicodeEmoji("🚤", [":speedboat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛴️", const [":ferry:"]),
+    UnicodeEmoji("⛴️", [":ferry:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛵", const [":sailboat:"]),
+    UnicodeEmoji("⛵", [":sailboat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛶", const [":canoe:"]),
+    UnicodeEmoji("🛶", [":canoe:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚟", const [":suspension-railway:"]),
+    UnicodeEmoji("🚟", [":suspension-railway:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚠", const [":mountain-cableway:"]),
+    UnicodeEmoji("🚠", [":mountain-cableway:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚡", const [":aerial-tramway:"]),
+    UnicodeEmoji("🚡", [":aerial-tramway:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚁", const [":helicopter:"]),
+    UnicodeEmoji("🚁", [":helicopter:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛸", const [":flying-saucer:"]),
+    UnicodeEmoji("🛸", [":flying-saucer:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🚀", const [":rocket:"]),
+    UnicodeEmoji("🚀", [":rocket:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("✈️", const [":airplane:"]),
+    UnicodeEmoji("✈️", [":airplane:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛫", const [":airplane-departure:"]),
+    UnicodeEmoji("🛫", [":airplane-departure:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛬", const [":airplane-arrival:"]),
+    UnicodeEmoji("🛬", [":airplane-arrival:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛩️", const [":small-airplane:"]),
+    UnicodeEmoji("🛩️", [":small-airplane:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛝", const [":slide:", ":playground:"]),
+    UnicodeEmoji("🛝", [":slide:", ":playground:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎢", const [":roller-coaster:"]),
+    UnicodeEmoji("🎢", [":roller-coaster:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎡", const [":ferris-wheel:"]),
+    UnicodeEmoji("🎡", [":ferris-wheel:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎠", const [":carousel-horse:"]),
+    UnicodeEmoji("🎠", [":carousel-horse:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎪", const [":circus-tent:"]),
+    UnicodeEmoji("🎪", [":circus-tent:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗼", const [":tokyo-tower:"]),
+    UnicodeEmoji("🗼", [":tokyo-tower:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗽", const [":statue-of-Liberty:"]),
+    UnicodeEmoji("🗽", [":statue-of-Liberty:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗿", const [":moai:"]),
+    UnicodeEmoji("🗿", [":moai:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗻", const [":mount-fuji:"]),
+    UnicodeEmoji("🗻", [":mount-fuji:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏛️", const [":classical-building:"]),
+    UnicodeEmoji("🏛️", [":classical-building:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💈", const [":barber-pole:"]),
+    UnicodeEmoji("💈", [":barber-pole:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛲", const [":fountain:"]),
+    UnicodeEmoji("⛲", [":fountain:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛩️", const [":shinto-shrine:"]),
+    UnicodeEmoji("⛩️", [":shinto-shrine:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕍", const [":synagogue:"]),
+    UnicodeEmoji("🕍", [":synagogue:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕌", const [":mosque:"]),
+    UnicodeEmoji("🕌", [":mosque:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🕋", const [":kaaba:"]),
+    UnicodeEmoji("🕋", [":kaaba:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛕", const [":hindu-temple:"]),
+    UnicodeEmoji("🛕", [":hindu-temple:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛪", const [":church:"]),
+    UnicodeEmoji("⛪", [":church:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💒", const [":wedding:"]),
+    UnicodeEmoji("💒", [":wedding:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏩", const [":love-hotel:"]),
+    UnicodeEmoji("🏩", [":love-hotel:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏯", const [":Japanese-castle:"]),
+    UnicodeEmoji("🏯", [":Japanese-castle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏰", const [":castle:"]),
+    UnicodeEmoji("🏰", [":castle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏗️", const [":construction-building:"]),
+    UnicodeEmoji("🏗️", [":construction-building:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏢", const [":office-building:"]),
+    UnicodeEmoji("🏢", [":office-building:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏭", const [":factory:"]),
+    UnicodeEmoji("🏭", [":factory:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏬", const [":department-store:"]),
+    UnicodeEmoji("🏬", [":department-store:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏪", const [":convenience-store:"]),
+    UnicodeEmoji("🏪", [":convenience-store:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏟️", const [":stadium:"]),
+    UnicodeEmoji("🏟️", [":stadium:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏦", const [":bank:"]),
+    UnicodeEmoji("🏦", [":bank:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏫", const [":school:"]),
+    UnicodeEmoji("🏫", [":school:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏨", const [":hotel:"]),
+    UnicodeEmoji("🏨", [":hotel:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏣", const [":Japanese-post-office:"]),
+    UnicodeEmoji("🏣", [":Japanese-post-office:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏤", const [":post-office:"]),
+    UnicodeEmoji("🏤", [":post-office:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏥", const [":hospital:"]),
+    UnicodeEmoji("🏥", [":hospital:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏚️", const [":derelict-house:"]),
+    UnicodeEmoji("🏚️", [":derelict-house:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏠", const [":house:"]),
+    UnicodeEmoji("🏠", [":house:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏡", const [":house-with-garden:"]),
+    UnicodeEmoji("🏡", [":house-with-garden:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏘️", const [":houses:"]),
+    UnicodeEmoji("🏘️", [":houses:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛖", const [":hut:"]),
+    UnicodeEmoji("🛖", [":hut:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛺", const [":tent:"]),
+    UnicodeEmoji("⛺", [":tent:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏕️", const [":camping:"]),
+    UnicodeEmoji("🏕️", [":camping:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("⛱️", const [":umbrella-on-ground:"]),
+    UnicodeEmoji("⛱️", [":umbrella-on-ground:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🏙️", const [":cityscape:"]),
+    UnicodeEmoji("🏙️", [":cityscape:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌆", const [":sunset-cityscape:"]),
+    UnicodeEmoji("🌆", [":sunset-cityscape:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌇", const [":sunset:"]),
+    UnicodeEmoji("🌇", [":sunset:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌃", const [":night-with-stars:"]),
+    UnicodeEmoji("🌃", [":night-with-stars:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌉", const [":bridge-at-night:"]),
+    UnicodeEmoji("🌉", [":bridge-at-night:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌁", const [":foggy:"]),
+    UnicodeEmoji("🌁", [":foggy:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛤️", const [":railway-track:"]),
+    UnicodeEmoji("🛤️", [":railway-track:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🛣️", const [":motorway:"]),
+    UnicodeEmoji("🛣️", [":motorway:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗾", const [":map-of-Japan:"]),
+    UnicodeEmoji("🗾", [":map-of-Japan:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🗺️", const [":world-map:"]),
+    UnicodeEmoji("🗺️", [":world-map:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌐", const [":globe-with-meridians:"]),
+    UnicodeEmoji("🌐", [":globe-with-meridians:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("💺", const [":seat:"]),
+    UnicodeEmoji("💺", [":seat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧳", const [":luggage:"]),
+    UnicodeEmoji("🧳", [":luggage:"]),
   ),
 ];

@@ -5,390 +5,390 @@ import 'package:kaiteki/fediverse/model/emoji/emoji.dart';
 
 final foodDrink = <EmojiCategoryItem<UnicodeEmoji>>[
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍓", const [":strawberry:"]),
+    UnicodeEmoji("🍓", [":strawberry:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍒", const [":cherries:"]),
+    UnicodeEmoji("🍒", [":cherries:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍎", const [":red-apple:"]),
+    UnicodeEmoji("🍎", [":red-apple:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍉", const [":watermelon:"]),
+    UnicodeEmoji("🍉", [":watermelon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍑", const [":peach:"]),
+    UnicodeEmoji("🍑", [":peach:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍊", const [":tangerine:", ":orange:", ":mandarin:"]),
+    UnicodeEmoji("🍊", [":tangerine:", ":orange:", ":mandarin:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥭", const [":mango:"]),
+    UnicodeEmoji("🥭", [":mango:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍍", const [":pineapple:"]),
+    UnicodeEmoji("🍍", [":pineapple:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍌", const [":banana:"]),
+    UnicodeEmoji("🍌", [":banana:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍋", const [":lemon:"]),
+    UnicodeEmoji("🍋", [":lemon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍈", const [":melon:"]),
+    UnicodeEmoji("🍈", [":melon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍏", const [":green-apple:"]),
+    UnicodeEmoji("🍏", [":green-apple:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍐", const [":pear:"]),
+    UnicodeEmoji("🍐", [":pear:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥝", const [":kiwi-fruit:"]),
+    UnicodeEmoji("🥝", [":kiwi-fruit:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫒", const [":olive:"]),
+    UnicodeEmoji("🫒", [":olive:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫐", const [":blueberries:"]),
+    UnicodeEmoji("🫐", [":blueberries:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍇", const [":grapes:"]),
+    UnicodeEmoji("🍇", [":grapes:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥥", const [":coconut:"]),
+    UnicodeEmoji("🥥", [":coconut:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍅", const [":tomato:"]),
+    UnicodeEmoji("🍅", [":tomato:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌶️", const [":hot-pepper:"]),
+    UnicodeEmoji("🌶️", [":hot-pepper:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫚", const [":ginger:"]),
+    UnicodeEmoji("🫚", [":ginger:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥕", const [":carrot:"]),
+    UnicodeEmoji("🥕", [":carrot:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍠", const [":roasted-sweet-potato:"]),
+    UnicodeEmoji("🍠", [":roasted-sweet-potato:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧅", const [":onion:"]),
+    UnicodeEmoji("🧅", [":onion:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌽", const [":ear-of-corn:"]),
+    UnicodeEmoji("🌽", [":ear-of-corn:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥦", const [":broccoli:"]),
+    UnicodeEmoji("🥦", [":broccoli:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥒", const [":cucumber:"]),
+    UnicodeEmoji("🥒", [":cucumber:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥬", const [":leafy-green:"]),
+    UnicodeEmoji("🥬", [":leafy-green:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫛", const [":pea-pod:"]),
+    UnicodeEmoji("🫛", [":pea-pod:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫑", const [":bell-pepper:"]),
+    UnicodeEmoji("🫑", [":bell-pepper:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥑", const [":avocado:"]),
+    UnicodeEmoji("🥑", [":avocado:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍆", const [":eggplant:"]),
+    UnicodeEmoji("🍆", [":eggplant:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧄", const [":garlic:"]),
+    UnicodeEmoji("🧄", [":garlic:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥔", const [":potato:"]),
+    UnicodeEmoji("🥔", [":potato:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫘", const [":beans:"]),
+    UnicodeEmoji("🫘", [":beans:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌰", const [":chestnut:"]),
+    UnicodeEmoji("🌰", [":chestnut:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥜", const [":peanuts:"]),
+    UnicodeEmoji("🥜", [":peanuts:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍞", const [":bread:"]),
+    UnicodeEmoji("🍞", [":bread:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫓", const [":flatbread:"]),
+    UnicodeEmoji("🫓", [":flatbread:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥐", const [":croissant:"]),
+    UnicodeEmoji("🥐", [":croissant:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥖", const [":baguette-bread:"]),
+    UnicodeEmoji("🥖", [":baguette-bread:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥯", const [":bagel:"]),
+    UnicodeEmoji("🥯", [":bagel:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧇", const [":waffle:"]),
+    UnicodeEmoji("🧇", [":waffle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥞", const [":pancakes:"]),
+    UnicodeEmoji("🥞", [":pancakes:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍳", const [":cooking:"]),
+    UnicodeEmoji("🍳", [":cooking:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥚", const [":egg:"]),
+    UnicodeEmoji("🥚", [":egg:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧀", const [":cheese-wedge:"]),
+    UnicodeEmoji("🧀", [":cheese-wedge:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥓", const [":bacon:"]),
+    UnicodeEmoji("🥓", [":bacon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥩", const [":cut-of-meat:"]),
+    UnicodeEmoji("🥩", [":cut-of-meat:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍗", const [":poultry-leg:"]),
+    UnicodeEmoji("🍗", [":poultry-leg:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍖", const [":meat-on-bone:"]),
+    UnicodeEmoji("🍖", [":meat-on-bone:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍔", const [":hamburger:"]),
+    UnicodeEmoji("🍔", [":hamburger:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌭", const [":hot-dog:"]),
+    UnicodeEmoji("🌭", [":hot-dog:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥪", const [":sandwich:"]),
+    UnicodeEmoji("🥪", [":sandwich:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥨", const [":pretzel:"]),
+    UnicodeEmoji("🥨", [":pretzel:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍟", const [":french-fries:"]),
+    UnicodeEmoji("🍟", [":french-fries:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍕", const [":pizza:"]),
+    UnicodeEmoji("🍕", [":pizza:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫔", const [":tamale:"]),
+    UnicodeEmoji("🫔", [":tamale:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌮", const [":taco:"]),
+    UnicodeEmoji("🌮", [":taco:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🌯", const [":burrito:"]),
+    UnicodeEmoji("🌯", [":burrito:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥙", const [":stuffed-flatbread:"]),
+    UnicodeEmoji("🥙", [":stuffed-flatbread:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧆", const [":falafel:"]),
+    UnicodeEmoji("🧆", [":falafel:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥘", const [":shallow-pan-of-food:"]),
+    UnicodeEmoji("🥘", [":shallow-pan-of-food:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍝", const [":spaghetti:"]),
+    UnicodeEmoji("🍝", [":spaghetti:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥫", const [":canned-food:"]),
+    UnicodeEmoji("🥫", [":canned-food:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫕", const [":fondue:"]),
+    UnicodeEmoji("🫕", [":fondue:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥣", const [":bowl-with-spoon:"]),
+    UnicodeEmoji("🥣", [":bowl-with-spoon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥗", const [":green-salad:"]),
+    UnicodeEmoji("🥗", [":green-salad:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍲", const [":pot-of-food:"]),
+    UnicodeEmoji("🍲", [":pot-of-food:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍛", const [":curry-rice:"]),
+    UnicodeEmoji("🍛", [":curry-rice:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍜", const [":steaming-bowl:"]),
+    UnicodeEmoji("🍜", [":steaming-bowl:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🦪", const [":oyster:"]),
+    UnicodeEmoji("🦪", [":oyster:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🦞", const [":lobster:"]),
+    UnicodeEmoji("🦞", [":lobster:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍣", const [":sushi:"]),
+    UnicodeEmoji("🍣", [":sushi:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍤", const [":fried-shrimp:"]),
+    UnicodeEmoji("🍤", [":fried-shrimp:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥡", const [":takeout-box:"]),
+    UnicodeEmoji("🥡", [":takeout-box:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍚", const [":cooked-rice:"]),
+    UnicodeEmoji("🍚", [":cooked-rice:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍱", const [":bento-box:"]),
+    UnicodeEmoji("🍱", [":bento-box:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥟", const [":dumpling:"]),
+    UnicodeEmoji("🥟", [":dumpling:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍢", const [":oden:"]),
+    UnicodeEmoji("🍢", [":oden:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍙", const [":rice-ball:"]),
+    UnicodeEmoji("🍙", [":rice-ball:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍘", const [":rice-cracker:"]),
+    UnicodeEmoji("🍘", [":rice-cracker:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍥", const [":fish-cake-with-swirl:"]),
+    UnicodeEmoji("🍥", [":fish-cake-with-swirl:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍡", const [":dango:"]),
+    UnicodeEmoji("🍡", [":dango:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥠", const [":fortune-cookie:"]),
+    UnicodeEmoji("🥠", [":fortune-cookie:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥮", const [":moon-cake:"]),
+    UnicodeEmoji("🥮", [":moon-cake:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍧", const [":shaved-ice:"]),
+    UnicodeEmoji("🍧", [":shaved-ice:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍨", const [":ice-cream:"]),
+    UnicodeEmoji("🍨", [":ice-cream:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍦", const [":soft-ice-cream:"]),
+    UnicodeEmoji("🍦", [":soft-ice-cream:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥧", const [":pie:"]),
+    UnicodeEmoji("🥧", [":pie:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍰", const [":shortcake:"]),
+    UnicodeEmoji("🍰", [":shortcake:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍮", const [":custard:"]),
+    UnicodeEmoji("🍮", [":custard:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🎂", const [":birthday-cake:"]),
+    UnicodeEmoji("🎂", [":birthday-cake:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧁", const [":cupcake:"]),
+    UnicodeEmoji("🧁", [":cupcake:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍭", const [":lollipop:"]),
+    UnicodeEmoji("🍭", [":lollipop:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍬", const [":candy:"]),
+    UnicodeEmoji("🍬", [":candy:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍫", const [":chocolate-bar:"]),
+    UnicodeEmoji("🍫", [":chocolate-bar:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍩", const [":doughnut:"]),
+    UnicodeEmoji("🍩", [":doughnut:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍪", const [":cookie:"]),
+    UnicodeEmoji("🍪", [":cookie:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍯", const [":honey-pot:"]),
+    UnicodeEmoji("🍯", [":honey-pot:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧂", const [":salt:"]),
+    UnicodeEmoji("🧂", [":salt:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧈", const [":butter:"]),
+    UnicodeEmoji("🧈", [":butter:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍿", const [":popcorn:"]),
+    UnicodeEmoji("🍿", [":popcorn:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧊", const [":ice-cube:"]),
+    UnicodeEmoji("🧊", [":ice-cube:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫙", const [":jar:"]),
+    UnicodeEmoji("🫙", [":jar:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥤", const [":cup-with-straw:"]),
+    UnicodeEmoji("🥤", [":cup-with-straw:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧋", const [":bubble-tea:", ":milk-tea:"]),
+    UnicodeEmoji("🧋", [":bubble-tea:", ":milk-tea:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧃", const [":beverage-box:"]),
+    UnicodeEmoji("🧃", [":beverage-box:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥛", const [":glass-of-milk:"]),
+    UnicodeEmoji("🥛", [":glass-of-milk:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍼", const [":baby-bottle:"]),
+    UnicodeEmoji("🍼", [":baby-bottle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍵", const [":teacup-without-handle:"]),
+    UnicodeEmoji("🍵", [":teacup-without-handle:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("☕", const [":hot-beverage:"]),
+    UnicodeEmoji("☕", [":hot-beverage:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫖", const [":teapot:"]),
+    UnicodeEmoji("🫖", [":teapot:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🧉", const [":mate:"]),
+    UnicodeEmoji("🧉", [":mate:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍺", const [":beer-mug:"]),
+    UnicodeEmoji("🍺", [":beer-mug:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍻", const [":clinking-beer-mugs:"]),
+    UnicodeEmoji("🍻", [":clinking-beer-mugs:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥂", const [":clinking-glasses:"]),
+    UnicodeEmoji("🥂", [":clinking-glasses:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍾", const [":bottle-with-popping-cork:"]),
+    UnicodeEmoji("🍾", [":bottle-with-popping-cork:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍷", const [":wine-glass:"]),
+    UnicodeEmoji("🍷", [":wine-glass:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥃", const [":tumbler-glass:"]),
+    UnicodeEmoji("🥃", [":tumbler-glass:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🫗", const [":pour:"]),
+    UnicodeEmoji("🫗", [":pour:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍸", const [":cocktail-glass:"]),
+    UnicodeEmoji("🍸", [":cocktail-glass:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍹", const [":tropical-drink:"]),
+    UnicodeEmoji("🍹", [":tropical-drink:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍶", const [":sake:"]),
+    UnicodeEmoji("🍶", [":sake:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥢", const [":chopsticks:"]),
+    UnicodeEmoji("🥢", [":chopsticks:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍴", const [":fork-and-knife:"]),
+    UnicodeEmoji("🍴", [":fork-and-knife:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🥄", const [":spoon:"]),
+    UnicodeEmoji("🥄", [":spoon:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🔪", const [":kitchen-knife:"]),
+    UnicodeEmoji("🔪", [":kitchen-knife:"]),
   ),
   const EmojiCategoryItem(
-    const UnicodeEmoji("🍽️", const [":fork-and-knife-with-plate:"]),
+    UnicodeEmoji("🍽️", [":fork-and-knife-with-plate:"]),
   ),
 ];
