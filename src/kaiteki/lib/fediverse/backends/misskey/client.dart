@@ -653,4 +653,25 @@ class MisskeyClient {
   Future<EmojisResponse> getEmojis() async => client
       .sendRequest(HttpMethod.post, "api/emojis")
       .then(EmojisResponse.fromJson.fromResponse);
+
+  Future<List<misskey.UserLite>> searchUsersByUsernameAndHost(
+    String username,
+    String? host, {
+    bool detail = true,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/users/search-by-username-and-host",
+          body: {
+            "username": username,
+            if (host != null) "host": host,
+            "detail": detail,
+          }.jsonBody,
+        )
+        .then(
+          (detail ? misskey.User.fromJson : misskey.UserLite.fromJson)
+              .fromResponseList,
+        );
+  }
 }

@@ -530,4 +530,11 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   Future<void> unmuteUser(String userId) async {
     await client.unmuteAccount(userId);
   }
+
+  @override
+  Future<User> lookupUser(String username, [String? host]) async {
+    final acct = host == null ? username : "$username@$host";
+    final user = await client.lookupAccount(acct);
+    return toUser(user, instance);
+  }
 }

@@ -578,4 +578,12 @@ class MastodonClient {
         )
         .then(MarkerResponse.fromJson.fromResponse);
   }
+
+  Future<Account> lookupAccount(String acct) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      "api/v1/accounts/lookup",
+      query: {"acct": acct},
+    ).then(Account.fromJson.fromResponse);
+  }
 }

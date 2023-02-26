@@ -117,13 +117,15 @@ extension HtmlNodeExtensions on Node {
 
 extension UserReferenceExtensions on UserReference {
   Future<User?> resolve(BackendAdapter adapter) async {
+    final id = this.id;
     if (id != null) {
-      return adapter.getUserById(id!);
+      return adapter.getUserById(id);
     }
 
-    // if (reference.username != null) {
-    //   return await manager.adapter.getUser(reference.username!, reference.host);
-    // }
+    final username = this.username;
+    if (username != null) {
+      return adapter.lookupUser(username, host);
+    }
 
     return null;
   }

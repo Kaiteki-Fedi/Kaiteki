@@ -100,6 +100,8 @@ abstract class BackendAdapter {
     String? sinceId,
     String? untilId,
   });
+
+  Future<User> lookupUser(String username, [String? host]);
 }
 
 extension FediverseAdapterExtensions on BackendAdapter {

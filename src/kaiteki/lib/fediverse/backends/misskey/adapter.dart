@@ -625,4 +625,12 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     // TODO(Craftplacer): implement deleteAccount
     throw UnimplementedError();
   }
+
+  @override
+  Future<User> lookupUser(String username, [String? host]) async {
+    final users = await client.searchUsersByUsernameAndHost(username, host);
+    final user =
+        users.firstWhere((e) => e.host == host && e.username == username);
+    return toUser(user, instance);
+  }
 }

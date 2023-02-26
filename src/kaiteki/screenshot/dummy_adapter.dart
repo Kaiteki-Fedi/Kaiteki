@@ -89,7 +89,7 @@ class DummyAdapter extends BackendAdapter {
   Future<LoginResult> login(
     ClientSecret? clientSecret,
     CredentialsCallback requestCredentials,
-    MfaCallback requestMfa,
+    CodeCallback requestMfa,
     OAuthCallback requestOAuth,
   ) =>
       throw UnimplementedError();
@@ -135,6 +135,10 @@ class DummyAdapter extends BackendAdapter {
 
   @override
   Future<void> deleteAccount(String password) => throw UnimplementedError();
+
+  @override
+  Future<User> lookupUser(String username, [String? host]) =>
+      throw UnimplementedError();
 }
 
 class DummyAdapterCapability extends AdapterCapabilities {

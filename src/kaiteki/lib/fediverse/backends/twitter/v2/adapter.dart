@@ -446,4 +446,8 @@ class TwitterAdapter extends CentralizedBackendAdapter
 
   @override
   Future<void> deleteAccount(String password) => throw UnimplementedError();
+
+  @override
+  Future<User> lookupUser(String username, [String? host]) =>
+      throw UnimplementedError();
 }
