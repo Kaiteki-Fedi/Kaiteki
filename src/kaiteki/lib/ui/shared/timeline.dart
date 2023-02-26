@@ -189,7 +189,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
       onTap: openPost,
       child: PostWidget(
         item,
-        wide: widget.wide,
+        layout: widget.wide ? PostWidgetLayout.wide : PostWidgetLayout.normal,
         onTap: openPost,
       ),
     );

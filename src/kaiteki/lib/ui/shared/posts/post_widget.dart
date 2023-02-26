@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
+import "package:flutter/semantics.dart";
 import "package:go_router/go_router.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/constants.dart";
@@ -39,16 +40,17 @@ const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 
 final sensitiveWords = {"cw", "mh", "ph", "pol", "suicide", "selfharm"};
 
+enum PostWidgetLayout { normal, wide, expanded }
+
 class PostWidget extends ConsumerStatefulWidget {
   final Post post;
   final bool showParentPost;
   final bool showActions;
-  final bool wide;
   final bool showReplyee;
   final bool showAvatar;
   final bool? showTime;
   final bool? showVisibility;
-  final bool expanded;
+  final PostWidgetLayout layout;
 
   /// onTap callback for content text
   final VoidCallback? onTap;
@@ -58,12 +60,11 @@ class PostWidget extends ConsumerStatefulWidget {
     super.key,
     this.showParentPost = true,
     this.showActions = true,
-    this.wide = false,
     this.showReplyee = true,
     this.showAvatar = true,
     this.showVisibility,
     this.showTime,
-    this.expanded = false,
+    this.layout = PostWidgetLayout.normal,
     this.onTap,
   });
 
@@ -85,7 +86,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final wide = widget.expanded || widget.wide;
+    final wide = widget.layout != PostWidgetLayout.normal;
 
     if (_post.repeatOf != null) {
       return Column(
@@ -102,7 +103,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           PostWidget(
             _post.repeatOf!,
             showActions: widget.showActions,
-            wide: wide,
+            layout: widget.layout,
           ),
         ],
       );
@@ -111,13 +112,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final adapter = ref.watch(adapterProvider);
     const spacer = SizedBox(height: 8);
 
+    final isExpanded = widget.layout == PostWidgetLayout.expanded;
     final children = [
       MetaBar(
         post: _post,
         showAvatar: widget.showAvatar && wide,
-        showTime: widget.showTime ?? !widget.expanded,
-        showVisibility: widget.showVisibility ?? !widget.expanded,
-        twolineAuthor: widget.expanded,
+        showTime: widget.showTime ?? !isExpanded,
+        showVisibility: widget.showVisibility ?? !isExpanded,
+        twolineAuthor: isExpanded,
       ),
       if (widget.showParentPost && _post.replyToUser != null)
         ReplyBar(post: _post),
@@ -125,8 +127,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         post: _translatedPost ?? _post,
         showReplyee: widget.showReplyee,
         onTap: widget.onTap,
-        style:
-            widget.expanded ? Theme.of(context).textTheme.headlineSmall : null,
+        // style: isExpanded ? Theme.of(context).textTheme.headlineSmall : null,
       ),
       if (_post.embeds.isNotEmpty)
         Card(
@@ -187,103 +188,119 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           onInvoke: (_) => _interactionBarKey.currentState?.showMenu(),
         ),
       },
-      child: Padding(
-        padding: theme.padding.copyWith(bottom: 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+      child: Semantics(
+        customSemanticsActions: {
+          CustomSemanticsAction(label: context.l10n.replyButtonLabel): _onReply,
+          if (adapter is FavoriteSupport)
+            CustomSemanticsAction(label: context.l10n.favoriteButtonLabel):
+                _onFavorite,
+          CustomSemanticsAction(label: context.l10n.repeatButtonLabel):
+              _onRepeat,
+          CustomSemanticsAction(label: context.l10n.bookmarkButtonLabel):
+              _onBookmark,
+          CustomSemanticsAction(label: context.l10n.reactButtonLabel): _onReact,
+        },
+        child: Padding(
+          padding: theme.padding.copyWith(bottom: 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   if (!wide && widget.showAvatar) ...[
-                  AvatarWidget(
-                    _post.author,
-                    onTap: () => context.showUser(_post.author, ref),
-                    focusNode: FocusNode(skipTraversal: true),
-                  ),
-                  SizedBox(width: theme.avatarSpacing),
+                    AvatarWidget(
+                      _post.author,
+                      onTap: () => context.showUser(_post.author, ref),
+                      focusNode: FocusNode(skipTraversal: true),
+                    ),
+                    SizedBox(width: theme.avatarSpacing),
+                  ],
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: children,
+                    ),
+                  )
                 ],
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: children,
+              ),
+              if (isExpanded) const Divider(height: 25),
+              if (isExpanded)
+                OverflowBar(
+                  spacing: 16.0,
+                  overflowSpacing: 8.0,
+                  children: [
+                    Text(
+                      DateFormat.yMMMMd(
+                        Localizations.localeOf(context).toString(),
+                      ).add_jm().format(_post.postedAt),
+                      style: outlineTextStyle,
+                    ),
+                    if (_post.visibility != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            _post.visibility!.toIconData(),
+                            size: 16,
+                            color: outlineColor,
+                          ),
+                          const SizedBox(width: 3.0),
+                          Text(
+                            _post.visibility!.toDisplayString(l10n),
+                            style: outlineTextStyle,
+                          ),
+                        ],
+                      ),
+                    if (clientText != null) clientText,
+                  ],
+                ),
+              if (isExpanded) const Divider(height: 25),
+              if (isExpanded) PostMetricBar(_post.metrics),
+              if (widget.showActions) ...[
+                if (isExpanded)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 12.0,
+                      bottom: kPostPadding.bottom,
+                    ),
+                    child: const Divider(height: 1),
+                  ),
+                Semantics(
+                  focusable: false,
+                  child: Padding(
+                    padding: isExpanded
+                        ? EdgeInsets.zero
+                        : EdgeInsets.only(left: leftPostContentInset - 8),
+                    child: InteractionBar(
+                      metrics: _post.metrics,
+                      onReply: _onReply,
+                      onFavorite: _onFavorite,
+                      onRepeat: _onRepeat,
+                      onReact: _onReact,
+                      showLabels: !isExpanded,
+                      spread: isExpanded,
+                      favorited: adapter is FavoriteSupport //
+                          ? _post.state.favorited
+                          : null,
+                      onShowFavoritees: () => context.pushNamed(
+                        "postFavorites",
+                        params: {...ref.accountRouterParams, "id": _post.id},
+                      ),
+                      onShowRepeatees: () => context.pushNamed(
+                        "postRepeats",
+                        params: {...ref.accountRouterParams, "id": _post.id},
+                      ),
+                      repeated: _post.state.repeated,
+                      reacted: adapter is ReactionSupport ? false : null,
+                      buildActions: _buildActions,
+                    ),
                   ),
                 )
               ],
-            ),
-            if (widget.expanded) const Divider(height: 25),
-            if (widget.expanded)
-              OverflowBar(
-                spacing: 16.0,
-                overflowSpacing: 8.0,
-                children: [
-                  Text(
-                    DateFormat.yMMMMd(
-                      Localizations.localeOf(context).toString(),
-                    ).add_jm().format(_post.postedAt),
-                    style: outlineTextStyle,
-                  ),
-                  if (_post.visibility != null)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _post.visibility!.toIconData(),
-                          size: 16,
-                          color: outlineColor,
-                        ),
-                        const SizedBox(width: 3.0),
-                        Text(
-                          _post.visibility!.toDisplayString(l10n),
-                          style: outlineTextStyle,
-                        ),
-                      ],
-                    ),
-                  if (clientText != null) clientText,
-                ],
-              ),
-            if (widget.expanded) const Divider(height: 25),
-            if (widget.expanded) PostMetricBar(_post.metrics),
-            if (widget.showActions) ...[
-              if (widget.expanded)
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 12.0,
-                    bottom: kPostPadding.bottom,
-                  ),
-                  child: const Divider(height: 1),
-                ),
-              Padding(
-                padding: widget.expanded
-                    ? EdgeInsets.zero
-                    : EdgeInsets.only(left: leftPostContentInset - 8),
-                child: InteractionBar(
-                  metrics: _post.metrics,
-                  onReply: _onReply,
-                  onFavorite: _onFavorite,
-                  onRepeat: _onRepeat,
-                  onReact: _onReact,
-                  showLabels: !widget.expanded,
-                  spread: widget.expanded,
-                  favorited: adapter is FavoriteSupport //
-                      ? _post.state.favorited
-                      : null,
-                  onShowFavoritees: () => context.pushNamed(
-                    "postFavorites",
-                    params: {...ref.accountRouterParams, "id": _post.id},
-                  ),
-                  onShowRepeatees: () => context.pushNamed(
-                    "postRepeats",
-                    params: {...ref.accountRouterParams, "id": _post.id},
-                  ),
-                  repeated: _post.state.repeated,
-                  reacted: adapter is ReactionSupport ? false : null,
-                  buildActions: _buildActions,
-                ),
-              )
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -608,6 +625,7 @@ class _PostContent extends ConsumerStatefulWidget {
     required this.post,
     required this.showReplyee,
     this.onTap,
+    // ignore: unused_element, this can't be removed you dumbfuck
     this.style,
   });
 

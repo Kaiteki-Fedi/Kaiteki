@@ -110,7 +110,9 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
               final post = snapshot.data!.elementAt(index);
               return PostWidget(
                 post,
-                expanded: index == 0,
+                layout: index == 0
+                    ? PostWidgetLayout.expanded
+                    : PostWidgetLayout.normal,
               );
             },
             separatorBuilder: (_, __) => const Divider(height: 1),
@@ -118,7 +120,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         } else if (snapshot.hasError) {
           return Column(
             children: [
-              PostWidget(widget.post, expanded: true),
+              PostWidget(widget.post, layout: PostWidgetLayout.expanded),
               _buildErrorListTile(context, snapshot),
             ],
           );

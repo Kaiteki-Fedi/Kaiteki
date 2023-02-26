@@ -108,7 +108,9 @@ class ThreadPostContainer extends StatelessWidget {
                 post.post,
                 showParentPost: false,
                 showReplyee: false,
-                expanded: threadLayer == 0,
+                layout: threadLayer == 0
+                    ? PostWidgetLayout.expanded
+                    : PostWidgetLayout.normal,
               ),
             ),
           ],
