@@ -16,14 +16,14 @@ class _DeckMainScreenViewState extends State<DeckMainScreenView> {
   @override
   Widget build(BuildContext context) {
     const width = 8.0 * 40.0;
-    return Align(
+    return const Align(
       alignment: Alignment.centerLeft,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
         scrollDirection: Axis.horizontal,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
+          children: [
             SizedBox(
               width: width,
               child: TimelineDeckColumn(

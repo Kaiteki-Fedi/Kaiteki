@@ -5,8 +5,8 @@ class AccountDeletionInProgressPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: const [
+    return const Row(
+      children: [
         CircularProgressIndicator(),
         SizedBox(width: 16.0),
         Text("Deleting account..."),

@@ -31,12 +31,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             onSubmitted: _onSubmitted,
             autofocus: true,
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             isScrollable: true,
             tabs: [
               Tab(
                 child: Row(
-                  children: const [
+                  children: [
                     Icon(Icons.article_rounded),
                     SizedBox(width: 8),
                     Text("Posts"),
@@ -45,7 +45,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               ),
               Tab(
                 child: Row(
-                  children: const [
+                  children: [
                     Icon(Icons.person_rounded),
                     SizedBox(width: 8),
                     Text("Users"),

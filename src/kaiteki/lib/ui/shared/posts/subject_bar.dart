@@ -33,8 +33,8 @@ class SubjectBar extends StatelessWidget {
             onTap: onTap,
           ),
           if (!collapsed)
-            Column(
-              children: const [
+            const Column(
+              children: [
                 Divider(height: 1),
                 SizedBox(height: 8),
               ],

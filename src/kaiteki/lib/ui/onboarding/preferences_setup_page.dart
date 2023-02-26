@@ -13,9 +13,9 @@ class _PreferencesSetupPageState extends State<PreferencesSetupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         ListTile(title: Text("Work in progress")),
       ],
     );

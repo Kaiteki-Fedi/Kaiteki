@@ -37,7 +37,7 @@ class EmojiTheme extends ThemeExtension<EmojiTheme> {
 class TextInheritedEmojiTheme extends ConsumerWidget {
   final Widget child;
 
-  const TextInheritedEmojiTheme({required this.child});
+  const TextInheritedEmojiTheme({super.key, required this.child});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
