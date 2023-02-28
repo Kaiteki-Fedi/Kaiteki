@@ -17,6 +17,7 @@ import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/enum_icon_button.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/compose/attachment_text_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_tray.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
@@ -209,6 +210,23 @@ class PostFormState extends ConsumerState<ComposeForm> {
                 onRemoveAttachment: (i) => setState(() {
                   attachments.removeAt(i);
                 }),
+                onAddAltText: (i) async {
+                  final attachment = await attachments[i];
+                  final altText = await showDialog<String>(
+                    context: context,
+                    builder: (context) => AttachmentTextDialog(
+                      attachment: attachment,
+                    ),
+                  );
+
+                  // if (altText != null) {
+                  //   setState(() {
+                  //     attachments[i] = attachments[i].then((attachment) {
+                  //       return attachment.copyWith(altText: altText);
+                  //     });
+                  //   });
+                  // }
+                },
               ),
             const Divider(height: 1),
             Padding(

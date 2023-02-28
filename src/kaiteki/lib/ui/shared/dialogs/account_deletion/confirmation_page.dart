@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/model/auth/account.dart";
-import "package:kaiteki/ui/shared/dialogs/account_list_dialog.dart";
+import "package:kaiteki/ui/shared/account_list/list_tile.dart";
 
 class AccountDeletionConfirmationPage extends StatelessWidget {
   final Account account;

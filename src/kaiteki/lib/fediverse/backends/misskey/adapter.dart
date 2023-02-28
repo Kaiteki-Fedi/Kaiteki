@@ -184,7 +184,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   Future<LoginResult> login(
     ClientSecret? clientSecret,
     CredentialsCallback requestCredentials,
-    MfaCallback requestMfa,
+    CodeCallback requestCode,
     OAuthCallback requestOAuth,
   ) async {
     final credentials = await authenticate(requestCredentials, requestOAuth);
@@ -261,7 +261,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
             (e) async => DirectChat(
               source: e,
               id: e.recipientId!,
-              recipient: toUserFromLite(e.recipient!, instance),
+              recipient: toUser(e.recipient!, instance),
               lastMessage: toChatMessage(e, instance),
               unread: e.isRead == false,
             ),
@@ -462,10 +462,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<List<User>> getRepeatees(String id) async {
     final notes = await client.getRenotes(id);
-    return notes
-        .map((n) => n.user)
-        .map((u) => toUserFromLite(u, instance))
-        .toList();
+    return notes.map((n) => n.user).map((u) => toUser(u, instance)).toList();
   }
 
   @override
@@ -519,7 +516,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<List<User>> searchForUsers(String query) async {
     final users = await client.searchUsers(query);
-    return users.map((u) => toUserFromLite(u, instance)).toList();
+    return users.map((u) => toUser(u, instance)).toList();
   }
 
   @override

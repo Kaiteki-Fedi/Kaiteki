@@ -49,7 +49,7 @@ jobs:
         run: |
           echo "BUILD_NUMBER=$(date +%s)" >> $GITHUB_OUTPUT
           echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
-          echo "BUILD_ARGS=--build-number=\"$(date +%s)\" --build-name=\"$(date +%Y-%U)\" --release \"--dart-define=VERSION_CODE=$(date +%s)\" \"--dart-define=VERSION_NAME=Weekly $(date +%Y-%U)\"" >> $GITHUB_OUTPUT
+          echo "BUILD_ARGS=--build-number=\"$(date +%s)\" --build-name=\"$(date +%Y-%U)\" --release --flavor signedfoss \"--dart-define=VERSION_CODE=$(date +%s)\" \"--dart-define=VERSION_NAME=Weekly $(date +%Y-%U)\"" >> $GITHUB_OUTPUT
 
   build-linux:
     name: Build for Linux
@@ -229,7 +229,7 @@ jobs:
         run: 'flutter pub get'
       
       - name: Build
-        run: 'flutter build web ${{needs.test.outputs.build-args}}'
+        run: 'flutter build web ${{needs.test.outputs.build-args}} --source-maps'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v3

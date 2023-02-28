@@ -2,22 +2,21 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/ui/auth/discover_instances/discover_instance_screen_result.dart";
-import "package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart";
 import "package:kaiteki/ui/auth/login/constants.dart";
-import "package:kaiteki/ui/auth/login/login_form.dart";
+import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/utils/lower_case_text_formatter.dart";
 
 class InstancePage extends StatefulWidget {
   final FutureOr<void> Function(String instance) onNext;
-  final FutureOr<void> Function(String instance)? onRegister;
+  final VoidCallback? onHandoff;
+
   final bool enabled;
 
   const InstancePage({
     required this.onNext,
-    this.onRegister,
     this.enabled = true,
     super.key,
+    this.onHandoff,
   });
 
   @override
@@ -27,6 +26,7 @@ class InstancePage extends StatefulWidget {
 class _InstancePageState extends State<InstancePage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _instanceController;
+  final _instanceFieldKey = UniqueKey();
 
   @override
   void initState() {
@@ -54,6 +54,7 @@ class _InstancePageState extends State<InstancePage> {
             Padding(
               padding: fieldMargin,
               child: TextFormField(
+                key: _instanceFieldKey,
                 enabled: widget.enabled,
                 autofillHints: const [AutofillHints.impp, AutofillHints.url],
                 controller: _instanceController,
@@ -74,37 +75,24 @@ class _InstancePageState extends State<InstancePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextButton(
-                  onPressed:
-                      widget.enabled ? _onDiscoverInstancesPressed : null,
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  child: Text(l10n.discoverInstancesButtonLabel),
-                ),
-                const SizedBox(height: 24.0),
+                const SizedBox(height: 16.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(l10n.authInstructions),
                 ),
-                const SizedBox(height: 24.0),
+                const SizedBox(height: 16.0),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (widget.onRegister == null)
-                      const SizedBox()
-                    else
+                    if (widget.onHandoff != null)
                       TextButton(
-                        // TODO(Craftplacer): This doesn't call widget.onRegister
-                        onPressed: () {},
+                        onPressed: widget.onHandoff,
                         style: TextButton.styleFrom(
                           visualDensity: VisualDensity.comfortable,
                         ),
-                        child: Text(l10n.registerButtonLabel),
+                        child: const Text("Sign in from other device"),
                       ),
+                    const Spacer(),
                     FilledButton(
                       onPressed: widget.enabled ? _onNext : null,
                       style: FilledButton.styleFrom(
@@ -138,19 +126,6 @@ class _InstancePageState extends State<InstancePage> {
       }
 
       widget.onNext.call(host);
-    }
-  }
-
-  Future<void> _onDiscoverInstancesPressed() async {
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const DiscoverInstancesScreen(),
-      ),
-    );
-
-    if (result is DiscoverInstanceScreenResult) {
-      _instanceController.text = result.instance;
-      _submit(result.instance);
     }
   }
 

@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw new GradleException('Flutter SDK not found. Define location with flutter.sdk in the local.properties file.')
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -33,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "moe.craftplacer.kaiteki"
+        applicationId 'moe.craftplacer.kaiteki'
         minSdkVersion 21
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
@@ -43,24 +43,42 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("keystore.jks")
-            storePassword = "$System.env.STORE_PASSWORD"
-            keyAlias = "release"
-            keyPassword = "$System.env.KEY_PASSWORD"
+            storeFile file('keystore.jks')
+            storePassword = '$System.env.STORE_PASSWORD'
+            keyAlias = 'release'
+            keyPassword = '$System.env.KEY_PASSWORD'
         }
     }
 
-    buildTypes {
-        release {
+    flavorDimensions 'version', 'distribution'
+
+    productFlavors {
+        unsigned {
+            dimension 'version'
+            applicationIdSuffix '.dev'
+            getIsDefault().set(true)
+        }
+
+        signed {
+            dimension 'version'
             signingConfig signingConfigs.release
         }
-        debug {
-            applicationIdSuffix ".dev"
+
+        foss {
+            dimension 'distribution'
+            getIsDefault().set(true)
+        }
+
+        store {
+            dimension 'distribution'
+            applicationIdSuffix '.store'
         }
     }
+
     lint {
         disable 'InvalidPackage'
     }
+
     namespace 'moe.craftplacer.kaiteki'
 }
 
@@ -69,6 +87,6 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version'
     implementation 'com.android.support:multidex:1.0.3'
 }

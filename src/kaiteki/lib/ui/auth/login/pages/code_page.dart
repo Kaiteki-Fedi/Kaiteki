@@ -3,22 +3,24 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/auth/login/constants.dart";
-import "package:kaiteki/ui/shared/async/async_block_widget.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_message.dart";
+import "package:kaiteki_material/kaiteki_material.dart";
 
-class MfaPage extends StatefulWidget {
+class CodePage extends StatefulWidget {
+  final CodePromptOptions options;
   final FutureOr<void> Function(String code) onSubmit;
 
-  const MfaPage({super.key, required this.onSubmit});
+  const CodePage({super.key, required this.onSubmit, required this.options});
 
   @override
-  State<MfaPage> createState() => _MfaPageState();
+  State<CodePage> createState() => _CodePageState();
 }
 
-class _MfaPageState extends State<MfaPage> {
+class _CodePageState extends State<CodePage> {
   final _textController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   Future? _future;
@@ -26,6 +28,7 @@ class _MfaPageState extends State<MfaPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final large = widget.options.length != null && widget.options.length! <= 8;
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
@@ -57,11 +60,14 @@ class _MfaPageState extends State<MfaPage> {
                             ),
                             textAlign: TextAlign.center,
                             keyboardType: TextInputType.visiblePassword,
-                            maxLength: 8,
-                            style: GoogleFonts.robotoMono(fontSize: 24),
+                            maxLength: widget.options.length,
+                            style: GoogleFonts.robotoMono(
+                              fontSize: large ? 24 : null,
+                            ),
                             textInputAction: TextInputAction.done,
                             inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
+                              if (widget.options.numericOnly)
+                                FilteringTextInputFormatter.digitsOnly
                             ],
                             autofocus: true,
                             autocorrect: false,
@@ -77,14 +83,23 @@ class _MfaPageState extends State<MfaPage> {
                       const SizedBox(width: 8),
                       Padding(
                         padding: const EdgeInsets.only(top: 1.0),
-                        child: FloatingActionButton(
-                          onPressed: () => _submit(_textController.text),
-                          elevation:
-                              Theme.of(context).useMaterial3 ? 0.0 : null,
-                          tooltip: l10n.submitButtonTooltip,
-                          heroTag: null,
-                          child: const Icon(Icons.arrow_forward_rounded),
-                        ),
+                        child: large
+                            ? FloatingActionButton(
+                                onPressed: () => _submit(_textController.text),
+                                elevation:
+                                    Theme.of(context).useMaterial3 ? 0.0 : null,
+                                tooltip: l10n.submitButtonTooltip,
+                                heroTag: null,
+                                child: const Icon(Icons.arrow_forward_rounded),
+                              )
+                            : FloatingActionButton.small(
+                                onPressed: () => _submit(_textController.text),
+                                elevation:
+                                    Theme.of(context).useMaterial3 ? 0.0 : null,
+                                tooltip: l10n.submitButtonTooltip,
+                                heroTag: null,
+                                child: const Icon(Icons.arrow_forward_rounded),
+                              ),
                       ),
                     ],
                   ),

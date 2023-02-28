@@ -4,11 +4,13 @@ import "package:kaiteki/ui/shared/common.dart";
 
 class AttachmentTrayItem extends StatelessWidget {
   final VoidCallback? onRemove;
+  final VoidCallback? onAddAltText;
 
   const AttachmentTrayItem({
     super.key,
     required this.attachment,
     this.onRemove,
+    this.onAddAltText,
   });
 
   final Future<Attachment> attachment;
@@ -65,13 +67,6 @@ class AttachmentTrayItem extends StatelessWidget {
                     iconSize: 20,
                     splashRadius: 12,
                     color: Theme.of(context).colorScheme.surfaceVariant,
-                    onSelected: (action) {
-                      switch (action) {
-                        case AttachmentTryItemAction.remove:
-                          onRemove?.call();
-                          break;
-                      }
-                    },
                     itemBuilder: buildItemActions,
                   ),
                 ),
@@ -83,12 +78,14 @@ class AttachmentTrayItem extends StatelessWidget {
     );
   }
 
-  List<PopupMenuEntry<AttachmentTryItemAction>> buildItemActions(
+  List<PopupMenuEntry> buildItemActions(
     BuildContext context,
   ) {
     return [
       PopupMenuItem(
-        value: AttachmentTryItemAction.remove,
+        onTap: () {
+          onRemove?.call();
+        },
         enabled: onRemove != null,
         child: const ListTile(
           contentPadding: EdgeInsets.zero,
@@ -96,10 +93,11 @@ class AttachmentTrayItem extends StatelessWidget {
           title: Text("Remove attachment"),
         ),
       ),
-      const PopupMenuItem(
-        value: AttachmentTryItemAction.addAltText,
-        enabled: false,
-        child: ListTile(
+      PopupMenuItem(
+        onTap: () {
+          onAddAltText?.call();
+        },
+        child: const ListTile(
           contentPadding: EdgeInsets.zero,
           leading: Icon(
             Icons.drive_file_rename_outline_rounded,
@@ -122,5 +120,3 @@ class AttachmentTrayItem extends StatelessWidget {
     }
   }
 }
-
-enum AttachmentTryItemAction { remove, addAltText }

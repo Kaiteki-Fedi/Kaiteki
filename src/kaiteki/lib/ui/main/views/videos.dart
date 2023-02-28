@@ -46,7 +46,7 @@ class FilteredTimelineStream {
     this.filter,
     this.onlyMedia = false,
   }) {
-    controller = StreamController();
+    controller = StreamController.broadcast();
   }
 
   Future<void> requestNextPage() async {
@@ -153,17 +153,23 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
         child: ColoredBox(
           color: Colors.black,
           child: Center(
-            child: AspectRatio(
-              aspectRatio: 9 / 16,
-              child: DefaultTextStyle.merge(
-                style: const TextStyle(color: Colors.white, shadows: shadows),
-                child: StreamBuilder<Iterable<Post>?>(
-                  stream: _stream!.stream,
-                  builder: (context, snapshot) {
-                    final loadingWidget = Center(
+            child: DefaultTextStyle.merge(
+              style: const TextStyle(color: Colors.white, shadows: shadows),
+              child: StreamBuilder<Iterable<Post>?>(
+                stream: _stream!.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return ErrorLandingWidget.fromAsyncSnapshot(
+                      snapshot,
+                      onRetry: _stream!.requestNextPage,
+                    );
+                  }
+
+                  if (snapshot.data == null) {
+                    return const Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           CircularProgressIndicator(),
                           SizedBox(height: 16),
                           Text(
@@ -172,165 +178,157 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                         ],
                       ),
                     );
+                  }
 
-                    if (snapshot.hasError) {
-                      return ErrorLandingWidget.fromAsyncSnapshot(
-                        snapshot,
-                        onRetry: _stream!.requestNextPage,
-                      );
-                    }
+                  final posts = snapshot.data?.expand(
+                    (p) {
+                      return p.attachments!
+                          .map((a) => _PostAttachmentCompound(p, a));
+                    },
+                  ).toList();
 
-                    if (snapshot.data == null) return loadingWidget;
+                  final _PostAttachmentCompound? compound;
 
-                    final posts = snapshot.data?.expand(
-                      (p) {
-                        return p.attachments!
-                            .map((a) => _PostAttachmentCompound(p, a));
-                      },
-                    ).toList();
+                  if (posts != null && (posts.length - 1) >= _index) {
+                    compound = posts.elementAt(_index);
+                  } else {
+                    compound = null;
+                  }
 
-                    final _PostAttachmentCompound? compound;
+                  final post = compound?.item1;
 
-                    if (posts != null && (posts.length - 1) >= _index) {
-                      compound = posts.elementAt(_index);
-                    } else {
-                      compound = null;
-                    }
+                  return Stack(
+                    children: [
+                      PageView.builder(
+                        itemCount: (posts?.length ?? 0) + 1,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          final _PostAttachmentCompound? compound;
 
-                    final post = compound?.item1;
+                          if (posts != null && (posts.length - 1) >= _index) {
+                            compound = posts.elementAt(_index);
+                          } else {
+                            compound = null;
+                          }
 
-                    return Stack(
-                      children: [
-                        PageView.builder(
-                          itemCount: (posts?.length ?? 0) + 1,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            final _PostAttachmentCompound? compound;
-
-                            if (posts != null && (posts.length - 1) >= _index) {
-                              compound = posts.elementAt(_index);
-                            } else {
-                              compound = null;
-                            }
-
-                            if (compound == null) return loadingWidget;
-
-                            return Positioned.fill(
-                              child: _VideoWidget(
-                                Uri.parse(compound.item2.url),
-                                key: ValueKey(compound.item2.url),
-                                onProgressChanged: (v) => setState(
-                                  () => progress = v,
-                                ),
+                          if (compound == null) {
+                            return const Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "Fetching the next post, hang tight...",
+                                  ),
+                                ],
                               ),
                             );
-                          },
-                          onPageChanged: (i) {
-                            setState(() => _index = i);
+                          }
 
-                            final notEnoughPages =
-                                _index > snapshot.data!.length - 1;
-                            if (notEnoughPages) {
-                              _stream!.requestNextPage();
-                            }
-                          },
+                          return _VideoWidget(
+                            Uri.parse(compound.item2.url),
+                            key: ValueKey(compound.item2.url),
+                            onProgressChanged: (v) {
+                              if (mounted) {
+                                setState(
+                                  () => progress = v,
+                                );
+                              }
+                            },
+                          );
+                        },
+                        onPageChanged: (i) => _onPageChanged(i, snapshot),
+                      ),
+                      Positioned(
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        child: LinearProgressIndicator(
+                          value: progress,
                         ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: LinearProgressIndicator(
-                            value: progress,
-                          ),
+                      ),
+                      IconTheme(
+                        data: const IconThemeData(
+                          color: Colors.white,
+                          size: 36,
+                          shadows: shadows,
                         ),
-                        IconTheme(
-                          data: const IconThemeData(
-                            color: Colors.white,
-                            size: 36,
-                            shadows: shadows,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 150),
-                              child: post == null
-                                  ? null
-                                  : Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                post.author.handle.toString(),
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              if (post.content != null)
-                                                Text.rich(
-                                                  post.renderContent(
-                                                    context,
-                                                    ref,
-                                                  ),
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Column(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 150),
+                            child: post == null
+                                ? null
+                                : Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(
-                                                Icons.more_horiz_rounded,
+                                            Text(
+                                              post.author.handle.toString(),
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            const SizedBox(height: 8),
-                                            AvatarWidget(
-                                              post.author,
-                                              size: 36,
-                                            ),
-                                            const SizedBox(height: 8),
-                                            IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(
-                                                Icons.star_outline_rounded,
+                                            if (post.content != null)
+                                              Text.rich(
+                                                post.renderContent(
+                                                  context,
+                                                  ref,
+                                                ),
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                            ),
-                                            IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(
-                                                Icons.repeat_rounded,
-                                              ),
-                                            ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                            ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.more_horiz_rounded,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          AvatarWidget(
+                                            post.author,
+                                            size: 36,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                           ),
                         ),
-                      ],
-                    );
-                  },
-                ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _onPageChanged(int i, AsyncSnapshot<Iterable<Post>?> snapshot) {
+    setState(() => _index = i);
+
+    final notEnoughPages = _index > snapshot.data!.length - 1;
+    if (notEnoughPages) {
+      _stream!.requestNextPage();
+    }
   }
 }
 
@@ -355,17 +353,21 @@ class _VideoWidgetState extends State<_VideoWidget> {
       _videoController.play();
       setState(() {});
     });
-    _videoController.addListener(() {
-      final duration = _videoController.value.duration.inMicroseconds;
-      final position = _videoController.value.position.inMicroseconds;
-      widget.onProgressChanged?.call(position / duration);
-    });
+    _videoController.addListener(_onVideoUpdate);
+  }
+
+  void _onVideoUpdate() {
+    final duration = _videoController.value.duration.inMicroseconds;
+    final position = _videoController.value.position.inMicroseconds;
+    widget.onProgressChanged?.call(position / duration);
   }
 
   @override
   void dispose() {
     widget.onProgressChanged?.call(null);
-    _videoController.dispose();
+    _videoController
+      ..removeListener(_onVideoUpdate)
+      ..dispose();
     super.dispose();
   }
 
@@ -375,11 +377,9 @@ class _VideoWidgetState extends State<_VideoWidget> {
       return centeredCircularProgressIndicator;
     }
 
-    return Center(
-      child: AspectRatio(
-        aspectRatio: _videoController.value.aspectRatio,
-        child: VideoPlayer(_videoController),
-      ),
+    return AspectRatio(
+      aspectRatio: _videoController.value.aspectRatio,
+      child: VideoPlayer(_videoController),
     );
   }
 }

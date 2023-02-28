@@ -78,7 +78,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build linux --release'
+        run: 'flutter build linux --release --flavor signedfoss'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -154,13 +154,13 @@ jobs:
           fileDir: '${{ env.SOURCE_PATH }}/android/app/'
           encodedString: ${{ secrets.ANDROID_JKS }}
 
-      - name: Build without release key
+      - name: Build (unsigned)
         if: github.event_name == 'pull_request'
-        run: flutter build apk --build-number $(date +%s)
+        run: 'flutter build apk --build-number $(date +%s) --release --flavor unsignedfoss'
 
-      - name: Build with release key
+      - name: Build (signed)
         if: github.event_name != 'pull_request'
-        run: flutter build apk --build-number $(date +%s) --release
+        run: 'flutter build apk --build-number $(date +%s) --release --flavor signedfoss'
         env:
           STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
@@ -196,7 +196,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build windows --release'
+        run: 'flutter build windows --release --flavor signedfoss'
         
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
@@ -229,7 +229,7 @@ jobs:
         run: 'flutter pub get'
       
       - name: Build
-        run: 'flutter build web --release'
+        run: 'flutter build web --release --flavor signedfoss --source-maps'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2

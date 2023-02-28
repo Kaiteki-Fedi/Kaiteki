@@ -39,7 +39,7 @@ abstract class BackendAdapter {
   Future<LoginResult> login(
     ClientSecret? clientSecret,
     CredentialsCallback requestCredentials,
-    MfaCallback requestMfa,
+    CodeCallback requestCode,
     OAuthCallback requestOAuth,
   );
 

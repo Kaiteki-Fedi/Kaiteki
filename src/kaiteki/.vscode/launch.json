@@ -11,6 +11,10 @@
                 "group": "Kaiteki",
                 "order": 1
             },
+            "toolArgs": [
+                "--flavor",
+                "unsignedfoss",
+            ],
         },
         {
             "name": "Kaiteki (profile mode)",
@@ -21,7 +25,11 @@
                 "hidden": false,
                 "group": "Kaiteki",
                 "order": 2
-            }
+            },
+            "toolArgs": [
+                "--flavor",
+                "unsignedfoss",
+            ],
         },
         {
             "name": "Kaiteki (release mode)",
@@ -32,22 +40,11 @@
                 "hidden": false,
                 "group": "Kaiteki",
                 "order": 3
-            }
-        },
-        {
-            "name": "Kaiteki (debug mode with fake version)",
-            "type": "dart",
-            "request": "launch",
-            "flutterMode": "debug",
-            "args": [
-                "--dart-define=VERSION_CODE=12423231",
-                "--dart-define=VERSION_NAME=Weekly 2023-03",
+            },
+            "toolArgs": [
+                "--flavor",
+                "unsignedfoss",
             ],
-            "presentation": {
-                "hidden": false,
-                "group": "Kaiteki",
-                "order": 4,
-            }
         },
         {
             "name": "Storybook",

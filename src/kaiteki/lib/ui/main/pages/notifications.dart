@@ -6,6 +6,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/interfaces/notification_support.dart";
 import "package:kaiteki/fediverse/model/notification.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/ui/animation_functions.dart" as animations;
 import "package:kaiteki/ui/shared/common.dart";
@@ -42,13 +43,14 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 
     return DefaultTabController(
       length: 2,
+      initialIndex: _getInitialIndex(ref),
       child: NestedScrollView(
         floatHeaderSlivers: true,
         dragStartBehavior: DragStartBehavior.down,
         headerSliverBuilder: (context, _) => [
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Column(
-              children: const [
+              children: [
                 TabBar(
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
@@ -79,6 +81,22 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         ),
       ),
     );
+  }
+
+  int _getInitialIndex(WidgetRef ref) {
+    if (ref.read(showReadNotifications).value) {
+      final account = ref.read(accountProvider);
+      if (account != null) {
+        final notifications =
+            ref.read(notificationServiceProvider(account.key)).valueOrNull;
+        if (notifications != null &&
+            notifications.any((e) => e.unread ?? false)) {
+          return 1;
+        }
+      }
+    }
+
+    return 0;
   }
 
   Widget _buildBody(List<Notification> data, NotificationService service) {

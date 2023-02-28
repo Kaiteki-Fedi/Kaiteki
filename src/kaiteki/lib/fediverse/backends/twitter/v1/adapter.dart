@@ -91,7 +91,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   Future<LoginResult> login(
     ClientSecret? clientSecret,
     CredentialsCallback requestCredentials,
-    MfaCallback requestMfa,
+    CodeCallback requestCode,
     OAuthCallback requestOAuth,
   ) async {
     // client.authenticationData!.accessToken = token;
@@ -116,12 +116,15 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
     // ignore: dead_code
     if (usePin) {
       tempResp = await auth.requestTemporaryCredentials("oob");
-      await requestMfa((code) async {
-        authResp = await auth.requestTokenCredentials(
-          tempResp.credentials,
-          code,
-        );
-      });
+      await requestCode(
+        const CodePromptOptions.numericOnly(8),
+        (code) async {
+          authResp = await auth.requestTokenCredentials(
+            tempResp.credentials,
+            code,
+          );
+        },
+      );
     } else {
       final response = await requestOAuth((oAuthUrl) async {
         tempResp = await auth.requestTemporaryCredentials(oAuthUrl.toString());

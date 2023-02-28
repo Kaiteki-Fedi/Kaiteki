@@ -6,6 +6,7 @@ import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/user/federation_disclaimer.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
 import "package:url_launcher/url_launcher_string.dart";
@@ -39,6 +40,7 @@ class UserInfoWidget extends ConsumerWidget {
           user.handle.toString(),
           style: Theme.of(context).textTheme.bodySmall,
         ),
+        if (true) ...[const SizedBox(height: 8), const FederationDisclaimer()],
         if (user.description != null) const SizedBox(height: 12.0),
         if (user.description != null)
           Text.rich(user.renderDescription(context, ref)),

@@ -84,7 +84,7 @@ class TimelineAdapter extends BackendAdapter {
   Future<LoginResult> login(
     ClientSecret? clientSecret,
     CredentialsCallback requestCredentials,
-    MfaCallback requestMfa,
+    CodeCallback requestMfa,
     OAuthCallback requestOAuth,
   ) =>
       throw UnimplementedError();

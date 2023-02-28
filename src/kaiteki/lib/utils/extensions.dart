@@ -25,6 +25,12 @@ extension ObjectExtensions<T> on T? {
     return function.call(value);
   }
 
+  S? safeCast<S>() {
+    final value = this;
+    if (value is S) return value;
+    return null;
+  }
+
   T inlineBang(String description) {
     final value = this;
     if (value == null) throw Exception(description);
@@ -224,4 +230,9 @@ extension FunctionExtensions<T> on T Function(JsonMap) {
       return castedList.map(this).toList();
     };
   }
+}
+
+extension NullableTextStyleExtensions on TextStyle? {
+  /// Provides an empty [TextStyle] if null. For use with [TextStyle.copyWith].
+  TextStyle get fallback => this ?? const TextStyle();
 }

@@ -4,11 +4,13 @@ import "package:kaiteki/ui/shared/posts/compose/attachment_tray_item.dart";
 
 class AttachmentTray extends StatelessWidget {
   final Function(int index)? onRemoveAttachment;
+  final Function(int index)? onAddAltText;
 
   const AttachmentTray({
     super.key,
     required this.attachments,
     this.onRemoveAttachment,
+    this.onAddAltText,
   });
 
   final List<Future<Attachment>> attachments;
@@ -23,6 +25,7 @@ class AttachmentTray extends StatelessWidget {
             AttachmentTrayItem(
               attachment: attachments[i],
               onRemove: () => onRemoveAttachment?.call(i),
+              onAddAltText: () => onAddAltText?.call(i),
             ),
         ],
       ),

@@ -44,3 +44,9 @@ final hidePostMetrics = createSettingProvider<bool>(
   initialValue: false,
   provider: sharedPreferencesProvider,
 );
+
+final showReadNotifications = createSettingProvider<bool>(
+  key: "showReadNotifications",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);

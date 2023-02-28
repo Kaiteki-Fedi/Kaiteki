@@ -36,7 +36,7 @@ Post toPost(misskey.Note source, String localHost) {
   return Post(
     source: source,
     postedAt: source.createdAt,
-    author: toUserFromLite(source.user, localHost),
+    author: toUser(source.user, localHost),
     subject: source.cw,
     content: source.text,
     emojis: mappedEmoji,
@@ -125,41 +125,29 @@ CustomEmoji toEmoji(misskey.Emoji emoji) {
   );
 }
 
-User toUser(misskey.User source, String localHost) {
+User toUser(misskey.UserLite source, String localHost) {
+  final detailedUser = source.safeCast<misskey.User>();
   return User(
-    avatarUrl: source.avatarUrl,
-    avatarBlurHash: source.avatarBlurhash as String?,
-    bannerUrl: source.bannerUrl,
-    bannerBlurHash: source.bannerBlurhash as String?,
-    description: source.description,
+    avatarUrl: source.avatarUrl.nullTransform(Uri.parse),
+    avatarBlurHash: detailedUser?.avatarBlurhash,
+    bannerUrl: detailedUser?.bannerUrl,
+    bannerBlurHash: detailedUser?.bannerBlurhash as String?,
+    description: detailedUser?.description,
     displayName: source.name,
     emojis: source.emojis?.map(toEmoji).toList(),
     host: source.host ?? localHost,
     id: source.id,
-    joinDate: source.createdAt,
+    joinDate: detailedUser?.createdAt,
     source: source,
     username: source.username,
     details: UserDetails(
-      location: source.location,
-      birthday: _parseBirthday(source.birthday),
-      fields: _parseFields(source.fields),
+      location: detailedUser?.location,
+      birthday: _parseBirthday(detailedUser?.birthday),
+      fields: _parseFields(detailedUser?.fields),
     ),
-    followerCount: source.followersCount,
-    followingCount: source.followingCount,
-    postCount: source.notesCount,
-  );
-}
-
-User toUserFromLite(misskey.UserLite source, String localHost) {
-  return User(
-    avatarUrl: source.avatarUrl,
-    // FIXME(Craftplacer): Adapters shouldn't "guess" values, e.g. display name inherited by username.
-    displayName: source.name ?? source.username,
-    emojis: source.emojis?.map(toEmoji).toList(),
-    host: source.host ?? localHost,
-    id: source.id,
-    source: source,
-    username: source.username,
+    followerCount: detailedUser?.followersCount,
+    followingCount: detailedUser?.followingCount,
+    postCount: detailedUser?.notesCount,
     flags: UserFlags(
       isAdministrator: source.isAdmin ?? false,
       isModerator: source.isModerator ?? false,
@@ -208,7 +196,7 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
 ChatMessage toChatMessage(misskey.MessagingMessage message, String localHost) {
   final file = message.file;
   return ChatMessage(
-    author: toUserFromLite(message.user!, localHost),
+    author: toUser(message.user!, localHost),
     content: message.text,
     sentAt: message.createdAt,
     emojis: [],
@@ -226,7 +214,7 @@ Notification toNotification(
   return Notification(
     createdAt: notification.createdAt,
     type: misskeyNotificationTypeRosetta.getRight(notification.type),
-    user: user == null ? null : toUserFromLite(user, localHost),
+    user: user == null ? null : toUser(user, localHost),
     post: note == null ? null : toPost(note, localHost),
     unread: !notification.isRead,
   );

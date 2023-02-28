@@ -187,7 +187,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
   Future<LoginResult> login(
     ClientSecret? clientSecret,
     CredentialsCallback requestCredentials,
-    MfaCallback requestMfa,
+    CodeCallback requestCode,
     OAuthCallback requestOAuth,
   ) async {
     late Uri redirectUri;

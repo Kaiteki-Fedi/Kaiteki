@@ -88,7 +88,15 @@ class AccountManager extends ChangeNotifier {
       return Tuple3(kv.key, kv.value, clientSecret);
     });
 
-    await Future.forEach(secretPairs, _restoreSession);
+    await Future.forEach(secretPairs, (tuple) async {
+      final account = await restoreSession(tuple);
+
+      if (account == null) return;
+
+      _logger.v("Signed into @${account.user.username}@${account.key.host}");
+
+      await add(account);
+    });
 
     if (_accounts.isNotEmpty) {
       // TODO(Craftplacer): Store which account the user last used
@@ -108,7 +116,7 @@ class AccountManager extends ChangeNotifier {
     return secrets[key];
   }
 
-  Future<void> _restoreSession(
+  Future<Account?> restoreSession(
     Tuple3<AccountKey, AccountSecret, ClientSecret?> credentials,
   ) async {
     final key = credentials.item1;
@@ -123,7 +131,7 @@ class AccountManager extends ChangeNotifier {
       await adapter.applySecrets(clientSecret, accountSecret);
     } catch (ex, s) {
       _logger.e("Failed to apply secrets to adapter", ex, s);
-      return;
+      return null;
     }
 
     User user;
@@ -132,7 +140,7 @@ class AccountManager extends ChangeNotifier {
       user = await adapter.getMyself();
     } catch (ex, s) {
       _logger.e("Failed to fetch user profile of authenticated user", ex, s);
-      return;
+      return null;
     }
 
     final account = Account(
@@ -143,8 +151,6 @@ class AccountManager extends ChangeNotifier {
       accountSecret: accountSecret,
     );
 
-    _logger.v("Signed into @${account.user.username}@${key.host}");
-
-    await add(account);
+    return account;
   }
 }

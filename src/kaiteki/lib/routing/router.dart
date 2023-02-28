@@ -14,7 +14,6 @@ import "package:kaiteki/routing/notifier.dart";
 import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
 import "package:kaiteki/ui/account_required_screen.dart";
-import "package:kaiteki/ui/auth/discover_instances/discover_instances_screen.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/feedback_screen.dart";
 import "package:kaiteki/ui/lists/lists_screen.dart";
@@ -26,14 +25,16 @@ import "package:kaiteki/ui/settings/customization/customization_settings_screen.
 import "package:kaiteki/ui/settings/debug/theme_screen.dart";
 import "package:kaiteki/ui/settings/debug_screen.dart";
 import "package:kaiteki/ui/settings/experiments.dart";
+import "package:kaiteki/ui/settings/pedantry_screen.dart";
 import "package:kaiteki/ui/settings/settings_screen.dart";
 import "package:kaiteki/ui/settings/wellbeing/wellbeing_screen.dart";
+import "package:kaiteki/ui/shared/account_list/dialog.dart";
 import "package:kaiteki/ui/shared/conversation_screen.dart";
-import "package:kaiteki/ui/shared/dialogs/account_list_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
 import "package:kaiteki/ui/user/user_screen_old.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "root");
@@ -103,6 +104,11 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             builder: (_, __) => const WellbeingScreen(),
           ),
           GoRoute(
+            name: "pedantry",
+            path: "pedantry",
+            builder: (_, __) => const PedantryScreen(),
+          ),
+          GoRoute(
             path: "debug",
             builder: (_, __) => const DebugScreen(),
             routes: [
@@ -123,11 +129,6 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
       GoRoute(
         path: "/credits",
         builder: (_, __) => const CreditsScreen(),
-        parentNavigatorKey: _rootNavigatorKey,
-      ),
-      GoRoute(
-        path: "/discover-instances",
-        builder: (_, __) => const DiscoverInstancesScreen(),
         parentNavigatorKey: _rootNavigatorKey,
       ),
       GoRoute(
@@ -177,8 +178,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                   return _DialogPage(
                     builder: (context) {
                       return ComposeScreen(
-                        replyTo:
-                            state.extra is Post ? state.extra! as Post : null,
+                        replyTo: state.extra?.safeCast<Post>(),
                       );
                     },
                   );
@@ -222,7 +222,14 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 // parentNavigatorKey: _authNavigatorKey,
                 path: "posts/:id",
                 builder: (context, state) {
-                  return ConversationScreen(state.extra! as Post);
+                  final post = state.extra.safeCast<Post>();
+
+                  if (post == null) {
+                    context.pop();
+                    return const SizedBox();
+                  } else {
+                    return ConversationScreen(post);
+                  }
                 },
                 routes: [
                   GoRoute(

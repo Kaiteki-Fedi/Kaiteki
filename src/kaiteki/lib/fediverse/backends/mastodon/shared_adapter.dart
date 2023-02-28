@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
 import "package:fediverse_objects/mastodon.dart" as mastodon;
 import "package:fediverse_objects/pleroma.dart" as pleroma;
+import "package:flutter/foundation.dart";
 import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/exceptions/authentication_exception.dart";
@@ -8,6 +9,7 @@ import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/backends/mastodon/adapter.dart";
 import "package:kaiteki/fediverse/backends/mastodon/capabilities.dart";
 import "package:kaiteki/fediverse/backends/mastodon/client.dart";
+import "package:kaiteki/fediverse/backends/mastodon/responses/login.dart";
 import "package:kaiteki/fediverse/backends/mastodon/responses/marker.dart";
 import "package:kaiteki/fediverse/backends/pleroma/exceptions/mfa_required.dart";
 import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
@@ -30,8 +32,11 @@ import "package:kaiteki/model/file.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/rosetta.dart";
 import "package:tuple/tuple.dart";
+import "package:url_launcher/url_launcher.dart";
 
 part "shared_adapter.c.dart"; // That file contains toEntity() methods
+
+const kOob = "urn:ietf:wg:oauth:2.0:oob";
 
 /// A class that allows Mastodon-derivatives (e.g. Pleroma and Mastodon itself)
 /// to use pre-existing code.
@@ -58,24 +63,29 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   Future<LoginResult> login(
     ClientSecret? clientSecret,
     CredentialsCallback requestCredentials,
-    MfaCallback requestMfa,
+    CodeCallback requestCode,
     OAuthCallback requestOAuth,
   ) async {
     late final String accessToken;
     late final mastodon.Application application;
 
+    Future<mastodon.Application> createApplication(String redirect) async {
+      return client.createApplication(
+        instance,
+        consts.appName,
+        consts.appWebsite,
+        redirect,
+        consts.defaultScopes,
+      );
+    }
+
+    final scopes = consts.defaultScopes.join(" ");
+
     if (consts.useOAuth) {
-      // if (Platform.isAndroid | Platform.isIOS) {}
-      final scopes = consts.defaultScopes.join(" ");
       late final String url;
+
       final response = await requestOAuth((oauthUrl) async {
-        application = await client.createApplication(
-          instance,
-          consts.appName,
-          consts.appWebsite,
-          url = oauthUrl.toString(),
-          consts.defaultScopes,
-        );
+        application = await createApplication(url = oauthUrl.toString());
 
         return Uri.https(
           instance,
@@ -91,25 +101,51 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
       if (response == null) return const LoginResult.aborted();
 
-      final code = response["code"]!;
       final loginResponse = await client.getToken(
         "authorization_code",
         application.clientId!,
         application.clientSecret!,
         url,
-        code: code,
+        // ignore: unnecessary_null_checks, should never be null even if permitted
+        code: response["code"]!,
         scope: scopes,
       );
 
       accessToken = loginResponse.accessToken!;
-    } else {
-      application = await client.createApplication(
-        instance,
-        consts.appName,
-        consts.appWebsite,
-        "urn:ietf:wg:oauth:2.0:oob",
-        consts.defaultScopes,
+    } else if (kIsWeb) {
+      application = await createApplication(kOob);
+      await launchUrl(
+        Uri.https(
+          instance,
+          "/oauth/authorize",
+          {
+            "response_type": "code",
+            "client_id": application.clientId,
+            "redirect_uri": kOob,
+            "scope": scopes,
+          },
+        ),
+        mode: LaunchMode.externalApplication,
       );
+
+      LoginResponse? loginResponse;
+
+      await requestCode(const CodePromptOptions(), (code) async {
+        loginResponse = await client.getToken(
+          "authorization_code",
+          application.clientId!,
+          application.clientSecret!,
+          kOob,
+          code: code,
+          scope: scopes,
+        );
+      });
+
+      if (loginResponse == null) return const LoginResult.aborted();
+
+      accessToken = loginResponse!.accessToken!;
+    } else {
+      application = await createApplication(kOob);
 
       String? mfaToken;
 
@@ -132,7 +168,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       );
 
       if (mfaToken != null) {
-        final mfaResponse = await requestMfa.call(
+        final mfaResponse = await requestCode.call(
+          const CodePromptOptions(numericOnly: true),
           (code) => client.respondMfa(
             mfaToken!,
             int.parse(code),

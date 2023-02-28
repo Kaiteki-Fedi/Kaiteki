@@ -1,7 +1,10 @@
 import "dart:async";
 
-typedef MfaCallback = Future<T?> Function<T>(MfaSubmitCallback<T> onSubmit);
-typedef MfaSubmitCallback<T> = Future<T> Function(String totp);
+typedef CodeCallback = Future<T?> Function<T>(
+  CodePromptOptions options,
+  CodeSubmitCallback<T> onSubmit,
+);
+typedef CodeSubmitCallback<T> = Future<T> Function(String totp);
 
 typedef CredentialsCallback = Future<T?> Function<T>(
   CredentialsSubmitCallback<T> onSubmit,
@@ -20,6 +23,31 @@ typedef OAuthUrlCreatedCallback = FutureOr<void> Function(
 );
 
 typedef GenerateOAuthUrlCallback = Future<Uri> Function(Uri oauthUrl);
+
+class CodePromptOptions {
+  final bool numericOnly;
+  final int? length;
+  final CodePromptLabel label;
+
+  /// Creates a free-form code prompt.
+  const CodePromptOptions({
+    this.numericOnly = false,
+    this.length,
+    this.label = CodePromptLabel.code,
+  });
+
+  const CodePromptOptions.numericOnly(
+    this.length, [
+    this.label = CodePromptLabel.code,
+  ]) : numericOnly = true;
+}
+
+enum CodePromptLabel {
+  totp,
+  pin,
+  token,
+  code,
+}
 
 class Credentials {
   final String username;
