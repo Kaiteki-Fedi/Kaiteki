@@ -21,9 +21,8 @@ jobs:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
     outputs:
-      build-number: ${{steps.build-variables.outputs.BUILD_NUMBER}}
-      build-name: ${{steps.build-variables.outputs.BUILD_NAME}}
-      build-args: ${{steps.build-variables.outputs.BUILD_ARGS}}
+      weekly-epoch: ${{steps.build-variables.outputs.WEEKLY_EPOCH}}
+      make-args: ${{steps.build-variables.outputs.MAKE_ARGS}}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -47,9 +46,8 @@ jobs:
       - name: Provide build variables
         id: build-variables
         run: |
-          echo "BUILD_NUMBER=$(date +%s)" >> $GITHUB_OUTPUT
-          echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
-          echo "BUILD_ARGS=--build-number=\"$(date +%s)\" --build-name=\"$(date +%Y-%U)\" --release --flavor signedfoss \"--dart-define=VERSION_CODE=$(date +%s)\" \"--dart-define=VERSION_NAME=Weekly $(date +%Y-%U)\"" >> $GITHUB_OUTPUT
+          echo "WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
+          echo "MAKE_ARGS=\"WEEKLY_EPOCH=$(date +%s) RELEASE=TRUE SIGNED=TRUE\"" >> $GITHUB_OUTPUT
 
   build-linux:
     name: Build for Linux
@@ -82,7 +80,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build linux ${{needs.test.outputs.build-args}}'
+        run: 'make build-linux ${{needs.test.outputs.make-args}}'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -160,7 +158,7 @@ jobs:
           encodedString: ${{ secrets.ANDROID_JKS }}
 
       - name: Build with release key
-        run: flutter build apk --split-per-abi ${{needs.test.outputs.build-args}}
+        run: 'make build-android-apk SPLIT_PER_ABI=TRUE ${{needs.test.outputs.make-args}}'
         env:
           STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
@@ -196,7 +194,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build windows ${{needs.test.outputs.build-args}}'
+        run: 'make build-windows ${{needs.test.outputs.make-args}}'
         
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -229,7 +227,7 @@ jobs:
         run: 'flutter pub get'
       
       - name: Build
-        run: 'flutter build web ${{needs.test.outputs.build-args}} --source-maps'
+        run: 'make build-web ${{needs.test.outputs.make-args}}'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v3

@@ -41,6 +41,11 @@ jobs:
 
       - name: Test
         run: 'flutter test --coverage -r expanded --no-pub'
+        
+      - name: Provide build variables
+        id: build-variables
+        run: |
+          echo "MAKE_ARGS=\"RELEASE=TRUE SPLIT_PER_ABI=TRUE \"" >> $GITHUB_OUTPUT
 
       - name: Codecov
         uses: codecov/codecov-action@v3
@@ -78,7 +83,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build linux --release --flavor signedfoss'
+        run: 'make build-linux ${{needs.test.outputs.make-args}}'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -156,11 +161,11 @@ jobs:
 
       - name: Build (unsigned)
         if: github.event_name == 'pull_request'
-        run: 'flutter build apk --build-number $(date +%s) --release --flavor unsignedfoss'
+        run: 'make build-android-apk SIGNED=FALSE ${{needs.test.outputs.make-args}}'
 
       - name: Build (signed)
         if: github.event_name != 'pull_request'
-        run: 'flutter build apk --build-number $(date +%s) --release --flavor signedfoss'
+        run: 'make build-android-apk SIGNED=TRUE ${{needs.test.outputs.make-args}}'
         env:
           STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
@@ -196,7 +201,7 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build
-        run: 'flutter build windows --release --flavor signedfoss'
+        run: 'make build-windows'
         
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
@@ -229,7 +234,7 @@ jobs:
         run: 'flutter pub get'
       
       - name: Build
-        run: 'flutter build web --release --flavor signedfoss --source-maps'
+        run: 'make build-web'
         
       - name: Upload artifact
         uses: actions/upload-artifact@v2
