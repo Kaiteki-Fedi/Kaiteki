@@ -169,10 +169,10 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: android
-          path: '${{ env.SOURCE_PATH }}/build/app/outputs/flutter-apk/app-release.apk'
+          path: '${{ env.SOURCE_PATH }}/build/app/outputs/flutter-apk/app-*.apk'
 
   build-windows:
     name: Build for Windows
