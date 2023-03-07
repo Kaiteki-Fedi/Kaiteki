@@ -152,23 +152,22 @@ jobs:
         run: 'flutter pub get'
 
       - name: Dump signing key
-        uses: timheuer/base64-to-file@v1.1
+        uses: timheuer/base64-to-file@v1.2
         if: github.event_name != 'pull_request'
         with:
-          fileName: 'keystore.jks'
+          fileName: 'keystore.pfx'
           fileDir: '${{ env.SOURCE_PATH }}/android/app/'
-          encodedString: ${{ secrets.ANDROID_JKS }}
+          encodedString: ${{ secrets.ANDROID_KEYSTORE }}
 
-      - name: Build (unsigned)
+      - name: Build (unsigned)  
         if: github.event_name == 'pull_request'
-        run: 'make build-android-apk SIGNED=FALSE ${{needs.test.outputs.make-args}}'
+        run: 'make build-android SIGNED=FALSE ${{needs.test.outputs.make-args}}'
 
       - name: Build (signed)
         if: github.event_name != 'pull_request'
-        run: 'make build-android-apk SIGNED=TRUE ${{needs.test.outputs.make-args}}'
+        run: 'make build-android SIGNED=TRUE ${{needs.test.outputs.make-args}}'
         env:
-          STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
-          KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -229,13 +228,13 @@ jobs:
 
       - name: Enable web
         run: flutter config --enable-web
-        
+
       - name: Get packages
         run: 'flutter pub get'
-      
+
       - name: Build
         run: 'make build-web'
-        
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:

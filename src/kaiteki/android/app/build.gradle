@@ -43,10 +43,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('keystore.jks')
-            storePassword = '$System.env.STORE_PASSWORD'
+            storeFile file('keystore.pfx')
+            storePassword = System.getenv('KEYSTORE_PASSWORD')
             keyAlias = 'release'
-            keyPassword = '$System.env.KEY_PASSWORD'
+            keyPassword = System.getenv('KEYSTORE_PASSWORD')
         }
     }
 

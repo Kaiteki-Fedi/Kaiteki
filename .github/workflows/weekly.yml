@@ -47,7 +47,7 @@ jobs:
         id: build-variables
         run: |
           echo "WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
-          echo "MAKE_ARGS=\"WEEKLY_EPOCH=$(date +%s) RELEASE=TRUE SIGNED=TRUE\"" >> $GITHUB_OUTPUT
+          echo "MAKE_ARGS=\"WEEKLY_EPOCH=$(date +%s) RELEASE=TRUE SIGNED=TRUE SPLIT_PER_ABI=TRUE\"" >> $GITHUB_OUTPUT
 
   build-linux:
     name: Build for Linux
@@ -150,18 +150,18 @@ jobs:
         run: 'flutter pub get'
 
       - name: Dump signing key
-        uses: timheuer/base64-to-file@v1.1
+        uses: timheuer/base64-to-file@v1.2
         if: github.event_name != 'pull_request'
         with:
-          fileName: 'keystore.jks'
+          fileName: 'keystore.pfx'
           fileDir: '${{ env.SOURCE_PATH }}/android/app/'
-          encodedString: ${{ secrets.ANDROID_JKS }}
+          encodedString: ${{ secrets.ANDROID_KEYSTORE }}
 
-      - name: Build with release key
-        run: 'make build-android-apk SPLIT_PER_ABI=TRUE ${{needs.test.outputs.make-args}}'
+      - name: Build (signed)
+        if: github.event_name != 'pull_request'
+        run: 'make build-android ${{needs.test.outputs.make-args}}'
         env:
-          STORE_PASSWORD: ${{ secrets.ANDROID_STORE }}
-          KEY_PASSWORD: ${{ secrets.ANDROID_KEY }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3

@@ -11,6 +11,7 @@
 
 # Tokens & keys
 *.jks
+*.pfx
 lib/fediverse/backends/twitter/*/keys.dart
 
 # IntelliJ related
