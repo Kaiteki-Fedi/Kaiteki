@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
@@ -15,7 +16,8 @@ final experiments = createSettingProvider<List<AppExperiment>>(
   read: (prefs, key) {
     final list = prefs
         .getStringList(key)
-        ?.map((v) => AppExperiment.values.firstWhere((e) => e.name == v))
+        ?.map((v) => AppExperiment.values.firstWhereOrNull((e) => e.name == v))
+        .whereNotNull()
         .toList();
     return list ?? const [];
   },
