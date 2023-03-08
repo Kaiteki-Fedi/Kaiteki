@@ -7,7 +7,6 @@ import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
 import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/model/file.dart";
 
 abstract class CentralizedBackendAdapter extends BackendAdapter {
   Instance get instance;
@@ -82,7 +81,7 @@ abstract class BackendAdapter {
   /// the adapter implementation.
   Future<User?> followUser(String id);
 
-  Future<Attachment> uploadAttachment(File file, String? description);
+  Future<Attachment> uploadAttachment(AttachmentDraft draft);
 
   Future<List<User>> getRepeatees(String id);
 

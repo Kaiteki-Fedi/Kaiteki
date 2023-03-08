@@ -5,7 +5,6 @@ import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
 import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/model/file.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 class TimelineAdapter extends BackendAdapter {
@@ -100,7 +99,7 @@ class TimelineAdapter extends BackendAdapter {
   Future<void> unrepeatPost(String id) => throw UnimplementedError();
 
   @override
-  Future<Attachment> uploadAttachment(File file, String? description) =>
+  Future<Attachment> uploadAttachment(AttachmentDraft draft) =>
       throw UnimplementedError();
 
   @override

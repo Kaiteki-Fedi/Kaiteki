@@ -83,8 +83,8 @@ User toUser(twitter.User user) {
 Attachment toAttachment(twitter.Media media) {
   return Attachment(
     source: media,
-    url: media.mediaUrlHttps,
-    previewUrl: media.mediaUrlHttps,
+    url: Uri.parse(media.mediaUrlHttps),
+    previewUrl: Uri.parse(media.mediaUrlHttps),
     type: {
       "photo": AttachmentType.image,
       "video": AttachmentType.video,

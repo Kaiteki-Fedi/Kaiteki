@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Build
 
 env:
   SOURCE_PATH: './src/kaiteki'

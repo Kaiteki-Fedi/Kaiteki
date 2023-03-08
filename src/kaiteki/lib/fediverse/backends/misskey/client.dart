@@ -400,7 +400,7 @@ class MisskeyClient {
     String? folderId,
     String? name,
     String? comment,
-    // bool? isSensitive,
+    bool? isSensitive,
   }) {
     return client.sendMultipartRequest(
       HttpMethod.post,
@@ -409,7 +409,7 @@ class MisskeyClient {
         if (folderId != null) "folderId": folderId,
         if (name != null) "name": name,
         if (comment != null) "comment": comment,
-        // if (isSensitive != null) "isSensitive": isSensitive,
+        if (isSensitive != null) "isSensitive": isSensitive.toString(),
       },
       files: [file],
     ).then(misskey.DriveFile.fromJson.fromResponse);

@@ -23,7 +23,7 @@ class ImageAttachmentWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => enlargeImage(context),
       child: Image.network(
-        attachment.previewUrl, // ?? attachment.url
+        (attachment.previewUrl ?? attachment.url).toString(),
         loadingBuilder: (context, widget, loadingProgress) {
           if (loadingProgress == null) {
             return widget;

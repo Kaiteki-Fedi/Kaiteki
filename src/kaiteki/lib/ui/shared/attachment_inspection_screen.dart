@@ -184,7 +184,7 @@ class _AttachmentInspectionScreenState
       PopupMenuItem(
         child: Text(l10n.copyAttachmentUrl),
         onTap: () async {
-          final uri = Uri.parse(attachment.url);
+          final uri = attachment.url;
           final data = ClipboardData(text: uri.toString());
           await Clipboard.setData(data);
           if (mounted) {
@@ -234,7 +234,7 @@ class _AttachmentInspectionScreenState
         return InteractiveViewer(
           child: Center(
             child: Image.network(
-              attachment.url,
+              attachment.url.toString(),
               fit: BoxFit.fill,
               semanticLabel: attachment.description,
             ),
@@ -253,7 +253,7 @@ class _AttachmentInspectionScreenState
     final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
 
-    final uri = Uri.parse(attachment.url);
+    final uri = attachment.url;
     final filePath = await FilePicker.platform.saveFile(
       fileName: uri.pathSegments.last,
       dialogTitle: l10n.attachmentDownloadDialogTitle,

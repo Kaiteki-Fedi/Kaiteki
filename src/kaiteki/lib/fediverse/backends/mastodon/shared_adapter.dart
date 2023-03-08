@@ -28,7 +28,6 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/model/file.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/rosetta.dart";
 import "package:tuple/tuple.dart";
@@ -227,6 +226,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       visibility: mastodonVisibilityRosetta.getLeft(draft.visibility),
       spoilerText: draft.subject,
       inReplyToId: draft.replyTo?.id,
+      // TODO(Craftplacer): change UI to allow setting entire post as senstive instead of just individual attachments
+      sensitive: draft.attachments.any((e) => e.isSensitive),
       contentType: pleromaFormattingRosetta.getLeft(draft.formatting),
       mediaIds: draft.attachments
           .map((a) => (a.source as mastodon.Attachment).id)
@@ -340,9 +341,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Attachment> uploadAttachment(File file, String? description) async {
-    final attachment = await client.uploadMedia(file, description);
-    return toAttachment(attachment);
+  Future<Attachment> uploadAttachment(AttachmentDraft draft) async {
+    final attachment = await client.uploadMedia(draft.file!, draft.description);
+    // HACK(Craftplacer): Mastodon doesn't support marking individual attachments as sensitive
+    return toAttachment(attachment).copyWith(isSensitive: draft.isSensitive);
   }
 
   @override

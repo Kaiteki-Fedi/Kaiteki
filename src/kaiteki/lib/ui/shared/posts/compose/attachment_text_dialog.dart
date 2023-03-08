@@ -1,10 +1,9 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
+import "package:kaiteki/fediverse/model/post/draft.dart";
 import "package:kaiteki/ui/shared/dialogs/responsive_dialog.dart";
-import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
 
 class AttachmentTextDialog extends StatefulWidget {
-  final Attachment? attachment;
+  final AttachmentDraft? attachment;
 
   const AttachmentTextDialog({super.key, required this.attachment});
 
@@ -52,10 +51,7 @@ class _AttachmentTextDialogState extends State<AttachmentTextDialog> {
             if (attachment != null)
               AspectRatio(
                 aspectRatio: 16.0 / 9.0,
-                child: AttachmentWidget(
-                  attachment: attachment,
-                  boxFit: BoxFit.contain,
-                ),
+                child: Image.file(attachment.file!.toDartFile()!),
               ),
             Flexible(
               flex: fullscreen ? 1 : 0,

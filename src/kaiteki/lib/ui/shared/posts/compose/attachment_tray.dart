@@ -1,19 +1,21 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
+import "package:kaiteki/fediverse/model/post/draft.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_tray_item.dart";
 
 class AttachmentTray extends StatelessWidget {
   final Function(int index)? onRemoveAttachment;
-  final Function(int index)? onAddAltText;
+  final Function(int index)? onChangeDescription;
+  final Function(int index)? onToggleSensitive;
 
   const AttachmentTray({
     super.key,
     required this.attachments,
     this.onRemoveAttachment,
-    this.onAddAltText,
+    this.onChangeDescription,
+    this.onToggleSensitive,
   });
 
-  final List<Future<Attachment>> attachments;
+  final List<AttachmentDraft> attachments;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,8 @@ class AttachmentTray extends StatelessWidget {
             AttachmentTrayItem(
               attachment: attachments[i],
               onRemove: () => onRemoveAttachment?.call(i),
-              onAddAltText: () => onAddAltText?.call(i),
+              onChangeDescription: () => onChangeDescription?.call(i),
+              onToggleSensitive: () => onToggleSensitive?.call(i),
             ),
         ],
       ),

@@ -22,7 +22,6 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/model/file.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:oauth1/oauth1.dart";
 import "package:tuple/tuple.dart";
@@ -183,13 +182,16 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   }
 
   @override
-  Future<Attachment> uploadAttachment(File file, String? description) async {
-    final upload = await client.uploadMedia(file);
-    return Attachment(
-      type: AttachmentType.image,
-      source: upload,
-      url: "", previewUrl: "", // TODO(Craftplacer): implement proper preview
-    );
+  Future<Attachment> uploadAttachment(AttachmentDraft draft) async {
+    throw UnimplementedError();
+
+    // TODO(Craftplacer): implement proper preview
+    // final upload = await client.uploadMedia(draft.file!);
+    // return Attachment(
+    //   type: AttachmentType.image,
+    //   source: upload,
+    //   url: "", previewUrl: "",
+    // );
   }
 
   @override

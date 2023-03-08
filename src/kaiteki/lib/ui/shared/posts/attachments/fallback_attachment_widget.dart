@@ -25,7 +25,7 @@ class FallbackAttachmentWidget extends StatelessWidget {
           size: 48,
           color: Theme.of(context).disabledColor,
         ),
-        onTap: () => context.launchUrl(attachment.url),
+        onTap: () => context.launchUrl(attachment.url.toString()),
       ),
     );
   }

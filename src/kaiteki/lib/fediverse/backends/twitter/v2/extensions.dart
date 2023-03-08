@@ -171,8 +171,8 @@ extension MediaExtensions on twt.Media {
   ktk.Attachment toKaiteki() {
     return ktk.Attachment(
       source: this,
-      previewUrl: previewImageUrl ?? url!,
-      url: url ?? previewImageUrl!,
+      previewUrl: previewImageUrl.nullTransform(Uri.parse),
+      url: Uri.parse(url ?? previewImageUrl!),
       type: type.toKaiteki(),
       description: altText,
     );

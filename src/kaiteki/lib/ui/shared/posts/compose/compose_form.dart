@@ -87,7 +87,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
 
   var _visibility = Visibility.public;
   Formatting? _formatting;
-  final List<Future<Attachment>> attachments = [];
+  final List<AttachmentDraft> attachments = [];
 
   bool get isEmpty {
     return (_bodyController.text.isEmpty ||
@@ -210,22 +210,26 @@ class PostFormState extends ConsumerState<ComposeForm> {
                 onRemoveAttachment: (i) => setState(() {
                   attachments.removeAt(i);
                 }),
-                onAddAltText: (i) async {
-                  final attachment = await attachments[i];
-                  final altText = await showDialog<String>(
+                onToggleSensitive: (i) => setState(() {
+                  attachments[i] = attachments[i].copyWith(
+                    isSensitive: !attachments[i].isSensitive,
+                  );
+                }),
+                onChangeDescription: (i) async {
+                  final attachment = attachments[i];
+                  final description = await showDialog<String>(
                     context: context,
                     builder: (context) => AttachmentTextDialog(
                       attachment: attachment,
                     ),
                   );
 
-                  // if (altText != null) {
-                  //   setState(() {
-                  //     attachments[i] = attachments[i].then((attachment) {
-                  //       return attachment.copyWith(altText: altText);
-                  //     });
-                  //   });
-                  // }
+                  if (description != null) {
+                    setState(() {
+                      attachments[i] =
+                          attachments[i].copyWith(description: description);
+                    });
+                  }
                 },
               ),
             const Divider(height: 1),
@@ -310,7 +314,9 @@ class PostFormState extends ConsumerState<ComposeForm> {
     final l10n = context.l10n;
 
     Future<Post> submitPost() async {
-      final attachments = await Future.wait(this.attachments);
+      final attachments = await Future.wait(
+        this.attachments.map(adapter.uploadAttachment),
+      );
       final draft = _getPostDraft(attachments);
       return adapter.postStatus(draft);
     }
@@ -444,11 +450,11 @@ class PostFormState extends ConsumerState<ComposeForm> {
     if (result == null) return;
 
     final pickedFile = result.files.first;
-    final kaitekiFile = File.path(pickedFile.path!, name: pickedFile.name);
-    final adapter = ref.watch(adapterProvider);
-    setState(
-      () => attachments.add(adapter.uploadAttachment(kaitekiFile, null)),
+    final attachment = AttachmentDraft(
+      file: KaitekiFile.path(pickedFile.path!, name: pickedFile.name),
     );
+
+    setState(() => attachments.add(attachment));
   }
 
   List<Widget> _buildActions(BuildContext context) {

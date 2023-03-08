@@ -21,7 +21,6 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/model/file.dart";
 import "package:kaiteki/utils/extensions.dart";
 
 const clientId = kDebugMode
@@ -305,7 +304,7 @@ class TwitterAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  Future<Attachment> uploadAttachment(File file, String? description) {
+  Future<Attachment> uploadAttachment(AttachmentDraft draft) {
     // TODO(Craftplacer): implement uploadAttachment
     throw UnimplementedError();
   }

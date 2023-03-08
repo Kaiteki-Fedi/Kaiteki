@@ -1,7 +1,9 @@
+import "dart:io" as io;
+
 import "package:http/http.dart" show MultipartFile;
 
 /// A simple data compound intended for use in file transfers.
-class File {
+class KaitekiFile {
   final String? name;
 
   final String? path;
@@ -9,21 +11,21 @@ class File {
   final Stream<List<int>>? stream;
   final int? size;
 
-  const File.stream(
+  const KaitekiFile.stream(
     Stream<List<int>> this.stream,
     this.size, {
     this.name,
   })  : path = null,
         bytes = null;
 
-  const File.path(
+  const KaitekiFile.path(
     String this.path, {
     this.name,
   })  : bytes = null,
         stream = null,
         size = null;
 
-  const File.bytes(
+  const KaitekiFile.bytes(
     List<int> this.bytes, {
     this.name,
   })  : path = null,
@@ -48,5 +50,11 @@ class File {
     }
 
     throw UnimplementedError();
+  }
+
+  io.File? toDartFile() {
+    final path = this.path;
+    if (path == null) return null;
+    return io.File(path);
   }
 }

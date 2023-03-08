@@ -32,7 +32,6 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/model/file.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/rosetta.dart";
 import "package:kaiteki/utils/utils.dart";
@@ -217,9 +216,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       text: draft.content,
       cw: draft.subject,
       replyId: draft.replyTo?.id,
-      fileIds: draft.attachments.map((a) {
-        return (a.source as misskey.DriveFile).id;
-      }).toList(),
+      fileIds: draft.attachments
+          .map((a) => a.source)
+          .cast<misskey.DriveFile>()
+          .map((a) => a.id)
+          .toList(),
     );
 
     return toPost(response.createdNote, instance);
@@ -443,9 +444,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Attachment> uploadAttachment(File file, String? description) async {
+  Future<Attachment> uploadAttachment(AttachmentDraft draft) async {
     final driveFile = await client.createDriveFile(
-      await file.toMultipartFile("file"),
+      await draft.file!.toMultipartFile("file"),
+      comment: draft.description,
+      isSensitive: draft.isSensitive,
     );
     return toAttachment(driveFile);
   }

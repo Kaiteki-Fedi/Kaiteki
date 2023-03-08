@@ -168,11 +168,12 @@ Attachment toAttachment(
   mastodon.Attachment attachment, {
   mastodon.Status? status,
 }) {
+  final url = Uri.parse(attachment.url);
   return Attachment(
     source: attachment,
     description: attachment.description,
-    url: attachment.url,
-    previewUrl: attachment.previewUrl ?? attachment.url,
+    url: url,
+    previewUrl: attachment.previewUrl.nullTransform(Uri.parse) ?? url,
     type: mastodonAttachmentTypeRosetta.getRight(attachment.type),
     isSensitive: status?.sensitive ?? false,
   );

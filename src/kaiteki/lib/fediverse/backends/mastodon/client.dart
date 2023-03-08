@@ -230,6 +230,7 @@ class MastodonClient {
   Future<Status> postStatus(
     String status, {
     String? spoilerText,
+    bool? sensitive,
     bool? pleromaPreview,
     String? visibility,
     String? inReplyToId,
@@ -245,10 +246,11 @@ class MastodonClient {
             "source": consts.appName,
             "spoiler_text": spoilerText ?? "",
             "content_type": contentType,
-            "preview": pleromaPreview.toString(),
+            "preview": pleromaPreview,
             "visibility": visibility,
             "in_reply_to_id": inReplyToId,
-            "media_ids": mediaIds
+            "media_ids": mediaIds,
+            "sensitive": sensitive,
           }.jsonBody,
         )
         .then(Status.fromJson.fromResponse);
@@ -339,7 +341,7 @@ class MastodonClient {
   }
 
   Future<Attachment> uploadMedia(
-    File file,
+    KaitekiFile file,
     String? description,
   ) async {
     return client.sendMultipartRequest(

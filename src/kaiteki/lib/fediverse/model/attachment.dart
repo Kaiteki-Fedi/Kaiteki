@@ -1,8 +1,8 @@
 import "package:kaiteki/fediverse/model/adapted_entity.dart";
 
 class Attachment<T> extends AdaptedEntity<T> {
-  final String previewUrl;
-  final String url;
+  final Uri? previewUrl;
+  final Uri url;
   final String? description;
   final AttachmentType type;
   final bool isSensitive;
@@ -17,6 +17,25 @@ class Attachment<T> extends AdaptedEntity<T> {
     this.isSensitive = false,
     this.blurHash,
   });
+
+  Attachment copyWith({
+    Uri? previewUrl,
+    Uri? url,
+    String? description,
+    AttachmentType? type,
+    bool? isSensitive,
+    String? blurHash,
+  }) {
+    return Attachment(
+      source: source,
+      previewUrl: previewUrl ?? this.previewUrl,
+      url: url ?? this.url,
+      description: description ?? this.description,
+      type: type ?? this.type,
+      isSensitive: isSensitive ?? this.isSensitive,
+      blurHash: blurHash ?? this.blurHash,
+    );
+  }
 }
 
 enum AttachmentType {

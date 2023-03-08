@@ -2,7 +2,6 @@ import "package:kaiteki/fediverse/backends/twitter/v1/auth/oauth_token.dart";
 import "package:kaiteki/fediverse/backends/twitter/v1/model/media_upload.dart";
 import "package:kaiteki/fediverse/backends/twitter/v1/model/tweet.dart";
 import "package:kaiteki/fediverse/backends/twitter/v1/model/user.dart";
-
 import "package:kaiteki/http/http.dart";
 import "package:kaiteki/model/file.dart";
 import "package:oauth1/oauth1.dart"
@@ -152,7 +151,7 @@ class OldTwitterClient {
     ).then(Tweet.fromJson.fromResponse);
   }
 
-  Future<MediaUpload> uploadMedia(File file) async {
+  Future<MediaUpload> uploadMedia(KaitekiFile file) async {
     return client.sendMultipartRequest(
       HttpMethod.post,
       "https://upload.twitter.com/1.1/media/upload.json",

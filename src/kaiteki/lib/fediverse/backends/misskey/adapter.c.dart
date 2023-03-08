@@ -109,8 +109,8 @@ Attachment toAttachment(misskey.DriveFile file) {
   return Attachment(
     source: file,
     description: file.name,
-    previewUrl: file.thumbnailUrl ?? file.url!,
-    url: file.url!,
+    previewUrl: Uri.parse(file.thumbnailUrl ?? file.url!),
+    url: Uri.parse(file.url!),
     type: type,
     isSensitive: file.isSensitive,
     blurHash: file.blurhash,

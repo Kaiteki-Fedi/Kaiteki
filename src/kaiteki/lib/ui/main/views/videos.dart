@@ -227,7 +227,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                           }
 
                           return _VideoWidget(
-                            Uri.parse(compound.item2.url),
+                            compound.item2.url,
                             key: ValueKey(compound.item2.url),
                             onProgressChanged: (v) {
                               if (mounted) {
