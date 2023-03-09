@@ -19,6 +19,7 @@ import "package:kaiteki/ui/feedback_screen.dart";
 import "package:kaiteki/ui/lists/lists_screen.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/search/screen.dart";
+import "package:kaiteki/ui/settings/a11y/screen.dart";
 import "package:kaiteki/ui/settings/about/about_screen.dart";
 import "package:kaiteki/ui/settings/credits_screen.dart";
 import "package:kaiteki/ui/settings/customization/customization_settings_screen.dart";
@@ -117,6 +118,10 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 builder: (_, __) => const ThemeScreen(),
               )
             ],
+          ),
+          GoRoute(
+            path: "accessibility",
+            builder: (_, __) => const AccessibilityScreen(),
           ),
         ],
       ),

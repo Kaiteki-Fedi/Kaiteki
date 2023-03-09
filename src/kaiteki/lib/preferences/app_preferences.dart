@@ -52,3 +52,9 @@ final showReadNotifications = createSettingProvider<bool>(
   initialValue: false,
   provider: sharedPreferencesProvider,
 );
+
+final showAttachmentDescriptionWarning = createSettingProvider<bool>(
+  key: "showAttachmentDescriptionWarning",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);

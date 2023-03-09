@@ -37,6 +37,11 @@ class SettingsScreen extends StatelessWidget {
                     title: Text(context.l10n.settingsWellbeing),
                     onTap: () => context.push("/settings/wellbeing"),
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.accessibility_new_rounded),
+                    title: Text(context.l10n.settingsAccessibility),
+                    onTap: () => context.push("/settings/accessibility"),
+                  ),
                 ],
               ),
               SettingsSection(

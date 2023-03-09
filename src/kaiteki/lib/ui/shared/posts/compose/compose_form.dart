@@ -12,8 +12,10 @@ import "package:kaiteki/fediverse/interfaces/preview_support.dart";
 import "package:kaiteki/fediverse/interfaces/search_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/file.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
+import "package:kaiteki/ui/shared/dialogs/missing_description.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/enum_icon_button.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
@@ -312,6 +314,21 @@ class PostFormState extends ConsumerState<ComposeForm> {
   Future<void> post(BuildContext context, BackendAdapter adapter) async {
     final messenger = ScaffoldMessenger.of(context);
     final l10n = context.l10n;
+    final goRouter = GoRouter.of(context);
+
+    final showMissingDescriptionWarnings =
+        ref.read(showAttachmentDescriptionWarning).value;
+    final hasUndescribedAttachments = attachments.any((e) {
+      return e.description == null || e.description!.isEmpty;
+    });
+
+    if (showMissingDescriptionWarnings && hasUndescribedAttachments) {
+      final result = await showDialog(
+        context: context,
+        builder: (context) => const MissingDescriptionDialog(),
+      );
+      if (result != true) return;
+    }
 
     Future<Post> submitPost() async {
       final attachments = await Future.wait(
@@ -325,7 +342,6 @@ class PostFormState extends ConsumerState<ComposeForm> {
       SnackBar(content: Text(l10n.postSubmissionSending)),
     );
 
-    final goRouter = GoRouter.of(context);
     final accountRouterParams = ref.accountRouterParams;
 
     submitPost().then((post) {
