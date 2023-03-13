@@ -1,0 +1,1 @@
+<p><i>Kaiteki</i> adalah klien lintas platform untuk situs jejaring sosial. Saat ini mendukung Mastodon, Pleroma, Misskey dan Twitter. Backend masa depan dapat mengikuti.</p>
