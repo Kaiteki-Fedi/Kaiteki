@@ -62,4 +62,7 @@ enum NotificationType {
 
   // Kaiteki received a notification type that it does not support
   unsupported,
+
+  /// Someone has moved to a new account
+  userMigrated,
 }

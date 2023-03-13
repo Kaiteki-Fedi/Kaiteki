@@ -369,6 +369,9 @@ class NotificationWidget extends ConsumerWidget {
       case NotificationType.newPost:
         return Icons.post_add_rounded;
 
+      case NotificationType.userMigrated:
+        return Icons.swap_horiz_rounded;
+
       case NotificationType.unsupported:
         return Icons.question_mark;
     }
@@ -404,6 +407,7 @@ class NotificationWidget extends ConsumerWidget {
       case NotificationType.followRequest:
       case NotificationType.groupInvite:
       case NotificationType.signedUp:
+      case NotificationType.userMigrated:
         return colorScheme.tertiary;
 
       case NotificationType.unsupported:
@@ -441,6 +445,8 @@ class NotificationWidget extends ConsumerWidget {
         return " has joined the instance";
       case NotificationType.newPost:
         return " made a new post";
+      case NotificationType.userMigrated:
+        return " migrated to a new account";
       case NotificationType.unsupported:
         return "Unsupported notification";
     }
