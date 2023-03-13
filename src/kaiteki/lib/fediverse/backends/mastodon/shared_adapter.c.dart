@@ -20,6 +20,7 @@ final mastodonNotificationTypeRosetta = Rosetta(const {
   "admin.sign_up": NotificationType.signedUp,
   "admin.report": NotificationType.reported,
   "status": NotificationType.newPost,
+  "move": NotificationType.userMigrated,
 });
 
 final mastodonAttachmentTypeRosetta = Rosetta(const {
