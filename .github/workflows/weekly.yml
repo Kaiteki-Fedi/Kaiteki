@@ -22,6 +22,7 @@ jobs:
         working-directory: ${{ env.SOURCE_PATH }}
     outputs:
       weekly-epoch: ${{steps.build-variables.outputs.WEEKLY_EPOCH}}
+      build-name: ${{steps.build-variables.outputs.BUILD_NAME}}
       make-args: ${{steps.build-variables.outputs.MAKE_ARGS}}
     steps:
       - uses: actions/checkout@v3
@@ -47,6 +48,7 @@ jobs:
         id: build-variables
         run: |
           echo "WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
+          echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
           echo "MAKE_ARGS=\"WEEKLY_EPOCH=$(date +%s) RELEASE=TRUE SIGNED=TRUE SPLIT_PER_ABI=TRUE\"" >> $GITHUB_OUTPUT
 
   build-linux:
