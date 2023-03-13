@@ -4,7 +4,6 @@ buildscript {
         mavenCentral()
         maven { url 'https://repo1.maven.org/maven2' }
         google()
-        jcenter()
     }
 
     dependencies {
@@ -18,7 +17,6 @@ allprojects {
         mavenCentral()
         maven { url 'https://repo1.maven.org/maven2' }
         google()
-        jcenter()
     }
 }
 
