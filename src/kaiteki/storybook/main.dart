@@ -7,6 +7,7 @@ import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/users/user_badge.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
 
+import "stories/count_buttons.dart";
 import "stories/dialogs.dart";
 import "stories/posts.dart";
 
@@ -38,6 +39,7 @@ class KaitekiStorybook extends StatelessWidget {
         userBadges,
         poll,
         avatars,
+        countButtons,
       ],
     );
   }
@@ -69,4 +71,9 @@ final avatars = Story(
       avatarBlurHash: "UgQ9[\$WB~Xt7?uoyIUWVxbWBkBoLf+aeoeae",
     ),
   ),
+);
+
+final countButtons = Story(
+  name: "Count buttons",
+  builder: (_) => const CountButtons(),
 );

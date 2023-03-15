@@ -3,10 +3,12 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/shared/social_icon_animation.dart";
 
 class CountButton extends ConsumerWidget {
   final bool enabled;
   final bool active;
+  final bool? animate;
 
   final int? count;
   final Color? activeColor;
@@ -35,6 +37,7 @@ class CountButton extends ConsumerWidget {
     this.onTap,
     this.showNumber = true,
     this.expanded = true,
+    this.animate,
   });
 
   @override
@@ -51,10 +54,7 @@ class CountButton extends ConsumerWidget {
     final showCount =
         showNumber && hasNumber && !ref.watch(hidePostMetrics).value;
 
-    final icon = IconTheme(
-      data: IconThemeData(color: color),
-      child: _buildIcon(),
-    );
+    final icon = _buildIcon(color);
 
     return RawMaterialButton(
       onPressed: callback,
@@ -96,10 +96,24 @@ class CountButton extends ConsumerWidget {
     );
   }
 
-  Widget _buildIcon() {
+  Widget _buildIcon(Color color) {
+    var icon = this.icon;
     final activeIcon = this.activeIcon;
-    if (activeIcon != null && active) return activeIcon;
-    return icon;
+    if (activeIcon != null && active) icon = activeIcon;
+
+    if (animate ?? true) {
+      icon = SocialIconAnimation(
+        active: active,
+        circleColors: List.filled(2, color),
+        bubbleColors: List.filled(4, color),
+        child: icon,
+      );
+    }
+
+    return IconTheme(
+      data: IconThemeData(color: color),
+      child: icon,
+    );
   }
 
   Color _getColor(BuildContext context) {
