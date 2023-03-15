@@ -479,7 +479,11 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     String listId, {
     TimelineQuery? query,
   }) async {
-    final posts = await client.getListTimeline(listId);
+    final posts = await client.getListTimeline(
+      listId,
+      sinceId: query?.sinceId,
+      maxId: query?.untilId,
+    );
     return posts.map((p) => toPost(p, instance)).toList();
   }
 
