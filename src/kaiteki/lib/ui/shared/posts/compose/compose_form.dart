@@ -1,8 +1,10 @@
+import "dart:convert";
 import "dart:math";
 
 import "package:async/async.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart" hide Visibility;
+import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" show bottomSheetConstraints;
 import "package:kaiteki/di.dart";
@@ -13,6 +15,7 @@ import "package:kaiteki/fediverse/interfaces/search_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/file.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/missing_description.dart";
@@ -56,6 +59,19 @@ class PostFormState extends ConsumerState<ComposeForm> {
   late final TextEditingController _subjectController = TextEditingController()
     ..addListener(_typingTimer.reset);
 
+  late final RestartableTimer _typingTimer = RestartableTimer(
+    const Duration(seconds: 1),
+    () {
+      _typingTimer.cancel();
+      setState(() {});
+    },
+  );
+
+  final List<AttachmentDraft> attachments = [];
+  var _visibility = Visibility.public;
+  Formatting? _formatting;
+  late String _language;
+
   String? get initialBody {
     final op = widget.replyTo;
 
@@ -78,18 +94,6 @@ class PostFormState extends ConsumerState<ComposeForm> {
 
     return null;
   }
-
-  late final RestartableTimer _typingTimer = RestartableTimer(
-    const Duration(seconds: 1),
-    () {
-      _typingTimer.cancel();
-      setState(() {});
-    },
-  );
-
-  var _visibility = Visibility.public;
-  Formatting? _formatting;
-  final List<AttachmentDraft> attachments = [];
 
   bool get isEmpty {
     return (_bodyController.text.isEmpty ||
@@ -137,6 +141,14 @@ class PostFormState extends ConsumerState<ComposeForm> {
     if (op?.visibility != null) {
       _visibility = op!.visibility!;
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final opLanguage = widget.replyTo?.language;
+    _language = opLanguage ?? Localizations.localeOf(context).languageCode;
   }
 
   @override
@@ -308,6 +320,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
       formatting: _formatting ?? Formatting.plainText,
       replyTo: widget.replyTo,
       attachments: attachments,
+      language: _language,
     );
   }
 
@@ -478,6 +491,8 @@ class PostFormState extends ConsumerState<ComposeForm> {
     final adapter = ref.watch(adapterProvider);
     final formattingList = adapter.capabilities.supportedFormattings;
     final supportedScopes = adapter.capabilities.supportedScopes;
+    final supportsLanguageTagging =
+        adapter.capabilities.supportsLanguageTagging;
     return [
       IconButton(
         onPressed: openAttachDrawer,
@@ -512,12 +527,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
             _bodyController.text = "$prefix$handle $suffix";
           },
         ),
-      const SizedBox(
-        height: 24,
-        child: VerticalDivider(
-          width: 16,
-        ),
-      ),
+      const SizedBox(height: 24, child: VerticalDivider(width: 16)),
       if (supportedScopes.length >= 2)
         EnumIconButton<Visibility>(
           tooltip: l10n.visibilityButtonTooltip,
@@ -539,7 +549,59 @@ class PostFormState extends ConsumerState<ComposeForm> {
           iconBuilder: (_, value) => Icon(value.toIconData()),
           textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
         ),
+      if (supportsLanguageTagging)
+        IconButton(
+          icon: Text(
+            _language.toUpperCase(),
+            style: Theme.of(context)
+                .ktkTextTheme
+                ?.monospaceTextStyle
+                .fallback
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          tooltip: "Language",
+          splashRadius: splashRadius,
+          onPressed: _onSelectLanguage,
+        ),
     ];
+  }
+
+  Future<void> _onSelectLanguage() async {
+    // FIXME(Craftplacer): Use providers to cache loading from rootBundle
+    final languagesJson = await rootBundle.loadString("assets/languages.json");
+    final languages = (jsonDecode(languagesJson) as List<dynamic>)
+        .cast<List<dynamic>>()
+        .map((e) => e.cast<String>())
+        .toList()
+      ..sort((a, b) => a[1].compareTo(b[1]));
+
+    if (!mounted) {
+      return;
+    }
+
+    final result = await showDialog(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          title: const Text("Select language"),
+          children: [
+            for (var tuple in languages)
+              RadioListTile(
+                title: Text(tuple[1]),
+                groupValue: _language,
+                value: tuple[0],
+                contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+                onChanged: (languageCode) =>
+                    Navigator.of(context).pop(languageCode),
+              ),
+          ],
+        );
+      },
+    );
+
+    if (result == null) return;
+
+    setState(() => _language = result);
   }
 }
 

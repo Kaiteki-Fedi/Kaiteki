@@ -111,6 +111,7 @@ flutter:
     - assets/icon.png
     - assets/credits.json
     - assets/instances.json
+    - assets/languages.json
     - assets/oauth-success.html
   fonts:
     - family: Quicksand

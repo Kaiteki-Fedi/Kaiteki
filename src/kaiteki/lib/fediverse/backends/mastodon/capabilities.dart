@@ -31,4 +31,7 @@ class MastodonCapabilities extends AdapterCapabilities {
       TimelineKind.directMessages,
     };
   }
+
+  @override
+  bool get supportsLanguageTagging => true;
 }

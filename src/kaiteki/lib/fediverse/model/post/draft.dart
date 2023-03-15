@@ -11,6 +11,7 @@ class PostDraft {
   final String? subject;
   final Post? replyTo;
   final List<Attachment> attachments;
+  final String? language;
 
   const PostDraft({
     required this.subject,
@@ -19,6 +20,7 @@ class PostDraft {
     this.formatting = Formatting.plainText,
     this.replyTo,
     this.attachments = const [],
+    this.language,
   });
 }
 

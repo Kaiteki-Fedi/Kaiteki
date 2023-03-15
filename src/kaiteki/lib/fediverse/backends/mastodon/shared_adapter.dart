@@ -232,6 +232,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       mediaIds: draft.attachments
           .map((a) => (a.source as mastodon.Attachment).id)
           .toList(),
+      language: draft.language,
     );
     return toPost(newPost, instance);
   }

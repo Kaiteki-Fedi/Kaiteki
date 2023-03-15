@@ -12,5 +12,8 @@ abstract class AdapterCapabilities {
 
   Set<TimelineKind> get supportedTimelines;
 
+  /// Specifies whether the adapter supports submitting posts with a language
+  bool get supportsLanguageTagging => false;
+
   const AdapterCapabilities();
 }

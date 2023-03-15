@@ -236,6 +236,7 @@ class MastodonClient {
     String? inReplyToId,
     String? contentType = "text/plain",
     List<String> mediaIds = const [],
+    String? language,
   }) async {
     return client
         .sendRequest(
@@ -251,6 +252,7 @@ class MastodonClient {
             "in_reply_to_id": inReplyToId,
             "media_ids": mediaIds,
             "sensitive": sensitive,
+            "language": language,
           }.jsonBody,
         )
         .then(Status.fromJson.fromResponse);
