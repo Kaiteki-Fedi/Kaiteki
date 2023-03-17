@@ -45,7 +45,7 @@ jobs:
       - name: Provide build variables
         id: build-variables
         run: |
-          echo "MAKE_ARGS=\"RELEASE=TRUE SPLIT_PER_ABI=TRUE \"" >> $GITHUB_OUTPUT
+          echo "MAKE_ARGS=RELEASE=TRUE SPLIT_PER_ABI=TRUE" >> $GITHUB_OUTPUT
 
       - name: Codecov
         uses: codecov/codecov-action@v3

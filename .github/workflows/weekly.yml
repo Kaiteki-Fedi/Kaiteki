@@ -49,7 +49,7 @@ jobs:
         run: |
           echo "WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
           echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
-          echo "MAKE_ARGS=\"WEEKLY_EPOCH=$(date +%s) RELEASE=TRUE SIGNED=TRUE SPLIT_PER_ABI=TRUE\"" >> $GITHUB_OUTPUT
+          echo "MAKE_ARGS=RELEASE=TRUE SIGNED=TRUE SPLIT_PER_ABI=TRUE WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
 
   build-linux:
     name: Build for Linux
