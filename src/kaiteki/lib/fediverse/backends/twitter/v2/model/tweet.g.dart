@@ -132,13 +132,11 @@ class _$TweetCWProxyImpl implements _$TweetCWProxy {
   }) {
     return Tweet(
       id: id == const $CopyWithPlaceholder() || id == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.id!
+          ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
       text: text == const $CopyWithPlaceholder() || text == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.text!
+          ? _value.text
           // ignore: cast_nullable_to_non_nullable
           : text as String,
       authorId: authorId == const $CopyWithPlaceholder()
