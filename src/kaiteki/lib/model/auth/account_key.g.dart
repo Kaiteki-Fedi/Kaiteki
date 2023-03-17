@@ -70,4 +70,5 @@ const _$ApiTypeEnumMap = {
   ApiType.misskey: 'misskey',
   ApiType.twitter: 'twitter',
   ApiType.twitterV1: 'twitterV1',
+  ApiType.tumblr: 'tumblr',
 };

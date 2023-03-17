@@ -210,23 +210,19 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
           // ignore: cast_nullable_to_non_nullable
           : source as T?,
       postedAt: postedAt == const $CopyWithPlaceholder() || postedAt == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.postedAt!
+          ? _value.postedAt
           // ignore: cast_nullable_to_non_nullable
           : postedAt as DateTime,
       author: author == const $CopyWithPlaceholder() || author == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.author!
+          ? _value.author
           // ignore: cast_nullable_to_non_nullable
           : author as User<dynamic>,
       id: id == const $CopyWithPlaceholder() || id == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.id!
+          ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
       reactions: reactions == const $CopyWithPlaceholder() || reactions == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.reactions!
+          ? _value.reactions
           // ignore: cast_nullable_to_non_nullable
           : reactions as List<Reaction>,
       mentionedUsers: mentionedUsers == const $CopyWithPlaceholder()
@@ -242,8 +238,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
           // ignore: cast_nullable_to_non_nullable
           : content as String?,
       embeds: embeds == const $CopyWithPlaceholder() || embeds == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.embeds!
+          ? _value.embeds
           // ignore: cast_nullable_to_non_nullable
           : embeds as List<Embed>,
       emojis: emojis == const $CopyWithPlaceholder()
@@ -259,18 +254,15 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
           // ignore: cast_nullable_to_non_nullable
           : formatting as Formatting?,
       metrics: metrics == const $CopyWithPlaceholder() || metrics == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.metrics!
+          ? _value.metrics
           // ignore: cast_nullable_to_non_nullable
           : metrics as PostMetrics,
       state: state == const $CopyWithPlaceholder() || state == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.state!
+          ? _value.state
           // ignore: cast_nullable_to_non_nullable
           : state as PostState,
       nsfw: nsfw == const $CopyWithPlaceholder() || nsfw == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.nsfw!
+          ? _value.nsfw
           // ignore: cast_nullable_to_non_nullable
           : nsfw as bool,
       quotedPost: quotedPost == const $CopyWithPlaceholder()

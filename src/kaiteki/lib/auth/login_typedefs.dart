@@ -14,8 +14,9 @@ typedef CredentialsSubmitCallback<T> = Future<T> Function(
 );
 
 typedef OAuthCallback = Future<Map<String, String>?> Function(
-  GenerateOAuthUrlCallback generateUrl,
-);
+  GenerateOAuthUrlCallback generateUrl, {
+  bool requireDefaultHttpPort,
+});
 
 typedef OAuthUrlCreatedCallback = FutureOr<void> Function(
   Uri oauthUrl,

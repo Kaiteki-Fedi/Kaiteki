@@ -63,24 +63,20 @@ class _$PostStateCWProxyImpl implements _$PostStateCWProxy {
   }) {
     return PostState(
       favorited: favorited == const $CopyWithPlaceholder() || favorited == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.favorited!
+          ? _value.favorited
           // ignore: cast_nullable_to_non_nullable
           : favorited as bool,
       repeated: repeated == const $CopyWithPlaceholder() || repeated == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.repeated!
+          ? _value.repeated
           // ignore: cast_nullable_to_non_nullable
           : repeated as bool,
       bookmarked:
           bookmarked == const $CopyWithPlaceholder() || bookmarked == null
-              // ignore: unnecessary_non_null_assertion
-              ? _value.bookmarked!
+              ? _value.bookmarked
               // ignore: cast_nullable_to_non_nullable
               : bookmarked as bool,
       pinned: pinned == const $CopyWithPlaceholder() || pinned == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.pinned!
+          ? _value.pinned
           // ignore: cast_nullable_to_non_nullable
           : pinned as bool,
     );

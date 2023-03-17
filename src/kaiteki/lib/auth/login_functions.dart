@@ -10,8 +10,9 @@ import "package:shelf/shelf_io.dart";
 
 Future<Map<String, String>?> runOAuthServer(
   OAuthUrlCreatedCallback ready,
-  String successPage,
-) async {
+  String successPage, {
+  bool defaultPort = false,
+}) async {
   final requestStream = StreamController<Map<String, String>>();
   HttpServer? server;
 
@@ -26,7 +27,7 @@ Future<Map<String, String>?> runOAuthServer(
     });
 
     // Start server, close & return when new request comes in
-    const port = 8080;
+    final port = defaultPort ? 80 : 8080;
     server = await serve(handler, "127.0.0.1", port, shared: true);
     final operation = CancelableOperation.fromFuture(
       requestStream.stream.first,

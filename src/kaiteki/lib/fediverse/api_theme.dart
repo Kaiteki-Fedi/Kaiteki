@@ -39,3 +39,10 @@ const twitterTheme = ApiTheme(
   Color(0xFFF6A358),
   iconAssetLocation: "assets/icons/twitter.png",
 );
+
+/// API theme for Twitter.
+const tumblrTheme = ApiTheme(
+  Color(0xFF001935),
+  Color(0xFF00B8FF),
+  iconAssetLocation: "assets/icons/tumblr.png",
+);

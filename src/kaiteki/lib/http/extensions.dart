@@ -25,8 +25,15 @@ extension KaitekiResponseExtensions on Response {
 
 extension KaitekiJsonDeserializationResopnseExtensions<T>
     on DeserializeFromJson<T> {
-  T fromResponse(Response response) => response.fromJson(this);
-  List<T> fromResponseList(Response response) => response.fromJsonList(this);
+  T fromResponse(Response response, [String? jsonKey]) {
+    if (jsonKey != null) return response.fromJson((j) => this(j[jsonKey]!));
+    return response.fromJson(this);
+  }
+
+  List<T> fromResponseList(Response response, [String? jsonKey]) {
+    if (jsonKey != null) return response.fromJsonList((j) => this(j[jsonKey]!));
+    return response.fromJsonList(this);
+  }
 }
 
 extension KaitekiJsonDeserializationResopnseGenericExtensions<T, K>

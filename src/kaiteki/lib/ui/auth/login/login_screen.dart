@@ -261,8 +261,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<Map<String, String>?> _handleOAuth(
-    GenerateOAuthUrlCallback generateUrl,
-  ) async {
+    GenerateOAuthUrlCallback generateUrl, {
+    bool requireDefaultHttpPort = false,
+  }) async {
     final successPage = await generateOAuthLandingPage(
       Theme.of(context).colorScheme,
     );
@@ -280,6 +281,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           setState(() => _oAuth = cancel);
         },
         successPage,
+        defaultPort: requireDefaultHttpPort,
       );
     } finally {
       setState(() => _oAuth = null);
