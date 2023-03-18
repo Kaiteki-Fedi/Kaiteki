@@ -42,6 +42,7 @@ enum ApiType {
   tumblr(
     displayName: "Tumblr",
     createAdapter: _instantiateTumblr,
+    hosts: ["tumblr.com"],
     theme: tumblrTheme,
     adapterType: TumblrAdapter,
   );

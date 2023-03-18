@@ -7,28 +7,16 @@ class TumblrCapabilities extends AdapterCapabilities {
   const TumblrCapabilities();
 
   @override
-  Set<Visibility> get supportedScopes {
-    return const {
-      Visibility.public,
-      Visibility.followersOnly,
-      Visibility.unlisted,
-      Visibility.direct,
-    };
-  }
+  Set<Visibility> get supportedScopes => const {Visibility.public};
 
   @override
   bool get supportsSubjects => true;
 
   @override
-  Set<Formatting> get supportedFormattings => const {Formatting.plainText};
-
-  @override
-  Set<TimelineKind> get supportedTimelines {
-    return const {
-      TimelineKind.home,
-    };
+  Set<Formatting> get supportedFormattings {
+    return const {Formatting.plainText, Formatting.markdown};
   }
 
   @override
-  bool get supportsLanguageTagging => true;
+  Set<TimelineKind> get supportedTimelines => const {TimelineKind.home};
 }

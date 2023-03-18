@@ -5,6 +5,7 @@ import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
 import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
+import "package:kaiteki/fediverse/backends/tumblr/adapter.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/text/parsers/html_text_parser.dart";
 import "package:kaiteki/text/parsers/md_text_parser.dart";
@@ -54,6 +55,8 @@ final textParserProvider = Provider<Set<TextParser>>(
       return const {MarkdownTextParser(), MfmTextParser(), socialTextParser};
     } else if (adapter is SharedMastodonAdapter) {
       return const {MastodonHtmlTextParser(), socialTextParser};
+    } else if (adapter is TumblrAdapter) {
+      return const {HtmlTextParser(), socialTextParser};
     } else {
       return const {socialTextParser};
     }
