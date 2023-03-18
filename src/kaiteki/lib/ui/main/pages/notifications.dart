@@ -1,4 +1,5 @@
 import "package:animations/animations.dart";
+import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Notification;
 import "package:go_router/go_router.dart";
@@ -14,6 +15,7 @@ import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:tuple/tuple.dart";
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
@@ -68,8 +70,10 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         body: PageTransitionSwitcher(
           transitionBuilder: animations.fadeThrough,
           child: ref.watch(notifications).when(
-                data: (data) =>
-                    _buildBody(data, ref.read(notifications.notifier)),
+                data: (data) => _buildBody(
+                  groupNotifications(data),
+                  ref.read(notifications.notifier),
+                ),
                 error: (error, stackTrace) => Center(
                   child: ErrorLandingWidget(
                     error: error,
@@ -97,6 +101,20 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     }
 
     return 0;
+  }
+
+  List<Notification> groupNotifications(List<Notification> ungrouped) {
+    final groups = ungrouped.groupBy((e) => Tuple2(e.type, e.post?.id));
+    return groups.entries
+        .map((kv) {
+          final notifications = kv.value;
+
+          if (notifications.length <= 2) return kv.value.toList();
+
+          return [GroupedNotification(notifications.toList())];
+        })
+        .flattened
+        .toList();
   }
 
   Widget _buildBody(List<Notification> data, NotificationService service) {
@@ -261,7 +279,12 @@ class NotificationWidget extends ConsumerWidget {
                               if (user != null)
                                 TextSpan(
                                   children: [
-                                    user.renderDisplayName(context, ref)
+                                    user.renderDisplayName(context, ref),
+                                    if (notification is GroupedNotification)
+                                      TextSpan(
+                                        text:
+                                            " and ${(notification as GroupedNotification).notifications.length - 1} others",
+                                      ),
                                   ],
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,

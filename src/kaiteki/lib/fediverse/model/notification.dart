@@ -17,6 +17,27 @@ class Notification {
   });
 }
 
+class GroupedNotification implements Notification {
+  final List<Notification> notifications;
+
+  @override
+  DateTime get createdAt => notifications.last.createdAt;
+
+  @override
+  bool get unread => notifications.any((e) => e.unread == true);
+
+  @override
+  Post? get post => notifications.last.post;
+
+  @override
+  NotificationType get type => notifications.first.type;
+
+  @override
+  User? get user => notifications.last.user;
+
+  const GroupedNotification(this.notifications);
+}
+
 enum NotificationType {
   /// Someone has liked the user's post
   liked,
