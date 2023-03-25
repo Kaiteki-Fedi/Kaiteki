@@ -72,6 +72,7 @@ Future<AccountManager> getAccountManager() async {
     accountBox,
     fromHive,
     toHive,
+    true,
   );
 
   final clientBox = await Hive.openBox<ClientSecret>("clientSecrets");
@@ -79,6 +80,7 @@ Future<AccountManager> getAccountManager() async {
     clientBox,
     fromHive,
     toHive,
+    true,
   );
 
   final manager = AccountManager(accountRepository, clientRepository);
