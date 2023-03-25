@@ -50,3 +50,15 @@ final showUserBadges = createSettingProvider<bool>(
   initialValue: true,
   provider: sharedPreferencesProvider,
 );
+
+final useWidePostLayout = createSettingProvider<bool>(
+  key: "useWidePostLayout",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
+final useFullWidthAttachments = createSettingProvider<bool>(
+  key: "useFullWidthAttachments",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);

@@ -15,7 +15,7 @@ import "package:tuple/tuple.dart";
 
 class TimelineSliver extends ConsumerStatefulWidget {
   final double? maxWidth;
-  final bool wide;
+  final PostWidgetLayout? postLayout;
   final TimelineKind? kind;
   final String? userId;
   final String? listId;
@@ -24,7 +24,7 @@ class TimelineSliver extends ConsumerStatefulWidget {
   const TimelineSliver.kind({
     super.key,
     this.maxWidth,
-    this.wide = false,
+    this.postLayout,
     this.kind = TimelineKind.home,
     this.includeReplies = true,
   })  : userId = null,
@@ -33,7 +33,7 @@ class TimelineSliver extends ConsumerStatefulWidget {
   const TimelineSliver.user({
     super.key,
     this.maxWidth,
-    this.wide = false,
+    this.postLayout,
     required String this.userId,
     this.includeReplies = true,
   })  : kind = null,
@@ -42,7 +42,7 @@ class TimelineSliver extends ConsumerStatefulWidget {
   const TimelineSliver.list({
     super.key,
     this.maxWidth,
-    this.wide = false,
+    this.postLayout,
     required String this.listId,
     this.includeReplies = true,
   })  : kind = null,
@@ -189,7 +189,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
       onTap: openPost,
       child: PostWidget(
         item,
-        layout: widget.wide ? PostWidgetLayout.wide : PostWidgetLayout.normal,
+        layout: widget.postLayout ?? PostWidgetLayout.normal,
         onTap: openPost,
       ),
     );
@@ -202,7 +202,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
 
 class Timeline extends StatelessWidget {
   final double? maxWidth;
-  final bool wide;
+  final PostWidgetLayout? postLayout;
   final TimelineKind? kind;
   final String? userId;
   final String? listId;
@@ -210,7 +210,7 @@ class Timeline extends StatelessWidget {
   const Timeline.kind({
     super.key,
     this.maxWidth,
-    this.wide = false,
+    this.postLayout,
     this.kind = TimelineKind.home,
   })  : userId = null,
         listId = null;
@@ -218,7 +218,7 @@ class Timeline extends StatelessWidget {
   const Timeline.user({
     super.key,
     this.maxWidth,
-    this.wide = false,
+    this.postLayout,
     required String this.userId,
   })  : kind = null,
         listId = null;
@@ -226,7 +226,7 @@ class Timeline extends StatelessWidget {
   const Timeline.list({
     super.key,
     this.maxWidth,
-    this.wide = false,
+    this.postLayout,
     required String this.listId,
   })  : kind = null,
         userId = null;
@@ -239,9 +239,18 @@ class Timeline extends StatelessWidget {
   }
 
   TimelineSliver _getSliver() {
-    if (kind != null) return TimelineSliver.kind(kind: kind);
-    if (listId != null) return TimelineSliver.list(listId: listId!);
-    if (userId != null) return TimelineSliver.user(userId: userId!);
+    if (kind != null) {
+      return TimelineSliver.kind(kind: kind, postLayout: postLayout);
+    }
+
+    if (listId != null) {
+      return TimelineSliver.list(listId: listId!, postLayout: postLayout);
+    }
+
+    if (userId != null) {
+      return TimelineSliver.user(userId: userId!, postLayout: postLayout);
+    }
+
     throw UnimplementedError();
   }
 }

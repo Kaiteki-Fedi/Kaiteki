@@ -113,13 +113,15 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     const spacer = SizedBox(height: 8);
 
     final isExpanded = widget.layout == PostWidgetLayout.expanded;
+    final isWide = widget.layout == PostWidgetLayout.wide;
+
     final children = [
       MetaBar(
         post: _post,
         showAvatar: widget.showAvatar && wide,
         showTime: widget.showTime ?? !isExpanded,
         showVisibility: widget.showVisibility ?? !isExpanded,
-        twolineAuthor: isExpanded,
+        twolineAuthor: isExpanded || isWide,
       ),
       if (widget.showParentPost && _post.replyToUser != null)
         ReplyBar(post: _post),
@@ -270,7 +272,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                 Semantics(
                   focusable: false,
                   child: Padding(
-                    padding: isExpanded
+                    padding: isExpanded || isWide
                         ? EdgeInsets.zero
                         : EdgeInsets.only(left: leftPostContentInset - 8),
                     child: InteractionBar(
