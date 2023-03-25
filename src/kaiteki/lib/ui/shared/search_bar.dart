@@ -1,12 +1,12 @@
 import "package:flutter/material.dart";
 
-class SearchBar extends StatelessWidget {
+class KaitekiSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String>? onSubmitted;
   final String? hintText;
   final bool autofocus;
 
-  const SearchBar({
+  const KaitekiSearchBar({
     super.key,
     required this.controller,
     this.onSubmitted,

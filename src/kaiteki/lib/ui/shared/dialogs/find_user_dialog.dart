@@ -37,7 +37,7 @@ class _FindUserDialogState extends ConsumerState<FindUserDialog> {
       content: FutureBuilder<List<User>>(
         future: _future,
         builder: (context, snapshot) {
-          final searchBar = SearchBar(
+          final searchBar = KaitekiSearchBar(
             autofocus: true,
             controller: _textController,
             hintText: "Search for user",

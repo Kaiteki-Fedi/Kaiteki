@@ -112,7 +112,7 @@ class _EmojiSelectorState extends State<EmojiSelector>
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SearchBar(
+                      child: KaitekiSearchBar(
                         controller: _searchTextController,
                         onSubmitted: (_) {
                           final emoji =

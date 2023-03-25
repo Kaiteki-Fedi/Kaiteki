@@ -67,7 +67,7 @@ class _GifBottomSheetState extends State<GifBottomSheet> {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
-                    SearchBar(
+                    KaitekiSearchBar(
                       controller: _searchController,
                       onSubmitted: (query) {
                         setState(
