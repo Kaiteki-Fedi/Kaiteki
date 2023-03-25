@@ -1,10 +1,8 @@
-import "dart:convert";
 import "dart:math";
 
 import "package:async/async.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart" hide Visibility;
-import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" show bottomSheetConstraints;
 import "package:kaiteki/di.dart";
@@ -567,34 +565,50 @@ class PostFormState extends ConsumerState<ComposeForm> {
   }
 
   Future<void> _onSelectLanguage() async {
-    // FIXME(Craftplacer): Use providers to cache loading from rootBundle
-    final languagesJson = await rootBundle.loadString("assets/languages.json");
-    final languages = (jsonDecode(languagesJson) as List<dynamic>)
-        .cast<List<dynamic>>()
-        .map((e) => e.cast<String>())
-        .toList()
-      ..sort((a, b) => a[1].compareTo(b[1]));
+    final languages = await ref.read(languageListProvider.future);
 
-    if (!mounted) {
-      return;
-    }
+    if (!mounted) return;
 
     final result = await showDialog(
       context: context,
+      useRootNavigator: false,
       builder: (context) {
-        return SimpleDialog(
-          title: const Text("Select language"),
-          children: [
-            for (var tuple in languages)
-              RadioListTile(
-                title: Text(tuple[1]),
-                groupValue: _language,
-                value: tuple[0],
-                contentPadding: const EdgeInsets.symmetric(horizontal: 18),
-                onChanged: (languageCode) =>
-                    Navigator.of(context).pop(languageCode),
-              ),
-          ],
+        return Consumer(
+          builder: (context, ref, _) {
+            final visible = ref.watch(visibleLanguages).value;
+            var list = languages.where((e) => visible.contains(e.code));
+
+            if (list.isEmpty) {
+              list = languages.where((e) {
+                return Localizations.localeOf(context).languageCode == e.code ||
+                    e.code == _language;
+              });
+            }
+
+            return SimpleDialog(
+              title: const Text("Select language"),
+              children: [
+                for (var tuple in list)
+                  RadioListTile(
+                    title: Text(tuple.englishName ?? tuple.code),
+                    groupValue: _language,
+                    value: tuple.code,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 18),
+                    onChanged: (languageCode) {
+                      Navigator.of(context).pop(languageCode);
+                    },
+                  ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.add),
+                  title: const Text("Add a language"),
+                  onTap: () => context.pushNamed("visibleLanguageSettings"),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                  minLeadingWidth: 32,
+                )
+              ],
+            );
+          },
         );
       },
     );

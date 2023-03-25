@@ -1,4 +1,5 @@
 import "package:collection/collection.dart";
+import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
@@ -62,5 +63,19 @@ final showAttachmentDescriptionWarning = createSettingProvider<bool>(
 final useSearchBar = createSettingProvider<bool>(
   key: "useSearchBar",
   initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
+final visibleLanguages = createSettingProvider<ISet<String>>(
+  key: "visibleLanguages",
+  initialValue: ISet(const {}),
+  read: (prefs, key) {
+    final list = prefs.getStringList(key);
+    if (list == null) return null;
+    return ISet(list);
+  },
+  write: (prefs, key, value) async {
+    await prefs.setStringList(key, value.toList());
+  },
   provider: sharedPreferencesProvider,
 );

@@ -123,6 +123,11 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             path: "accessibility",
             builder: (_, __) => const AccessibilityScreen(),
           ),
+          GoRoute(
+            path: "visible-languages",
+            name: "visibleLanguageSettings",
+            builder: (_, __) => const ManageLanaguagesScreen(),
+          )
         ],
       ),
       GoRoute(
