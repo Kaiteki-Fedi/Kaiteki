@@ -24,13 +24,12 @@ class PedantryScreen extends StatelessWidget {
                     "The read tab will be shown by default if there are no unread notifications",
                   ),
                 ),
-                const SwitchListTile(
-                  title: Text("Use search bar"),
-                  subtitle: Text(
+                PreferenceSwitchListTile(
+                  provider: useSearchBar,
+                  title: const Text("Use search bar"),
+                  subtitle: const Text(
                     "Replaces the app bar with a search bar",
                   ),
-                  onChanged: null,
-                  value: false,
                 ),
               ],
             ),

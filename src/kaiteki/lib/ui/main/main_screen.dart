@@ -13,6 +13,7 @@ import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/main/drawer.dart";
 import "package:kaiteki/ui/main/fab_data.dart";
@@ -230,7 +231,29 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  AppBar _buildAppBar(BuildContext context, bool immerse) {
+  PreferredSizeWidget _buildAppBar(BuildContext context, bool immerse) {
+    if (ref.watch(useSearchBar).value) {
+      return PreferredSize(
+        preferredSize: const Size.fromHeight(56.0 + 8.0 * 2),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SearchBar(
+            focusNode: FocusNode(canRequestFocus: false, skipTraversal: true),
+            onTap: () => context.pushNamed(
+              "search",
+              params: ref.accountRouterParams,
+            ),
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            leading: const DrawerButton(),
+            hintText: "Search",
+            trailing: const [
+              AccountSwitcherWidget(size: 30),
+            ],
+          ),
+        ),
+      );
+    }
+
     Color? foregroundColor;
 
     final outsideColor = immerse ? _outsideColor : null;

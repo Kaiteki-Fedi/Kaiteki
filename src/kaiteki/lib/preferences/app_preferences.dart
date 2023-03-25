@@ -58,3 +58,9 @@ final showAttachmentDescriptionWarning = createSettingProvider<bool>(
   initialValue: false,
   provider: sharedPreferencesProvider,
 );
+
+final useSearchBar = createSettingProvider<bool>(
+  key: "useSearchBar",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
