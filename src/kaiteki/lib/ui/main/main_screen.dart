@@ -6,6 +6,8 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
+import "package:kaiteki/fediverse/interfaces/chat_support.dart";
 import "package:kaiteki/fediverse/interfaces/notification_support.dart";
 import "package:kaiteki/fediverse/interfaces/search_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
@@ -52,10 +54,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   MainScreenView _view = MainScreenView.stream;
 
   int get _currentIndex {
-    return _tabs!.indexWhere((tab) => tab.kind == _currentTab);
+    final index = _tabs!.indexWhere((tab) => tab.kind == _currentTab);
+    return index == -1 ? 0 : index;
   }
 
   List<MainScreenTab> getTabs(AppLocalizations l10n) {
+    final adapter = ref.watch(adapterProvider);
+    final supportsNotifications = adapter is NotificationSupport;
+    final supportsChats = adapter is ChatSupport;
+    final supportsBookmarks = adapter is BookmarkSupport;
     return [
       MainScreenTab(
         kind: TabKind.home,
@@ -70,25 +77,28 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         ),
         hideFabWhenDesktop: true,
       ),
-      MainScreenTab(
-        kind: TabKind.notifications,
-        selectedIcon: Icons.notifications_rounded,
-        icon: Icons.notifications_none,
-        text: l10n.notificationsTab,
-        fetchUnreadCount: _fetchNotificationCount,
-      ),
-      MainScreenTab(
-        kind: TabKind.chats,
-        selectedIcon: Icons.forum,
-        icon: Icons.forum_outlined,
-        text: l10n.chatsTab,
-      ),
-      MainScreenTab(
-        kind: TabKind.bookmarks,
-        selectedIcon: Icons.bookmark_rounded,
-        icon: Icons.bookmark_border_rounded,
-        text: l10n.bookmarksTab,
-      ),
+      if (supportsNotifications)
+        MainScreenTab(
+          kind: TabKind.notifications,
+          selectedIcon: Icons.notifications_rounded,
+          icon: Icons.notifications_none,
+          text: l10n.notificationsTab,
+          fetchUnreadCount: _fetchNotificationCount,
+        ),
+      if (supportsChats)
+        MainScreenTab(
+          kind: TabKind.chats,
+          selectedIcon: Icons.forum,
+          icon: Icons.forum_outlined,
+          text: l10n.chatsTab,
+        ),
+      if (supportsBookmarks)
+        MainScreenTab(
+          kind: TabKind.bookmarks,
+          selectedIcon: Icons.bookmark_rounded,
+          icon: Icons.bookmark_border_rounded,
+          text: l10n.bookmarksTab,
+        ),
     ];
   }
 
@@ -145,7 +155,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
 
     final l10n = context.l10n;
-    _tabs ??= getTabs(l10n);
+    _tabs = getTabs(l10n);
 
     final body = PageTransitionSwitcher(
       transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
@@ -385,9 +395,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     Widget child,
   ) {
     final m3 = Theme.of(context).useMaterial3;
+    final tabCount = _tabs?.length ?? 0;
     return Row(
       children: [
-        if (!hideNavRail) ...[
+        if (!hideNavRail && tabCount >= 2) ...[
           _buildNavigationRail(extendNavRail),
           if (!m3) const VerticalDivider(thickness: 1, width: 1),
         ],
