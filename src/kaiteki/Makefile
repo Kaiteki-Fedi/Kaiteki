@@ -26,13 +26,13 @@ all: analyze
 
 build-android:
 ifdef $(STORE)
-	@$(FLUTTER) build appbundle $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),)
+	@$(FLUTTER) build appbundle $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),) $(if $(SPLIT_PER_ABI),--split-per-abi,)
 else
-	@$(FLUTTER) build apk $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),)
+	@$(FLUTTER) build apk $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),) $(if $(SPLIT_PER_ABI),--split-per-abi,)
 endif
 
 build-web:
-	@$(FLUTTER) build web $(BUILD_ARGS) --source-maps $(if $(SPLIT_PER_ABI),--split-per-abi,)
+	@$(FLUTTER) build web $(BUILD_ARGS) --source-maps
 
 build-windows:
 	@$(FLUTTER) build windows $(BUILD_ARGS)
