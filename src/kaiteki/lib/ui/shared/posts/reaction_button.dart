@@ -73,7 +73,7 @@ class ReactionButton extends ConsumerWidget {
           side: reacted ? BorderSide.none : BorderSide(color: outlineColor),
         ),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        minWidth: emojiSize,
+        minWidth: emojiSize + 40,
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -86,7 +86,7 @@ class ReactionButton extends ConsumerWidget {
               ),
             ),
             if (!ref.watch(hidePostMetrics).value) ...[
-              const SizedBox(width: 4),
+              const SizedBox(width: 6),
               Text(
                 reaction.count.toString(),
                 style: textStyle.copyWith(color: foregroundColor),
