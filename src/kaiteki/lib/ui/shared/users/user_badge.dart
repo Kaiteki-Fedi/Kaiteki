@@ -11,7 +11,53 @@ class UserBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var color = Color.lerp(
+    final isShortened = MediaQuery.of(context).size.width < 600;
+    final color = getColor(context);
+
+    var label = this.label.toUpperCase();
+    if (isShortened) label = label.substring(0, 1);
+
+    final content = Text(
+      label,
+      style: Theme.of(context)
+          .textTheme
+          .labelSmall
+          .fallback
+          .copyWith(color: color),
+    );
+
+    if (isShortened) {
+      return Tooltip(
+        message: this.label,
+        child: SizedBox.square(
+          dimension: 20,
+          child: Align(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2),
+                border: Border.all(color: color),
+              ),
+              child: Center(child: content),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: color),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+        child: content,
+      ),
+    );
+  }
+
+  Color getColor(BuildContext context) {
+    final color = Color.lerp(
       this.color,
       Theme.of(context).colorScheme.onBackground,
       0.5,
@@ -23,26 +69,10 @@ class UserBadge extends StatelessWidget {
         Theme.of(context).colorScheme.brightness,
       );
 
-      color = palette.color;
+      return palette.color;
     }
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2),
-        border: Border.all(color: color),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-        child: Text(
-          label.toUpperCase(),
-          style: Theme.of(context)
-              .textTheme
-              .labelSmall
-              .fallback
-              .copyWith(color: color),
-        ),
-      ),
-    );
+    return color;
   }
 }
 
