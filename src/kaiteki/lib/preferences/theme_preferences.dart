@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/preferences/notified_preferences_riverpod.dart";
+import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
 final useSystemColorScheme = createSettingProvider<bool>(
   key: "useSystemColorScheme",

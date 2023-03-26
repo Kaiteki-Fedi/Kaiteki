@@ -65,6 +65,7 @@ dependencies:
   mek_data_class: ^1.0.0
   meta: ^1.8.0
   notified_preferences: ^2.0.0
+  notified_preferences_riverpod: ^1.0.0
   oauth1:
     git: https://github.com/Kaiteki-Fedi/dart-oauth1.git
   page_view_dot_indicator: ^2.0.0
