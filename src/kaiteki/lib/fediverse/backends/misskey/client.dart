@@ -694,4 +694,23 @@ class MisskeyClient {
         )
         .then(Mute.fromJson.fromResponseList);
   }
+
+  Future<void> muteUser(String userId, {int? expiresAt}) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/mute/create",
+      body: {"userId": userId, if (expiresAt != null) "expiresAt": expiresAt}
+          .jsonBody,
+    );
+  }
+
+  Future<void> unmuteUser(String userId) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/mute/delete",
+      body: {
+        "userId": userId,
+      }.jsonBody,
+    );
+  }
 }

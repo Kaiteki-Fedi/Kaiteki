@@ -642,7 +642,6 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     String? nextId,
   }) async {
     final mutes = await client.getMutedAccounts(previousId, nextId);
-    _logger.e(mutes);
     return PaginatedSet(
       mutes.map((e) => toUser(e.mutee, instance)).toSet(),
       previousId,
@@ -651,14 +650,12 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<void> muteUser(String userId) {
-    // TODO(AnActualEmerald): implement muteUser
-    throw UnimplementedError();
+  Future<void> muteUser(String userId) async {
+    await client.muteUser(userId);
   }
 
   @override
-  Future<void> unmuteUser(String userId) {
-    // TODO(AnAcutalEmerald): implement unmuteUser
-    throw UnimplementedError();
+  Future<void> unmuteUser(String userId) async {
+    await client.unmuteUser(userId);
   }
 }
