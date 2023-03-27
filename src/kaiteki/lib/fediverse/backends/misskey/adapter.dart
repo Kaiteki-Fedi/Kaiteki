@@ -20,6 +20,7 @@ import "package:kaiteki/fediverse/backends/misskey/responses/signin.dart";
 import "package:kaiteki/fediverse/interfaces/chat_support.dart";
 import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
 import "package:kaiteki/fediverse/interfaces/list_support.dart";
+import "package:kaiteki/fediverse/interfaces/mute_support.dart";
 import "package:kaiteki/fediverse/interfaces/notification_support.dart";
 import "package:kaiteki/fediverse/interfaces/post_translation_support.dart";
 import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
@@ -49,6 +50,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         ReactionSupport,
         CustomEmojiSupport,
         NotificationSupport,
+        MuteSupport,
         SearchSupport,
         ListSupport,
         PostTranslationSupport {
@@ -632,5 +634,28 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     final user =
         users.firstWhere((e) => e.host == host && e.username == username);
     return toUser(user, instance);
+  }
+
+  @override
+  Future<PaginatedSet<String, User>> getMutedUsers({
+    String? previousId,
+    String? nextId,
+  }) async {
+    final mutes = await client.getMutedAccounts(previousId, nextId);
+    return PaginatedSet(
+      mutes.map((e) => toUser(e.mutee, instance)).toSet(),
+      previousId,
+      nextId,
+    );
+  }
+
+  @override
+  Future<void> muteUser(String userId) async {
+    await client.muteUser(userId);
+  }
+
+  @override
+  Future<void> unmuteUser(String userId) async {
+    await client.unmuteUser(userId);
   }
 }

@@ -1,6 +1,7 @@
 import "dart:async";
 import "dart:convert";
 import "dart:developer";
+import "dart:io";
 
 import "package:fediverse_objects/misskey.dart" as misskey;
 import "package:http/http.dart"
@@ -9,6 +10,7 @@ import "package:kaiteki/exceptions/http_exception.dart";
 import "package:kaiteki/fediverse/backends/misskey/exception.dart";
 import "package:kaiteki/fediverse/backends/misskey/model/follow.dart";
 import "package:kaiteki/fediverse/backends/misskey/model/list.dart";
+import "package:kaiteki/fediverse/backends/misskey/model/mute.dart";
 import "package:kaiteki/fediverse/backends/misskey/requests/sign_in.dart";
 import "package:kaiteki/fediverse/backends/misskey/requests/timeline.dart";
 import "package:kaiteki/fediverse/backends/misskey/responses/check_session.dart";
@@ -673,5 +675,42 @@ class MisskeyClient {
           (detail ? misskey.User.fromJson : misskey.UserLite.fromJson)
               .fromResponseList,
         );
+  }
+
+  Future<List<Mute>> getMutedAccounts(
+    String? sinceId,
+    String? untilId, {
+    int limit = 30,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/mute/list",
+          body: {
+            "limit": limit,
+            if (sinceId != null) "sinceId": sinceId,
+            if (untilId != null) "untilId": untilId,
+          }.jsonBody,
+        )
+        .then(Mute.fromJson.fromResponseList);
+  }
+
+  Future<void> muteUser(String userId, {int? expiresAt}) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/mute/create",
+      body: {"userId": userId, if (expiresAt != null) "expiresAt": expiresAt}
+          .jsonBody,
+    );
+  }
+
+  Future<void> unmuteUser(String userId) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/mute/delete",
+      body: {
+        "userId": userId,
+      }.jsonBody,
+    );
   }
 }
