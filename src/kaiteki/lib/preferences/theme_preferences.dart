@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/preferences/notified_preferences_riverpod.dart";
+import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
 final useSystemColorScheme = createSettingProvider<bool>(
   key: "useSystemColorScheme",
@@ -48,5 +48,17 @@ final avatarCornerRadius = createSettingProvider<double>(
 final showUserBadges = createSettingProvider<bool>(
   key: "showUserBadges",
   initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final useWidePostLayout = createSettingProvider<bool>(
+  key: "useWidePostLayout",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
+final useFullWidthAttachments = createSettingProvider<bool>(
+  key: "useFullWidthAttachments",
+  initialValue: false,
   provider: sharedPreferencesProvider,
 );

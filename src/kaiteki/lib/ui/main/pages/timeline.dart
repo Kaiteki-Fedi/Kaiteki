@@ -2,6 +2,8 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
 import "package:kaiteki/utils/extensions.dart";
 
@@ -75,6 +77,9 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
         body: Timeline.kind(
           key: _timelineKey,
           kind: _kind ?? kinds.first,
+          postLayout: ref.watch(useWidePostLayout).value
+              ? PostWidgetLayout.wide
+              : PostWidgetLayout.normal,
           maxWidth: 800,
         ),
       ),

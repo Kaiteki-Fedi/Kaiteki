@@ -28,6 +28,7 @@ final mastodonAttachmentTypeRosetta = Rosetta(const {
   "video": AttachmentType.video,
   "audio": AttachmentType.audio,
   "gifv": AttachmentType.animated,
+  "unknown": AttachmentType.file,
 });
 
 final pleromaFormattingRosetta = Rosetta(const {

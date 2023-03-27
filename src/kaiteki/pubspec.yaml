@@ -45,7 +45,7 @@ dependencies:
   flutter_simple_treeview: ^3.0.1
   flutter_staggered_grid_view: ^0.6.2
   flutter_svg: ^2.0.0+1
-  fpdart: ^0.4.0
+  fpdart: ^0.5.0
   go_router: ^6.0.0
   google_fonts: ^4.0.1
   hive: ^2.2.3
@@ -65,6 +65,7 @@ dependencies:
   mek_data_class: ^1.0.0
   meta: ^1.8.0
   notified_preferences: ^2.0.0
+  notified_preferences_riverpod: ^1.0.0
   oauth1:
     git: https://github.com/Kaiteki-Fedi/dart-oauth1.git
   page_view_dot_indicator: ^2.0.0

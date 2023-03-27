@@ -23,9 +23,11 @@ import "package:kaiteki/ui/settings/a11y/screen.dart";
 import "package:kaiteki/ui/settings/about/about_screen.dart";
 import "package:kaiteki/ui/settings/credits_screen.dart";
 import "package:kaiteki/ui/settings/customization/customization_settings_screen.dart";
+import "package:kaiteki/ui/settings/customization/post_layout.dart";
 import "package:kaiteki/ui/settings/debug/theme_screen.dart";
 import "package:kaiteki/ui/settings/debug_screen.dart";
 import "package:kaiteki/ui/settings/experiments.dart";
+import "package:kaiteki/ui/settings/manage_languages.dart";
 import "package:kaiteki/ui/settings/pedantry_screen.dart";
 import "package:kaiteki/ui/settings/settings_screen.dart";
 import "package:kaiteki/ui/settings/wellbeing/wellbeing_screen.dart";
@@ -93,6 +95,12 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
           GoRoute(
             path: "customization",
             builder: (_, __) => const CustomizationSettingsScreen(),
+            routes: [
+              GoRoute(
+                path: "post-layout",
+                builder: (_, __) => const PostLayoutSettingsScreen(),
+              ),
+            ],
           ),
           GoRoute(
             name: "experiments",

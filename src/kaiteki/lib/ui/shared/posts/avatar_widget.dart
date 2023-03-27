@@ -60,18 +60,7 @@ class AvatarWidget extends StatelessWidget {
       avatar = InkWell(onTap: onTap, focusNode: focusNode, child: avatar);
     }
 
-    final shape = this.shape ??
-        Theme.of(context).extension<AvatarTheme>()?.shape ??
-        const CircleBorder();
-    // ignore: join_return_with_assignment
-    avatar = Material(
-      clipBehavior: Clip.antiAlias,
-      shape: shape,
-      color: Theme.of(context).colorScheme.surfaceVariant,
-      child: avatar,
-    );
-
-    return avatar;
+    return AvatarSurface(shape: shape, child: avatar);
   }
 
   Widget _frameBuilder(
@@ -93,6 +82,27 @@ class AvatarWidget extends StatelessWidget {
       child: frame == null
           ? SizedBox.square(dimension: size, child: blurHashWidget)
           : SizedBox(child: child),
+    );
+  }
+}
+
+class AvatarSurface extends StatelessWidget {
+  final Widget? child;
+  final ShapeBorder? shape;
+
+  const AvatarSurface({super.key, this.child, this.shape});
+
+  @override
+  Widget build(BuildContext context) {
+    final shape = this.shape ??
+        Theme.of(context).extension<AvatarTheme>()?.shape ??
+        const CircleBorder();
+
+    return Material(
+      clipBehavior: Clip.antiAlias,
+      shape: shape,
+      color: Theme.of(context).colorScheme.surfaceVariant,
+      child: child,
     );
   }
 }

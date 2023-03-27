@@ -3,7 +3,7 @@ import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
-import "package:kaiteki/preferences/notified_preferences_riverpod.dart";
+import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
 final locale = createSettingProvider<String?>(
   key: "locale",

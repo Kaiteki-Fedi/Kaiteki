@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/settings/customization/theme_selector.dart";
@@ -56,6 +57,11 @@ class _CustomizationBasicPageState
                 PreferenceSwitchListTile(
                   provider: showUserBadges,
                   title: const Text("Show user badges"),
+                ),
+                ListTile(
+                  title: const Text("Post layout settings"),
+                  onTap: () =>
+                      context.push("/settings/customization/post-layout"),
                 ),
               ],
             ),
