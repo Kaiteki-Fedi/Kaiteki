@@ -4,7 +4,9 @@ import "package:kaiteki/fediverse/model/formatting.dart";
 
 class GlitchCapabilities extends MastodonCapabilities
     implements ReactionSupportCapabilities {
-  const GlitchCapabilities();
+  final bool supportsReactions;
+
+  const GlitchCapabilities(this.supportsReactions);
 
   // TODO(erincandescent): Take from
   // api/v1/instance:configuration.statuses.supported_media_types
@@ -16,12 +18,10 @@ class GlitchCapabilities extends MastodonCapabilities
     };
   }
 
-  // TODO(erincandescent): Enable if
-  // api/v1/instance:configuration.reactions exists
   @override
-  bool get supportsCustomEmojiReactions => false;
+  bool get supportsCustomEmojiReactions => supportsReactions;
   @override
-  bool get supportsUnicodeEmojiReactions => false;
+  bool get supportsUnicodeEmojiReactions => supportsReactions;
   @override
-  bool get supportsMultipleReactions => false;
+  bool get supportsMultipleReactions => supportsReactions;
 }

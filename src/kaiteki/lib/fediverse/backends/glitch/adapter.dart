@@ -1,3 +1,4 @@
+import "package:fediverse_objects/mastodon.dart" as mastodon;
 import "package:kaiteki/fediverse/backends/glitch/capabilities.dart";
 import "package:kaiteki/fediverse/backends/glitch/client.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
@@ -12,31 +13,36 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
     implements ReactionSupport {
   @override
   final String instance;
+  final mastodon.Instance instanceInfo;
 
   static Future<GlitchAdapter> create(String instance) async {
     final cli = GlitchClient(instance);
-    return GlitchAdapter.custom(instance, cli);
+    final instanceInfo = await cli.getInstance();
+    return GlitchAdapter.custom(instance, instanceInfo, cli);
   }
 
-  GlitchAdapter.custom(this.instance, super.client);
+  GlitchAdapter.custom(this.instance, this.instanceInfo, super.client);
 
   @override
-  GlitchCapabilities get capabilities => const GlitchCapabilities();
+  GlitchCapabilities get capabilities {
+    final supportsReactions =
+        (instanceInfo.configuration?.reactions?.maxReactions ?? 0) != 0;
+
+    return GlitchCapabilities(supportsReactions);
+  }
 
   @override
   Future<Instance?> probeInstance() async {
-    final instance = await client.getInstance();
-
-    if (!instance.version.contains("+glitch")) {
+    if (!instanceInfo.version.contains("+glitch")) {
       return null;
     }
 
-    return toInstance(instance);
+    return toInstance(instanceInfo);
   }
 
   @override
   Future<Instance> getInstance() async {
-    return toInstance(await client.getInstance());
+    return toInstance(instanceInfo);
   }
 
   @override
