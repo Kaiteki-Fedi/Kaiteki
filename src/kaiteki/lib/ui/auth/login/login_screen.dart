@@ -73,7 +73,7 @@ class InstanceCompound {
   @override
   int get hashCode => host.hashCode ^ type.hashCode ^ data.hashCode;
 
-  BackendAdapter createAdapter() => type.createAdapter(host);
+  Future<BackendAdapter> createAdapter() => type.createAdapter(host);
 }
 
 class CallbackRequest<T, K extends Function> {
@@ -303,7 +303,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (selectedType == null) return null;
       type = selectedType;
 
-      final adapter = type.createAdapter(host);
+      final adapter = await type.createAdapter(host);
       instance = await adapter.getInstance();
     }
 
@@ -369,7 +369,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _login(InstanceCompound instance) async {
     final accounts = ref.read(accountManagerProvider);
-    final adapter = instance.createAdapter();
+    final adapter = await instance.createAdapter();
 
     final result = await adapter.login(
       await accounts.getClientSecret(instance.host),

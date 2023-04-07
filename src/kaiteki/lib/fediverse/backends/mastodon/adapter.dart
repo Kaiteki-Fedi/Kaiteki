@@ -7,7 +7,7 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
   @override
   final String instance;
 
-  factory MastodonAdapter(String instance) {
+  static Future<MastodonAdapter> create(String instance) async {
     return MastodonAdapter.custom(instance, MastodonClient(instance));
   }
 

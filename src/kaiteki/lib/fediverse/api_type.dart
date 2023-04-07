@@ -7,27 +7,29 @@ import "package:kaiteki/fediverse/backends/pleroma/adapter.dart";
 import "package:kaiteki/fediverse/backends/twitter/v1/adapter.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/adapter.dart";
 
-TwitterAdapter _instantiateTwitterV2(String _) => TwitterAdapter();
-OldTwitterAdapter _instantiateTwitterV1(String _) => OldTwitterAdapter();
+Future<TwitterAdapter> _instantiateTwitterV2(String _) async =>
+    TwitterAdapter();
+Future<OldTwitterAdapter> _instantiateTwitterV1(String _) async =>
+    OldTwitterAdapter();
 
 enum ApiType {
   mastodon(
-    createAdapter: MastodonAdapter.new,
+    createAdapter: MastodonAdapter.create,
     theme: mastodonTheme,
     adapterType: MastodonAdapter,
   ),
   glitch(
-    createAdapter: GlitchAdapter.new,
+    createAdapter: GlitchAdapter.create,
     theme: mastodonTheme,
     adapterType: GlitchAdapter,
   ),
   pleroma(
-    createAdapter: PleromaAdapter.new,
+    createAdapter: PleromaAdapter.create,
     theme: pleromaTheme,
     adapterType: PleromaAdapter,
   ),
   misskey(
-    createAdapter: MisskeyAdapter.new,
+    createAdapter: MisskeyAdapter.create,
     theme: misskeyTheme,
     adapterType: MisskeyAdapter,
   ),
@@ -45,7 +47,7 @@ enum ApiType {
   );
 
   final String? _displayName;
-  final BackendAdapter Function(String instance) createAdapter;
+  final Future<BackendAdapter> Function(String instance) createAdapter;
   final ApiTheme theme;
   final List<String>? hosts;
   final Type adapterType;

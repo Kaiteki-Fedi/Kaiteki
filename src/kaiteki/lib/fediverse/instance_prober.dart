@@ -63,7 +63,7 @@ Future<InstanceProbeResult> probeInstance(
   }
 
   if (result.instance == null) {
-    final adapter = type.createAdapter(host);
+    final adapter = await type.createAdapter(host);
     result = result.copyWith(instance: await adapter.getInstance());
   }
 
@@ -173,7 +173,7 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
 Future<InstanceProbeResult?> _probeEndpoints(String host) async {
   for (final apiType in ApiType.values) {
     try {
-      final adapter = apiType.createAdapter(host);
+      final adapter = await apiType.createAdapter(host);
 
       if (adapter is! DecentralizedBackendAdapter) continue;
 

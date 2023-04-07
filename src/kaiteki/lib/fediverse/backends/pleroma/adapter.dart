@@ -19,13 +19,8 @@ class PleromaAdapter //
   @override
   final String instance;
 
-  factory PleromaAdapter(String instance) {
-    return PleromaAdapter.custom(
-      instance,
-      PleromaClient(
-        instance,
-      ),
-    );
+  static Future<PleromaAdapter> create(String instance) async {
+    return PleromaAdapter.custom(instance, PleromaClient(instance));
   }
 
   PleromaAdapter.custom(this.instance, super.client);

@@ -13,8 +13,9 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
   @override
   final String instance;
 
-  factory GlitchAdapter(String instance) {
-    return GlitchAdapter.custom(instance, GlitchClient(instance));
+  static Future<GlitchAdapter> create(String instance) async {
+    final cli = GlitchClient(instance);
+    return GlitchAdapter.custom(instance, cli);
   }
 
   GlitchAdapter.custom(this.instance, super.client);
