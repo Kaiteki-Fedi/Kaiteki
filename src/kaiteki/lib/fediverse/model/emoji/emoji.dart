@@ -2,6 +2,9 @@ abstract class Emoji {
   /// Short representation of the emoji, e.g. `thinking`
   String get short;
 
+  /// Tag of this emoji, e.g. "blobcat" or "blobcat@instance.example"
+  String get tag;
+
   /// Aliases of the emoji, used for searching, e.g. "think", "thoughtful", etc.
   List<String>? get aliases;
 
@@ -9,7 +12,7 @@ abstract class Emoji {
 
   /// String representation of the emoji (in logs or as fallback).
   @override
-  String toString() => ":$short:";
+  String toString() => ":$tag:";
 }
 
 class UnicodeEmoji extends Emoji {
@@ -22,6 +25,9 @@ class UnicodeEmoji extends Emoji {
 
   @override
   String get short => emoji;
+
+  @override
+  String get tag => emoji;
 }
 
 class CustomEmoji extends Emoji {
@@ -42,9 +48,16 @@ class CustomEmoji extends Emoji {
     required this.url,
   });
 
+  factory CustomEmoji.parse(String tag, Uri url) {
+    final parts = tag.split("@");
+    final instance = parts.length > 1 ? parts[1] : null;
+
+    return CustomEmoji(short: parts[0], instance: instance, url: url);
+  }
+
   @override
-  String toString() {
-    if (instance == null) return ":$short:";
-    return ":$short@$instance:";
+  String get tag {
+    if (instance == null) return "$short";
+    return "$short@$instance";
   }
 }
