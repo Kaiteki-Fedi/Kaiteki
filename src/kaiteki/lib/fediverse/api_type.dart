@@ -1,5 +1,6 @@
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/api_theme.dart";
+import "package:kaiteki/fediverse/backends/glitch/adapter.dart";
 import "package:kaiteki/fediverse/backends/mastodon/adapter.dart";
 import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
 import "package:kaiteki/fediverse/backends/pleroma/adapter.dart";
@@ -14,6 +15,11 @@ enum ApiType {
     createAdapter: MastodonAdapter.new,
     theme: mastodonTheme,
     adapterType: MastodonAdapter,
+  ),
+  glitch(
+    createAdapter: GlitchAdapter.new,
+    theme: mastodonTheme,
+    adapterType: GlitchAdapter,
   ),
   pleroma(
     createAdapter: PleromaAdapter.new,

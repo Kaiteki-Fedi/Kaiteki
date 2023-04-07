@@ -1,24 +1,32 @@
-import "package:kaiteki/fediverse/backends/mastodon/client.dart";
+import "package:kaiteki/fediverse/backends/glitch/capabilities.dart";
+import "package:kaiteki/fediverse/backends/glitch/client.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
-import "package:kaiteki/fediverse/model/instance.dart";
-import "package:kaiteki/fediverse/model/notification.dart";
+import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
 
-class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
+import "../../model/emoji/emoji.dart";
+import "../../model/instance.dart";
+import "../../model/notification.dart";
+import "../../model/post/post.dart";
+
+class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
+    implements ReactionSupport {
   @override
   final String instance;
 
-  factory MastodonAdapter(String instance) {
-    return MastodonAdapter.custom(instance, MastodonClient(instance));
+  factory GlitchAdapter(String instance) {
+    return GlitchAdapter.custom(instance, GlitchClient(instance));
   }
 
-  MastodonAdapter.custom(this.instance, super.client);
+  GlitchAdapter.custom(this.instance, super.client);
+
+  @override
+  GlitchCapabilities get capabilities => const GlitchCapabilities();
 
   @override
   Future<Instance?> probeInstance() async {
     final instance = await client.getInstance();
 
-    if (instance.version.contains("Pleroma") ||
-        instance.version.contains("+glitch")) {
+    if (!instance.version.contains("+glitch")) {
       return null;
     }
 
@@ -49,5 +57,15 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
     throw UnsupportedError(
       "Mastodon does not support marking individual notifications as read",
     );
+  }
+
+  @override
+  Future<void> addReaction(Post post, Emoji emoji) async {
+    await client.react(post.id, emoji.tag);
+  }
+
+  @override
+  Future<void> removeReaction(Post post, Emoji emoji) async {
+    await client.removeReaction(post.id, emoji.tag);
   }
 }
