@@ -6,6 +6,8 @@ class GlitchCapabilities extends MastodonCapabilities
     implements ReactionSupportCapabilities {
   const GlitchCapabilities();
 
+  // TODO(erincandescent): Take from
+  // api/v1/instance:configuration.statuses.supported_media_types
   @override
   Set<Formatting> get supportedFormattings {
     return const {
@@ -14,11 +16,12 @@ class GlitchCapabilities extends MastodonCapabilities
     };
   }
 
-  // TODO(erincandescent): Detect per-instance support for these
+  // TODO(erincandescent): Enable if
+  // api/v1/instance:configuration.reactions exists
   @override
   bool get supportsCustomEmojiReactions => false;
   @override
-  bool get supportsUnicodeEmojiReactions => true;
+  bool get supportsUnicodeEmojiReactions => false;
   @override
-  bool get supportsMultipleReactions => true;
+  bool get supportsMultipleReactions => false;
 }
