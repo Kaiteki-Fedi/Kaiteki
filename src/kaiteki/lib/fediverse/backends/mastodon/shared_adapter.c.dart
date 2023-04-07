@@ -11,6 +11,7 @@ final mastodonVisibilityRosetta = Rosetta(const {
 final mastodonNotificationTypeRosetta = Rosetta(const {
   "favourite": NotificationType.liked,
   "reblog": NotificationType.repeated,
+  "reaction": NotificationType.reacted,
   "pleroma:emoji_reaction": NotificationType.reacted,
   "follow": NotificationType.followed,
   "mention": NotificationType.mentioned,
@@ -38,6 +39,12 @@ final pleromaFormattingRosetta = Rosetta(const {
   "text/bbcode": Formatting.bbCode,
 });
 
+Iterable<Reaction> _statusReactions(mastodon.Status source, String localHost) {
+  final r = source.reactions ?? source.pleroma?.emojiReactions;
+
+  return r?.map((r) => toReaction(r, localHost)).toList() ?? const [];
+}
+
 Post toPost(mastodon.Status source, String localHost) {
   final repliedUser = getRepliedUser(source, localHost);
   return Post(
@@ -61,10 +68,7 @@ Post toPost(mastodon.Status source, String localHost) {
     // FIXME(Craftplacer): source.url should be Uri?, not String?
     externalUrl: source.url.nullTransform(Uri.parse),
     client: source.application?.name,
-    reactions: source.pleroma?.emojiReactions
-            ?.map((r) => toReaction(r, localHost))
-            .toList() ??
-        const [],
+    reactions: _statusReactions(source, localHost).toList(),
     language: source.language,
     mentionedUsers: source.mentions.map((e) {
       return UserReference.all(
@@ -139,11 +143,15 @@ Notification toNotification(
   );
 }
 
-Reaction toReaction(pleroma.EmojiReaction reaction, String localHost) {
+Reaction toReaction(mastodon.Reaction reaction, String localHost) {
+  final emoji = reaction.url != null
+      ? CustomEmoji.parse(reaction.name, Uri.parse(reaction.url ?? ""))
+      : UnicodeEmoji(reaction.name);
+
   return Reaction(
     includesMe: reaction.me,
     count: reaction.count,
-    emoji: UnicodeEmoji(reaction.name),
+    emoji: emoji,
     users: reaction.accounts?.map((a) => toUser(a, localHost)).toList() ?? [],
   );
 }
