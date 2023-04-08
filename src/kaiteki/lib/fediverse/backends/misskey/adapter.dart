@@ -59,7 +59,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   final String instance;
 
-  factory MisskeyAdapter(String instance) {
+  static Future<MisskeyAdapter> create(String instance) async {
     return MisskeyAdapter.custom(instance, MisskeyClient(instance));
   }
 

@@ -154,7 +154,7 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
 
                         // initialize client
                         final adapter =
-                            asyncValue.type!.createAdapter(user.host);
+                            await asyncValue.type!.createAdapter(user.host);
 
                         // override adapter being used with
                         // dependency injection
