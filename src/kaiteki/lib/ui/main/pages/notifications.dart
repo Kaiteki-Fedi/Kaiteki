@@ -297,8 +297,10 @@ class NotificationWidget extends ConsumerWidget {
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.fade,
+                          softWrap: false,
                         ),
                       ),
+                      const SizedBox(width: 8),
                       Tooltip(
                         message: notification.createdAt.toString(),
                         child: Text(
