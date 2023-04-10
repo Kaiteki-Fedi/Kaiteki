@@ -2,9 +2,15 @@ import "package:flutter/material.dart";
 import "package:kaiteki/ui/main/pages/timeline.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_form.dart";
 
-class FoxMainScreenView extends StatelessWidget {
+class FoxMainScreenView extends StatefulWidget {
   const FoxMainScreenView({super.key});
 
+  @override
+  State<FoxMainScreenView> createState() => _FoxMainScreenViewState();
+}
+
+class _FoxMainScreenViewState extends State<FoxMainScreenView> {
+  final composeFormKey = GlobalKey<ComposeFormState>();
   @override
   Widget build(BuildContext context) {
     return Center(
