@@ -21,7 +21,7 @@ class ComposeScreen extends ConsumerStatefulWidget {
 class _PostScreenState extends ConsumerState<ComposeScreen> {
   bool enableSubject = false;
   bool showPreview = false;
-  final key = GlobalKey<PostFormState>();
+  final key = GlobalKey<ComposeFormState>();
 
   @override
   Widget build(BuildContext context) {

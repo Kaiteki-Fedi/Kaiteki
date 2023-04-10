@@ -16,10 +16,15 @@ class FoxMainScreenView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               FocusTraversalGroup(
-                child: const SizedBox(
+                child: SizedBox(
                   width: 365,
                   child: SingleChildScrollView(
-                    child: Card(child: ComposeForm()),
+                    child: Card(
+                      child: ComposeForm(
+                        key: composeFormKey,
+                        onSubmit: () => composeFormKey.currentState?.reset(),
+                      ),
+                    ),
                   ),
                 ),
               ),

@@ -47,10 +47,10 @@ class ComposeForm extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ComposeForm> createState() => PostFormState();
+  ConsumerState<ComposeForm> createState() => ComposeFormState();
 }
 
-class PostFormState extends ConsumerState<ComposeForm> {
+class ComposeFormState extends ConsumerState<ComposeForm> {
   late final TextEditingController _bodyController =
       TextEditingController(text: initialBody)..addListener(_typingTimer.reset);
 
@@ -616,6 +616,14 @@ class PostFormState extends ConsumerState<ComposeForm> {
     if (result == null) return;
 
     setState(() => _language = result);
+  }
+
+  void reset() {
+    setState(() {
+      _bodyController.clear();
+      _subjectController.clear();
+      attachments.clear();
+    });
   }
 }
 
