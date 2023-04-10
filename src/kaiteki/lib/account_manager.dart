@@ -125,7 +125,7 @@ class AccountManager extends ChangeNotifier {
 
     _logger.v("Trying to recover a ${key.type!.displayName} account");
 
-    final adapter = key.type!.createAdapter(key.host);
+    final adapter = await key.type!.createAdapter(key.host);
 
     try {
       await adapter.applySecrets(clientSecret, accountSecret);

@@ -63,7 +63,7 @@ Future<InstanceProbeResult> probeInstance(
   }
 
   if (result.instance == null) {
-    final adapter = type.createAdapter(host);
+    final adapter = await type.createAdapter(host);
     result = result.copyWith(instance: await adapter.getInstance());
   }
 
@@ -147,7 +147,7 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
   final nodeInfo = await fetchNodeInfo(host);
   if (nodeInfo == null) return null;
 
-  final apiType = const <String, ApiType>{
+  var apiType = const <String, ApiType>{
     "mastodon": ApiType.mastodon,
     "pleroma": ApiType.pleroma,
     "misskey": ApiType.misskey,
@@ -158,6 +158,10 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
   }[nodeInfo.software.name];
 
   if (apiType == null) return null;
+  if (apiType == ApiType.mastodon &&
+      nodeInfo.software.version.contains("+glitch")) {
+    apiType = ApiType.glitch;
+  }
 
   return InstanceProbeResult.successful(
     apiType,
@@ -169,7 +173,7 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
 Future<InstanceProbeResult?> _probeEndpoints(String host) async {
   for (final apiType in ApiType.values) {
     try {
-      final adapter = apiType.createAdapter(host);
+      final adapter = await apiType.createAdapter(host);
 
       if (adapter is! DecentralizedBackendAdapter) continue;
 

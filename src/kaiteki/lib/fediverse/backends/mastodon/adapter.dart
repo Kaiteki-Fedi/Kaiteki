@@ -7,7 +7,7 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
   @override
   final String instance;
 
-  factory MastodonAdapter(String instance) {
+  static Future<MastodonAdapter> create(String instance) async {
     return MastodonAdapter.custom(instance, MastodonClient(instance));
   }
 
@@ -17,7 +17,8 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
   Future<Instance?> probeInstance() async {
     final instance = await client.getInstance();
 
-    if (instance.version.contains("Pleroma")) {
+    if (instance.version.contains("Pleroma") ||
+        instance.version.contains("+glitch")) {
       return null;
     }
 
