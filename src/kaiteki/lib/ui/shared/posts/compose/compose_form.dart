@@ -306,27 +306,33 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
   Future<Post>? getPreviewFuture(PreviewSupport adapter) {
     if (_bodyController.value.text.isEmpty) return null;
 
-    final draft = _getPostDraft([]);
+    final draft = postDraft;
     return adapter.getPreview(draft);
   }
 
-  PostDraft _getPostDraft(List<Attachment> attachments) {
+  PostDraft get postDraft {
+    final subject =
+        _subjectController.text.isEmpty ? null : _subjectController.text;
+    final content = _bodyController.value.text;
+
     return PostDraft(
-      subject: _subjectController.text.isEmpty ? null : _subjectController.text,
-      content: _bodyController.value.text,
+      subject: subject,
+      content: content,
       visibility: _visibility,
       formatting: _formatting ?? Formatting.plainText,
       replyTo: widget.replyTo,
-      attachments: attachments,
       language: _language,
     );
   }
 
-  Future<void> post(BuildContext context, BackendAdapter adapter) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final l10n = context.l10n;
-    final goRouter = GoRouter.of(context);
-
+  /// Shows a attachment description reminder when enabled and there's at least
+  /// one attachment without description.
+  ///
+  /// Returns true, if the user cancelled the post submission. Returns false, if
+  /// reminders are disabled or the user acknowledged the dialog.
+  Future<bool> _checkForUndescribedAttachments(
+    List<AttachmentDraft> attachments,
+  ) async {
     final showMissingDescriptionWarnings =
         ref.read(showAttachmentDescriptionWarning).value;
     final hasUndescribedAttachments = attachments.any((e) {
@@ -338,15 +344,28 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
         context: context,
         builder: (context) => const MissingDescriptionDialog(),
       );
-      if (result != true) return;
+      if (result != true) return true;
     }
+
+    return false;
+  }
+
+  Future<void> post(BuildContext context, BackendAdapter adapter) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    final goRouter = GoRouter.of(context);
+
+    // pin state
+    final draft = postDraft;
+    final draftAttachments = attachments;
+
+    if (await _checkForUndescribedAttachments(draftAttachments)) return;
 
     Future<Post> submitPost() async {
       final attachments = await Future.wait(
-        this.attachments.map(adapter.uploadAttachment),
+        draftAttachments.map(adapter.uploadAttachment),
       );
-      final draft = _getPostDraft(attachments);
-      return adapter.postStatus(draft);
+      return adapter.postStatus(draft.copyWith(attachments: attachments));
     }
 
     var snackBarController = messenger.showSnackBar(
