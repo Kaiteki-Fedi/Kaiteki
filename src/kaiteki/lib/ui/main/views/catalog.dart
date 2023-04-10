@@ -5,16 +5,21 @@ import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:tuple/tuple.dart";
 
-class CatalogMainScreenView extends ConsumerStatefulWidget {
+class CatalogMainScreenView extends ConsumerStatefulWidget
+    implements MainScreenView {
   const CatalogMainScreenView({super.key});
 
   @override
   ConsumerState<CatalogMainScreenView> createState() =>
       _CatalogMainScreenViewState();
+
+  @override
+  NavigationVisibility get navigationVisibility => NavigationVisibility.compact;
 }
 
 class _CatalogMainScreenViewState extends ConsumerState<CatalogMainScreenView> {
@@ -103,8 +108,6 @@ class _CatalogMainScreenViewState extends ConsumerState<CatalogMainScreenView> {
               constraints: const BoxConstraints(maxHeight: 150),
               child: AttachmentWidget(
                 attachment: attachment,
-                attachmentIndex: 0,
-                parentPost: item,
                 boxFit: BoxFit.scaleDown,
               ),
             ),

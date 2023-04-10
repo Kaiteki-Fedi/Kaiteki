@@ -31,6 +31,7 @@ import "package:kaiteki/ui/main/views/catalog.dart";
 import "package:kaiteki/ui/main/views/deck.dart";
 import "package:kaiteki/ui/main/views/fox.dart";
 import "package:kaiteki/ui/main/views/videos.dart";
+import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
@@ -51,7 +52,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final _timelineKey = GlobalKey<TimelinePageState>();
   List<MainScreenTab>? _tabs;
   TabKind _currentTab = TabKind.home;
-  MainScreenView _view = MainScreenView.stream;
+  MainScreenViewType _view = MainScreenViewType.stream;
 
   int get _currentIndex {
     final index = _tabs!.indexWhere((tab) => tab.kind == _currentTab);
@@ -120,18 +121,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   Widget _buildTimeline(BuildContext context) {
     switch (_view) {
-      case MainScreenView.stream:
+      case MainScreenViewType.stream:
         return TimelinePage(
           key: _timelineKey,
           initialTimeline: widget.initialTimeline,
         );
-      case MainScreenView.deck:
+      case MainScreenViewType.deck:
         return const DeckMainScreenView();
-      case MainScreenView.catalog:
+      case MainScreenViewType.catalog:
         return const CatalogMainScreenView();
-      case MainScreenView.videos:
+      case MainScreenViewType.videos:
         return const VideoMainScreenView();
-      case MainScreenView.fox:
+      case MainScreenViewType.fox:
         return const FoxMainScreenView();
     }
   }
@@ -157,6 +158,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final l10n = context.l10n;
     _tabs = getTabs(l10n);
 
+    final timeline = _buildTimeline(context);
+
     final body = PageTransitionSwitcher(
       transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
         return FadeThroughTransition(
@@ -166,7 +169,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         );
       },
       child: [
-        _buildTimeline(context),
+        timeline,
         const NotificationsPage(),
         const ChatsPage(),
         const BookmarksPage(),
@@ -191,48 +194,55 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: BreakpointBuilder(
         builder: (_, breakpoint) {
           final isMobile = breakpoint.window == WindowSize.xsmall;
-          final outsideColor = _outsideColor;
           final tab = _tabs![_currentIndex];
           final fab = tab.fab;
 
-          final hideNavigation = _view == MainScreenView.fox;
+          final hideNavigation = _view == MainScreenViewType.fox;
           final hideBottomBar = _tabs!.length < 2 ||
-              _view == MainScreenView.videos ||
+              _view == MainScreenViewType.videos ||
               hideNavigation;
-          final hideFab = fab == null || _view == MainScreenView.videos;
+          final hideFab = fab == null || _view == MainScreenViewType.videos;
           final immerse = !hideNavigation;
+
+          Widget? floatingActionButton, bottomNavigationBar;
+
+          NavigationVisibility? navigationVisibility;
+
+          if (_currentTab == TabKind.home && timeline is MainScreenView) {
+            navigationVisibility =
+                (timeline as MainScreenView).navigationVisibility;
+          }
+
+          navigationVisibility ??= breakpoint.window < WindowSize.large
+              ? NavigationVisibility.compact
+              : NavigationVisibility.normal;
+
+          if (isMobile && !hideBottomBar) {
+            bottomNavigationBar = MainScreenNavigationBar(
+              tabs: _tabs!,
+              currentIndex: _currentIndex,
+              onChangeIndex: _changeIndex,
+            );
+          }
+
+          if (!hideFab && !(tab.hideFabWhenDesktop && !isMobile)) {
+            floatingActionButton = _buildFab(context, fab, isMobile);
+          }
 
           if (isMobile) {
             return Scaffold(
               appBar: _buildAppBar(context, false),
               body: body,
-              bottomNavigationBar: hideBottomBar
-                  ? null
-                  : MainScreenNavigationBar(
-                      tabs: _tabs!,
-                      currentIndex: _currentIndex,
-                      onChangeIndex: _changeIndex,
-                    ),
-              floatingActionButton:
-                  hideFab ? null : _buildFab(context, fab, true),
+              bottomNavigationBar: bottomNavigationBar,
+              floatingActionButton: floatingActionButton,
               drawer: const MainScreenDrawer(),
             );
           } else {
             return Scaffold(
-              backgroundColor: outsideColor,
+              backgroundColor: _outsideColor,
               appBar: _buildAppBar(context, immerse),
-              body: _buildDesktopView(
-                hideNavigation,
-                breakpoint.window >= WindowSize.medium &&
-                    !((_view == MainScreenView.deck ||
-                            _view == MainScreenView.fox) &&
-                        _currentTab == TabKind.home),
-                immerse,
-                body,
-              ),
-              floatingActionButton: tab.hideFabWhenDesktop || hideFab
-                  ? null
-                  : _buildFab(context, fab, isMobile),
+              body: _buildDesktopView(navigationVisibility, immerse, body),
+              floatingActionButton: floatingActionButton,
               drawer: const MainScreenDrawer(),
             );
           }
@@ -287,17 +297,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  static Widget _buildViewIcon(MainScreenView view) {
+  static Widget _buildViewIcon(MainScreenViewType view) {
     switch (view) {
-      case MainScreenView.stream:
+      case MainScreenViewType.stream:
         return const Icon(Icons.view_stream_rounded);
-      case MainScreenView.deck:
+      case MainScreenViewType.deck:
         return const Icon(Icons.view_column_rounded);
-      case MainScreenView.catalog:
+      case MainScreenViewType.catalog:
         return const Icon(Icons.view_module_rounded);
-      case MainScreenView.videos:
+      case MainScreenViewType.videos:
         return const Icon(Icons.videocam_rounded);
-      case MainScreenView.fox:
+      case MainScreenViewType.fox:
         return Builder(
           builder: (context) {
             return Text(
@@ -309,17 +319,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
-  static String _getViewDisplayName(MainScreenView view) {
+  static String _getViewDisplayName(MainScreenViewType view) {
     switch (view) {
-      case MainScreenView.stream:
+      case MainScreenViewType.stream:
         return "Stream";
-      case MainScreenView.deck:
+      case MainScreenViewType.deck:
         return "Deck";
-      case MainScreenView.catalog:
+      case MainScreenViewType.catalog:
         return "Catalog";
-      case MainScreenView.videos:
+      case MainScreenViewType.videos:
         return "Videos";
-      case MainScreenView.fox:
+      case MainScreenViewType.fox:
         return "Fox";
     }
   }
@@ -331,23 +341,23 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return [
       if (_currentTab == TabKind.home &&
           experiments.contains(AppExperiment.timelineViews))
-        PopupMenuButton<MainScreenView>(
+        PopupMenuButton<MainScreenViewType>(
           initialValue: _view,
           icon: _buildViewIcon(_view),
           tooltip: "View",
           onSelected: (view) => setState(() => _view = view),
           itemBuilder: (context) {
             return [
-              for (final view in MainScreenView.values)
+              for (final view in MainScreenViewType.values)
                 PopupMenuItem(
                   value: view,
-                  enabled:
-                      !(view == MainScreenView.videos && !supportsVideoPlayer),
+                  enabled: !(view == MainScreenViewType.videos &&
+                      !supportsVideoPlayer),
                   child: ListTile(
                     leading: _buildViewIcon(view),
                     title: Text(_getViewDisplayName(view)),
                     contentPadding: EdgeInsets.zero,
-                    enabled: !(view == MainScreenView.videos &&
+                    enabled: !(view == MainScreenViewType.videos &&
                         !supportsVideoPlayer),
                   ),
                 ),
@@ -389,8 +399,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget _buildDesktopView(
-    bool hideNavRail,
-    bool extendNavRail,
+    NavigationVisibility navigationRail,
     bool immerse,
     Widget child,
   ) {
@@ -398,8 +407,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final tabCount = _tabs?.length ?? 0;
     return Row(
       children: [
-        if (!hideNavRail && tabCount >= 2) ...[
-          _buildNavigationRail(extendNavRail),
+        if (navigationRail != NavigationVisibility.hide && tabCount >= 2) ...[
+          _buildNavigationRail(navigationRail == NavigationVisibility.normal),
           if (!m3) const VerticalDivider(thickness: 1, width: 1),
         ],
         Expanded(child: immerse ? _roundWidget(context, child) : child),
@@ -487,4 +496,4 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 }
 
-enum MainScreenView { stream, deck, catalog, videos, fox }
+enum MainScreenViewType { stream, deck, catalog, videos, fox }
