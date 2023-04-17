@@ -151,10 +151,9 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
     "mastodon": ApiType.mastodon,
     "pleroma": ApiType.pleroma,
     "misskey": ApiType.misskey,
-    "foundkey": ApiType.misskey,
-    "akkoma": ApiType.pleroma,
-    // TODO(thatonecalculator): change to ApiType.calckey once implemented
-    "calckey": ApiType.misskey,
+    "foundkey": ApiType.foundkey,
+    "akkoma": ApiType.akkoma,
+    "calckey": ApiType.calckey,
   }[nodeInfo.software.name];
 
   if (apiType == null) return null;
@@ -172,6 +171,8 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
 
 Future<InstanceProbeResult?> _probeEndpoints(String host) async {
   for (final apiType in ApiType.values) {
+    if (apiType.disfavorsProbing) continue;
+
     try {
       final adapter = await apiType.createAdapter(host);
 
@@ -188,7 +189,8 @@ Future<InstanceProbeResult?> _probeEndpoints(String host) async {
           InstanceProbeMethod.endpoint,
         );
       }
-    } catch (_) {
+    } catch (e, s) {
+      _logger.w("Probe for ${apiType.displayName} on $host failed", e, s);
       continue;
     }
   }

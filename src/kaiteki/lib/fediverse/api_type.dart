@@ -12,57 +12,41 @@ Future<TwitterAdapter> _instantiateTwitterV2(String _) async =>
 Future<OldTwitterAdapter> _instantiateTwitterV1(String _) async =>
     OldTwitterAdapter();
 
-enum ApiType {
-  mastodon(
-    createAdapter: MastodonAdapter.create,
-    theme: mastodonTheme,
-    adapterType: MastodonAdapter,
-  ),
-  glitch(
-    createAdapter: GlitchAdapter.create,
-    theme: mastodonTheme,
-    adapterType: GlitchAdapter,
-  ),
-  pleroma(
-    createAdapter: PleromaAdapter.create,
-    theme: pleromaTheme,
-    adapterType: PleromaAdapter,
-  ),
-  misskey(
-    createAdapter: MisskeyAdapter.create,
-    theme: misskeyTheme,
-    adapterType: MisskeyAdapter,
-  ),
-  twitter(
-    createAdapter: _instantiateTwitterV2,
-    theme: twitterTheme,
-    hosts: ["twitter.com"],
-    adapterType: TwitterAdapter,
-  ),
+enum ApiType<T extends BackendAdapter> {
+  mastodon(MastodonAdapter.create, theme: mastodonTheme),
+  glitch(GlitchAdapter.create, theme: mastodonTheme),
+  pleroma(PleromaAdapter.create, theme: pleromaTheme),
+  misskey(MisskeyAdapter.create, theme: misskeyTheme),
+  akkoma(PleromaAdapter.create, theme: akkomaTheme, disfavorsProbing: true),
+  foundkey(MisskeyAdapter.create, theme: foundKeyTheme, disfavorsProbing: true),
+  calckey(MisskeyAdapter.create, theme: calckeyTheme, disfavorsProbing: true),
+  // TODO(Craftplacer): I'm too lazy, sowwy
+  // goToSocial(MastodonAdapter.create, theme: goToSocialTheme),
+  twitter(_instantiateTwitterV2, theme: twitterTheme, hosts: ["twitter.com"]),
   twitterV1(
-    createAdapter: _instantiateTwitterV1,
+    _instantiateTwitterV1,
     theme: twitterTheme,
     hosts: ["twitter.com"],
-    adapterType: OldTwitterAdapter,
+    disfavorsProbing: true,
   );
 
   final String? _displayName;
-  final Future<BackendAdapter> Function(String instance) createAdapter;
+  final Future<T> Function(String instance) createAdapter;
   final ApiTheme theme;
   final List<String>? hosts;
-  final Type adapterType;
+  final bool disfavorsProbing;
+  Type get adapterType => T;
 
   String get displayName {
     return _displayName ?? name[0].toUpperCase() + name.substring(1);
   }
 
-  const ApiType({
+  const ApiType(
+    this.createAdapter, {
     String? displayName,
-    required this.createAdapter,
     required this.theme,
-    required this.adapterType,
-    // ignore: unused_element, used for Twitter later on
     this.hosts,
+    this.disfavorsProbing = false,
   }) : _displayName = displayName;
 
   bool isType(BackendAdapter adapter) => adapter.runtimeType == adapterType;
