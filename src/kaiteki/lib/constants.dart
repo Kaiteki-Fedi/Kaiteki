@@ -2,13 +2,14 @@ import "package:flutter/foundation.dart";
 import "package:flutter/rendering.dart" show BoxConstraints;
 
 const String appName = "Kaiteki";
-const String appWebsite = "https://craftplacer.moe/projects/kaiteki";
+const String appWebsite = "https://kaiteki.app/";
 const String telegramChannel = "https://t.me/kaiteki_fedi";
 const String githubRepository = "https://github.com/Kaiteki-Fedi/Kaiteki";
 const String appDescription = "The comfy Fediverse client";
-const String appRemoteIcon =
-    "https://craftplacer.moe/projects/kaiteki/img/kaiteki.png";
+const String appRemoteIcon = "https://kaiteki.app/img/kaiteki.png";
 const String userAgent = "Kaiteki/1.0 (+$appWebsite)";
+const String appLegalese =
+    "Licensed under the GNU Affero General Public License v3.0";
 
 const double defaultFormWidth = 448;
 const double defaultFormHeight = 592;
