@@ -13,6 +13,10 @@ abstract class Emoji {
   /// String representation of the emoji (in logs or as fallback).
   @override
   String toString() => ":$tag:";
+
+  /// Returns the tag of this emoji, but without the instance part if it's the
+  /// same as the given [localInstance].
+  String getTag([String? localInstance]) => tag;
 }
 
 class UnicodeEmoji extends Emoji {
@@ -36,28 +40,34 @@ class CustomEmoji extends Emoji {
 
   final Uri url;
 
-  final String? instance;
+  final String instance;
 
   @override
   final List<String>? aliases;
 
   const CustomEmoji({
     required this.short,
-    this.instance,
+    required this.instance,
     this.aliases,
     required this.url,
   });
 
-  factory CustomEmoji.parse(String tag, Uri url) {
+  factory CustomEmoji.parse(String tag, Uri url, String localInstance) {
     final parts = tag.split("@");
     final instance = parts.length > 1 ? parts[1] : null;
 
-    return CustomEmoji(short: parts[0], instance: instance, url: url);
+    return CustomEmoji(
+      short: parts[0],
+      instance: instance ?? localInstance,
+      url: url,
+    );
   }
 
   @override
-  String get tag {
-    if (instance == null) return "$short";
-    return "$short@$instance";
+  String get tag => "$short@$instance";
+
+  @override
+  String getTag([String? localInstance]) {
+    return instance == localInstance ? short : tag;
   }
 }

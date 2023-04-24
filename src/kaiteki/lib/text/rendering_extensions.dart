@@ -21,7 +21,11 @@ Emoji? resolveEmoji(
 
   if (adapter is MisskeyAdapter) {
     final url = buildEmojiUriManual(adapter.instance, input, remoteHost);
-    return CustomEmoji(short: input, url: url);
+    return CustomEmoji(
+      short: input,
+      url: url,
+      instance: remoteHost ?? adapter.instance,
+    );
   }
 
   return null;
@@ -70,10 +74,15 @@ extension ChatMessageRenderExtensions on ChatMessage {
 
 extension UserRenderExtensions on User {
   InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
-    return renderText(context, ref, displayName!);
+    final displayName = this.displayName;
+    if (displayName == null) return TextSpan(text: username);
+    return renderText(context, ref, displayName);
   }
 
   InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
+    final hasDescription = description != null;
+    assert(hasDescription);
+    if (!hasDescription) return const TextSpan(text: "");
     return renderText(context, ref, description!);
   }
 

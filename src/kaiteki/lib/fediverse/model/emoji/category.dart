@@ -17,7 +17,14 @@ class EmojiCategory {
 
   final String? name;
 
-  const EmojiCategory(this.name, this.items);
+  factory EmojiCategory(String? name, Iterable<Emoji> items) {
+    return EmojiCategory.withVariants(
+      name,
+      items.map(EmojiCategoryItem.new).toList(growable: false),
+    );
+  }
+
+  const EmojiCategory.withVariants(this.name, this.items);
 }
 
 class EmojiCategoryItem<T extends Emoji> {
