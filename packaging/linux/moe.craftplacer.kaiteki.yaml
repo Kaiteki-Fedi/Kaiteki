@@ -1,0 +1,43 @@
+app-id: moe.craftplacer.kaiteki
+runtime: org.freedesktop.Platform
+runtime-version: "22.08"
+sdk: org.freedesktop.Sdk
+command: moe.craftplacer.kaiteki
+separate-locales: false
+rename-icon: kaiteki
+rename-desktop-file: kaiteki.desktop
+rename-appdata-file: kaiteki.metainfo.xml
+finish-args:
+  - --device=dri
+  - --share=ipc
+  - --share=network
+  - --socket=pulseaudio
+  - --socket=x11
+  # - --socket=fallback-x11
+  # - --socket=wayland
+modules:
+  - name: kaiteki
+    buildsystem: simple
+    build-commands:
+      - mv kaiteki $FLATPAK_DEST/kaiteki/
+      - chmod +x $FLATPAK_DEST/kaiteki/kaiteki
+      - mkdir $FLATPAK_DEST/bin
+      - ln -s $FLATPAK_DEST/kaiteki/kaiteki $FLATPAK_DEST/bin/$FLATPAK_ID
+      - desktop-file-edit --set-icon=$FLATPAK_ID kaiteki.desktop
+      - desktop-file-edit --set-key=Exec --set-value="$FLATPAK_ID %U" kaiteki.desktop
+      - install -Dm644 kaiteki.desktop $FLATPAK_DEST/share/applications/kaiteki.desktop
+      - install -Dm644 kaiteki.metainfo.xml $FLATPAK_DEST/share/metainfo/kaiteki.metainfo.xml
+      - install -Dm644 kaiteki-color.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/kaiteki.svg
+      - install -Dm644 kaiteki-symbolic.svg $FLATPAK_DEST/share/icons/hicolor/symbolic/apps/kaiteki-symbolic.svg
+    sources:
+      - type: dir
+        path: ../../src/kaiteki/build/linux/x64/release/bundle/
+        dest: kaiteki
+      - type: file
+        path: ./kaiteki-color.svg
+      - type: file
+        path: ./kaiteki-symbolic.svg
+      - type: file
+        path: ./kaiteki.metainfo.xml
+      - type: file
+        path: ./kaiteki.desktop
