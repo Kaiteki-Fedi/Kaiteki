@@ -189,7 +189,8 @@ Future<ui.Image> captureImage(Element element) {
 extension SetScreenSize on WidgetTester {
   Future<void> setScreenSize(Size size, [double pixelDensity = 1]) async {
     await binding.setSurfaceSize(size);
-    binding.window.physicalSizeTestValue = size;
-    binding.window.devicePixelRatioTestValue = pixelDensity;
+    view
+      ..physicalSize = size
+      ..devicePixelRatio = pixelDensity;
   }
 }
