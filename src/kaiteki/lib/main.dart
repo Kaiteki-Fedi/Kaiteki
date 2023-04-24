@@ -1,4 +1,5 @@
 import "dart:async";
+import "dart:io";
 
 import "package:flutter/material.dart";
 import "package:hive_flutter/hive_flutter.dart";
@@ -10,6 +11,8 @@ import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/repositories/hive_repository.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/crash_screen.dart";
+import "package:path/path.dart" as p;
+import "package:path_provider/path_provider.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 /// Main entrypoint.
@@ -55,7 +58,15 @@ void handleFatalError(Object error, StackTrace stackTrace) {
 }
 
 Future<void> initializeHive() async {
-  await Hive.initFlutter();
+  if (Platform.isLinux && Platform.environment["FLATPAK_ID"] != null) {
+    final directory = await getApplicationSupportDirectory();
+    final path = p.join(directory.path, 'kaiteki');
+
+    Hive.init(path);
+  } else {
+    await Hive.initFlutter();
+  }
+
   Hive
     ..registerAdapter(AccountKeyAdapter())
     ..registerAdapter(ClientSecretAdapter())
