@@ -60,7 +60,7 @@ void handleFatalError(Object error, StackTrace stackTrace) {
 Future<void> initializeHive() async {
   if (Platform.isLinux && Platform.environment["FLATPAK_ID"] != null) {
     final directory = await getApplicationSupportDirectory();
-    final path = p.join(directory.path, 'kaiteki');
+    final path = p.join(directory.path, "kaiteki");
 
     Hive.init(path);
   } else {
