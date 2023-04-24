@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
+import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/logger.dart";
 import "package:kaiteki/model/auth/account.dart";
@@ -122,15 +123,23 @@ class AccountManager extends ChangeNotifier {
     final key = credentials.item1;
     final accountSecret = credentials.item2;
     final clientSecret = credentials.item3;
+    final type = key.type!;
 
-    _logger.v("Trying to recover a ${key.type!.displayName} account");
+    _logger.v("Trying to recover a ${type.displayName} account");
 
-    final adapter = await key.type!.createAdapter(key.host);
+    BackendAdapter adapter;
+
+    try {
+      adapter = await type.createAdapter(key.host);
+    } catch (ex, s) {
+      _logger.e("Failed to create ${type.adapterType}", ex, s);
+      return null;
+    }
 
     try {
       await adapter.applySecrets(clientSecret, accountSecret);
     } catch (ex, s) {
-      _logger.e("Failed to apply secrets to adapter", ex, s);
+      _logger.e("Failed to apply secrets to ${type.adapterType}", ex, s);
       return null;
     }
 

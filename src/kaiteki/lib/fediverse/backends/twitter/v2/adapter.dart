@@ -38,6 +38,9 @@ class TwitterAdapter extends CentralizedBackendAdapter
   AdapterCapabilities get capabilities => const TwitterCapabilities();
 
   @override
+  ApiType get type => ApiType.twitter;
+
+  @override
   Future<User?> followUser(String id) {
     // TODO(Craftplacer): implement followUser
     throw UnimplementedError();
@@ -389,10 +392,13 @@ class TwitterAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  final instance = const Instance(
+  final instance = Instance(
     name: "Twitter",
-    backgroundUrl:
-        "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
+    backgroundUrl: Uri(
+      scheme: "https",
+      host: "abs.twimg.com",
+      path: "sticky/illustrations/lohp_en_1302x955.png",
+    ),
   );
 
   @override

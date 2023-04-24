@@ -1,4 +1,5 @@
 import "package:fediverse_objects/mastodon.dart" as mastodon;
+import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/backends/glitch/capabilities.dart";
 import "package:kaiteki/fediverse/backends/glitch/client.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
@@ -15,18 +16,24 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
   final String instance;
   final mastodon.Instance instanceInfo;
 
-  static Future<GlitchAdapter> create(String instance) async {
+  static Future<GlitchAdapter> create(ApiType type, String instance) async {
     final cli = GlitchClient(instance);
     final instanceInfo = await cli.getInstance();
-    return GlitchAdapter.custom(instance, instanceInfo, cli);
+    return GlitchAdapter.custom(type, instance, instanceInfo, cli);
   }
 
-  GlitchAdapter.custom(this.instance, this.instanceInfo, super.client);
+  GlitchAdapter.custom(
+    super.type,
+    this.instance,
+    this.instanceInfo,
+    super.client,
+  );
 
   @override
   GlitchCapabilities get capabilities {
-    final supportsReactions =
-        (instanceInfo.configuration?.reactions?.maxReactions ?? 0) != 0;
+    final maxReactions =
+        instanceInfo.configuration.reactions?.maxReactions ?? 0;
+    final supportsReactions = maxReactions != 0;
 
     return GlitchCapabilities(supportsReactions);
   }
@@ -37,12 +44,12 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
       return null;
     }
 
-    return toInstance(instanceInfo);
+    return toInstance(instanceInfo, instance);
   }
 
   @override
   Future<Instance> getInstance() async {
-    return toInstance(instanceInfo);
+    return toInstance(instanceInfo, instance);
   }
 
   @override
@@ -68,11 +75,11 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
 
   @override
   Future<void> addReaction(Post post, Emoji emoji) async {
-    await client.react(post.id, emoji.tag);
+    await client.react(post.id, emoji.getTag(instance));
   }
 
   @override
   Future<void> removeReaction(Post post, Emoji emoji) async {
-    await client.removeReaction(post.id, emoji.tag);
+    await client.removeReaction(post.id, emoji.getTag(instance));
   }
 }

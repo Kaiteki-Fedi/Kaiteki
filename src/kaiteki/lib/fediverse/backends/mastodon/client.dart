@@ -3,6 +3,7 @@ import "dart:convert";
 import "package:collection/collection.dart";
 import "package:fediverse_objects/mastodon.dart" hide List;
 import "package:fediverse_objects/mastodon.dart" as mastodon show List;
+import "package:fediverse_objects/mastodon_v1.dart" as v1;
 import "package:http/http.dart" show Response;
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/exceptions/http_exception.dart";
@@ -20,9 +21,10 @@ import "package:kaiteki/utils/utils.dart";
 class MastodonClient {
   late final KaitekiClient client;
 
+  String instance;
   String? accessToken;
 
-  MastodonClient(String instance) {
+  MastodonClient(this.instance) {
     client = KaitekiClient(
       baseUri: Uri(scheme: "https", host: instance),
       checkResponse: checkResponse,
@@ -33,8 +35,12 @@ class MastodonClient {
     );
   }
 
-  Future<Instance> getInstance() async => client
+  Future<v1.Instance> getInstanceV1() async => client
       .sendRequest(HttpMethod.get, "api/v1/instance")
+      .then(v1.Instance.fromJson.fromResponse);
+
+  Future<Instance> getInstance() async => client
+      .sendRequest(HttpMethod.get, "api/v2/instance")
       .then(Instance.fromJson.fromResponse);
 
   Future<Account> getAccount(String id) async => client

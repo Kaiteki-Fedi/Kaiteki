@@ -1,7 +1,6 @@
 import "dart:async";
 import "dart:convert";
 import "dart:developer";
-import "dart:io";
 
 import "package:fediverse_objects/misskey.dart" as misskey;
 import "package:http/http.dart"

@@ -7,47 +7,51 @@ import "package:kaiteki/fediverse/backends/pleroma/adapter.dart";
 import "package:kaiteki/fediverse/backends/twitter/v1/adapter.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/adapter.dart";
 
-Future<TwitterAdapter> _instantiateTwitterV2(String _) async =>
+Future<TwitterAdapter> _instantiateTwitterV2(ApiType _, String __) async =>
     TwitterAdapter();
-Future<OldTwitterAdapter> _instantiateTwitterV1(String _) async =>
+Future<OldTwitterAdapter> _instantiateTwitterV1(ApiType _, String __) async =>
     OldTwitterAdapter();
 
 enum ApiType<T extends BackendAdapter> {
-  mastodon(MastodonAdapter.create, theme: mastodonTheme),
-  glitch(GlitchAdapter.create, theme: mastodonTheme),
-  pleroma(PleromaAdapter.create, theme: pleromaTheme),
-  misskey(MisskeyAdapter.create, theme: misskeyTheme),
-  akkoma(PleromaAdapter.create, theme: akkomaTheme, disfavorsProbing: true),
-  foundkey(MisskeyAdapter.create, theme: foundKeyTheme, disfavorsProbing: true),
-  calckey(MisskeyAdapter.create, theme: calckeyTheme, disfavorsProbing: true),
-  // TODO(Craftplacer): I'm too lazy, sowwy
-  // goToSocial(MastodonAdapter.create, theme: goToSocialTheme),
-  twitter(_instantiateTwitterV2, theme: twitterTheme, hosts: ["twitter.com"]),
+  mastodon(MastodonAdapter.create, mastodonTheme),
+  glitch(GlitchAdapter.create, mastodonTheme, probingPriority: 5),
+  pleroma(PleromaAdapter.create, pleromaTheme, probingPriority: 5),
+  misskey(MisskeyAdapter.create, misskeyTheme),
+  akkoma(PleromaAdapter.create, akkomaTheme, probingPriority: null),
+  foundkey(MisskeyAdapter.create, foundKeyTheme, probingPriority: null),
+  calckey(MisskeyAdapter.create, calckeyTheme, probingPriority: null),
+  twitter(_instantiateTwitterV2, twitterTheme, hosts: ["twitter.com"]),
   twitterV1(
     _instantiateTwitterV1,
-    theme: twitterTheme,
+    twitterTheme,
     hosts: ["twitter.com"],
-    disfavorsProbing: true,
+    probingPriority: null,
   );
+  // TODO(Craftplacer): I'm too lazy, sowwy
+  // goToSocial(MastodonAdapter.create, theme: goToSocialTheme),
 
   final String? _displayName;
-  final Future<T> Function(String instance) createAdapter;
+  final Future<T> Function(ApiType type, String instance) _createAdapter;
   final ApiTheme theme;
   final List<String>? hosts;
-  final bool disfavorsProbing;
+
+  /// Which priority each API type has when probing the instance.
+  ///
+  /// If set to `null`, the probing is disabled.
+  final int? probingPriority;
   Type get adapterType => T;
+
+  Future<T> createAdapter(String instance) => _createAdapter(this, instance);
 
   String get displayName {
     return _displayName ?? name[0].toUpperCase() + name.substring(1);
   }
 
   const ApiType(
-    this.createAdapter, {
+    this._createAdapter,
+    this.theme, {
     String? displayName,
-    required this.theme,
     this.hosts,
-    this.disfavorsProbing = false,
+    this.probingPriority = 0,
   }) : _displayName = displayName;
-
-  bool isType(BackendAdapter adapter) => adapter.runtimeType == adapterType;
 }

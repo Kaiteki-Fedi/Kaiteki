@@ -59,11 +59,14 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   final String instance;
 
-  static Future<MisskeyAdapter> create(String instance) async {
-    return MisskeyAdapter.custom(instance, MisskeyClient(instance));
+  @override
+  final ApiType type;
+
+  static Future<MisskeyAdapter> create(ApiType type, String instance) async {
+    return MisskeyAdapter.custom(type, instance, MisskeyClient(instance));
   }
 
-  MisskeyAdapter.custom(this.instance, this.client);
+  MisskeyAdapter.custom(this.type, this.instance, this.client);
 
   @override
   Future<User> getUser(String username, [String? instance]) async {
@@ -392,9 +395,12 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     final emojiCategories = emojis.groupBy((e) => e.category);
     return emojiCategories.entries
         .map(
-          (kv) => EmojiCategory(
+          (kv) => EmojiCategory.withVariants(
             kv.key,
-            kv.value.map(toEmoji).map(EmojiCategoryItem.new).toList(),
+            kv.value //
+                .map((e) => toEmoji(e, instance))
+                .map(EmojiCategoryItem.new)
+                .toList(),
           ),
         )
         .toList(growable: false);

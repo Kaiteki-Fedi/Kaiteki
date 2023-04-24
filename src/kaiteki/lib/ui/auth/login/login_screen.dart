@@ -136,7 +136,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               duration: const Duration(milliseconds: 500),
               child: instanceBackgroundUrl == null
                   ? const SizedBox()
-                  : Image.network(instanceBackgroundUrl, fit: BoxFit.cover),
+                  : Image.network(
+                      instanceBackgroundUrl.toString(),
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           Scaffold(
@@ -424,7 +427,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final credentialRequest = _credentialRequest;
     if (credentialRequest != null) {
       return UserPage(
-        image: _instance?.data.iconUrl,
+        image: _instance?.data.iconUrl.toString(),
         onBack: _onBackButtonPressed,
         onSubmit: (username, password) async {
           final credentials = Credentials(username, password);

@@ -1,5 +1,6 @@
 import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/capabilities.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
@@ -124,6 +125,9 @@ class TimelineAdapter extends BackendAdapter {
   @override
   Future<User> lookupUser(String username, [String? host]) =>
       throw UnimplementedError();
+
+  @override
+  ApiType get type => ApiType.mastodon;
 }
 
 class TimelineAdapterCapabilities extends AdapterCapabilities {

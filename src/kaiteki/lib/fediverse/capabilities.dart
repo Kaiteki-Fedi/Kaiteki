@@ -12,6 +12,11 @@ abstract class AdapterCapabilities {
 
   Set<TimelineKind> get supportedTimelines;
 
+  /// Specifies the maximum amount of characters for the content within a post.
+  ///
+  /// If `null`, no limit is enforced or it is unknown.
+  int? get maxPostContentLength => null;
+
   /// Specifies whether the adapter supports submitting posts with a language
   bool get supportsLanguageTagging => false;
 

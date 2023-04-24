@@ -36,6 +36,9 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
   OldTwitterAdapter.custom(this.client);
 
   @override
+  ApiType get type => ApiType.twitterV1;
+
+  @override
   Future<User> getMyself() async => toUser(await client.verifyCredentials());
 
   @override

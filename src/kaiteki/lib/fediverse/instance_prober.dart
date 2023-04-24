@@ -170,9 +170,11 @@ Future<InstanceProbeResult?> _probeActivityPubNodeInfo(String host) async {
 }
 
 Future<InstanceProbeResult?> _probeEndpoints(String host) async {
-  for (final apiType in ApiType.values) {
-    if (apiType.disfavorsProbing) continue;
+  final backends = ApiType.values
+      .whereNot((e) => e.probingPriority == null)
+      .sorted((a, b) => a.probingPriority!.compareTo(b.probingPriority!));
 
+  for (final apiType in backends) {
     try {
       final adapter = await apiType.createAdapter(host);
 

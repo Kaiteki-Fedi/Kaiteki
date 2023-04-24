@@ -16,7 +16,9 @@ ChatMessage toChatMessage(
     attachments: [
       if (attachment != null) toAttachment(attachment),
     ],
-    emojis: message.emojis.map(toEmoji).toList(growable: false),
+    emojis: message.emojis
+        .map((e) => toEmoji(e, currentUser.host))
+        .toList(growable: false),
   );
 }
 
