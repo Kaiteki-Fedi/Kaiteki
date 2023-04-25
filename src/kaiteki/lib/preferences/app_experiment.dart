@@ -19,7 +19,11 @@ enum AppExperiment {
     "App Feedback",
     "Enable the feedback screen; currently unfunctional",
   ),
-  chats("Chats");
+  chats("Chats"),
+  userSignatures(
+    "User signatures",
+    "Show the user's bio under their posts",
+  );
 
   final String displayName;
   final String? description;

@@ -6,17 +6,20 @@ import "package:go_router/go_router.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
 import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
 import "package:kaiteki/fediverse/interfaces/post_translation_support.dart";
 import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
 import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/content_warning_behavior.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/theming/kaiteki/post.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
+import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/attachment_row.dart";
@@ -41,6 +44,8 @@ const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 final sensitiveWords = {"cw", "mh", "ph", "pol", "suicide", "selfharm"};
 
 enum PostWidgetLayout { normal, wide, expanded }
+
+const spacer = SizedBox(height: 8);
 
 class PostWidget extends ConsumerStatefulWidget {
   final Post post;
@@ -86,9 +91,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final wide = widget.layout != PostWidgetLayout.normal;
 
-    if (_post.repeatOf != null) {
+    final repeatOf = _post.repeatOf;
+    if (repeatOf != null) {
       return Column(
         children: [
           InkWell(
@@ -101,7 +106,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             ),
           ),
           PostWidget(
-            _post.repeatOf!,
+            repeatOf,
             showActions: widget.showActions,
             layout: widget.layout,
           ),
@@ -110,18 +115,23 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     }
 
     final adapter = ref.watch(adapterProvider);
-    const spacer = SizedBox(height: 8);
 
     final isExpanded = widget.layout == PostWidgetLayout.expanded;
     final isWide = widget.layout == PostWidgetLayout.wide;
+    final outlineColor = Theme.of(context).colorScheme.outline;
+    final outlineTextStyle = outlineColor.textStyle;
 
+    final showSig = ref.watch(AppExperiment.userSignatures.provider);
     final children = [
-      MetaBar(
-        post: _post,
-        showAvatar: widget.showAvatar && wide,
-        showTime: widget.showTime ?? !isExpanded,
-        showVisibility: widget.showVisibility ?? !isExpanded,
-        twolineAuthor: isExpanded || isWide,
+      InkWell(
+        onTap: (isWide || isExpanded) ? showAuthor : null,
+        child: MetaBar(
+          post: _post,
+          showAvatar: widget.showAvatar && (isWide || isExpanded),
+          showTime: widget.showTime ?? !isExpanded,
+          showVisibility: widget.showVisibility ?? !isExpanded,
+          twolineAuthor: isWide || isExpanded,
+        ),
       ),
       if (widget.showParentPost && _post.replyToUser != null)
         ReplyBar(post: _post),
@@ -131,32 +141,17 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         onTap: widget.onTap,
         // style: isExpanded ? Theme.of(context).textTheme.headlineSmall : null,
       ),
-      if (_post.embeds.isNotEmpty)
-        Card(
-          margin: EdgeInsets.zero,
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            children: <Widget>[
-              for (var embed in _post.embeds) EmbedWidget(embed),
-            ].joinNonString(const Divider(height: 1)),
-          ),
+      if (showSig && _post.author.description?.isNotEmpty == true) ...[
+        const SizedBox(
+          width: 48,
+          child: Divider(height: 25),
         ),
-      if (_post.poll != null) ...[
-        spacer,
-        DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).colorScheme.outline,
-            ),
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          child: PollWidget(_post.poll!, padding: const EdgeInsets.all(16)),
+        Text.rich(
+          _post.author.renderDescription(context, ref),
+          style: outlineTextStyle,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
         ),
-      ],
-      if (_post.quotedPost != null) EmbeddedPostWidget(_post.quotedPost!),
-      if (_post.attachments?.isNotEmpty == true) ...[
-        spacer,
-        AttachmentRow(post: _post),
       ],
       if (_post.reactions.isNotEmpty) ...[
         spacer,
@@ -166,10 +161,10 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
     final theme = Theme.of(context).ktkPostTheme!;
     final leftPostContentInset = theme.avatarSpacing + 48;
-    final outlineColor = Theme.of(context).colorScheme.outline;
-    final outlineTextStyle = outlineColor.textStyle;
 
     final clientText = _buildExpandedMetaBeta();
+
+    final padding = theme.padding;
 
     return FocusableActionDetector(
       shortcuts: const {
@@ -180,40 +175,21 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         // react: ReactIntent(),
         menu: OpenMenuIntent(),
       },
-      actions: {
-        ReplyIntent: CallbackAction(onInvoke: (_) => _onReply),
-        FavoriteIntent: CallbackAction(onInvoke: (_) => _onFavorite()),
-        RepeatIntent: CallbackAction(onInvoke: (_) => _onRepeat()),
-        BookmarkIntent: CallbackAction(onInvoke: (_) => _onBookmark()),
-        ReactIntent: CallbackAction(onInvoke: (_) => _onReact()),
-        OpenMenuIntent: CallbackAction(
-          onInvoke: (_) => _interactionBarKey.currentState?.showMenu(),
-        ),
-      },
+      actions: _actions,
       child: Semantics(
-        customSemanticsActions: {
-          CustomSemanticsAction(label: context.l10n.replyButtonLabel): _onReply,
-          if (adapter is FavoriteSupport)
-            CustomSemanticsAction(label: context.l10n.favoriteButtonLabel):
-                _onFavorite,
-          CustomSemanticsAction(label: context.l10n.repeatButtonLabel):
-              _onRepeat,
-          CustomSemanticsAction(label: context.l10n.bookmarkButtonLabel):
-              _onBookmark,
-          CustomSemanticsAction(label: context.l10n.reactButtonLabel): _onReact,
-        },
+        customSemanticsActions: _getSemanticsActions(context, adapter),
         child: Padding(
-          padding: theme.padding.copyWith(bottom: 0.0),
+          padding: padding.copyWith(bottom: 0.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (!wide && widget.showAvatar) ...[
+                  if (!(isWide || isExpanded) && widget.showAvatar) ...[
                     AvatarWidget(
                       _post.author,
-                      onTap: () => context.showUser(_post.author, ref),
+                      onTap: showAuthor,
                       focusNode: FocusNode(skipTraversal: true),
                     ),
                     SizedBox(width: theme.avatarSpacing),
@@ -308,6 +284,43 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     );
   }
 
+  Map<Type, Action<Intent>> get _actions {
+    return {
+      ReplyIntent: CallbackAction(onInvoke: (_) => _onReply),
+      FavoriteIntent: CallbackAction(onInvoke: (_) => _onFavorite()),
+      RepeatIntent: CallbackAction(onInvoke: (_) => _onRepeat()),
+      BookmarkIntent: CallbackAction(onInvoke: (_) => _onBookmark()),
+      ReactIntent: CallbackAction(onInvoke: (_) => _onReact()),
+      OpenMenuIntent: CallbackAction(
+        onInvoke: (_) => _interactionBarKey.currentState?.showMenu(),
+      ),
+    };
+  }
+
+  Map<CustomSemanticsAction, VoidCallback> _getSemanticsActions(
+    BuildContext context,
+    BackendAdapter adapter,
+  ) {
+    return {
+      CustomSemanticsAction(
+        label: context.l10n.replyButtonLabel,
+      ): _onReply,
+      if (adapter is FavoriteSupport)
+        CustomSemanticsAction(
+          label: context.l10n.favoriteButtonLabel,
+        ): _onFavorite,
+      CustomSemanticsAction(
+        label: context.l10n.repeatButtonLabel,
+      ): _onRepeat,
+      CustomSemanticsAction(
+        label: context.l10n.bookmarkButtonLabel,
+      ): _onBookmark,
+      CustomSemanticsAction(
+        label: context.l10n.reactButtonLabel,
+      ): _onReact,
+    };
+  }
+
   List<PopupMenuEntry> _buildActions(BuildContext context) {
     final l10n = context.l10n;
     final adapter = ref.read(adapterProvider);
@@ -356,6 +369,24 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             contentPadding: EdgeInsets.zero,
           ),
           onTap: () => setState(() => _translatedPost = null),
+        ),
+      if (ref.watch(AppExperiment.instanceVetting.provider))
+        PopupMenuItem(
+          child: const ListTile(
+            title: Text("Vet instance"),
+            leading: Icon(Icons.shield_rounded),
+            contentPadding: EdgeInsets.zero,
+          ),
+          onTap: () async => showModalBottomSheet(
+            context: context,
+            useRootNavigator: true,
+            isScrollControlled: true,
+            constraints: bottomSheetConstraints,
+            showDragHandle: true,
+            builder: (_) => InstanceVettingBottomSheet(
+              instance: _post.author.host,
+            ),
+          ),
         ),
       const PopupMenuDivider(),
       PopupMenuItem(
@@ -615,6 +646,10 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       style: Theme.of(context).colorScheme.outline.textStyle,
     );
   }
+
+  Future<void> showAuthor() async {
+    await context.showUser(_post.author, ref);
+  }
 }
 
 class _PostContent extends ConsumerStatefulWidget {
@@ -721,6 +756,33 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
               style: widget.style,
             ),
           ),
+        if (post.embeds.isNotEmpty)
+          Card(
+            margin: EdgeInsets.zero,
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: <Widget>[
+                for (var embed in post.embeds) EmbedWidget(embed),
+              ].joinWithValue(const Divider(height: 1)),
+            ),
+          ),
+        if (post.poll != null) ...[
+          spacer,
+          DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: PollWidget(post.poll!, padding: const EdgeInsets.all(16)),
+          ),
+        ],
+        if (post.quotedPost != null) EmbeddedPostWidget(post.quotedPost!),
+        if (post.attachments?.isNotEmpty == true) ...[
+          spacer,
+          AttachmentRow(post: post),
+        ],
       ],
     );
   }
