@@ -2,7 +2,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/app.dart";
-import "package:kaiteki/constants.dart" as consts;
+import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
@@ -30,7 +30,7 @@ class AboutScreen extends StatelessWidget {
               constraints: constraints,
               child: Center(
                 child: SizedBox(
-                  width: consts.defaultFormWidth,
+                  width: defaultFormWidth,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -43,7 +43,7 @@ class AboutScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            consts.appName,
+                            appName,
                             textScaleFactor: 2,
                             style: Theme.of(context)
                                 .ktkTextTheme
@@ -77,15 +77,7 @@ class AboutScreen extends StatelessWidget {
                               leading: const Icon(Mdi.license),
                               title: Text(l10n.creditsLicenses),
                               trailing: const Icon(Icons.chevron_right_rounded),
-                              onTap: () {
-                                showLicensePage(
-                                  context: context,
-                                  applicationName: consts.appName,
-                                  applicationVersion: "1.0.0",
-                                  applicationLegalese:
-                                      "Licensed under the GNU Affero General Public License v3.0",
-                                );
-                              },
+                              onTap: () => _onShowLicenses(context),
                             ),
                             ListTile(
                               leading: const Icon(Icons.people_rounded),
@@ -108,25 +100,25 @@ class AboutScreen extends StatelessWidget {
                               icon: const Icon(Icons.public_rounded),
                               tooltip: l10n.creditsWebsite,
                               onPressed: () {
-                                context.launchUrl(consts.appWebsite);
+                                context.launchUrl(appWebsite);
                               },
-                              splashRadius: consts.defaultSplashRadius,
+                              splashRadius: defaultSplashRadius,
                             ),
                             IconButton(
                               icon: const Icon(Mdi.github),
                               tooltip: l10n.creditsGithubRepo,
                               onPressed: () {
-                                context.launchUrl(consts.githubRepository);
+                                context.launchUrl(githubRepository);
                               },
-                              splashRadius: consts.defaultSplashRadius,
+                              splashRadius: defaultSplashRadius,
                             ),
                             IconButton(
                               icon: const Icon(Mdi.telegram),
                               tooltip: l10n.creditsTelegramChannel,
                               onPressed: () {
-                                context.launchUrl(consts.telegramChannel);
+                                context.launchUrl(telegramChannel);
                               },
-                              splashRadius: consts.defaultSplashRadius,
+                              splashRadius: defaultSplashRadius,
                             ),
                           ],
                         ),
@@ -139,6 +131,16 @@ class AboutScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  void _onShowLicenses(BuildContext context) {
+    showLicensePage(
+      context: context,
+      applicationName: appName,
+      // ignore: avoid_redundant_argument_values
+      applicationVersion: KaitekiApp.versionName,
+      applicationLegalese: appLegalese,
     );
   }
 
