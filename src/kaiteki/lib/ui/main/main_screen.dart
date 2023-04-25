@@ -2,7 +2,6 @@ import "package:animations/animations.dart";
 import "package:breakpoint/breakpoint.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
@@ -36,6 +35,43 @@ import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/utils/extensions.dart";
 
+Widget _buildViewIcon(MainScreenViewType view) {
+  switch (view) {
+    case MainScreenViewType.stream:
+      return const Icon(Icons.view_stream_rounded);
+    case MainScreenViewType.deck:
+      return const Icon(Icons.view_column_rounded);
+    case MainScreenViewType.catalog:
+      return const Icon(Icons.view_module_rounded);
+    case MainScreenViewType.videos:
+      return const Icon(Icons.videocam_rounded);
+    case MainScreenViewType.fox:
+      return Builder(
+        builder: (context) {
+          return Text(
+            "🦊",
+            style: TextStyle(fontSize: IconTheme.of(context).size! * 0.8),
+          );
+        },
+      );
+  }
+}
+
+String _getViewDisplayName(MainScreenViewType view) {
+  switch (view) {
+    case MainScreenViewType.stream:
+      return "Stream";
+    case MainScreenViewType.deck:
+      return "Deck";
+    case MainScreenViewType.catalog:
+      return "Catalog";
+    case MainScreenViewType.videos:
+      return "Videos";
+    case MainScreenViewType.fox:
+      return "Fox";
+  }
+}
+
 class MainScreen extends ConsumerStatefulWidget {
   @visibleForTesting
   final TimelineKind? initialTimeline;
@@ -46,70 +82,18 @@ class MainScreen extends ConsumerStatefulWidget {
   ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
+enum MainScreenViewType { stream, deck, catalog, videos, fox }
+
 class _MainScreenState extends ConsumerState<MainScreen> {
   // Why does this exist? In order to refresh the timeline
   final _timelineKey = GlobalKey<TimelinePageState>();
-  List<MainScreenTab>? _tabs;
+  late List<MainScreenTab> _tabs;
   TabKind _currentTab = TabKind.home;
   MainScreenViewType _view = MainScreenViewType.stream;
 
   int get _currentIndex {
-    final index = _tabs!.indexWhere((tab) => tab.kind == _currentTab);
+    final index = _tabs.indexWhere((tab) => tab.kind == _currentTab);
     return index == -1 ? 0 : index;
-  }
-
-  List<MainScreenTab> getTabs(AppLocalizations l10n) {
-    final adapter = ref.watch(adapterProvider);
-    final supportsNotifications = adapter is NotificationSupport;
-    final supportsChats = adapter is ChatSupport;
-    final supportsBookmarks = adapter is BookmarkSupport;
-    return [
-      MainScreenTab(
-        kind: TabKind.home,
-        selectedIcon: Icons.home,
-        icon: Icons.home_outlined,
-        text: l10n.timelineTab,
-        fab: FloatingActionButtonData(
-          icon: Icons.edit_rounded,
-          tooltip: l10n.composeDialogTitle,
-          text: l10n.composeButtonLabel,
-          onTap: _onCompose,
-        ),
-        hideFabWhenDesktop: true,
-      ),
-      if (supportsNotifications)
-        MainScreenTab(
-          kind: TabKind.notifications,
-          selectedIcon: Icons.notifications_rounded,
-          icon: Icons.notifications_none,
-          text: l10n.notificationsTab,
-          fetchUnreadCount: _fetchNotificationCount,
-        ),
-      if (supportsChats)
-        MainScreenTab(
-          kind: TabKind.chats,
-          selectedIcon: Icons.forum,
-          icon: Icons.forum_outlined,
-          text: l10n.chatsTab,
-        ),
-      if (supportsBookmarks)
-        MainScreenTab(
-          kind: TabKind.bookmarks,
-          selectedIcon: Icons.bookmark_rounded,
-          icon: Icons.bookmark_border_rounded,
-          text: l10n.bookmarksTab,
-        ),
-    ];
-  }
-
-  int? _fetchNotificationCount() {
-    final account = ref.watch(accountProvider);
-
-    if (account == null) return null;
-    if (account.adapter is! NotificationSupport) return null;
-
-    final notifications = ref.watch(notificationServiceProvider(account.key));
-    return notifications.valueOrNull?.where((n) => n.unread != false).length;
   }
 
   Color? get _outsideColor {
@@ -118,28 +102,26 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return null;
   }
 
-  Widget _buildTimeline(BuildContext context) {
-    switch (_view) {
-      case MainScreenViewType.stream:
-        return TimelinePage(
-          key: _timelineKey,
-          initialTimeline: widget.initialTimeline,
-        );
-      case MainScreenViewType.deck:
-        return const DeckMainScreenView();
-      case MainScreenViewType.catalog:
-        return const CatalogMainScreenView();
-      case MainScreenViewType.videos:
-        return const VideoMainScreenView();
-      case MainScreenViewType.fox:
-        return const FoxMainScreenView();
+  VoidCallback? get _refresh {
+    switch (_currentTab) {
+      case TabKind.home:
+        return _timelineKey.currentState?.refresh;
+
+      case TabKind.notifications:
+        final account = ref.watch(accountProvider)!.key;
+        return ref.read(notificationServiceProvider(account).notifier).refresh;
+
+      default:
+        return null;
     }
   }
 
-  void _onCompose() => context.pushNamed(
-        "compose",
-        params: ref.accountRouterParams,
-      );
+  VoidCallback? get _search {
+    if (ref.watch(adapterProvider) is! SearchSupport) return null;
+    return () {
+      context.pushNamed("search", params: ref.accountRouterParams);
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +136,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       ),
     );
 
-    final l10n = context.l10n;
-    _tabs = getTabs(l10n);
+    _tabs = getTabs().map((e) => buildTabItem(context, e)).toList();
 
     final timeline = _buildTimeline(context);
 
@@ -167,21 +148,21 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           child: Material(child: child),
         );
       },
-      child: [
-        timeline,
-        const NotificationsPage(),
-        const ChatsPage(),
-        const BookmarksPage(),
-      ][_currentIndex],
+      child: {
+        TabKind.home: timeline,
+        TabKind.notifications: const NotificationsPage(),
+        TabKind.chats: const ChatsPage(),
+        TabKind.bookmarks: const BookmarksPage(),
+      }[_currentTab],
     );
 
     return FocusableActionDetector(
       autofocus: true,
       actions: {
         NewPostIntent: CallbackAction(onInvoke: (_) => _onCompose()),
-        // SearchIntent: CallbackAction(
-        //   onInvoke: (_) => _search?.call(),
-        // ),
+        SearchIntent: CallbackAction(
+          onInvoke: (_) => _search?.call(),
+        ),
         RefreshIntent: CallbackAction(onInvoke: (_) => _refresh?.call()),
         GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
           onInvoke: _changeLocation,
@@ -193,11 +174,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: BreakpointBuilder(
         builder: (_, breakpoint) {
           final isMobile = breakpoint.window == WindowSize.xsmall;
-          final tab = _tabs![_currentIndex];
+          final tab = _tabs[_currentIndex];
           final fab = tab.fab;
 
           final hideNavigation = _view == MainScreenViewType.fox;
-          final hideBottomBar = _tabs!.length < 2 ||
+          final hideBottomBar = _tabs.length < 2 ||
               _view == MainScreenViewType.videos ||
               hideNavigation;
           final hideFab = fab == null || _view == MainScreenViewType.videos;
@@ -218,7 +199,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
           if (isMobile && !hideBottomBar) {
             bottomNavigationBar = MainScreenNavigationBar(
-              tabs: _tabs!,
+              tabs: _tabs,
               currentIndex: _currentIndex,
               onChangeIndex: _changeIndex,
             );
@@ -248,6 +229,48 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         },
       ),
     );
+  }
+
+  MainScreenTab buildTabItem(BuildContext context, TabKind kind) {
+    final l10n = context.l10n;
+
+    switch (kind) {
+      case TabKind.home:
+        return MainScreenTab(
+          TabKind.home,
+          fab: FloatingActionButtonData(
+            icon: Icons.edit_rounded,
+            tooltip: l10n.composeDialogTitle,
+            text: l10n.composeButtonLabel,
+            onTap: _onCompose,
+          ),
+          hideFabWhenDesktop: true,
+        );
+      case TabKind.notifications:
+        return MainScreenTab(
+          TabKind.notifications,
+          fetchUnreadCount: _fetchNotificationCount,
+        );
+      case TabKind.chats:
+        return const MainScreenTab(TabKind.chats);
+      case TabKind.bookmarks:
+        return const MainScreenTab(TabKind.bookmarks);
+    }
+  }
+
+  Set<TabKind> getTabs() {
+    final adapter = ref.watch(adapterProvider);
+    final supportsNotifications = adapter is NotificationSupport;
+    final supportsChats =
+        adapter.safeCast<ChatSupport>()?.capabilities.supportsChat ?? false;
+    final supportsBookmarks = adapter is BookmarkSupport;
+
+    return {
+      TabKind.home,
+      if (supportsNotifications) TabKind.notifications,
+      if (supportsChats) TabKind.chats,
+      if (supportsBookmarks) TabKind.bookmarks,
+    };
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, bool immerse) {
@@ -294,43 +317,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       actions: _buildAppBarActions(context),
       scrolledUnderElevation: immerse ? elevation : null,
     );
-  }
-
-  static Widget _buildViewIcon(MainScreenViewType view) {
-    switch (view) {
-      case MainScreenViewType.stream:
-        return const Icon(Icons.view_stream_rounded);
-      case MainScreenViewType.deck:
-        return const Icon(Icons.view_column_rounded);
-      case MainScreenViewType.catalog:
-        return const Icon(Icons.view_module_rounded);
-      case MainScreenViewType.videos:
-        return const Icon(Icons.videocam_rounded);
-      case MainScreenViewType.fox:
-        return Builder(
-          builder: (context) {
-            return Text(
-              "🦊",
-              style: TextStyle(fontSize: IconTheme.of(context).size! * 0.8),
-            );
-          },
-        );
-    }
-  }
-
-  static String _getViewDisplayName(MainScreenViewType view) {
-    switch (view) {
-      case MainScreenViewType.stream:
-        return "Stream";
-      case MainScreenViewType.deck:
-        return "Deck";
-      case MainScreenViewType.catalog:
-        return "Catalog";
-      case MainScreenViewType.videos:
-        return "Videos";
-      case MainScreenViewType.fox:
-        return "Fox";
-    }
   }
 
   List<Widget> _buildAppBarActions(BuildContext context) {
@@ -386,23 +372,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ];
   }
 
-  Widget _buildNavigationRail(bool extend) {
-    return MainScreenNavigationRail(
-      tabs: _tabs!,
-      currentIndex: _currentIndex,
-      onChangeIndex: _changeIndex,
-      extended: extend,
-      backgroundColor: _outsideColor,
-    );
-  }
-
   Widget _buildDesktopView(
     NavigationVisibility navigationRail,
     bool immerse,
     Widget child,
   ) {
     final m3 = Theme.of(context).useMaterial3;
-    final tabCount = _tabs?.length ?? 0;
+    final tabCount = _tabs.length ?? 0;
     return Row(
       children: [
         if (navigationRail != NavigationVisibility.hide && tabCount >= 2) ...[
@@ -413,47 +389,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       ],
     );
   }
-
-  VoidCallback? get _search {
-    if (ref.watch(adapterProvider) is! SearchSupport) return null;
-    return () {
-      context.pushNamed("search", params: ref.accountRouterParams);
-    };
-  }
-
-  VoidCallback? get _refresh {
-    switch (_currentTab) {
-      case TabKind.home:
-        return _timelineKey.currentState?.refresh;
-
-      case TabKind.notifications:
-        final account = ref.watch(accountProvider)!.key;
-        return ref.read(notificationServiceProvider(account).notifier).refresh;
-
-      default:
-        return null;
-    }
-  }
-
-  Future<void> _showKeyboardShortcuts() async {
-    await showDialog(
-      context: context,
-      builder: (_) => const KeyboardShortcutsDialog(),
-    );
-  }
-
-  static Widget _roundWidget(BuildContext context, Widget widget) {
-    if (!Theme.of(context).useMaterial3) return widget;
-
-    const radius = Radius.circular(16.0);
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(topLeft: radius),
-      child: widget,
-    );
-  }
-
-  void _changeIndex(int index) => _changePage(_tabs![index].kind);
-  void _changePage(TabKind tab) => setState(() => _currentTab = tab);
 
   Widget? _buildFab(
     BuildContext context,
@@ -475,6 +410,36 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
+  Widget _buildNavigationRail(bool extend) {
+    return MainScreenNavigationRail(
+      tabs: _tabs,
+      currentIndex: _currentIndex,
+      onChangeIndex: _changeIndex,
+      extended: extend,
+      backgroundColor: _outsideColor,
+    );
+  }
+
+  Widget _buildTimeline(BuildContext context) {
+    switch (_view) {
+      case MainScreenViewType.stream:
+        return TimelinePage(
+          key: _timelineKey,
+          initialTimeline: widget.initialTimeline,
+        );
+      case MainScreenViewType.deck:
+        return const DeckMainScreenView();
+      case MainScreenViewType.catalog:
+        return const CatalogMainScreenView();
+      case MainScreenViewType.videos:
+        return const VideoMainScreenView();
+      case MainScreenViewType.fox:
+        return const FoxMainScreenView();
+    }
+  }
+
+  void _changeIndex(int index) => _changePage(_tabs[index].kind);
+
   dynamic _changeLocation(GoToAppLocationIntent i) {
     switch (i.location) {
       case AppLocation.home:
@@ -492,6 +457,38 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
     return null;
   }
-}
 
-enum MainScreenViewType { stream, deck, catalog, videos, fox }
+  void _changePage(TabKind tab) => setState(() => _currentTab = tab);
+
+  int? _fetchNotificationCount() {
+    final account = ref.watch(accountProvider);
+
+    if (account == null) return null;
+    if (account.adapter is! NotificationSupport) return null;
+
+    final notifications = ref.watch(notificationServiceProvider(account.key));
+    return notifications.valueOrNull?.where((n) => n.unread != false).length;
+  }
+
+  void _onCompose() => context.pushNamed(
+        "compose",
+        params: ref.accountRouterParams,
+      );
+
+  Future<void> _showKeyboardShortcuts() async {
+    await showDialog(
+      context: context,
+      builder: (_) => const KeyboardShortcutsDialog(),
+    );
+  }
+
+  static Widget _roundWidget(BuildContext context, Widget widget) {
+    if (!Theme.of(context).useMaterial3) return widget;
+
+    const radius = Radius.circular(16.0);
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(topLeft: radius),
+      child: widget,
+    );
+  }
+}

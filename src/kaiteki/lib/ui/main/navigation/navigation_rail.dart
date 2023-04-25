@@ -22,15 +22,15 @@ class MainScreenNavigationRail extends ConsumerWidget {
     this.backgroundColor,
   });
 
-  List<NavigationRailDestination> get _destinations {
+  List<NavigationRailDestination> _destinations(BuildContext context) {
     final destinations = <NavigationRailDestination>[];
     for (final tab in tabs) {
       final unreadCount = tab.fetchUnreadCount?.call();
       destinations.add(
         NavigationRailDestination(
-          icon: Icon(tab.icon).wrapWithLargeBadge(unreadCount),
-          selectedIcon: Icon(tab.selectedIcon).wrapWithLargeBadge(unreadCount),
-          label: Text(tab.text),
+          icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
+          selectedIcon: Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          label: Text(tab.kind.getLabel(context)),
         ),
       );
     }
@@ -58,7 +58,7 @@ class MainScreenNavigationRail extends ConsumerWidget {
           context.pushNamed("compose", params: ref.accountRouterParams);
         },
       ),
-      destinations: _destinations,
+      destinations: _destinations(context),
     );
   }
 }
