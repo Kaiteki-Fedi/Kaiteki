@@ -76,9 +76,7 @@ class _FindUserDialogState extends ConsumerState<FindUserDialog> {
               for (final user in results)
                 UserListTile(
                   user: user,
-                  onPressed: () {
-                    Navigator.of(context).pop(user);
-                  },
+                  onPressed: () => Navigator.of(context).pop(user),
                 ),
             ],
           );

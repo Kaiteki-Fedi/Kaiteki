@@ -5,6 +5,7 @@ import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:kaiteki/utils/extensions.dart";
 import "package:tuple/tuple.dart";
 
 class UserSliver extends ConsumerStatefulWidget {
@@ -99,7 +100,10 @@ class UserSliverState extends ConsumerState<UserSliver> {
       pagingController: _controller,
       builderDelegate: PagedChildBuilderDelegate<User>(
         itemBuilder: (context, item, index) {
-          return UserListTile(user: item);
+          return UserListTile(
+            user: item,
+            onPressed: () => context.showUser(item, ref),
+          );
         },
         animateTransitions: true,
         firstPageErrorIndicatorBuilder: (context) {

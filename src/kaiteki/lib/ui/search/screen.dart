@@ -6,6 +6,7 @@ import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:kaiteki/utils/extensions/build_context.dart";
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -114,7 +115,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           },
                           itemBuilder: (context, i) {
                             final user = results.users[i];
-                            return UserListTile(user: user);
+                            return UserListTile(
+                              user: user,
+                              onPressed: () => context.showUser(user, ref),
+                            );
                           },
                           itemCount: results.users.length,
                         ),

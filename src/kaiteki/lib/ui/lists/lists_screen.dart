@@ -328,6 +328,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
                   final user = snapshot.data![index];
                   return UserListTile(
                     user: user,
+                    onPressed: () => context.showUser(user, ref),
                     trailing: [
                       IconButton(
                         splashRadius: 24,
