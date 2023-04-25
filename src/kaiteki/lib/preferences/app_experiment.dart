@@ -1,3 +1,6 @@
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
+
 enum AppExperiment {
   remoteUserFetching(
     "Fetch users from remote instances",
@@ -22,4 +25,11 @@ enum AppExperiment {
   final String? description;
 
   const AppExperiment(this.displayName, [this.description]);
+
+  Provider<bool> get provider => experimentsProvider(this);
 }
+
+final experimentsProvider = Provider.family<bool, AppExperiment>(
+  (ref, e) => ref.watch(experiments.select((v) => v.value.contains(e))),
+  dependencies: [experiments],
+);

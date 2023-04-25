@@ -27,8 +27,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final experiments = ref.watch(preferences.experiments).value;
-    if (!experiments.contains(AppExperiment.chats)) {
+    if (!ref.watch(AppExperiment.chats.provider)) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -41,7 +40,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
             ElevatedButton(
               onPressed: () {
                 final notifier = ref.read(preferences.experiments);
-                notifier.value = notifier.value..add(AppExperiment.chats);
+                notifier.value = [...notifier.value, AppExperiment.chats];
               },
               child: const Text("Enable Experiment"),
             ),
