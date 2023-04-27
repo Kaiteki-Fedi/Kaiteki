@@ -378,7 +378,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     Widget child,
   ) {
     final m3 = Theme.of(context).useMaterial3;
-    final tabCount = _tabs.length ?? 0;
+    final tabCount = _tabs.length;
     return Row(
       children: [
         if (navigationRail != NavigationVisibility.hide && tabCount >= 2) ...[
