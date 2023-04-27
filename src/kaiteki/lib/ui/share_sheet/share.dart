@@ -16,9 +16,7 @@ Future<void> share(BuildContext context, Object content) async {
   await showModalBottomSheet(
     context: context,
     useRootNavigator: true,
-    builder: (context) {
-      return ShareSheet(content);
-    },
+    builder: (context) => ShareSheet(content),
   );
 }
 

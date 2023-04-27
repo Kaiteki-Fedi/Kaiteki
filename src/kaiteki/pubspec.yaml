@@ -22,6 +22,7 @@ dependencies:
   anchor_scroll_controller: ^0.4.1
   animations: ^2.0.0
   async: ^2.9.0
+  autoscale_tabbarview: ^1.0.2
   breakpoint: ^1.2.0
   chewie: ^1.0.0
   collection: ^1.16.0
@@ -37,7 +38,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_blurhash: ^0.7.0
-  flutter_local_notifications: ^13.0.0
+  flutter_local_notifications: ^14.0.0
   flutter_localizations:
     sdk: flutter
   flutter_native_splash: ^2.2.8
@@ -60,7 +61,7 @@ dependencies:
       url: https://github.com/Kaiteki-Fedi/kaiteki_material.git
   logger: ^1.0.0
   markdown: ^7.0.1
-  material_color_utilities: ^0.2.0
+  material_color_utilities: ^0.3.0
   mdi: ^5.0.0-nullsafety.0
   mek_data_class: ^1.0.0
   meta: ^1.8.0
@@ -105,11 +106,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - assets/icons/mastodon.png
-    - assets/icons/pleroma.png
-    - assets/icons/misskey.png
-    - assets/icons/husky.png
-    - assets/icons/twitter.png
+    - assets/icons/
     - assets/icon.png
     - assets/credits.json
     - assets/instances.json

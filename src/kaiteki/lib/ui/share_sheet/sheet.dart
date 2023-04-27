@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -18,21 +19,27 @@ class ShareSheet extends StatelessWidget {
         final text = getShareText(content);
         final url = getShareUrl(content);
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              dragHandleInset,
               Text(
                 "Share",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 16.0,
+                ),
                 child: Row(
                   children: [
-                    Expanded(child: buildPreview(context)),
+                    buildPreviewIcon(context),
+                    const SizedBox(width: 8),
+                    Expanded(child: buildPreviewBody(context)),
                     const SizedBox(width: 8),
                     IconButton(
                       onPressed: () async {
@@ -82,6 +89,7 @@ class ShareSheet extends StatelessWidget {
                   );
                 },
               ),
+              const SizedBox(height: 8),
             ],
           ),
         );
@@ -108,11 +116,31 @@ class ShareSheet extends StatelessWidget {
     );
   }
 
-  Widget buildPreview(BuildContext context) {
+  Widget buildPreviewBody(BuildContext context) {
     final text = getShareText(content);
     return Text(
       text,
       maxLines: 2,
     );
+  }
+
+  Widget buildPreviewIcon(BuildContext context) {
+    if (content is Uri) {
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: SizedBox.square(
+          dimension: 48,
+          child: Icon(
+            Icons.link_rounded,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 }

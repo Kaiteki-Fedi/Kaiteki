@@ -3,6 +3,7 @@ import "dart:math";
 import "package:async/async.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart" hide Visibility;
+import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" show bottomSheetConstraints;
 import "package:kaiteki/di.dart";
@@ -17,6 +18,7 @@ import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/missing_description.dart";
+import "package:kaiteki/ui/shared/dialogs/post_too_long_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/enum_icon_button.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
@@ -209,6 +211,8 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
                         minLines: widget.expands ? null : 6,
                         maxLines: widget.expands ? null : 8,
                         controller: _bodyController,
+                        maxLength: adapter.capabilities.maxPostContentLength,
+                        maxLengthEnforcement: MaxLengthEnforcement.none,
                       ),
                     ),
                   ],
@@ -359,6 +363,15 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
     final draft = postDraft;
     final draftAttachments = attachments;
 
+    final maxPostContentLength = adapter.capabilities.maxPostContentLength;
+    if (maxPostContentLength != null &&
+        draft.content.length >= maxPostContentLength) {
+      await showDialog(
+        context: context,
+        builder: (_) => PostTooLongDialog(characterLimit: maxPostContentLength),
+      );
+      return;
+    }
     if (await _checkForUndescribedAttachments(draftAttachments)) return;
 
     Future<Post> submitPost() async {

@@ -10,6 +10,11 @@ const centeredCircularProgressIndicator = Center(
   child: CircularProgressIndicator(),
 );
 
+/// A [SizedBox] with a height of 26, which is the default height of a
+/// bottom sheet drag handle. This is used to inset the content of a
+/// bottom sheet in case the drag handle is not used.
+const dragHandleInset = SizedBox(height: 26);
+
 Future<void> showTextAlert(BuildContext context, String title, String body) {
   return showDialog(
     builder: (context) => AlertDialog(

@@ -27,6 +27,9 @@ class UserDisplayNameWidget extends ConsumerWidget {
         Text.rich(
           user.renderDisplayName(context, ref),
           style: primaryTextStyle,
+          maxLines: 1,
+          overflow: TextOverflow.fade,
+          softWrap: false,
         )
       else
         Text(

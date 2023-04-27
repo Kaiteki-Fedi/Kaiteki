@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/ui/shared/popup_menu_wrapper.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
 
 class InteractionBar extends StatefulWidget {
@@ -49,7 +50,8 @@ class InteractionBarState extends State<InteractionBar> {
 
   @override
   Widget build(BuildContext context) {
-    final buttons = [
+    // ignore: omit_local_variable_types
+    List<Widget> buttons = <Widget>[
       CountButton(
         count: widget.metrics.replyCount,
         focusNode: FocusNode(skipTraversal: true),
@@ -58,16 +60,16 @@ class InteractionBarState extends State<InteractionBar> {
         showNumber: widget.showLabels,
       ),
       if (widget.repeated != null)
-        CountButton(
-          active: widget.repeated ?? false,
-          activeColor: Theme.of(context).ktkColors?.repeatColor,
-          count: widget.metrics.repeatCount,
-          focusNode: FocusNode(skipTraversal: true),
-          icon: const Icon(Icons.repeat_rounded),
-          onTap: widget.onRepeat,
-          onLongPress: widget.onShowRepeatees,
-          showNumber: widget.showLabels,
-        ),
+        if (true)
+          _buildRepeatButton(context, widget.onRepeat)
+        else
+          // Ja ich weiß
+          // ignore: dead_code
+          PopupMenuWrapper(
+            itemBuilder: buildRepeatActions,
+            offset: const Offset(-8, -8),
+            builder: _buildRepeatButton,
+          ),
       if (widget.favorited != null)
         CountButton(
           active: widget.favorited ?? false,
@@ -87,14 +89,23 @@ class InteractionBarState extends State<InteractionBar> {
           onTap: widget.onReact,
           showNumber: widget.showLabels,
         ),
+    ];
+
+    if (!widget.spread) {
+      buttons = buttons.map<Widget>((e) => Flexible(child: e)).toList();
+    }
+
+    buttons.add(
       PopupMenuButton(
         key: _popupMenuButtonKey,
-        icon: const Icon(Icons.more_horiz),
+        icon: Icon(
+          Icons.more_horiz,
+          color: Theme.of(context).colorScheme.outline,
+        ),
         itemBuilder: widget.buildActions,
         splashRadius: 24,
-        color: Theme.of(context).colorScheme.outline,
       ),
-    ];
+    );
 
     return widget.spread
         ? Row(
@@ -103,15 +114,56 @@ class InteractionBarState extends State<InteractionBar> {
           )
         : ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
-            child: Row(
-              children: [
-                for (final button in buttons)
-                  if (button is CountButton)
-                    Flexible(child: button)
-                  else
-                    button,
-              ],
-            ),
+            child: Row(children: buttons),
           );
+  }
+
+  CountButton _buildRepeatButton(BuildContext context, VoidCallback? onTap) {
+    return CountButton(
+      active: widget.repeated ?? false,
+      activeColor: Theme.of(context).ktkColors?.repeatColor,
+      count: widget.metrics.repeatCount,
+      focusNode: FocusNode(skipTraversal: true),
+      icon: const Icon(Icons.repeat_rounded),
+      onTap: onTap,
+      onLongPress: widget.onShowRepeatees,
+      showNumber: widget.showLabels,
+    );
+  }
+
+  List<PopupMenuEntry> buildRepeatActions(BuildContext context) {
+    return [
+      PopupMenuItem(
+        onTap: widget.onRepeat,
+        child: const ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(Icons.repeat_rounded),
+          title: Text("Repeat"),
+        ),
+      ),
+      // PopupMenuItem(
+      //   onTap: widget.onRepeat,
+      //   child: const ListTile(
+      //     contentPadding: EdgeInsets.zero,
+      //     leading: Icon(Icons.format_quote_rounded),
+      //     title: Text("Quote"),
+      //   ),
+      // ),
+      // PopupMenuItem(
+      //   child: const ListTile(
+      //     contentPadding: EdgeInsets.zero,
+      //     leading: Icon(Icons.forward_rounded),
+      //     title: Text("Repost"),
+      //   ),
+      //   onTap: () async {
+      //     final account = await showDialog(
+      //       context: context,
+      //       builder: (_) => const ChooseAccountDialog(),
+      //     );
+//
+      //     await context.pushNamed("compose");
+      //   },
+      // ),
+    ];
   }
 }

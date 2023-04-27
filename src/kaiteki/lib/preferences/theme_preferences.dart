@@ -62,3 +62,18 @@ final useFullWidthAttachments = createSettingProvider<bool>(
   initialValue: false,
   provider: sharedPreferencesProvider,
 );
+
+final postReplyPreview = createEnumSettingProvider<PostReplyPreview>(
+  key: "postReplyPreview",
+  initialValue: PostReplyPreview.compact,
+  values: PostReplyPreview.values,
+  provider: sharedPreferencesProvider,
+);
+
+enum PostReplyPreview {
+  /// Show a preview of the post that is being replied to.
+  normal,
+
+  /// Only show the name of the user being replied to.
+  compact,
+}
