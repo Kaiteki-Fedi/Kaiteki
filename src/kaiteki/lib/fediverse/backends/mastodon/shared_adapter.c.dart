@@ -250,9 +250,10 @@ Instance toInstance(mastodon.Instance instance, String host) {
     name: instance.title,
     description: instance.description,
     backgroundUrl: instance.thumbnail.url,
-    administrator: instance.contact.account.nullTransform(
-      (e) => toUser(e, host),
+    administrators: instance.contact.account.nullTransform(
+      (e) => [toUser(e, host)],
     ),
+    rules: instance.rules.map((e) => e.text).toList(),
   );
 }
 

@@ -113,22 +113,23 @@ class PleromaAdapter //
       mascotUrl: instance.mascotUrl,
       backgroundUrl: background ?? instance.backgroundUrl,
       iconUrl: logo ?? instance.iconUrl,
-      administrator: instance.administrator,
+      administrators: instance.administrators,
+      moderators: instance.moderators,
       description: instance.description,
       postCount: instance.postCount,
       userCount: instance.userCount,
+      tosUrl: instance.tosUrl ??
+          Uri.https(
+            this.instance,
+            "/static/terms-of-service.html",
+          ),
     );
   }
 
-  Uri? ensureAbsolute(String? input, String host) {
+  Uri? ensureAbsolute(Uri? input, String host) {
     if (input == null) return null;
-
-    final uri = Uri.https(host);
-    final relative = Uri.parse(input);
-
-    if (!relative.isAbsolute) return uri.resolveUri(relative);
-
-    return relative;
+    if (!input.isAbsolute) return Uri.https(host).resolveUri(input);
+    return input;
   }
 
   @override

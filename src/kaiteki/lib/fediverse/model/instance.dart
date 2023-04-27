@@ -15,7 +15,11 @@ class Instance<T> extends AdaptedEntity<T> {
   /// How many users are registered on this instance;
   final int? userCount;
 
-  final User? administrator;
+  final List<User>? administrators;
+  final List<User>? moderators;
+
+  final List<String>? rules;
+  final Uri? tosUrl;
 
   const Instance({
     super.source,
@@ -26,6 +30,9 @@ class Instance<T> extends AdaptedEntity<T> {
     this.postCount,
     this.userCount,
     this.description,
-    this.administrator,
+    this.administrators,
+    this.moderators,
+    this.rules,
+    this.tosUrl,
   });
 }
