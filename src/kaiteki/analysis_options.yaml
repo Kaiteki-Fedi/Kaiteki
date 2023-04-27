@@ -1,6 +1,8 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  plugins:
+    - custom_lint
   exclude:
     - '**.g.dart'
   errors:
@@ -11,6 +13,11 @@ analyzer:
     todo: ignore
     fixme: ignore
     hack: ignore
+
+custom_lint:
+  rules:
+    # Unreliable, triggers on variables and methods returning expected Widget type.
+    - missing_provider_scope: false
 
 linter:
   rules:
