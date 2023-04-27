@@ -78,16 +78,18 @@ class _AttachmentInspectionScreenState
       ),
     );
 
+    final hasDescription = attachment.description?.isNotEmpty == true;
     return Scaffold(
       backgroundColor: background,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: background,
+        foregroundColor: Colors.white,
         title: buildTitle(context),
         actions: [
           IconButton(
             icon: const Icon(Icons.subtitles_rounded),
-            onPressed: attachment.description == null ? null : _showAltText,
+            onPressed: hasDescription ? _showAltText : null,
             tooltip: context.l10n.showAltTextTooltip,
           ),
           IconButton(
@@ -259,9 +261,7 @@ class _AttachmentInspectionScreenState
       dialogTitle: l10n.attachmentDownloadDialogTitle,
     );
 
-    if (filePath == null) {
-      return;
-    }
+    if (filePath == null) return;
 
     final request = http.Request("GET", uri);
     final response = await request.send();

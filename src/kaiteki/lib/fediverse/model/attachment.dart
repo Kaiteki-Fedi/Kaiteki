@@ -3,9 +3,10 @@ import "package:kaiteki/fediverse/model/adapted_entity.dart";
 class Attachment<T> extends AdaptedEntity<T> {
   final Uri? previewUrl;
   final Uri url;
+  final Uri? externalUrl;
   final String? description;
   final AttachmentType type;
-  final bool isSensitive;
+  final bool? isSensitive;
   final String? blurHash;
 
   Attachment({
@@ -14,8 +15,9 @@ class Attachment<T> extends AdaptedEntity<T> {
     required this.url,
     this.description,
     this.type = AttachmentType.file,
-    this.isSensitive = false,
+    this.isSensitive,
     this.blurHash,
+    this.externalUrl,
   });
 
   Attachment copyWith({
