@@ -20,6 +20,10 @@ enum AppExperiment {
     "Enable the feedback screen; currently unfunctional",
   ),
   chats("Chats"),
+  instanceVetting(
+    "Instance vetting",
+    "See the information of an instance at a glance",
+  ),
   userSignatures(
     "User signatures",
     "Show the user's bio under their posts",
