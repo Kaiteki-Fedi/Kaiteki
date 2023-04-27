@@ -454,8 +454,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       case AppLocation.settings:
         context.push("/settings");
         break;
+      default:
+        return null;
     }
-    return null;
   }
 
   void _changePage(TabKind tab) => setState(() => _currentTab = tab);

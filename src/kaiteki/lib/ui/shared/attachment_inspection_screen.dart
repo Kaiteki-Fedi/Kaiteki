@@ -242,13 +242,13 @@ class _AttachmentInspectionScreenState
             ),
           ),
         );
+      default:
+        throw ArgumentError.value(
+          attachment.type,
+          "attachment",
+          "Can't build widget for specified attachment type",
+        );
     }
-
-    throw ArgumentError.value(
-      attachment.type,
-      "attachment",
-      "Can't build widget for specified attachment type",
-    );
   }
 
   Future<void> downloadAttachment(BuildContext context) async {

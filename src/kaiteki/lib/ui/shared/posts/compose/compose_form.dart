@@ -299,6 +299,8 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
         } else {
           return PostWidget(snapshot.data!, showActions: false);
         }
+
+      default:
     }
 
     return const Padding(
