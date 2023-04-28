@@ -9,7 +9,6 @@ import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
-import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/routing/notifier.dart";
 import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
@@ -218,8 +217,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 // parentNavigatorKey: _authNavigatorKey,
                 path: "users/:id",
                 builder: (context, state) {
-                  final experiments = ref.read(preferences.experiments).value;
-                  if (experiments.contains(AppExperiment.newUserScreen)) {
+                  if (ref.read(AppExperiment.newUserScreen.provider)) {
                     return UserScreen(id: state.params["id"]!);
                   }
 

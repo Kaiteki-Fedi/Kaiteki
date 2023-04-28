@@ -1,5 +1,8 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/exceptions/http_exception.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 
@@ -24,11 +27,21 @@ class ErrorLandingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final error = this.error;
     if (error is UnimplementedError) {
       return IconLandingWidget(
         icon: const Icon(Icons.assignment_late_rounded),
         text: Text(context.l10n.niy),
       );
+    }
+
+    if (error is HttpException) {
+      if (error.statusCode == HttpStatus.unauthorized) {
+        return const IconLandingWidget(
+          icon: Icon(Icons.lock_rounded),
+          text: Text("Unauthorized"),
+        );
+      }
     }
 
     return Column(

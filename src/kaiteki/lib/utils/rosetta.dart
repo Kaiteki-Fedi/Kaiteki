@@ -20,7 +20,7 @@ class Rosetta<Left, Right> {
 
   Right getRight(Left left) {
     final right = tryGetRight(left);
-    if (right == null) throw MissingRosettaValueException(left, Left);
+    if (right == null) throw MissingRosettaValueException(left, Right);
     return right;
   }
 

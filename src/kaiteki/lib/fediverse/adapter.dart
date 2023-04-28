@@ -23,6 +23,7 @@ abstract class DecentralizedBackendAdapter extends BackendAdapter {
 
 abstract class BackendAdapter {
   AdapterCapabilities get capabilities;
+  ApiType get type;
 
   /// Retrieves the profile of the currently authenticated user.
   Future<User> getMyself();
@@ -101,8 +102,4 @@ abstract class BackendAdapter {
   });
 
   Future<User> lookupUser(String username, [String? host]);
-}
-
-extension FediverseAdapterExtensions on BackendAdapter {
-  ApiType get type => ApiType.values.firstWhere((t) => t.isType(this));
 }

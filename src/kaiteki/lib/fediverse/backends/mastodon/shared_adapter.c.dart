@@ -37,6 +37,7 @@ final pleromaFormattingRosetta = Rosetta(const {
   "text/markdown": Formatting.markdown,
   "text/html": Formatting.html,
   "text/bbcode": Formatting.bbCode,
+  "text/x.misskeymarkdown": Formatting.misskeyMarkdown,
 });
 
 Iterable<Reaction> _statusReactions(mastodon.Status source, String localHost) {
@@ -55,7 +56,7 @@ Post toPost(mastodon.Status source, String localHost) {
     subject: source.spoilerText,
     author: toUser(source.account, localHost),
     repeatOf: source.reblog.nullTransform((r) => toPost(r, localHost)),
-    emojis: source.emojis.map(toEmoji).toList(),
+    emojis: source.emojis.map((e) => toEmoji(e, localHost)).toList(),
     attachments: source.mediaAttachments
         .map((a) => toAttachment(a, status: source))
         .toList(),
@@ -98,7 +99,7 @@ Poll toPoll(mastodon.Poll poll) {
   return Poll(
     id: poll.id,
     hasEnded: poll.expired,
-    endedAt: poll.expiresAt!,
+    endedAt: poll.expiresAt ?? DateTime.now(),
     source: poll,
     options: poll.options
         .map(
@@ -145,7 +146,11 @@ Notification toNotification(
 
 Reaction toReaction(mastodon.Reaction reaction, String localHost) {
   final emoji = reaction.url != null
-      ? CustomEmoji.parse(reaction.name, Uri.parse(reaction.url ?? ""))
+      ? CustomEmoji.parse(
+          reaction.name,
+          Uri.parse(reaction.url ?? ""),
+          localHost,
+        )
       : UnicodeEmoji(reaction.name);
 
   return Reaction(
@@ -189,11 +194,12 @@ Attachment toAttachment(
   );
 }
 
-CustomEmoji toEmoji(mastodon.Emoji emoji) {
+CustomEmoji toEmoji(mastodon.Emoji emoji, String localHost) {
   return CustomEmoji(
     url: Uri.parse(emoji.staticUrl),
     short: emoji.shortcode,
     aliases: emoji.tags?.toList(),
+    instance: localHost,
   );
 }
 
@@ -207,7 +213,7 @@ User toUser(mastodon.Account source, String localHost) {
     joinDate: source.createdAt,
     id: source.id,
     description: source.note,
-    emojis: source.emojis.map(toEmoji).toList(),
+    emojis: source.emojis.map((e) => toEmoji(e, localHost)).toList(),
     followerCount: source.followersCount,
     followingCount: source.followingCount,
     postCount: source.statusesCount,
@@ -238,11 +244,30 @@ String? _getHost(String acct) {
   return null;
 }
 
-Instance toInstance(mastodon.Instance instance) {
+Instance toInstance(mastodon.Instance instance, String host) {
   return Instance(
     source: instance,
     name: instance.title,
-    backgroundUrl: instance.thumbnail,
+    description: instance.description,
+    backgroundUrl: instance.thumbnail.url,
+    administrators: instance.contact.account.nullTransform(
+      (e) => [toUser(e, host)],
+    ),
+    rules: instance.rules.map((e) => e.text).toList(),
+  );
+}
+
+Instance toInstanceFromV1(mastodon_v1.Instance instance, String host) {
+  return Instance(
+    source: instance,
+    name: instance.title,
+    description: instance.description,
+    backgroundUrl: instance.thumbnail.nullTransform(Uri.parse),
+    postCount: instance.stats.statusCount,
+    userCount: instance.stats.userCount,
+    // administrator: instance.contact.nullTransform(
+    //   (e) => toUser(e, host),
+    // ),
   );
 }
 

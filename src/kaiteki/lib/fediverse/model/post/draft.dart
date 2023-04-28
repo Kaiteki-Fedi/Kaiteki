@@ -22,6 +22,26 @@ class PostDraft {
     this.attachments = const [],
     this.language,
   });
+
+  PostDraft copyWith({
+    subject,
+    content,
+    visibility,
+    formatting,
+    replyTo,
+    attachments,
+    language,
+  }) {
+    return PostDraft(
+      content: content ?? this.content,
+      visibility: visibility ?? this.visibility,
+      formatting: formatting ?? this.formatting,
+      subject: subject ?? this.subject,
+      replyTo: replyTo ?? this.replyTo,
+      attachments: attachments ?? this.attachments,
+      language: language ?? this.language,
+    );
+  }
 }
 
 class AttachmentDraft {

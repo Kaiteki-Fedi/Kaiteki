@@ -7,9 +7,10 @@ void main() {
   late PleromaClient client;
   setUpAll(() => client = PleromaClient("lain.com"));
   test("fetch instance", () async {
-    final instance = await client.getInstance();
+    final instance = await client.getInstanceV1();
     log(
-      "We are testing on ${instance.uri} (${instance.title}), running Pleroma ${instance.version}.",
+      "We are testing on ${instance.uri} (${instance.title}), running Pleroma "
+      "${instance.version}.",
     );
   });
   test("fetch user profile", () async {

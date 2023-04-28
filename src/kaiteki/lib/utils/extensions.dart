@@ -205,7 +205,7 @@ extension UriExtensions on Uri {
 }
 
 extension ListExtensions<T> on List<T> {
-  List<T> joinNonString(T separator) {
+  List<T> joinWithValue(T separator) {
     if (length <= 1) return this;
 
     return List<T>.generate(

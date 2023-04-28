@@ -1,3 +1,4 @@
+import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/backends/mastodon/client.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
 import "package:kaiteki/fediverse/model/instance.dart";
@@ -7,11 +8,11 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
   @override
   final String instance;
 
-  static Future<MastodonAdapter> create(String instance) async {
-    return MastodonAdapter.custom(instance, MastodonClient(instance));
+  static Future<MastodonAdapter> create(ApiType type, String instance) async {
+    return MastodonAdapter.custom(type, instance, MastodonClient(instance));
   }
 
-  MastodonAdapter.custom(this.instance, super.client);
+  MastodonAdapter.custom(super.type, this.instance, super.client);
 
   @override
   Future<Instance?> probeInstance() async {
@@ -22,12 +23,12 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
       return null;
     }
 
-    return toInstance(instance);
+    return toInstance(instance, this.instance);
   }
 
   @override
   Future<Instance> getInstance() async {
-    return toInstance(await client.getInstance());
+    return toInstance(await client.getInstance(), instance);
   }
 
   @override

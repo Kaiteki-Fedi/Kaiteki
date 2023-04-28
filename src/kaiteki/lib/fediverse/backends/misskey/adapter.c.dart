@@ -22,7 +22,8 @@ final misskeyVisibilityRosetta = Rosetta<String, Visibility>(const {
 });
 
 Post toPost(misskey.Note source, String localHost) {
-  final mappedEmoji = source.emojis?.map<CustomEmoji>(toEmoji).toList();
+  final mappedEmoji =
+      source.emojis?.map<CustomEmoji>((e) => toEmoji(e, localHost)).toList();
   final sourceReply = source.reply;
   final sourceReplyId = source.replyId;
 
@@ -48,7 +49,7 @@ Post toPost(misskey.Note source, String localHost) {
       } else if (isCustomEmoji(mkr.key)) {
         final emojiName = mkr.key.substring(1, mkr.key.length - 1);
         final emojiUrl = buildEmojiUri(localHost, emojiName);
-        emoji = CustomEmoji(short: mkr.key, url: emojiUrl);
+        emoji = CustomEmoji(short: mkr.key, url: emojiUrl, instance: localHost);
       } else {
         emoji = UnicodeEmoji(mkr.key);
       }
@@ -117,11 +118,12 @@ Attachment toAttachment(misskey.DriveFile file) {
   );
 }
 
-CustomEmoji toEmoji(misskey.Emoji emoji) {
+CustomEmoji toEmoji(misskey.Emoji emoji, String localHost) {
   return CustomEmoji(
     short: emoji.name,
     url: Uri.parse(emoji.url),
     aliases: emoji.aliases,
+    instance: emoji.host ?? localHost,
   );
 }
 
@@ -134,7 +136,7 @@ User toUser(misskey.UserLite source, String localHost) {
     bannerBlurHash: detailedUser?.bannerBlurhash as String?,
     description: detailedUser?.description,
     displayName: source.name,
-    emojis: source.emojis?.map(toEmoji).toList(),
+    emojis: source.emojis?.map((e) => toEmoji(e, localHost)).toList(),
     host: source.host ?? localHost,
     id: source.id,
     joinDate: detailedUser?.createdAt,
@@ -184,11 +186,10 @@ Instance toInstance(misskey.Meta instance, String instanceUrl) {
 
   return Instance(
     name: instance.name,
-    iconUrl: instance.iconUrl
-        .nullTransform((e) => instanceUri.resolve(e).toString()),
-    mascotUrl: instance.mascotImageUrl
-        .nullTransform((e) => instanceUri.resolve(e).toString()),
-    backgroundUrl: instance.bannerUrl,
+    description: instance.description,
+    iconUrl: instance.iconUrl.nullTransform(instanceUri.resolve),
+    mascotUrl: instance.mascotImageUrl.nullTransform(instanceUri.resolve),
+    backgroundUrl: instance.bannerUrl.nullTransform(Uri.parse),
     source: instance,
   );
 }

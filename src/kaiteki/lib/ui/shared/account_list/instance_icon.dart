@@ -18,7 +18,7 @@ class InstanceIcon extends ConsumerWidget {
         final iconUrl = result.instance?.iconUrl;
         if (iconUrl == null) return _buildFallback();
         return Image.network(
-          iconUrl,
+          iconUrl.toString(),
           width: size,
           height: size,
           cacheHeight: size?.ceil(),

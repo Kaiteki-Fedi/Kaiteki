@@ -1,11 +1,12 @@
 import "package:collection/collection.dart";
 import "package:fediverse_objects/mastodon.dart" as mastodon;
-import "package:fediverse_objects/pleroma.dart" as pleroma;
+import "package:fediverse_objects/mastodon_v1.dart" as mastodon_v1;
 import "package:flutter/foundation.dart";
 import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/exceptions/authentication_exception.dart";
 import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/backends/mastodon/adapter.dart";
 import "package:kaiteki/fediverse/backends/mastodon/capabilities.dart";
 import "package:kaiteki/fediverse/backends/mastodon/client.dart";
@@ -51,7 +52,13 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         MuteSupport {
   final T client;
 
-  SharedMastodonAdapter(this.client);
+  @override
+  String get instance => client.instance;
+
+  @override
+  final ApiType type;
+
+  SharedMastodonAdapter(this.type, this.client);
 
   @override
   Future<User> getUserById(String id) async {
@@ -227,7 +234,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       spoilerText: draft.subject,
       inReplyToId: draft.replyTo?.id,
       // TODO(Craftplacer): change UI to allow setting entire post as senstive instead of just individual attachments
-      sensitive: draft.attachments.any((e) => e.isSensitive),
+      sensitive: draft.attachments.any((e) => e.isSensitive ?? false),
       contentType: pleromaFormattingRosetta.getLeft(draft.formatting),
       mediaIds: draft.attachments
           .map((a) => (a.source as mastodon.Attachment).id)
@@ -295,15 +302,14 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     final emojis = await client.getCustomEmojis();
     final categories = emojis.groupBy((emoji) => emoji.category);
 
-    return categories.entries.map((kv) {
-      return EmojiCategory(
-        kv.key,
-        kv.value
-            .map(toEmoji)
-            .map(EmojiCategoryItem.new)
-            .toList(growable: false),
-      );
-    }).toList();
+    return categories.entries
+        .map(
+          (kv) => EmojiCategory(
+            kv.key,
+            kv.value.map((e) => toEmoji(e, instance)),
+          ),
+        )
+        .toList();
   }
 
   @override
@@ -316,12 +322,6 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       ...context.descendants.map((s) => toPost(s, instance)),
     ];
   }
-
-  @override
-  Future<Instance> getInstance() => throw UnimplementedError();
-
-  @override
-  Future<Instance?> probeInstance() => throw UnimplementedError();
 
   @override
   Future<Post> getPostById(String id) async {

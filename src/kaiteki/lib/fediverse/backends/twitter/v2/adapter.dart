@@ -1,6 +1,5 @@
 import "dart:async";
 
-import "package:flutter/foundation.dart";
 import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/api_type.dart";
@@ -23,9 +22,7 @@ import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/utils/extensions.dart";
 
-const clientId = kDebugMode
-    ? "QTFFSnY5d2QwTkp3enliMHdfaXg6MTpjaQ"
-    : "Q2lkU2p0VERwOWxreXdxeFVsQm46MTpjaQ";
+const clientId = "Q2lkU2p0VERwOWxreXdxeFVsQm46MTpjaQ";
 
 class TwitterAdapter extends CentralizedBackendAdapter
     implements FavoriteSupport, BookmarkSupport, SearchSupport {
@@ -39,6 +36,9 @@ class TwitterAdapter extends CentralizedBackendAdapter
 
   @override
   AdapterCapabilities get capabilities => const TwitterCapabilities();
+
+  @override
+  ApiType get type => ApiType.twitter;
 
   @override
   Future<User?> followUser(String id) {
@@ -392,10 +392,13 @@ class TwitterAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  final instance = const Instance(
+  final instance = Instance(
     name: "Twitter",
-    backgroundUrl:
-        "https://abs.twimg.com/sticky/illustrations/lohp_en_1302x955.png",
+    backgroundUrl: Uri(
+      scheme: "https",
+      host: "abs.twimg.com",
+      path: "sticky/illustrations/lohp_en_1302x955.png",
+    ),
   );
 
   @override

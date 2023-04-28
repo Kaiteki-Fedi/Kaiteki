@@ -4,7 +4,6 @@ import "package:kaiteki/constants.dart" show appName;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/interfaces/list_support.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
-import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/utils/extensions.dart";
 
@@ -17,10 +16,7 @@ class MainScreenDrawer extends ConsumerWidget {
     final account = ref.watch(accountProvider)!;
     final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
     final adapter = ref.watch(adapterProvider);
-    final feedbackEnabled = ref
-        .watch(preferences.experiments)
-        .value
-        .contains(AppExperiment.feedback);
+    final feedbackEnabled = ref.watch(AppExperiment.feedback.provider);
 
     return Drawer(
       child: SafeArea(

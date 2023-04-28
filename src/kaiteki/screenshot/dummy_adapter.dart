@@ -2,6 +2,7 @@ import "dart:async";
 
 import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/capabilities.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
@@ -21,6 +22,9 @@ class DummyAdapter extends BackendAdapter {
 
   @override
   AdapterCapabilities get capabilities => DummyAdapterCapability();
+
+  @override
+  ApiType get type => ApiType.mastodon;
 
   @override
   Future<User?> followUser(String id) {

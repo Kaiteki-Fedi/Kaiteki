@@ -51,6 +51,7 @@ class AttachmentTrayItem extends StatelessWidget {
           );
           break;
         }
+      default:
     }
 
     return Padding(

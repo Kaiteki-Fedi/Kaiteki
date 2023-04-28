@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:fediverse_objects/pleroma.dart" as pleroma;
+import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
 import "package:kaiteki/fediverse/backends/pleroma/capabilities.dart";
 import "package:kaiteki/fediverse/backends/pleroma/client.dart";
@@ -12,18 +13,23 @@ import "package:kaiteki/utils/extensions.dart";
 
 part "adapter.c.dart";
 
-// TODO(Craftplacer): add missing implementations
 class PleromaAdapter //
     extends SharedMastodonAdapter<PleromaClient>
     implements ChatSupport, ReactionSupport, PreviewSupport {
   @override
-  final String instance;
+  final PleromaCapabilities capabilities;
 
-  static Future<PleromaAdapter> create(String instance) async {
-    return PleromaAdapter.custom(instance, PleromaClient(instance));
+  static Future<PleromaAdapter> create(ApiType type, String instance) async {
+    final client = PleromaClient(instance);
+    final instanceInfo = await client.getInstanceV1();
+    return PleromaAdapter._(
+      type,
+      client,
+      PleromaCapabilities.fromInstance(instanceInfo),
+    );
   }
 
-  PleromaAdapter.custom(this.instance, super.client);
+  PleromaAdapter._(super.type, super.client, this.capabilities);
 
   @override
   Future<ChatMessage> postChatMessage(
@@ -59,13 +65,13 @@ class PleromaAdapter //
   }
 
   @override
-  Future<void> addReaction(Post post, covariant UnicodeEmoji emoji) async {
-    await client.react(post.id, emoji.emoji);
+  Future<void> addReaction(Post post, Emoji emoji) async {
+    await client.react(post.id, emoji.short);
   }
 
   @override
-  Future<void> removeReaction(Post post, covariant UnicodeEmoji emoji) async {
-    await client.removeReaction(post.id, emoji.emoji);
+  Future<void> removeReaction(Post post, Emoji emoji) async {
+    await client.removeReaction(post.id, emoji.short);
   }
 
   @override
@@ -80,18 +86,18 @@ class PleromaAdapter //
 
   @override
   Future<Instance?> probeInstance() async {
-    final instance = await client.getInstance();
+    final instance = await client.getInstanceV1();
 
     if (!instance.version.contains("Pleroma")) {
       return null;
     }
 
-    return _injectFE(toInstance(instance));
+    return _injectFE(toInstanceFromV1(instance, this.instance));
   }
 
   @override
   Future<Instance> getInstance() async {
-    return _injectFE(toInstance(await client.getInstance()));
+    return _injectFE(toInstanceFromV1(await client.getInstanceV1(), instance));
   }
 
   Future<Instance> _injectFE(Instance instance) async {
@@ -103,31 +109,28 @@ class PleromaAdapter //
 
     return Instance(
       name: instance.name,
-      source: instance,
+      source: instance.source,
       mascotUrl: instance.mascotUrl,
       backgroundUrl: background ?? instance.backgroundUrl,
       iconUrl: logo ?? instance.iconUrl,
+      administrators: instance.administrators,
+      moderators: instance.moderators,
+      description: instance.description,
+      postCount: instance.postCount,
+      userCount: instance.userCount,
+      tosUrl: instance.tosUrl ??
+          Uri.https(
+            this.instance,
+            "/static/terms-of-service.html",
+          ),
     );
   }
 
-  String? ensureAbsolute(String? input, String host) {
-    if (input == null) {
-      return null;
-    }
-
-    final uri = Uri.https(host);
-    final relative = Uri.parse(input);
-
-    if (!relative.isAbsolute) {
-      final resolved = uri.resolveUri(relative);
-      return resolved.toString();
-    }
-
-    return relative.toString();
+  Uri? ensureAbsolute(Uri? input, String host) {
+    if (input == null) return null;
+    if (!input.isAbsolute) return Uri.https(host).resolveUri(input);
+    return input;
   }
-
-  @override
-  PleromaCapabilities get capabilities => const PleromaCapabilities();
 
   @override
   Future<void> deleteAccount(String password) async {

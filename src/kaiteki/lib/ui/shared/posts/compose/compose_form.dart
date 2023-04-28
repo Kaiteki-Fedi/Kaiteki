@@ -3,6 +3,7 @@ import "dart:math";
 import "package:async/async.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart" hide Visibility;
+import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" show bottomSheetConstraints;
 import "package:kaiteki/di.dart";
@@ -17,6 +18,7 @@ import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/missing_description.dart";
+import "package:kaiteki/ui/shared/dialogs/post_too_long_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/enum_icon_button.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
@@ -209,6 +211,8 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
                         minLines: widget.expands ? null : 6,
                         maxLines: widget.expands ? null : 8,
                         controller: _bodyController,
+                        maxLength: adapter.capabilities.maxPostContentLength,
+                        maxLengthEnforcement: MaxLengthEnforcement.none,
                       ),
                     ),
                   ],
@@ -295,6 +299,8 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
         } else {
           return PostWidget(snapshot.data!, showActions: false);
         }
+
+      default:
     }
 
     return const Padding(
@@ -306,27 +312,33 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
   Future<Post>? getPreviewFuture(PreviewSupport adapter) {
     if (_bodyController.value.text.isEmpty) return null;
 
-    final draft = _getPostDraft([]);
+    final draft = postDraft;
     return adapter.getPreview(draft);
   }
 
-  PostDraft _getPostDraft(List<Attachment> attachments) {
+  PostDraft get postDraft {
+    final subject =
+        _subjectController.text.isEmpty ? null : _subjectController.text;
+    final content = _bodyController.value.text;
+
     return PostDraft(
-      subject: _subjectController.text.isEmpty ? null : _subjectController.text,
-      content: _bodyController.value.text,
+      subject: subject,
+      content: content,
       visibility: _visibility,
       formatting: _formatting ?? Formatting.plainText,
       replyTo: widget.replyTo,
-      attachments: attachments,
       language: _language,
     );
   }
 
-  Future<void> post(BuildContext context, BackendAdapter adapter) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final l10n = context.l10n;
-    final goRouter = GoRouter.of(context);
-
+  /// Shows a attachment description reminder when enabled and there's at least
+  /// one attachment without description.
+  ///
+  /// Returns true, if the user cancelled the post submission. Returns false, if
+  /// reminders are disabled or the user acknowledged the dialog.
+  Future<bool> _checkForUndescribedAttachments(
+    List<AttachmentDraft> attachments,
+  ) async {
     final showMissingDescriptionWarnings =
         ref.read(showAttachmentDescriptionWarning).value;
     final hasUndescribedAttachments = attachments.any((e) {
@@ -338,15 +350,37 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
         context: context,
         builder: (context) => const MissingDescriptionDialog(),
       );
-      if (result != true) return;
+      if (result != true) return true;
     }
+
+    return false;
+  }
+
+  Future<void> post(BuildContext context, BackendAdapter adapter) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
+    final goRouter = GoRouter.of(context);
+
+    // pin state
+    final draft = postDraft;
+    final draftAttachments = attachments;
+
+    final maxPostContentLength = adapter.capabilities.maxPostContentLength;
+    if (maxPostContentLength != null &&
+        draft.content.length >= maxPostContentLength) {
+      await showDialog(
+        context: context,
+        builder: (_) => PostTooLongDialog(characterLimit: maxPostContentLength),
+      );
+      return;
+    }
+    if (await _checkForUndescribedAttachments(draftAttachments)) return;
 
     Future<Post> submitPost() async {
       final attachments = await Future.wait(
-        this.attachments.map(adapter.uploadAttachment),
+        draftAttachments.map(adapter.uploadAttachment),
       );
-      final draft = _getPostDraft(attachments);
-      return adapter.postStatus(draft);
+      return adapter.postStatus(draft.copyWith(attachments: attachments));
     }
 
     var snackBarController = messenger.showSnackBar(

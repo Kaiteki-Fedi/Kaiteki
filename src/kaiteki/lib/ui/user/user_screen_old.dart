@@ -8,7 +8,6 @@ import "package:kaiteki/fediverse/instance_prober.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/logger.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
-import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
@@ -58,9 +57,7 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
 
     id = widget.id;
     remoteFetchPopupIgnored = !ref
-        .watch(preferences.experiments)
-        .value
-        .contains(AppExperiment.remoteUserFetching);
+        .watch(AppExperiment.remoteUserFetching.provider);
 
     final bannerUrl = widget.initialUser?.bannerUrl;
     if (bannerUrl != null) {

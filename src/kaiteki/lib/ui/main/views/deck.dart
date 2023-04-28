@@ -2,14 +2,19 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
+import "package:kaiteki/ui/main/views/view.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
 import "package:kaiteki/utils/extensions.dart";
 
-class DeckMainScreenView extends StatefulWidget {
+class DeckMainScreenView extends StatefulWidget implements MainScreenView {
   const DeckMainScreenView({super.key});
 
   @override
   State<DeckMainScreenView> createState() => _DeckMainScreenViewState();
+
+  @override
+  NavigationVisibility get navigationVisibility => NavigationVisibility.hide;
 }
 
 class _DeckMainScreenViewState extends State<DeckMainScreenView> {
@@ -130,6 +135,7 @@ class TimelineDeckColumn extends StatelessWidget {
       child: Timeline.kind(
         kind: timelineKind,
         maxWidth: 800,
+        postLayout: PostWidgetLayout.wide,
       ),
     );
   }

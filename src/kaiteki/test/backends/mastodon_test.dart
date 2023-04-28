@@ -9,7 +9,10 @@ void main() {
   test("fetch instance", () async {
     final instance = await client.getInstance();
     log(
-      "We are testing on ${instance.uri} (${instance.title}), an instance run by ${instance.contactAccount?.displayName} (@${instance.contactAccount?.acct}), running Mastodon ${instance.version}.",
+      "We are testing on ${instance.domain} (${instance.title}), an instance "
+      "run by ${instance.contact.account.displayName} "
+      "(@${instance.contact.account.acct}), running Mastodon "
+      "${instance.version}.",
     );
   });
   test("fetch user profile", () async {

@@ -2,7 +2,6 @@ import "package:animations/animations.dart";
 import "package:breakpoint/breakpoint.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
@@ -14,7 +13,6 @@ import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
-import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/main/drawer.dart";
@@ -31,10 +29,48 @@ import "package:kaiteki/ui/main/views/catalog.dart";
 import "package:kaiteki/ui/main/views/deck.dart";
 import "package:kaiteki/ui/main/views/fox.dart";
 import "package:kaiteki/ui/main/views/videos.dart";
+import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/utils/extensions.dart";
+
+Widget _buildViewIcon(MainScreenViewType view) {
+  switch (view) {
+    case MainScreenViewType.stream:
+      return const Icon(Icons.view_stream_rounded);
+    case MainScreenViewType.deck:
+      return const Icon(Icons.view_column_rounded);
+    case MainScreenViewType.catalog:
+      return const Icon(Icons.view_module_rounded);
+    case MainScreenViewType.videos:
+      return const Icon(Icons.videocam_rounded);
+    case MainScreenViewType.fox:
+      return Builder(
+        builder: (context) {
+          return Text(
+            "🦊",
+            style: TextStyle(fontSize: IconTheme.of(context).size! * 0.8),
+          );
+        },
+      );
+  }
+}
+
+String _getViewDisplayName(MainScreenViewType view) {
+  switch (view) {
+    case MainScreenViewType.stream:
+      return "Stream";
+    case MainScreenViewType.deck:
+      return "Deck";
+    case MainScreenViewType.catalog:
+      return "Catalog";
+    case MainScreenViewType.videos:
+      return "Videos";
+    case MainScreenViewType.fox:
+      return "Fox";
+  }
+}
 
 class MainScreen extends ConsumerStatefulWidget {
   @visibleForTesting
@@ -46,70 +82,18 @@ class MainScreen extends ConsumerStatefulWidget {
   ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
+enum MainScreenViewType { stream, deck, catalog, videos, fox }
+
 class _MainScreenState extends ConsumerState<MainScreen> {
   // Why does this exist? In order to refresh the timeline
   final _timelineKey = GlobalKey<TimelinePageState>();
-  List<MainScreenTab>? _tabs;
+  late List<MainScreenTab> _tabs;
   TabKind _currentTab = TabKind.home;
-  MainScreenView _view = MainScreenView.stream;
+  MainScreenViewType _view = MainScreenViewType.stream;
 
   int get _currentIndex {
-    final index = _tabs!.indexWhere((tab) => tab.kind == _currentTab);
+    final index = _tabs.indexWhere((tab) => tab.kind == _currentTab);
     return index == -1 ? 0 : index;
-  }
-
-  List<MainScreenTab> getTabs(AppLocalizations l10n) {
-    final adapter = ref.watch(adapterProvider);
-    final supportsNotifications = adapter is NotificationSupport;
-    final supportsChats = adapter is ChatSupport;
-    final supportsBookmarks = adapter is BookmarkSupport;
-    return [
-      MainScreenTab(
-        kind: TabKind.home,
-        selectedIcon: Icons.home,
-        icon: Icons.home_outlined,
-        text: l10n.timelineTab,
-        fab: FloatingActionButtonData(
-          icon: Icons.edit_rounded,
-          tooltip: l10n.composeDialogTitle,
-          text: l10n.composeButtonLabel,
-          onTap: _onCompose,
-        ),
-        hideFabWhenDesktop: true,
-      ),
-      if (supportsNotifications)
-        MainScreenTab(
-          kind: TabKind.notifications,
-          selectedIcon: Icons.notifications_rounded,
-          icon: Icons.notifications_none,
-          text: l10n.notificationsTab,
-          fetchUnreadCount: _fetchNotificationCount,
-        ),
-      if (supportsChats)
-        MainScreenTab(
-          kind: TabKind.chats,
-          selectedIcon: Icons.forum,
-          icon: Icons.forum_outlined,
-          text: l10n.chatsTab,
-        ),
-      if (supportsBookmarks)
-        MainScreenTab(
-          kind: TabKind.bookmarks,
-          selectedIcon: Icons.bookmark_rounded,
-          icon: Icons.bookmark_border_rounded,
-          text: l10n.bookmarksTab,
-        ),
-    ];
-  }
-
-  int? _fetchNotificationCount() {
-    final account = ref.watch(accountProvider);
-
-    if (account == null) return null;
-    if (account.adapter is! NotificationSupport) return null;
-
-    final notifications = ref.watch(notificationServiceProvider(account.key));
-    return notifications.valueOrNull?.where((n) => n.unread != false).length;
   }
 
   Color? get _outsideColor {
@@ -118,28 +102,26 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return null;
   }
 
-  Widget _buildTimeline(BuildContext context) {
-    switch (_view) {
-      case MainScreenView.stream:
-        return TimelinePage(
-          key: _timelineKey,
-          initialTimeline: widget.initialTimeline,
-        );
-      case MainScreenView.deck:
-        return const DeckMainScreenView();
-      case MainScreenView.catalog:
-        return const CatalogMainScreenView();
-      case MainScreenView.videos:
-        return const VideoMainScreenView();
-      case MainScreenView.fox:
-        return const FoxMainScreenView();
+  VoidCallback? get _refresh {
+    switch (_currentTab) {
+      case TabKind.home:
+        return _timelineKey.currentState?.refresh;
+
+      case TabKind.notifications:
+        final account = ref.watch(accountProvider)!.key;
+        return ref.read(notificationServiceProvider(account).notifier).refresh;
+
+      default:
+        return null;
     }
   }
 
-  void _onCompose() => context.pushNamed(
-        "compose",
-        params: ref.accountRouterParams,
-      );
+  VoidCallback? get _search {
+    if (ref.watch(adapterProvider) is! SearchSupport) return null;
+    return () {
+      context.pushNamed("search", params: ref.accountRouterParams);
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +136,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       ),
     );
 
-    final l10n = context.l10n;
-    _tabs = getTabs(l10n);
+    _tabs = getTabs().map((e) => buildTabItem(context, e)).toList();
+
+    final timeline = _buildTimeline(context);
 
     final body = PageTransitionSwitcher(
       transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
@@ -165,21 +148,21 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           child: Material(child: child),
         );
       },
-      child: [
-        _buildTimeline(context),
-        const NotificationsPage(),
-        const ChatsPage(),
-        const BookmarksPage(),
-      ][_currentIndex],
+      child: {
+        TabKind.home: timeline,
+        TabKind.notifications: const NotificationsPage(),
+        TabKind.chats: const ChatsPage(),
+        TabKind.bookmarks: const BookmarksPage(),
+      }[_currentTab],
     );
 
     return FocusableActionDetector(
       autofocus: true,
       actions: {
         NewPostIntent: CallbackAction(onInvoke: (_) => _onCompose()),
-        // SearchIntent: CallbackAction(
-        //   onInvoke: (_) => _search?.call(),
-        // ),
+        SearchIntent: CallbackAction(
+          onInvoke: (_) => _search?.call(),
+        ),
         RefreshIntent: CallbackAction(onInvoke: (_) => _refresh?.call()),
         GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
           onInvoke: _changeLocation,
@@ -191,54 +174,103 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: BreakpointBuilder(
         builder: (_, breakpoint) {
           final isMobile = breakpoint.window == WindowSize.xsmall;
-          final outsideColor = _outsideColor;
-          final tab = _tabs![_currentIndex];
+          final tab = _tabs[_currentIndex];
           final fab = tab.fab;
 
-          final hideNavigation = _view == MainScreenView.fox;
-          final hideBottomBar = _tabs!.length < 2 ||
-              _view == MainScreenView.videos ||
+          final hideNavigation = _view == MainScreenViewType.fox;
+          final hideBottomBar = _tabs.length < 2 ||
+              _view == MainScreenViewType.videos ||
               hideNavigation;
-          final hideFab = fab == null || _view == MainScreenView.videos;
+          final hideFab = fab == null || _view == MainScreenViewType.videos;
           final immerse = !hideNavigation;
+
+          Widget? floatingActionButton, bottomNavigationBar;
+
+          NavigationVisibility? navigationVisibility;
+
+          if (_currentTab == TabKind.home && timeline is MainScreenView) {
+            navigationVisibility =
+                (timeline as MainScreenView).navigationVisibility;
+          }
+
+          navigationVisibility ??= breakpoint.window < WindowSize.large
+              ? NavigationVisibility.compact
+              : NavigationVisibility.normal;
+
+          if (isMobile && !hideBottomBar) {
+            bottomNavigationBar = MainScreenNavigationBar(
+              tabs: _tabs,
+              currentIndex: _currentIndex,
+              onChangeIndex: _changeIndex,
+            );
+          }
+
+          if (!hideFab && !(tab.hideFabWhenDesktop && !isMobile)) {
+            floatingActionButton = _buildFab(context, fab, isMobile);
+          }
 
           if (isMobile) {
             return Scaffold(
               appBar: _buildAppBar(context, false),
               body: body,
-              bottomNavigationBar: hideBottomBar
-                  ? null
-                  : MainScreenNavigationBar(
-                      tabs: _tabs!,
-                      currentIndex: _currentIndex,
-                      onChangeIndex: _changeIndex,
-                    ),
-              floatingActionButton:
-                  hideFab ? null : _buildFab(context, fab, true),
+              bottomNavigationBar: bottomNavigationBar,
+              floatingActionButton: floatingActionButton,
               drawer: const MainScreenDrawer(),
             );
           } else {
             return Scaffold(
-              backgroundColor: outsideColor,
+              backgroundColor: _outsideColor,
               appBar: _buildAppBar(context, immerse),
-              body: _buildDesktopView(
-                hideNavigation,
-                breakpoint.window >= WindowSize.medium &&
-                    !((_view == MainScreenView.deck ||
-                            _view == MainScreenView.fox) &&
-                        _currentTab == TabKind.home),
-                immerse,
-                body,
-              ),
-              floatingActionButton: tab.hideFabWhenDesktop || hideFab
-                  ? null
-                  : _buildFab(context, fab, isMobile),
+              body: _buildDesktopView(navigationVisibility, immerse, body),
+              floatingActionButton: floatingActionButton,
               drawer: const MainScreenDrawer(),
             );
           }
         },
       ),
     );
+  }
+
+  MainScreenTab buildTabItem(BuildContext context, TabKind kind) {
+    final l10n = context.l10n;
+
+    switch (kind) {
+      case TabKind.home:
+        return MainScreenTab(
+          TabKind.home,
+          fab: FloatingActionButtonData(
+            icon: Icons.edit_rounded,
+            tooltip: l10n.composeDialogTitle,
+            text: l10n.composeButtonLabel,
+            onTap: _onCompose,
+          ),
+          hideFabWhenDesktop: true,
+        );
+      case TabKind.notifications:
+        return MainScreenTab(
+          TabKind.notifications,
+          fetchUnreadCount: _fetchNotificationCount,
+        );
+      case TabKind.chats:
+        return const MainScreenTab(TabKind.chats);
+      case TabKind.bookmarks:
+        return const MainScreenTab(TabKind.bookmarks);
+    }
+  }
+
+  Set<TabKind> getTabs() {
+    final adapter = ref.watch(adapterProvider);
+    final supportsNotifications = adapter is NotificationSupport;
+    final supportsChats =
+        adapter.safeCast<ChatSupport>()?.capabilities.supportsChat ?? false;
+    final supportsBookmarks = adapter is BookmarkSupport;
+
+    return {
+      TabKind.home,
+      if (supportsNotifications) TabKind.notifications,
+      if (supportsChats) TabKind.chats,
+      if (supportsBookmarks) TabKind.bookmarks,
+    };
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context, bool immerse) {
@@ -287,67 +319,29 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  static Widget _buildViewIcon(MainScreenView view) {
-    switch (view) {
-      case MainScreenView.stream:
-        return const Icon(Icons.view_stream_rounded);
-      case MainScreenView.deck:
-        return const Icon(Icons.view_column_rounded);
-      case MainScreenView.catalog:
-        return const Icon(Icons.view_module_rounded);
-      case MainScreenView.videos:
-        return const Icon(Icons.videocam_rounded);
-      case MainScreenView.fox:
-        return Builder(
-          builder: (context) {
-            return Text(
-              "🦊",
-              style: TextStyle(fontSize: IconTheme.of(context).size! * 0.8),
-            );
-          },
-        );
-    }
-  }
-
-  static String _getViewDisplayName(MainScreenView view) {
-    switch (view) {
-      case MainScreenView.stream:
-        return "Stream";
-      case MainScreenView.deck:
-        return "Deck";
-      case MainScreenView.catalog:
-        return "Catalog";
-      case MainScreenView.videos:
-        return "Videos";
-      case MainScreenView.fox:
-        return "Fox";
-    }
-  }
-
   List<Widget> _buildAppBarActions(BuildContext context) {
     final l10n = context.l10n;
-    final experiments = ref.watch(preferences.experiments).value;
 
     return [
       if (_currentTab == TabKind.home &&
-          experiments.contains(AppExperiment.timelineViews))
-        PopupMenuButton<MainScreenView>(
+          ref.watch(AppExperiment.timelineViews.provider))
+        PopupMenuButton<MainScreenViewType>(
           initialValue: _view,
           icon: _buildViewIcon(_view),
           tooltip: "View",
           onSelected: (view) => setState(() => _view = view),
           itemBuilder: (context) {
             return [
-              for (final view in MainScreenView.values)
+              for (final view in MainScreenViewType.values)
                 PopupMenuItem(
                   value: view,
-                  enabled:
-                      !(view == MainScreenView.videos && !supportsVideoPlayer),
+                  enabled: !(view == MainScreenViewType.videos &&
+                      !supportsVideoPlayer),
                   child: ListTile(
                     leading: _buildViewIcon(view),
                     title: Text(_getViewDisplayName(view)),
                     contentPadding: EdgeInsets.zero,
-                    enabled: !(view == MainScreenView.videos &&
+                    enabled: !(view == MainScreenViewType.videos &&
                         !supportsVideoPlayer),
                   ),
                 ),
@@ -378,75 +372,23 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ];
   }
 
-  Widget _buildNavigationRail(bool extend) {
-    return MainScreenNavigationRail(
-      tabs: _tabs!,
-      currentIndex: _currentIndex,
-      onChangeIndex: _changeIndex,
-      extended: extend,
-      backgroundColor: _outsideColor,
-    );
-  }
-
   Widget _buildDesktopView(
-    bool hideNavRail,
-    bool extendNavRail,
+    NavigationVisibility navigationRail,
     bool immerse,
     Widget child,
   ) {
     final m3 = Theme.of(context).useMaterial3;
-    final tabCount = _tabs?.length ?? 0;
+    final tabCount = _tabs.length;
     return Row(
       children: [
-        if (!hideNavRail && tabCount >= 2) ...[
-          _buildNavigationRail(extendNavRail),
+        if (navigationRail != NavigationVisibility.hide && tabCount >= 2) ...[
+          _buildNavigationRail(navigationRail == NavigationVisibility.normal),
           if (!m3) const VerticalDivider(thickness: 1, width: 1),
         ],
         Expanded(child: immerse ? _roundWidget(context, child) : child),
       ],
     );
   }
-
-  VoidCallback? get _search {
-    if (ref.watch(adapterProvider) is! SearchSupport) return null;
-    return () {
-      context.pushNamed("search", params: ref.accountRouterParams);
-    };
-  }
-
-  VoidCallback? get _refresh {
-    switch (_currentTab) {
-      case TabKind.home:
-        return _timelineKey.currentState?.refresh;
-
-      case TabKind.notifications:
-        final account = ref.watch(accountProvider)!.key;
-        return ref.read(notificationServiceProvider(account).notifier).refresh;
-
-      default:
-        return null;
-    }
-  }
-
-  Future<void> _showKeyboardShortcuts() async {
-    await showDialog(
-      context: context,
-      builder: (_) => const KeyboardShortcutsDialog(),
-    );
-  }
-
-  static Widget _roundWidget(BuildContext context, Widget widget) {
-    if (!Theme.of(context).useMaterial3) return widget;
-
-    const radius = Radius.circular(16.0);
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(topLeft: radius),
-      child: widget,
-    );
-  }
-
-  void _changeIndex(int index) => _changePage(_tabs![index].kind);
-  void _changePage(TabKind tab) => setState(() => _currentTab = tab);
 
   Widget? _buildFab(
     BuildContext context,
@@ -468,6 +410,36 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
+  Widget _buildNavigationRail(bool extend) {
+    return MainScreenNavigationRail(
+      tabs: _tabs,
+      currentIndex: _currentIndex,
+      onChangeIndex: _changeIndex,
+      extended: extend,
+      backgroundColor: _outsideColor,
+    );
+  }
+
+  Widget _buildTimeline(BuildContext context) {
+    switch (_view) {
+      case MainScreenViewType.stream:
+        return TimelinePage(
+          key: _timelineKey,
+          initialTimeline: widget.initialTimeline,
+        );
+      case MainScreenViewType.deck:
+        return const DeckMainScreenView();
+      case MainScreenViewType.catalog:
+        return const CatalogMainScreenView();
+      case MainScreenViewType.videos:
+        return const VideoMainScreenView();
+      case MainScreenViewType.fox:
+        return const FoxMainScreenView();
+    }
+  }
+
+  void _changeIndex(int index) => _changePage(_tabs[index].kind);
+
   dynamic _changeLocation(GoToAppLocationIntent i) {
     switch (i.location) {
       case AppLocation.home:
@@ -482,9 +454,42 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       case AppLocation.settings:
         context.push("/settings");
         break;
+      default:
+        return null;
     }
-    return null;
+  }
+
+  void _changePage(TabKind tab) => setState(() => _currentTab = tab);
+
+  int? _fetchNotificationCount() {
+    final account = ref.watch(accountProvider);
+
+    if (account == null) return null;
+    if (account.adapter is! NotificationSupport) return null;
+
+    final notifications = ref.watch(notificationServiceProvider(account.key));
+    return notifications.valueOrNull?.where((n) => n.unread != false).length;
+  }
+
+  void _onCompose() => context.pushNamed(
+        "compose",
+        params: ref.accountRouterParams,
+      );
+
+  Future<void> _showKeyboardShortcuts() async {
+    await showDialog(
+      context: context,
+      builder: (_) => const KeyboardShortcutsDialog(),
+    );
+  }
+
+  static Widget _roundWidget(BuildContext context, Widget widget) {
+    if (!Theme.of(context).useMaterial3) return widget;
+
+    const radius = Radius.circular(16.0);
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(topLeft: radius),
+      child: widget,
+    );
   }
 }
-
-enum MainScreenView { stream, deck, catalog, videos, fox }

@@ -1,99 +1,90 @@
 import "package:flutter/material.dart";
 import "package:flutter_blurhash/flutter_blurhash.dart";
 import "package:kaiteki/fediverse/model/attachment.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/platform_checks.dart";
+import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/posts/attachments/fallback_attachment_widget.dart";
 import "package:kaiteki/ui/shared/posts/attachments/image_attachment_widget.dart";
 import "package:kaiteki/ui/shared/posts/attachments/video_attachment_widget.dart";
 
-class AttachmentWidget extends StatefulWidget {
+class AttachmentWidget extends StatelessWidget {
   final Attachment attachment;
-  final Post? parentPost;
-  final int? attachmentIndex;
   final BoxFit? boxFit;
+  final bool showDescriptionBadge;
+
+  /// Whether the attachment is revealed
+  final bool? reveal;
 
   const AttachmentWidget({
     super.key,
     required this.attachment,
-    this.parentPost,
     this.boxFit,
-    this.attachmentIndex,
+    this.reveal,
+    this.showDescriptionBadge = true,
   });
 
   @override
-  State<AttachmentWidget> createState() => _AttachmentWidgetState();
-}
-
-class _AttachmentWidgetState extends State<AttachmentWidget> {
-  bool revealed = false;
-
-  @override
   Widget build(BuildContext context) {
-    final blurHash = widget.attachment.blurHash;
-    if (widget.attachment.isSensitive && !revealed) {
-      return Stack(
-        children: [
-          if (blurHash != null && blurHash.isNotEmpty)
-            BlurHash(hash: widget.attachment.blurHash!),
-          Center(
-            child: FilledButton.tonal(
-              style: FilledButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.background,
-              ),
-              onPressed: reveal,
-              child: const Text("Show sensitive content"),
-            ),
-          ),
-        ],
-      );
+    final revealed = reveal ?? !(attachment.isSensitive ?? false);
+
+    final blurHash = attachment.blurHash;
+    final isBlurHashAvailable = blurHash != null && blurHash.isNotEmpty;
+    if (!revealed) {
+      if (isBlurHashAvailable) return BlurHash(hash: blurHash);
+      return const SizedBox.expand();
     }
 
     Widget attachmentWidget;
 
-    if (widget.attachment.type == AttachmentType.image) {
+    if (attachment.type == AttachmentType.image) {
       // HACK(Craftplacer): missing case when null
       attachmentWidget = ImageAttachmentWidget(
-        attachment: widget.attachment,
-        index: widget.attachmentIndex,
-        post: widget.parentPost,
-        boxFit: widget.boxFit,
+        attachment: attachment,
+        boxFit: boxFit,
       );
-    } else if (widget.attachment.type == AttachmentType.video &&
-        supportsVideoPlayer) {
-      attachmentWidget = VideoAttachmentWidget(attachment: widget.attachment);
+    } else if (attachment.type == AttachmentType.video && supportsVideoPlayer) {
+      attachmentWidget = VideoAttachmentWidget(attachment: attachment);
     } else {
-      attachmentWidget =
-          FallbackAttachmentWidget(attachment: widget.attachment);
+      attachmentWidget = FallbackAttachmentWidget(attachment: attachment);
     }
 
     return Stack(
+      fit: StackFit.expand,
       children: [
-        Positioned.fill(child: attachmentWidget),
-        if (widget.attachment.isSensitive)
-          Positioned(
+        attachmentWidget,
+        if (showDescriptionBadge && attachment.description?.isNotEmpty == true)
+          const Positioned(
             top: 8,
             right: 8,
-            child: Material(
-              clipBehavior: Clip.antiAlias,
-              shape: const StadiumBorder(),
-              color: Theme.of(context)
-                  .colorScheme
-                  .secondaryContainer
-                  .withOpacity(.85),
-              child: IconButton(
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-                icon: const Icon(Icons.visibility_off_rounded),
-                onPressed: unreveal,
-                splashRadius: 24,
-                tooltip: "Hide sensitive content",
-              ),
-            ),
+            child: AltTextBadge(),
           ),
       ],
     );
   }
+}
 
-  void reveal() => setState(() => revealed = true);
-  void unreveal() => setState(() => revealed = false);
+class AltTextBadge extends StatelessWidget {
+  const AltTextBadge({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final background = Theme.of(context).colorScheme.inverseSurface;
+    final foreground = Theme.of(context).colorScheme.onInverseSurface;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: background,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: Text(
+          "ALT",
+          style: Theme.of(context)
+              .ktkTextTheme
+              ?.monospaceTextStyle
+              .copyWith(color: foreground),
+        ),
+      ),
+    );
+  }
 }

@@ -58,15 +58,12 @@ class HtmlTextParser implements TextParser {
         _logger.w("Unhandled HTML tag ($tag), returning it as TextElement.");
       }
     }
-    // else if (node is dom.Text) {
-    //  return TextElement(node.text, children: renderedSubNodes);
-    //}
 
-    if (node.text == null) {
-      return renderedSubNodes;
-    } else {
-      return [TextElement(node.text, children: renderedSubNodes)];
+    if (node is dom.Text) {
+      return [if (node.data.isNotEmpty) TextElement(node.text)];
     }
+
+    return renderedSubNodes;
   }
 
   Element? renderNodeOverride(dom.Node node) => null;

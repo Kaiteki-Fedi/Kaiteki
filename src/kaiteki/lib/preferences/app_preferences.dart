@@ -66,6 +66,12 @@ final useSearchBar = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
+final recentlyUsedEmojis = createSettingProvider<List<String>>(
+  key: "recentlyUsedEmojis",
+  initialValue: const [],
+  provider: sharedPreferencesProvider,
+);
+
 final visibleLanguages = createSettingProvider<ISet<String>>(
   key: "visibleLanguages",
   initialValue: ISet(const {}),

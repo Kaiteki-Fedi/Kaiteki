@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/interfaces/chat_support.dart";
 import "package:kaiteki/fediverse/model/chat_message.dart";
 import "package:kaiteki/fediverse/model/chat_target.dart";
@@ -27,8 +26,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final experiments = ref.watch(preferences.experiments).value;
-    if (!experiments.contains(AppExperiment.chats)) {
+    if (!ref.watch(AppExperiment.chats.provider)) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -41,7 +39,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
             ElevatedButton(
               onPressed: () {
                 final notifier = ref.read(preferences.experiments);
-                notifier.value = notifier.value..add(AppExperiment.chats);
+                notifier.value = [...notifier.value, AppExperiment.chats];
               },
               child: const Text("Enable Experiment"),
             ),
@@ -51,7 +49,8 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
     }
 
     final adapter = ref.watch(adapterProvider);
-    if (adapter is! ChatSupport) {
+    final chatAdapter = adapter.safeCast<ChatSupport>();
+    if (chatAdapter == null || !chatAdapter.capabilities.supportsChat) {
       return Center(
         child: IconLandingWidget(
           icon: const Icon(Icons.forum_outlined),
@@ -60,7 +59,6 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
       );
     }
 
-    final chatAdapter = adapter as ChatSupport;
     final chatList = FutureBuilder<Iterable<ChatTarget>>(
       future: chatAdapter.getChats(),
       builder: (context, snapshot) {
