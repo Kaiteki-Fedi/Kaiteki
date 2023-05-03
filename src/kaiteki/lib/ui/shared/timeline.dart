@@ -181,7 +181,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
   Widget _buildPost(BuildContext context, Post item, int index) {
     void openPost() => context.pushNamed(
           "post",
-          params: {...ref.accountRouterParams, "id": item.id},
+          pathParameters: {...ref.accountRouterParams, "id": item.id},
           extra: item,
         );
 

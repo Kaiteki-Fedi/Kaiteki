@@ -119,7 +119,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   VoidCallback? get _search {
     if (ref.watch(adapterProvider) is! SearchSupport) return null;
     return () {
-      context.pushNamed("search", params: ref.accountRouterParams);
+      context.pushNamed("search", pathParameters: ref.accountRouterParams);
     };
   }
 
@@ -283,7 +283,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             focusNode: FocusNode(canRequestFocus: false, skipTraversal: true),
             onTap: () => context.pushNamed(
               "search",
-              params: ref.accountRouterParams,
+              pathParameters: ref.accountRouterParams,
             ),
             shadowColor: MaterialStateProperty.all(Colors.transparent),
             leading: const DrawerButton(),
@@ -473,7 +473,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   void _onCompose() => context.pushNamed(
         "compose",
-        params: ref.accountRouterParams,
+        pathParameters: ref.accountRouterParams,
       );
 
   Future<void> _showKeyboardShortcuts() async {

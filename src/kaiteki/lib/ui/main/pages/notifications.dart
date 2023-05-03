@@ -483,7 +483,10 @@ class NotificationWidget extends ConsumerWidget {
       context.pushNamed(
         "post",
         extra: notification.post,
-        params: {...accountKey.routerParams, "id": notification.post!.id},
+        pathParameters: {
+          ...accountKey.routerParams,
+          "id": notification.post!.id,
+        },
       );
       return;
     }
@@ -493,7 +496,10 @@ class NotificationWidget extends ConsumerWidget {
       context.pushNamed(
         "user",
         extra: notification.user,
-        params: {...accountKey.routerParams, "id": notification.user!.id},
+        pathParameters: {
+          ...accountKey.routerParams,
+          "id": notification.user!.id,
+        },
       );
       return;
     }

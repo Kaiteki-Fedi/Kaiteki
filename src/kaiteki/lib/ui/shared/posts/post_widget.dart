@@ -264,11 +264,17 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                           : null,
                       onShowFavoritees: () => context.pushNamed(
                         "postFavorites",
-                        params: {...ref.accountRouterParams, "id": _post.id},
+                        pathParameters: {
+                          ...ref.accountRouterParams,
+                          "id": _post.id,
+                        },
                       ),
                       onShowRepeatees: () => context.pushNamed(
                         "postRepeats",
-                        params: {...ref.accountRouterParams, "id": _post.id},
+                        pathParameters: {
+                          ...ref.accountRouterParams,
+                          "id": _post.id,
+                        },
                       ),
                       repeated: _post.state.repeated,
                       reacted: adapter is ReactionSupport ? false : null,
@@ -430,7 +436,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   void _onReply() {
     context.pushNamed(
       "compose",
-      params: ref.accountRouterParams,
+      pathParameters: ref.accountRouterParams,
       extra: _post,
     );
   }

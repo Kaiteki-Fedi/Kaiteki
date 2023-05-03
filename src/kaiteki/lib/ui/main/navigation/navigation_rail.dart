@@ -55,7 +55,7 @@ class MainScreenNavigationRail extends ConsumerWidget {
             ? ComposeFloatingActionButtonType.extended
             : ComposeFloatingActionButtonType.small,
         onTap: () {
-          context.pushNamed("compose", params: ref.accountRouterParams);
+          context.pushNamed("compose", pathParameters: ref.accountRouterParams);
         },
       ),
       destinations: _destinations(context),

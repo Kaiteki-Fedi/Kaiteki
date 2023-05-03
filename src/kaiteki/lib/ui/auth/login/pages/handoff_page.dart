@@ -141,7 +141,7 @@ class _HandoffPageState extends State<HandoffPage> {
 
                         context.goNamed(
                           "home",
-                          params: account.key.routerParams,
+                          pathParameters: account.key.routerParams,
                         );
                       },
                     );

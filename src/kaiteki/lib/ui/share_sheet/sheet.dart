@@ -82,8 +82,8 @@ class ShareSheet extends StatelessWidget {
                       Navigator.of(context).pop();
                       context.pushNamed(
                         "compose",
-                        params: ref.accountRouterParams,
-                        queryParams: {"body": text},
+                        pathParameters: ref.accountRouterParams,
+                        queryParameters: {"body": text},
                       );
                     },
                   );

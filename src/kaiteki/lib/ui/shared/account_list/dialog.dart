@@ -80,7 +80,7 @@ class AccountListDialog extends ConsumerWidget {
     Navigator.of(context).pop();
     context.goNamed(
       "home",
-      params: {
+      pathParameters: {
         "accountUsername": account.key.username,
         "accountHost": account.key.host,
       },

@@ -399,7 +399,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
             onPressed: () {
               goRouter.pushNamed(
                 "post",
-                params: {...accountRouterParams, "id": post.id},
+                pathParameters: {...accountRouterParams, "id": post.id},
                 extra: post,
               );
               messenger.hideCurrentSnackBar();

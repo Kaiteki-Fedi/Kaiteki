@@ -48,7 +48,7 @@ class MainScreenDrawer extends ConsumerWidget {
                   title: Text(l10n.listsTitle),
                   onTap: () => context.pushNamed(
                     "lists",
-                    params: ref.accountRouterParams,
+                    pathParameters: ref.accountRouterParams,
                   ),
                 ),
               ListTile(
@@ -76,7 +76,7 @@ class MainScreenDrawer extends ConsumerWidget {
                 title: Text(l10n.accountSettingsTitle),
                 onTap: () => context.pushNamed(
                   "accountSettings",
-                  params: ref.accountRouterParams,
+                  pathParameters: ref.accountRouterParams,
                 ),
               ),
               const Divider(),

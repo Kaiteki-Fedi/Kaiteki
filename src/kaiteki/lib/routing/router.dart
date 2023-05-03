@@ -46,8 +46,7 @@ final GlobalKey<NavigatorState> _authNavigatorKey =
 const authenticatedPath = "/@:accountUsername@:accountHost";
 
 final routerProvider = Provider.autoDispose<GoRouter>((ref) {
-  final sub = ref.listen(routerNotifierProvider, (_, __) {});
-  ref.onDispose(sub.close);
+  final account = ref.watch(routerNotifierProvider);
 
   final notifier = ref.read(routerNotifierProvider.notifier);
 
@@ -61,9 +60,8 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         path: "/",
         builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
-          final scope = ProviderScope.containerOf(context);
-          if (scope.read(accountProvider) == null) return "/welcome";
-          return "/${notifier.currentHandle}/home";
+          if (account == null) return "/welcome";
+          return "/${account.handle}/home";
         },
       ),
       GoRoute(
@@ -153,8 +151,8 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         path: authenticatedPath,
         builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
-          final user = state.params["accountUsername"];
-          final host = state.params["accountHost"];
+          final user = state.pathParameters["accountUsername"];
+          final host = state.pathParameters["accountHost"];
 
           if (user != null && host != null) {
             final account = ref.read(
@@ -178,7 +176,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             }
           }
 
-          if (state.fullpath == authenticatedPath) {
+          if (state.fullPath == authenticatedPath) {
             return "${state.location}/home";
           }
           return null;
@@ -217,15 +215,15 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 // parentNavigatorKey: _authNavigatorKey,
                 path: "users/:id",
                 builder: (context, state) {
-                  if (ref.read(AppExperiment.newUserScreen.provider)) {
-                    return UserScreen(id: state.params["id"]!);
+                  final id = state.pathParameters["id"]!;
+
+                  if (ref.read(AppExperiment.oldUserScreen.provider)) {
+                    final user = state.extra.safeCast<User>();
+                    if (user != null) return OldUserScreen.fromUser(user);
+                    return OldUserScreen.fromId(id);
                   }
 
-                  if (state.extra == null) {
-                    return OldUserScreen.fromId(state.params["id"]!);
-                  } else {
-                    return OldUserScreen.fromUser(state.extra! as User);
-                  }
+                  return UserScreen(id: id);
                 },
               ),
               GoRoute(
@@ -255,7 +253,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                       return _DialogPage(
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
-                            final postId = state.params["id"]!;
+                            final postId = state.pathParameters["id"]!;
                             final l10n = context.l10n;
                             final adapter = ref.watch(adapterProvider);
                             return UserListDialog(
@@ -281,7 +279,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                       return _DialogPage(
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
-                            final postId = state.params["id"]!;
+                            final postId = state.pathParameters["id"]!;
                             final l10n = context.l10n;
                             final adapter = ref.watch(adapterProvider);
                             return UserListDialog(
@@ -331,8 +329,8 @@ Widget _authenticatedBuilder(
     builder: (context, ref, child) {
       final Account? account;
 
-      final user = state.params["accountUsername"];
-      final host = state.params["accountHost"];
+      final user = state.pathParameters["accountUsername"];
+      final host = state.pathParameters["accountHost"];
 
       if (user != null && host != null) {
         account = ref.watch(
