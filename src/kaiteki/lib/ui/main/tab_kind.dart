@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 
 enum TabKind {
-  home(Icons.home, Icons.home_outlined),
+  home(Icons.home_outlined, Icons.home),
   notifications(Icons.notifications_none, Icons.notifications_rounded),
   chats(Icons.forum_outlined, Icons.forum),
   bookmarks(Icons.bookmark_border_rounded, Icons.bookmark_rounded);
