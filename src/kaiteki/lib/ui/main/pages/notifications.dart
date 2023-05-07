@@ -351,55 +351,24 @@ class NotificationWidget extends ConsumerWidget {
   }
 
   IconData? _getNotificationIcon(NotificationType type) {
-    switch (type) {
-      case NotificationType.liked:
-        return Icons.star_rounded;
-
-      case NotificationType.repeated:
-        return Icons.repeat_rounded;
-
-      case NotificationType.mentioned:
-        return Icons.alternate_email_rounded;
-
-      case NotificationType.followed:
-        return Icons.person_add_rounded;
-
-      case NotificationType.followRequest:
-        return Icons.person_add_rounded;
-
-      case NotificationType.reacted:
-        return Icons.emoji_emotions_rounded;
-
-      case NotificationType.groupInvite:
-        return Icons.group_add_rounded;
-
-      case NotificationType.pollEnded:
-        return Icons.poll_rounded;
-
-      case NotificationType.quoted:
-        return Icons.format_quote_rounded;
-
-      case NotificationType.replied:
-        return Icons.reply_rounded;
-
-      case NotificationType.updated:
-        return Icons.edit_rounded;
-
-      case NotificationType.reported:
-        return Icons.report_rounded;
-
-      case NotificationType.signedUp:
-        return Icons.person_add_rounded;
-
-      case NotificationType.newPost:
-        return Icons.post_add_rounded;
-
-      case NotificationType.userMigrated:
-        return Icons.swap_horiz_rounded;
-
-      case NotificationType.unsupported:
-        return Icons.question_mark;
-    }
+    return switch (type) {
+      NotificationType.liked => Icons.star_rounded,
+      NotificationType.repeated => Icons.repeat_rounded,
+      NotificationType.mentioned => Icons.alternate_email_rounded,
+      NotificationType.followed => Icons.person_add_rounded,
+      NotificationType.followRequest => Icons.person_outline_rounded,
+      NotificationType.reacted => Icons.emoji_emotions_rounded,
+      NotificationType.groupInvite => Icons.group_add_rounded,
+      NotificationType.pollEnded => Icons.poll_rounded,
+      NotificationType.quoted => Icons.format_quote_rounded,
+      NotificationType.replied => Icons.reply_rounded,
+      NotificationType.updated => Icons.edit_rounded,
+      NotificationType.reported => Icons.report_rounded,
+      NotificationType.signedUp => Icons.person_add_rounded,
+      NotificationType.newPost => Icons.post_add_rounded,
+      NotificationType.userMigrated => Icons.swap_horiz_rounded,
+      NotificationType.unsupported => Icons.question_mark
+    };
   }
 
   Color _getColor(BuildContext context) {
@@ -441,40 +410,24 @@ class NotificationWidget extends ConsumerWidget {
   }
 
   String _getTitle(BuildContext context, NotificationType type) {
-    switch (type) {
-      case NotificationType.liked:
-        return " favorited your post";
-      case NotificationType.repeated:
-        return " repeated your post";
-      case NotificationType.reacted:
-        return " reacted to your post";
-      case NotificationType.followed:
-        return " followed you";
-      case NotificationType.mentioned:
-        return " mentioned you";
-      case NotificationType.followRequest:
-        return " wants to follow you";
-      case NotificationType.groupInvite:
-        return " invited you to a group";
-      case NotificationType.pollEnded:
-        return "'s poll has ended";
-      case NotificationType.quoted:
-        return " quoted you";
-      case NotificationType.replied:
-        return " replied to you";
-      case NotificationType.updated:
-        return " updated their post";
-      case NotificationType.reported:
-        return "New report";
-      case NotificationType.signedUp:
-        return " has joined the instance";
-      case NotificationType.newPost:
-        return " made a new post";
-      case NotificationType.userMigrated:
-        return " migrated to a new account";
-      case NotificationType.unsupported:
-        return "Unsupported notification";
-    }
+    return switch (type) {
+      NotificationType.liked => " favorited your post",
+      NotificationType.repeated => " repeated your post",
+      NotificationType.reacted => " reacted to your post",
+      NotificationType.followed => " followed you",
+      NotificationType.mentioned => " mentioned you",
+      NotificationType.followRequest => " wants to follow you",
+      NotificationType.groupInvite => " invited you to a group",
+      NotificationType.pollEnded => "'s poll has ended",
+      NotificationType.quoted => " quoted you",
+      NotificationType.replied => " replied to you",
+      NotificationType.updated => " updated their post",
+      NotificationType.reported => "New report",
+      NotificationType.signedUp => " has joined the instance",
+      NotificationType.newPost => " made a new post",
+      NotificationType.userMigrated => " migrated to a new account",
+      NotificationType.unsupported => "Unsupported notification"
+    };
   }
 
   void _onTap(BuildContext context, WidgetRef ref) {

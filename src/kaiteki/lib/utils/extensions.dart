@@ -40,57 +40,33 @@ extension ObjectExtensions<T> on T? {
 
 extension BrightnessExtensions on Brightness {
   Brightness get inverted {
-    switch (this) {
-      case Brightness.dark:
-        return Brightness.light;
-      case Brightness.light:
-        return Brightness.dark;
-    }
+    return switch (this) {
+      Brightness.dark => Brightness.light,
+      Brightness.light => Brightness.dark
+    };
   }
 
   SystemUiOverlayStyle get systemUiOverlayStyle {
-    switch (this) {
-      case Brightness.dark:
-        return SystemUiOverlayStyle.dark;
-      case Brightness.light:
-        return SystemUiOverlayStyle.light;
-    }
+    return switch (this) {
+      Brightness.dark => SystemUiOverlayStyle.dark,
+      Brightness.light => SystemUiOverlayStyle.light
+    };
   }
 
   Color getColor({
     Color dark = const Color(0xFF000000),
     Color light = const Color(0xFFFFFFFF),
   }) {
-    switch (this) {
-      case Brightness.dark:
-        return dark;
-      case Brightness.light:
-        return light;
-    }
+    return switch (this) { Brightness.dark => dark, Brightness.light => light };
   }
 }
 
 extension TextDirectionExtensions on TextDirection {
   TextDirection get inverted {
-    switch (this) {
-      case TextDirection.ltr:
-        return TextDirection.rtl;
-      case TextDirection.rtl:
-        return TextDirection.ltr;
-    }
-  }
-}
-
-extension AsyncSnapshotExtensions on AsyncSnapshot {
-  @Deprecated("Use appropriate AsyncSnapshot properties instead")
-  AsyncSnapshotState get state {
-    if (hasError) {
-      return AsyncSnapshotState.errored;
-    } else if (!hasData) {
-      return AsyncSnapshotState.loading;
-    } else {
-      return AsyncSnapshotState.done;
-    }
+    return switch (this) {
+      TextDirection.ltr => TextDirection.rtl,
+      TextDirection.rtl => TextDirection.ltr
+    };
   }
 }
 

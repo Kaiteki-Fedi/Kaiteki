@@ -48,26 +48,17 @@ class UnicodeEmojiCategory implements EmojiCategory {
 
   @override
   List<EmojiCategoryItem<UnicodeEmoji>> get items {
-    switch (type) {
-      case UnicodeEmojiGroup.activities:
-        return activities;
-      case UnicodeEmojiGroup.animalsNature:
-        return animalsNature;
-      case UnicodeEmojiGroup.flags:
-        return flags;
-      case UnicodeEmojiGroup.foodDrink:
-        return foodDrink;
-      case UnicodeEmojiGroup.objects:
-        return objects;
-      case UnicodeEmojiGroup.peopleBody:
-        return peopleBody;
-      case UnicodeEmojiGroup.smileysEmotion:
-        return smileysEmotion;
-      case UnicodeEmojiGroup.symbols:
-        return symbols;
-      case UnicodeEmojiGroup.travelPlaces:
-        return travelPlaces;
-    }
+    return switch (type) {
+      UnicodeEmojiGroup.activities => activities,
+      UnicodeEmojiGroup.animalsNature => animalsNature,
+      UnicodeEmojiGroup.flags => flags,
+      UnicodeEmojiGroup.foodDrink => foodDrink,
+      UnicodeEmojiGroup.objects => objects,
+      UnicodeEmojiGroup.peopleBody => peopleBody,
+      UnicodeEmojiGroup.smileysEmotion => smileysEmotion,
+      UnicodeEmojiGroup.symbols => symbols,
+      UnicodeEmojiGroup.travelPlaces => travelPlaces
+    };
   }
 
   const UnicodeEmojiCategory(this.name, this.type);
@@ -85,25 +76,16 @@ enum UnicodeEmojiGroup {
   flags;
 
   String getDisplayName(AppLocalizations l10n) {
-    switch (this) {
-      case UnicodeEmojiGroup.smileysEmotion:
-        return l10n.emojiUnicodeGroupSmileysEmotion;
-      case UnicodeEmojiGroup.peopleBody:
-        return l10n.emojiUnicodeGroupPeopleBody;
-      case UnicodeEmojiGroup.animalsNature:
-        return l10n.emojiUnicodeGroupAnimalsNature;
-      case UnicodeEmojiGroup.foodDrink:
-        return l10n.emojiUnicodeGroupFoodDrink;
-      case UnicodeEmojiGroup.travelPlaces:
-        return l10n.emojiUnicodeGroupTravelPlaces;
-      case UnicodeEmojiGroup.activities:
-        return l10n.emojiUnicodeGroupActivities;
-      case UnicodeEmojiGroup.objects:
-        return l10n.emojiUnicodeGroupObjects;
-      case UnicodeEmojiGroup.symbols:
-        return l10n.emojiUnicodeGroupSymbols;
-      case UnicodeEmojiGroup.flags:
-        return l10n.emojiUnicodeGroupFlags;
-    }
+    return switch (this) {
+      UnicodeEmojiGroup.smileysEmotion => l10n.emojiUnicodeGroupSmileysEmotion,
+      UnicodeEmojiGroup.peopleBody => l10n.emojiUnicodeGroupPeopleBody,
+      UnicodeEmojiGroup.animalsNature => l10n.emojiUnicodeGroupAnimalsNature,
+      UnicodeEmojiGroup.foodDrink => l10n.emojiUnicodeGroupFoodDrink,
+      UnicodeEmojiGroup.travelPlaces => l10n.emojiUnicodeGroupTravelPlaces,
+      UnicodeEmojiGroup.activities => l10n.emojiUnicodeGroupActivities,
+      UnicodeEmojiGroup.objects => l10n.emojiUnicodeGroupObjects,
+      UnicodeEmojiGroup.symbols => l10n.emojiUnicodeGroupSymbols,
+      UnicodeEmojiGroup.flags => l10n.emojiUnicodeGroupFlags
+    };
   }
 }

@@ -16,4 +16,7 @@ enum Visibility {
 
   /// This [Post] does not federate.
   local,
+
+  /// This [Post] is only visible to the author's mutuals.
+  mutuals,
 }

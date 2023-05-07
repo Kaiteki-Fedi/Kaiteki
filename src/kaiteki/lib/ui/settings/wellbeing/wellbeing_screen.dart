@@ -60,20 +60,11 @@ class ContentWarningBehaviorListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(preferences.cwBehavior).value;
-
-    Widget subtitle;
-
-    switch (state) {
-      case ContentWarningBehavior.collapse:
-        subtitle = const Text("Collapse post");
-        break;
-      case ContentWarningBehavior.automatic:
-        subtitle = const Text("Automatic");
-        break;
-      case ContentWarningBehavior.expanded:
-        subtitle = const Text("Expand post");
-        break;
-    }
+    final subtitle = switch (state) {
+      ContentWarningBehavior.collapse => const Text("Collapse post"),
+      ContentWarningBehavior.automatic => const Text("Automatic"),
+      ContentWarningBehavior.expanded => const Text("Expand post")
+    };
 
     return ListTile(
       leading: const Icon(Icons.warning_rounded),
@@ -121,34 +112,23 @@ class ContentWarningBehaviorDialog extends ConsumerWidget {
   }
 
   Widget _buildTitle(ContentWarningBehavior behavior) {
-    switch (behavior) {
-      case ContentWarningBehavior.collapse:
-        return const Text("Collapse");
-
-      case ContentWarningBehavior.automatic:
-        return const Text("Automatic");
-
-      case ContentWarningBehavior.expanded:
-        return const Text("Expanded");
-    }
+    return switch (behavior) {
+      ContentWarningBehavior.collapse => const Text("Collapse"),
+      ContentWarningBehavior.automatic => const Text("Automatic"),
+      ContentWarningBehavior.expanded => const Text("Expanded")
+    };
   }
 
   Widget _buildSubtitle(ContentWarningBehavior behavior) {
-    switch (behavior) {
-      case ContentWarningBehavior.collapse:
-        return const Text(
+    return Text(
+      switch (behavior) {
+        ContentWarningBehavior.collapse =>
           "Posts with a content warning are always collapsed",
-        );
-
-      case ContentWarningBehavior.automatic:
-        return const Text(
+        ContentWarningBehavior.automatic =>
           "Posts will be collapsed if their content warning contains sensitive words",
-        );
-
-      case ContentWarningBehavior.expanded:
-        return const Text(
+        ContentWarningBehavior.expanded =>
           "Posts are always expanded. Content warnings are being treated as subjects.",
-        );
-    }
+      },
+    );
   }
 }
