@@ -10,7 +10,6 @@ final lightColorScheme = ColorScheme.light(
   secondaryContainer: kaitekiOrange.shade600,
   // error
   error: Colors.red,
-  onError: Colors.black,
 );
 
 final _brandedDarkBackgroundColor = Color.alphaBlend(
