@@ -14,43 +14,27 @@ part "post.g.dart";
 /// A class representing a post.
 @CopyWith()
 class Post<T> extends AdaptedEntity<T> {
-  /// The original object.
   final String id;
-
-  // METADATA
   final DateTime postedAt;
   final User author;
   final bool nsfw;
   final Visibility? visibility;
-
   final PostMetrics metrics;
   final PostState state;
-
-  /// What reactions this post has
   final List<Reaction> reactions;
-
-  // CONTENT
   final String? subject;
   final String? content;
   final Formatting? formatting;
   final List<Attachment>? attachments;
   final List<Emoji>? emojis;
-
   final List<Embed> embeds;
-
-  /// The client used to make this post.
   final String? client;
-
   final Poll? poll;
-
   final ResolvablePost? replyTo;
   final ResolvableUser? replyToUser;
-
   final Post? repeatOf;
   final Post? quotedPost;
-
   final List<UserReference>? mentionedUsers;
-
   final Uri? externalUrl;
   final String? language;
 
@@ -138,11 +122,4 @@ class Post<T> extends AdaptedEntity<T> {
 
     return copyWith.reactions(reactions);
   }
-}
-
-enum PostFlag {
-  repeatable,
-  replyable,
-  favoritable,
-  federatable,
 }
