@@ -121,7 +121,10 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
                 children: [
                   ValueListenableBuilder(
                     builder: (context, value, _) {
-                      return CircularProgressIndicator(value: value);
+                      return CircularProgressIndicator.adaptive(
+                        value: value,
+                        strokeCap: StrokeCap.round,
+                      );
                     },
                     valueListenable: valueNotifier,
                   ),

@@ -7,7 +7,11 @@ export "package:kaiteki/common.dart";
 typedef LocalizableStringBuilder = String Function(BuildContext context);
 
 const centeredCircularProgressIndicator = Center(
-  child: CircularProgressIndicator(),
+  child: circularProgressIndicator,
+);
+
+const circularProgressIndicator = CircularProgressIndicator.adaptive(
+  strokeCap: StrokeCap.round,
 );
 
 /// A [SizedBox] with a height of 26, which is the default height of a
