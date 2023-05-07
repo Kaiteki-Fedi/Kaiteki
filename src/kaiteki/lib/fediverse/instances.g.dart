@@ -34,8 +34,12 @@ Map<String, dynamic> _$InstanceDataToJson(InstanceData instance) =>
 
 const _$ApiTypeEnumMap = {
   ApiType.mastodon: 'mastodon',
+  ApiType.glitch: 'glitch',
   ApiType.pleroma: 'pleroma',
   ApiType.misskey: 'misskey',
+  ApiType.akkoma: 'akkoma',
+  ApiType.foundkey: 'foundkey',
+  ApiType.calckey: 'calckey',
   ApiType.twitter: 'twitter',
   ApiType.twitterV1: 'twitterV1',
 };
