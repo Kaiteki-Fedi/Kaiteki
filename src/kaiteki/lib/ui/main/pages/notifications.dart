@@ -104,7 +104,19 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   }
 
   List<Notification> groupNotifications(List<Notification> ungrouped) {
-    final groups = ungrouped.groupBy((e) => Tuple2(e.type, e.post?.id));
+    final groups = ungrouped.groupBy((e) {
+      String? followRequestValue;
+
+      if (e.type == NotificationType.followRequest) {
+        followRequestValue = e.user?.id;
+      }
+
+      return Tuple3(
+        e.type,
+        e.post?.id,
+        followRequestValue,
+      );
+    });
     return groups.entries
         .map((kv) {
           final notifications = kv.value;
