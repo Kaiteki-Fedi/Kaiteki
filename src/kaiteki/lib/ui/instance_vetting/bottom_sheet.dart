@@ -51,7 +51,9 @@ class _InstanceVettingBottomSheetState
               name != null && name.toLowerCase() != widget.instance;
 
           final instance = info?.probe.instance;
-          Widget leading = const Icon(Icons.public_rounded);
+
+          const leadingFallback = Icon(Icons.public_rounded);
+          Widget leading = leadingFallback;
 
           if (iconUrl != null) {
             leading = Image.network(
@@ -59,7 +61,7 @@ class _InstanceVettingBottomSheetState
               width: 24,
               height: 24,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => leading,
+              errorBuilder: (_, __, ___) => leadingFallback,
             );
           }
 
@@ -160,9 +162,7 @@ class _InstanceVettingBottomSheetState
           child: ColoredBox(
             color: Theme.of(context).colorScheme.surface,
             child: snapshot.connectionState == ConnectionState.waiting
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+                ? centeredCircularProgressIndicator
                 : instance?.backgroundUrl.nullTransform(
                     (bgUrl) => Image.network(
                       bgUrl.toString(),
@@ -364,6 +364,8 @@ class _InstanceVettingBottomSheetState
                 ListTile(
                   leading: Image.asset(
                     type.theme.iconAssetLocation!,
+                    width: 24,
+                    height: 24,
                   ),
                   title: Text(type.displayName),
                   subtitle: version == null ? null : Text(version),

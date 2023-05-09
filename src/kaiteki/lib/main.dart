@@ -29,7 +29,7 @@ Future<void> main() async {
     // construct app & run
     app = ProviderScope(
       overrides: [
-        sharedPreferencesProvider.overrideWith((_) => sharedPrefs),
+        sharedPreferencesProvider.overrideWithValue(sharedPrefs),
         accountManagerProvider.overrideWith((_) => accountManager),
       ],
       child: const KaitekiApp(),
