@@ -71,7 +71,9 @@ User toUser(twitter.User user) {
     description: user.description,
     avatarUrl: user.profileImageUrlHttps.nullTransform(Uri.parse),
     bannerUrl: user.profileBannerUrl,
-    postCount: user.statusesCount,
+    metrics: UserMetrics(
+      postCount: user.statusesCount,
+    ),
     details: UserDetails(
       location: user.location,
       website: url == null ? null : removeEntities(url, user.entities.url),

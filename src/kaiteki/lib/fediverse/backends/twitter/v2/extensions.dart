@@ -30,9 +30,17 @@ extension UserExtensions on twt.User {
         host: "twitter.com",
         pathSegments: [username],
       ),
-      followerCount: publicMetrics?.followersCount,
-      followingCount: publicMetrics?.followingCount,
-      postCount: publicMetrics?.tweetCount,
+      metrics: publicMetrics?.toKaiteki() ?? const ktk.UserMetrics(),
+    );
+  }
+}
+
+extension UserMetricsExtensions on twt.UserPublicMetrics {
+  ktk.UserMetrics toKaiteki() {
+    return ktk.UserMetrics(
+      followerCount: followersCount,
+      followingCount: followingCount,
+      postCount: tweetCount,
     );
   }
 }

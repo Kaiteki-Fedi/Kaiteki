@@ -596,4 +596,33 @@ class MastodonClient {
       query: {"acct": acct},
     ).then(Account.fromJson.fromResponse);
   }
+
+  Future<Relationship> getRelationship(String id) async {
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          "api/v1/accounts/relationships",
+          query: {"id": id},
+        )
+        .then(Relationship.fromJson.fromResponseList)
+        .then((list) => list.firstWhere((e) => e.id == id));
+  }
+
+  Future<Relationship> followAccount(String id) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/accounts/$id/follow",
+        )
+        .then(Relationship.fromJson.fromResponse);
+  }
+
+  Future<Relationship> unfollowAccount(String id) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/accounts/$id/unfollow",
+        )
+        .then(Relationship.fromJson.fromResponse);
+  }
 }

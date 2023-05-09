@@ -78,9 +78,13 @@ abstract class BackendAdapter {
 
   /// Follows an user.
   ///
-  /// This method *may* return a [User] with updated information depending on
-  /// the adapter implementation.
+  /// May return a [User] with updated user state, otherwise throw on error.
   Future<User?> followUser(String id);
+
+  /// Unfollows an user.
+  ///
+  /// May return a [User] with updated user state, otherwise throw on error.
+  Future<User?> unfollowUser(String id);
 
   Future<Attachment> uploadAttachment(AttachmentDraft draft);
 

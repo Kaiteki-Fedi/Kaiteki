@@ -452,4 +452,10 @@ class TwitterAdapter extends CentralizedBackendAdapter
   @override
   Future<User> lookupUser(String username, [String? host]) =>
       throw UnimplementedError();
+
+  @override
+  Future<User?> unfollowUser(String id) {
+    // TODO: implement unfollowUser
+    throw UnimplementedError();
+  }
 }

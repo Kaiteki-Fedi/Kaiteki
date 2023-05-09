@@ -203,7 +203,21 @@ CustomEmoji toEmoji(mastodon.Emoji emoji, String localHost) {
   );
 }
 
-User toUser(mastodon.Account source, String localHost) {
+User toUser(
+  mastodon.Account source,
+  String localHost, {
+  mastodon.Relationship? relationship,
+}) {
+  UserFollowState? getFollowState() {
+    if (relationship?.requested == true) return UserFollowState.pending;
+
+    if (relationship == null) return null;
+
+    return relationship.following == true
+        ? UserFollowState.following
+        : UserFollowState.notFollowing;
+  }
+
   return User(
     source: source,
     displayName: source.displayName,
@@ -214,16 +228,23 @@ User toUser(mastodon.Account source, String localHost) {
     id: source.id,
     description: source.note,
     emojis: source.emojis.map((e) => toEmoji(e, localHost)).toList(),
-    followerCount: source.followersCount,
-    followingCount: source.followingCount,
-    postCount: source.statusesCount,
+    metrics: UserMetrics(
+      followerCount: source.followersCount,
+      followingCount: source.followingCount,
+      postCount: source.statusesCount,
+    ),
+    state: UserState(
+      isMuted: relationship?.muting,
+      isBlocked: relationship?.blocking,
+      follow: getFollowState(),
+    ),
     host: _getHost(source.acct) ?? localHost,
     details: UserDetails(fields: _parseFields(source.fields)),
     url: source.url.nullTransform(Uri.parse),
     flags: UserFlags(
-      isBot: source.bot ?? false,
-      isModerator: source.pleroma?.isModerator ?? false,
-      isAdministrator: source.pleroma?.isAdmin ?? false,
+      isBot: source.bot,
+      isModerator: source.pleroma?.isModerator,
+      isAdministrator: source.pleroma?.isAdmin,
       isApprovingFollowers: source.locked,
     ),
   );

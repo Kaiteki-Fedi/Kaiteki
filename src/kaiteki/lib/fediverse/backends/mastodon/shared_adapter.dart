@@ -62,7 +62,9 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<User> getUserById(String id) async {
-    return toUser(await client.getAccount(id), instance);
+    final account = await client.getAccount(id);
+    final relationship = await client.getRelationship(id);
+    return toUser(account, instance, relationship: relationship);
   }
 
   @override
@@ -326,9 +328,17 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<User?> followUser(String id) {
-    // TODO(Craftplacer): implement followUser
-    throw UnimplementedError();
+  Future<User?> followUser(String id) async {
+    final relationship = await client.followAccount(id);
+    // TODO(Craftplacer): return updated relationship
+    return null;
+  }
+
+  @override
+  Future<User?> unfollowUser(String id) async {
+    final relationship = await client.unfollowAccount(id);
+    // TODO(Craftplacer): return updated relationship
+    return null;
   }
 
   @override

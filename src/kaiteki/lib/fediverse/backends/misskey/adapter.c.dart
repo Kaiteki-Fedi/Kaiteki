@@ -21,61 +21,19 @@ final misskeyVisibilityRosetta = Rosetta<String, Visibility>(const {
   "public": Visibility.public,
 });
 
-Post toPost(misskey.Note source, String localHost) {
-  final mappedEmoji =
-      source.emojis?.map<CustomEmoji>((e) => toEmoji(e, localHost)).toList();
-  final sourceReply = source.reply;
-  final sourceReplyId = source.replyId;
-
-  ResolvablePost? replyTo;
-  if (sourceReplyId != null) {
-    replyTo = sourceReply == null
-        ? ResolvablePost.fromId(sourceReplyId)
-        : toPost(sourceReply, localHost).resolved;
-  }
-
-  return Post(
-    source: source,
-    postedAt: source.createdAt,
-    author: toUser(source.user, localHost),
-    subject: source.cw,
-    content: source.text,
-    emojis: mappedEmoji,
-    reactions: source.reactions.entries.map((mkr) {
-      final Emoji emoji;
-
-      if (mappedEmoji != null) {
-        emoji = getEmojiFromString(mkr.key, mappedEmoji);
-      } else if (isCustomEmoji(mkr.key)) {
-        final emojiName = mkr.key.substring(1, mkr.key.length - 1);
-        final emojiUrl = buildEmojiUri(localHost, emojiName);
-        emoji = CustomEmoji(short: mkr.key, url: emojiUrl, instance: localHost);
-      } else {
-        emoji = UnicodeEmoji(mkr.key);
-      }
-
-      return Reaction(
-        count: mkr.value,
-        includesMe: mkr.key == source.myReaction,
-        emoji: emoji,
-      );
-    }).toList(),
-    replyTo: replyTo,
-    repeatOf: source.renote.nullTransform((n) => toPost(n, localHost)),
-    id: source.id,
-    visibility: misskeyVisibilityRosetta.getRight(source.visibility),
-    attachments: source.files?.map(toAttachment).toList(),
-    // FIXME(Craftplacer): Change to Uri?
-    externalUrl: source.url.nullTransform(Uri.parse),
-    metrics: PostMetrics(
-      repeatCount: source.renoteCount,
-      replyCount: source.repliesCount,
-    ),
+Uri buildEmojiUriManual(String localHost, String name, String? remoteHost) {
+  return Uri(
+    scheme: "https",
+    host: localHost,
+    pathSegments: [
+      "emoji",
+      if (remoteHost == null || localHost == remoteHost)
+        "$name.webp"
+      else
+        "$name@$remoteHost.webp",
+    ],
   );
 }
-
-bool isCustomEmoji(String input) =>
-    input.length >= 3 && input.startsWith(":") && input.endsWith(":");
 
 Emoji getEmojiFromString(String key, List<CustomEmoji> mappedEmoji) {
   final emoji = mappedEmoji.firstWhereOrNull(
@@ -91,72 +49,46 @@ Emoji getEmojiFromString(String key, List<CustomEmoji> mappedEmoji) {
   return emoji;
 }
 
-Attachment toAttachment(misskey.DriveFile file) {
-  var type = AttachmentType.file;
+bool isCustomEmoji(String input) =>
+    input.length >= 3 && input.startsWith(":") && input.endsWith(":");
 
-  final mainType = file.type.split("/").first.toLowerCase();
-  switch (mainType) {
-    case "video":
-      type = AttachmentType.video;
-      break;
-    case "image":
-      type = AttachmentType.image;
-      break;
-    case "audio":
-      type = AttachmentType.audio;
-      break;
+ChatMessage toChatMessage(misskey.MessagingMessage message, String localHost) {
+  final file = message.file;
+  return ChatMessage(
+    author: message.user!.toKaiteki(localHost),
+    content: message.text,
+    sentAt: message.createdAt,
+    emojis: [],
+    attachments: [if (file != null) file.toKaiteki()],
+  );
+}
+
+PostList toList(MisskeyList list) {
+  return PostList(
+    id: list.id,
+    name: list.name,
+    createdAt: list.createdAt,
+    source: list.createdAt,
+  );
+}
+
+Uri _buildEmojiUri(String localHost, _EmojiHandle handle) {
+  final (name, host) = handle;
+  return Uri.https(localHost).replace(
+    pathSegments: [
+      "emoji",
+      if (host == null) "$name.webp" else "$name@$host.webp",
+    ],
+  );
+}
+
+DateTime? _parseBirthday(String? birthday) {
+  if (birthday == null) {
+    return null;
   }
 
-  return Attachment(
-    source: file,
-    description: file.name,
-    previewUrl: Uri.parse(file.thumbnailUrl ?? file.url!),
-    url: Uri.parse(file.url!),
-    type: type,
-    isSensitive: file.isSensitive,
-    blurHash: file.blurhash,
-  );
-}
-
-CustomEmoji toEmoji(misskey.Emoji emoji, String localHost) {
-  return CustomEmoji(
-    short: emoji.name,
-    url: Uri.parse(emoji.url),
-    aliases: emoji.aliases,
-    instance: emoji.host ?? localHost,
-  );
-}
-
-User toUser(misskey.UserLite source, String localHost) {
-  final detailedUser = source.safeCast<misskey.User>();
-  return User(
-    avatarUrl: source.avatarUrl.nullTransform(Uri.parse),
-    avatarBlurHash: detailedUser?.avatarBlurhash,
-    bannerUrl: detailedUser?.bannerUrl,
-    bannerBlurHash: detailedUser?.bannerBlurhash as String?,
-    description: detailedUser?.description,
-    displayName: source.name,
-    emojis: source.emojis?.map((e) => toEmoji(e, localHost)).toList(),
-    host: source.host ?? localHost,
-    id: source.id,
-    joinDate: detailedUser?.createdAt,
-    source: source,
-    username: source.username,
-    details: UserDetails(
-      location: detailedUser?.location,
-      birthday: _parseBirthday(detailedUser?.birthday),
-      fields: _parseFields(detailedUser?.fields),
-    ),
-    followerCount: detailedUser?.followersCount,
-    followingCount: detailedUser?.followingCount,
-    postCount: detailedUser?.notesCount,
-    flags: UserFlags(
-      isAdministrator: source.isAdmin ?? false,
-      isModerator: source.isModerator ?? false,
-      isApprovingFollowers: false,
-      isBot: source.isBot ?? false,
-    ),
-  );
+  final dateFormat = DateFormat("yyyy-MM-dd");
+  return dateFormat.parseStrict(birthday);
 }
 
 Map<String, String>? _parseFields(Iterable<JsonMap>? fields) {
@@ -172,90 +104,187 @@ Map<String, String>? _parseFields(Iterable<JsonMap>? fields) {
   );
 }
 
-DateTime? _parseBirthday(String? birthday) {
-  if (birthday == null) {
-    return null;
+_EmojiHandle _splitEmoji(String key) {
+  if (key.startsWith(":") && key.endsWith(":")) {
+    key = key.substring(1, key.length - 1);
   }
 
-  final dateFormat = DateFormat("yyyy-MM-dd");
-  return dateFormat.parseStrict(birthday);
+  final split = key.split("@");
+  final hasHost = split.length >= 2 && split[1] != ".";
+  return (split[0], hasHost ? split[1] : null);
 }
 
-Instance toInstance(misskey.Meta instance, String instanceUrl) {
-  final instanceUri = Uri.parse(instanceUrl);
+typedef _EmojiHandle = (String name, String? host);
 
-  return Instance(
-    name: instance.name,
-    description: instance.description,
-    iconUrl: instance.iconUrl.nullTransform(instanceUri.resolve),
-    mascotUrl: instance.mascotImageUrl.nullTransform(instanceUri.resolve),
-    backgroundUrl: instance.bannerUrl.nullTransform(Uri.parse),
-    source: instance,
-  );
+extension KaitekiDriveFileExtension on misskey.DriveFile {
+  Attachment toKaiteki() {
+    final mainType = this.type.split("/").first.toLowerCase();
+
+    final type = switch (mainType) {
+      "video" => AttachmentType.video,
+      "image" => AttachmentType.image,
+      "audio" => AttachmentType.audio,
+      _ => AttachmentType.file
+    };
+
+    return Attachment(
+      source: this,
+      fileName: name,
+      previewUrl: Uri.parse(thumbnailUrl ?? url!),
+      url: Uri.parse(url!),
+      type: type,
+      isSensitive: isSensitive,
+      blurHash: blurhash,
+    );
+  }
 }
 
-ChatMessage toChatMessage(misskey.MessagingMessage message, String localHost) {
-  final file = message.file;
-  return ChatMessage(
-    author: toUser(message.user!, localHost),
-    content: message.text,
-    sentAt: message.createdAt,
-    emojis: [],
-    attachments: [if (file != null) toAttachment(file)],
-  );
+extension KaitekiEmojiExtension on misskey.Emoji {
+  CustomEmoji toKaiteki(String localHost) {
+    return CustomEmoji(
+      short: name,
+      url: Uri.parse(url),
+      aliases: aliases,
+      instance: host ?? localHost,
+    );
+  }
 }
 
-Notification toNotification(
-  misskey.Notification notification,
-  String localHost,
-) {
-  final note = notification.note;
-  final user = notification.user;
-
-  return Notification(
-    createdAt: notification.createdAt,
-    type: misskeyNotificationTypeRosetta.getRight(notification.type),
-    user: user == null ? null : toUser(user, localHost),
-    post: note == null ? null : toPost(note, localHost),
-    unread: !notification.isRead,
-  );
+extension KaitekiMetaExtension on misskey.Meta {
+  Instance toKaiteki(Uri instanceUri) {
+    return Instance(
+      source: this,
+      name: name,
+      description: description,
+      iconUrl: iconUrl.nullTransform(instanceUri.resolve),
+      mascotUrl: mascotImageUrl.nullTransform(instanceUri.resolve),
+      backgroundUrl: bannerUrl.nullTransform(Uri.parse),
+    );
+  }
 }
 
-PostList toList(MisskeyList list) {
-  return PostList(
-    id: list.id,
-    name: list.name,
-    createdAt: list.createdAt,
-    source: list.createdAt,
-  );
+extension KaitekiNoteExtension on misskey.Note {
+  Post toKaiteki(String localHost) {
+    final mappedEmoji =
+        emojis?.map<CustomEmoji>((e) => e.toKaiteki(localHost)).toList();
+    final sourceReply = reply;
+    final sourceReplyId = replyId;
+
+    ResolvablePost? replyTo;
+    if (sourceReplyId != null) {
+      replyTo = sourceReply == null
+          ? ResolvablePost.fromId(sourceReplyId)
+          : sourceReply.toKaiteki(localHost).resolved;
+    }
+
+    Reaction convertReaction(MapEntry<String, int> reaction) {
+      final Emoji emoji;
+
+      if (mappedEmoji != null) {
+        emoji = getEmojiFromString(reaction.key, mappedEmoji);
+      } else if (isCustomEmoji(reaction.key)) {
+        final emojiKey = _splitEmoji(reaction.key);
+        final emojiUrl = _buildEmojiUri(localHost, emojiKey);
+        emoji = CustomEmoji(
+          short: emojiKey.$1,
+          url: emojiUrl,
+          instance: emojiKey.$2 ?? localHost,
+        );
+      } else {
+        emoji = UnicodeEmoji(reaction.key);
+      }
+
+      return Reaction(
+        count: reaction.value,
+        includesMe: reaction.key == myReaction,
+        emoji: emoji,
+      );
+    }
+
+    return Post(
+      source: this,
+      postedAt: createdAt,
+      author: user.toKaiteki(localHost),
+      subject: cw,
+      content: text,
+      emojis: mappedEmoji,
+      reactions: reactions.entries.map(convertReaction).toList(),
+      replyTo: replyTo,
+      repeatOf: renote.nullTransform((n) => n.toKaiteki(localHost)),
+      id: id,
+      visibility: misskeyVisibilityRosetta.getRight(visibility),
+      attachments: files?.map((f) => f.toKaiteki()).toList(),
+      // FIXME(Craftplacer): Change to Uri?
+      externalUrl: url.nullTransform(Uri.parse),
+      metrics: PostMetrics(
+        repeatCount: renoteCount,
+        replyCount: repliesCount,
+      ),
+    );
+  }
 }
 
-Uri buildEmojiUri(String localHost, String emoji) {
-  assert(!(emoji.startsWith(":") || emoji.endsWith(":")));
-  final emojiSplit = emoji.split("@");
-  return Uri(
-    scheme: "https",
-    host: localHost,
-    pathSegments: [
-      "emoji",
-      if (emojiSplit.length == 1 || emojiSplit[1] == ".")
-        "${emojiSplit[0]}.webp"
-      else
-        "$emoji.webp",
-    ],
-  );
+extension KaitekiNotificationExtension on misskey.Notification {
+  Notification toKaiteki(String localHost) {
+    return Notification(
+      createdAt: createdAt,
+      type: misskeyNotificationTypeRosetta.getRight(type),
+      user: user?.toKaiteki(localHost),
+      post: note?.toKaiteki(localHost),
+      unread: !isRead,
+    );
+  }
 }
 
-Uri buildEmojiUriManual(String localHost, String name, String? remoteHost) {
-  return Uri(
-    scheme: "https",
-    host: localHost,
-    pathSegments: [
-      "emoji",
-      if (remoteHost == null || localHost == remoteHost)
-        "$name.webp"
-      else
-        "$name@$remoteHost.webp",
-    ],
-  );
+extension KaitekiUserExtension on misskey.UserLite {
+  User toKaiteki(String localHost) {
+    final detailed = safeCast<misskey.User>();
+
+    UserFollowState getFollowState() {
+      if (detailed?.isFollowing == true) return UserFollowState.following;
+
+      if (detailed?.hasPendingFollowRequestFromYou == true ||
+          detailed?.hasPendingReceivedFollowRequest == true) {
+        return UserFollowState.pending;
+      }
+
+      return UserFollowState.notFollowing;
+    }
+
+    return User(
+      avatarUrl: avatarUrl.nullTransform(Uri.parse),
+      avatarBlurHash: detailed?.avatarBlurhash,
+      bannerUrl: detailed?.bannerUrl,
+      bannerBlurHash: detailed?.bannerBlurhash as String?,
+      description: detailed?.description,
+      displayName: name,
+      emojis: emojis?.map((e) => e.toKaiteki(localHost)).toList(),
+      host: host ?? localHost,
+      id: id,
+      joinDate: detailed?.createdAt,
+      source: this,
+      username: username,
+      details: UserDetails(
+        location: detailed?.location,
+        birthday: _parseBirthday(detailed?.birthday),
+        fields: _parseFields(detailed?.fields),
+      ),
+      state: UserState(
+        isBlocked: detailed?.isBlocked,
+        isMuted: detailed?.isMuted,
+        follow: getFollowState(),
+      ),
+      metrics: UserMetrics(
+        followerCount: detailed?.followersCount,
+        followingCount: detailed?.followingCount,
+        postCount: detailed?.notesCount,
+      ),
+      flags: UserFlags(
+        isAdministrator: isAdmin,
+        isModerator: isModerator,
+        isApprovingFollowers: detailed?.isLocked,
+        isBot: isBot,
+      ),
+    );
+  }
 }

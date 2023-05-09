@@ -142,6 +142,9 @@ class DummyAdapter extends BackendAdapter {
   @override
   Future<User> lookupUser(String username, [String? host]) =>
       throw UnimplementedError();
+
+  @override
+  Future<User?> unfollowUser(String id) => throw UnimplementedError();
 }
 
 class DummyAdapterCapability extends AdapterCapabilities {

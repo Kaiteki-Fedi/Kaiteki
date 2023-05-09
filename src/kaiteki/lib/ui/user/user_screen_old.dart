@@ -56,8 +56,8 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
     _tabController = TabController(vsync: this, length: 3);
 
     id = widget.id;
-    remoteFetchPopupIgnored = !ref
-        .watch(AppExperiment.remoteUserFetching.provider);
+    remoteFetchPopupIgnored =
+        !ref.watch(AppExperiment.remoteUserFetching.provider);
 
     final bannerUrl = widget.initialUser?.bannerUrl;
     if (bannerUrl != null) {
@@ -314,19 +314,19 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
     return [
       buildTab(
         l10n.postsTab,
-        user?.postCount ?? 0,
+        user?.metrics.postCount ?? 0,
         showCountBadges,
         direction,
       ),
       buildTab(
         l10n.followersTab,
-        user?.followerCount ?? 0,
+        user?.metrics.followerCount ?? 0,
         showCountBadges,
         direction,
       ),
       buildTab(
         l10n.followingTab,
-        user?.followingCount ?? 0,
+        user?.metrics.followingCount ?? 0,
         showCountBadges,
         direction,
       ),
