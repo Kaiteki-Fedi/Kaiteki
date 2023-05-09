@@ -11,9 +11,9 @@ enum AppExperiment {
     "Denser reactions",
     "Reduces the spacing between reactions in order to show more of them",
   ),
-  newUserScreen(
-    "New User Screen",
-    "Use the new design of the user screen",
+  oldUserScreen(
+    "Old User Screen",
+    "Use the old design of the user screen",
   ),
   feedback(
     "App Feedback",
