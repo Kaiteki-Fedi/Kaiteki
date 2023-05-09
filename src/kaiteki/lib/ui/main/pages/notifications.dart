@@ -138,12 +138,6 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 
     return Column(
       children: [
-        // TextButton(
-        //   onPressed: () async {
-        //     await NativeNotificationPoster().sendNotification(data.first);
-        //   },
-        //   child: const Text("Send native notification"),
-        // ),
         Expanded(
           child: Material(
             child: TabBarView(
@@ -336,23 +330,22 @@ class NotificationWidget extends ConsumerWidget {
                         color: inheritedTextStyle.color?.withOpacity(.5),
                       ),
                     ),
-                  if (notification.type == NotificationType.followRequest)
-                    Row(
-                      children: [
-                        // TODO(Craftplacer): add following implementation
-                        OutlinedButton.icon(
-                          onPressed: null,
-                          icon: const Icon(Icons.check_rounded),
-                          label: const Text("Accept"),
-                        ),
-                        const SizedBox(width: 6),
-                        TextButton.icon(
-                          onPressed: null,
-                          icon: const Icon(Icons.close_rounded),
-                          label: const Text("Reject"),
-                        ),
-                      ],
-                    ),
+                  // if (notification.type == NotificationType.followRequest)
+                  //   Row(
+                  //     children: [
+                  //       OutlinedButton.icon(
+                  //         onPressed: null,
+                  //         icon: const Icon(Icons.check_rounded),
+                  //         label: const Text("Accept"),
+                  //       ),
+                  //       const SizedBox(width: 6),
+                  //       TextButton.icon(
+                  //         onPressed: null,
+                  //         icon: const Icon(Icons.close_rounded),
+                  //         label: const Text("Reject"),
+                  //       ),
+                  //     ],
+                  //   ),
                 ],
               ),
             ),
