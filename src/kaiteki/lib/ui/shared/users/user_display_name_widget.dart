@@ -23,22 +23,13 @@ class UserDisplayNameWidget extends ConsumerWidget {
     final textSpacing = !content.separate ? 0.0 : 6.0;
 
     return buildFlowWidget([
-      if (user.hasDisplayName)
-        Text.rich(
-          user.renderDisplayName(context, ref),
-          style: primaryTextStyle,
-          maxLines: 1,
-          overflow: TextOverflow.fade,
-          softWrap: false,
-        )
-      else
-        Text(
-          user.username,
-          style: primaryTextStyle,
-          overflow: TextOverflow.fade,
-          maxLines: 1,
-          softWrap: false,
-        ),
+      Text.rich(
+        user.renderText(context, ref, content.primary),
+        style: primaryTextStyle,
+        maxLines: 1,
+        overflow: TextOverflow.fade,
+        softWrap: false,
+      ),
       SizedBox(width: textSpacing),
       if (content.secondary != null)
         Text(
@@ -67,29 +58,39 @@ class UserDisplayNameWidget extends ConsumerWidget {
 }
 
 class DisplayNameTuple {
+  final String primary;
   final String? secondary;
   final bool separate;
 
-  const DisplayNameTuple(this.secondary, this.separate);
+  const DisplayNameTuple(this.primary, this.secondary, this.separate);
 
   factory DisplayNameTuple.fromUser(
     User user, [
     bool forceShowUsername = false,
   ]) {
     final username = user.username;
-    final display = user.displayName;
+    final display = user.displayName ?? username;
     final host = user.host;
+    final handle = user.handle;
 
-    final hasDisplay = user.hasDisplayName;
-    final prefixUsername =
-        (hasDisplay && (display!.toLowerCase() != username.toLowerCase())) ||
-            forceShowUsername;
+    if (!forceShowUsername) {
+      final normalizedDisplay = display.toLowerCase().trim();
 
-    String? secondary;
-    if (prefixUsername) secondary = "@${user.username}";
-    final prefix = secondary ?? "";
-    secondary = "$prefix@$host";
+      final similarToHandle = [
+        handle.toString().toLowerCase(),
+        handle.toString(false).toLowerCase(),
+        username.toLowerCase(),
+      ];
 
-    return DisplayNameTuple(secondary, prefixUsername);
+      if (similarToHandle.contains(normalizedDisplay)) {
+        return DisplayNameTuple(username, "@$host", false);
+      }
+    }
+
+    return DisplayNameTuple(
+      display,
+      handle.toString(),
+      true,
+    );
   }
 }
