@@ -1,9 +1,10 @@
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 class KaitekiColors extends ThemeExtension<KaitekiColors> {
   /// Primary color used for bookmarks.
-  final Color bookmarkColor;
+  final Color? bookmarkColor;
 
   /// Primary color used for favorites.
   final Color favoriteColor;
@@ -18,11 +19,17 @@ class KaitekiColors extends ThemeExtension<KaitekiColors> {
   });
 
   factory KaitekiColors.fromMaterialTheme(ThemeData theme) {
-    final primaryColor = theme.colorScheme.primary;
+    CustomColorPalette harmonizeWithPrimary(Color base) {
+      return createCustomColorPalette(
+        base.harmonizeWith(theme.colorScheme.primary),
+        theme.colorScheme.brightness,
+      );
+    }
+
     return KaitekiColors(
-      bookmarkColor: Colors.pink.harmonizeWith(primaryColor),
-      favoriteColor: Colors.orange.harmonizeWith(primaryColor),
-      repeatColor: Colors.green.harmonizeWith(primaryColor),
+      bookmarkColor: harmonizeWithPrimary(Colors.pink).color,
+      favoriteColor: harmonizeWithPrimary(Colors.orange).color,
+      repeatColor: harmonizeWithPrimary(Colors.green).color,
     );
   }
 
@@ -44,7 +51,7 @@ class KaitekiColors extends ThemeExtension<KaitekiColors> {
     if (other is! KaitekiColors) return this;
 
     return KaitekiColors(
-      bookmarkColor: Color.lerp(bookmarkColor, other.bookmarkColor, t)!,
+      bookmarkColor: Color.lerp(bookmarkColor, other.bookmarkColor, t),
       favoriteColor: Color.lerp(favoriteColor, other.favoriteColor, t)!,
       repeatColor: Color.lerp(repeatColor, other.repeatColor, t)!,
     );
