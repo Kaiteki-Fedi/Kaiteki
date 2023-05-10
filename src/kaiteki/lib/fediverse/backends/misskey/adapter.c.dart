@@ -141,11 +141,12 @@ extension KaitekiDriveFileExtension on misskey.DriveFile {
 
 extension KaitekiEmojiExtension on misskey.Emoji {
   CustomEmoji toKaiteki(String localHost) {
+    final handle = _splitEmoji(name);
     return CustomEmoji(
-      short: name,
+      short: handle.$1,
       url: Uri.parse(url),
       aliases: aliases,
-      instance: host ?? localHost,
+      instance: handle.$2 ?? localHost,
     );
   }
 }
