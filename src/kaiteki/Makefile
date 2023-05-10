@@ -2,7 +2,7 @@
 FLUTTER := flutter
 DART := $(FLUTTER) pub run dart
 
-BUILD_NUMBER := $(date +%s)
+BUILD_NUMBER := $(shell date +%s)
 
 # Define build args
 BUILD_MODE := $(if $(DEBUG),--debug)$(if $(RELEASE),--release)$(if $(PROFILE),--profile)
@@ -21,11 +21,12 @@ ifneq ($(WEEKLY_EPOCH),)
 	BUILD_ARGS += "--dart-define=VERSION_NAME=Weekly $(BUILD_NAME)"
 endif
 
+$(info build number: $(BUILD_NUMBER))
+
 # Define targets and their dependencies
 all: analyze
 
 build-android:
-	$(info build number: $(BUILD_NUMBER))
 ifdef $(STORE)
 	@$(FLUTTER) build appbundle $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),) $(if $(SPLIT_PER_ABI),--split-per-abi,)
 else

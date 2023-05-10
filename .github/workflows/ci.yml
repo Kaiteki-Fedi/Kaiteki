@@ -19,6 +19,9 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    outputs:
+      build-name: ${{steps.build-variables.outputs.BUILD_NAME}}
+      make-args: ${{steps.build-variables.outputs.MAKE_ARGS}}
     defaults:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
@@ -41,10 +44,11 @@ jobs:
 
       - name: Test
         run: 'flutter test --coverage -r expanded --no-pub'
-        
+
       - name: Provide build variables
         id: build-variables
         run: |
+          echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
           echo "MAKE_ARGS=RELEASE=TRUE SPLIT_PER_ABI=TRUE" >> $GITHUB_OUTPUT
 
       - name: Codecov
