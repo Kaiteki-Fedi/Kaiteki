@@ -329,14 +329,14 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<User?> followUser(String id) async {
-    final relationship = await client.followAccount(id);
+    /* final relationship = */ await client.followAccount(id);
     // TODO(Craftplacer): return updated relationship
     return null;
   }
 
   @override
   Future<User?> unfollowUser(String id) async {
-    final relationship = await client.unfollowAccount(id);
+    /* final relationship = */ await client.unfollowAccount(id);
     // TODO(Craftplacer): return updated relationship
     return null;
   }

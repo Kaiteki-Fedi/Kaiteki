@@ -42,7 +42,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape = MediaQuery.of(context).size.width >= 600;
+    // final isLandscape = MediaQuery.of(context).size.width >= 600;
     return Option<ListSupport>.safeCast(ref.watch(adapterProvider)).match(
       () => Scaffold(
         appBar: AppBar(title: const Text("Lists")),
@@ -56,15 +56,15 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
       (adapter) => FutureBuilder<List<PostList>>(
         future: _future,
         builder: (context, snapshot) {
-          Widget body;
-
-          if (_editMode) {
-            body = _buildEdit(snapshot);
-          } else {
-            body = isLandscape
-                ? _buildViewLandscape(context, snapshot)
-                : _buildView(snapshot, adapter);
-          }
+          // Widget body;
+          //
+          // if (_editMode) {
+          //   body = _buildEdit(snapshot);
+          // } else {
+          //   body = isLandscape
+          //       ? _buildViewLandscape(context, snapshot)
+          //       : _buildView(snapshot, adapter);
+          // }
 
           return AppBarTabBarTheme(
             child: DefaultTabController(
