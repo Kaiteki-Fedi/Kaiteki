@@ -24,15 +24,27 @@ ColorScheme getColorScheme(Brightness brightness, bool useM3) {
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyKaitekiTweaks() {
-    final navigationBarForegroundColor =
-        colorScheme.brightness == Brightness.dark
-            ? colorScheme.onSurface
-            : colorScheme.onPrimary;
     return copyWith(
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: colorScheme.secondaryContainer,
-        foregroundColor: colorScheme.onSecondaryContainer,
+        backgroundColor: useMaterial3 ? null : colorScheme.primary,
+        foregroundColor: useMaterial3 ? null : colorScheme.onPrimary,
         extendedTextStyle: textTheme.labelLarge,
+      ),
+      cardTheme: CardTheme(
+        shadowColor: useMaterial3 ? Colors.transparent : null,
+        margin: EdgeInsets.zero,
+      ),
+      menuButtonTheme: MenuButtonThemeData(
+        style: MenuItemButton.styleFrom(
+          iconColor:
+              useMaterial3 ? null : colorScheme.onSurface.withOpacity(.6),
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.onSurface,
+        elevation: 0,
+        scrolledUnderElevation: 4.0,
       ),
       snackBarTheme: const SnackBarThemeData(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
@@ -41,14 +53,14 @@ extension ThemeDataExtensions on ThemeData {
       dialogTheme: const DialogTheme(
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: colorScheme.brightness == Brightness.dark
-            ? colorScheme.surface
-            : colorScheme.primary,
-        selectedItemColor: navigationBarForegroundColor,
-        unselectedItemColor: navigationBarForegroundColor.withOpacity(0.76),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         showSelectedLabels: true,
+        showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
+      ),
+      badgeTheme: BadgeThemeData(
+        backgroundColor: useMaterial3 ? null : colorScheme.error,
+        textColor: useMaterial3 ? null : colorScheme.onError,
       ),
       textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
     );
