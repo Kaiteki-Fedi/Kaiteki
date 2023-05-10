@@ -164,7 +164,7 @@ jobs:
 
       - name: Build (unsigned)  
         if: github.event_name == 'pull_request'
-        run: 'make build-android SIGNED=FALSE ${{needs.test.outputs.make-args}}'
+        run: 'make build-android ${{needs.test.outputs.make-args}}'
 
       - name: Build (signed)
         if: github.event_name != 'pull_request'
