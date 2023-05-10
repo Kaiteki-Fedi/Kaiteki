@@ -421,9 +421,9 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<User?> followUser(String id) {
-    // TODO(Craftplacer): implement followUser
-    throw UnimplementedError();
+  Future<User?> followUser(String id) async {
+    await client.followUser(id);
+    return null;
   }
 
   @override
@@ -647,8 +647,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<User?> unfollowUser(String id) {
-    // TODO: implement unfollowUser
-    throw UnimplementedError();
+  Future<User?> unfollowUser(String id) async {
+    await client.unfollowUser(id);
+    return null;
   }
 }

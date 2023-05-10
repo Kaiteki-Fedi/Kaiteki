@@ -710,4 +710,22 @@ class MisskeyClient {
       }.jsonBody,
     );
   }
+
+  // TODO(Craftplacer): Misskey actually does return something -- UserLite?
+  Future<void> followUser(String id) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/following/create",
+      body: {"userId": id}.jsonBody,
+    );
+  }
+
+  // TODO(Craftplacer): Misskey actually does return something -- UserLite?
+  Future<void> unfollowUser(String id) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/following/delete",
+      body: {"userId": id}.jsonBody,
+    );
+  }
 }
