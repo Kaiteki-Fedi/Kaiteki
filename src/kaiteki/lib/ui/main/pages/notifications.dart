@@ -67,21 +67,24 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             ),
           ),
         ],
-        body: PageTransitionSwitcher(
-          transitionBuilder: animations.fadeThrough,
-          child: ref.watch(notifications).when(
-                data: (data) => _buildBody(
-                  groupNotifications(data),
-                  ref.read(notifications.notifier),
-                ),
-                error: (error, stackTrace) => Center(
-                  child: ErrorLandingWidget(
-                    error: error,
-                    stackTrace: stackTrace,
+        body: RefreshIndicator(
+          onRefresh: () => ref.read(notifications.notifier).refresh(),
+          child: PageTransitionSwitcher(
+            transitionBuilder: animations.fadeThrough,
+            child: ref.watch(notifications).when(
+                  data: (data) => _buildBody(
+                    groupNotifications(data),
+                    ref.read(notifications.notifier),
                   ),
+                  error: (error, stackTrace) => Center(
+                    child: ErrorLandingWidget(
+                      error: error,
+                      stackTrace: stackTrace,
+                    ),
+                  ),
+                  loading: () => centeredCircularProgressIndicator,
                 ),
-                loading: () => centeredCircularProgressIndicator,
-              ),
+          ),
         ),
       ),
     );

@@ -1,5 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/interfaces/search_support.dart";
 import "package:kaiteki/ui/main/tab_kind.dart";
 import "package:kaiteki/ui/main/views/bird.dart";
 import "package:kaiteki/ui/main/views/cat/view.dart";
@@ -8,6 +11,7 @@ import "package:kaiteki/ui/main/views/deck.dart";
 import "package:kaiteki/ui/main/views/fox.dart";
 import "package:kaiteki/ui/main/views/kaiteki.dart";
 import "package:kaiteki/ui/main/views/videos.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 export "package:kaiteki/ui/main/tab_kind.dart";
 
@@ -32,6 +36,13 @@ extension MainScreenViewExtension on MainScreenView {
   MainScreenViewType get type {
     return MainScreenViewType.values.firstWhere((e) => e.type == runtimeType);
   }
+}
+
+VoidCallback? getSearchCallback(BuildContext context, WidgetRef ref) {
+  if (ref.watch(adapterProvider) is! SearchSupport) return null;
+  return () {
+    context.pushNamed("search", pathParameters: ref.accountRouterParams);
+  };
 }
 
 enum MainScreenViewType<T extends MainScreenView> {

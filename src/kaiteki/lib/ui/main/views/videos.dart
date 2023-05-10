@@ -7,7 +7,6 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
-import "package:kaiteki/ui/main/tab_kind.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";

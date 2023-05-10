@@ -6,6 +6,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
 import "package:kaiteki/fediverse/interfaces/chat_support.dart";
 import "package:kaiteki/fediverse/interfaces/notification_support.dart";
+import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -16,7 +17,6 @@ import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/main/navigation/navigation_bar.dart";
 import "package:kaiteki/ui/main/navigation/navigation_rail.dart";
 import "package:kaiteki/ui/main/tab.dart";
-import "package:kaiteki/ui/main/tab_kind.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/window_class.dart";
@@ -199,13 +199,23 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
         ),
       IconButton(
         icon: const Icon(Icons.search_rounded),
-        onPressed: null, // _search,
+        onPressed: getSearchCallback(context, ref),
         tooltip: l10n.searchButtonLabel,
       ),
       IconButton(
         icon: const Icon(Icons.refresh_rounded),
-        onPressed: null,
-        // onPressed: _refresh,
+        onPressed: switch (widget.tab) {
+          TabKind.notifications => () async {
+              await ref
+                  .read(
+                    notificationServiceProvider(
+                      ref.read(accountProvider)!.key,
+                    ).notifier,
+                  )
+                  .refresh();
+            },
+          _ => null,
+        },
         tooltip: l10n.refreshTimelineButtonLabel,
       ),
 
