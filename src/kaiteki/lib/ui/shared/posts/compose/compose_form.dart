@@ -15,6 +15,7 @@ import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/file.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/adaptive_menu_anchor.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/missing_description.dart";
@@ -582,74 +583,67 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
           textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
         ),
       if (supportsLanguageTagging)
-        IconButton(
-          icon: Text(
-            _language.toUpperCase(),
-            style: Theme.of(context)
-                .ktkTextTheme
-                ?.monospaceTextStyle
-                .fallback
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-          tooltip: "Language",
-          splashRadius: splashRadius,
-          onPressed: _onSelectLanguage,
-        ),
-    ];
-  }
-
-  Future<void> _onSelectLanguage() async {
-    final languages = await ref.read(languageListProvider.future);
-
-    if (!mounted) return;
-
-    final result = await showDialog(
-      context: context,
-      useRootNavigator: false,
-      builder: (context) {
-        return Consumer(
-          builder: (context, ref, _) {
-            final visible = ref.watch(visibleLanguages).value;
-            var list = languages.where((e) => visible.contains(e.code));
-
-            if (list.isEmpty) {
-              list = languages.where((e) {
-                return Localizations.localeOf(context).languageCode == e.code ||
-                    e.code == _language;
-              });
-            }
-
-            return SimpleDialog(
-              title: const Text("Select language"),
-              children: [
-                for (var tuple in list)
-                  RadioListTile(
-                    title: Text(tuple.englishName ?? tuple.code),
-                    groupValue: _language,
-                    value: tuple.code,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 18),
-                    onChanged: (languageCode) {
-                      Navigator.of(context).pop(languageCode);
-                    },
+        FutureBuilder(
+          future: ref.read(languageListProvider.future),
+          builder: (context, snapshot) {
+            return AdaptiveMenu(
+              builder: (context, onTap) {
+                return IconButton(
+                  icon: Text(
+                    _language.toUpperCase(),
+                    style: Theme.of(context)
+                        .ktkTextTheme
+                        ?.monospaceTextStyle
+                        .fallback
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.add),
-                  title: const Text("Add a language"),
-                  onTap: () => context.pushNamed("visibleLanguageSettings"),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                  minLeadingWidth: 32,
-                )
-              ],
+                  tooltip: "Language",
+                  splashRadius: splashRadius,
+                  onPressed: snapshot.hasData ? onTap : null,
+                );
+              },
+              itemBuilder: (context, onClose) {
+                final visible = ref.watch(visibleLanguages).value;
+                final languages = snapshot.data!;
+                var list = languages.where((e) => visible.contains(e.code));
+
+                if (list.isEmpty) {
+                  list = languages.where((e) {
+                    return Localizations.localeOf(context).languageCode ==
+                            e.code ||
+                        e.code == _language;
+                  });
+                }
+
+                return [
+                  for (var tuple in list)
+                    MenuItemButton(
+                      leadingIcon: const SizedBox.square(dimension: 24),
+                      trailingIcon: _language == tuple.code
+                          ? const Icon(Icons.check)
+                          : const SizedBox.square(dimension: 24),
+                      onPressed: () {
+                        setState(() => _language = tuple.code);
+                        onClose?.call();
+                      },
+                      child: Text(tuple.englishName ?? tuple.code),
+                    ),
+                  const Divider(),
+                  MenuItemButton(
+                    leadingIcon: const Icon(Icons.add),
+                    onPressed: () {
+                      context.pushNamed("visibleLanguageSettings");
+                      onClose?.call();
+                    },
+                    trailingIcon: const SizedBox.square(dimension: 24),
+                    child: const Text("Add a language"),
+                  ),
+                ];
+              },
             );
           },
-        );
-      },
-    );
-
-    if (result == null) return;
-
-    setState(() => _language = result);
+        ),
+    ];
   }
 
   void reset() {

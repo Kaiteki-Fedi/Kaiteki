@@ -73,11 +73,9 @@ extension TextDirectionExtensions on TextDirection {
 enum AsyncSnapshotState { errored, loading, done }
 
 extension PostExtensions on Post {
-  Post getRoot() => _getRoot(this);
-
-  Post _getRoot(Post post) {
-    final repeatChild = post.repeatOf;
-    return repeatChild == null ? post : _getRoot(repeatChild);
+  Post get root {
+    final repeatOf = this.repeatOf;
+    return repeatOf == null ? this : repeatOf.root;
   }
 }
 

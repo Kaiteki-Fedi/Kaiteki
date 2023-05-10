@@ -1,59 +1,105 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/main/views/view.dart";
+import "package:kaiteki/ui/shared/posts/compose/compose_form.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
 import "package:kaiteki/utils/extensions.dart";
 
-class DeckMainScreenView extends StatefulWidget implements MainScreenView {
-  const DeckMainScreenView({super.key});
+class DeckMainScreenView extends ConsumerStatefulWidget
+    implements MainScreenView {
+  final Widget Function(TabKind tab) getPage;
+  final TabKind tab;
+  final Function(TabKind tab) onChangeTab;
+  final Function(MainScreenViewType view) onChangeView;
+
+  const DeckMainScreenView({
+    super.key,
+    required this.getPage,
+    required this.onChangeTab,
+    required this.tab,
+    required this.onChangeView,
+  });
 
   @override
-  State<DeckMainScreenView> createState() => _DeckMainScreenViewState();
-
-  @override
-  NavigationVisibility get navigationVisibility => NavigationVisibility.hide;
+  ConsumerState<DeckMainScreenView> createState() => _DeckMainScreenViewState();
 }
 
-class _DeckMainScreenViewState extends State<DeckMainScreenView> {
+class _DeckMainScreenViewState extends ConsumerState<DeckMainScreenView> {
   @override
   Widget build(BuildContext context) {
     const width = 8.0 * 40.0;
-    return const Align(
-      alignment: Alignment.centerLeft,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              width: width,
-              child: TimelineDeckColumn(
-                timelineKind: TimelineKind.home,
+    return Scaffold(
+      body: Align(
+        alignment: Alignment.centerLeft,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8),
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: width,
+                child: Column(
+                  children: [
+                    const Card(
+                      child: ComposeForm(),
+                    ),
+                    const SizedBox(height: 8),
+                    Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        leading: Icon(Icons.adaptive.arrow_back_rounded),
+                        title: const Text("Return to normal view"),
+                        onTap: () =>
+                            widget.onChangeView(MainScreenViewType.stream),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(width: 8),
-            SizedBox(
-              width: width,
-              child: TimelineDeckColumn(
-                timelineKind: TimelineKind.federated,
+              const SizedBox(width: 8),
+              const SizedBox(
+                width: width,
+                child: TimelineDeckColumn(
+                  timelineKind: TimelineKind.home,
+                ),
               ),
-            ),
-            SizedBox(width: 8),
-            SizedBox(
-              width: width,
-              child: DeckColumn(
-                icon: Icon(Icons.notifications_rounded),
-                title: Text("Notifications"),
-                child: NotificationsPage(),
+              const SizedBox(width: 8),
+              const SizedBox(
+                width: width,
+                child: TimelineDeckColumn(
+                  timelineKind: TimelineKind.federated,
+                ),
               ),
-            ),
-            SizedBox(width: 8),
-            AddColumnButton(),
-          ],
+              const SizedBox(width: 8),
+              SizedBox(
+                width: width,
+                child: DeckColumn(
+                  icon: const Icon(Icons.notifications_rounded),
+                  title: const Text("Notifications"),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.refresh_rounded),
+                      onPressed: () {
+                        final account = ref.read(accountProvider)!;
+                        ref
+                            .read(notificationServiceProvider(account.key)
+                                .notifier)
+                            .refresh();
+                      },
+                    ),
+                  ],
+                  child: const NotificationsPage(),
+                ),
+              ),
+              const SizedBox(width: 8),
+              const AddColumnButton(),
+            ],
+          ),
         ),
       ),
     );

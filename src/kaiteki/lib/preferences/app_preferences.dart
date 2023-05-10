@@ -60,6 +60,12 @@ final showAttachmentDescriptionWarning = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
+final showDedicatedPostOpenButton = createSettingProvider<bool>(
+  key: "showDedicatedPostOpenButton",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
 final useSearchBar = createSettingProvider<bool>(
   key: "useSearchBar",
   initialValue: false,

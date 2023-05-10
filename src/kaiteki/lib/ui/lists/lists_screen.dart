@@ -42,6 +42,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape = MediaQuery.of(context).size.width >= 600;
     return Option<ListSupport>.safeCast(ref.watch(adapterProvider)).match(
       () => Scaffold(
         appBar: AppBar(title: const Text("Lists")),
@@ -55,6 +56,16 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
       (adapter) => FutureBuilder<List<PostList>>(
         future: _future,
         builder: (context, snapshot) {
+          Widget body;
+
+          if (_editMode) {
+            body = _buildEdit(snapshot);
+          } else {
+            body = isLandscape
+                ? _buildViewLandscape(context, snapshot)
+                : _buildView(snapshot, adapter);
+          }
+
           return AppBarTabBarTheme(
             child: DefaultTabController(
               length: snapshot.data?.length ?? 0,
@@ -108,6 +119,95 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
                 },
               ),
       ),
+    );
+  }
+
+  Widget _buildViewLandscape(
+    BuildContext context,
+    AsyncSnapshot<List<PostList>> snapshot,
+  ) {
+    final lists = snapshot.data;
+    final isLoading = snapshot.connectionState == ConnectionState.waiting;
+    final listsAvailable = lists != null && lists.isNotEmpty;
+
+    final appBar = AppBar(
+      title: const Text("Lists"),
+      actions: [
+        if (listsAvailable)
+          IconButton(
+            icon: const Icon(Icons.edit_rounded),
+            tooltip: "Edit lists",
+            onPressed: () => setState(() => _editMode = true),
+          ),
+      ],
+    );
+
+    final Widget body;
+
+    if (isLoading) {
+      body = const SizedBox();
+    } else if (listsAvailable) {
+      body = TabBarView(
+        children: [
+          for (final list in lists) Timeline.list(listId: list.id),
+        ],
+      );
+    } else {
+      body = _buildEmptyState();
+    }
+
+    return Scaffold(
+      body: isLoading
+          ? centeredCircularProgressIndicator
+          : Row(
+              children: [
+                SizedBox(
+                  width: 300,
+                  child: Column(
+                    children: [
+                      appBar,
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            return NavigationDrawer(
+                              elevation: 0,
+                              onDestinationSelected: (index) {
+                                DefaultTabController.of(context)
+                                    .animateTo(index);
+                              },
+                              children: [
+                                if (lists != null)
+                                  for (final list in lists)
+                                    NavigationDrawerDestination(
+                                      icon: const Icon(Icons.list_alt_rounded),
+                                      label: Text(list.name),
+                                    ),
+                              ],
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: PageTransitionSwitcher(
+                    transitionBuilder: (
+                      child,
+                      animation,
+                      secondaryAnimation,
+                    ) {
+                      return FadeThroughTransition(
+                        animation: animation,
+                        secondaryAnimation: secondaryAnimation,
+                        child: child,
+                      );
+                    },
+                    child: body,
+                  ),
+                ),
+              ],
+            ),
     );
   }
 

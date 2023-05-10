@@ -27,6 +27,14 @@ enum AppExperiment {
   userSignatures(
     "User signatures",
     "Show the user's bio under their posts",
+  ),
+  navigationBarTheming(
+    "Navigation bar theming",
+    "Adjust the Android navigation bar to the current theme",
+  ),
+  articleView(
+    "Article view",
+    "Read posts like articles",
   );
 
   final String displayName;

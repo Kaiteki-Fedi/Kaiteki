@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/ui/adaptive_menu_anchor.dart";
 
 typedef EnumButtonCallback<T> = void Function(T newValue);
 typedef EnumWidgetBuilder<T> = Widget Function(BuildContext context, T value);
@@ -32,27 +33,35 @@ class EnumIconButton<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MenuAnchor(
+    return AdaptiveMenu(
       key: key,
-      builder: (context, controller, _) {
+      builder: (context, onPressed) {
         return IconButton(
           icon: iconBuilder.call(context, value),
-          onPressed: controller.open,
+          onPressed: onPressed,
           tooltip: tooltip,
           splashRadius: splashRadius,
         );
       },
-      menuChildren: _buildItems(context),
+      itemBuilder: _buildItems,
     );
   }
 
-  List<MenuItemButton> _buildItems(BuildContext context) {
+  List<MenuItemButton> _buildItems(
+    BuildContext context,
+    VoidCallback? onClose,
+  ) {
     final canSelect = onChanged != null;
 
     return [
       for (final value in values!)
         MenuItemButton(
-          onPressed: canSelect ? () => onChanged?.call(value) : null,
+          onPressed: canSelect
+              ? () {
+                  onChanged?.call(value);
+                  onClose?.call();
+                }
+              : null,
           leadingIcon: iconBuilder.call(context, value),
           trailingIcon: value == this.value
               ? const Icon(Icons.check_rounded)

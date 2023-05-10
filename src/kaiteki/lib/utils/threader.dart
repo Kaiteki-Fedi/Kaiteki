@@ -6,8 +6,8 @@ import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 
-ThreadPost toThread(Iterable<Post> posts) {
-  final threadPosts = posts.map((post) => ThreadPost(post.getRoot())).toList();
+ThreadPost toThread(Iterable<Post> posts, {bool ignoreMissing = false}) {
+  final threadPosts = posts.map((post) => ThreadPost(post.root)).toList();
 
   for (final post in threadPosts) {
     final id = post.post.id;
@@ -15,8 +15,13 @@ ThreadPost toThread(Iterable<Post> posts) {
 
     if (parentId != null) {
       final parent = threadPosts.firstWhereOrNull((p) => p.post.id == parentId);
+
       if (parent == null) {
-        throw Exception("Couldn't find parent post $parentId for $id");
+        if (ignoreMissing) continue;
+
+        throw BrokenThreadException(
+          "Couldn't find parent post $parentId for $id",
+        );
       }
 
       parent.replies.add(post);
@@ -30,6 +35,18 @@ ThreadPost toThread(Iterable<Post> posts) {
   }
 
   return op;
+}
+
+/// Exception thrown when a thread has posts replying to non-existent posts.
+///
+/// This is an indicator that the user is not authorized to view all replies.
+class BrokenThreadException implements Exception {
+  final String message;
+
+  const BrokenThreadException(this.message);
+
+  @override
+  String toString() => "BrokenThreadException: $message";
 }
 
 /// A mutable class

@@ -1,7 +1,6 @@
 import "dart:developer";
 
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
@@ -184,19 +183,10 @@ class TimelineState extends ConsumerState<TimelineSliver> {
   }
 
   Widget _buildPost(BuildContext context, Post item, int index) {
-    void openPost() => context.pushNamed(
-          "post",
-          pathParameters: {...ref.accountRouterParams, "id": item.id},
-          extra: item,
-        );
-
-    return InkWell(
-      onTap: openPost,
-      child: PostWidget(
-        item,
-        layout: widget.postLayout ?? PostWidgetLayout.normal,
-        onTap: openPost,
-      ),
+    return PostWidget(
+      item,
+      layout: widget.postLayout ?? PostWidgetLayout.normal,
+      onOpen: () => context.showPost(item, ref),
     );
   }
 

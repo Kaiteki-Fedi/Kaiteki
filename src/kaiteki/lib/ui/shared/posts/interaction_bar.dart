@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
-import "package:kaiteki/ui/shared/popup_menu_wrapper.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
 
 class InteractionBar extends StatefulWidget {
@@ -15,11 +14,11 @@ class InteractionBar extends StatefulWidget {
     this.favorited,
     this.repeated,
     this.reacted,
-    required this.buildActions,
     this.onShowFavoritees,
     this.onShowRepeatees,
     this.showLabels = true,
     this.spread = false,
+    this.menuChildren,
   });
 
   final PostMetrics metrics;
@@ -37,7 +36,7 @@ class InteractionBar extends StatefulWidget {
   final bool spread;
   final VoidCallback? onReact;
   final bool? reacted;
-  final List<PopupMenuEntry> Function(BuildContext) buildActions;
+  final List<Widget>? menuChildren;
 
   @override
   State<InteractionBar> createState() => InteractionBarState();
@@ -65,10 +64,20 @@ class InteractionBarState extends State<InteractionBar> {
         else
           // Ja ich weiß
           // ignore: dead_code
-          PopupMenuWrapper(
-            itemBuilder: buildRepeatActions,
-            offset: const Offset(-8, -8),
-            builder: _buildRepeatButton,
+          MenuAnchor(
+            builder: (context, controller, _) {
+              return _buildRepeatButton(context, controller.open);
+            },
+            menuChildren: [
+              PopupMenuItem(
+                onTap: widget.onRepeat,
+                child: const ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.repeat_rounded),
+                  title: Text("Repeat"),
+                ),
+              ),
+            ],
           ),
       if (widget.favorited != null)
         CountButton(
@@ -95,17 +104,25 @@ class InteractionBarState extends State<InteractionBar> {
       buttons = buttons.map<Widget>((e) => Flexible(child: e)).toList();
     }
 
-    buttons.add(
-      PopupMenuButton(
-        key: _popupMenuButtonKey,
-        icon: Icon(
-          Icons.more_horiz,
-          color: Theme.of(context).colorScheme.outline,
+    final menuChildren = widget.menuChildren;
+    if (menuChildren != null) {
+      buttons.add(
+        MenuAnchor(
+          menuChildren: menuChildren,
+          key: _popupMenuButtonKey,
+          builder: (context, controller, _) {
+            return IconButton(
+              onPressed: controller.open,
+              icon: Icon(
+                Icons.more_horiz,
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              splashRadius: 24,
+            );
+          },
         ),
-        itemBuilder: widget.buildActions,
-        splashRadius: 24,
-      ),
-    );
+      );
+    }
 
     return widget.spread
         ? Row(
@@ -129,41 +146,5 @@ class InteractionBarState extends State<InteractionBar> {
       onLongPress: widget.onShowRepeatees,
       showNumber: widget.showLabels,
     );
-  }
-
-  List<PopupMenuEntry> buildRepeatActions(BuildContext context) {
-    return [
-      PopupMenuItem(
-        onTap: widget.onRepeat,
-        child: const ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: Icon(Icons.repeat_rounded),
-          title: Text("Repeat"),
-        ),
-      ),
-      // PopupMenuItem(
-      //   onTap: widget.onRepeat,
-      //   child: const ListTile(
-      //     contentPadding: EdgeInsets.zero,
-      //     leading: Icon(Icons.format_quote_rounded),
-      //     title: Text("Quote"),
-      //   ),
-      // ),
-      // PopupMenuItem(
-      //   child: const ListTile(
-      //     contentPadding: EdgeInsets.zero,
-      //     leading: Icon(Icons.forward_rounded),
-      //     title: Text("Repost"),
-      //   ),
-      //   onTap: () async {
-      //     final account = await showDialog(
-      //       context: context,
-      //       builder: (_) => const ChooseAccountDialog(),
-      //     );
-//
-      //     await context.pushNamed("compose");
-      //   },
-      // ),
-    ];
   }
 }

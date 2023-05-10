@@ -127,14 +127,12 @@ class AttachmentTrayItem extends StatelessWidget {
   }
 
   Widget _buildFallbackIcon(AttachmentType type) {
-    switch (type) {
-      case AttachmentType.video:
-        return const Icon(Icons.video_file_rounded);
-      case AttachmentType.audio:
-        return const Icon(Icons.audio_file_rounded);
-      case AttachmentType.file:
-      default:
-        return const Icon(Icons.insert_drive_file_rounded);
-    }
+    return switch (type) {
+      AttachmentType.video => const Icon(Icons.video_file_rounded),
+      AttachmentType.image => const Icon(Icons.image_rounded),
+      AttachmentType.audio => const Icon(Icons.audio_file_rounded),
+      AttachmentType.file => const Icon(Icons.insert_drive_file_rounded),
+      AttachmentType.animated => const Icon(Icons.gif_box_rounded),
+    };
   }
 }

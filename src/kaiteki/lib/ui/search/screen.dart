@@ -99,7 +99,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           },
                           itemBuilder: (context, i) {
                             final post = results.posts[i];
-                            return PostWidget(post);
+                            return InkWell(
+                              onTap: () => context.showPost(post, ref),
+                              child: PostWidget(post),
+                            );
                           },
                           itemCount: results.posts.length,
                         ),

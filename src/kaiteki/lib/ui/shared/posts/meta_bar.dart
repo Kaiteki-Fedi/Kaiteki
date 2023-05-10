@@ -4,7 +4,6 @@ import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
-import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/users/user_badge.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -18,6 +17,7 @@ class MetaBar extends ConsumerWidget {
     this.showTime = true,
     this.showVisibility = true,
     this.showLanguage = true,
+    this.onOpen,
   }) : _post = post;
 
   final Post _post;
@@ -26,11 +26,14 @@ class MetaBar extends ConsumerWidget {
   final bool showVisibility;
   final bool showLanguage;
   final bool twolineAuthor;
+  final VoidCallback? onOpen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: kPostPadding.copyWith(top: 0),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minHeight: 32,
+      ),
       child: Row(
         children: [
           ...buildLeft(context, ref),
@@ -136,6 +139,20 @@ class MetaBar extends ConsumerWidget {
               color: secondaryColor,
             ),
           ),
+        ),
+      if (onOpen == null)
+        const SizedBox(width: 8)
+      else
+        IconButton(
+          icon: Icon(
+            Icons.open_in_full_rounded,
+            size: iconSize,
+            color: secondaryColor,
+          ),
+          visualDensity: VisualDensity.compact,
+          onPressed: onOpen,
+          tooltip: "Open post",
+          splashRadius: 16,
         ),
     ];
   }
