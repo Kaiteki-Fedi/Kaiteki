@@ -17,8 +17,8 @@ class PlaceholderPostWidget extends StatelessWidget {
     final theme = Theme.of(context).ktkPostTheme!;
     final leftPostContentInset = theme.avatarSpacing + 48;
 
-    final isExpanded = layout == PostWidgetLayout.expanded;
-    final isWide = layout == PostWidgetLayout.wide;
+    const isExpanded = layout == PostWidgetLayout.expanded;
+    const isWide = layout == PostWidgetLayout.wide;
     final outlineColor = Theme.of(context).colorScheme.outline;
     // final outlineTextStyle = outlineColor.textStyle;
 

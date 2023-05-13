@@ -87,8 +87,9 @@ class _DeckMainScreenViewState extends ConsumerState<DeckMainScreenView> {
                       onPressed: () {
                         final account = ref.read(accountProvider)!;
                         ref
-                            .read(notificationServiceProvider(account.key)
-                                .notifier)
+                            .read(
+                              notificationServiceProvider(account.key).notifier,
+                            )
                             .refresh();
                       },
                     ),
