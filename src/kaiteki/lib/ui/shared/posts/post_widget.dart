@@ -46,7 +46,7 @@ const kArticleViewThreshold = 300;
 
 const spacer = SizedBox(height: 8);
 
-final sensitiveWords = {"cw", "mh", "ph", "pol", "suicide", "selfharm"};
+final sensitiveWords = {"cw", "mh", "ph", "pol", "suicide", "selfharm", "nsfw"};
 
 class PostWidget extends ConsumerStatefulWidget {
   final Post post;
