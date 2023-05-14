@@ -47,29 +47,20 @@ extension UserMetricsExtensions on twt.UserPublicMetrics {
 
 extension TweetExtensions on twt.Tweet {
   ktk.Post toKaiteki(ResponseIncludes includes) {
-    Timeline.instantSync(
-      "Translating tweet to post",
-      arguments: {"tweet": toJson()},
-    );
+    (String id, twt.Tweet?)? getTweet(twt.ReferencedTweetType type) {
+      final id = referencedTweets?.firstWhereOrNull((t) => t.type == type)?.id;
 
-    final retweet = referencedTweets?.firstWhereOrNull((t) {
-      return t.type == twt.ReferencedTweetType.retweeted;
-    });
+      if (id == null) return null;
 
-    final quote = referencedTweets?.firstWhereOrNull((t) {
-      return t.type == twt.ReferencedTweetType.quoted;
-    });
-
-    final reply = referencedTweets?.firstWhereOrNull((t) {
-      return t.type == twt.ReferencedTweetType.repliedTo;
-    });
-
-    Post? replyPost;
-    if (reply != null) {
-      replyPost = includes.tweets
-          ?.firstWhereOrNull((t) => t.id == reply.id)
-          ?.toKaiteki(includes);
+      return (
+        id,
+        includes.tweets?.firstWhereOrNull((t) => t.id == id),
+      );
     }
+
+    final retweet = getTweet(twt.ReferencedTweetType.retweeted);
+    final quote = getTweet(twt.ReferencedTweetType.quoted);
+    final op = getTweet(twt.ReferencedTweetType.repliedTo);
 
     final media = attachments?.mediaKeys
         ?.map((key) {
@@ -80,22 +71,19 @@ extension TweetExtensions on twt.Tweet {
 
     final author = includes.users!.firstWhere((u) => u.id == authorId);
 
+    final replyTo = op.nullTransform(
+      (op) => ResolvablePost(op.$1, op.$2?.toKaiteki(includes)),
+    );
+
     return ktk.Post(
       source: this,
       id: id,
       author: author.toKaiteki(),
       postedAt: createdAt!,
       content: getText(),
-      repeatOf: retweet != null
-          ? includes.tweets
-              ?.firstWhereOrNull((t) => t.id == retweet.id)
-              ?.toKaiteki(includes)
-          : null,
-      quotedPost: quote != null
-          ? includes.tweets
-              ?.firstWhereOrNull((t) => t.id == quote.id)
-              ?.toKaiteki(includes)
-          : null,
+      language: lang,
+      repeatOf: retweet?.$2.nullTransform((t) => t.toKaiteki(includes)),
+      quotedPost: quote?.$2.nullTransform((t) => t.toKaiteki(includes)),
       attachments: media
           ?.where((m) {
             final hasUrl = m.url != null || m.previewImageUrl != null;
@@ -104,16 +92,16 @@ extension TweetExtensions on twt.Tweet {
           })
           .map((m) => m.toKaiteki())
           .toList(),
-      replyTo: replyPost == null
-          ? reply?.id.nullTransform(ResolvablePost.fromId)
-          : ResolvablePost.fromData(replyPost),
+      replyTo: replyTo,
       metrics: PostMetrics(
         favoriteCount: publicMetrics?.likeCount ?? 0,
         repeatCount: (publicMetrics?.retweetCount ?? 0) +
             (publicMetrics?.quoteCount ?? 0),
         replyCount: publicMetrics?.replyCount ?? 0,
       ),
-      replyToUser: inReplyToUserId.nullTransform(ResolvableUser.fromId),
+      replyToUser: replyTo?.data == null
+          ? inReplyToUserId.nullTransform(ResolvableUser.fromId)
+          : ResolvableUser.fromData(replyTo!.data!.author),
       externalUrl: Uri(
         scheme: "https",
         host: "twitter.com",
