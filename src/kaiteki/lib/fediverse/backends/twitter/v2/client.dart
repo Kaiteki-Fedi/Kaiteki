@@ -186,14 +186,23 @@ class TwitterClient {
   void _checkResponse(http.Response response) {
     if (response.isSuccessful) return;
 
-    String? error;
-    String? description;
-
-    try {
       final json = jsonDecode(response.body) as JsonMap;
-      error = json["error"] as String;
-      description = json["error_description"] as String;
-    } catch (e, s) {
+
+    final error = switch (json) {
+      {
+        "error": final String error,
+        "error_description": final String description,
+      } =>
+        (error, description),
+      {
+        "title": final String title,
+        "detail": final String detail,
+      } =>
+        (title, detail),
+      _ => null,
+    };
+
+    try {} catch (e, s) {
       log(
         "Error while parsing error response: ${response.body}",
         name: "TwitterClient",
@@ -202,11 +211,9 @@ class TwitterClient {
       );
     }
 
-    if (error == null || description == null) {
-      throw HttpException.fromResponse(response);
-    } else {
-      throw Exception("$error: $description");
-    }
+    if (error == null) throw HttpException.fromResponse(response);
+
+    throw Exception("${error.$1}: ${error.$2}");
   }
 
   Future<TweetListResponse> searchRecentTweets(
