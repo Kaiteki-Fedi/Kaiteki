@@ -154,7 +154,7 @@ class TwitterClient {
   }) async {
     return client.sendRequest(
       HttpMethod.get,
-      "2/users/$userId/tweets",
+      "2/users/$id/tweets",
       query: {
         if (expansions.isNotEmpty) "expansions": expansions.join(","),
         if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
@@ -174,7 +174,7 @@ class TwitterClient {
   }) async {
     return client.sendRequest(
       HttpMethod.get,
-      "2/users/$userId",
+      "2/users/$id",
       query: {
         if (expansions.isNotEmpty) "expansions": expansions.join(","),
         if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
