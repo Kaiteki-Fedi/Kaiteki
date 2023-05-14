@@ -109,8 +109,8 @@ class TwitterClient {
                 ),
               },
             if (quoteTweetId != null) "quote_tweet_id": quoteTweetId,
-            "direct_message_deep_link":
-                "https://twitter.com/messages/compose?recipient_id=$userId"
+            // "direct_message_deep_link":
+            //     "https://twitter.com/messages/compose?recipient_id=$userId"
           }.jsonBody,
         )
         .then(
