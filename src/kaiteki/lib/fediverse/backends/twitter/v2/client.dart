@@ -10,6 +10,7 @@ import "package:kaiteki/fediverse/backends/twitter/v2/model/user.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/bookmark_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/like_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/retweet_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/timeline_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/token_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/user_response.dart";
@@ -186,7 +187,7 @@ class TwitterClient {
   void _checkResponse(http.Response response) {
     if (response.isSuccessful) return;
 
-      final json = jsonDecode(response.body) as JsonMap;
+    final json = jsonDecode(response.body) as JsonMap;
 
     final error = switch (json) {
       {
@@ -335,6 +336,30 @@ class TwitterClient {
         .sendRequest(HttpMethod.delete, "2/users/$userId/likes/$tweetId")
         .then(
           LikeResponse.fromJson.fromResponse(LikeResponseData.fromJson.generic),
+        );
+  }
+
+  Future<RetweetResponse> retweet(String tweetId) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "2/users/$userId/retweets",
+          body: {"tweet_id": tweetId}.jsonBody,
+        )
+        .then(
+          RetweetResponse.fromJson.fromResponse(
+            RetweetResponseData.fromJson.generic,
+          ),
+        );
+  }
+
+  Future<RetweetResponse> undoRetweet(String tweetId) async {
+    return client
+        .sendRequest(HttpMethod.delete, "2/users/$userId/retweets/$tweetId")
+        .then(
+          RetweetResponse.fromJson.fromResponse(
+            RetweetResponseData.fromJson.generic,
+          ),
         );
   }
 

@@ -292,15 +292,17 @@ class TwitterAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  Future<Post?> repeatPost(String id) {
-    // TODO(Craftplacer): implement repeatPost
-    throw UnimplementedError();
+  Future<Post?> repeatPost(String id) async {
+    final response = await client.retweet(id);
+    assert(response.data.retweeted);
+    return null;
   }
 
   @override
-  Future<Post?> unrepeatPost(String id) {
-    // TODO(Craftplacer): implement unrepeatPost
-    throw UnimplementedError();
+  Future<Post?> unrepeatPost(String id) async {
+    final response = await client.undoRetweet(id);
+    assert(!response.data.retweeted);
+    return null;
   }
 
   @override
