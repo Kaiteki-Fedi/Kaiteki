@@ -133,16 +133,6 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
               style: widget.style,
             ),
           ),
-        if (post.embeds.isNotEmpty)
-          Card(
-            margin: EdgeInsets.zero,
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: <Widget>[
-                for (var embed in post.embeds) EmbedWidget(embed),
-              ].joinWithValue(const Divider(height: 1)),
-            ),
-          ),
         if (post.poll != null) ...[
           spacer,
           DecoratedBox(
@@ -159,6 +149,18 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
         if (post.attachments?.isNotEmpty == true) ...[
           spacer,
           AttachmentRow(post: post),
+        ],
+        if (post.embeds.isNotEmpty) ...[
+          spacer,
+          Card(
+            margin: EdgeInsets.zero,
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: <Widget>[
+                for (var embed in post.embeds) EmbedWidget(embed),
+              ].joinWithValue(const Divider(height: 1)),
+            ),
+          ),
         ],
       ],
     );
@@ -311,10 +313,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
               spacer,
               ReactionRow(_post.reactions, (r) => _onChangeReaction(r.emoji)),
             ],
-            for (final embed in _post.embeds)
-              EmbedWidget(
-                embed,
-              ),
           ],
         ),
       ),
