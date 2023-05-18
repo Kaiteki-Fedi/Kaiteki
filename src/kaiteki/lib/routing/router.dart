@@ -8,7 +8,6 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/auth/account.dart";
-import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/routing/notifier.dart";
 import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
@@ -35,7 +34,6 @@ import "package:kaiteki/ui/shared/conversation_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
-import "package:kaiteki/ui/user/user_screen_old.dart";
 import "package:kaiteki/utils/extensions.dart";
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -216,13 +214,6 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 path: "users/:id",
                 builder: (context, state) {
                   final id = state.pathParameters["id"]!;
-
-                  if (ref.read(AppExperiment.oldUserScreen.provider)) {
-                    final user = state.extra.safeCast<User>();
-                    if (user != null) return OldUserScreen.fromUser(user);
-                    return OldUserScreen.fromId(id);
-                  }
-
                   return UserScreen(id: id);
                 },
               ),
