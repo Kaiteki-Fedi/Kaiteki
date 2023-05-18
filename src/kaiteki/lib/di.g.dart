@@ -38,12 +38,12 @@ final languageIdentificatorProvider =
 
 typedef LanguageIdentificatorRef
     = AutoDisposeProviderRef<LanguageIdentificator?>;
-String _$languageListHash() => r'6379885123a836693b8b287564329b03589a7bfc';
+String _$languageListHash() => r'47585c70705158bdd9b5e9b6347637b2f1e3558d';
 
 /// See also [languageList].
 @ProviderFor(languageList)
 final languageListProvider =
-    AutoDisposeFutureProvider<UnmodifiableListView<Language>>.internal(
+    FutureProvider<UnmodifiableListView<Language>>.internal(
   languageList,
   name: r'languageListProvider',
   debugGetCreateSourceHash:
@@ -52,6 +52,5 @@ final languageListProvider =
   allTransitiveDependencies: null,
 );
 
-typedef LanguageListRef
-    = AutoDisposeFutureProviderRef<UnmodifiableListView<Language>>;
+typedef LanguageListRef = FutureProviderRef<UnmodifiableListView<Language>>;
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

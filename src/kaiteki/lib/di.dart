@@ -70,7 +70,7 @@ final textParserProvider = Provider<Set<TextParser>>(
   dependencies: [adapterProvider],
 );
 
-@Riverpod()
+@Riverpod(keepAlive: true)
 Future<UnmodifiableListView<Language>> languageList(LanguageListRef ref) async {
   final languagesJson =
       await rootBundle.loadString("assets/languages.json", cache: false);
