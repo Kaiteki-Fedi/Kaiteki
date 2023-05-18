@@ -29,7 +29,8 @@ class MainScreenNavigationRail extends ConsumerWidget {
       destinations.add(
         NavigationRailDestination(
           icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
-          selectedIcon: Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          selectedIcon:
+              Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
           label: Text(tab.kind.getLabel(context)),
         ),
       );
