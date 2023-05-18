@@ -32,6 +32,7 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 # System-level dependencies.
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
+pkg_check_modules(HANDY REQUIRED IMPORTED_TARGET libhandy-1)
 
 add_definitions(-DAPPLICATION_ID="${APPLICATION_ID}")
 
@@ -44,6 +45,7 @@ add_executable(${BINARY_NAME}
 apply_standard_settings(${BINARY_NAME})
 target_link_libraries(${BINARY_NAME} PRIVATE flutter)
 target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK)
+target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::HANDY)
 add_dependencies(${BINARY_NAME} flutter_assemble)
 set_target_properties(${BINARY_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/tmp)
 
