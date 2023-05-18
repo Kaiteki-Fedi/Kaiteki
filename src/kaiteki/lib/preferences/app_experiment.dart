@@ -6,7 +6,7 @@ enum AppExperiment {
     "Fetch users from remote instances",
     "Allows querying the remote instance for user details",
   ),
-  timelineViews("Timeline views"),
+  timelineViews("Layouts"),
   denseReactions(
     "Denser reactions",
     "Reduces the spacing between reactions in order to show more of them",
