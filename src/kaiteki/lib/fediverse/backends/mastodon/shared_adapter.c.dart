@@ -46,6 +46,17 @@ Iterable<Reaction> _statusReactions(mastodon.Status source, String localHost) {
   return r?.map((r) => toReaction(r, localHost)).toList() ?? const [];
 }
 
+Embed toEmbed(mastodon.PreviewCard card) {
+  return Embed(
+    source: card,
+    uri: card.url,
+    description: card.description,
+    title: card.title,
+    imageUrl: card.image,
+    siteName: card.providerName,
+  );
+}
+
 Post toPost(mastodon.Status source, String localHost) {
   final repliedUser = getRepliedUser(source, localHost);
   return Post(
@@ -92,6 +103,7 @@ Post toPost(mastodon.Status source, String localHost) {
       pinned: source.pinned ?? false,
     ),
     poll: source.poll.nullTransform(toPoll),
+    embeds: [source.card.nullTransform(toEmbed)].whereNotNull().toList(),
   );
 }
 

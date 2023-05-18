@@ -490,6 +490,38 @@ class MastodonClient {
         .then(Status.fromJson.fromResponseList);
   }
 
+  Future<List<PreviewCard>> getTrendingLinks({
+    int? limit,
+    int? offset,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          "api/v1/trends/links",
+          body: {
+            if (limit == null) "limit": limit,
+            if (offset == null) "offset": offset,
+          }.jsonBody,
+        )
+        .then(PreviewCard.fromJson.fromResponseList);
+  }
+
+  Future<List<Tag>> getTrendingTags({
+    int? limit,
+    int? offset,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          "api/v1/trends/tags",
+          body: {
+            if (limit == null) "limit": limit,
+            if (offset == null) "offset": offset,
+          }.jsonBody,
+        )
+        .then(Tag.fromJson.fromResponseList);
+  }
+
   Future<MastodonPagination<List<Account>>> getAccountFollowing(
     String id, {
     String? maxId,

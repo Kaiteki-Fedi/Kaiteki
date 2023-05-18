@@ -23,7 +23,7 @@ abstract class _$PostCWProxy<T> {
 
   Post<T> content(String? content);
 
-  Post<T> embeds(List<Embed> embeds);
+  Post<T> embeds(List<Embed<dynamic>> embeds);
 
   Post<T> emojis(List<Emoji>? emojis);
 
@@ -70,7 +70,7 @@ abstract class _$PostCWProxy<T> {
     List<UserReference>? mentionedUsers,
     List<Attachment<dynamic>>? attachments,
     String? content,
-    List<Embed>? embeds,
+    List<Embed<dynamic>>? embeds,
     List<Emoji>? emojis,
     Uri? externalUrl,
     Formatting? formatting,
@@ -122,7 +122,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
   Post<T> content(String? content) => this(content: content);
 
   @override
-  Post<T> embeds(List<Embed> embeds) => this(embeds: embeds);
+  Post<T> embeds(List<Embed<dynamic>> embeds) => this(embeds: embeds);
 
   @override
   Post<T> emojis(List<Emoji>? emojis) => this(emojis: emojis);
@@ -240,7 +240,7 @@ class _$PostCWProxyImpl<T> implements _$PostCWProxy<T> {
       embeds: embeds == const $CopyWithPlaceholder() || embeds == null
           ? _value.embeds
           // ignore: cast_nullable_to_non_nullable
-          : embeds as List<Embed>,
+          : embeds as List<Embed<dynamic>>,
       emojis: emojis == const $CopyWithPlaceholder()
           ? _value.emojis
           // ignore: cast_nullable_to_non_nullable

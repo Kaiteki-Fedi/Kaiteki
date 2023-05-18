@@ -10,10 +10,12 @@ class EmbedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final description = embed.description;
     return Card(
       child: InkWell(
         onTap: () => launchUrl(embed.uri),
-        child: IntrinsicHeight(
+        child: SizedBox(
+          height: 8 * 12,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -29,36 +31,39 @@ class EmbedWidget extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: DefaultTextStyle.merge(
-                    softWrap: false,
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (embed.title != null)
-                          Text(
-                            embed.title!,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        if (embed.description != null) Text(embed.description!),
-
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (embed.title != null)
                         Text(
-                          embed.uri.host,
-                          style: TextStyle(
-                            color: Theme.of(context).disabledColor,
-                          ),
+                          embed.title!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          maxLines: 1,
                         ),
-                        // Spacer(),
-                        // Row(
-                        //   children: [
-                        //     if (card.pleroma.opengraph["site_name"] != null)
-                        //       Text(card.pleroma.opengraph["site_name"])
-                        //   ],
-                        // )
-                      ],
-                    ),
+                      if (description != null && description.isNotEmpty)
+                        Text(
+                          description
+                              .split("\n")
+                              .where((e) => e.isNotEmpty)
+                              .join(" "),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      Text(
+                        embed.uri.host,
+                        style: TextStyle(
+                          color: Theme.of(context).disabledColor,
+                        ),
+                      ),
+                      // Spacer(),
+                      // Row(
+                      //   children: [
+                      //     if (card.pleroma.opengraph["site_name"] != null)
+                      //       Text(card.pleroma.opengraph["site_name"])
+                      //   ],
+                      // )
+                    ],
                   ),
                 ),
               )
@@ -70,21 +75,21 @@ class EmbedWidget extends StatelessWidget {
   }
 
   Widget buildIcon(BuildContext context) {
-    if (embed.largeImageUrl == null) {
+    if (embed.imageUrl == null) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Icon(
             Icons.public_rounded,
             size: 32,
-            color: Theme.of(context).disabledColor,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
       );
     }
 
     return Image.network(
-      embed.largeImageUrl!,
+      embed.imageUrl!.toString(),
       width: 120,
       fit: BoxFit.cover,
     );
