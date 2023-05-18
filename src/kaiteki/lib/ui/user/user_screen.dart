@@ -2,12 +2,15 @@ import "dart:math";
 
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
+import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
 import "package:kaiteki/ui/user/user_panel.dart";
 import "package:kaiteki/ui/user/user_sliver.dart";
+import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:share_plus/share_plus.dart";
 
@@ -17,8 +20,14 @@ const bannerHeight = 8.0 * 24.0;
 
 class UserScreen extends ConsumerStatefulWidget {
   final String id;
+  final User? user;
 
-  const UserScreen({super.key, required this.id});
+  const UserScreen({super.key, required this.id}) : user = null;
+
+  UserScreen.fromUser({
+    super.key,
+    required User this.user,
+  }) : id = user.id;
 
   @override
   ConsumerState<UserScreen> createState() => _UserScreenState();
@@ -32,7 +41,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   @override
   void initState() {
     super.initState();
-    _future = ref.read(adapterProvider).getUserById(widget.id);
+    _future = widget.user.nullTransform(Future.value) ??
+        ref.read(adapterProvider).getUserById(widget.id);
     _showReplies = StateProvider((_) => true);
   }
 
@@ -73,27 +83,46 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isCompact = MediaQuery.of(context).size.width < 600;
+    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
 
-    return DefaultTabController(
-      length: 3,
-      child: FutureBuilder<User>(
-        future: _future,
-        builder: (context, snapshot) {
-          final user = snapshot.data;
-          final includeReplies = ref.watch(_showReplies);
+    debugPrint(
+      "${MediaQuery.of(context).size.width},${WindowClass.fromContext(context)}",
+    );
 
-          if (isCompact) {
-            return buildBodyCompact(context, user, includeReplies);
-          }
-
-          return buildBody(context, user, includeReplies);
-        },
-      ),
+    return FutureBuilder<User>(
+      future: _future,
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        final includeReplies = ref.watch(_showReplies);
+        final theme = Theme.of(context);
+        return FutureBuilder(
+          future: (user?.bannerUrl ?? user?.avatarUrl)?.nullTransform(
+            (url) => ColorScheme.fromImageProvider(
+              provider: NetworkImage(url.toString()),
+              brightness: theme.brightness,
+            ),
+          ),
+          builder: (context, snapshot) {
+            return Theme(
+              data: theme.copyWith(colorScheme: snapshot.data),
+              child: DefaultTabController(
+                length: 3,
+                child: Builder(
+                  builder: (context) {
+                    return isCompact
+                        ? buildBodyCompact(context, user, includeReplies)
+                        : buildBody(context, user, includeReplies);
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
-  Color get _backgroundColor {
+  Color _getBackgroundColor(BuildContext context) {
     return ElevationOverlay.applySurfaceTint(
       Theme.of(context).colorScheme.surface,
       Theme.of(context).colorScheme.surfaceTint,
@@ -108,7 +137,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       MediaQuery.of(context).size.width < 840,
     );
     return Scaffold(
-      backgroundColor: _backgroundColor,
+      backgroundColor: _getBackgroundColor(context),
       body: SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,15 +191,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                             children: [
                               if (primaryButton != null) primaryButton,
                               const SizedBox(width: 8),
-                              MenuAnchor(
-                                builder: (context, controller, _) {
-                                  return IconButton.filledTonal(
-                                    onPressed: controller.open,
-                                    icon: Icon(Icons.adaptive.more_rounded),
-                                  );
-                                },
-                                menuChildren: getMenuItems(user),
-                              ),
+                              buildMenuButton(user),
                             ],
                           ),
                         )
@@ -197,8 +218,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                         Material(child: buildTabBar()),
                         const Divider(),
                         Expanded(
-                          child:
-                              Material(child: buildTabBarView(includeReplies)),
+                          child: Material(
+                            child: buildTabBarView(includeReplies),
+                          ),
                         ),
                       ],
                     ),
@@ -213,18 +235,38 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     );
   }
 
-  List<Widget> getMenuItems(User<dynamic>? user) {
+  MenuAnchor buildMenuButton(User<dynamic>? user) {
+    return MenuAnchor(
+      builder: (context, controller, _) {
+        return IconButton.filledTonal(
+          onPressed: user == null ? null : controller.open,
+          icon: Icon(Icons.adaptive.more_rounded),
+        );
+      },
+      menuChildren: user == null ? [] : getMenuItems(user),
+    );
+  }
+
+  List<Widget> getMenuItems(User<dynamic> user) {
     return [
       MenuItemButton(
-        onPressed: user?.url == null
-            ? () async {
-                final url = user?.url;
-                if (url == null) return;
-                await Share.share(url.toString());
-              }
-            : null,
+        onPressed: user.url.nullTransform(
+          (url) => () async => Share.share(url.toString()),
+        ),
         leadingIcon: Icon(Icons.adaptive.share_rounded),
         child: const Text("Share"),
+      ),
+      MenuItemButton(
+        onPressed: () async => showModalBottomSheet(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          constraints: bottomSheetConstraints,
+          showDragHandle: true,
+          builder: (_) => InstanceVettingBottomSheet(instance: user.host),
+        ),
+        leadingIcon: const Icon(Icons.shield_rounded),
+        child: const Text("Vet instance"),
       ),
     ];
   }
@@ -238,7 +280,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       user,
     );
     return Scaffold(
-      backgroundColor: _backgroundColor,
+      backgroundColor: _getBackgroundColor(context),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           IconButton adaptiveIconButton({
@@ -261,16 +303,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                   );
           }
 
-          final moreButton = MenuAnchor(
-            builder: (context, controller, _) {
-              return adaptiveIconButton(
-                icon: Icon(Icons.adaptive.more),
-                onPressed: controller.open,
-                tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-              );
-            },
-            menuChildren: getMenuItems(user),
-          );
+          final moreButton = buildMenuButton(user);
           return [
             SliverAppBar(
               automaticallyImplyLeading: false,
@@ -279,7 +312,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 onPressed: () => Navigator.of(context).maybePop(),
                 tooltip: MaterialLocalizations.of(context).backButtonTooltip,
               ),
-              backgroundColor: _backgroundColor,
+              backgroundColor: _getBackgroundColor(context),
               scrolledUnderElevation: 0,
               actions: [
                 if (innerBoxIsScrolled)
@@ -352,7 +385,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               ),
             CustomSliverPersistentHeader(
               child: Material(
-                color: _backgroundColor,
+                color: _getBackgroundColor(context),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
