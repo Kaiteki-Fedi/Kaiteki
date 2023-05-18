@@ -125,7 +125,7 @@ void main() {
       orderedEquals([
         const HashtagElement("Test"),
         const TextElement(" "),
-        const MentionElement(UserReference.url("https://floss.social/@Kaiteki"))
+        MentionElement(const UserReference.url("https://floss.social/@Kaiteki"))
       ]),
     );
   });

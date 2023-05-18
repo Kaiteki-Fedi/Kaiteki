@@ -1,11 +1,8 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/chat_target.dart";
-import "package:kaiteki/text/text_renderer.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki/utils/helpers.dart";
 import "package:mdi/mdi.dart";
 
 typedef ChatSelectedCallback = void Function(ChatTarget chat);
@@ -49,21 +46,7 @@ class ChatTargetTile extends ConsumerWidget {
 
     final content = lastMessage.content;
     if (content != null) {
-      final renderedContent = render(
-        context,
-        content,
-        textContext: TextContext(
-          emojiResolver: (e) => resolveEmoji(
-            e,
-            ref,
-            lastMessage.author.host,
-            lastMessage.emojis,
-          ),
-        ),
-        textTheme: Theme.of(context).ktkTextTheme!,
-        onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
-        parsers: ref.read(textParserProvider),
-      );
+      final renderedContent = lastMessage.renderContent(context, ref);
 
       return Text.rich(
         renderedContent,

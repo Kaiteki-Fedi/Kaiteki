@@ -6,12 +6,29 @@ import "package:kaiteki/utils/extensions.dart";
 abstract class Element extends Equatable {
   final List<Element>? children;
 
-  const Element({this.children});
+  final String? text;
+
+  String get allText {
+    final buffer = StringBuffer(text ?? "");
+
+    final children = this.children;
+
+    if (children != null) {
+      for (final child in children) {
+        buffer.write(child.allText);
+      }
+    }
+
+    return buffer.toString();
+  }
+
+  const Element({this.text, this.children});
 }
 
 typedef ReplacementElementBuilder = Element Function(String text);
 
 class TextElement extends Element {
+  @override
   final String? text;
   final TextElementStyle? style;
 
@@ -117,7 +134,7 @@ class LinkElement extends Element {
 class MentionElement extends Element {
   final UserReference reference;
 
-  const MentionElement(this.reference);
+  MentionElement(this.reference) : super(text: reference.handle);
 
   @override
   String toString() => "Mention";
@@ -129,7 +146,7 @@ class MentionElement extends Element {
 class HashtagElement extends Element {
   final String name;
 
-  const HashtagElement(this.name);
+  const HashtagElement(this.name) : super(text: "#$name");
 
   @override
   String toString() => "Hashtag";
@@ -141,7 +158,7 @@ class HashtagElement extends Element {
 class EmojiElement extends Element {
   final String name;
 
-  const EmojiElement(this.name);
+  const EmojiElement(this.name) : super(text: ":$name:");
 
   @override
   String toString() => "Emoji (:$name:)";

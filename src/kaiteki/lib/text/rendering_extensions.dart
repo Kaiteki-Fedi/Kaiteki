@@ -4,8 +4,68 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/text/text_renderer.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
-import "package:kaiteki/utils/helpers.dart";
+
+extension PostRenderExtensions on Post {
+  InlineSpan renderContent(
+    BuildContext context,
+    WidgetRef ref, {
+    bool showReplyees = true,
+  }) {
+    final replyee = replyToUser?.data;
+
+    assert(content != null);
+    final elements = parseText(content!, ref.read(textParserProvider));
+    final renderer = TextRenderer.fromContext(
+      context,
+      ref,
+      TextContext(
+        emojiResolver: (e) => resolveEmoji(e, ref, author.host, emojis),
+        users: mentionedUsers ?? [],
+        excludedUsers: [
+          if (!showReplyees && replyee != null)
+            UserReference.handle(replyee.username, replyee.host)
+        ],
+      ),
+    );
+    return renderer.render(elements);
+  }
+}
+
+extension ChatMessageRenderExtensions on ChatMessage {
+  InlineSpan renderContent(BuildContext context, WidgetRef ref) {
+    assert(content != null);
+    final elements = parseText(content!, ref.read(textParserProvider));
+    final renderer = TextRenderer.fromContext(context, ref);
+    return renderer.render(elements);
+  }
+}
+
+extension UserRenderExtensions on User {
+  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
+    final displayName = this.displayName;
+    if (displayName == null || displayName.isEmpty) {
+      return TextSpan(text: username);
+    }
+    return renderText(context, ref, displayName);
+  }
+
+  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
+    final hasDescription = description != null;
+    assert(hasDescription);
+    if (!hasDescription) return const TextSpan(text: "");
+    return renderText(context, ref, description!);
+  }
+
+  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
+    final elements = parseText(text, ref.read(textParserProvider));
+    final renderer = TextRenderer.fromContext(
+      context,
+      ref,
+      TextContext(emojiResolver: (e) => resolveEmoji(e, ref, host, emojis)),
+    );
+    return renderer.render(elements);
+  }
+}
 
 Emoji? resolveEmoji(
   String input,
@@ -29,74 +89,4 @@ Emoji? resolveEmoji(
   }
 
   return null;
-}
-
-extension PostRenderExtensions on Post {
-  InlineSpan renderContent(
-    BuildContext context,
-    WidgetRef ref, {
-    bool showReplyees = true,
-  }) {
-    final replyee = replyToUser?.data;
-
-    return render(
-      parsers: ref.read(textParserProvider),
-      context,
-      content!,
-      textContext: TextContext(
-        emojiResolver: (e) => resolveEmoji(e, ref, author.host, emojis),
-        users: mentionedUsers,
-        excludedUsers: [
-          if (!showReplyees && replyee != null)
-            UserReference.handle(replyee.username, replyee.host)
-        ],
-      ),
-      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
-      textTheme: Theme.of(context).ktkTextTheme!,
-    );
-  }
-}
-
-extension ChatMessageRenderExtensions on ChatMessage {
-  InlineSpan renderContent(BuildContext context, WidgetRef ref) {
-    return render(
-      parsers: ref.read(textParserProvider),
-      context,
-      content!,
-      textContext: TextContext(
-        emojiResolver: (e) => resolveEmoji(e, ref, author.host, emojis),
-      ),
-      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
-      textTheme: Theme.of(context).ktkTextTheme!,
-    );
-  }
-}
-
-extension UserRenderExtensions on User {
-  InlineSpan renderDisplayName(BuildContext context, WidgetRef ref) {
-    final displayName = this.displayName;
-    if (displayName == null) return TextSpan(text: username);
-    return renderText(context, ref, displayName);
-  }
-
-  InlineSpan renderDescription(BuildContext context, WidgetRef ref) {
-    final hasDescription = description != null;
-    assert(hasDescription);
-    if (!hasDescription) return const TextSpan(text: "");
-    return renderText(context, ref, description!);
-  }
-
-  InlineSpan renderText(BuildContext context, WidgetRef ref, String text) {
-    return render(
-      parsers: ref.read(textParserProvider),
-      context,
-      text,
-      textContext: TextContext(
-        users: [],
-        emojiResolver: (e) => resolveEmoji(e, ref, host, emojis),
-      ),
-      onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
-      textTheme: Theme.of(context).ktkTextTheme!,
-    );
-  }
 }

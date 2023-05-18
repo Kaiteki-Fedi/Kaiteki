@@ -10,7 +10,6 @@ import "package:kaiteki/fediverse/model/instance.dart";
 import "package:kaiteki/fediverse/model/timeline_kind.dart";
 import "package:kaiteki/text/parsers/html_text_parser.dart";
 import "package:kaiteki/text/text_renderer.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
@@ -252,13 +251,7 @@ class _InstanceVettingBottomSheetState
               alignment: Alignment.topLeft,
               child: hasDescription
                   ? Text.rich(
-                      render(
-                        context,
-                        description,
-                        parsers: const {HtmlTextParser()},
-                        onUserClick: (_) {},
-                        textTheme: Theme.of(context).ktkTextTheme!,
-                      ),
+                    TextRenderer.fromContext(context, ref).render(parseText(description, const {HtmlTextParser()}),),
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   : Text(
