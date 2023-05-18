@@ -71,7 +71,7 @@ TextTheme _createKaitekiTextTheme(
   TextTheme original,
   KaitekiTextTheme? ktkTextTheme,
 ) {
-  final baseTextTheme = GoogleFonts.robotoTextTheme(original);
+  final baseTextTheme = GoogleFonts.firaSansTextTheme(original);
   return baseTextTheme.copyWith(
     titleLarge: ktkTextTheme?.kaitekiTextStyle.copyWith(
       fontSize: baseTextTheme.titleLarge?.fontSize,
