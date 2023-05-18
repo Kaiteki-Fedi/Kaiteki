@@ -34,41 +34,49 @@ class AccountListDialog extends ConsumerWidget {
               title: Text(l10n.manageAccountsTitle),
               forceMaterialTransparency: true,
             ),
-            Column(
-              children: [
-                if (currentAccount != null) ...[
-                  AccountListTile(
-                    account: currentAccount,
-                    selected: true,
-                    onSelect: () => context.showUser(currentAccount.user, ref),
-                    onSignOut: () => _onSignOut(context, ref, currentAccount),
-                    onHandoff: () => _onHandoff(context, ref, currentAccount),
-                    showInstanceIcon: true,
-                  ),
-                  const Divider()
-                ],
-                for (final account in unselectedAccounts)
-                  AccountListTile(
-                    account: account,
-                    selected: currentAccount == account,
-                    onSelect: () => _switchAccount(context, account),
-                    onSignOut: () => _onSignOut(context, ref, account),
-                    onHandoff: () => _onHandoff(context, ref, account),
-                    showInstanceIcon: true,
-                  ),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.outlineVariant,
-                    foregroundColor: Theme.of(context).colorScheme.onSurface,
-                    radius: 22,
-                    child: const Icon(Icons.add_rounded),
-                  ),
-                  title: Text(l10n.addAccountButtonLabel),
-                  onTap: () => onTapAdd(context),
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if (currentAccount != null) ...[
+                      AccountListTile(
+                        account: currentAccount,
+                        selected: true,
+                        onSelect: () =>
+                            context.showUser(currentAccount.user, ref),
+                        onSignOut: () =>
+                            _onSignOut(context, ref, currentAccount),
+                        onHandoff: () =>
+                            _onHandoff(context, ref, currentAccount),
+                        showInstanceIcon: true,
+                      ),
+                      const Divider()
+                    ],
+                    for (final account in unselectedAccounts)
+                      AccountListTile(
+                        account: account,
+                        selected: currentAccount == account,
+                        onSelect: () => _switchAccount(context, account),
+                        onSignOut: () => _onSignOut(context, ref, account),
+                        onHandoff: () => _onHandoff(context, ref, account),
+                        showInstanceIcon: true,
+                      ),
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.outlineVariant,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onSurface,
+                        radius: 22,
+                        child: const Icon(Icons.add_rounded),
+                      ),
+                      title: Text(l10n.addAccountButtonLabel),
+                      onTap: () => onTapAdd(context),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
-                const SizedBox(height: 8),
-              ],
+              ),
             ),
           ],
         );
