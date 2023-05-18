@@ -13,6 +13,7 @@ import "package:kaiteki/fediverse/interfaces/preview_support.dart";
 import "package:kaiteki/fediverse/interfaces/search_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/file.dart";
+import "package:kaiteki/model/language.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/adaptive_menu_anchor.dart";
@@ -220,8 +221,8 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
                 ),
               ),
             ),
-            if (attachments.isNotEmpty) const Divider(height: 1),
-            if (attachments.isNotEmpty)
+            if (attachments.isNotEmpty) ...[
+              const Divider(height: 1),
               AttachmentTray(
                 attachments: attachments,
                 onRemoveAttachment: (i) => setState(() {
@@ -249,6 +250,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
                   }
                 },
               ),
+            ],
             const Divider(height: 1),
             Padding(
               padding: const EdgeInsets.only(
@@ -582,68 +584,63 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
           iconBuilder: (_, value) => Icon(value.toIconData()),
           textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
         ),
-      if (supportsLanguageTagging)
-        FutureBuilder(
-          future: ref.read(languageListProvider.future),
-          builder: (context, snapshot) {
-            return AdaptiveMenu(
-              builder: (context, onTap) {
-                return IconButton(
-                  icon: Text(
-                    _language.toUpperCase(),
-                    style: Theme.of(context)
-                        .ktkTextTheme
-                        ?.monospaceTextStyle
-                        .fallback
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  tooltip: "Language",
-                  splashRadius: splashRadius,
-                  onPressed: snapshot.hasData ? onTap : null,
-                );
-              },
-              itemBuilder: (context, onClose) {
-                final visible = ref.watch(visibleLanguages).value;
-                final languages = snapshot.data!;
-                var list = languages.where((e) => visible.contains(e.code));
+      if (supportsLanguageTagging) _buildLanguageSwitcher(),
+    ];
+  }
 
-                if (list.isEmpty) {
-                  list = languages.where((e) {
-                    return Localizations.localeOf(context).languageCode ==
-                            e.code ||
-                        e.code == _language;
-                  });
-                }
-
-                return [
-                  for (var tuple in list)
-                    MenuItemButton(
-                      leadingIcon: const SizedBox.square(dimension: 24),
-                      trailingIcon: _language == tuple.code
-                          ? const Icon(Icons.check)
-                          : const SizedBox.square(dimension: 24),
-                      onPressed: () {
-                        setState(() => _language = tuple.code);
-                        onClose?.call();
-                      },
-                      child: Text(tuple.englishName ?? tuple.code),
-                    ),
-                  const Divider(),
-                  MenuItemButton(
-                    leadingIcon: const Icon(Icons.add),
-                    onPressed: () {
-                      context.pushNamed("visibleLanguageSettings");
-                      onClose?.call();
-                    },
-                    trailingIcon: const SizedBox.square(dimension: 24),
-                    child: const Text("Add a language"),
-                  ),
-                ];
-              },
+  Widget _buildLanguageSwitcher() {
+    return FutureBuilder(
+      future: ref.read(languageListProvider.future),
+      builder: (context, snapshot) {
+        return AdaptiveMenu(
+          builder: (context, onTap) {
+            return IconButton(
+              icon: LanguageIcon(_language),
+              tooltip: "Language",
+              splashRadius: splashRadius,
+              onPressed: snapshot.hasData ? onTap : null,
             );
           },
-        ),
-    ];
+          itemBuilder: (context, onClose) {
+            final visible = ref.watch(visibleLanguages).value;
+            final languages = snapshot.data;
+            var list = languages?.where((e) => visible.contains(e.code));
+
+            if (list?.isEmpty ?? false) {
+              list = languages?.where((e) {
+                return Localizations.localeOf(context).languageCode == e.code ||
+                    e.code == _language;
+              });
+            }
+
+            return [
+              for (var tuple in list ?? <Language>[])
+                MenuItemButton(
+                  leadingIcon: const SizedBox.square(dimension: 24),
+                  trailingIcon: _language == tuple.code
+                      ? const Icon(Icons.check)
+                      : const SizedBox.square(dimension: 24),
+                  onPressed: () {
+                    setState(() => _language = tuple.code);
+                    onClose?.call();
+                  },
+                  child: Text(tuple.englishName ?? tuple.code),
+                ),
+              const Divider(),
+              MenuItemButton(
+                leadingIcon: const Icon(Icons.add),
+                onPressed: () {
+                  context.pushNamed("visibleLanguageSettings");
+                  onClose?.call();
+                },
+                trailingIcon: const SizedBox.square(dimension: 24),
+                child: const Text("Add a language"),
+              ),
+            ];
+          },
+        );
+      },
+    );
   }
 
   void reset() {
@@ -652,6 +649,27 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
       _subjectController.clear();
       attachments.clear();
     });
+  }
+}
+
+class LanguageIcon extends StatelessWidget {
+  const LanguageIcon(
+    this.language, {
+    super.key,
+  });
+
+  final String language;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Text(
+      language.toUpperCase(),
+      style: theme.ktkTextTheme?.monospaceTextStyle.fallback.copyWith(
+        fontWeight: FontWeight.bold,
+        color: IconTheme.of(context).color,
+      ),
+    );
   }
 }
 
