@@ -14,7 +14,7 @@ class DeckMainScreenView extends ConsumerStatefulWidget
   final Widget Function(TabKind tab) getPage;
   final TabKind tab;
   final Function(TabKind tab) onChangeTab;
-  final Function(MainScreenViewType view) onChangeView;
+  final Function([MainScreenViewType? view]) onChangeView;
 
   const DeckMainScreenView({
     super.key,
@@ -52,10 +52,9 @@ class _DeckMainScreenViewState extends ConsumerState<DeckMainScreenView> {
                     Card(
                       clipBehavior: Clip.antiAlias,
                       child: ListTile(
-                        leading: Icon(Icons.adaptive.arrow_back_rounded),
-                        title: const Text("Return to normal view"),
-                        onTap: () =>
-                            widget.onChangeView(MainScreenViewType.stream),
+                        leading: const Icon(Icons.swap_horiz_rounded),
+                        title: const Text("Switch Layout"),
+                        onTap: widget.onChangeView,
                       ),
                     ),
                   ],
@@ -87,8 +86,9 @@ class _DeckMainScreenViewState extends ConsumerState<DeckMainScreenView> {
                       onPressed: () {
                         final account = ref.read(accountProvider)!;
                         ref
-                            .read(notificationServiceProvider(account.key)
-                                .notifier)
+                            .read(
+                              notificationServiceProvider(account.key).notifier,
+                            )
                             .refresh();
                       },
                     ),

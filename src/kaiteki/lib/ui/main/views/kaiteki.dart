@@ -1,10 +1,12 @@
 import "package:animations/animations.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
 import "package:kaiteki/fediverse/interfaces/chat_support.dart";
+import "package:kaiteki/fediverse/interfaces/explore_support.dart";
 import "package:kaiteki/fediverse/interfaces/notification_support.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/platform_checks.dart";
@@ -27,7 +29,7 @@ class KaitekiMainScreenView extends ConsumerStatefulWidget
   final Widget Function(TabKind tab) getPage;
   final TabKind tab;
   final Function(TabKind tab) onChangeTab;
-  final Function(MainScreenViewType view) onChangeView;
+  final Function([MainScreenViewType? view]) onChangeView;
 
   const KaitekiMainScreenView({
     super.key,
@@ -51,37 +53,37 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
     return null;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    ref.listenManual(
-      adapterProvider,
-      (_, adapter) {
-        final supportsNotifications = adapter is NotificationSupport;
-        final supportsChats =
-            adapter.safeCast<ChatSupport>()?.capabilities.supportsChat ?? false;
-        final supportsBookmarks = adapter is BookmarkSupport;
+  List<TabKind> getTabs() {
+    final adapter = ref.watch(adapterProvider);
 
-        _tabs = [
-          TabKind.home,
-          if (supportsNotifications) TabKind.notifications,
-          if (supportsChats) TabKind.chats,
-          if (supportsBookmarks) TabKind.bookmarks,
-        ];
-      },
-      fireImmediately: true,
-    );
+    final supportsNotifications = adapter is NotificationSupport;
+    final supportsChats =
+        adapter.safeCast<ChatSupport>()?.capabilities.supportsChat ?? false;
+    final supportsBookmarks = adapter is BookmarkSupport;
+    final supportsExplore = adapter is ExploreSupport;
+
+    final chatsEnabled = ref.watch(AppExperiment.chats.provider);
+
+    return [
+      TabKind.home,
+      if (supportsNotifications) TabKind.notifications,
+      if (supportsChats && chatsEnabled) TabKind.chats,
+      if (supportsBookmarks) TabKind.bookmarks,
+      if (supportsExplore) TabKind.explore,
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
+    _tabs = getTabs();
+
     final windowClass = WindowClass.fromContext(context);
     final isCompact = windowClass <= WindowClass.compact;
 
     final body = buildBody(context);
     final tabItems = _tabs.map((e) => buildTabItem(context, e)).toList();
+    final tabItem = tabItems.firstWhereOrNull((e) => e.kind == widget.tab);
 
-    final fabData = tabItems.firstWhere((e) => e.kind == widget.tab).fab;
     return Scaffold(
       backgroundColor: isCompact ? null : getOutsideColor(context),
       appBar: buildAppBar(context),
@@ -100,14 +102,19 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
               onChangeIndex: (i) => widget.onChangeTab(_tabs[i]),
             )
           : null,
-      floatingActionButton: fabData.nullTransform<Widget?>(
-        (data) => buildFloatingActionButton(
-          context,
-          data,
-          windowClass >= WindowClass.expanded,
-        ),
+      floatingActionButton:
+          (!isCompact && (tabItem?.hideFabWhenDesktop ?? false))
+              ? null
+              : tabItem?.fab.nullTransform<Widget?>(
+                  (data) => buildFloatingActionButton(
+                    context,
+                    data,
+                    windowClass >= WindowClass.expanded,
+                  ),
+                ),
+      drawer: MainScreenDrawer(
+        onSwitchLayout: () => widget.onChangeView(),
       ),
-      drawer: const MainScreenDrawer(),
     );
   }
 
@@ -133,8 +140,7 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
           fetchUnreadCount: () =>
               ref.watch(notificationCountProvider).valueOrNull,
         ),
-      TabKind.chats => const MainScreenTab(TabKind.chats),
-      TabKind.bookmarks => const MainScreenTab(TabKind.bookmarks)
+      _ => MainScreenTab(kind),
     };
   }
 
@@ -192,6 +198,9 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
                     !(view == MainScreenViewType.videos && !supportsVideoPlayer)
                         ? () => widget.onChangeView(view)
                         : null,
+                trailingIcon: view == widget.type
+                    ? const Icon(Icons.check_rounded)
+                    : const SizedBox.square(dimension: 24),
                 leadingIcon: view.getIcon(),
                 child: Text(view.getDisplayName(l10n)),
               ),
@@ -276,20 +285,22 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
     if (ref.watch(useSearchBar).value) {
       return PreferredSize(
         preferredSize: const Size.fromHeight(56.0 + 8.0 * 2),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SearchBar(
-            focusNode: FocusNode(canRequestFocus: false, skipTraversal: true),
-            onTap: () => context.pushNamed(
-              "search",
-              pathParameters: ref.accountRouterParams,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SearchBar(
+              focusNode: FocusNode(canRequestFocus: false, skipTraversal: true),
+              onTap: () => context.pushNamed(
+                "search",
+                pathParameters: ref.accountRouterParams,
+              ),
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              leading: const DrawerButton(),
+              hintText: "Search",
+              trailing: const [
+                AccountSwitcherWidget(size: 30),
+              ],
             ),
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            leading: const DrawerButton(),
-            hintText: "Search",
-            trailing: const [
-              AccountSwitcherWidget(size: 30),
-            ],
           ),
         ),
       );

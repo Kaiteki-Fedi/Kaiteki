@@ -14,7 +14,7 @@ class CatCalendarWidget extends StatelessWidget {
       elevation: 0,
       color: Theme.of(context).colorScheme.surface,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
             Flexible(

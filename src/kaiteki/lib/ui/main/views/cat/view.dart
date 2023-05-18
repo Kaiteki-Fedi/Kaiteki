@@ -1,12 +1,18 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/main/views/cat/calendar.dart";
 import "package:kaiteki/ui/main/views/view.dart";
+import "package:kaiteki/ui/shared/account_list/instance_icon.dart";
+import "package:kaiteki/utils/extensions.dart";
 
-class CatMainScreenView extends StatefulWidget implements MainScreenView {
+class CatMainScreenView extends ConsumerStatefulWidget
+    implements MainScreenView {
   final Widget Function(TabKind tab) getPage;
   final TabKind tab;
   final Function(TabKind tab) onChangeTab;
-  final Function(MainScreenViewType view) onChangeView;
+  final Function([MainScreenViewType? view]) onChangeView;
 
   const CatMainScreenView({
     super.key,
@@ -17,10 +23,10 @@ class CatMainScreenView extends StatefulWidget implements MainScreenView {
   });
 
   @override
-  State<CatMainScreenView> createState() => _CatMainScreenViewState();
+  ConsumerState<CatMainScreenView> createState() => _CatMainScreenViewState();
 }
 
-class _CatMainScreenViewState extends State<CatMainScreenView> {
+class _CatMainScreenViewState extends ConsumerState<CatMainScreenView> {
   @override
   Widget build(BuildContext context) {
     final showSidebar = MediaQuery.of(context).size.width > 1090;
@@ -37,10 +43,20 @@ class _CatMainScreenViewState extends State<CatMainScreenView> {
             const VerticalDivider(),
             const SizedBox(
               width: 332,
-              child: Column(
-                children: [
-                  CatCalendarWidget(),
-                ],
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Card(child: CatCalendarWidget()),
+                    SizedBox(height: 16),
+                    SizedBox(
+                      height: 300,
+                      child: Card(
+                        child: NotificationsPage(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -63,10 +79,13 @@ class _CatMainScreenViewState extends State<CatMainScreenView> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.network(
-                  "https://s3.arkjp.net/misskey/65b25d3c-2ae4-474f-b1c0-050c8c8962e1.jpg",
-                  fit: BoxFit.cover,
-                  opacity: const AlwaysStoppedAnimation(0.25),
+                // Image.network(
+                //   "https://s3.arkjp.net/misskey/65b25d3c-2ae4-474f-b1c0-050c8c8962e1.jpg",
+                //   fit: BoxFit.cover,
+                //   opacity: const AlwaysStoppedAnimation(0.25),
+                // ),
+                Center(
+                  child: InstanceIcon(ref.watch(accountProvider)!.key.host),
                 ),
               ],
             ),
@@ -83,9 +102,36 @@ class _CatMainScreenViewState extends State<CatMainScreenView> {
                   endIndent: 16,
                 ),
               ),
-              child: const NavigationDrawer(
+              child: NavigationDrawer(
                 elevation: 0,
-                children: [
+                onDestinationSelected: (value) {
+                  switch (value) {
+                    case 0:
+                      widget.onChangeTab(TabKind.home);
+                      break;
+                    case 1:
+                      widget.onChangeTab(TabKind.notifications);
+                      break;
+                    case 2:
+                      context.pushNamed(
+                        "search",
+                        pathParameters: ref.accountRouterParams,
+                      );
+                      break;
+                    case 3:
+                      widget.onChangeView();
+                      break;
+                    case 4:
+                      context.pushNamed("settings");
+                      break;
+                  }
+                },
+                selectedIndex: switch (widget.tab) {
+                  TabKind.home => 0,
+                  TabKind.notifications => 1,
+                  _ => null,
+                },
+                children: const [
                   NavigationDrawerDestination(
                     icon: Icon(Icons.home_outlined),
                     label: Text("Timeline"),

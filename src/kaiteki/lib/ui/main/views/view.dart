@@ -19,7 +19,7 @@ typedef ViewConstructor<T extends MainScreenView> = T Function({
   required Widget Function(TabKind tab) getPage,
   required Function(TabKind tab) onChangeTab,
   required TabKind tab,
-  required Function(MainScreenViewType view) onChangeView,
+  required Function([MainScreenViewType? view]) onChangeView,
 });
 
 abstract class MainScreenView extends Widget {

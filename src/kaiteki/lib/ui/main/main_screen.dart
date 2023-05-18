@@ -9,10 +9,13 @@ import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
 import "package:kaiteki/ui/main/pages/chats.dart";
+import "package:kaiteki/ui/main/pages/explore.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
+import "package:kaiteki/ui/main/pages/placeholder.dart";
 import "package:kaiteki/ui/main/pages/timeline.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
+import "package:kaiteki/ui/shared/dialogs/options_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/utils/extensions.dart";
 
@@ -134,7 +137,23 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       getPage: (tab) => buildPage(context, tab),
       onChangeTab: _changePage,
       tab: _currentTab,
-      onChangeView: (view) => setState(() => _view = view),
+      onChangeView: ([view]) async {
+        var layout = view;
+
+        layout ??= await showDialog<MainScreenViewType>(
+          context: context,
+          builder: (_) => OptionsDialog(
+            groupValue: _view,
+            values: MainScreenViewType.values,
+            textBuilder: (context, e) => Text(e.getDisplayName(context.l10n)),
+            title: const Text("Switch layout"),
+          ),
+        );
+
+        if (layout == null) return;
+
+        setState(() => _view = layout!);
+      },
     );
   }
 
@@ -147,6 +166,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       TabKind.notifications => const NotificationsPage(),
       TabKind.chats => const ChatsPage(),
       TabKind.bookmarks => const BookmarksPage(),
+      TabKind.explore => const ExplorePage(),
+      TabKind.directMessages => const PlaceholderPage(),
     };
   }
 }
