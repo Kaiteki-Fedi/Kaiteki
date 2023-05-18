@@ -142,7 +142,10 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
               ),
               borderRadius: BorderRadius.circular(16.0),
             ),
-            child: PollWidget(post.poll!, padding: const EdgeInsets.all(16)),
+            child: PollWidget.fromPost(
+              post,
+              padding: const EdgeInsets.all(16),
+            ),
           ),
         ],
         if (post.quotedPost != null) EmbeddedPostWidget(post.quotedPost!),
