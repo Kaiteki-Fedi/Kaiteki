@@ -64,7 +64,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     if (bannerUrl == null) return placeholder;
 
     return Image.network(
-      bannerUrl,
+      bannerUrl.toString(),
       fit: BoxFit.cover,
       isAntiAlias: true,
       errorBuilder: (_, __, ___) => placeholder,

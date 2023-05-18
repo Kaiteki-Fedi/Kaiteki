@@ -103,7 +103,7 @@ class UserCard extends ConsumerWidget {
     final bannerUrl = user.bannerUrl;
     if (bannerUrl != null) {
       return Image.network(
-        bannerUrl,
+        bannerUrl.toString(),
         fit: BoxFit.cover,
         width: double.infinity,
         isAntiAlias: true,

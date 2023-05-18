@@ -255,7 +255,7 @@ extension KaitekiUserExtension on misskey.UserLite {
     return User(
       avatarUrl: avatarUrl.nullTransform(Uri.parse),
       avatarBlurHash: detailed?.avatarBlurhash,
-      bannerUrl: detailed?.bannerUrl,
+      bannerUrl: detailed?.bannerUrl.nullTransform(Uri.parse),
       bannerBlurHash: detailed?.bannerBlurhash as String?,
       description: detailed?.description,
       displayName: name,

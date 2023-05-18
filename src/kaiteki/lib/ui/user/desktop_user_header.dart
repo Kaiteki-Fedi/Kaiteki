@@ -133,7 +133,7 @@ class DesktopUserHeader extends StatelessWidget {
       return null;
     } else {
       return Image.network(
-        url,
+        url.toString(),
         frameBuilder: _frameBuilder,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => const SizedBox(),

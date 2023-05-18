@@ -222,7 +222,7 @@ User toUser(
     source: source,
     displayName: source.displayName,
     username: source.username,
-    bannerUrl: source.header,
+    bannerUrl: source.header.nullTransform(Uri.parse),
     avatarUrl: source.avatar.nullTransform(Uri.parse),
     joinDate: source.createdAt,
     id: source.id,

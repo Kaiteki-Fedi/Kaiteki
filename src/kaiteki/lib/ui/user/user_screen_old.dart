@@ -61,7 +61,7 @@ class _UserScreenState extends ConsumerState<OldUserScreen>
 
     final bannerUrl = widget.initialUser?.bannerUrl;
     if (bannerUrl != null) {
-      _bannerProvider = NetworkImage(bannerUrl);
+      _bannerProvider = NetworkImage(bannerUrl.toString());
     }
   }
 

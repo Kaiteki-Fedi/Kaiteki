@@ -20,7 +20,7 @@ class User<T> extends AdaptedEntity<T> {
   final String? avatarBlurHash;
 
   /// The URL of the user's banner.
-  final String? bannerUrl;
+  final Uri? bannerUrl;
 
   /// The blur hash of the user's banner.
   final String? bannerBlurHash;
@@ -79,7 +79,7 @@ class User<T> extends AdaptedEntity<T> {
     String? displayName,
     Uri? avatarUrl,
     String? avatarBlurHash,
-    String? bannerUrl,
+    Uri? bannerUrl,
     String? bannerBlurHash,
     String? id,
     List<Emoji>? emojis,
