@@ -3,31 +3,37 @@ import "package:flutter/material.dart";
 class ThemePreview extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
-  final Icon? icon;
   final String name;
+  final ThemeData theme;
+  final ThemeData? darkTheme;
 
-  const ThemePreview({
+  const ThemePreview(
+    this.theme, {
     super.key,
     this.selected = false,
     required this.onTap,
-    this.icon,
     required this.name,
+    this.darkTheme,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final borderRadius = BorderRadius.circular(4.0);
+    final useMaterial3 = Theme.of(context).useMaterial3;
+    final borderRadius =
+        useMaterial3 ? BorderRadius.circular(12.0) : BorderRadius.circular(4.0);
 
     final selectedDecoration = BoxDecoration(
       border: Border.all(
-        color: colorScheme.primary,
+        color: theme.colorScheme.primary,
         width: 4.0,
       ),
       borderRadius: borderRadius,
     );
 
-    final useMaterial3 = Theme.of(context).useMaterial3;
+    final themes = [
+      theme,
+      if (darkTheme != null) darkTheme!,
+    ];
     return Tooltip(
       message: name,
       child: Card(
@@ -35,47 +41,61 @@ class ThemePreview extends StatelessWidget {
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
         elevation: useMaterial3 ? 0.0 : null,
-        color: useMaterial3 ? colorScheme.surfaceVariant : colorScheme.surface,
+        color: useMaterial3
+            ? theme.colorScheme.surfaceVariant
+            : theme.colorScheme.surface,
         child: InkWell(
           onTap: onTap,
           child: DecoratedBox(
             decoration: selected ? selectedDecoration : const BoxDecoration(),
             position: DecorationPosition.foreground,
-            child: SizedBox(
-              width: 8 * 12,
-              height: 8 * 12,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _buildContent(context),
-              ),
+            child: Column(
+              children: [
+                for (final theme in themes)
+                  Theme(
+                    data: theme,
+                    child: SizedBox(
+                      width: 8 * 12,
+                      height: (8 * 12) / themes.length,
+                      child: _ThemePreview(theme: theme),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildContent(BuildContext context) {
-    final theme = Theme.of(context);
-    if (icon == null) {
-      return Wrap(
-        crossAxisAlignment: WrapCrossAlignment.end,
-        spacing: 4.0,
-        children: [
-          _ColorCircle(color: theme.colorScheme.primary),
-          _ColorCircle(color: theme.colorScheme.secondary),
-          if (theme.useMaterial3)
-            _ColorCircle(color: theme.colorScheme.tertiary),
-        ],
-      );
-    } else {
-      return Center(
-        child: IconTheme(
-          data: IconThemeData(color: theme.colorScheme.onSurface, size: 32),
-          child: icon!,
+class _ThemePreview extends StatelessWidget {
+  const _ThemePreview({
+    required this.theme,
+  });
+
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: theme.useMaterial3
+          ? theme.colorScheme.surfaceVariant
+          : theme.colorScheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.end,
+          spacing: 4.0,
+          children: [
+            _ColorCircle(color: theme.colorScheme.primary),
+            _ColorCircle(color: theme.colorScheme.secondary),
+            if (theme.useMaterial3)
+              _ColorCircle(color: theme.colorScheme.tertiary),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 }
 
@@ -89,7 +109,7 @@ class _ColorCircle extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(24),
+        shape: BoxShape.circle,
       ),
       child: const SizedBox.square(dimension: 16),
     );
