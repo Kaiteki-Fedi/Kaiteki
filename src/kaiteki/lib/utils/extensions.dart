@@ -171,6 +171,12 @@ extension QueryExtension on Map<String, String> {
 extension UriExtensions on Uri {
   Tuple2<String, String> get fediverseHandle {
     var username = pathSegments.last;
+
+    // FIXME(Craftplacer): This is just a lazy fix for empty usernames
+    if (username.isEmpty) {
+      return Tuple2(host, username);
+    }
+
     if (username[0] == "@") {
       username = username.substring(1);
     }
