@@ -23,7 +23,6 @@ class ThemeSelector extends StatelessWidget {
         light: getDefaultTheme(Brightness.light, m3),
         dark: getDefaultTheme(Brightness.dark, m3),
       ),
-      
     ];
 
     return Wrap(
@@ -35,7 +34,7 @@ class ThemeSelector extends StatelessWidget {
             themeSet.light,
             darkTheme: themeSet.dark,
             name: "Kaiteki",
-            selected: theme == ThemeMode.light,
+            selected: true,
             onTap: () => onSelected(ThemeMode.light),
           ),
       ],
