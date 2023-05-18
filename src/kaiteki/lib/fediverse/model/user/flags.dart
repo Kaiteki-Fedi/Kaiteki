@@ -1,7 +1,4 @@
 class UserFlags {
-  /// Whether the user is a bot.
-  final bool? isBot;
-
   /// Whether the [User] is part of the instance's administrators.
   final bool? isAdministrator;
 
@@ -13,7 +10,6 @@ class UserFlags {
   final bool? isApprovingFollowers;
 
   const UserFlags({
-    this.isBot,
     this.isAdministrator,
     this.isModerator,
     this.isApprovingFollowers,

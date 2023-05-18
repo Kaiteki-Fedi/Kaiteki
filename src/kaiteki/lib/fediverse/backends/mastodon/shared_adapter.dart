@@ -63,7 +63,12 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   Future<User> getUserById(String id) async {
     final account = await client.getAccount(id);
-    final relationship = await client.getRelationship(id);
+    mastodon.Relationship? relationship;
+
+    try {
+      relationship = await client.getRelationship(id);
+    } catch (_) {}
+
     return toUser(account, instance, relationship: relationship);
   }
 

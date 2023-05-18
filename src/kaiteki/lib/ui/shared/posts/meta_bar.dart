@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
@@ -47,7 +48,7 @@ class MetaBar extends ConsumerWidget {
   List<Widget> buildLeft(BuildContext context, WidgetRef ref) {
     final isAdministrator = _post.author.flags?.isAdministrator ?? false;
     final isModerator = _post.author.flags?.isModerator ?? false;
-    final isBot = _post.author.flags?.isBot ?? false;
+    final isBot = _post.author.type == UserType.bot;
     return [
       if (showAvatar)
         Padding(

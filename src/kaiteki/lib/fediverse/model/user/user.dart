@@ -47,6 +47,8 @@ class User<T> extends AdaptedEntity<T> {
 
   final UserState state;
 
+  final UserType type;
+
   const User({
     required this.displayName,
     required this.host,
@@ -65,6 +67,7 @@ class User<T> extends AdaptedEntity<T> {
     this.joinDate,
     this.url,
     this.state = const UserState(),
+    this.type = UserType.person,
   });
 
   UserHandle get handle => UserHandle.fromUser(this);
@@ -189,3 +192,5 @@ class UserState {
     );
   }
 }
+
+enum UserType { person, bot, group, organization }

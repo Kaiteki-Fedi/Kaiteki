@@ -230,6 +230,15 @@ User toUser(
         : UserFollowState.notFollowing;
   }
 
+  UserType getUserType() {
+    final actorType = source.source?.pleroma?.actorType;
+
+    if (actorType == "Organization") return UserType.organization;
+    if (actorType == "Group") return UserType.group;
+    if (source.bot ?? false) return UserType.bot;
+    return UserType.person;
+  }
+
   return User(
     source: source,
     displayName: source.displayName,
@@ -254,11 +263,11 @@ User toUser(
     details: UserDetails(fields: _parseFields(source.fields)),
     url: source.url.nullTransform(Uri.parse),
     flags: UserFlags(
-      isBot: source.bot,
       isModerator: source.pleroma?.isModerator,
       isAdministrator: source.pleroma?.isAdmin,
       isApprovingFollowers: source.locked,
     ),
+    type: getUserType(),
   );
 }
 

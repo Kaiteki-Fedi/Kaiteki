@@ -284,8 +284,8 @@ extension KaitekiUserExtension on misskey.UserLite {
         isAdministrator: isAdmin,
         isModerator: isModerator,
         isApprovingFollowers: detailed?.isLocked,
-        isBot: isBot,
       ),
+      type: isBot == true ? UserType.bot : UserType.person,
     );
   }
 }
