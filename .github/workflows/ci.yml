@@ -89,7 +89,7 @@ jobs:
         run: 'make build-linux ${{needs.test.outputs.make-args}}'
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: linux
           path: '${{ env.SOURCE_PATH }}/build/linux/x64/release/bundle/'
@@ -108,7 +108,7 @@ jobs:
           chmod +x appimagetool
 
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: linux
           path: 'kaiteki.AppDir'
@@ -128,7 +128,7 @@ jobs:
           ./squashfs-root/AppRun kaiteki.AppDir/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: appimage
           path: 'Kaiteki-x86_64.AppImage'
@@ -191,7 +191,7 @@ jobs:
         run: 'make build-windows'
         
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows
           path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/'
@@ -224,7 +224,7 @@ jobs:
         run: 'make build-web'
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: web
           path: '${{ env.SOURCE_PATH }}/build/web/*'
