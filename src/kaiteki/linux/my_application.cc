@@ -46,8 +46,15 @@ static void my_application_activate(GApplication *application)
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
 
+static void my_application_startup(GApplication *application)
+{
+  G_APPLICATION_CLASS(my_application_parent_class)->startup(application);
+  hdy_init();
+}
+
 static void my_application_class_init(MyApplicationClass *klass)
 {
+  G_APPLICATION_CLASS(klass)->startup = my_application_startup;
   G_APPLICATION_CLASS(klass)->activate = my_application_activate;
 }
 
