@@ -155,10 +155,24 @@ jobs:
         run: 'flutter pub get'
 
       - name: Build (unsigned)
+        if: github.event_name == 'pull_request'
         run: 'make build-android ${{needs.test.outputs.make-args}}'
+
+      - name: Dump signing key
+        uses: timheuer/base64-to-file@v1.2
+        if: github.event_name != 'pull_request'
+        with:
+          fileName: 'keystore.pfx'
+          fileDir: '${{ env.SOURCE_PATH }}/android/app/'
+          encodedString: ${{ secrets.ANDROID_KEYSTORE }}
+
+      - name: Build (signed)
+        if: github.event_name != 'pull_request'
+        run: 'make build-android SIGNED=TRUE ${{needs.test.outputs.make-args}}'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
+        if: github.event_name != 'pull_request'
         with:
           name: android
           path: '${{ env.SOURCE_PATH }}/build/app/outputs/flutter-apk/app-*.apk'
