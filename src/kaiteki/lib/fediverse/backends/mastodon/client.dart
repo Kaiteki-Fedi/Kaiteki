@@ -490,6 +490,38 @@ class MastodonClient {
         .then(Status.fromJson.fromResponseList);
   }
 
+  Future<List<PreviewCard>> getTrendingLinks({
+    int? limit,
+    int? offset,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          "api/v1/trends/links",
+          body: {
+            if (limit == null) "limit": limit,
+            if (offset == null) "offset": offset,
+          }.jsonBody,
+        )
+        .then(PreviewCard.fromJson.fromResponseList);
+  }
+
+  Future<List<Tag>> getTrendingTags({
+    int? limit,
+    int? offset,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          "api/v1/trends/tags",
+          body: {
+            if (limit == null) "limit": limit,
+            if (offset == null) "offset": offset,
+          }.jsonBody,
+        )
+        .then(Tag.fromJson.fromResponseList);
+  }
+
   Future<MastodonPagination<List<Account>>> getAccountFollowing(
     String id, {
     String? maxId,
@@ -595,5 +627,34 @@ class MastodonClient {
       "api/v1/accounts/lookup",
       query: {"acct": acct},
     ).then(Account.fromJson.fromResponse);
+  }
+
+  Future<Relationship> getRelationship(String id) async {
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          "api/v1/accounts/relationships",
+          query: {"id": id},
+        )
+        .then(Relationship.fromJson.fromResponseList)
+        .then((list) => list.firstWhere((e) => e.id == id));
+  }
+
+  Future<Relationship> followAccount(String id) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/accounts/$id/follow",
+        )
+        .then(Relationship.fromJson.fromResponse);
+  }
+
+  Future<Relationship> unfollowAccount(String id) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "api/v1/accounts/$id/unfollow",
+        )
+        .then(Relationship.fromJson.fromResponse);
   }
 }

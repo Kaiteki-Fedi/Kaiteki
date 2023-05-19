@@ -1,8 +1,10 @@
 import "dart:convert";
+import "dart:io";
 
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:http/http.dart" as http;
+import "package:http/http.dart";
 import "package:kaiteki/exceptions/instance_unreachable_exception.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/api_type.dart";
@@ -204,8 +206,10 @@ Future<bool> _checkInstanceAvailability(String instance) async {
   final uri = Uri.https(instance);
 
   try {
-    final response = await http.get(uri);
-    return response.statusCode == 200;
+    final request = Request("GET", uri)..followRedirects = false;
+    final response = await request.send();
+    return response.statusCode == HttpStatus.ok ||
+        response.statusCode == HttpStatus.found;
   } catch (e) {
     return false;
   }

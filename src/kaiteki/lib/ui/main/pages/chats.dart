@@ -8,6 +8,7 @@ import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/chats/chat_message.dart";
 import "package:kaiteki/ui/chats/chat_target_list.dart";
 import "package:kaiteki/ui/chats/compose_message_bar.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
@@ -62,9 +63,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
     final chatList = FutureBuilder<Iterable<ChatTarget>>(
       future: chatAdapter.getChats(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        if (!snapshot.hasData) return centeredCircularProgressIndicator;
 
         final chats = snapshot.data!;
 
@@ -190,9 +189,7 @@ class ChatView extends ConsumerWidget {
             builder: (context, snapshot) {
               final data = snapshot.data;
 
-              if (data == null) {
-                return const Center(child: CircularProgressIndicator());
-              }
+              if (data == null) return centeredCircularProgressIndicator;
 
               final messages = data;
 

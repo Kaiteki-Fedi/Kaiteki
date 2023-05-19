@@ -46,6 +46,15 @@ class UserReference extends Equatable {
 
   @override
   String toString() {
+    final handle = this.handle;
+    if (handle != null) return handle;
+
+    if (id != null) return id!;
+
+    return "<unknown>";
+  }
+
+  String? get handle {
     if (username != null && host != null) return "@$username@$host";
     if (username != null) return "@$username";
 
@@ -56,9 +65,7 @@ class UserReference extends Equatable {
       return "@${handle.item2}@${handle.item1}";
     }
 
-    if (id != null) return id!;
-
-    return "<unknown>";
+    return null;
   }
 
   @override

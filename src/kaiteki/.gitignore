@@ -49,3 +49,6 @@ app.*.map.json
 
 # Test coverage
 coverage/lcov.info
+
+# Miscellaneous
+.DS_Store

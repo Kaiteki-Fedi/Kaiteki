@@ -16,34 +16,29 @@ class MfmTextParser implements TextParser {
       // final args = match.group(2).split(",");
       final content = match.group(3);
 
-      switch (key!) {
-        case "x2":
-          return TextElement(
+      return switch (key!) {
+        "x2" => TextElement(
             content,
             style: const TextElementStyle(scale: 2.0),
             children: children,
-          );
-        case "x3":
-          return TextElement(
+          ),
+        "x3" => TextElement(
             content,
             style: const TextElementStyle(scale: 3.0),
             children: children,
-          );
-        case "x4":
-          return TextElement(
+          ),
+        "x4" => TextElement(
             content,
             style: const TextElementStyle(scale: 4.0),
             children: children,
-          );
-        case "blur":
-          return TextElement(
+          ),
+        "blur" => TextElement(
             content,
             style: const TextElementStyle(blur: true),
             children: children,
-          );
-        default:
-          return TextElement(content);
-      }
+          ),
+        _ => TextElement(content)
+      };
     });
 
     if (children != null) {

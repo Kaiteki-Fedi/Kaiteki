@@ -63,19 +63,16 @@ class _$ReactionCWProxyImpl implements _$ReactionCWProxy {
   }) {
     return Reaction(
       emoji: emoji == const $CopyWithPlaceholder() || emoji == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.emoji!
+          ? _value.emoji
           // ignore: cast_nullable_to_non_nullable
           : emoji as Emoji,
       includesMe:
           includesMe == const $CopyWithPlaceholder() || includesMe == null
-              // ignore: unnecessary_non_null_assertion
-              ? _value.includesMe!
+              ? _value.includesMe
               // ignore: cast_nullable_to_non_nullable
               : includesMe as bool,
       count: count == const $CopyWithPlaceholder() || count == null
-          // ignore: unnecessary_non_null_assertion
-          ? _value.count!
+          ? _value.count
           // ignore: cast_nullable_to_non_nullable
           : count as int,
       users: users == const $CopyWithPlaceholder()

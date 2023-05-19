@@ -309,14 +309,12 @@ class MisskeyClient {
   }
 
   /// Removes the reaction from the specified note.
-  Future<misskey.User> deleteReaction(String noteId) async {
-    return client
-        .sendRequest(
-          HttpMethod.post,
-          "api/notes/reactions/delete",
-          body: {"noteId": noteId}.jsonBody,
-        )
-        .then(misskey.User.fromJson.fromResponse);
+  Future<void> deleteReaction(String noteId) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/notes/reactions/delete",
+      body: {"noteId": noteId}.jsonBody,
+    );
   }
 
   Future<misskey.Meta> getMeta({bool detail = false}) async {
@@ -710,6 +708,24 @@ class MisskeyClient {
       body: {
         "userId": userId,
       }.jsonBody,
+    );
+  }
+
+  // TODO(Craftplacer): Misskey actually does return something -- UserLite?
+  Future<void> followUser(String id) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/following/create",
+      body: {"userId": id}.jsonBody,
+    );
+  }
+
+  // TODO(Craftplacer): Misskey actually does return something -- UserLite?
+  Future<void> unfollowUser(String id) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      "api/following/delete",
+      body: {"userId": id}.jsonBody,
     );
   }
 }

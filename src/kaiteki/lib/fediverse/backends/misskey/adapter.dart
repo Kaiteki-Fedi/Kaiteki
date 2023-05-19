@@ -70,13 +70,14 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
   @override
   Future<User> getUser(String username, [String? instance]) async {
-    final mkUser = await client.showUserByName(username, instance);
-    return toUser(mkUser, this.instance);
+    final user = await client.showUserByName(username, instance);
+    return user.toKaiteki(this.instance);
   }
 
   @override
   Future<User> getUserById(String id) async {
-    return toUser(await client.showUser(id), instance);
+    final user = await client.showUser(id);
+    return user.toKaiteki(instance);
   }
 
   Future<CheckSessionResponse?> loginMiAuth(
@@ -205,7 +206,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     final user = credentials.item3 ?? await client.showUser(credentials.item2!);
     final account = Account(
       adapter: this,
-      user: toUser(user, instance),
+      user: user.toKaiteki(instance),
       key: AccountKey(ApiType.misskey, instance, user.username),
       clientSecret: null,
       accountSecret: AccountSecret(credentials.item1),
@@ -228,12 +229,13 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
           .toList(),
     );
 
-    return toPost(response.createdNote, instance);
+    return response.createdNote.toKaiteki(instance);
   }
 
   @override
   Future<User> getMyself() async {
-    return toUser(await client.getI(), instance);
+    final user = await client.getI();
+    return user.toKaiteki(instance);
   }
 
   @override
@@ -253,7 +255,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
                 id: e.groupId!,
                 createdAt: e.createdAt,
                 recipients:
-                    resolvedUsers.map((e) => toUser(e, instance)).toList(),
+                    resolvedUsers.map((e) => e.toKaiteki(instance)).toList(),
               );
             },
           ),
@@ -267,7 +269,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
             (e) async => DirectChat(
               source: e,
               id: e.recipientId!,
-              recipient: toUser(e.recipient!, instance),
+              recipient: e.recipient!.toKaiteki(instance),
               lastMessage: toChatMessage(e, instance),
               unread: e.isRead == false,
             ),
@@ -291,35 +293,16 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       untilId: query?.untilId,
     );
 
-    switch (type) {
-      case TimelineKind.home:
-        notes = await client.getTimeline(request);
-        break;
+    notes = switch (type) {
+      TimelineKind.home => await client.getTimeline(request),
+      TimelineKind.local => await client.getLocalTimeline(request),
+      TimelineKind.bubble => await client.getBubbleTimeline(request),
+      TimelineKind.hybrid => await client.getHybridTimeline(request),
+      TimelineKind.federated => await client.getGlobalTimeline(request),
+      _ => throw UnsupportedError("Timeline type $type is not supported."),
+    };
 
-      case TimelineKind.local:
-        notes = await client.getLocalTimeline(request);
-        break;
-
-      case TimelineKind.bubble:
-        notes = await client.getBubbleTimeline(request);
-        break;
-
-      case TimelineKind.hybrid:
-        notes = await client.getHybridTimeline(request);
-        break;
-
-      case TimelineKind.federated:
-        notes = await client.getGlobalTimeline(request);
-        break;
-
-      // ignore: no_default_cases
-      default:
-        throw UnimplementedError(
-          "Fetching of timeline type $type is not implemented yet.",
-        );
-    }
-
-    return notes.map((n) => toPost(n, instance)).toList();
+    return notes.map((n) => n.toKaiteki(instance)).toList();
   }
 
   @override
@@ -349,7 +332,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       sinceId: query?.sinceId,
       untilId: query?.untilId,
     );
-    return notes.map((n) => toPost(n, instance)).toList();
+    return notes.map((n) => n.toKaiteki(instance)).toList();
   }
 
   @override
@@ -398,7 +381,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
           (kv) => EmojiCategory.withVariants(
             kv.key,
             kv.value //
-                .map((e) => toEmoji(e, instance))
+                .map((e) => e.toKaiteki(instance))
                 .map(EmojiCategoryItem.new)
                 .toList(),
           ),
@@ -423,15 +406,13 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       notes = await client.getNoteChildren(reply.id);
     }
 
-    return notes.map((n) => toPost(n, instance)).followedBy([reply]);
+    return notes.map((n) => n.toKaiteki(instance)).followedBy([reply]);
   }
 
   @override
   Future<Instance> getInstance() async {
-    return toInstance(
-      await client.getMeta(),
-      client.client.baseUri.toString(),
-    );
+    final instance = await client.getMeta();
+    return instance.toKaiteki(client.client.baseUri);
   }
 
   @override
@@ -440,9 +421,9 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<User?> followUser(String id) {
-    // TODO(Craftplacer): implement followUser
-    throw UnimplementedError();
+  Future<User?> followUser(String id) async {
+    await client.followUser(id);
+    return null;
   }
 
   @override
@@ -458,7 +439,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       comment: draft.description,
       isSensitive: draft.isSensitive,
     );
-    return toAttachment(driveFile);
+    return driveFile.toKaiteki();
   }
 
   @override
@@ -473,7 +454,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<List<User>> getRepeatees(String id) async {
     final notes = await client.getRenotes(id);
-    return notes.map((n) => n.user).map((u) => toUser(u, instance)).toList();
+    return notes.map((n) => n.user.toKaiteki(instance)).toList();
   }
 
   @override
@@ -483,7 +464,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<List<Notification>> getNotifications() async {
     final notifications = await client.getNotifications();
-    return notifications.map((n) => toNotification(n, instance)).toList();
+    return notifications.map((n) => n.toKaiteki(instance)).toList();
   }
 
   @override
@@ -521,13 +502,13 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<List<Post>> searchForPosts(String query) async {
     final notes = await client.searchNotes(query);
-    return notes.map((n) => toPost(n, instance)).toList();
+    return notes.map((n) => n.toKaiteki(instance)).toList();
   }
 
   @override
   Future<List<User>> searchForUsers(String query) async {
     final users = await client.searchUsers(query);
-    return users.map((u) => toUser(u, instance)).toList();
+    return users.map((u) => u.toKaiteki(instance)).toList();
   }
 
   @override
@@ -554,7 +535,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       untilId: query?.untilId,
     );
     final notes = await client.getUserListTimeline(listId, request);
-    return notes.map((n) => toPost(n, instance)).toList();
+    return notes.map((n) => n.toKaiteki(instance)).toList();
   }
 
   @override
@@ -567,7 +548,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       users = await client.showUsers(userIds.toSet());
     }
 
-    return users.map((e) => toUser(e, instance)).toList();
+    return users.map((e) => e.toKaiteki(instance)).toList();
   }
 
   @override
@@ -598,7 +579,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       untilId: untilId,
     );
     return PaginatedList(
-      users.map((e) => toUser(e.follower!, instance)).toList(),
+      users.map((e) => e.follower!.toKaiteki(instance)).toList(),
       null,
       users.last.followerId,
     );
@@ -616,7 +597,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       untilId: untilId,
     );
     return PaginatedList(
-      users.map((e) => toUser(e.followee!, instance)).toList(),
+      users.map((e) => e.followee!.toKaiteki(instance)).toList(),
       null,
       users.last.followeeId,
     );
@@ -639,7 +620,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     final users = await client.searchUsersByUsernameAndHost(username, host);
     final user =
         users.firstWhere((e) => e.host == host && e.username == username);
-    return toUser(user, instance);
+    return user.toKaiteki(instance);
   }
 
   @override
@@ -649,7 +630,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }) async {
     final mutes = await client.getMutedAccounts(previousId, nextId);
     return PaginatedSet(
-      mutes.map((e) => toUser(e.mutee, instance)).toSet(),
+      mutes.map((e) => e.mutee.toKaiteki(instance)).toSet(),
       previousId,
       nextId,
     );
@@ -663,5 +644,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<void> unmuteUser(String userId) async {
     await client.unmuteUser(userId);
+  }
+
+  @override
+  Future<User?> unfollowUser(String id) async {
+    await client.unfollowUser(id);
+    return null;
   }
 }

@@ -2,13 +2,15 @@ import "dart:math";
 
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
+import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
-import "package:kaiteki/ui/shared/popup_menu_wrapper.dart";
+import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
 import "package:kaiteki/ui/user/user_panel.dart";
 import "package:kaiteki/ui/user/user_sliver.dart";
+import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:share_plus/share_plus.dart";
 
@@ -18,8 +20,14 @@ const bannerHeight = 8.0 * 24.0;
 
 class UserScreen extends ConsumerStatefulWidget {
   final String id;
+  final User? user;
 
-  const UserScreen({super.key, required this.id});
+  const UserScreen({super.key, required this.id}) : user = null;
+
+  UserScreen.fromUser({
+    super.key,
+    required User this.user,
+  }) : id = user.id;
 
   @override
   ConsumerState<UserScreen> createState() => _UserScreenState();
@@ -33,7 +41,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   @override
   void initState() {
     super.initState();
-    _future = ref.read(adapterProvider).getUserById(widget.id);
+    _future = widget.user.nullTransform(Future.value) ??
+        ref.read(adapterProvider).getUserById(widget.id);
     _showReplies = StateProvider((_) => true);
   }
 
@@ -65,7 +74,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     if (bannerUrl == null) return placeholder;
 
     return Image.network(
-      bannerUrl,
+      bannerUrl.toString(),
       fit: BoxFit.cover,
       isAntiAlias: true,
       errorBuilder: (_, __, ___) => placeholder,
@@ -74,27 +83,46 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isCompact = MediaQuery.of(context).size.width < 600;
+    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
 
-    return DefaultTabController(
-      length: 3,
-      child: FutureBuilder<User>(
-        future: _future,
-        builder: (context, snapshot) {
-          final user = snapshot.data;
-          final includeReplies = ref.watch(_showReplies);
+    debugPrint(
+      "${MediaQuery.of(context).size.width},${WindowClass.fromContext(context)}",
+    );
 
-          if (isCompact) {
-            return buildBodyCompact(context, user, includeReplies);
-          }
-
-          return buildBody(context, user, includeReplies);
-        },
-      ),
+    return FutureBuilder<User>(
+      future: _future,
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        final includeReplies = ref.watch(_showReplies);
+        final theme = Theme.of(context);
+        return FutureBuilder(
+          future: (user?.bannerUrl ?? user?.avatarUrl)?.nullTransform(
+            (url) => ColorScheme.fromImageProvider(
+              provider: NetworkImage(url.toString()),
+              brightness: theme.brightness,
+            ),
+          ),
+          builder: (context, snapshot) {
+            return Theme(
+              data: theme.copyWith(colorScheme: snapshot.data),
+              child: DefaultTabController(
+                length: 3,
+                child: Builder(
+                  builder: (context) {
+                    return isCompact
+                        ? buildBodyCompact(context, user, includeReplies)
+                        : buildBody(context, user, includeReplies);
+                  },
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
-  Color get _backgroundColor {
+  Color _getBackgroundColor(BuildContext context) {
     return ElevationOverlay.applySurfaceTint(
       Theme.of(context).colorScheme.surface,
       Theme.of(context).colorScheme.surfaceTint,
@@ -103,87 +131,144 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 
   Widget buildBody(BuildContext context, User? user, bool includeReplies) {
+    const a = avatarSize * 0.5;
+    final primaryButton = buildPrimaryButton(
+      user,
+      MediaQuery.of(context).size.width < 840,
+    );
     return Scaffold(
-      backgroundColor: _backgroundColor,
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton.filledTonal(
-              onPressed: Navigator.of(context).maybePop,
-              icon: Icon(Icons.adaptive.arrow_back),
-              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-            ),
-          ),
-          // https://m3.material.io/foundations/layout/canonical-layouts/supporting-pane#13c3c489-9cc7-4830-b44a-fe6c2d431c1f
-          SizedBox(
-            // HACK(Craftplacer): Material 3 advises to only show the supporting
-            // pane when the screen hits the expanded layout class. Since the
-            // recommended side pane width is 360dp, we use what is lower of
-            // width and a third of the screen, so the content pane doesn't get
-            //too squished.
-            width: min(MediaQuery.of(context).size.width / 3, 360),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: Alignment.bottomLeft,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(bottom: avatarSize * 0.25),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(16),
-                          ),
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: _buildBanner(user),
-                          ),
-                        ),
-                      ),
-                      if (user != null)
-                        Positioned(
-                          left: 16.0,
-                          child: AvatarWidget(user, size: avatarSize),
-                        ),
-                    ],
-                  ),
-                  if (user != null) ...[
-                    const SizedBox(height: 16),
-                    UserPanel(user),
-                  ],
-                ],
+      backgroundColor: _getBackgroundColor(context),
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton.filledTonal(
+                onPressed: Navigator.of(context).maybePop,
+                icon: Icon(Icons.adaptive.arrow_back),
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
               ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                child: ColoredBox(
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Column(
-                    children: [
-                      Material(child: buildTabBar()),
-                      const Divider(),
-                      Expanded(
-                        child: Material(child: buildTabBarView(includeReplies)),
-                      ),
+            // https://m3.material.io/foundations/layout/canonical-layouts/supporting-pane#13c3c489-9cc7-4830-b44a-fe6c2d431c1f
+            SizedBox(
+              // HACK(Craftplacer): Material 3 advises to only show the supporting
+              // pane when the screen hits the expanded layout class. Since the
+              // recommended side pane width is 360dp, we use what is lower of
+              // width and a third of the screen, so the content pane doesn't get
+              // too squished.
+              width: min(MediaQuery.of(context).size.width / 3, 360),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  children: [
+                    Stack(
+                      alignment: Alignment.bottomLeft,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: a),
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(16),
+                            ),
+                            child: AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: _buildBanner(user),
+                            ),
+                          ),
+                        ),
+                        if (user != null)
+                          Positioned(
+                            left: 16.0,
+                            child: AvatarWidget(user, size: avatarSize),
+                          ),
+                        Positioned(
+                          left: 16.0 + avatarSize,
+                          right: 0,
+                          bottom: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              if (primaryButton != null) primaryButton,
+                              const SizedBox(width: 8),
+                              buildMenuButton(user),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    if (user != null) ...[
+                      const SizedBox(height: 16),
+                      UserPanel(user),
                     ],
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  child: ColoredBox(
+                    color: Theme.of(context).colorScheme.surface,
+                    child: Column(
+                      children: [
+                        Material(child: buildTabBar()),
+                        const Divider(),
+                        Expanded(
+                          child: Material(
+                            child: buildTabBarView(includeReplies),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 16),
-        ],
+            const SizedBox(width: 16),
+          ],
+        ),
       ),
     );
+  }
+
+  MenuAnchor buildMenuButton(User<dynamic>? user) {
+    return MenuAnchor(
+      builder: (context, controller, _) {
+        return IconButton.filledTonal(
+          onPressed: user == null ? null : controller.open,
+          icon: Icon(Icons.adaptive.more_rounded),
+        );
+      },
+      menuChildren: user == null ? [] : getMenuItems(user),
+    );
+  }
+
+  List<Widget> getMenuItems(User<dynamic> user) {
+    return [
+      MenuItemButton(
+        onPressed: user.url.nullTransform(
+          (url) => () async => Share.share(url.toString()),
+        ),
+        leadingIcon: Icon(Icons.adaptive.share_rounded),
+        child: const Text("Share"),
+      ),
+      MenuItemButton(
+        onPressed: () async => showModalBottomSheet(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          constraints: bottomSheetConstraints,
+          showDragHandle: true,
+          builder: (_) => InstanceVettingBottomSheet(instance: user.host),
+        ),
+        leadingIcon: const Icon(Icons.shield_rounded),
+        child: const Text("Vet instance"),
+      ),
+    ];
   }
 
   Widget buildBodyCompact(
@@ -191,8 +276,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     User? user,
     bool includeReplies,
   ) {
+    final primaryButton = buildPrimaryButton(
+      user,
+    );
     return Scaffold(
-      backgroundColor: _backgroundColor,
+      backgroundColor: _getBackgroundColor(context),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           IconButton adaptiveIconButton({
@@ -205,34 +293,17 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                     icon: icon,
                     onPressed: onPressed,
                     tooltip: tooltip,
+                    visualDensity: VisualDensity.standard,
                   )
                 : IconButton.filledTonal(
                     icon: icon,
                     onPressed: onPressed,
                     tooltip: tooltip,
+                    visualDensity: VisualDensity.standard,
                   );
           }
 
-          final moreButton = PopupMenuWrapper(
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: () async {
-                  final url = user?.url;
-                  if (url == null) return;
-                  await Share.share(url.toString());
-                },
-                enabled: user?.url != null,
-                child: const Text("Share"),
-              ),
-            ],
-            builder: (context, onTap) {
-              return adaptiveIconButton(
-                icon: Icon(Icons.adaptive.more),
-                onPressed: onTap,
-                tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-              );
-            },
-          );
+          final moreButton = buildMenuButton(user);
           return [
             SliverAppBar(
               automaticallyImplyLeading: false,
@@ -241,20 +312,28 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 onPressed: () => Navigator.of(context).maybePop(),
                 tooltip: MaterialLocalizations.of(context).backButtonTooltip,
               ),
-              backgroundColor: _backgroundColor,
+              backgroundColor: _getBackgroundColor(context),
               scrolledUnderElevation: 0,
               actions: [
                 if (innerBoxIsScrolled)
                   moreButton
                 else
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: const BorderRadius.horizontal(
-                        left: Radius.circular(24),
+                  Stack(
+                    children: [
+                      Positioned.fill(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            borderRadius: const BorderRadius.horizontal(
+                              left: Radius.circular(24),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    child: moreButton,
+                      moreButton,
+                    ],
                   ),
               ],
               title: AnimatedSwitcher(
@@ -265,7 +344,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               ),
               pinned: true,
               forceElevated: innerBoxIsScrolled,
-              expandedHeight: bannerHeight + (avatarSizeCompact / 2),
+              expandedHeight: bannerHeight + (avatarSize / 2),
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.pin,
                 background: Stack(
@@ -273,9 +352,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                   children: [
                     Padding(
                       padding: !innerBoxIsScrolled
-                          ? const EdgeInsets.only(
-                              bottom: avatarSizeCompact / 2,
-                            )
+                          ? const EdgeInsets.only(bottom: avatarSize / 2)
                           : EdgeInsets.zero,
                       child: _buildBanner(user),
                     ),
@@ -283,8 +360,18 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                       Positioned(
                         left: 16.0,
                         bottom: 0,
-                        child: AvatarWidget(user, size: avatarSizeCompact),
-                      )
+                        child: AvatarWidget(user, size: avatarSize),
+                      ),
+                    if (primaryButton != null)
+                      Positioned(
+                        left: 16.0 + avatarSize + 8,
+                        right: 16.0,
+                        bottom: 0,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: primaryButton,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -298,7 +385,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               ),
             CustomSliverPersistentHeader(
               child: Material(
-                color: _backgroundColor,
+                color: _getBackgroundColor(context),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -365,6 +452,110 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         Tab(text: "Following"),
       ],
     );
+  }
+
+  Future<void> _onFollow(BuildContext context, User user) async {
+    final adapter = ref.read(adapterProvider);
+
+    final followState = user.state.follow;
+
+    if (followState == null) return;
+
+    User? updatedUser;
+
+    switch (followState) {
+      case UserFollowState.following:
+        updatedUser = await adapter.unfollowUser(user.id) ??
+            user.copyWith(
+              state: user.state.copyWith(follow: UserFollowState.notFollowing),
+            );
+        break;
+
+      case UserFollowState.notFollowing:
+        updatedUser = await adapter.followUser(user.id) ??
+            user.copyWith(
+              state: user.state.copyWith(
+                follow: user.flags?.isApprovingFollowers ?? false
+                    ? UserFollowState.pending
+                    : UserFollowState.following,
+              ),
+            );
+        break;
+
+      case UserFollowState.pending:
+        // TODO(Craftplacer): Prompt to cancel follow request
+        break;
+    }
+
+    setState(() {
+      _future = Future.value(updatedUser);
+    });
+  }
+
+  Widget? buildPrimaryButton(User? user, [bool small = false]) {
+    if (user?.id == ref.watch(accountProvider)?.user.id) {
+      if (small) {
+        return IconButton.filled(
+          onPressed: () {},
+          icon: const Icon(Icons.edit_rounded),
+          tooltip: "Edit Profile",
+        );
+      }
+
+      return FilledButton(
+        onPressed: null,
+        style: FilledButton.styleFrom(
+          visualDensity: VisualDensity.comfortable,
+        ),
+        child: const Text("Edit Profile"),
+      );
+    }
+
+    final followState = user?.state.follow;
+
+    if (followState == null) return null;
+
+    final buttonStyle = FilledButton.styleFrom(
+      visualDensity: VisualDensity.comfortable,
+    );
+
+    Future<void> onPressed() => _onFollow(context, user!);
+
+    return switch (followState) {
+      UserFollowState.following => small
+          ? IconButton.filledTonal(
+              onPressed: onPressed,
+              icon: const Icon(Icons.person_remove_rounded),
+              tooltip: "Unfollow",
+            )
+          : FilledButton.tonal(
+              onPressed: onPressed,
+              style: buttonStyle,
+              child: const Text("Unfollow"),
+            ),
+      UserFollowState.notFollowing => small
+          ? IconButton.filled(
+              onPressed: onPressed,
+              icon: const Icon(Icons.person_add_rounded),
+              tooltip: "Follow",
+            )
+          : FilledButton(
+              onPressed: onPressed,
+              style: buttonStyle,
+              child: const Text("Follow"),
+            ),
+      UserFollowState.pending => small
+          ? IconButton.filled(
+              onPressed: onPressed,
+              icon: const Icon(Icons.lock_clock_rounded),
+              tooltip: "Pending",
+            )
+          : FilledButton.tonal(
+              onPressed: onPressed,
+              style: buttonStyle,
+              child: const Text("Pending"),
+            ),
+    };
   }
 }
 

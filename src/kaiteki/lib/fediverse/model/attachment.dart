@@ -3,13 +3,14 @@ import "package:kaiteki/fediverse/model/adapted_entity.dart";
 class Attachment<T> extends AdaptedEntity<T> {
   final Uri? previewUrl;
   final Uri url;
+  final String? fileName;
   final Uri? externalUrl;
   final String? description;
   final AttachmentType type;
   final bool? isSensitive;
   final String? blurHash;
 
-  Attachment({
+  const Attachment({
     super.source,
     required this.previewUrl,
     required this.url,
@@ -18,6 +19,7 @@ class Attachment<T> extends AdaptedEntity<T> {
     this.isSensitive,
     this.blurHash,
     this.externalUrl,
+    this.fileName,
   });
 
   Attachment copyWith({

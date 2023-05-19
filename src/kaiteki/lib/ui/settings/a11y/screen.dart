@@ -27,6 +27,16 @@ class AccessibilityScreen extends StatelessWidget {
                     ),
                     provider: showAttachmentDescriptionWarning,
                   ),
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.open_in_full_rounded),
+                    title: const Text(
+                      "Show dedicated post open button",
+                    ),
+                    subtitle: const Text(
+                      "Adds a button for opening the conversation of a post without having to click on the post itself.",
+                    ),
+                    provider: showDedicatedPostOpenButton,
+                  ),
                 ],
               ),
             ],

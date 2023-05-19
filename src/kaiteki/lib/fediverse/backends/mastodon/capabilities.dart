@@ -1,9 +1,11 @@
 import "package:kaiteki/fediverse/capabilities.dart";
+import "package:kaiteki/fediverse/interfaces/explore_support.dart";
 import "package:kaiteki/fediverse/model/formatting.dart";
 import "package:kaiteki/fediverse/model/timeline_kind.dart";
 import "package:kaiteki/fediverse/model/visibility.dart";
 
-class MastodonCapabilities extends AdapterCapabilities {
+class MastodonCapabilities extends AdapterCapabilities
+    implements ExploreCapabilities {
   const MastodonCapabilities();
 
   @override
@@ -34,4 +36,7 @@ class MastodonCapabilities extends AdapterCapabilities {
 
   @override
   bool get supportsLanguageTagging => true;
+
+  @override
+  bool get supportsTrendingLinks => true;
 }

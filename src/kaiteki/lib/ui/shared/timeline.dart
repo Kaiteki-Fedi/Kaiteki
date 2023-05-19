@@ -1,13 +1,13 @@
 import "dart:developer";
 
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/interfaces/list_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -161,6 +161,10 @@ class TimelineState extends ConsumerState<TimelineSliver> {
             ),
           );
         },
+        firstPageProgressIndicatorBuilder: (context) => const Padding(
+          padding: EdgeInsets.all(32),
+          child: centeredCircularProgressIndicator,
+        ),
         noMoreItemsIndicatorBuilder: (context) {
           final l10n = context.l10n;
           return Align(
@@ -179,19 +183,10 @@ class TimelineState extends ConsumerState<TimelineSliver> {
   }
 
   Widget _buildPost(BuildContext context, Post item, int index) {
-    void openPost() => context.pushNamed(
-          "post",
-          params: {...ref.accountRouterParams, "id": item.id},
-          extra: item,
-        );
-
-    return InkWell(
-      onTap: openPost,
-      child: PostWidget(
-        item,
-        layout: widget.postLayout ?? PostWidgetLayout.normal,
-        onTap: openPost,
-      ),
+    return PostWidget(
+      item,
+      layout: widget.postLayout ?? PostWidgetLayout.normal,
+      onOpen: () => context.showPost(item, ref),
     );
   }
 

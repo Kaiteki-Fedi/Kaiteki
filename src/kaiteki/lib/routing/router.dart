@@ -8,7 +8,6 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/auth/account.dart";
-import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/routing/notifier.dart";
 import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
@@ -35,7 +34,6 @@ import "package:kaiteki/ui/shared/conversation_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
-import "package:kaiteki/ui/user/user_screen_old.dart";
 import "package:kaiteki/utils/extensions.dart";
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -46,8 +44,7 @@ final GlobalKey<NavigatorState> _authNavigatorKey =
 const authenticatedPath = "/@:accountUsername@:accountHost";
 
 final routerProvider = Provider.autoDispose<GoRouter>((ref) {
-  final sub = ref.listen(routerNotifierProvider, (_, __) {});
-  ref.onDispose(sub.close);
+  final account = ref.watch(routerNotifierProvider);
 
   final notifier = ref.read(routerNotifierProvider.notifier);
 
@@ -61,9 +58,8 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         path: "/",
         builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
-          final scope = ProviderScope.containerOf(context);
-          if (scope.read(accountProvider) == null) return "/welcome";
-          return "/${notifier.currentHandle}/home";
+          if (account == null) return "/welcome";
+          return "/${account.handle}/home";
         },
       ),
       GoRoute(
@@ -153,8 +149,8 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         path: authenticatedPath,
         builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
-          final user = state.params["accountUsername"];
-          final host = state.params["accountHost"];
+          final user = state.pathParameters["accountUsername"];
+          final host = state.pathParameters["accountHost"];
 
           if (user != null && host != null) {
             final account = ref.read(
@@ -178,7 +174,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             }
           }
 
-          if (state.fullpath == authenticatedPath) {
+          if (state.fullPath == authenticatedPath) {
             return "${state.location}/home";
           }
           return null;
@@ -217,15 +213,8 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 // parentNavigatorKey: _authNavigatorKey,
                 path: "users/:id",
                 builder: (context, state) {
-                  if (ref.read(AppExperiment.newUserScreen.provider)) {
-                    return UserScreen(id: state.params["id"]!);
-                  }
-
-                  if (state.extra == null) {
-                    return OldUserScreen.fromId(state.params["id"]!);
-                  } else {
-                    return OldUserScreen.fromUser(state.extra! as User);
-                  }
+                  final id = state.pathParameters["id"]!;
+                  return UserScreen(id: id);
                 },
               ),
               GoRoute(
@@ -255,7 +244,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                       return _DialogPage(
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
-                            final postId = state.params["id"]!;
+                            final postId = state.pathParameters["id"]!;
                             final l10n = context.l10n;
                             final adapter = ref.watch(adapterProvider);
                             return UserListDialog(
@@ -281,7 +270,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                       return _DialogPage(
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
-                            final postId = state.params["id"]!;
+                            final postId = state.pathParameters["id"]!;
                             final l10n = context.l10n;
                             final adapter = ref.watch(adapterProvider);
                             return UserListDialog(
@@ -331,8 +320,8 @@ Widget _authenticatedBuilder(
     builder: (context, ref, child) {
       final Account? account;
 
-      final user = state.params["accountUsername"];
-      final host = state.params["accountHost"];
+      final user = state.pathParameters["accountUsername"];
+      final host = state.pathParameters["accountHost"];
 
       if (user != null && host != null) {
         account = ref.watch(

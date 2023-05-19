@@ -10,6 +10,7 @@ import "package:kaiteki/fediverse/backends/twitter/v2/model/user.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/bookmark_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/like_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/response.dart";
+import "package:kaiteki/fediverse/backends/twitter/v2/responses/retweet_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/timeline_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/token_response.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/responses/user_response.dart";
@@ -109,8 +110,8 @@ class TwitterClient {
                 ),
               },
             if (quoteTweetId != null) "quote_tweet_id": quoteTweetId,
-            "direct_message_deep_link":
-                "https://twitter.com/messages/compose?recipient_id=$userId"
+            // "direct_message_deep_link":
+            //     "https://twitter.com/messages/compose?recipient_id=$userId"
           }.jsonBody,
         )
         .then(
@@ -154,7 +155,7 @@ class TwitterClient {
   }) async {
     return client.sendRequest(
       HttpMethod.get,
-      "2/users/$userId/tweets",
+      "2/users/$id/tweets",
       query: {
         if (expansions.isNotEmpty) "expansions": expansions.join(","),
         if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
@@ -174,7 +175,7 @@ class TwitterClient {
   }) async {
     return client.sendRequest(
       HttpMethod.get,
-      "2/users/$userId",
+      "2/users/$id",
       query: {
         if (expansions.isNotEmpty) "expansions": expansions.join(","),
         if (tweetFields.isNotEmpty) "tweet.fields": tweetFields.join(","),
@@ -186,14 +187,23 @@ class TwitterClient {
   void _checkResponse(http.Response response) {
     if (response.isSuccessful) return;
 
-    String? error;
-    String? description;
+    final json = jsonDecode(response.body) as JsonMap;
 
-    try {
-      final json = jsonDecode(response.body) as JsonMap;
-      error = json["error"] as String;
-      description = json["error_description"] as String;
-    } catch (e, s) {
+    final error = switch (json) {
+      {
+        "error": final String error,
+        "error_description": final String description,
+      } =>
+        (error, description),
+      {
+        "title": final String title,
+        "detail": final String detail,
+      } =>
+        (title, detail),
+      _ => null,
+    };
+
+    try {} catch (e, s) {
       log(
         "Error while parsing error response: ${response.body}",
         name: "TwitterClient",
@@ -202,11 +212,9 @@ class TwitterClient {
       );
     }
 
-    if (error == null || description == null) {
-      throw HttpException.fromResponse(response);
-    } else {
-      throw Exception("$error: $description");
-    }
+    if (error == null) throw HttpException.fromResponse(response);
+
+    throw Exception("${error.$1}: ${error.$2}");
   }
 
   Future<TweetListResponse> searchRecentTweets(
@@ -328,6 +336,30 @@ class TwitterClient {
         .sendRequest(HttpMethod.delete, "2/users/$userId/likes/$tweetId")
         .then(
           LikeResponse.fromJson.fromResponse(LikeResponseData.fromJson.generic),
+        );
+  }
+
+  Future<RetweetResponse> retweet(String tweetId) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          "2/users/$userId/retweets",
+          body: {"tweet_id": tweetId}.jsonBody,
+        )
+        .then(
+          RetweetResponse.fromJson.fromResponse(
+            RetweetResponseData.fromJson.generic,
+          ),
+        );
+  }
+
+  Future<RetweetResponse> undoRetweet(String tweetId) async {
+    return client
+        .sendRequest(HttpMethod.delete, "2/users/$userId/retweets/$tweetId")
+        .then(
+          RetweetResponse.fromJson.fromResponse(
+            RetweetResponseData.fromJson.generic,
+          ),
         );
   }
 

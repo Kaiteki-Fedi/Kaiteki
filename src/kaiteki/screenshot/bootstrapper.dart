@@ -48,7 +48,7 @@ class Bootstrapper {
     return Bootstrapper._(adapter, accountManager, preferences, locale);
   }
 
-  Widget wrap(Widget child) {
+  Widget wrap(Widget child, Size size) {
     final locale = this.locale;
     return ProviderScope(
       overrides: [
@@ -57,7 +57,7 @@ class Bootstrapper {
         sharedPreferencesProvider.overrideWith((_) => preferences),
       ],
       child: MediaQuery(
-        data: const MediaQueryData(devicePixelRatio: 2.0),
+        data: MediaQueryData(devicePixelRatio: 2.0, size: size),
         child: MaterialApp(
           home: Builder(
             builder: (context) => ColoredBox(

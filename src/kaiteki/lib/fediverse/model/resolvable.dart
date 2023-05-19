@@ -17,10 +17,10 @@ class ResolvableUser implements Resolvable<String, User> {
   @override
   final String id;
 
-  const ResolvableUser._(this.id, this.data);
+  const ResolvableUser(this.id, this.data);
 
-  factory ResolvableUser.fromId(String id) => ResolvableUser._(id, null);
-  factory ResolvableUser.fromData(User user) => ResolvableUser._(user.id, user);
+  factory ResolvableUser.fromId(String id) => ResolvableUser(id, null);
+  factory ResolvableUser.fromData(User user) => ResolvableUser(user.id, user);
 
   FutureOr<User> resolve(BackendAdapter adapter) {
     if (data != null) return data!;
@@ -39,10 +39,10 @@ class ResolvablePost implements Resolvable<String, Post> {
   @override
   final String id;
 
-  const ResolvablePost._(this.id, this.data);
+  const ResolvablePost(this.id, this.data);
 
-  factory ResolvablePost.fromId(String id) => ResolvablePost._(id, null);
-  factory ResolvablePost.fromData(Post post) => ResolvablePost._(post.id, post);
+  factory ResolvablePost.fromId(String id) => ResolvablePost(id, null);
+  factory ResolvablePost.fromData(Post post) => ResolvablePost(post.id, post);
 
   FutureOr<Post> resolve(BackendAdapter adapter) {
     if (data != null) return data!;

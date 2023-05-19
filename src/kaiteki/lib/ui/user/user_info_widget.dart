@@ -8,7 +8,6 @@ import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/user/federation_disclaimer.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki/utils/helpers.dart";
 import "package:url_launcher/url_launcher_string.dart";
 
 /// A vertical list describing the provided user.
@@ -151,19 +150,11 @@ class _UserInfoFieldRow extends ConsumerWidget {
         ),
         const SizedBox(height: 4.0),
         Text.rich(
-          render(
-            context,
-            field.value,
-            textContext: TextContext(
-              // FIXME(Craftplacer): Missing remoteHost
-              emojiResolver: (e) => resolveEmoji(e, ref, null, emojis),
+          TextRenderer.fromContext(context, ref).render(
+            parseText(
+              field.value,
+              ref.read(textParserProvider),
             ),
-            onUserClick: (reference) => resolveAndOpenUser(
-              reference,
-              context,
-              ref,
-            ),
-            textTheme: Theme.of(context).ktkTextTheme!,
           ),
         ),
       ],

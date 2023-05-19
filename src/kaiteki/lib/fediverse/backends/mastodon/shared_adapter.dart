@@ -62,7 +62,14 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<User> getUserById(String id) async {
-    return toUser(await client.getAccount(id), instance);
+    final account = await client.getAccount(id);
+    mastodon.Relationship? relationship;
+
+    try {
+      relationship = await client.getRelationship(id);
+    } catch (_) {}
+
+    return toUser(account, instance, relationship: relationship);
   }
 
   @override
@@ -257,35 +264,25 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }) async {
     final Iterable<mastodon.Status> posts;
 
-    switch (type) {
-      case TimelineKind.home:
-        posts = await client.getHomeTimeline(
+    posts = switch (type) {
+      TimelineKind.home => await client.getHomeTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
           onlyMedia: query?.onlyMedia,
-        );
-        break;
-
-      case TimelineKind.local:
-        posts = await client.getPublicTimeline(
+        ),
+      TimelineKind.local => await client.getPublicTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
           onlyMedia: query?.onlyMedia,
           local: true,
-        );
-        break;
-
-      case TimelineKind.federated:
-        posts = await client.getPublicTimeline(
+        ),
+      TimelineKind.federated => await client.getPublicTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
           onlyMedia: query?.onlyMedia,
-        );
-        break;
-
-      default:
-        throw UnimplementedError();
-    }
+        ),
+      _ => throw UnimplementedError()
+    };
 
     return posts.map((p) => toPost(p, instance)).toList();
   }
@@ -336,9 +333,17 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<User?> followUser(String id) {
-    // TODO(Craftplacer): implement followUser
-    throw UnimplementedError();
+  Future<User?> followUser(String id) async {
+    /* final relationship = */ await client.followAccount(id);
+    // TODO(Craftplacer): return updated relationship
+    return null;
+  }
+
+  @override
+  Future<User?> unfollowUser(String id) async {
+    /* final relationship = */ await client.unfollowAccount(id);
+    // TODO(Craftplacer): return updated relationship
+    return null;
   }
 
   @override

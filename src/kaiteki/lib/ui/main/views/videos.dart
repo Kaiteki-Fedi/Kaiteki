@@ -19,14 +19,22 @@ typedef _PostAttachmentCompound = Tuple2<Post, Attachment>;
 
 class VideoMainScreenView extends ConsumerStatefulWidget
     implements MainScreenView {
-  const VideoMainScreenView({super.key});
+  final Widget Function(TabKind tab) getPage;
+  final TabKind tab;
+  final Function(TabKind tab) onChangeTab;
+  final Function(MainScreenViewType view) onChangeView;
+
+  const VideoMainScreenView({
+    super.key,
+    required this.getPage,
+    required this.onChangeTab,
+    required this.tab,
+    required this.onChangeView,
+  });
 
   @override
   ConsumerState<VideoMainScreenView> createState() =>
       _VideoMainScreenViewState();
-
-  @override
-  NavigationVisibility get navigationVisibility => NavigationVisibility.compact;
 }
 
 class FilteredTimelineStream {
@@ -175,7 +183,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          CircularProgressIndicator(),
+                          circularProgressIndicator,
                           SizedBox(height: 16),
                           Text(
                             "Fetching the next post, hang tight...",
@@ -221,7 +229,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CircularProgressIndicator(),
+                                  circularProgressIndicator,
                                   SizedBox(height: 16),
                                   Text(
                                     "Fetching the next post, hang tight...",

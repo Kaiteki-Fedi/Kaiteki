@@ -18,9 +18,12 @@ import "package:kaiteki/text/parsers/social_text_parser.dart";
 import "package:kaiteki/text/parsers/text_parser.dart";
 import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 export "package:flutter_riverpod/flutter_riverpod.dart";
+
+part "di.g.dart";
 
 final accountManagerProvider = ChangeNotifierProvider<AccountManager>((_) {
   throw UnimplementedError();
@@ -44,12 +47,13 @@ final adapterProvider = Provider<BackendAdapter>(
   dependencies: [accountProvider],
 );
 
-final translatorProvider = Provider<Translator?>((_) {
+@Riverpod()
+Translator? translator(TranslatorRef _) => null;
+
+@Riverpod()
+LanguageIdentificator? languageIdentificator(LanguageIdentificatorRef _) {
   return null;
-});
-final languageIdentificatorProvider = Provider<LanguageIdentificator?>((_) {
-  return null;
-});
+}
 
 final textParserProvider = Provider<Set<TextParser>>(
   (ref) {
@@ -66,8 +70,8 @@ final textParserProvider = Provider<Set<TextParser>>(
   dependencies: [adapterProvider],
 );
 
-final languageListProvider =
-    FutureProvider<UnmodifiableListView<Language>>((ref) async {
+@Riverpod(keepAlive: true)
+Future<UnmodifiableListView<Language>> languageList(LanguageListRef ref) async {
   final languagesJson =
       await rootBundle.loadString("assets/languages.json", cache: false);
 
@@ -82,7 +86,7 @@ final languageListProvider =
         });
 
   return UnmodifiableListView(languages);
-});
+}
 
 extension BuildContextExtensions on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this)!;

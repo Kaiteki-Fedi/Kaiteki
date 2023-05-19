@@ -4,6 +4,7 @@ import "package:kaiteki/model/language.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 
 class ManageLanaguagesScreen extends ConsumerStatefulWidget {
@@ -80,7 +81,7 @@ class _ManageLanaguagesScreenState
                 ),
               );
             },
-            loading: (_) => const Center(child: CircularProgressIndicator()),
+            loading: (_) => centeredCircularProgressIndicator,
             error: (_) => const Center(
               child: Text("There was a problem loading languages"),
             ),

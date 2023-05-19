@@ -128,6 +128,9 @@ class TimelineAdapter extends BackendAdapter {
 
   @override
   ApiType get type => ApiType.mastodon;
+
+  @override
+  Future<User?> unfollowUser(String id) => throw UnimplementedError();
 }
 
 class TimelineAdapterCapabilities extends AdapterCapabilities {

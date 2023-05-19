@@ -37,7 +37,10 @@ class ImageAttachmentWidget extends StatelessWidget {
               if (blurHash != null && blurHash.isNotEmpty)
                 BlurHash(hash: attachment.blurHash!),
               Center(
-                child: CircularProgressIndicator(value: progress),
+                child: CircularProgressIndicator.adaptive(
+                  value: progress,
+                  strokeCap: StrokeCap.round,
+                ),
               ),
             ],
           );

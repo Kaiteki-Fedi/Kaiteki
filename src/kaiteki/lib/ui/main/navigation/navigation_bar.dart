@@ -29,7 +29,6 @@ class MainScreenNavigationBar extends StatelessWidget {
 
     return BottomNavigationBar(
       selectedFontSize: 12,
-      showUnselectedLabels: false,
       onTap: onChangeIndex,
       currentIndex: currentIndex,
       items: _buildBottomNavigationBarItems(context),

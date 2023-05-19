@@ -43,7 +43,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                     title: const Text("Mutes"),
                     onTap: () => context.pushNamed(
                       "accountMutes",
-                      params: ref.accountRouterParams,
+                      pathParameters: ref.accountRouterParams,
                     ),
                   ),
                   const ListTile(

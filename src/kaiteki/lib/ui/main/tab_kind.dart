@@ -2,10 +2,12 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 
 enum TabKind {
-  home(Icons.home, Icons.home_outlined),
+  home(Icons.home_outlined, Icons.home),
   notifications(Icons.notifications_none, Icons.notifications_rounded),
-  chats(Icons.forum_outlined, Icons.forum),
-  bookmarks(Icons.bookmark_border_rounded, Icons.bookmark_rounded);
+  chats(Icons.forum_outlined, Icons.forum_rounded),
+  bookmarks(Icons.bookmark_border_rounded, Icons.bookmark_rounded),
+  explore(Icons.explore_outlined, Icons.explore_rounded),
+  directMessages(Icons.mail_outline_rounded, Icons.mail_rounded);
 
   final IconData icon;
   final IconData? selectedIcon;
@@ -14,15 +16,13 @@ enum TabKind {
 
   String getLabel(BuildContext context) {
     final l10n = context.l10n;
-    switch (this) {
-      case home:
-        return l10n.timelineTab;
-      case notifications:
-        return l10n.notificationsTab;
-      case chats:
-        return l10n.chatsTab;
-      case bookmarks:
-        return l10n.bookmarksTab;
-    }
+    return switch (this) {
+      home => l10n.timelineTab,
+      notifications => l10n.notificationsTab,
+      chats => l10n.chatsTab,
+      bookmarks => l10n.bookmarksTab,
+      explore => "Explore",
+      directMessages => "Direct Messages",
+    };
   }
 }

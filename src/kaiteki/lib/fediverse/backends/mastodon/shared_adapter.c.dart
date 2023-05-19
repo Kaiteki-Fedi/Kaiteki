@@ -46,6 +46,17 @@ Iterable<Reaction> _statusReactions(mastodon.Status source, String localHost) {
   return r?.map((r) => toReaction(r, localHost)).toList() ?? const [];
 }
 
+Embed toEmbed(mastodon.PreviewCard card) {
+  return Embed(
+    source: card,
+    uri: card.url,
+    description: card.description,
+    title: card.title,
+    imageUrl: card.image,
+    siteName: card.providerName,
+  );
+}
+
 Post toPost(mastodon.Status source, String localHost) {
   final repliedUser = getRepliedUser(source, localHost);
   return Post(
@@ -92,6 +103,7 @@ Post toPost(mastodon.Status source, String localHost) {
       pinned: source.pinned ?? false,
     ),
     poll: source.poll.nullTransform(toPoll),
+    embeds: [source.card.nullTransform(toEmbed)].whereNotNull().toList(),
   );
 }
 
@@ -203,29 +215,59 @@ CustomEmoji toEmoji(mastodon.Emoji emoji, String localHost) {
   );
 }
 
-User toUser(mastodon.Account source, String localHost) {
+User toUser(
+  mastodon.Account source,
+  String localHost, {
+  mastodon.Relationship? relationship,
+}) {
+  UserFollowState? getFollowState() {
+    if (relationship?.requested == true) return UserFollowState.pending;
+
+    if (relationship == null) return null;
+
+    return relationship.following == true
+        ? UserFollowState.following
+        : UserFollowState.notFollowing;
+  }
+
+  UserType getUserType() {
+    final actorType = source.source?.pleroma?.actorType;
+
+    if (actorType == "Organization") return UserType.organization;
+    if (actorType == "Group") return UserType.group;
+    if (source.bot ?? false) return UserType.bot;
+    return UserType.person;
+  }
+
   return User(
     source: source,
     displayName: source.displayName,
     username: source.username,
-    bannerUrl: source.header,
+    bannerUrl: source.header.nullTransform(Uri.parse),
     avatarUrl: source.avatar.nullTransform(Uri.parse),
     joinDate: source.createdAt,
     id: source.id,
     description: source.note,
     emojis: source.emojis.map((e) => toEmoji(e, localHost)).toList(),
-    followerCount: source.followersCount,
-    followingCount: source.followingCount,
-    postCount: source.statusesCount,
+    metrics: UserMetrics(
+      followerCount: source.followersCount,
+      followingCount: source.followingCount,
+      postCount: source.statusesCount,
+    ),
+    state: UserState(
+      isMuted: relationship?.muting,
+      isBlocked: relationship?.blocking,
+      follow: getFollowState(),
+    ),
     host: _getHost(source.acct) ?? localHost,
     details: UserDetails(fields: _parseFields(source.fields)),
     url: source.url.nullTransform(Uri.parse),
     flags: UserFlags(
-      isBot: source.bot ?? false,
-      isModerator: source.pleroma?.isModerator ?? false,
-      isAdministrator: source.pleroma?.isAdmin ?? false,
+      isModerator: source.pleroma?.isModerator,
+      isAdministrator: source.pleroma?.isAdmin,
       isApprovingFollowers: source.locked,
     ),
+    type: getUserType(),
   );
 }
 

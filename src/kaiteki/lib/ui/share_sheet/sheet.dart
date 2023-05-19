@@ -18,19 +18,78 @@ class ShareSheet extends StatelessWidget {
       builder: (context) {
         final text = getShareText(content);
         final url = getShareUrl(content);
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              dragHandleInset,
-              Text(
-                "Share",
-                style: Theme.of(context).textTheme.titleLarge,
+        const margin = EdgeInsets.symmetric(horizontal: 16.0);
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            dragHandleInset,
+            Padding(
+              padding: margin,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      "Share",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  IconButton.filledTonal(
+                    onPressed: () async {
+                      final data = ClipboardData(text: text);
+                      await Clipboard.setData(data).then((_) {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Copied to clipboard"),
+                          ),
+                        );
+                      });
+                    },
+                    icon: const Icon(Icons.copy_rounded),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.filledTonal(
+                    onPressed: url.nullTransform(
+                      (url) {
+                        return () => launchUrl(url).then(
+                              (_) => Navigator.of(context).pop(),
+                            );
+                      },
+                    ),
+                    icon: const Icon(Icons.open_in_new_rounded),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Padding(
+            ),
+            const SizedBox(height: 8),
+            SingleChildScrollView(
+              padding: margin,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: <Widget>[
+                  FilterChip(
+                    label: const Text("Content"),
+                    onSelected: (v) {},
+                  ),
+                  FilterChip(
+                    label: const Text("Link"),
+                    onSelected: (v) {},
+                  ),
+                  FilterChip(
+                    label: Text("Link on ${url?.host}"),
+                    onSelected: (v) {},
+                    selected: true,
+                  ),
+                ].joinWithValue(const SizedBox(width: 8)),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Card(
+              margin: margin,
+              elevation: 2.0,
+              child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,
                   vertical: 16.0,
@@ -40,79 +99,34 @@ class ShareSheet extends StatelessWidget {
                     buildPreviewIcon(context),
                     const SizedBox(width: 8),
                     Expanded(child: buildPreviewBody(context)),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      onPressed: () async {
-                        final data = ClipboardData(text: text);
-                        await Clipboard.setData(data).then((_) {
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Copied to clipboard"),
-                            ),
-                          );
-                        });
-                      },
-                      icon: const Icon(Icons.copy_rounded),
-                      style: getIconButtonStyle(context),
-                    ),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      onPressed: url.nullTransform(
-                        (url) {
-                          return () => launchUrl(url).then(
-                                (_) => Navigator.of(context).pop(),
-                              );
-                        },
-                      ),
-                      icon: const Icon(Icons.open_in_new_rounded),
-                      style: getIconButtonStyle(context, url != null),
-                    ),
                   ],
                 ),
               ),
-              const Divider(),
-              const SizedBox(height: 8),
-              Consumer(
-                builder: (context, ref, child) {
-                  return ListTile(
-                    leading: const Icon(Icons.edit),
-                    title: const Text("Compose"),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      context.pushNamed(
-                        "compose",
-                        params: ref.accountRouterParams,
-                        queryParams: {"body": text},
-                      );
-                    },
-                  );
-                },
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            const Divider(indent: 16, endIndent: 16),
+            const SizedBox(height: 16),
+            Consumer(
+              builder: (context, ref, child) {
+                return ListTile(
+                  leading: const Icon(Icons.edit),
+                  title: const Text("Compose"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.pushNamed(
+                      "compose",
+                      pathParameters: ref.accountRouterParams,
+                      queryParameters: {"body": text},
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
         );
       },
       onClosing: () {},
-    );
-  }
-
-  ButtonStyle getIconButtonStyle(BuildContext context, [bool enabled = true]) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return IconButton.styleFrom(
-      focusColor: colorScheme.onSurfaceVariant.withOpacity(0.12),
-      highlightColor: colorScheme.onSurface.withOpacity(0.12),
-      side: !enabled
-          ? BorderSide(color: colorScheme.onSurface.withOpacity(0.12))
-          : BorderSide(color: colorScheme.outline),
-    ).copyWith(
-      foregroundColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.pressed)) {
-          return colorScheme.onSurface;
-        }
-        return null;
-      }),
     );
   }
 

@@ -6,7 +6,7 @@ part of 'instance_prober.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$probeInstanceHash() => r'2e4a8d040a0a93d901647dbdcb582c60948bce61';
+String _$probeInstanceHash() => r'7c97ef1a14aafb01ad4bd198dbdf53996cc378f0';
 
 /// Copied from Dart SDK
 class _SystemHash {

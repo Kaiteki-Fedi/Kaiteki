@@ -1,3 +1,4 @@
+import "package:anchor_scroll_controller/anchor_scroll_controller.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/model.dart";
@@ -18,6 +19,15 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   Future<Iterable<Post>>? _threadFetchFuture;
   // Future<ThreadPost>? _threadedFuture;
   bool showThreaded = true;
+  late String selectedPostId;
+  late final AnchorScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedPostId = widget.post.id;
+    _scrollController = AnchorScrollController();
+  }
 
   @override
   void didChangeDependencies() {
@@ -25,8 +35,14 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
     final adapter = ref.watch(adapterProvider);
     try {
-      _threadFetchFuture = adapter.getThread(widget.post.getRoot());
-      // ignore: avoid_catching_errors
+      _threadFetchFuture = adapter.getThread(widget.post.root);
+      _threadFetchFuture!.then((list) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _scrollController.scrollToIndex(
+            index: list.toList().indexWhere((e) => e.id == selectedPostId),
+          );
+        });
+      });
     } on UnimplementedError {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -104,14 +120,23 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       builder: (_, snapshot) {
         if (snapshot.hasData) {
           return ListView.separated(
+            controller: _scrollController,
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final post = snapshot.data!.elementAt(index);
-              return PostWidget(
-                post,
-                layout: index == 0
-                    ? PostWidgetLayout.expanded
-                    : PostWidgetLayout.normal,
+              final isSelected = post.id == selectedPostId;
+              return AnchorItemWrapper(
+                index: index,
+                controller: _scrollController,
+                child: PostWidget(
+                  post,
+                  onOpen: isSelected
+                      ? null
+                      : () => setState(() => selectedPostId = post.id),
+                  layout: isSelected
+                      ? PostWidgetLayout.expanded
+                      : PostWidgetLayout.normal,
+                ),
               );
             },
             separatorBuilder: (_, __) => const Divider(height: 1),

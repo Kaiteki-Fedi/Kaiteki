@@ -29,7 +29,8 @@ class MainScreenNavigationRail extends ConsumerWidget {
       destinations.add(
         NavigationRailDestination(
           icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
-          selectedIcon: Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          selectedIcon:
+              Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
           label: Text(tab.kind.getLabel(context)),
         ),
       );
@@ -55,7 +56,7 @@ class MainScreenNavigationRail extends ConsumerWidget {
             ? ComposeFloatingActionButtonType.extended
             : ComposeFloatingActionButtonType.small,
         onTap: () {
-          context.pushNamed("compose", params: ref.accountRouterParams);
+          context.pushNamed("compose", pathParameters: ref.accountRouterParams);
         },
       ),
       destinations: _destinations(context),

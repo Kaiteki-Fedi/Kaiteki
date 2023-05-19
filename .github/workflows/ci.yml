@@ -19,6 +19,9 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    outputs:
+      build-name: ${{steps.build-variables.outputs.BUILD_NAME}}
+      make-args: ${{steps.build-variables.outputs.MAKE_ARGS}}
     defaults:
       run:
         working-directory: ${{ env.SOURCE_PATH }}
@@ -41,10 +44,11 @@ jobs:
 
       - name: Test
         run: 'flutter test --coverage -r expanded --no-pub'
-        
+
       - name: Provide build variables
         id: build-variables
         run: |
+          echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
           echo "MAKE_ARGS=RELEASE=TRUE SPLIT_PER_ABI=TRUE" >> $GITHUB_OUTPUT
 
       - name: Codecov
@@ -69,11 +73,11 @@ jobs:
         with:
           channel: 'master'
           cache: true
-        
+
       - name: Install Linux build requirements
         run: |
           sudo apt-get update --fix-missing
-          sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev
+          sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev libhandy-1-dev
 
       - name: Enable Linux Desktop
         run: 'flutter config --enable-linux-desktop'
@@ -83,9 +87,9 @@ jobs:
 
       - name: Build
         run: 'make build-linux ${{needs.test.outputs.make-args}}'
-        
+
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: linux
           path: '${{ env.SOURCE_PATH }}/build/linux/x64/release/bundle/'
@@ -104,7 +108,7 @@ jobs:
           chmod +x appimagetool
 
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: linux
           path: 'kaiteki.AppDir'
@@ -124,7 +128,7 @@ jobs:
           ./squashfs-root/AppRun kaiteki.AppDir/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: appimage
           path: 'Kaiteki-x86_64.AppImage'
@@ -175,6 +179,10 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Build (unsigned)
+        if: github.event_name == 'pull_request'
+        run: 'make build-android ${{needs.test.outputs.make-args}}'
+
       - name: Dump signing key
         uses: timheuer/base64-to-file@v1.2
         if: github.event_name != 'pull_request'
@@ -183,18 +191,13 @@ jobs:
           fileDir: '${{ env.SOURCE_PATH }}/android/app/'
           encodedString: ${{ secrets.ANDROID_KEYSTORE }}
 
-      - name: Build (unsigned)  
-        if: github.event_name == 'pull_request'
-        run: 'make build-android SIGNED=FALSE ${{needs.test.outputs.make-args}}'
-
       - name: Build (signed)
         if: github.event_name != 'pull_request'
         run: 'make build-android SIGNED=TRUE ${{needs.test.outputs.make-args}}'
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
+        if: github.event_name != 'pull_request'
         with:
           name: android
           path: '${{ env.SOURCE_PATH }}/build/app/outputs/flutter-apk/app-*.apk'
@@ -227,7 +230,7 @@ jobs:
         run: 'make build-windows'
         
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows
           path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/'
@@ -260,7 +263,7 @@ jobs:
         run: 'make build-web'
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: web
           path: '${{ env.SOURCE_PATH }}/build/web/*'

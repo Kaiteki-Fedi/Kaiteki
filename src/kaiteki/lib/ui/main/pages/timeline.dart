@@ -74,13 +74,18 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
               ),
             ),
         ],
-        body: Timeline.kind(
-          key: _timelineKey,
-          kind: _kind ?? kinds.first,
-          postLayout: ref.watch(useWidePostLayout).value
-              ? PostWidgetLayout.wide
-              : PostWidgetLayout.normal,
-          maxWidth: 800,
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: SizedBox(
+            width: 800,
+            child: Timeline.kind(
+              key: _timelineKey,
+              kind: _kind ?? kinds.first,
+              postLayout: ref.watch(useWidePostLayout).value
+                  ? PostWidgetLayout.wide
+                  : PostWidgetLayout.normal,
+            ),
+          ),
         ),
       ),
     );

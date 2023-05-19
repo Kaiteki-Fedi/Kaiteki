@@ -407,7 +407,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     await accounts.add(account);
-    router.goNamed("home", params: account.key.routerParams);
+    router.goNamed("home", pathParameters: account.key.routerParams);
   }
 
   Future<void> _showError(Object error, StackTrace? stack) async {

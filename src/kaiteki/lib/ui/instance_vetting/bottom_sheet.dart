@@ -10,7 +10,6 @@ import "package:kaiteki/fediverse/model/instance.dart";
 import "package:kaiteki/fediverse/model/timeline_kind.dart";
 import "package:kaiteki/text/parsers/html_text_parser.dart";
 import "package:kaiteki/text/text_renderer.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
@@ -51,7 +50,9 @@ class _InstanceVettingBottomSheetState
               name != null && name.toLowerCase() != widget.instance;
 
           final instance = info?.probe.instance;
-          Widget leading = const Icon(Icons.public_rounded);
+
+          const leadingFallback = Icon(Icons.public_rounded);
+          Widget leading = leadingFallback;
 
           if (iconUrl != null) {
             leading = Image.network(
@@ -59,7 +60,7 @@ class _InstanceVettingBottomSheetState
               width: 24,
               height: 24,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => leading,
+              errorBuilder: (_, __, ___) => leadingFallback,
             );
           }
 
@@ -160,9 +161,7 @@ class _InstanceVettingBottomSheetState
           child: ColoredBox(
             color: Theme.of(context).colorScheme.surface,
             child: snapshot.connectionState == ConnectionState.waiting
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+                ? centeredCircularProgressIndicator
                 : instance?.backgroundUrl.nullTransform(
                     (bgUrl) => Image.network(
                       bgUrl.toString(),
@@ -252,13 +251,7 @@ class _InstanceVettingBottomSheetState
               alignment: Alignment.topLeft,
               child: hasDescription
                   ? Text.rich(
-                      render(
-                        context,
-                        description,
-                        parsers: const {HtmlTextParser()},
-                        onUserClick: (_) {},
-                        textTheme: Theme.of(context).ktkTextTheme!,
-                      ),
+                    TextRenderer.fromContext(context, ref).render(parseText(description, const {HtmlTextParser()}),),
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   : Text(
@@ -364,6 +357,8 @@ class _InstanceVettingBottomSheetState
                 ListTile(
                   leading: Image.asset(
                     type.theme.iconAssetLocation!,
+                    width: 24,
+                    height: 24,
                   ),
                   title: Text(type.displayName),
                   subtitle: version == null ? null : Text(version),

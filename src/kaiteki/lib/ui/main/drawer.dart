@@ -8,7 +8,9 @@ import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/utils/extensions.dart";
 
 class MainScreenDrawer extends ConsumerWidget {
-  const MainScreenDrawer({super.key});
+  final VoidCallback onSwitchLayout;
+
+  const MainScreenDrawer({super.key, required this.onSwitchLayout});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,6 +19,7 @@ class MainScreenDrawer extends ConsumerWidget {
     final fontSize = Theme.of(context).textTheme.titleLarge?.fontSize;
     final adapter = ref.watch(adapterProvider);
     final feedbackEnabled = ref.watch(AppExperiment.feedback.provider);
+    final layoutsEnabled = ref.watch(AppExperiment.timelineViews.provider);
 
     return Drawer(
       child: SafeArea(
@@ -48,7 +51,7 @@ class MainScreenDrawer extends ConsumerWidget {
                   title: Text(l10n.listsTitle),
                   onTap: () => context.pushNamed(
                     "lists",
-                    params: ref.accountRouterParams,
+                    pathParameters: ref.accountRouterParams,
                   ),
                 ),
               ListTile(
@@ -76,9 +79,17 @@ class MainScreenDrawer extends ConsumerWidget {
                 title: Text(l10n.accountSettingsTitle),
                 onTap: () => context.pushNamed(
                   "accountSettings",
-                  params: ref.accountRouterParams,
+                  pathParameters: ref.accountRouterParams,
                 ),
               ),
+              if (layoutsEnabled) ...[
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.swap_horiz_rounded),
+                  title: const Text("Switch Layout"),
+                  onTap: onSwitchLayout,
+                ),
+              ],
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.settings_rounded),

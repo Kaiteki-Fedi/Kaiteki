@@ -10,8 +10,8 @@
   - **Android:** See Flutter "Getting Started" guide for setting up the Android SDK, otherwise download <https://developer.android.com/studio#command-line-tools-only> and set SDK path with `flutter config --android-studio-dir`
   - **Windows:** [Visual Studio](https://visualstudio.microsoft.com/downloads/) or [Build Tools for Visual Studio 2022](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022) with "Desktop development with C++" workload
   - **Linux:**
-    - **Debian/Ubuntu:** `clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev`
-    - **Void Linux:** `clang cmake ninja pkg-config gtk+3-devel`
+    - **Debian-based:** `clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libhandy-1-dev`
+    - **Void Linux:** `clang cmake ninja pkg-config gtk+3-devel libhandy1-devel`
 
 ## Cloning and updating submodules
 

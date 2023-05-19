@@ -1,10 +1,14 @@
 import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/backends/mastodon/client.dart";
 import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
+import "package:kaiteki/fediverse/interfaces/explore_support.dart";
+import "package:kaiteki/fediverse/model/embed.dart";
 import "package:kaiteki/fediverse/model/instance.dart";
 import "package:kaiteki/fediverse/model/notification.dart";
+import "package:kaiteki/fediverse/model/post/post.dart";
 
-class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
+class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
+    implements ExploreSupport {
   @override
   final String instance;
 
@@ -50,5 +54,23 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient> {
     throw UnsupportedError(
       "Mastodon does not support marking individual notifications as read",
     );
+  }
+
+  @override
+  Future<List<Post>> getTrendingPosts() async {
+    final statuses = await client.getTrendingStatuses();
+    return statuses.map((s) => toPost(s, instance)).toList();
+  }
+
+  @override
+  Future<List<Embed>> getTrendingLinks() async {
+    final links = await client.getTrendingLinks();
+    return links.map(toEmbed).toList();
+  }
+
+  @override
+  Future<List<String>> getTrendingHashtags() async {
+    final tags = await client.getTrendingTags();
+    return tags.map((t) => t.name).toList();
   }
 }

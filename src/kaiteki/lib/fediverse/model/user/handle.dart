@@ -15,5 +15,10 @@ class UserHandle extends Equatable {
   List<Object?> get props => [username, host];
 
   @override
-  String toString() => "@$username@$host";
+  String toString([bool leadingAt = true]) {
+    final buffer = StringBuffer();
+    if (leadingAt) buffer.write("@");
+    buffer.writeAll([username, "@", host]);
+    return buffer.toString();
+  }
 }
