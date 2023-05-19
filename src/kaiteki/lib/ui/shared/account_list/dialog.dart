@@ -150,11 +150,13 @@ class AccountListDialog extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  QrImage(
+                  QrImageView(
                     data: jsonEncode(
                       TransitAccount.fromAccount(account).toJson(),
                     ),
-                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    dataModuleStyle: QrDataModuleStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ],
               ),
