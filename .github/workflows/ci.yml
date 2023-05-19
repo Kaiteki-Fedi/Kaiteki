@@ -154,8 +154,7 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
-      - name: Build (unsigned)  
-        if: github.event_name == 'pull_request'
+      - name: Build (unsigned)
         run: 'make build-android ${{needs.test.outputs.make-args}}'
 
       - name: Upload artifact
