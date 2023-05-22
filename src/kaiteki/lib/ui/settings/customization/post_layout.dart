@@ -57,10 +57,10 @@ class PostLayoutSettingsScreen extends StatelessWidget {
                     provider: useWidePostLayout,
                     title: const Text("Wide layout"),
                   ),
-                  // PreferenceSwitchListTile(
-                  //   provider: useFullWidthAttachments,
-                  //   title: const Text("Full-width attachments"),
-                  // ),
+                  PreferenceSwitchListTile(
+                    provider: cropAttachments,
+                    title: const Text("Crop attachments"),
+                  ),
                 ],
               ),
             ],

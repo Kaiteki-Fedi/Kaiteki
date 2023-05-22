@@ -77,3 +77,9 @@ enum PostReplyPreview {
   /// Only show the name of the user being replied to.
   compact,
 }
+
+final cropAttachments = createSettingProvider<bool>(
+  key: "cropAttachments",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
