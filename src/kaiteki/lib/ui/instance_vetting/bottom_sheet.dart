@@ -251,7 +251,9 @@ class _InstanceVettingBottomSheetState
               alignment: Alignment.topLeft,
               child: hasDescription
                   ? Text.rich(
-                    TextRenderer.fromContext(context, ref).render(parseText(description, const {HtmlTextParser()}),),
+                      TextRenderer.fromContext(context, ref).render(
+                        parseText(description, const {HtmlTextParser()}),
+                      ),
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   : Text(
