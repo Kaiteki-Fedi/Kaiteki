@@ -309,7 +309,7 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
     Color? backgroundColor, foregroundColor;
 
     if (immerse) {
-      final backgroundColor = getOutsideColor(context);
+      backgroundColor = getOutsideColor(context);
       if (backgroundColor != null) {
         foregroundColor = ThemeData.estimateBrightnessForColor(backgroundColor)
             .inverted
