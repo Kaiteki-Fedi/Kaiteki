@@ -13,7 +13,7 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
 
   @override
   AccountKey? build() {
-    final key = ref.read(accountProvider)!.key;
+    final key = ref.read(accountProvider)?.key;
 
     ref.listenSelf((_, __) => _routerListener?.call());
 
