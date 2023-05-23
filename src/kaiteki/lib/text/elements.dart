@@ -23,20 +23,22 @@ abstract class Element extends Equatable {
   }
 
   const Element({this.text, this.children});
+
+  bool has(bool Function(Element element) predicate) {
+    return predicate(this) || children?.any(predicate) == true;
+  }
 }
 
 typedef ReplacementElementBuilder = Element Function(String text);
 
 class TextElement extends Element {
-  @override
-  final String? text;
   final TextElementStyle? style;
 
   const TextElement(
-    this.text, {
+    String? text, {
     this.style,
     super.children,
-  });
+  }) : super(text: text);
 
   List<Element> cut(int index, int length, ReplacementElementBuilder builder) {
     final text = this.text;

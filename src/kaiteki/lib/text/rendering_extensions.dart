@@ -75,18 +75,25 @@ Emoji? resolveEmoji(
 ]) {
   final adapter = ref.read(adapterProvider);
 
+  if (emojis == null) debugPrint("No emojis were provided");
+
   if (emojis != null) {
-    return emojis.firstWhereOrNull((e) => e.short == input);
+    final emoji = emojis.firstWhereOrNull((e) => e.short == input);
+    if (emoji == null) debugPrint("Couldn't find $input in provided emojis");
+    return emoji;
   }
 
   if (adapter is MisskeyAdapter) {
     final url = buildEmojiUriManual(adapter.instance, input, remoteHost);
+    debugPrint("Returning mkv13 emoji based on static url: $url");
     return CustomEmoji(
       short: input,
       url: url,
       instance: remoteHost ?? adapter.instance,
     );
   }
+
+  debugPrint("Couldn't resolve emoji $input");
 
   return null;
 }
