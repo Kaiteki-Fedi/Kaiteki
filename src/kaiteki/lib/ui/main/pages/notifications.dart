@@ -97,7 +97,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         final notifications =
             ref.read(notificationServiceProvider(account.key)).valueOrNull;
         if (notifications != null &&
-            notifications.any((e) => e.unread ?? false)) {
+            !notifications.any((e) => e.unread ?? true)) {
           return 1;
         }
       }
