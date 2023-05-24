@@ -80,7 +80,7 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadAllAccounts() async {
+  Future<void> restoreSessions() async {
     final accountSecrets = await _accountSecrets.read();
     final clientSecrets = await _clientSecrets.read();
 

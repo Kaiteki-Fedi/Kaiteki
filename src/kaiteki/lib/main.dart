@@ -86,6 +86,6 @@ Future<AccountManager> getAccountManager() async {
   );
 
   final manager = AccountManager(accountRepository, clientRepository);
-  await manager.loadAllAccounts();
+  await manager.restoreSessions();
   return manager;
 }
