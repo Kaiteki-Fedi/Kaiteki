@@ -35,7 +35,6 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/rosetta.dart";
 import "package:kaiteki/utils/utils.dart";
 import "package:logging/logging.dart";
-import "package:tuple/tuple.dart";
 import "package:uuid/uuid.dart";
 
 part "adapter.c.dart";
@@ -97,9 +96,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     return client.checkSession(session);
   }
 
-  Future<Tuple2<misskey.User, String>?> loginAlt(
-    OAuthCallback requestOAuth,
-  ) async {
+  Future<(misskey.User, String)?> loginAlt(OAuthCallback requestOAuth) async {
     late final String appSecret;
     late final String sessionToken;
     final result = await requestOAuth((oauthUrl) async {
@@ -122,7 +119,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
     final userkeyResponse = await client.userkey(appSecret, sessionToken);
     final concat = userkeyResponse.accessToken + appSecret;
-    return Tuple2(
+    return (
       userkeyResponse.user!,
       sha256.convert(concat.codeUnits).toString(),
     );
@@ -137,14 +134,14 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     );
   }
 
-  Future<Tuple3<String, String?, misskey.User?>?> authenticate(
+  Future<(String, String?, misskey.User?)?> authenticate(
     CredentialsCallback requestCredentials,
     OAuthCallback requestOAuth,
   ) async {
     try {
       final tuple = await loginAlt(requestOAuth);
       if (tuple == null) return null;
-      return Tuple3(tuple.item2, null, tuple.item1);
+      return (tuple.$2, null, tuple.$1);
     } catch (e, s) {
       _logger.warning(
         "Failed to login using the conventional method. Trying MiAuth instead...",
@@ -157,7 +154,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       final session = const Uuid().v4();
       final response = await loginMiAuth(session, requestOAuth);
       if (response == null) return null;
-      return Tuple3(response.token, null, response.user);
+      return (response.token, null, response.user);
     } catch (e, s) {
       _logger.warning(
         "Failed to login using MiAuth. Trying private endpoints instead...",
@@ -181,7 +178,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
     if (signInResponse == null) return null;
 
-    return Tuple3(signInResponse.i, signInResponse.id, null);
+    return (signInResponse.i, signInResponse.id, null);
   }
 
   @override
@@ -196,19 +193,19 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     if (credentials == null) return const LoginResult.aborted();
 
     assert(
-      !(credentials.item3 == null && credentials.item2 == null),
+      !(credentials.$3 == null && credentials.$2 == null),
       "Both user and id are null",
     );
 
-    client.i = credentials.item1;
+    client.i = credentials.$1;
 
-    final user = credentials.item3 ?? await client.showUser(credentials.item2!);
+    final user = credentials.$3 ?? await client.showUser(credentials.$2!);
     final account = Account(
       adapter: this,
       user: user.toKaiteki(instance),
       key: AccountKey(ApiType.misskey, instance, user.username),
       clientSecret: null,
-      accountSecret: AccountSecret(credentials.item1),
+      accountSecret: AccountSecret(credentials.$1),
     );
 
     return LoginResult.successful(account);

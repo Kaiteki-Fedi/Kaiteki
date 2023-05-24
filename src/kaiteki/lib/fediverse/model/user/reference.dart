@@ -62,7 +62,7 @@ class UserReference extends Equatable {
       final parsedUrl = Uri.tryParse(remoteUrl!);
       if (parsedUrl == null) return remoteUrl!;
       final handle = parsedUrl.fediverseHandle;
-      return "@${handle.item2}@${handle.item1}";
+      return "@${handle.$2}@${handle.$1}";
     }
 
     return null;

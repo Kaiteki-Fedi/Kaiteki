@@ -9,7 +9,6 @@ import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/utils/utils.dart";
-import "package:tuple/tuple.dart";
 
 export "package:kaiteki/text/rendering_extensions.dart";
 export "package:kaiteki/utils/extensions/build_context.dart";
@@ -169,18 +168,16 @@ extension QueryExtension on Map<String, String> {
 }
 
 extension UriExtensions on Uri {
-  Tuple2<String, String> get fediverseHandle {
+  (String, String) get fediverseHandle {
     var username = pathSegments.last;
 
     // FIXME(Craftplacer): This is just a lazy fix for empty usernames
-    if (username.isEmpty) {
-      return Tuple2(host, username);
-    }
+    if (username.isEmpty) return (host, username);
 
     if (username[0] == "@") {
       username = username.substring(1);
     }
-    return Tuple2(host, username);
+    return (host, username);
   }
 }
 

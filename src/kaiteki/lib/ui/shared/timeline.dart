@@ -10,7 +10,6 @@ import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:logging/logging.dart";
-import "package:tuple/tuple.dart";
 
 final _logger = Logger("Timeline");
 
@@ -106,7 +105,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
           }
         }
       } catch (e, s) {
-        if (mounted) _controller.error = Tuple2(e, s);
+        if (mounted) _controller.error = (e, s);
       }
     });
 

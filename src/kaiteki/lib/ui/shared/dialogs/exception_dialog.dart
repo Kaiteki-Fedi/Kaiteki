@@ -7,7 +7,6 @@ import "package:kaiteki/common.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/stack_trace_screen.dart";
-import "package:tuple/tuple.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class ExceptionDialog extends StatelessWidget {
@@ -24,11 +23,11 @@ class ExceptionDialog extends StatelessWidget {
 
   String get exceptionRuntimeType => error.$1.runtimeType.toString();
 
-  Map<String, Tuple2<String, bool>> get longDetails {
+  Map<String, (String, bool)> get longDetails {
     final stackTrace = error.$2;
     return {
       if (stackTrace != null)
-        "Stack Trace": Tuple2(
+        "Stack Trace": (
           stackTrace.toString(),
           false,
         ),
@@ -71,7 +70,7 @@ class ExceptionDialog extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
             ),
             for (var detail in longDetails.entries)
-              if (detail.value.item2)
+              if (detail.value.$2)
                 ExpansionTile(
                   tilePadding: EdgeInsets.zero,
                   childrenPadding: EdgeInsets.zero,
@@ -80,7 +79,7 @@ class ExceptionDialog extends StatelessWidget {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: SelectableText(
-                        detail.value.item1,
+                        detail.value.$1,
                         style:
                             Theme.of(context).ktkTextTheme?.monospaceTextStyle,
                       ),

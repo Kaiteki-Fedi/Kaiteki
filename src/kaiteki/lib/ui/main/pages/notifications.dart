@@ -15,7 +15,6 @@ import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:tuple/tuple.dart";
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
@@ -109,7 +108,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         followRequestValue = e.user?.id;
       }
 
-      return Tuple3(
+      return (
         e.type,
         e.post?.id,
         followRequestValue,

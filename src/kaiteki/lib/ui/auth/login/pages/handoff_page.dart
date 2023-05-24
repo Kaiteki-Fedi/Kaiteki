@@ -8,7 +8,6 @@ import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/ui/auth/transit_account.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart";
-import "package:tuple/tuple.dart";
 
 class HandoffPage extends StatefulWidget {
   const HandoffPage({super.key});
@@ -121,11 +120,7 @@ class _HandoffPageState extends State<HandoffPage> {
                         }
 
                         final account = await accountManager.restoreSession(
-                          Tuple3(
-                            accountKey,
-                            accountSecret,
-                            clientSecret,
-                          ),
+                          (accountKey, accountSecret, clientSecret),
                         );
 
                         if (account == null) {

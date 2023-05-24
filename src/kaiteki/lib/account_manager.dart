@@ -7,7 +7,6 @@ import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/repositories/repository.dart";
 import "package:logging/logging.dart";
-import "package:tuple/tuple.dart";
 
 class AccountManager extends ChangeNotifier {
   static final _logger = Logger("AccountManager");
@@ -86,7 +85,7 @@ class AccountManager extends ChangeNotifier {
 
     final secretPairs = accountSecrets.entries.map((kv) {
       final clientSecret = clientSecrets[kv.key];
-      return Tuple3(kv.key, kv.value, clientSecret);
+      return (kv.key, kv.value, clientSecret);
     });
 
     await Future.forEach(secretPairs, (tuple) async {
@@ -118,11 +117,9 @@ class AccountManager extends ChangeNotifier {
   }
 
   Future<Account?> restoreSession(
-    Tuple3<AccountKey, AccountSecret, ClientSecret?> credentials,
+    (AccountKey, AccountSecret, ClientSecret?) credentials,
   ) async {
-    final key = credentials.item1;
-    final accountSecret = credentials.item2;
-    final clientSecret = credentials.item3;
+    final (key, accountSecret, clientSecret) = credentials;
     final type = key.type!;
 
     _logger.fine("Trying to recover a ${type.displayName} account");

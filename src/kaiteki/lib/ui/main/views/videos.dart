@@ -6,16 +6,15 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/text/rendering_extensions.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
-import "package:kaiteki/utils/extensions.dart";
 import "package:logging/logging.dart";
-import "package:tuple/tuple.dart";
 import "package:video_player/video_player.dart";
 
-typedef _PostAttachmentCompound = Tuple2<Post, Attachment>;
+typedef _PostAttachmentCompound = (Post, Attachment);
 
 class VideoMainScreenView extends ConsumerStatefulWidget
     implements MainScreenView {
@@ -191,12 +190,11 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                     );
                   }
 
-                  final posts = snapshot.data?.expand(
-                    (p) {
-                      return p.attachments!
-                          .map((a) => _PostAttachmentCompound(p, a));
-                    },
-                  ).toList();
+                  final posts = snapshot.data
+                      ?.expand(
+                        (p) => p.attachments!.map((a) => (p, a)),
+                      )
+                      .toList();
 
                   final _PostAttachmentCompound? compound;
 
@@ -206,7 +204,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                     compound = null;
                   }
 
-                  final post = compound?.item1;
+                  final post = compound?.$1;
 
                   return Stack(
                     children: [
@@ -238,8 +236,8 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                           }
 
                           return _VideoWidget(
-                            compound.item2.url,
-                            key: ValueKey(compound.item2.url),
+                            compound.$2.url,
+                            key: ValueKey(compound.$2.url),
                             onProgressChanged: (v) {
                               if (mounted) {
                                 setState(
