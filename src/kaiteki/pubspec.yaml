@@ -12,7 +12,6 @@ dependencies:
   animations: ^2.0.0
   async: ^2.9.0
   autoscale_tabbarview: ^1.0.2
-  breakpoint: ^1.2.0
   chewie: ^1.5.0
   collection: ^1.16.0
   copy_with_extension: ^5.0.0
