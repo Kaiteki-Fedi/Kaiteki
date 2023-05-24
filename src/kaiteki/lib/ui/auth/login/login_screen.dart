@@ -1,5 +1,4 @@
 import "dart:async";
-import "dart:developer";
 
 import "package:animations/animations.dart";
 import "package:async/async.dart";
@@ -24,6 +23,7 @@ import "package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dar
 import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
+import "package:logging/logging.dart";
 import "package:tuple/tuple.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -395,7 +395,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     if (!mounted) {
-      log("Login screen was unmounted before login could be completed");
+      Logger("LoginScreen").warning(
+          "Login screen was unmounted before login could be completed");
       return;
     }
 

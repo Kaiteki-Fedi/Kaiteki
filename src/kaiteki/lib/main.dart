@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:kaiteki/account_manager.dart";
@@ -10,10 +11,13 @@ import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/repositories/hive_repository.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/crash_screen.dart";
+import "package:logging/logging.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 /// Main entrypoint.
 Future<void> main() async {
+  Logger.root.level = kDebugMode ? Level.ALL : Level.INFO;
+
   final Widget app;
 
   try {

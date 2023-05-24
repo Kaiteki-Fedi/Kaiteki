@@ -36,7 +36,6 @@ class _GifBottomSheetState extends State<GifBottomSheet> {
         (json["results"] as List<dynamic>).cast<Map<String, dynamic>>().map(
       (e) {
         final media = e["media_formats"] as Map<String, dynamic>;
-        debugPrint(media.toString());
         return Gif(
           Uri.parse(media["mediumgif"]["url"] as String),
           Uri.parse(media["gifpreview"]["url"] as String),

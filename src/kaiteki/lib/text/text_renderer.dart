@@ -109,10 +109,7 @@ class TextRenderer {
     final name = element.name;
     final emoji = context?.emojiResolver?.call(name);
 
-    if (emoji == null) {
-      debugPrint("Couldn't resolve emoji $name");
-      return TextSpan(text: ":$name:");
-    }
+    if (emoji == null) return TextSpan(text: ":$name:");
 
     // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
     return WidgetSpan(
