@@ -5,6 +5,7 @@ import "package:flutter/material.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/app.dart";
+import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
@@ -39,21 +40,18 @@ Future<void> main() async {
       child: const KaitekiApp(),
     );
   } catch (e, s) {
-    handleFatalError(e, s);
+    handleFatalError((e, s));
     return;
   }
 
   runApp(app);
 }
 
-void handleFatalError(Object error, StackTrace stackTrace) {
+void handleFatalError(TraceableError error) {
   final crashScreen = MaterialApp(
     theme: getDefaultTheme(Brightness.light, true),
     darkTheme: getDefaultTheme(Brightness.dark, true),
-    home: CrashScreen(
-      exception: error,
-      stackTrace: stackTrace,
-    ),
+    home: CrashScreen(error),
   );
   runApp(crashScreen);
 }

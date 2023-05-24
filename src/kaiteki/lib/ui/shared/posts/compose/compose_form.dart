@@ -375,10 +375,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
           content: Text(l10n.postSubmissionFailed),
           action: SnackBarAction(
             label: l10n.whyButtonLabel,
-            onPressed: () => context.showExceptionDialog(
-              e as Object,
-              s as StackTrace?,
-            ),
+            onPressed: () => context.showExceptionDialog((e, s)),
           ),
         ),
       );

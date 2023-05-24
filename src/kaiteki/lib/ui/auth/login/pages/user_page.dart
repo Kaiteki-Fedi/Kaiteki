@@ -69,10 +69,7 @@ class _UserPageState extends State<UserPage> {
                   if (snapshot.hasError)
                     Padding(
                       padding: fieldMargin,
-                      child: ErrorMessageWidget(
-                        error: snapshot.error!,
-                        stackTrace: snapshot.stackTrace,
-                      ),
+                      child: ErrorMessageWidget(snapshot.traceableError!),
                     ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),

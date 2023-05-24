@@ -162,8 +162,7 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
       if (mounted) {
         context.showErrorSnackbar(
           text: const Text("Failed to import mutes"),
-          error: e,
-          stackTrace: s,
+          error: (e, s),
         );
       }
     } finally {

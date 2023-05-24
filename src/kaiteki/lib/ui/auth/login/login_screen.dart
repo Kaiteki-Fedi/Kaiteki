@@ -24,7 +24,6 @@ import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
 import "package:logging/logging.dart";
-import "package:tuple/tuple.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -103,8 +102,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _loginFuture = () async {
         try {
           await _loginToInstance(host);
-        } catch (s, e) {
-          _showError(s, e);
+        } catch (e, s) {
+          _showError((e, s));
         } finally {
           setState(() => _instance = null);
         }
@@ -384,8 +383,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (result.aborted) return;
 
     if (!result.successful) {
-      final error = result.error!;
-      _showError(error.item1, error.item2);
+      _showError(result.error!);
       return;
     }
 
@@ -396,7 +394,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (!mounted) {
       Logger("LoginScreen").warning(
-          "Login screen was unmounted before login could be completed");
+        "Login screen was unmounted before login could be completed",
+      );
       return;
     }
 
@@ -411,11 +410,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     router.goNamed("home", pathParameters: account.key.routerParams);
   }
 
-  Future<void> _showError(Object error, StackTrace? stack) async {
+  Future<void> _showError(TraceableError error) async {
     await showDialog(
       context: context,
       builder: (_) => AuthenticationUnsuccessfulDialog(
-        error: Tuple2(error, stack),
+        error: error,
       ),
     );
   }
@@ -476,8 +475,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _loginFuture = () async {
         try {
           await _loginToInstance(host);
-        } catch (s, e) {
-          _showError(s, e);
+        } catch (e, s) {
+          _showError((e, s));
         } finally {
           setState(() => _instance = null);
         }

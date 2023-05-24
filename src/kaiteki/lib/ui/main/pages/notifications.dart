@@ -76,12 +76,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                     groupNotifications(data),
                     ref.read(notifications.notifier),
                   ),
-                  error: (error, stackTrace) => Center(
-                    child: ErrorLandingWidget(
-                      error: error,
-                      stackTrace: stackTrace,
-                    ),
-                  ),
+                  error: (e, s) => Center(child: ErrorLandingWidget((e, s))),
                   loading: () => centeredCircularProgressIndicator,
                 ),
           ),
@@ -174,11 +169,11 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                                     ),
                                     action: SnackBarAction(
                                       label: "Show details",
-                                      onPressed: () =>
-                                          context.showExceptionDialog(
-                                        error,
-                                        stackTrace,
-                                      ),
+                                      onPressed: () {
+                                        context.showExceptionDialog(
+                                          (error, stackTrace),
+                                        );
+                                      },
                                     ),
                                   ),
                                 );

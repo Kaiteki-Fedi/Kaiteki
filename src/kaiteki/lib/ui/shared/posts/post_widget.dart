@@ -675,8 +675,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postBookmarkFailed),
-        stackTrace: s,
-        error: e,
+        error: (e, s),
       );
     }
   }
@@ -716,9 +715,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           content: const Text("Failed to react to post"),
           action: SnackBarAction(
             label: "Show details",
-            onPressed: () {
-              context.showExceptionDialog(e, s);
-            },
+            onPressed: () => context.showExceptionDialog((e, s)),
           ),
         ),
       );
@@ -742,8 +739,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postFavoriteFailed),
-        stackTrace: s,
-        error: e,
+        error: (e, s),
       );
     }
   }
@@ -789,8 +785,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postRepeatFailed),
-        stackTrace: s,
-        error: e,
+        error: (e, s),
       );
     }
   }

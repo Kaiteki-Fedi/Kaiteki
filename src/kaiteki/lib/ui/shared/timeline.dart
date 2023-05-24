@@ -146,12 +146,8 @@ class TimelineState extends ConsumerState<TimelineSliver> {
         itemBuilder: _buildPost,
         animateTransitions: true,
         firstPageErrorIndicatorBuilder: (context) {
-          final t = _controller.error as Tuple2<Object, StackTrace>;
           return Center(
-            child: ErrorLandingWidget(
-              error: t.item1,
-              stackTrace: t.item2,
-            ),
+            child: ErrorLandingWidget(_controller.error as TraceableError),
           );
         },
         firstPageProgressIndicatorBuilder: (context) => const Padding(

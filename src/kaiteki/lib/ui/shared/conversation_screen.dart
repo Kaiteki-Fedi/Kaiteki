@@ -106,10 +106,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       title: Text(l10n.threadRetrievalFailed),
       trailing: OutlinedButton(
         child: const Text("Show details"),
-        onPressed: () => context.showExceptionDialog(
-          snapshot.error!,
-          snapshot.stackTrace,
-        ),
+        onPressed: () => context.showExceptionDialog(snapshot.traceableError!),
       ),
     );
   }

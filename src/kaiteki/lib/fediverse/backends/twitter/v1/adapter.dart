@@ -24,7 +24,6 @@ import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:oauth1/oauth1.dart";
-import "package:tuple/tuple.dart";
 
 part "adapter.c.dart";
 
@@ -152,7 +151,7 @@ class OldTwitterAdapter extends CentralizedBackendAdapter {
       account = await client.verifyCredentials();
       username ??= account.screenName;
     } catch (e, s) {
-      return LoginResult.failed(Tuple2(e, s));
+      return LoginResult.failed((e, s));
     }
 
     // Create and set account secret
