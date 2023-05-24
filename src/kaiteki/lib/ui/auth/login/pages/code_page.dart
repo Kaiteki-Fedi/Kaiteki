@@ -105,10 +105,7 @@ class _CodePageState extends State<CodePage> {
                   ),
                   const SizedBox(height: 24),
                   if (snapshot.hasError)
-                    ErrorMessageWidget(
-                      error: snapshot.error!,
-                      stackTrace: snapshot.stackTrace,
-                    ),
+                    ErrorMessageWidget(snapshot.traceableError!),
                 ],
               ),
             ),

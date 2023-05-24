@@ -10,14 +10,14 @@ import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/instances.dart";
 import "package:kaiteki/fediverse/model/instance.dart";
-import "package:kaiteki/logger.dart";
 import "package:kaiteki/model/node_info.dart";
 import "package:kaiteki/utils/utils.dart";
+import "package:logging/logging.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "instance_prober.g.dart";
 
-final _logger = getLogger("InstanceProber");
+final _logger = Logger("Instance Probing");
 
 @riverpod
 Future<InstanceProbeResult> probeInstance(
@@ -36,32 +36,33 @@ Future<InstanceProbeResult> probeInstance(
   try {
     result ??= await _probeKnownInstances(host);
   } catch (e, s) {
-    _logger.w("Couldn't check for $host in known instances", e, s);
+    _logger.warning("Couldn't check for $host in known instances", e, s);
   }
 
   try {
     result ??= await _probeActivityPubNodeInfo(host);
   } catch (e, s) {
-    _logger.w("Couldn't check node info for $host", e, s);
+    _logger.warning("Couldn't check node info for $host", e, s);
   }
 
   try {
     result ??= await _probeEndpoints(host);
   } catch (e, s) {
-    _logger.w("Couldn't probe endpoints for $host", e, s);
+    _logger.warning("Couldn't probe endpoints for $host", e, s);
   }
 
   if (result == null) {
-    _logger.d("Couldn't detect backend on on $host");
+    _logger.warning("Couldn't detect backend on on $host");
     return const InstanceProbeResult.failed();
   }
 
   final type = result.type!;
 
   if (result.method == null) {
-    _logger.d("Detected ${type.displayName} on $host");
+    _logger.fine("Detected ${type.displayName} on $host");
   } else {
-    _logger.d("Detected ${type.displayName} on $host using ${result.method}");
+    _logger
+        .fine("Detected ${type.displayName} on $host using ${result.method}");
   }
 
   if (result.instance == null) {
@@ -111,7 +112,7 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
   try {
     object = jsonDecode(response.body) as JsonMap;
   } catch (e) {
-    _logger.w("Failed to read nodeinfo response: $e");
+    _logger.warning("Failed to read nodeinfo response: $e");
     return null;
   }
 
@@ -128,7 +129,7 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
   final hrefUri = Uri.tryParse(href);
 
   if (hrefUri == null) {
-    _logger.w("Failed to parse nodeinfo URL: $href");
+    _logger.warning("Failed to parse nodeinfo URL: $href");
     return null;
   }
 
@@ -138,7 +139,7 @@ Future<NodeInfo?> fetchNodeInfo(String host) async {
   try {
     nodeInfoBody = utf8.decode(nodeInfoResponse.bodyBytes);
   } catch (e, s) {
-    _logger.w("Failed to decode nodeinfo body", e, s);
+    _logger.warning("Failed to decode nodeinfo body", e, s);
     return null;
   }
 
@@ -182,7 +183,7 @@ Future<InstanceProbeResult?> _probeEndpoints(String host) async {
 
       if (adapter is! DecentralizedBackendAdapter) continue;
 
-      _logger.d("Probing for ${apiType.displayName} on $host...");
+      _logger.fine("Probing for ${apiType.displayName} on $host...");
 
       final result = await adapter.probeInstance();
 
@@ -194,7 +195,7 @@ Future<InstanceProbeResult?> _probeEndpoints(String host) async {
         );
       }
     } catch (e, s) {
-      _logger.w("Probe for ${apiType.displayName} on $host failed", e, s);
+      _logger.warning("Probe for ${apiType.displayName} on $host failed", e, s);
       continue;
     }
   }

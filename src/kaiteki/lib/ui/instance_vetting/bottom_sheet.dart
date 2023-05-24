@@ -127,8 +127,7 @@ class _InstanceVettingBottomSheetState
                           trailing: FilledButton.tonal(
                             onPressed: () {
                               context.showExceptionDialog(
-                                snapshot.error!,
-                                snapshot.stackTrace,
+                                snapshot.traceableError!,
                               );
                             },
                             child: const Text("Show details"),

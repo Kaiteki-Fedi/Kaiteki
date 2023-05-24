@@ -1,5 +1,4 @@
 import "dart:async";
-import "dart:developer";
 
 import "package:collection/collection.dart";
 import "package:crypto/crypto.dart";
@@ -28,7 +27,6 @@ import "package:kaiteki/fediverse/interfaces/search_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/notification.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
-import "package:kaiteki/logger.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/login_result.dart";
@@ -36,12 +34,10 @@ import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/rosetta.dart";
 import "package:kaiteki/utils/utils.dart";
-import "package:tuple/tuple.dart";
+import "package:logging/logging.dart";
 import "package:uuid/uuid.dart";
 
 part "adapter.c.dart";
-
-final _logger = getLogger("MisskeyAdapter");
 
 // TODO(Craftplacer): add missing implementations
 class MisskeyAdapter extends DecentralizedBackendAdapter
@@ -55,6 +51,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         ListSupport,
         PostTranslationSupport {
   final MisskeyClient client;
+
+  static final _logger = Logger("MisskeyAdapter");
 
   @override
   final String instance;
@@ -98,9 +96,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     return client.checkSession(session);
   }
 
-  Future<Tuple2<misskey.User, String>?> loginAlt(
-    OAuthCallback requestOAuth,
-  ) async {
+  Future<(misskey.User, String)?> loginAlt(OAuthCallback requestOAuth) async {
     late final String appSecret;
     late final String sessionToken;
     final result = await requestOAuth((oauthUrl) async {
@@ -123,7 +119,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
     final userkeyResponse = await client.userkey(appSecret, sessionToken);
     final concat = userkeyResponse.accessToken + appSecret;
-    return Tuple2(
+    return (
       userkeyResponse.user!,
       sha256.convert(concat.codeUnits).toString(),
     );
@@ -138,16 +134,16 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     );
   }
 
-  Future<Tuple3<String, String?, misskey.User?>?> authenticate(
+  Future<(String, String?, misskey.User?)?> authenticate(
     CredentialsCallback requestCredentials,
     OAuthCallback requestOAuth,
   ) async {
     try {
       final tuple = await loginAlt(requestOAuth);
       if (tuple == null) return null;
-      return Tuple3(tuple.item2, null, tuple.item1);
+      return (tuple.$2, null, tuple.$1);
     } catch (e, s) {
-      _logger.w(
+      _logger.warning(
         "Failed to login using the conventional method. Trying MiAuth instead...",
         e,
         s,
@@ -158,9 +154,9 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       final session = const Uuid().v4();
       final response = await loginMiAuth(session, requestOAuth);
       if (response == null) return null;
-      return Tuple3(response.token, null, response.user);
+      return (response.token, null, response.user);
     } catch (e, s) {
-      _logger.w(
+      _logger.warning(
         "Failed to login using MiAuth. Trying private endpoints instead...",
         e,
         s,
@@ -182,7 +178,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
     if (signInResponse == null) return null;
 
-    return Tuple3(signInResponse.i, signInResponse.id, null);
+    return (signInResponse.i, signInResponse.id, null);
   }
 
   @override
@@ -197,19 +193,19 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     if (credentials == null) return const LoginResult.aborted();
 
     assert(
-      !(credentials.item3 == null && credentials.item2 == null),
+      !(credentials.$3 == null && credentials.$2 == null),
       "Both user and id are null",
     );
 
-    client.i = credentials.item1;
+    client.i = credentials.$1;
 
-    final user = credentials.item3 ?? await client.showUser(credentials.item2!);
+    final user = credentials.$3 ?? await client.showUser(credentials.$2!);
     final account = Account(
       adapter: this,
       user: user.toKaiteki(instance),
       key: AccountKey(ApiType.misskey, instance, user.username),
       clientSecret: null,
-      accountSecret: AccountSecret(credentials.item1),
+      accountSecret: AccountSecret(credentials.$1),
     );
 
     return LoginResult.successful(account);
@@ -396,11 +392,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     try {
       notes = await client.getConversation(reply.id);
     } catch (e, s) {
-      log(
-        "Failed to fetch thread using notes/conversation",
-        error: e,
-        stackTrace: s,
-      );
+      _logger.fine("Failed to fetch thread using notes/conversation", e, s);
 
       // FIXME(Craftplacer): Fetch (entire thread), or implement incomplete threads (will be a nightmare to do)
       notes = await client.getNoteChildren(reply.id);

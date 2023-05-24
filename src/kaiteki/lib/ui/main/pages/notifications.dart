@@ -15,7 +15,6 @@ import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:tuple/tuple.dart";
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
@@ -76,12 +75,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                     groupNotifications(data),
                     ref.read(notifications.notifier),
                   ),
-                  error: (error, stackTrace) => Center(
-                    child: ErrorLandingWidget(
-                      error: error,
-                      stackTrace: stackTrace,
-                    ),
-                  ),
+                  error: (e, s) => Center(child: ErrorLandingWidget((e, s))),
                   loading: () => centeredCircularProgressIndicator,
                 ),
           ),
@@ -114,7 +108,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         followRequestValue = e.user?.id;
       }
 
-      return Tuple3(
+      return (
         e.type,
         e.post?.id,
         followRequestValue,
@@ -174,11 +168,11 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
                                     ),
                                     action: SnackBarAction(
                                       label: "Show details",
-                                      onPressed: () =>
-                                          context.showExceptionDialog(
-                                        error,
-                                        stackTrace,
-                                      ),
+                                      onPressed: () {
+                                        context.showExceptionDialog(
+                                          (error, stackTrace),
+                                        );
+                                      },
                                     ),
                                   ),
                                 );

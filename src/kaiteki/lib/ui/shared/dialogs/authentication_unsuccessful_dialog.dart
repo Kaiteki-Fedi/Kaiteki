@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/common.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/exceptions/instance_unreachable_exception.dart";
-import "package:kaiteki/ui/shared/dialogs/exception_dialog.dart";
-import "package:tuple/tuple.dart";
+import "package:kaiteki/utils/extensions.dart";
 
 class AuthenticationUnsuccessfulDialog extends StatelessWidget {
-  final Tuple2<Object, StackTrace?> error;
+  final TraceableError error;
 
   const AuthenticationUnsuccessfulDialog({super.key, required this.error});
 
@@ -14,10 +14,10 @@ class AuthenticationUnsuccessfulDialog extends StatelessWidget {
     Widget icon = const Icon(Icons.error_rounded);
     Widget title = const Text("Login failed");
     Widget description = Text(
-      "An error occurred with following message while logging in:\n\n${error.item1}",
+      "An error occurred with following message while logging in:\n\n${error.$1}",
     );
 
-    if (error.item1 is InstanceUnreachableException) {
+    if (error.$1 is InstanceUnreachableException) {
       icon = const Icon(Icons.public_off_rounded);
       title = const Text("Instance unreachable");
       description = const Text(
@@ -36,13 +36,7 @@ class AuthenticationUnsuccessfulDialog extends StatelessWidget {
       actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: <Widget>[
         TextButton(
-          onPressed: () => showDialog(
-            context: context,
-            builder: (_) => ExceptionDialog(
-              exception: error.item1,
-              stackTrace: error.item2,
-            ),
-          ),
+          onPressed: () => context.showExceptionDialog(error),
           child: const Text("Show details"),
         ),
         TextButton(

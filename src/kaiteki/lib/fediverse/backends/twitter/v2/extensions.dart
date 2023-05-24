@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:collection/collection.dart";
 import "package:kaiteki/fediverse/backends/twitter/v2/model/media.dart" as twt;
 import "package:kaiteki/fediverse/backends/twitter/v2/model/media.dart";
@@ -85,11 +83,7 @@ extension TweetExtensions on twt.Tweet {
       repeatOf: retweet?.$2.nullTransform((t) => t.toKaiteki(includes)),
       quotedPost: quote?.$2.nullTransform((t) => t.toKaiteki(includes)),
       attachments: media
-          ?.where((m) {
-            final hasUrl = m.url != null || m.previewImageUrl != null;
-            if (!hasUrl) log("Media (${m.mediaKey}) has no URL");
-            return hasUrl;
-          })
+          ?.where((m) => m.url != null || m.previewImageUrl != null)
           .map((m) => m.toKaiteki())
           .toList(),
       replyTo: replyTo,

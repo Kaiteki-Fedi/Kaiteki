@@ -1,4 +1,3 @@
-import "package:breakpoint/breakpoint.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:html/dom.dart";
@@ -9,7 +8,6 @@ import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/utils/utils.dart";
-import "package:tuple/tuple.dart";
 
 export "package:kaiteki/text/rendering_extensions.dart";
 export "package:kaiteki/utils/extensions/build_context.dart";
@@ -136,24 +134,6 @@ extension AccountKeyExtensions on AccountKey {
   }
 }
 
-extension BreakpointExtensions on Breakpoint {
-  double? get margin {
-    if (window == WindowSize.xsmall) return 16;
-    if (window == WindowSize.small && columns == 8) return 32;
-    if (window == WindowSize.small && columns == 12) return null;
-    if (window == WindowSize.medium) return 200;
-    return null;
-  }
-
-  double? get body {
-    if (window == WindowSize.xsmall) return null;
-    if (window == WindowSize.small && columns == 8) return null;
-    if (window == WindowSize.small && columns == 12) return 840;
-    if (window == WindowSize.medium) return null;
-    return 1040;
-  }
-}
-
 extension QueryExtension on Map<String, String> {
   String toQueryString() {
     if (isEmpty) return "";
@@ -169,18 +149,16 @@ extension QueryExtension on Map<String, String> {
 }
 
 extension UriExtensions on Uri {
-  Tuple2<String, String> get fediverseHandle {
+  (String, String) get fediverseHandle {
     var username = pathSegments.last;
 
     // FIXME(Craftplacer): This is just a lazy fix for empty usernames
-    if (username.isEmpty) {
-      return Tuple2(host, username);
-    }
+    if (username.isEmpty) return (host, username);
 
     if (username[0] == "@") {
       username = username.substring(1);
     }
-    return Tuple2(host, username);
+    return (host, username);
   }
 }
 

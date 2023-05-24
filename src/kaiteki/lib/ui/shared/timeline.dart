@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:flutter/material.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
@@ -11,7 +9,9 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:tuple/tuple.dart";
+import "package:logging/logging.dart";
+
+final _logger = Logger("Timeline");
 
 class TimelineSliver extends ConsumerStatefulWidget {
   final double? maxWidth;
@@ -64,28 +64,20 @@ class TimelineState extends ConsumerState<TimelineSliver> {
 
     final timelineKind = widget.kind;
     if (timelineKind != null) {
-      log(
-        "Showing posts from $timelineKind at ${adapter.runtimeType}",
-        name: "Timeline",
-      );
+      _logger
+          .fine("Showing posts from $timelineKind at ${adapter.runtimeType}");
       return (q) => adapter.getTimeline(timelineKind, query: q);
     }
 
     final userId = widget.userId;
     if (userId != null) {
-      log(
-        "Showing posts from $userId at ${adapter.runtimeType}",
-        name: "Timeline",
-      );
+      _logger.fine("Showing posts from $userId at ${adapter.runtimeType}");
       return (q) => adapter.getStatusesOfUserById(userId, query: q);
     }
 
     final listId = widget.listId;
     if (listId != null) {
-      log(
-        "Showing posts from $listId at ${adapter.runtimeType}",
-        name: "Timeline",
-      );
+      _logger.fine("Showing posts from $listId at ${adapter.runtimeType}");
       final listAdapter = adapter as ListSupport;
       return (q) => listAdapter.getListPosts(listId, query: q);
     }
@@ -113,7 +105,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
           }
         }
       } catch (e, s) {
-        if (mounted) _controller.error = Tuple2(e, s);
+        if (mounted) _controller.error = (e, s);
       }
     });
 
@@ -153,12 +145,8 @@ class TimelineState extends ConsumerState<TimelineSliver> {
         itemBuilder: _buildPost,
         animateTransitions: true,
         firstPageErrorIndicatorBuilder: (context) {
-          final t = _controller.error as Tuple2<Object, StackTrace>;
           return Center(
-            child: ErrorLandingWidget(
-              error: t.item1,
-              stackTrace: t.item2,
-            ),
+            child: ErrorLandingWidget(_controller.error as TraceableError),
           );
         },
         firstPageProgressIndicatorBuilder: (context) => const Padding(

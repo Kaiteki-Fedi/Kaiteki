@@ -1,6 +1,5 @@
 import "dart:async";
 import "dart:convert";
-import "dart:developer";
 
 import "package:http/http.dart" as http show Response;
 import "package:kaiteki/exceptions/http_exception.dart";
@@ -17,6 +16,7 @@ import "package:kaiteki/fediverse/backends/twitter/v2/responses/user_response.da
 import "package:kaiteki/http/http.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/utils.dart";
+import "package:logging/logging.dart";
 
 class TwitterClient {
   late final KaitekiClient client;
@@ -203,16 +203,11 @@ class TwitterClient {
       _ => null,
     };
 
-    try {} catch (e, s) {
-      log(
-        "Error while parsing error response: ${response.body}",
-        name: "TwitterClient",
-        error: e,
-        stackTrace: s,
-      );
+    if (error == null) {
+      Logger("TwitterClient")
+          .warning("Malformed error response: ${response.body}");
+      throw HttpException.fromResponse(response);
     }
-
-    if (error == null) throw HttpException.fromResponse(response);
 
     throw Exception("${error.$1}: ${error.$2}");
   }

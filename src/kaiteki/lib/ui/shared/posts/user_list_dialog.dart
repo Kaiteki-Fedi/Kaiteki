@@ -85,12 +85,14 @@ class UserListTile extends ConsumerWidget {
     super.key,
     required this.user,
     this.onPressed,
+    this.showDescription = true,
     this.trailing = const [],
   });
 
   final User user;
   final VoidCallback? onPressed;
   final List<Widget> trailing;
+  final bool showDescription;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -101,7 +103,7 @@ class UserListTile extends ConsumerWidget {
       title: UserDisplayNameWidget(user),
       leading: AvatarWidget(user, size: 32),
       titleAlignment: ListTileTitleAlignment.top,
-      subtitle: hasDescription
+      subtitle: hasDescription && showDescription
           ? Text.rich(
               user.renderText(context, ref, description),
               maxLines: 3,

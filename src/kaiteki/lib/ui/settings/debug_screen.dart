@@ -101,7 +101,7 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
     try {
       throw Exception("Test exception");
     } catch (e, s) {
-      await context.showExceptionDialog(e, s);
+      await context.showExceptionDialog((e, s));
     }
   }
 }

@@ -1,11 +1,11 @@
 import "package:animations/animations.dart";
 import "package:async/async.dart";
-import "package:breakpoint/breakpoint.dart";
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/onboarding/benefits.dart";
 import "package:kaiteki/ui/onboarding/self_select_screen.dart";
+import "package:kaiteki/ui/window_class.dart";
 import "package:page_view_dot_indicator/page_view_dot_indicator.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -72,13 +72,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         }
       },
       child: Scaffold(
-        body: BreakpointBuilder(
-          builder: (context, breakpoint) {
-            return breakpoint.window >= WindowSize.medium
-                ? buildLandscape()
-                : buildPortrait();
-          },
-        ),
+        body: WindowClass.fromContext(context) >= WindowClass.medium
+            ? buildLandscape()
+            : buildPortrait(),
       ),
     );
   }

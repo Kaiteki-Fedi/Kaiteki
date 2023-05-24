@@ -4,7 +4,6 @@ import "package:fediverse_objects/mastodon_v1.dart" as mastodon_v1;
 import "package:flutter/foundation.dart";
 import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/constants.dart" as consts;
-import "package:kaiteki/exceptions/authentication_exception.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/backends/mastodon/adapter.dart";
@@ -31,7 +30,6 @@ import "package:kaiteki/model/auth/login_result.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/rosetta.dart";
-import "package:tuple/tuple.dart";
 import "package:url_launcher/url_launcher.dart";
 
 part "shared_adapter.c.dart"; // That file contains toEntity() methods
@@ -208,10 +206,9 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
     try {
       account = await client.verifyCredentials();
-    } catch (e) {
-      return const LoginResult.failed(
-        Tuple2(AuthenticationException("Failed to verify credentials"), null),
-      );
+    } catch (e, s) {
+      // TODO(Craftplacer): log error for diagnostics
+      return LoginResult.failed((e, s));
     }
 
     final ktkAccount = Account(

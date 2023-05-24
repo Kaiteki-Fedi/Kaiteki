@@ -113,10 +113,8 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
                 const Text("An error occurred while deleting your account."),
             actions: [
               TextButton(
-                onPressed: () => context.showExceptionDialog(
-                  error as Object,
-                  stackTrace as StackTrace,
-                ),
+                onPressed: () =>
+                    context.showExceptionDialog((error, stackTrace)),
                 child: const Text("Show details"),
               ),
               TextButton(

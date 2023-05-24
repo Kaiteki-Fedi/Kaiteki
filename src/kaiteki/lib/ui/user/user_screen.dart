@@ -85,10 +85,6 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   Widget build(BuildContext context) {
     final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
 
-    debugPrint(
-      "${MediaQuery.of(context).size.width},${WindowClass.fromContext(context)}",
-    );
-
     return FutureBuilder<User>(
       future: _future,
       builder: (context, snapshot) {
