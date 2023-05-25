@@ -68,26 +68,30 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
       children: [
         AppBar(
           actions: [
-            IconButton(
-              isSelected: showPreview,
-              onPressed: togglePreview,
-              icon: const Icon(Icons.preview_rounded),
-            ),
             if (adapter.capabilities.supportsSubjects)
               ToggleSubjectButton(
                 value: enableSubject,
                 onChanged: toggleSubject,
               ),
+            IconButton(
+              isSelected: showPreview,
+              onPressed: togglePreview,
+              icon: const Icon(Icons.preview_rounded),
+              tooltip: "Toggle preview",
+              // HACK(Craftplacer): `AppBar`s break the selected color in `IconButton`s, https://github.com/flutter/flutter/issues/127626
+              selectedIcon: Icon(
+                Icons.preview_rounded,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
             if (!fullscreen && closeButton != null) closeButton,
           ],
           automaticallyImplyLeading: false,
           leading: fullscreen && closeButton != null ? closeButton : null,
-          foregroundColor: Theme.of(context).colorScheme.onBackground,
           title: replyTextSpan == null
               ? Text(l10n.composeDialogTitle)
               : Text.rich(replyTextSpan),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
+          forceMaterialTransparency: true,
         ),
         Expanded(
           flex: fullscreen ? 1 : 0,
