@@ -21,7 +21,7 @@ import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/enum_icon_button.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_text_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_tray.dart";
-import "package:kaiteki/ui/shared/posts/compose/post_preivew.dart";
+import "package:kaiteki/ui/shared/posts/compose/post_preview.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
