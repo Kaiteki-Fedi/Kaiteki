@@ -182,7 +182,7 @@ class _PostPreviewState extends ConsumerState<PostPreview> {
         }
 
         return Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+          padding: const EdgeInsets.all(16.0),
           child: AnimatedSwitcher(
             layoutBuilder: _switcherLayoutBuilder,
             duration: const Duration(milliseconds: 200),

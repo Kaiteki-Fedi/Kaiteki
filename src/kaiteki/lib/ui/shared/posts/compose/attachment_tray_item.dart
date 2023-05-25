@@ -56,9 +56,11 @@ class AttachmentTrayItem extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Material(
+      child: Card(
         clipBehavior: Clip.antiAlias,
-        borderRadius: BorderRadius.circular(8.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
         color: Theme.of(context).colorScheme.surfaceVariant,
         elevation: 4.0,
         child: PopupMenuButton(

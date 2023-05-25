@@ -71,7 +71,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
             if (adapter.capabilities.supportsSubjects)
               ToggleSubjectButton(
                 value: enableSubject,
-                onChanged: toggleSubject,
+                onChanged: showPreview ? null : toggleSubject,
               ),
             IconButton(
               isSelected: showPreview,
@@ -93,6 +93,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
               : Text.rich(replyTextSpan),
           forceMaterialTransparency: true,
         ),
+        const Divider(),
         Expanded(
           flex: fullscreen ? 1 : 0,
           child: ComposeForm(

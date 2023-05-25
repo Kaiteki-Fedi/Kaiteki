@@ -152,16 +152,20 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Flexible(
-              fit: FlexFit.tight,
-              flex: flex,
-              // HACK(Craftplacer): I wanted to settle on a `AnimatedCrossFade`
-              // but given how ass it is to layout `TextField`s and make them
-              // responsive, they give me too many problems with constraints
-              // and bounds, so I just give up on making it look fancy.
-              child: widget.showPreview
-                  ? PostPreview(draft: postDraft)
-                  : buildEdit(context),
+            Card(
+              elevation: 0,
+              shape: const Border(),
+              child: Flexible(
+                fit: FlexFit.tight,
+                flex: flex,
+                // HACK(Craftplacer): I wanted to settle on a `AnimatedCrossFade`
+                // but given how ass it is to layout `TextField`s and make them
+                // responsive, they give me too many problems with constraints
+                // and bounds, so I just give up on making it look fancy.
+                child: widget.showPreview
+                    ? PostPreview(draft: postDraft)
+                    : buildEdit(context),
+              ),
             ),
             if (attachments.isNotEmpty) ...[
               const Divider(height: 1),
