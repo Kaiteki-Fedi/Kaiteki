@@ -5,6 +5,7 @@ import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/interfaces/list_support.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
@@ -170,16 +171,27 @@ class TimelineState extends ConsumerState<TimelineSliver> {
     );
   }
 
+  bool get useCards => ref.watch(usePostCards).value;
+
   Widget _buildPost(BuildContext context, Post item, int index) {
-    return PostWidget(
+    final postWidget = PostWidget(
       item,
       layout: widget.postLayout ?? PostWidgetLayout.normal,
       onOpen: () => context.showPost(item, ref),
     );
+
+    if (useCards) {
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        child: postWidget,
+      );
+    }
+
+    return postWidget;
   }
 
   Widget _buildSeparator(BuildContext context, int index) {
-    return const Divider(height: 1);
+    return useCards ? const SizedBox(height: 8) : const Divider(height: 1);
   }
 }
 

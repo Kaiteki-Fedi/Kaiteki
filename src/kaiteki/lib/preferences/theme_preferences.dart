@@ -83,3 +83,9 @@ final cropAttachments = createSettingProvider<bool>(
   initialValue: true,
   provider: sharedPreferencesProvider,
 );
+
+final usePostCards = createSettingProvider<bool>(
+  key: "usePostCards",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
