@@ -127,8 +127,7 @@ class _InstanceVettingBottomSheetState
                           trailing: FilledButton.tonal(
                             onPressed: () {
                               context.showExceptionDialog(
-                                snapshot.error!,
-                                snapshot.stackTrace,
+                                snapshot.traceableError!,
                               );
                             },
                             child: const Text("Show details"),
@@ -251,7 +250,9 @@ class _InstanceVettingBottomSheetState
               alignment: Alignment.topLeft,
               child: hasDescription
                   ? Text.rich(
-                    TextRenderer.fromContext(context, ref).render(parseText(description, const {HtmlTextParser()}),),
+                      TextRenderer.fromContext(context, ref).render(
+                        parseText(description, const {HtmlTextParser()}),
+                      ),
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   : Text(

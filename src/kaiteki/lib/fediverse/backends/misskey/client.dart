@@ -1,6 +1,5 @@
 import "dart:async";
 import "dart:convert";
-import "dart:developer";
 
 import "package:fediverse_objects/misskey.dart" as misskey;
 import "package:http/http.dart"
@@ -22,8 +21,10 @@ import "package:kaiteki/fediverse/backends/misskey/responses/signin.dart";
 import "package:kaiteki/fediverse/backends/misskey/responses/userkey.dart";
 import "package:kaiteki/http/http.dart";
 import "package:kaiteki/utils/utils.dart";
+import "package:logging/logging.dart";
 
 class MisskeyClient {
+  static final _logger = Logger("MisskeyClient");
   late final KaitekiClient client;
 
   String? i;
@@ -274,12 +275,7 @@ class MisskeyClient {
       final json = jsonDecode(response.body) as JsonMap;
       error = json["error"];
     } catch (e, s) {
-      log(
-        "Failed to parse error JSON",
-        error: e,
-        stackTrace: s,
-        name: "MisskeyClient",
-      );
+      _logger.warning("Failed to parse error JSON", e, s);
     }
 
     if (error is JsonMap) {

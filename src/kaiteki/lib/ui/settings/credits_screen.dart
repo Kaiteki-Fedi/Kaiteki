@@ -8,7 +8,6 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/utils.dart";
-import "package:tuple/tuple.dart";
 
 part "credits_screen.g.dart";
 
@@ -81,14 +80,10 @@ class CreditsItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final roles = item.roles.map((e) {
       final split = e.split(":");
-      final role = CreditsRole.values.firstWhere(
-        (r) => r.name == split[0],
-      );
-      return Tuple2<CreditsRole, String?>(
-        role,
-        split.length >= 2 ? split[1] : null,
-      );
+      final role = CreditsRole.values.firstWhere((r) => r.name == split[0]);
+      return (role, split.length >= 2 ? split[1] : null);
     });
+
     return ListTile(
       title: Text(item.name),
       subtitle: IconTheme(
@@ -99,7 +94,7 @@ class CreditsItemWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            for (var role in roles) buildRole(role.item1, role.item2),
+            for (var role in roles) buildRole(role.$1, role.$2),
           ],
         ),
       ),

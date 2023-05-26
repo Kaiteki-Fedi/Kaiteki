@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/model/attachment.dart";
 import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/shared/bottom_sheets/attachment.dart";
 import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
 
-class AttachmentRow extends StatefulWidget {
+class AttachmentRow extends ConsumerStatefulWidget {
   final Post post;
 
   const AttachmentRow({
@@ -13,10 +15,10 @@ class AttachmentRow extends StatefulWidget {
   });
 
   @override
-  State<AttachmentRow> createState() => _AttachmentRowState();
+  ConsumerState<AttachmentRow> createState() => _AttachmentRowState();
 }
 
-class _AttachmentRowState extends State<AttachmentRow> {
+class _AttachmentRowState extends ConsumerState<AttachmentRow> {
   bool revealed = false;
 
   @override
@@ -59,7 +61,9 @@ class _AttachmentRowState extends State<AttachmentRow> {
                               child: AttachmentWidget(
                                 attachment: attachment,
                                 reveal: revealed,
-                                boxFit: BoxFit.cover,
+                                boxFit: ref.watch(cropAttachments).value
+                                    ? BoxFit.cover
+                                    : BoxFit.contain,
                               ),
                             ),
                           ),

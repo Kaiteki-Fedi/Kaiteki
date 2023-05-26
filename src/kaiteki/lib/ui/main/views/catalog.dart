@@ -10,7 +10,6 @@ import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:tuple/tuple.dart";
 
 class CatalogMainScreenView extends ConsumerStatefulWidget
     implements MainScreenView {
@@ -66,7 +65,7 @@ class _CatalogMainScreenViewState extends ConsumerState<CatalogMainScreenView> {
           }
         }
       } catch (e, s) {
-        if (mounted) _controller.error = Tuple2(e, s);
+        if (mounted) _controller.error = (e, s);
       }
     });
   }

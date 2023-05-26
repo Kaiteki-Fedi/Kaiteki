@@ -2,15 +2,14 @@ import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/model/user/user.dart";
-import "package:kaiteki/logger.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/repositories/repository.dart";
-import "package:tuple/tuple.dart";
+import "package:logging/logging.dart";
 
 class AccountManager extends ChangeNotifier {
-  static final _logger = getLogger("AccountManager");
+  static final _logger = Logger("AccountManager");
 
   Account? _currentAccount;
 
@@ -80,13 +79,13 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadAllAccounts() async {
+  Future<void> restoreSessions() async {
     final accountSecrets = await _accountSecrets.read();
     final clientSecrets = await _clientSecrets.read();
 
     final secretPairs = accountSecrets.entries.map((kv) {
       final clientSecret = clientSecrets[kv.key];
-      return Tuple3(kv.key, kv.value, clientSecret);
+      return (kv.key, kv.value, clientSecret);
     });
 
     await Future.forEach(secretPairs, (tuple) async {
@@ -94,7 +93,7 @@ class AccountManager extends ChangeNotifier {
 
       if (account == null) return;
 
-      _logger.v("Signed into @${account.user.username}@${account.key.host}");
+      _logger.fine("Signed into @${account.user.username}@${account.key.host}");
 
       await add(account);
     });
@@ -118,28 +117,26 @@ class AccountManager extends ChangeNotifier {
   }
 
   Future<Account?> restoreSession(
-    Tuple3<AccountKey, AccountSecret, ClientSecret?> credentials,
+    (AccountKey, AccountSecret, ClientSecret?) credentials,
   ) async {
-    final key = credentials.item1;
-    final accountSecret = credentials.item2;
-    final clientSecret = credentials.item3;
+    final (key, accountSecret, clientSecret) = credentials;
     final type = key.type!;
 
-    _logger.v("Trying to recover a ${type.displayName} account");
+    _logger.fine("Trying to recover a ${type.displayName} account");
 
     BackendAdapter adapter;
 
     try {
       adapter = await type.createAdapter(key.host);
-    } catch (ex, s) {
-      _logger.e("Failed to create ${type.adapterType}", ex, s);
+    } catch (e, s) {
+      _logger.warning("Failed to create ${type.adapterType}", e, s);
       return null;
     }
 
     try {
       await adapter.applySecrets(clientSecret, accountSecret);
-    } catch (ex, s) {
-      _logger.e("Failed to apply secrets to ${type.adapterType}", ex, s);
+    } catch (e, s) {
+      _logger.warning("Failed to apply secrets to ${type.adapterType}", e, s);
       return null;
     }
 
@@ -147,8 +144,12 @@ class AccountManager extends ChangeNotifier {
 
     try {
       user = await adapter.getMyself();
-    } catch (ex, s) {
-      _logger.e("Failed to fetch user profile of authenticated user", ex, s);
+    } catch (e, s) {
+      _logger.warning(
+        "Failed to fetch user profile of authenticated user",
+        e,
+        s,
+      );
       return null;
     }
 

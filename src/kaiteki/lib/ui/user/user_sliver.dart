@@ -3,10 +3,11 @@ import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/adapter.dart";
 import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:kaiteki/ui/shared/users/user_card.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:tuple/tuple.dart";
 
 class UserSliver extends ConsumerStatefulWidget {
   final bool wide;
@@ -64,7 +65,7 @@ class UserSliverState extends ConsumerState<UserSliver> {
           _controller.appendPage(pagination.data, pagination.next);
         }
       } catch (e, s) {
-        if (mounted) _controller.error = Tuple2(e, s);
+        if (mounted) _controller.error = (e, s);
       }
     });
 
@@ -96,23 +97,42 @@ class UserSliverState extends ConsumerState<UserSliver> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.wide) {
+      return PagedSliverGrid(
+        pagingController: _controller,
+        builderDelegate: PagedChildBuilderDelegate<User>(
+          itemBuilder: (context, item, index) {
+            return UserCard(item);
+          },
+          firstPageErrorIndicatorBuilder: (context) {
+            return Center(
+              child: ErrorLandingWidget(_controller.error as TraceableError),
+            );
+          },
+        ),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+        ),
+      );
+    }
+
     return PagedSliverList<dynamic, User>.separated(
       pagingController: _controller,
       builderDelegate: PagedChildBuilderDelegate<User>(
         itemBuilder: (context, item, index) {
-          return UserListTile(
-            user: item,
-            onPressed: () => context.showUser(item, ref),
-          );
+          return widget.wide
+              ? UserCard(item)
+              : UserListTile(
+                  user: item,
+                  onPressed: () => context.showUser(item, ref),
+                );
         },
         animateTransitions: true,
         firstPageErrorIndicatorBuilder: (context) {
-          final t = _controller.error as Tuple2<Object, StackTrace>;
           return Center(
-            child: ErrorLandingWidget(
-              error: t.item1,
-              stackTrace: t.item2,
-            ),
+            child: ErrorLandingWidget(_controller.error as TraceableError),
           );
         },
         noMoreItemsIndicatorBuilder: (context) {

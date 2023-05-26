@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
@@ -35,6 +33,7 @@ import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:logging/logging.dart";
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "root");
@@ -42,6 +41,8 @@ final GlobalKey<NavigatorState> _authNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "authenticated");
 
 const authenticatedPath = "/@:accountUsername@:accountHost";
+
+final _logger = Logger("Router");
 
 final routerProvider = Provider.autoDispose<GoRouter>((ref) {
   final account = ref.watch(routerNotifierProvider);
@@ -163,14 +164,16 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             );
 
             if (account == null) {
-              log("No account matching to @$user@$host, so no account was switched");
+              _logger.info(
+                  "No account matching to @$user@$host, so no account was switched");
             }
 
             final accountManager = ref.read(accountManagerProvider);
             final previousAccount = accountManager.current;
             if (previousAccount != account) {
               accountManager.current = account;
-              log("Switched from ${previousAccount?.key.handle} to ${account!.key.handle} due to navigation path");
+              _logger.info(
+                  "Switched from ${previousAccount?.key.handle} to ${account!.key.handle} due to navigation path");
             }
           }
 

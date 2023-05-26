@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/model/post/post.dart";
@@ -40,8 +41,7 @@ extension BuildContextExtensions on BuildContext {
 
   void showErrorSnackbar({
     required Widget text,
-    required Object error,
-    StackTrace? stackTrace,
+    required TraceableError error,
   }) {
     final l10n = this.l10n;
     ScaffoldMessenger.of(this).showSnackBar(
@@ -49,22 +49,16 @@ extension BuildContextExtensions on BuildContext {
         content: text,
         action: SnackBarAction(
           label: l10n.whyButtonLabel,
-          onPressed: () => showExceptionDialog(error, stackTrace),
+          onPressed: () => showExceptionDialog(error),
         ),
       ),
     );
   }
 
-  Future<void> showExceptionDialog(
-    Object exception,
-    StackTrace? stackTrace,
-  ) async {
+  Future<void> showExceptionDialog(TraceableError error) async {
     await showDialog(
       context: this,
-      builder: (_) => ExceptionDialog(
-        exception: exception,
-        stackTrace: stackTrace,
-      ),
+      builder: (_) => ExceptionDialog(error),
     );
   }
 }

@@ -4,6 +4,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
 import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/text/text_renderer.dart";
+import "package:logging/logging.dart";
 
 extension PostRenderExtensions on Post {
   InlineSpan renderContent(
@@ -73,20 +74,32 @@ Emoji? resolveEmoji(
   String? remoteHost,
   List<Emoji>? emojis,
 ]) {
+  final logger = Logger("resolveEmoji");
   final adapter = ref.read(adapterProvider);
 
   if (emojis != null) {
-    return emojis.firstWhereOrNull((e) => e.short == input);
+    final emoji = emojis.firstWhereOrNull((e) => e.short == input);
+
+    if (emoji == null) {
+      logger.warning("Couldn't find $input in provided emojis");
+    }
+
+    return emoji;
   }
+
+  logger.fine("No emojis were provided");
 
   if (adapter is MisskeyAdapter) {
     final url = buildEmojiUriManual(adapter.instance, input, remoteHost);
+    logger.fine("Returning mkv13 emoji based on static url: $url");
     return CustomEmoji(
       short: input,
       url: url,
       instance: remoteHost ?? adapter.instance,
     );
   }
+
+  logger.fine("Couldn't resolve emoji $input");
 
   return null;
 }

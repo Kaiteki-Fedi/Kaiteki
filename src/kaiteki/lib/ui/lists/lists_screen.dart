@@ -507,7 +507,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
           ),
           action: SnackBarAction(
             label: context.l10n.whyButtonLabel,
-            onPressed: () => context.showExceptionDialog(e, s),
+            onPressed: () => context.showExceptionDialog((e, s)),
           ),
         ),
       );
@@ -561,7 +561,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
           ),
           action: SnackBarAction(
             label: context.l10n.whyButtonLabel,
-            onPressed: () => context.showExceptionDialog(e, s),
+            onPressed: () => context.showExceptionDialog((e, s)),
           ),
         ),
       );

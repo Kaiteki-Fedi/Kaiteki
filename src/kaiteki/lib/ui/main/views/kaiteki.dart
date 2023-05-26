@@ -86,7 +86,7 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
 
     return Scaffold(
       backgroundColor: isCompact ? null : getOutsideColor(context),
-      appBar: buildAppBar(context),
+      appBar: buildAppBar(context, !isCompact),
       body: isCompact
           ? body
           : _buildDesktopView(
@@ -281,7 +281,7 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
     );
   }
 
-  PreferredSizeWidget buildAppBar(BuildContext context) {
+  PreferredSizeWidget buildAppBar(BuildContext context, bool immerse) {
     if (ref.watch(useSearchBar).value) {
       return PreferredSize(
         preferredSize: const Size.fromHeight(56.0 + 8.0 * 2),
@@ -306,18 +306,20 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
       );
     }
 
-    Color? foregroundColor;
+    Color? backgroundColor, foregroundColor;
 
-    final outsideColor = getOutsideColor(context);
-    if (outsideColor != null) {
-      foregroundColor = ThemeData.estimateBrightnessForColor(outsideColor)
-          .inverted
-          .getColor();
+    if (immerse) {
+      backgroundColor = getOutsideColor(context);
+      if (backgroundColor != null) {
+        foregroundColor = ThemeData.estimateBrightnessForColor(backgroundColor)
+            .inverted
+            .getColor();
+      }
     }
 
     final theme = Theme.of(context);
     return AppBar(
-      backgroundColor: outsideColor,
+      backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
       title: Text(
         appName,
@@ -325,7 +327,7 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
       ),
       actions: _buildAppBarActions(context),
       elevation: 0.0,
-      scrolledUnderElevation: outsideColor != null ? 0.0 : 4.0,
+      scrolledUnderElevation: immerse ? 0.0 : 4.0,
     );
   }
 }

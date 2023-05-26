@@ -6,7 +6,6 @@ import "dart:io";
 import "package:http/http.dart" as http;
 import "package:kaiteki/utils/utils.dart";
 import "package:path/path.dart";
-import "package:tuple/tuple.dart";
 
 final emojiListUri = Uri.parse(
   "https://raw.githubusercontent.com/googlefonts/emoji-metadata/main/emoji_15_0_ordering.json",
@@ -21,7 +20,7 @@ const groupNameMap = {
   "Travel and places": "Travel & Places",
 };
 
-typedef EmojiCompound = Tuple3<String, List<String>, List<String>>;
+typedef EmojiCompound = (String, List<String>, List<String>);
 
 void main(List<String> arguments) async {
   final raw = await fetchEmojiList();
@@ -50,7 +49,7 @@ void main(List<String> arguments) async {
 
       final shortCodes = emoji["shortcodes"] as List<dynamic>;
 
-      compounds.add(EmojiCompound(base, variants, shortCodes.cast()));
+      compounds.add((base, variants, shortCodes.cast()));
     }
 
     groups[groupName] = compounds;
@@ -126,9 +125,9 @@ String generateDartFile(String fieldName, List<EmojiCompound> emojis) {
   buffer.writeln();
   buffer.writeln("final $fieldName = <EmojiCategoryItem<UnicodeEmoji>>[");
   for (final compound in emojis) {
-    final baseEmoji = compound.item1;
-    final variants = compound.item2;
-    final shortCodes = compound.item3.map((e) => '"$e"').join(", ");
+    final baseEmoji = compound.$1;
+    final variants = compound.$2;
+    final shortCodes = compound.$3.map((e) => '"$e"').join(", ");
 
     buffer.writeln("  const EmojiCategoryItem(");
 

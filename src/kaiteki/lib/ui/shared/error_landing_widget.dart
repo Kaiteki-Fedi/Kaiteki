@@ -1,33 +1,41 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
+import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/exceptions/http_exception.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 
 class ErrorLandingWidget extends StatelessWidget {
-  final Object error;
-  final StackTrace? stackTrace;
+  final TraceableError error;
   final VoidCallback? onRetry;
 
-  const ErrorLandingWidget({
+  const ErrorLandingWidget(
+    this.error, {
     super.key,
-    required this.error,
-    this.stackTrace,
     this.onRetry,
   });
 
-  ErrorLandingWidget.fromAsyncSnapshot(
+  factory ErrorLandingWidget.fromAsyncSnapshot(
     AsyncSnapshot snapshot, {
-    super.key,
-    this.onRetry,
-  })  : error = snapshot.error!,
-        stackTrace = snapshot.stackTrace;
+    Key? key,
+    VoidCallback? onRetry,
+  }) {
+    final error = snapshot.traceableError;
+
+    if (error == null) throw ArgumentError("snapshot has no error", "snapshot");
+
+    return ErrorLandingWidget(
+      error,
+      key: key,
+      onRetry: onRetry,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final error = this.error;
+    final error = this.error.$1;
     if (error is UnimplementedError) {
       return IconLandingWidget(
         icon: const Icon(Icons.assignment_late_rounded),
@@ -66,7 +74,7 @@ class ErrorLandingWidget extends StatelessWidget {
                 const SizedBox(height: 8),
               ],
               OutlinedButton(
-                onPressed: () => context.showExceptionDialog(error, stackTrace),
+                onPressed: () => context.showExceptionDialog(this.error),
                 child: const Text("Show details"),
               ),
             ],
