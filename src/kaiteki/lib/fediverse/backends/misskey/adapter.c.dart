@@ -232,7 +232,7 @@ extension KaitekiNotificationExtension on misskey.Notification {
       type: misskeyNotificationTypeRosetta.getRight(type),
       user: user?.toKaiteki(localHost),
       post: note?.toKaiteki(localHost),
-      unread: !isRead,
+      unread: isRead ?? false,
     );
   }
 }
