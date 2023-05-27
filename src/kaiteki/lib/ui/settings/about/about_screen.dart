@@ -9,6 +9,7 @@ import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/settings/about/app_badge_kind.dart";
 import "package:kaiteki/ui/shared/layout/dfp.dart";
 import "package:kaiteki/utils/extensions/build_context.dart";
+import "package:mdi/mdi.dart";
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
