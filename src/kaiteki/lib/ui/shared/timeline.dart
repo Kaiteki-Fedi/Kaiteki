@@ -140,34 +140,37 @@ class TimelineState extends ConsumerState<TimelineSliver> {
 
   @override
   Widget build(BuildContext context) {
-    return PagedSliverList<String?, Post>.separated(
-      pagingController: _controller,
-      builderDelegate: PagedChildBuilderDelegate<Post>(
-        itemBuilder: _buildPost,
-        animateTransitions: true,
-        firstPageErrorIndicatorBuilder: (context) {
-          return Center(
-            child: ErrorLandingWidget(_controller.error as TraceableError),
-          );
-        },
-        firstPageProgressIndicatorBuilder: (context) => const Padding(
-          padding: EdgeInsets.all(32),
-          child: centeredCircularProgressIndicator,
-        ),
-        noMoreItemsIndicatorBuilder: (context) {
-          final l10n = context.l10n;
-          return Align(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Text(
-                l10n.noMorePosts,
-                style: TextStyle(color: Theme.of(context).disabledColor),
+    return SliverPadding(
+      padding: useCards ? const EdgeInsets.all(8) : EdgeInsets.zero,
+      sliver: PagedSliverList<String?, Post>.separated(
+        pagingController: _controller,
+        builderDelegate: PagedChildBuilderDelegate<Post>(
+          itemBuilder: _buildPost,
+          animateTransitions: true,
+          firstPageErrorIndicatorBuilder: (context) {
+            return Center(
+              child: ErrorLandingWidget(_controller.error as TraceableError),
+            );
+          },
+          firstPageProgressIndicatorBuilder: (context) => const Padding(
+            padding: EdgeInsets.all(32),
+            child: centeredCircularProgressIndicator,
+          ),
+          noMoreItemsIndicatorBuilder: (context) {
+            final l10n = context.l10n;
+            return Align(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  l10n.noMorePosts,
+                  style: TextStyle(color: Theme.of(context).disabledColor),
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
+        separatorBuilder: _buildSeparator,
       ),
-      separatorBuilder: _buildSeparator,
     );
   }
 

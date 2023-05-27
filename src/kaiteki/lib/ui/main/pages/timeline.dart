@@ -78,19 +78,12 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
           alignment: Alignment.topCenter,
           child: SizedBox(
             width: 800,
-            child: CustomScrollView(
-              slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.all(8),
-                  sliver: TimelineSliver.kind(
-                    key: _timelineKey,
-                    kind: _kind ?? kinds.first,
-                    postLayout: ref.watch(useWidePostLayout).value
-                        ? PostWidgetLayout.wide
-                        : PostWidgetLayout.normal,
-                  ),
-                ),
-              ],
+            child: Timeline.kind(
+              key: _timelineKey,
+              kind: _kind ?? kinds.first,
+              postLayout: ref.watch(useWidePostLayout).value
+                  ? PostWidgetLayout.wide
+                  : PostWidgetLayout.normal,
             ),
           ),
         ),
