@@ -5,12 +5,12 @@ import "package:kaiteki/utils/extensions.dart";
 
 class UserDisplayNameWidget extends ConsumerWidget {
   final User user;
-  final Axis? orientation;
+  final Axis orientation;
 
   const UserDisplayNameWidget(
     this.user, {
     super.key,
-    this.orientation,
+    this.orientation = Axis.horizontal,
   });
 
   @override
@@ -43,17 +43,13 @@ class UserDisplayNameWidget extends ConsumerWidget {
   }
 
   Widget buildFlowWidget(List<Widget> children) {
-    switch (orientation) {
-      case Axis.horizontal:
-        return Row(children: children);
-      case Axis.vertical:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
-        );
-      default:
-        return OverflowBar(children: children);
-    }
+    return Flex(
+      direction: orientation,
+      crossAxisAlignment: orientation == Axis.horizontal
+          ? CrossAxisAlignment.center
+          : CrossAxisAlignment.start,
+      children: children,
+    );
   }
 }
 
