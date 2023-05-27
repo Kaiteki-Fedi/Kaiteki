@@ -165,7 +165,8 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
 
             if (account == null) {
               _logger.info(
-                  "No account matching to @$user@$host, so no account was switched");
+                "No account matching to @$user@$host, so no account was switched",
+              );
             }
 
             final accountManager = ref.read(accountManagerProvider);
@@ -173,7 +174,8 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             if (previousAccount != account) {
               accountManager.current = account;
               _logger.info(
-                  "Switched from ${previousAccount?.key.handle} to ${account!.key.handle} due to navigation path");
+                "Switched from ${previousAccount?.key.handle} to ${account!.key.handle} due to navigation path",
+              );
             }
           }
 
