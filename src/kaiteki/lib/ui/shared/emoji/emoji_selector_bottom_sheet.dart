@@ -73,7 +73,7 @@ class _EmojiSelectorBottomSheetState
                   const ButtonSegment(
                     value: _EmojiKindTab.custom,
                     label: Text("Custom"),
-                    icon: Icon(Mdi.emoticon),
+                    icon: Icon(Icons.insert_emoticon_rounded),
                   ),
                 if (availableTabs.contains(_EmojiKindTab.unicode))
                   const ButtonSegment(

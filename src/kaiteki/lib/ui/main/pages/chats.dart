@@ -13,7 +13,6 @@ import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:mdi/mdi.dart";
 
 class ChatsPage extends ConsumerStatefulWidget {
   const ChatsPage({super.key});
@@ -87,7 +86,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
                   );
                 },
                 tooltip: "Start a new chat",
-                child: const Icon(Mdi.plus),
+                child: const Icon(Icons.add_rounded),
               ),
             ),
           ],
@@ -98,7 +97,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
     final chatView = selectedChat == null
         ? const Center(
             child: IconLandingWidget(
-              icon: Icon(Mdi.forumOutline),
+              icon: Icon(Icons.forum_rounded),
               text: Text("Select a chat to begin"),
             ),
           )
@@ -196,7 +195,7 @@ class ChatView extends ConsumerWidget {
               if (messages.isEmpty) {
                 return const Center(
                   child: IconLandingWidget(
-                    icon: Icon(Mdi.messageOutline),
+                    icon: Icon(Icons.message_rounded),
                     text: Text("Looks empty here..."),
                   ),
                 );

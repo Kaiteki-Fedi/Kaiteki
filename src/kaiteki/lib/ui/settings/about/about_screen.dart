@@ -9,7 +9,6 @@ import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/settings/about/app_badge_kind.dart";
 import "package:kaiteki/ui/shared/layout/dfp.dart";
 import "package:kaiteki/utils/extensions/build_context.dart";
-import "package:mdi/mdi.dart";
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -74,7 +73,7 @@ class AboutScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             ListTile(
-                              leading: const Icon(Mdi.license),
+                              leading: const Icon(Icons.gavel_rounded),
                               title: Text(l10n.creditsLicenses),
                               trailing: const Icon(Icons.chevron_right_rounded),
                               onTap: () => _onShowLicenses(context),
