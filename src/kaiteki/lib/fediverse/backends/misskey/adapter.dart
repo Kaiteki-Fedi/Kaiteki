@@ -55,16 +55,22 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   static final _logger = Logger("MisskeyAdapter");
 
   @override
-  final String instance;
+  String get instance => client.instance;
 
   @override
   final ApiType type;
 
   static Future<MisskeyAdapter> create(ApiType type, String instance) async {
-    return MisskeyAdapter.custom(type, instance, MisskeyClient(instance));
+    final client = MisskeyClient(instance);
+    final meta = await client.getMeta();
+    return MisskeyAdapter._(
+      type,
+      client,
+      MisskeyCapabilities.fromMeta(meta),
+    );
   }
 
-  MisskeyAdapter.custom(this.type, this.instance, this.client);
+  MisskeyAdapter._(this.type, this.client, this.capabilities);
 
   @override
   Future<User> getUser(String username, [String? instance]) async {
@@ -292,7 +298,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     notes = switch (type) {
       TimelineKind.home => await client.getTimeline(request),
       TimelineKind.local => await client.getLocalTimeline(request),
-      TimelineKind.bubble => await client.getBubbleTimeline(request),
+      TimelineKind.recommended => await client.getRecommendedTimeline(request),
       TimelineKind.hybrid => await client.getHybridTimeline(request),
       TimelineKind.federated => await client.getGlobalTimeline(request),
       _ => throw UnsupportedError("Timeline type $type is not supported."),
@@ -435,7 +441,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  MisskeyCapabilities get capabilities => const MisskeyCapabilities();
+  final MisskeyCapabilities capabilities;
 
   @override
   Future<void> repeatPost(String id) async => client.createRenote(id);

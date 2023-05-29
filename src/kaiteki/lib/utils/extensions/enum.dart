@@ -73,7 +73,8 @@ extension TimelindKindExtensions on TimelineKind {
       TimelineKind.bubble => Icons.workspaces_rounded,
       TimelineKind.hybrid => Icons.handshake_rounded,
       TimelineKind.federated => Icons.public_rounded,
-      TimelineKind.directMessages => Icons.mail_rounded
+      TimelineKind.directMessages => Icons.mail_rounded,
+      TimelineKind.recommended => Icons.auto_awesome_rounded,
     };
   }
 
@@ -84,7 +85,9 @@ extension TimelindKindExtensions on TimelineKind {
       TimelineKind.bubble => l10n.timelineBubble,
       TimelineKind.hybrid => l10n.timelineHybrid,
       TimelineKind.federated => l10n.timelineFederated,
-      TimelineKind.directMessages => l10n.timelineDirectMessages
+      TimelineKind.directMessages => l10n.timelineDirectMessages,
+      // TODO(Craftplacer): Translate
+      TimelineKind.recommended => "Recommended",
     };
   }
 }

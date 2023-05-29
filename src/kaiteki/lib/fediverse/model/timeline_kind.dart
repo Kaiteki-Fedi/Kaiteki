@@ -20,4 +20,6 @@ enum TimelineKind {
   ///
   /// Learn more: https://meta.akkoma.dev/t/akkoma-stable-2022-08-the-power-of-friendship-wahaha/46#the-bubble-timeline-3
   bubble,
+
+  recommended,
 }

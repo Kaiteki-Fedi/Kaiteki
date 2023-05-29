@@ -1,3 +1,4 @@
+import "package:fediverse_objects/misskey.dart";
 import "package:kaiteki/fediverse/capabilities.dart";
 import "package:kaiteki/fediverse/interfaces/chat_support.dart";
 import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
@@ -23,7 +24,21 @@ class MisskeyCapabilities extends AdapterCapabilities
   @override
   bool get supportsUnicodeEmojiReactions => true;
 
-  const MisskeyCapabilities();
+  const MisskeyCapabilities({
+    required this.supportedTimelines,
+  });
+
+  factory MisskeyCapabilities.fromMeta(Meta meta) {
+    return MisskeyCapabilities(
+      supportedTimelines: {
+        TimelineKind.home,
+        if (meta.disableLocalTimeline != true) TimelineKind.local,
+        if (meta.disableRecommendedTimeline == false) TimelineKind.recommended,
+        TimelineKind.hybrid,
+        if (meta.disableGlobalTimeline != true) TimelineKind.federated,
+      },
+    );
+  }
 
   @override
   Set<Formatting> get supportedFormattings {
@@ -33,17 +48,8 @@ class MisskeyCapabilities extends AdapterCapabilities
   @override
   bool get supportsSubjects => true;
 
-  // TODO(ThatOneCalculator): Check for nodeinfo here
   @override
-  Set<TimelineKind> get supportedTimelines {
-    return const {
-      TimelineKind.home,
-      TimelineKind.local,
-      TimelineKind.bubble,
-      TimelineKind.hybrid,
-      TimelineKind.federated,
-    };
-  }
+  final Set<TimelineKind> supportedTimelines;
 
   @override
   bool get supportsMultipleReactions => false;

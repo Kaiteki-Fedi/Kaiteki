@@ -28,8 +28,9 @@ class MisskeyClient {
   late final KaitekiClient client;
 
   String? i;
+  final String instance;
 
-  MisskeyClient(String instance) {
+  MisskeyClient(this.instance) {
     client = KaitekiClient(
       baseUri: Uri(scheme: "https", host: instance),
       checkResponse: _checkResponse,
@@ -227,7 +228,7 @@ class MisskeyClient {
   }
 
   // Have to implement checking nodeinfo for `disableRecommendedTimeline`
-  Future<List<misskey.Note>> getBubbleTimeline(
+  Future<List<misskey.Note>> getRecommendedTimeline(
     MisskeyTimelineRequest request,
   ) async {
     return client
