@@ -181,31 +181,6 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
     final l10n = context.l10n;
 
     return [
-      if (widget.tab == TabKind.home &&
-          ref.watch(AppExperiment.timelineViews.provider))
-        MenuAnchor(
-          builder: (context, controller, child) {
-            return IconButton(
-              icon: widget.type.getIcon(),
-              tooltip: "View",
-              onPressed: controller.open,
-            );
-          },
-          menuChildren: [
-            for (final view in MainScreenViewType.values)
-              MenuItemButton(
-                onPressed:
-                    !(view == MainScreenViewType.videos && !supportsVideoPlayer)
-                        ? () => widget.onChangeView(view)
-                        : null,
-                trailingIcon: view == widget.type
-                    ? const Icon(Icons.check_rounded)
-                    : const SizedBox.square(dimension: 24),
-                leadingIcon: view.getIcon(),
-                child: Text(view.getDisplayName(l10n)),
-              ),
-          ],
-        ),
       IconButton(
         icon: const Icon(Icons.search_rounded),
         onPressed: getSearchCallback(context, ref),
@@ -238,6 +213,24 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
           );
         },
         menuChildren: [
+          if (ref.watch(AppExperiment.timelineViews.provider))
+            SubmenuButton(
+              menuChildren: [
+                for (final view in MainScreenViewType.values)
+                  MenuItemButton(
+                    onPressed: !(view == MainScreenViewType.videos &&
+                            !supportsVideoPlayer)
+                        ? () => widget.onChangeView(view)
+                        : null,
+                    trailingIcon: view == widget.type
+                        ? const Icon(Icons.check_rounded)
+                        : const SizedBox.square(dimension: 24),
+                    leadingIcon: view.getIcon(),
+                    child: Text(view.getDisplayName(l10n)),
+                  ),
+              ],
+              child: const Text("View"),
+            ),
           MenuItemButton(
             onPressed: () => showKeyboardShortcuts(context),
             child: Text(l10n.keyboardShortcuts),
