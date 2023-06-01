@@ -19,7 +19,8 @@ class _CustomizationAdvancedPageState extends State<CustomizationAdvancedPage> {
     return ListView(
       children: [
         ListTile(
-          title: Text("This page contains fine tuned settings to customize the app to the last detail."),
+          title: Text(
+              "This page contains fine tuned settings to customize the app to the last detail."),
         ),
         SwitchListTile(
           title: Text("Center title"),
@@ -33,9 +34,8 @@ class _CustomizationAdvancedPageState extends State<CustomizationAdvancedPage> {
           ),
         ),
         ListTile(
-          title: Text("App name preference"),
-          subtitle: Text(preferences.appNameMode.toString())
-        ),
+            title: Text("App name preference"),
+            subtitle: Text(preferences.appNameMode.toString())),
       ],
     );
   }

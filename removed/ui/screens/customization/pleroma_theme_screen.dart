@@ -12,11 +12,11 @@ class PleromaThemeScreen extends StatefulWidget {
   PleromaThemeScreen({Key key}) : super(key: key);
 
   @override
-  _PleromaThemeScreenState createState() =>
-      _PleromaThemeScreenState();
+  _PleromaThemeScreenState createState() => _PleromaThemeScreenState();
 }
 
-class _PleromaThemeScreenState extends State<PleromaThemeScreen> with SingleTickerProviderStateMixin {
+class _PleromaThemeScreenState extends State<PleromaThemeScreen>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   var _tabs = <Widget>[
@@ -78,37 +78,36 @@ class _PleromaThemeScreenState extends State<PleromaThemeScreen> with SingleTick
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Edit Pleroma Theme"),
-        actions: [
-          IconButton(
-            icon: Icon(Mdi.undo),
-            tooltip: "Reset to default",
-            onPressed: resetTheme,
+        appBar: AppBar(
+          title: Text("Edit Pleroma Theme"),
+          actions: [
+            IconButton(
+              icon: Icon(Mdi.undo),
+              tooltip: "Reset to default",
+              onPressed: resetTheme,
+            ),
+          ],
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: _tabs,
           ),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: _tabs,
         ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          PreviewPage(),
-          CommonPage(),
-          IconLandingWidget(
-            icon: Mdi.cat,
-            text: "Proper color screens are not implemented yet~",
-          ),
-          RoundnessPage(),
-          IconLandingWidget(
-            icon: Mdi.cat,
-            text: "Shadow effects are not implemented yet~",
-          ),
-          FontsPage(),
-        ],
-      )
-    );
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            PreviewPage(),
+            CommonPage(),
+            IconLandingWidget(
+              icon: Mdi.cat,
+              text: "Proper color screens are not implemented yet~",
+            ),
+            RoundnessPage(),
+            IconLandingWidget(
+              icon: Mdi.cat,
+              text: "Shadow effects are not implemented yet~",
+            ),
+            FontsPage(),
+          ],
+        ));
   }
 }

@@ -51,9 +51,9 @@ class PleromaThemeParser {
   }
 
   static Map<String, Color> resolveColors(
-      Map<String, Color> colors,
-      Map<String, double> opacities,
-      ) {
+    Map<String, Color> colors,
+    Map<String, double> opacities,
+  ) {
     var result = <String, Color>{};
 
     _mapping.forEach((entry) {
@@ -69,7 +69,7 @@ class PleromaThemeParser {
       if (color == null) return null;
 
       // apply opacity if available
-      if (entry.opacity != null && opacities.containsKey(entry.opacity)) {
+      if (opacities.containsKey(entry.opacity)) {
         color = color.withOpacity(opacities[entry.opacity]);
       }
 

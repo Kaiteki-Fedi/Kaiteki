@@ -1,7 +1,7 @@
 ListTile(
-  title: Text("App Background"),
-  trailing: Icon(Mdi.chevronRight),
-  onTap: () {
+  title = Text("App Background"),
+  trailing = Icon(Mdi.chevronRight),
+  onTap = () {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => AppBackgroundScreen()),

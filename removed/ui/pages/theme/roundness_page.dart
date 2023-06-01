@@ -23,16 +23,14 @@ class _RoundnessPageState extends State<RoundnessPage> {
         var key = keys.elementAt(i);
         var value = theme.radii[key];
         return ListTile(
-          title: Text(key),
-          leading: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(value),
-              color: Colors.white
-            ),
-            width: 24,
-            height: 24,
-          )
-        );
+            title: Text(key),
+            leading: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(value),
+                  color: Colors.white),
+              width: 24,
+              height: 24,
+            ));
       },
     );
   }

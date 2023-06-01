@@ -16,53 +16,51 @@ class _AppBackgroundScreenState extends State<AppBackgroundScreen> {
     var container = Provider.of<ThemeContainer>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Background")
-      ),
-      body: ListView(
-        padding: const EdgeInsets.only(top: 8),
-        children: [
-          ListTile(
-            title: Text("You can set an image to display behind transparent backgrounds."),
-          ),
-          Divider(),
-          ListTile(
-            title: Text("Select background"),
-            onTap: () async {
-              PlatformFile file;
+        appBar: AppBar(title: Text("Background")),
+        body: ListView(
+          padding: const EdgeInsets.only(top: 8),
+          children: [
+            ListTile(
+              title: Text(
+                  "You can set an image to display behind transparent backgrounds."),
+            ),
+            Divider(),
+            ListTile(
+              title: Text("Select background"),
+              onTap: () async {
+                PlatformFile file;
 
-              try {
-                var result = await FilePicker.platform.pickFiles(type: FileType.image);
+                try {
+                  var result =
+                      await FilePicker.platform.pickFiles(type: FileType.image);
 
-                if (result == null) return;
+                  if (result == null) return;
 
-                file = result.files.single;
-              } catch (e) {
-                print("Failed to open file picker for theme import:\n$e");
-                return;
-              }
+                  file = result.files.single;
+                } catch (e) {
+                  print("Failed to open file picker for theme import:\n$e");
+                  return;
+                }
 
-              if (file == null)
-                return;
+                if (file == null) return;
 
-              var image = Image.memory(file.bytes).image;
-              container.background = image;
-            },
-          ),
-          ListTile(
-            title: Text("Reset"),
-            onTap: () => container.background = null,
-          ),
-          Divider(),
-          ListTile(
-            title: Text("Opacity"),
-          ),
-          Slider(
-            value: container.backgroundOpacity,
-            onChanged: (v) => container.backgroundOpacity = v,
-          ),
-        ],
-      )
-    );
+                var image = Image.memory(file.bytes).image;
+                container.background = image;
+              },
+            ),
+            ListTile(
+              title: Text("Reset"),
+              onTap: () => container.background = null,
+            ),
+            Divider(),
+            ListTile(
+              title: Text("Opacity"),
+            ),
+            Slider(
+              value: container.backgroundOpacity,
+              onChanged: (v) => container.backgroundOpacity = v,
+            ),
+          ],
+        ));
   }
 }

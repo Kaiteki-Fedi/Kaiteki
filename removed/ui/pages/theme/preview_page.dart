@@ -14,10 +14,8 @@ class PreviewPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Control Preview",
-                style: Theme.of(context).textTheme.headline4
-              ),
+              Text("Control Preview",
+                  style: Theme.of(context).textTheme.headline4),
               Row(
                 children: [
                   RaisedButton(
@@ -31,9 +29,7 @@ class PreviewPage extends StatelessWidget {
                 ],
               ),
               TextField(
-                decoration: InputDecoration(
-                    hintText: "Test Input Field"
-                ),
+                decoration: InputDecoration(hintText: "Test Input Field"),
               ),
             ],
           ),

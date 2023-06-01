@@ -24,36 +24,29 @@ class _FontsPageState extends State<FontsPage> {
           padding: buttonPadding,
           child: FontButton(),
         ),
-
         Divider(),
-
         SeparatorText("Input fields"),
         Padding(
           padding: buttonPadding,
           child: FontButton(),
         ),
-
         Divider(),
-
         SeparatorText("Post text"),
         Padding(
           padding: buttonPadding,
           child: FontButton(),
         ),
-
         Divider(),
-
         SeparatorText("Monospaced text"),
         Padding(
           padding: buttonPadding,
           child: FontButton(),
         ),
-
         Divider(),
-
         ListTile(
           title: Text("Kaiteki supports Google Fonts"),
-          subtitle: Text("Enter a name of a font from Google Fonts and Kaiteki will fetch and display it."),
+          subtitle: Text(
+              "Enter a name of a font from Google Fonts and Kaiteki will fetch and display it."),
         )
       ],
     );
