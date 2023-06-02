@@ -8,6 +8,7 @@ final misskeyNotificationTypeRosetta = Rosetta(const {
   misskey.NotificationType.quote: NotificationType.quoted,
   misskey.NotificationType.reaction: NotificationType.reacted,
   misskey.NotificationType.pollEnded: NotificationType.pollEnded,
+  misskey.NotificationType.pollVote: NotificationType.unsupported,
   misskey.NotificationType.receiveFollowRequest: NotificationType.followRequest,
   misskey.NotificationType.followRequestAccepted: NotificationType.followed,
   misskey.NotificationType.groupInvited: NotificationType.groupInvite,
