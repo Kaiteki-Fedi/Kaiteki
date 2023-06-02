@@ -357,7 +357,7 @@ class NotificationWidget extends ConsumerWidget {
       NotificationType.liked => Icons.star_rounded,
       NotificationType.repeated => Icons.repeat_rounded,
       NotificationType.mentioned => Icons.alternate_email_rounded,
-      NotificationType.followed => Icons.person_add_rounded,
+      NotificationType.followed => Icons.add_rounded,
       NotificationType.followRequest => Icons.person_outline_rounded,
       NotificationType.reacted => Icons.emoji_emotions_rounded,
       NotificationType.groupInvite => Icons.group_add_rounded,
