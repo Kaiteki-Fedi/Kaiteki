@@ -28,3 +28,7 @@ doc/api/
 GeneratedPluginRegistrant.*
 generated_plugin_registrant.*
 src/kaiteki/lib/fediverse/backends/twitter/keys.dart
+
+# Miscellaneous
+.DS_Store
+**/.DS_Store
