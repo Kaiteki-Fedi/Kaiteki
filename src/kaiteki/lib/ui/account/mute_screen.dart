@@ -4,11 +4,11 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/services/mutes.dart";
 import "package:kaiteki/model/pagination_state.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class MutesScreen extends ConsumerStatefulWidget {
   const MutesScreen({super.key});

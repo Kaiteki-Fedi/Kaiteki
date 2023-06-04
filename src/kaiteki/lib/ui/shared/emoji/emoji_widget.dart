@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
+import "package:kaiteki_core/model.dart";
 
 const _defaultEmojiSize = 24.0;
 

@@ -1,7 +1,8 @@
 import "package:equatable/equatable.dart";
 import "package:hive/hive.dart";
 import "package:json_annotation/json_annotation.dart";
-import "package:kaiteki/utils/utils.dart";
+import "package:kaiteki_core/social.dart" as core;
+import "package:kaiteki_core/utils.dart";
 import "package:meta/meta.dart";
 
 part "secret.g.dart";
@@ -24,6 +25,9 @@ class AccountSecret extends Equatable {
 
   const AccountSecret(this.accessToken, [this.refreshToken, this.userId]);
 
+  factory AccountSecret.fromCore(core.UserSecret secret) =>
+      AccountSecret(secret.accessToken, secret.refreshToken, secret.userId);
+
   factory AccountSecret.fromJson(JsonMap json) => _$AccountSecretFromJson(json);
 
   JsonMap toJson() => _$AccountSecretToJson(this);
@@ -44,6 +48,9 @@ class ClientSecret extends Equatable {
   final String clientSecret;
 
   const ClientSecret(this.clientId, this.clientSecret);
+
+  factory ClientSecret.fromCore(core.ClientSecret secret) =>
+      ClientSecret(secret.$1, secret.$2);
 
   factory ClientSecret.fromJson(JsonMap json) => _$ClientSecretFromJson(json);
 

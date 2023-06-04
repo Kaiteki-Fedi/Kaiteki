@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki_core/model.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
 
 final avatars = Story(

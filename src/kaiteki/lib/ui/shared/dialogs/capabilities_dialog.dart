@@ -1,11 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart" show dialogConstraints;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/api_type.dart";
-import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
-import "package:kaiteki/fediverse/interfaces/chat_support.dart";
-import "package:kaiteki/fediverse/interfaces/preview_support.dart";
-import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
+import "package:kaiteki_core/social.dart";
 
 class CapabilitiesDialog extends StatelessWidget {
   final ApiType type;

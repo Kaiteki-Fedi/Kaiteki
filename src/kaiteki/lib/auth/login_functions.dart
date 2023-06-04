@@ -4,7 +4,7 @@ import "dart:io";
 import "package:async/async.dart";
 import "package:flutter/material.dart" show ColorScheme;
 import "package:flutter/services.dart";
-import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki_core/social.dart";
 import "package:shelf/shelf.dart";
 import "package:shelf/shelf_io.dart";
 

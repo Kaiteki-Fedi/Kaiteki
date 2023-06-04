@@ -1,5 +1,5 @@
-import "package:kaiteki/common.dart";
 import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki_core/utils.dart";
 
 class LoginResult {
   final TraceableError? error;

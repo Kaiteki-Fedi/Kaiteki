@@ -1,4 +1,4 @@
-import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki_core/model.dart";
 
 const instance = Instance(
   name: "Instance",

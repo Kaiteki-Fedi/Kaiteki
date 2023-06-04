@@ -1,11 +1,4 @@
-import "package:kaiteki/auth/login_typedefs.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/api_type.dart";
-import "package:kaiteki/fediverse/capabilities.dart";
-import "package:kaiteki/fediverse/model/model.dart";
-import "package:kaiteki/fediverse/model/timeline_query.dart";
-import "package:kaiteki/model/auth/login_result.dart";
-import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 class TimelineAdapter extends BackendAdapter {
@@ -22,7 +15,7 @@ class TimelineAdapter extends BackendAdapter {
   @override
   FutureOr<void> applySecrets(
     ClientSecret? clientSecret,
-    AccountSecret accountSecret,
+    UserSecret accountSecret,
   ) {}
 
   @override
@@ -79,15 +72,6 @@ class TimelineAdapter extends BackendAdapter {
 
   @override
   Future<User> getUserById(String id) => throw UnimplementedError();
-
-  @override
-  Future<LoginResult> login(
-    ClientSecret? clientSecret,
-    CredentialsCallback requestCredentials,
-    CodeCallback requestMfa,
-    OAuthCallback requestOAuth,
-  ) =>
-      throw UnimplementedError();
 
   @override
   Future<Post> postStatus(PostDraft draft, {Post? parentPost}) =>

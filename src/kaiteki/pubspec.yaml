@@ -39,10 +39,12 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   html: ^0.15.0
-  http: ^0.13.1
+  http: ^1.0.0
   infinite_scroll_pagination: ^3.1.0
   intl: ^0.18.0
   json_annotation: any
+  kaiteki_core:
+    path: ../kaiteki_core
   kaiteki_material:
     git:
       url: https://github.com/Kaiteki-Fedi/kaiteki_material.git
@@ -54,8 +56,6 @@ dependencies:
   meta: ^1.8.0
   notified_preferences: ^2.0.0
   notified_preferences_riverpod: ^1.0.0
-  oauth1:
-    git: https://github.com/Kaiteki-Fedi/dart-oauth1.git
   page_view_dot_indicator: ^2.0.0
   path: ^1.8.1
   path_provider: ^2.0.11
@@ -76,8 +76,6 @@ dev_dependencies:
   build_runner: ^2.1.4
   build_verify: ^3.1.0
   copy_with_extension_gen: ^5.0.0
-  custom_lint: ^0.4.0
-  dart_code_metrics: ^5.5.1
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
@@ -87,7 +85,6 @@ dev_dependencies:
   json_serializable: ^6.0.1
   msix: ^3.5.1
   riverpod_generator: ^2.1.6
-  riverpod_lint: ^1.2.0
   test: ^1.17.10
 
 flutter:

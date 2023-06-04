@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 
@@ -47,7 +47,7 @@ class SelectLocaleDialog extends StatelessWidget {
           ),
         ),
         const Divider(),
-        for (var locale in AppLocalizations.supportedLocales)
+        for (var locale in KaitekiLocalizations.supportedLocales)
           SimpleDialogOption(
             child: Text(
               locale.toString(),

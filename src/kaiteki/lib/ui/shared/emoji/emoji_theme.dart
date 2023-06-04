@@ -3,7 +3,7 @@ import "dart:ui";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
-import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/utils.dart";
 
 @immutable
 class EmojiTheme extends ThemeExtension<EmojiTheme> {

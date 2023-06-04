@@ -5,6 +5,7 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class ShareSheet extends StatelessWidget {

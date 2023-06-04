@@ -5,13 +5,10 @@ import "package:async/async.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/auth/login_functions.dart";
-import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/instance_prober.dart";
-import "package:kaiteki/fediverse/model/instance.dart";
+import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/auth/login/dialogs/api_type_dialog.dart";
 import "package:kaiteki/ui/auth/login/pages/code_page.dart";
 import "package:kaiteki/ui/auth/login/pages/handoff_page.dart";
@@ -22,6 +19,8 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart";
 import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -373,21 +372,37 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final accounts = ref.read(accountManagerProvider);
     final adapter = await instance.createAdapter();
 
-    final result = await adapter.login(
-      await accounts.getClientSecret(instance.host),
-      _askForCredentials,
-      _askForCode,
-      _handleOAuth,
+    final loginInterface = adapter as LoginSupport;
+
+    final clientSecret = await accounts.getClientSecret(instance.host);
+    final loginContext = LoginContext(
+      clientSecret:
+          clientSecret.nullTransform((e) => (e.clientId, e.clientSecret)),
+      requestCredentials: _askForCredentials,
+      requestCode: _askForCode,
+      requestOAuth: _handleOAuth,
+      openUrl: (uri) async {
+        await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      },
+      application: appId,
     );
 
-    if (result.aborted) return;
+    final result = await loginInterface.login(loginContext);
 
-    if (!result.successful) {
-      _showError(result.error!);
+    if (result is! LoginSuccess) {
+      if (result is LoginFailure) _showError(result.error);
       return;
     }
 
-    final account = result.account!;
+    final account = Account.fromLoginResult(
+      result,
+      adapter,
+      instance.host,
+    );
+
     if (account.accountSecret == null) {
       await _showTemporaryAccountNotice();
     }

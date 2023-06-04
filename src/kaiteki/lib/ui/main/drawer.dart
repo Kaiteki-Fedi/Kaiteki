@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" show appName;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/list_support.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 class MainScreenDrawer extends ConsumerWidget {
   final VoidCallback onSwitchLayout;

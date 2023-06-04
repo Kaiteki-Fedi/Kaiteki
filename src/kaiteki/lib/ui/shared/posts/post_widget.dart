@@ -5,13 +5,6 @@ import "package:go_router/go_router.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
-import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
-import "package:kaiteki/fediverse/interfaces/post_translation_support.dart";
-import "package:kaiteki/fediverse/interfaces/reaction_support.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -39,6 +32,7 @@ import "package:kaiteki/ui/shared/posts/subject_bar.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:url_launcher/url_launcher.dart";
 
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
@@ -647,17 +641,20 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   Future<void> _onBookmark() async {
     final adapter = ref.read(adapterProvider);
     final l10n = context.l10n;
+
     try {
       final f = adapter as BookmarkSupport;
 
-      final Post newPost;
+      final PostState newState;
       if (_post.state.bookmarked) {
         await f.unbookmarkPost(_post.id);
-        newPost = _post.copyWith.state(_post.state.copyWith.bookmarked(false));
+        newState = _post.state.copyWith(bookmarked: false);
       } else {
         await f.bookmarkPost(_post.id);
-        newPost = _post.copyWith.state(_post.state.copyWith.bookmarked(false));
+        newState = _post.state.copyWith(bookmarked: true);
       }
+
+      setState(() => _post = _post.copyWith(state: newState));
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -670,8 +667,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           ),
         );
       }
-
-      setState(() => _post = newPost);
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postBookmarkFailed),
@@ -725,17 +720,20 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   Future<void> _onFavorite() async {
     final adapter = ref.read(adapterProvider);
     final l10n = context.l10n;
+
     try {
       final f = adapter as FavoriteSupport;
-      final Post newPost;
+      final PostState newState;
+
       if (_post.state.favorited) {
         await f.unfavoritePost(_post.id);
-        newPost = _post.copyWith.state(_post.state.copyWith.favorited(false));
+        newState = _post.state.copyWith(favorited: false);
       } else {
         await f.favoritePost(_post.id);
-        newPost = _post.copyWith.state(_post.state.copyWith.favorited(true));
+        newState = _post.state.copyWith(favorited: true);
       }
-      setState(() => _post = newPost);
+
+      setState(() => _post = _post.copyWith(state: newState));
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postFavoriteFailed),
@@ -771,17 +769,17 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final adapter = ref.read(adapterProvider);
     final l10n = context.l10n;
     try {
-      final Post newPost;
+      final PostState newState;
 
       if (_post.state.repeated) {
         await adapter.unrepeatPost(_post.id);
-        newPost = _post.copyWith.state(_post.state.copyWith.repeated(false));
+        newState = _post.state.copyWith(repeated: false);
       } else {
         await adapter.repeatPost(_post.id);
-        newPost = _post.copyWith.state(_post.state.copyWith.repeated(true));
+        newState = _post.state.copyWith(repeated: true);
       }
 
-      setState(() => _post = newPost);
+      setState(() => _post = _post.copyWith(state: newState));
     } catch (e, s) {
       context.showErrorSnackbar(
         text: Text(l10n.postRepeatFailed),

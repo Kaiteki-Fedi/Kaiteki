@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki_core/model.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 import "../mocks/timeline_adapter.dart";
@@ -29,8 +29,8 @@ void main() {
         ],
         child: MaterialApp(
           theme: getDefaultTheme(Brightness.light, true),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
+          supportedLocales: KaitekiLocalizations.supportedLocales,
           home: Scaffold(body: widget),
         ),
       );
@@ -67,8 +67,8 @@ void main() {
         ],
         child: MaterialApp(
           theme: getDefaultTheme(Brightness.light, true),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
+          supportedLocales: KaitekiLocalizations.supportedLocales,
           home: Scaffold(body: widget),
         ),
       );

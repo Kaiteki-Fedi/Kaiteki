@@ -1,6 +1,6 @@
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
+import "package:kaiteki_core/model.dart";
 import "package:test/test.dart";
 
 void main() {

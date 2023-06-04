@@ -1,0 +1,60 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Kaiteki (debug mode)",
+            "request": "launch",
+            "cwd": "kaiteki",
+            "type": "dart",
+            "flutterMode": "debug",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 1
+            },
+            "toolArgs": [
+                "--flavor",
+                "unsignedfoss",
+            ],
+        },
+        {
+            "name": "Kaiteki (profile mode)",
+            "request": "launch",
+            "cwd": "kaiteki",
+            "type": "dart",
+            "flutterMode": "profile",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 2
+            },
+            "toolArgs": [
+                "--flavor",
+                "unsignedfoss",
+            ],
+        },
+        {
+            "name": "Kaiteki (release mode)",
+            "request": "launch",
+            "cwd": "kaiteki",
+            "type": "dart",
+            "flutterMode": "release",
+            "presentation": {
+                "hidden": false,
+                "group": "Kaiteki",
+                "order": 3
+            },
+            "toolArgs": [
+                "--flavor",
+                "unsignedfoss",
+            ],
+        },
+        {
+            "name": "Storybook",
+            "request": "launch",
+            "cwd": "kaiteki",
+            "type": "dart",
+            "program": "storybook/main.dart"
+        }
+    ]
+}

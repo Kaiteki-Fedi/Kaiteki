@@ -2,9 +2,9 @@ import "dart:math" as math;
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 ThreadPost toThread(Iterable<Post> posts, {bool ignoreMissing = false}) {
   final threadPosts = posts.map((post) => ThreadPost(post.root)).toList();

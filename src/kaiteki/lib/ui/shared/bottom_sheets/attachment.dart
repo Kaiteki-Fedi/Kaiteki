@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki_core/model.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class AttachmentBottomSheet extends StatelessWidget {

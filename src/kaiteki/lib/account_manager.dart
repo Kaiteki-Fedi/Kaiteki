@@ -1,11 +1,10 @@
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/repositories/repository.dart";
+import "package:kaiteki_core/kaiteki_core.dart" hide UserSecret, ClientSecret;
 import "package:logging/logging.dart";
 
 class AccountManager extends ChangeNotifier {
@@ -134,7 +133,14 @@ class AccountManager extends ChangeNotifier {
     }
 
     try {
-      await adapter.applySecrets(clientSecret, accountSecret);
+      await adapter.applySecrets(
+        clientSecret.nullTransform((e) => (e.clientId, e.clientSecret)),
+        (
+          accessToken: accountSecret.accessToken,
+          refreshToken: accountSecret.refreshToken,
+          userId: accountSecret.userId
+        ),
+      );
     } catch (e, s) {
       _logger.warning("Failed to apply secrets to ${type.adapterType}", e, s);
       return null;

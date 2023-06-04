@@ -4,12 +4,11 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/model.dart";
-import "package:kaiteki/fediverse/model/timeline_query.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class CatalogMainScreenView extends ConsumerStatefulWidget
     implements MainScreenView {

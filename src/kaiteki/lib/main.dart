@@ -5,13 +5,13 @@ import "package:flutter/material.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/app.dart";
-import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/repositories/hive_repository.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/crash_screen.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:logging/logging.dart";
 import "package:shared_preferences/shared_preferences.dart";
 

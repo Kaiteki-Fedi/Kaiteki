@@ -1,10 +1,10 @@
 import "package:anchor_scroll_controller/anchor_scroll_controller.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class ConversationScreen extends ConsumerStatefulWidget {
   final Post post;

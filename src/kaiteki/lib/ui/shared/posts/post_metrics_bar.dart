@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/post/metrics.dart";
+import "package:kaiteki_core/social.dart";
 
 class PostMetricBar extends StatelessWidget {
   final PostMetrics metrics;

@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/user/text_with_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 class UserPanel extends ConsumerWidget {
   final User user;

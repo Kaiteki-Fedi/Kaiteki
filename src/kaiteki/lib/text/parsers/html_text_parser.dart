@@ -1,10 +1,10 @@
 import "package:collection/collection.dart";
 import "package:html/dom.dart" as dom;
 import "package:html/parser.dart" show parseFragment;
-import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
 
 typedef HtmlElementConstructor = List<Element>? Function(

@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/ui/shared/posts/attachment_row.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class EmbeddedPostWidget extends ConsumerWidget {
   final Post post;

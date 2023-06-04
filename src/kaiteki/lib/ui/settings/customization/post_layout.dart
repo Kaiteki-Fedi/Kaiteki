@@ -1,12 +1,11 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/mock_data.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki_core/model.dart";
 
 final _example = examplePost.copyWith(
   attachments: [

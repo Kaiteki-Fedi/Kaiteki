@@ -2,7 +2,6 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/explore_support.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/account_list/instance_icon.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
@@ -10,6 +9,8 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class BirdMainScreenView extends ConsumerStatefulWidget
     implements MainScreenView {

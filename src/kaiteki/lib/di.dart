@@ -3,12 +3,9 @@ import "dart:convert";
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:kaiteki/account_manager.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/backends/mastodon/shared_adapter.dart";
-import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/language.dart";
 import "package:kaiteki/text/parsers/html_text_parser.dart";
@@ -18,6 +15,9 @@ import "package:kaiteki/text/parsers/social_text_parser.dart";
 import "package:kaiteki/text/parsers/text_parser.dart";
 import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
+import "package:kaiteki_core/backends/mastodon.dart";
+import "package:kaiteki_core/backends/misskey.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
@@ -89,7 +89,7 @@ Future<UnmodifiableListView<Language>> languageList(LanguageListRef ref) async {
 }
 
 extension BuildContextExtensions on BuildContext {
-  AppLocalizations get l10n => AppLocalizations.of(this)!;
+  KaitekiLocalizations get l10n => KaitekiLocalizations.of(this)!;
 
   MaterialLocalizations get materialL10n {
     return Localizations.of<MaterialLocalizations>(

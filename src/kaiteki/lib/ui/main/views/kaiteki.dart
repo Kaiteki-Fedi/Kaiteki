@@ -4,10 +4,6 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/bookmark_support.dart";
-import "package:kaiteki/fediverse/interfaces/chat_support.dart";
-import "package:kaiteki/fediverse/interfaces/explore_support.dart";
-import "package:kaiteki/fediverse/interfaces/notification_support.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
@@ -23,6 +19,8 @@ import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class KaitekiMainScreenView extends ConsumerStatefulWidget
     implements MainScreenView {

@@ -1,7 +1,7 @@
 import "package:equatable/equatable.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/text/parsers/text_parser.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 abstract class Element extends Equatable {
   final List<Element>? children;

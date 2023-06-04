@@ -6,10 +6,6 @@ import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" show bottomSheetConstraints;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
-import "package:kaiteki/fediverse/interfaces/search_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
-import "package:kaiteki/model/file.dart";
 import "package:kaiteki/model/language.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
@@ -26,6 +22,7 @@ import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 const double splashRadius = 20.0;
 
@@ -467,7 +464,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
 
     final pickedFile = result.files.first;
     final attachment = AttachmentDraft(
-      file: KaitekiFile.path(pickedFile.path!, name: pickedFile.name),
+      file: KaitekiLocalFile(pickedFile.path!),
     );
 
     setState(() => attachments.add(attachment));

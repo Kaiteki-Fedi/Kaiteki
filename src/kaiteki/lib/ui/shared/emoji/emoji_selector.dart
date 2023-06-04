@@ -6,12 +6,12 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/emoji/category.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/emoji/unicode.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_button.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki_core/model.dart";
 
 const _emojiSize = 32.0;
 

@@ -3,10 +3,10 @@ import "dart:io" show Platform;
 import "package:flutter/foundation.dart" show kIsWeb;
 import "package:flutter/material.dart";
 import "package:kaiteki/app.dart";
-import "package:kaiteki/common.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/stack_trace_screen.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class ExceptionDialog extends StatelessWidget {

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
+import "package:kaiteki_core/model.dart";
 
 class EmojiButton extends StatelessWidget {
   final Emoji emoji;

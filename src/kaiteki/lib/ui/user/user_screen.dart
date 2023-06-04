@@ -4,7 +4,6 @@ import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
@@ -12,6 +11,8 @@ import "package:kaiteki/ui/user/user_panel.dart";
 import "package:kaiteki/ui/user/user_sliver.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:share_plus/share_plus.dart";
 
 const avatarSizeCompact = 72.0;

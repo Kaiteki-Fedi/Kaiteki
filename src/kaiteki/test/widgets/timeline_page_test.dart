@@ -2,14 +2,14 @@ import "dart:developer";
 
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/main/pages/timeline.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 import "../mocks/timeline_adapter.dart";
@@ -38,8 +38,8 @@ void main() {
           ],
           child: MaterialApp(
             theme: getDefaultTheme(Brightness.light, true),
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
+            supportedLocales: KaitekiLocalizations.supportedLocales,
             home: const Scaffold(body: TimelinePage()),
           ),
         ),

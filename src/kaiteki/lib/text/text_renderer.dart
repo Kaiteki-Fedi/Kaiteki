@@ -2,9 +2,6 @@ import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Element;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/text/unblur_on_hover.dart";
@@ -14,6 +11,8 @@ import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
+import "package:kaiteki_core/model.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
 
 List<Element> parseText(

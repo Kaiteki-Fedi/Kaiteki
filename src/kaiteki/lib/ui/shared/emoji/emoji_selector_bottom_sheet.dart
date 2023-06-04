@@ -1,11 +1,11 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
-import "package:kaiteki/fediverse/model/emoji/category.dart";
+import "package:kaiteki/emoji/unicode.dart";
 import "package:kaiteki/fediverse/services/emoji.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:mdi/mdi.dart";
 
 class EmojiSelectorBottomSheet extends ConsumerStatefulWidget {

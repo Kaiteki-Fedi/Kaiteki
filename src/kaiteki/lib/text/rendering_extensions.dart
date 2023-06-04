@@ -1,9 +1,9 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/backends/misskey/adapter.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/text/text_renderer.dart";
+import "package:kaiteki_core/backends/misskey.dart";
+import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
 
 extension PostRenderExtensions on Post {
@@ -90,7 +90,7 @@ Emoji? resolveEmoji(
   logger.fine("No emojis were provided");
 
   if (adapter is MisskeyAdapter) {
-    final url = buildEmojiUriManual(adapter.instance, input, remoteHost);
+    final url = buildEmojiUri(adapter.instance, (input, remoteHost));
     logger.fine("Returning mkv13 emoji based on static url: $url");
     return CustomEmoji(
       short: input,

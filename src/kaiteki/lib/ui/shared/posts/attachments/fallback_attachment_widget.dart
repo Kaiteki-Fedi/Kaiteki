@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
 import "package:kaiteki/utils/extensions/build_context.dart";
+import "package:kaiteki_core/model.dart";
 
 class FallbackAttachmentWidget extends StatelessWidget {
   const FallbackAttachmentWidget({

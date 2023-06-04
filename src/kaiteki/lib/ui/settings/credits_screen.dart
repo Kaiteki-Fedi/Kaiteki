@@ -7,7 +7,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki/utils/utils.dart";
+import "package:kaiteki_core/utils.dart";
 
 part "credits_screen.g.dart";
 

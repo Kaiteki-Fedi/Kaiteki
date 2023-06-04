@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/common.dart";
 import "package:kaiteki/constants.dart";
-import "package:kaiteki/exceptions/instance_unreachable_exception.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class AuthenticationUnsuccessfulDialog extends StatelessWidget {
   final TraceableError error;

@@ -4,17 +4,18 @@ import "package:fediverse_objects/misskey.dart" as mk;
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
+import "package:kaiteki/fediverse/api_theme.dart";
 import "package:kaiteki/fediverse/instance_prober.dart";
-import "package:kaiteki/fediverse/model/instance.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
 import "package:kaiteki/text/parsers/html_text_parser.dart";
 import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
+
 
 class InstanceVettingBottomSheet extends ConsumerStatefulWidget {
   final String instance;

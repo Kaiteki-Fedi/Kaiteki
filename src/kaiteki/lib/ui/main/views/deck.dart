@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/main/views/view.dart";
@@ -8,6 +7,8 @@ import "package:kaiteki/ui/shared/posts/compose/compose_form.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/timeline.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
+import "package:kaiteki_core/model.dart";
 
 class DeckMainScreenView extends ConsumerStatefulWidget
     implements MainScreenView {

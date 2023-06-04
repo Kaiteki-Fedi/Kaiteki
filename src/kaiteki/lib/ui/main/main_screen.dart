@@ -2,9 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/notification_support.dart";
-import "package:kaiteki/fediverse/interfaces/search_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
@@ -18,6 +15,7 @@ import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/options_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 final notificationCountProvider = FutureProvider<int?>(
   (ref) {

@@ -3,8 +3,8 @@ import "dart:convert";
 import "package:flutter/material.dart";
 import "package:http/http.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
-import "package:kaiteki/fediverse/model/gif.dart";
 import "package:kaiteki/ui/shared/search_bar.dart";
+import "package:kaiteki_core/model.dart";
 
 class GifBottomSheet extends StatefulWidget {
   const GifBottomSheet({super.key});

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
 
 Future<void> resolveAndOpenUser(

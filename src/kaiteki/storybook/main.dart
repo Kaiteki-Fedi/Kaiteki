@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/users/user_badge.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
@@ -27,8 +27,8 @@ class KaitekiStorybook extends StatelessWidget {
             body: Center(child: child),
           ),
         ),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
+        supportedLocales: KaitekiLocalizations.supportedLocales,
       ),
       stories: [
         discardPost,

@@ -1,8 +1,6 @@
 import "package:flutter/material.dart" hide Visibility;
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:kaiteki/fediverse/model/formatting.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
-import "package:kaiteki/fediverse/model/visibility.dart";
+import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki_core/model.dart";
 import "package:mdi/mdi.dart";
 
 extension VisibilityExtensions on Visibility {
@@ -18,7 +16,7 @@ extension VisibilityExtensions on Visibility {
     };
   }
 
-  String toDisplayString(AppLocalizations l10n) {
+  String toDisplayString(KaitekiLocalizations l10n) {
     return switch (this) {
       Visibility.direct => l10n.visibilityDirect,
       Visibility.followersOnly => l10n.visibilityFollowersOnly,
@@ -30,7 +28,7 @@ extension VisibilityExtensions on Visibility {
     };
   }
 
-  String toDescription(AppLocalizations l10n) {
+  String toDescription(KaitekiLocalizations l10n) {
     return switch (this) {
       Visibility.direct => l10n.visibilityDirectDescription,
       Visibility.followersOnly => l10n.visibilityFollowersOnlyDescription,
@@ -54,7 +52,7 @@ extension FormattingExtensions on Formatting {
     };
   }
 
-  String toDisplayString(AppLocalizations l10n) {
+  String toDisplayString(KaitekiLocalizations l10n) {
     return switch (this) {
       Formatting.plainText => l10n.formattingPlain,
       Formatting.markdown => "Markdown",
@@ -78,7 +76,7 @@ extension TimelindKindExtensions on TimelineKind {
     };
   }
 
-  String getDisplayName(AppLocalizations l10n) {
+  String getDisplayName(KaitekiLocalizations l10n) {
     return switch (this) {
       TimelineKind.home => l10n.timelineHome,
       TimelineKind.local => l10n.timelineLocal,

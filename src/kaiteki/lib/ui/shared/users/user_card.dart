@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
-import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/text/rendering_extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class UserCard extends ConsumerWidget {
   /// The user to display. If null, a placeholder will be displayed.

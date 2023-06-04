@@ -2,14 +2,14 @@ import "package:async/async.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/preview_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/services/emoji.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers/social_text_parser.dart";
 import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class PostPreview extends ConsumerStatefulWidget {
   final PostDraft draft;

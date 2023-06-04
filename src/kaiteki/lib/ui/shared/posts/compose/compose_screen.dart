@@ -1,12 +1,12 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/ui/shared/dialogs/dialog_close_button.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_form.dart";
 import "package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/toggle_subject_button.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class ComposeScreen extends ConsumerStatefulWidget {
   final Post? replyTo;

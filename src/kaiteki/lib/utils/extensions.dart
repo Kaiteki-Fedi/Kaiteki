@@ -2,12 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:html/dom.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/model/auth/account_key.dart";
-import "package:kaiteki/utils/utils.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 export "package:kaiteki/text/rendering_extensions.dart";
 export "package:kaiteki/utils/extensions/build_context.dart";
@@ -17,18 +13,6 @@ export "package:kaiteki/utils/extensions/iterable.dart";
 export "package:kaiteki/utils/extensions/string.dart";
 
 extension ObjectExtensions<T> on T? {
-  S? nullTransform<S>(S Function(T object) function) {
-    final value = this;
-    if (value == null) return null;
-    return function.call(value);
-  }
-
-  S? safeCast<S>() {
-    final value = this;
-    if (value is S) return value;
-    return null;
-  }
-
   T inlineBang(String description) {
     final value = this;
     if (value == null) throw Exception(description);
@@ -148,20 +132,6 @@ extension QueryExtension on Map<String, String> {
   }
 }
 
-extension UriExtensions on Uri {
-  (String, String) get fediverseHandle {
-    var username = pathSegments.last;
-
-    // FIXME(Craftplacer): This is just a lazy fix for empty usernames
-    if (username.isEmpty) return (host, username);
-
-    if (username[0] == "@") {
-      username = username.substring(1);
-    }
-    return (host, username);
-  }
-}
-
 extension ListExtensions<T> on List<T> {
   List<T> joinWithValue(T separator) {
     if (length <= 1) return this;
@@ -173,24 +143,16 @@ extension ListExtensions<T> on List<T> {
   }
 }
 
-extension NullableObjectExtensions on Object? {}
-
-extension FunctionExtensions<T> on T Function(JsonMap) {
-  T Function(Object?) get generic {
-    return (obj) => this(obj! as JsonMap);
-  }
-
-  List<T>? Function(Object?) get genericList {
-    return (obj) {
-      if (obj == null) return null;
-      final list = obj as List<dynamic>;
-      final castedList = list.cast<JsonMap>();
-      return castedList.map(this).toList();
-    };
-  }
-}
-
 extension NullableTextStyleExtensions on TextStyle? {
   /// Provides an empty [TextStyle] if null. For use with [TextStyle.copyWith].
   TextStyle get fallback => this ?? const TextStyle();
+}
+
+extension KaitekiFileExtensions on KaitekiFile {
+  ImageProvider getImageProvider() {
+    final file = this;
+    if (file is KaitekiMemoryFile) return MemoryImage(file.bytes);
+    if (file is KaitekiLocalFile) return FileImage(file.toDartFile());
+    throw UnimplementedError();
+  }
 }

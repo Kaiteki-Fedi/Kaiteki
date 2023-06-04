@@ -4,8 +4,6 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Notification;
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/notification_support.dart";
-import "package:kaiteki/fediverse/model/notification.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
@@ -15,6 +13,7 @@ import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});

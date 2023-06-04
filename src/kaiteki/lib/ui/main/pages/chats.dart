@@ -1,8 +1,5 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/chat_support.dart";
-import "package:kaiteki/fediverse/model/chat_message.dart";
-import "package:kaiteki/fediverse/model/chat_target.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/chats/chat_message.dart";
@@ -13,6 +10,8 @@ import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ChatsPage extends ConsumerStatefulWidget {
   const ChatsPage({super.key});

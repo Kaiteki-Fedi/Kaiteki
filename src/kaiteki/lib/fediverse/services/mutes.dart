@@ -1,8 +1,7 @@
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/mute_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/pagination_state.dart";
+import "package:kaiteki_core/social.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "mutes.g.dart";

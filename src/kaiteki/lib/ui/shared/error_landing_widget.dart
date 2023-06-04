@@ -4,9 +4,10 @@ import "package:flutter/material.dart";
 import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/exceptions/http_exception.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/http.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ErrorLandingWidget extends StatelessWidget {
   final TraceableError error;

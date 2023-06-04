@@ -9,11 +9,10 @@ import "package:flutter/rendering.dart"
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import "package:flutter_test/flutter_test.dart";
 import "package:integration_test/integration_test.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
+import "package:kaiteki_core/model.dart";
 import "package:path/path.dart" as path;
 
 import "bootstrapper.dart";
