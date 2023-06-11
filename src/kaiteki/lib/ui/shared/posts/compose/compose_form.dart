@@ -311,10 +311,11 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
   }
 
   Future<void> post(BuildContext context) async {
-    final adapter = ref.read(adapterProvider);
     final messenger = ScaffoldMessenger.of(context);
+    final navigatorContext = Navigator.of(context).context;
     final l10n = context.l10n;
     final goRouter = GoRouter.of(context);
+    final adapter = ref.read(adapterProvider);
 
     // pin state
     final draft = postDraft;
@@ -369,7 +370,9 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
           content: Text(l10n.postSubmissionFailed),
           action: SnackBarAction(
             label: l10n.whyButtonLabel,
-            onPressed: () => context.showExceptionDialog((e, s)),
+            onPressed: () {
+              navigatorContext.showExceptionDialog((e, s));
+            },
           ),
         ),
       );
