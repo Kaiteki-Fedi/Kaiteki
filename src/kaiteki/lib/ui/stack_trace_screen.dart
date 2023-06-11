@@ -34,7 +34,8 @@ class StackTraceScreen extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: SelectableText(
             text,
-            style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
+            style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
+                DefaultKaitekiTextTheme(context).monospaceTextStyle,
           ),
         ),
       ),

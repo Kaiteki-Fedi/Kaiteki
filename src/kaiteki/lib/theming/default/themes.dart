@@ -73,9 +73,6 @@ TextTheme _createKaitekiTextTheme(
 ) {
   final baseTextTheme = GoogleFonts.firaSansTextTheme(original);
   return baseTextTheme.copyWith(
-    titleLarge: ktkTextTheme?.kaitekiTextStyle.copyWith(
-      fontSize: baseTextTheme.titleLarge?.fontSize,
-      color: baseTextTheme.titleLarge?.color,
-    ),
+    titleLarge: ktkTextTheme?.kaitekiTextStyle,
   );
 }

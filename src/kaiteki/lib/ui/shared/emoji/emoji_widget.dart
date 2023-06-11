@@ -61,7 +61,7 @@ class EmojiWidget extends StatelessWidget {
     );
 
     final theme = Theme.of(context).extension<EmojiTheme>();
-    final size = this.size ?? theme!.size;
+    final size = this.size ?? theme?.size;
 
     return SizedBox(
       width: size,

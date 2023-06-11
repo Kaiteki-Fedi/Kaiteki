@@ -5,7 +5,6 @@ import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/shared/common.dart";
-import "package:kaiteki/utils/extensions.dart";
 
 class ManageLanaguagesScreen extends ConsumerStatefulWidget {
   const ManageLanaguagesScreen({super.key});
@@ -59,13 +58,16 @@ class _ManageLanaguagesScreenState
                       itemBuilder: (context, index) {
                         final language = list[index];
                         return CheckboxListTile(
-                          secondary: Text(
-                            language.code.toUpperCase(),
-                            style: Theme.of(context)
-                                .ktkTextTheme
-                                ?.monospaceTextStyle
-                                .fallback
-                                .copyWith(fontWeight: FontWeight.bold),
+                          secondary: DefaultTextStyle.merge(
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            child: Text(
+                              language.code.toUpperCase(),
+                              style: Theme.of(context)
+                                      .ktkTextTheme
+                                      ?.monospaceTextStyle ??
+                                  DefaultKaitekiTextTheme(context)
+                                      .monospaceTextStyle,
+                            ),
                           ),
                           value: languages.contains(language.code),
                           title: Text(language.englishName ?? language.code),

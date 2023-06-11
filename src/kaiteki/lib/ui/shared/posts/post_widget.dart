@@ -10,7 +10,6 @@ import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
-import "package:kaiteki/theming/kaiteki/post.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
 import "package:kaiteki/ui/features/article_view/screen.dart";
 import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
@@ -254,7 +253,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             child: InteractionEventBar(
               icon: Icons.repeat_rounded,
               text: l10n.postRepeated,
-              color: Theme.of(context).ktkColors!.repeatColor,
+              color: Theme.of(context).ktkColors?.repeatColor ??
+                  DefaultKaitekiColors(context).repeatColor,
               user: _post.author,
             ),
           ),
@@ -275,9 +275,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final outlineColor = Theme.of(context).colorScheme.outline;
     final outlineTextStyle = outlineColor.textStyle;
 
-    final theme = Theme.of(context).ktkPostTheme!;
     final signature = buildSignature(context);
-    final padding = theme.padding;
+    const padding = EdgeInsets.all(8);
 
     final children = [
       InkWell(
@@ -315,7 +314,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       ),
     ];
 
-    final leftPostContentInset = theme.avatarSpacing + 48;
+    const leftPostContentInset = 8 + 48;
 
     final clientText = _buildExpandedMetaBeta();
 
@@ -354,7 +353,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                           focusNode: FocusNode(skipTraversal: true),
                         ),
                       ),
-                      SizedBox(width: theme.avatarSpacing),
+                      const SizedBox(width: 8),
                     ],
                     Expanded(
                       child: Column(
@@ -412,7 +411,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                     child: Padding(
                       padding: isExpanded || isWide
                           ? EdgeInsets.zero
-                          : EdgeInsets.only(left: leftPostContentInset - 8),
+                          : const EdgeInsets.only(
+                              left: leftPostContentInset - 8,
+                            ),
                       child: InteractionBar(
                         metrics: _post.metrics,
                         onReply: _onReply,
@@ -661,8 +662,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           SnackBar(
             content: Text(
               _post.state.bookmarked
-                  ? l10n.postBookmarkRemoved
-                  : l10n.postBookmarkAdded,
+                  ? l10n.postBookmarkAdded
+                  : l10n.postBookmarkRemoved,
             ),
           ),
         );

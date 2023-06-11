@@ -110,9 +110,9 @@ class MetaBar extends ConsumerWidget {
           padding: const EdgeInsets.only(left: 8.0),
           child: Text(
             language,
-            style: Theme.of(context).ktkTextTheme?.monospaceTextStyle.copyWith(
-                  color: secondaryColor,
-                ),
+            style: (Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
+                    DefaultKaitekiTextTheme(context).monospaceTextStyle)
+                .copyWith(color: secondaryColor),
           ),
         ),
       if (showTime)

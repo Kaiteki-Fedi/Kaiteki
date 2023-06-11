@@ -77,12 +77,13 @@ class AltTextBadge extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: Text(
-          "ALT",
-          style: Theme.of(context)
-              .ktkTextTheme
-              ?.monospaceTextStyle
-              .copyWith(color: foreground),
+        child: DefaultTextStyle(
+          style: TextStyle(color: foreground),
+          child: Text(
+            "ALT",
+            style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
+                DefaultKaitekiTextTheme(context).monospaceTextStyle,
+          ),
         ),
       ),
     );

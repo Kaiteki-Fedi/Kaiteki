@@ -314,7 +314,8 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
       foregroundColor: foregroundColor,
       title: Text(
         appName,
-        style: theme.ktkTextTheme?.kaitekiTextStyle,
+        style: theme.ktkTextTheme?.kaitekiTextStyle ??
+            DefaultKaitekiTextTheme(context).kaitekiTextStyle,
       ),
       actions: _buildAppBarActions(context),
       elevation: 0.0,

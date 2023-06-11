@@ -561,11 +561,15 @@ class LanguageIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Text(
-      language.toUpperCase(),
-      style: theme.ktkTextTheme?.monospaceTextStyle.fallback.copyWith(
+    return DefaultTextStyle.merge(
+      style: TextStyle(
         fontWeight: FontWeight.bold,
         color: IconTheme.of(context).color,
+      ),
+      child: Text(
+        language.toUpperCase(),
+        style: theme.ktkTextTheme?.monospaceTextStyle ??
+            DefaultKaitekiTextTheme(context).monospaceTextStyle,
       ),
     );
   }

@@ -116,7 +116,8 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
                     element.style?.font == TextElementFont.monospace)
                   Text(
                     "mono",
-                    style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
+                    style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
+                        DefaultKaitekiTextTheme(context).monospaceTextStyle,
                     textScaleFactor: 0.75,
                   ),
               ],

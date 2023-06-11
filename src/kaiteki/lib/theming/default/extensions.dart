@@ -1,7 +1,4 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/theming/kaiteki/colors.dart";
-import "package:kaiteki/theming/kaiteki/post.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/theming/kaiteki/theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
@@ -55,10 +52,7 @@ extension ThemeDataExtensions on ThemeData {
     return copyWith(
       extensions: [
         ...extensions.values,
-        KaitekiTextTheme.fromMaterialTheme(this),
-        KaitekiColors.fromMaterialTheme(this),
         KaitekiTheme.fromMaterialTheme(this),
-        KaitekiPostTheme.fallback,
         EmojiTheme(square: squareEmoji ?? true),
         AvatarTheme(shape: avatarShape ?? const CircleBorder()),
       ],

@@ -7,31 +7,16 @@ class KaitekiColors extends ThemeExtension<KaitekiColors> {
   final Color? bookmarkColor;
 
   /// Primary color used for favorites.
-  final Color favoriteColor;
+  final Color? favoriteColor;
 
   /// Primary color used for repeats.
-  final Color repeatColor;
+  final Color? repeatColor;
 
   const KaitekiColors({
-    required this.bookmarkColor,
-    required this.favoriteColor,
-    required this.repeatColor,
+    this.bookmarkColor,
+    this.favoriteColor,
+    this.repeatColor,
   });
-
-  factory KaitekiColors.fromMaterialTheme(ThemeData theme) {
-    CustomColorPalette harmonizeWithPrimary(Color base) {
-      return createCustomColorPalette(
-        base.harmonizeWith(theme.colorScheme.primary),
-        theme.colorScheme.brightness,
-      );
-    }
-
-    return KaitekiColors(
-      bookmarkColor: harmonizeWithPrimary(Colors.pink).color,
-      favoriteColor: harmonizeWithPrimary(Colors.orange).color,
-      repeatColor: harmonizeWithPrimary(Colors.green).color,
-    );
-  }
 
   @override
   KaitekiColors copyWith({
@@ -52,9 +37,34 @@ class KaitekiColors extends ThemeExtension<KaitekiColors> {
 
     return KaitekiColors(
       bookmarkColor: Color.lerp(bookmarkColor, other.bookmarkColor, t),
-      favoriteColor: Color.lerp(favoriteColor, other.favoriteColor, t)!,
-      repeatColor: Color.lerp(repeatColor, other.repeatColor, t)!,
+      favoriteColor: Color.lerp(favoriteColor, other.favoriteColor, t),
+      repeatColor: Color.lerp(repeatColor, other.repeatColor, t),
     );
+  }
+}
+
+class DefaultKaitekiColors extends KaitekiColors {
+  final BuildContext _context;
+
+  const DefaultKaitekiColors(BuildContext context)
+      : _context = context,
+        super();
+
+  @override
+  Color get bookmarkColor => _harmonize(Colors.pink);
+
+  @override
+  Color get favoriteColor => _harmonize(Colors.orange);
+
+  @override
+  Color get repeatColor => _harmonize(Colors.green);
+
+  Color _harmonize(Color base) {
+    final colorScheme = Theme.of(_context).colorScheme;
+    return createCustomColorPalette(
+      base.harmonizeWith(colorScheme.primary),
+      colorScheme.brightness,
+    ).color;
   }
 }
 

@@ -51,7 +51,8 @@ class SelectLocaleDialog extends StatelessWidget {
           SimpleDialogOption(
             child: Text(
               locale.toString(),
-              style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
+              style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
+                  DefaultKaitekiTextTheme(context).monospaceTextStyle,
             ),
             onPressed: () => Navigator.of(context).maybePop(
               LocaleChoice(locale.toLanguageTag()),

@@ -375,14 +375,16 @@ class NotificationWidget extends ConsumerWidget {
   Color _getColor(BuildContext context) {
     final theme = Theme.of(context);
     final ktkColors = theme.ktkColors;
+    final defaults = DefaultKaitekiColors(context);
+
     final colorScheme = theme.colorScheme;
 
     switch (notification.type) {
       case NotificationType.liked:
-        return ktkColors!.favoriteColor;
+        return ktkColors?.favoriteColor ?? defaults.favoriteColor;
 
       case NotificationType.repeated:
-        return ktkColors!.repeatColor;
+        return ktkColors?.repeatColor ?? defaults.repeatColor;
 
       case NotificationType.reported:
         return colorScheme.error;

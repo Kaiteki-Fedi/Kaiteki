@@ -30,8 +30,8 @@ class ReactionButton extends ConsumerWidget {
         ? Theme.of(context).colorScheme.onInverseSurface
         : Theme.of(context).colorScheme.onSurfaceVariant;
 
-    final textStyle =
-        Theme.of(context).ktkTextTheme?.countTextStyle ?? const TextStyle();
+    final textStyle = Theme.of(context).ktkTextTheme?.countTextStyle ??
+        DefaultKaitekiTextTheme(context).countTextStyle;
 
     var count = reaction.count;
 

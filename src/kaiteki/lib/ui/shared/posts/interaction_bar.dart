@@ -82,7 +82,8 @@ class InteractionBarState extends State<InteractionBar> {
       if (widget.favorited != null)
         CountButton(
           active: widget.favorited ?? false,
-          activeColor: Theme.of(context).ktkColors?.favoriteColor,
+          activeColor: Theme.of(context).ktkColors?.favoriteColor ??
+              DefaultKaitekiColors(context).favoriteColor,
           activeIcon: const Icon(Icons.star_rounded),
           count: widget.metrics.favoriteCount,
           focusNode: FocusNode(skipTraversal: true),
@@ -138,7 +139,8 @@ class InteractionBarState extends State<InteractionBar> {
   CountButton _buildRepeatButton(BuildContext context, VoidCallback? onTap) {
     return CountButton(
       active: widget.repeated ?? false,
-      activeColor: Theme.of(context).ktkColors?.repeatColor,
+      activeColor: Theme.of(context).ktkColors?.repeatColor ??
+          DefaultKaitekiColors(context).repeatColor,
       count: widget.metrics.repeatCount,
       focusNode: FocusNode(skipTraversal: true),
       icon: const Icon(Icons.repeat_rounded),

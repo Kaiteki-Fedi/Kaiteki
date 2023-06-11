@@ -89,7 +89,8 @@ class _CatalogMainScreenViewState extends ConsumerState<CatalogMainScreenView> {
           TextSpan(
             text: text,
             recognizer: TapGestureRecognizer()..onTap = onTap,
-            style: Theme.of(context).ktkTextTheme?.linkTextStyle,
+            style: Theme.of(context).ktkTextTheme?.linkTextStyle ??
+                DefaultKaitekiTextTheme(context).linkTextStyle,
           ),
           const TextSpan(text: "]"),
         ],

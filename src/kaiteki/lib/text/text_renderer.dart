@@ -78,7 +78,8 @@ class TextRenderer {
   ]) {
     return TextRenderer(
       textStyle: DefaultTextStyle.of(context).style,
-      textTheme: Theme.of(context).ktkTextTheme,
+      textTheme:
+          Theme.of(context).ktkTextTheme ?? DefaultKaitekiTextTheme(context),
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       onLinkClick: (url) async {
         await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -175,7 +176,7 @@ class TextRenderer {
           (onTap) => TapGestureRecognizer()..onTap = () => onTap(reference),
         ),
         text: reference.toString(),
-        style: textTheme?.linkTextStyle,
+        style: textTheme?.mentionTextStyle,
       );
     }
   }

@@ -1,7 +1,6 @@
 import "dart:math";
 
 import "package:flutter/material.dart";
-import "package:kaiteki/theming/kaiteki/post.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 
@@ -14,8 +13,7 @@ class PlaceholderPostWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     const showAvatar = true;
     const layout = PostWidgetLayout.normal;
-    final theme = Theme.of(context).ktkPostTheme!;
-    final leftPostContentInset = theme.avatarSpacing + 48;
+    const leftPostContentInset = 8 + 48;
 
     const isExpanded = layout == PostWidgetLayout.expanded;
     const isWide = layout == PostWidgetLayout.wide;
@@ -41,7 +39,7 @@ class PlaceholderPostWidget extends StatelessWidget {
     ];
 
     return Padding(
-      padding: showPadding ? theme.padding : EdgeInsets.zero,
+      padding: showPadding ? const EdgeInsets.all(8) : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,7 +50,7 @@ class PlaceholderPostWidget extends StatelessWidget {
                 const AvatarSurface(
                   child: SizedBox.square(dimension: 48),
                 ),
-                SizedBox(width: theme.avatarSpacing),
+                const SizedBox(width: 8),
               ],
               Expanded(
                 child: Column(
@@ -108,7 +106,7 @@ class PlaceholderPostWidget extends StatelessWidget {
             Padding(
               padding: isExpanded || isWide
                   ? EdgeInsets.zero
-                  : EdgeInsets.only(left: leftPostContentInset - 8),
+                  : const EdgeInsets.only(left: leftPostContentInset - 8),
               child: _InteractionBar(),
             ),
           ],

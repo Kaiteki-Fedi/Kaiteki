@@ -55,7 +55,8 @@ class UserInfoWidget extends ConsumerWidget {
             body: Text.rich(
               TextSpan(
                 text: website,
-                style: Theme.of(context).ktkTextTheme!.linkTextStyle,
+                style: Theme.of(context).ktkTextTheme?.linkTextStyle ??
+                    DefaultKaitekiTextTheme(context).linkTextStyle,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => launchUrlString(website),
               ),

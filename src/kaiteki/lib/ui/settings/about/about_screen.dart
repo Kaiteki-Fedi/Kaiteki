@@ -46,8 +46,10 @@ class AboutScreen extends StatelessWidget {
                             appName,
                             textScaleFactor: 2,
                             style: Theme.of(context)
-                                .ktkTextTheme
-                                ?.kaitekiTextStyle,
+                                    .ktkTextTheme
+                                    ?.kaitekiTextStyle ??
+                                DefaultKaitekiTextTheme(context)
+                                    .kaitekiTextStyle,
                           ),
                           if (badge != null)
                             Padding(

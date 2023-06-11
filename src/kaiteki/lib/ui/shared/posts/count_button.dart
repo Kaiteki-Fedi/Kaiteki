@@ -56,6 +56,9 @@ class CountButton extends ConsumerWidget {
 
     final icon = _buildIcon(color);
 
+    final textStyle = (Theme.of(context).ktkTextTheme?.countTextStyle ??
+            DefaultKaitekiTextTheme(context).countTextStyle)
+        .copyWith(color: color);
     return RawMaterialButton(
       onPressed: callback,
       onLongPress: onLongPress,
@@ -77,10 +80,7 @@ class CountButton extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: DefaultTextStyle.merge(
-                        style: Theme.of(context)
-                            .ktkTextTheme!
-                            .countTextStyle
-                            .copyWith(color: color),
+                        style: textStyle,
                         child: Text(
                           shortenedCount,
                           maxLines: 1,
