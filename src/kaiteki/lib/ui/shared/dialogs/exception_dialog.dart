@@ -1,10 +1,13 @@
+import "dart:convert";
 import "dart:io" show Platform;
 
 import "package:flutter/foundation.dart" show kIsWeb;
 import "package:flutter/material.dart";
+import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki/app.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/plain_text_screen.dart";
 import "package:kaiteki/ui/stack_trace_screen.dart";
 import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
@@ -37,6 +40,7 @@ class ExceptionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stackTrace = error.$2;
+    final json = error.$1.safeCast<CheckedFromJsonException>()?.map;
     return AlertDialog(
       title: const Text("Exception details"),
       content: ConstrainedBox(
@@ -63,6 +67,22 @@ class ExceptionDialog extends StatelessWidget {
               },
               contentPadding: EdgeInsets.zero,
             ),
+            if (json != null)
+              ListTile(
+                title: const Text("Show JSON"),
+                leading: const Icon(Icons.data_object_rounded),
+                enabled: stackTrace != null,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => PlainTextScreen(
+                      const JsonEncoder.withIndent("  ").convert(json),
+                      title: const Text("JSON"),
+                    ),
+                  );
+                },
+                contentPadding: EdgeInsets.zero,
+              ),
             ListTile(
               title: const Text("Report on GitHub"),
               leading: const Icon(Icons.error_rounded),
