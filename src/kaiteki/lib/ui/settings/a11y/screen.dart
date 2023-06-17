@@ -16,6 +16,7 @@ class AccessibilityScreen extends StatelessWidget {
           child: Column(
             children: [
               SettingsSection(
+                title: const Text("Inclusion"),
                 children: [
                   PreferenceSwitchListTile(
                     secondary: const Icon(Icons.image_rounded),
@@ -27,6 +28,11 @@ class AccessibilityScreen extends StatelessWidget {
                     ),
                     provider: showAttachmentDescriptionWarning,
                   ),
+                ],
+              ),
+              SettingsSection(
+                title: const Text("Ease of use"),
+                children: [
                   PreferenceSwitchListTile(
                     secondary: const Icon(Icons.open_in_full_rounded),
                     title: const Text(
@@ -36,6 +42,16 @@ class AccessibilityScreen extends StatelessWidget {
                       "Adds a button for opening the conversation of a post without having to click on the post itself.",
                     ),
                     provider: showDedicatedPostOpenButton,
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: const Text("Visuals"),
+                children: [
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.format_underline_rounded),
+                    title: const Text("Underline links"),
+                    provider: underlineLinks,
                   ),
                 ],
               ),

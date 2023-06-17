@@ -29,7 +29,7 @@ class KaitekiTextTheme extends ThemeExtension<KaitekiTextTheme> {
   });
 
   @override
-  ThemeExtension<KaitekiTextTheme> copyWith({
+  KaitekiTextTheme copyWith({
     TextStyle? hashtagTextStyle,
     TextStyle? linkTextStyle,
     TextStyle? mentionTextStyle,

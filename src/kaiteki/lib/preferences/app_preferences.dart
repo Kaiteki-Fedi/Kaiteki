@@ -91,3 +91,9 @@ final visibleLanguages = createSettingProvider<ISet<String>>(
   },
   provider: sharedPreferencesProvider,
 );
+
+final underlineLinks = createSettingProvider<bool>(
+  key: "underlineLinks",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);

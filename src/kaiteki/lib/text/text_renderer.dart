@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Element;
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/text/unblur_on_hover.dart";
@@ -76,10 +77,20 @@ class TextRenderer {
     WidgetRef ref, [
     TextContext? textContext,
   ]) {
+    final textTheme =
+        Theme.of(context).ktkTextTheme ?? DefaultKaitekiTextTheme(context);
     return TextRenderer(
       textStyle: DefaultTextStyle.of(context).style,
-      textTheme:
-          Theme.of(context).ktkTextTheme ?? DefaultKaitekiTextTheme(context),
+      textTheme: ref.watch(underlineLinks).value
+          ? textTheme.copyWith(
+              linkTextStyle: textTheme.linkTextStyle
+                  ?.copyWith(decoration: TextDecoration.underline),
+              mentionTextStyle: textTheme.mentionTextStyle
+                  ?.copyWith(decoration: TextDecoration.underline),
+              hashtagTextStyle: textTheme.hashtagTextStyle
+                 ?.copyWith(decoration: TextDecoration.underline),
+            )
+          : textTheme,
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       onLinkClick: (url) async {
         await launchUrl(url, mode: LaunchMode.externalApplication);
