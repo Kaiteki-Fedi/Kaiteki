@@ -32,6 +32,7 @@ class ComposeForm extends ConsumerStatefulWidget {
   final bool showPreview;
   final bool expands;
   final VoidCallback? onSubmit;
+  final bool minimal;
 
   const ComposeForm({
     super.key,
@@ -40,6 +41,7 @@ class ComposeForm extends ConsumerStatefulWidget {
     this.showPreview = false,
     this.expands = false,
     this.onSubmit,
+    this.minimal = false,
   });
 
   @override
@@ -149,76 +151,98 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Card(
-              elevation: 0,
-              shape: const Border(),
-              child: Flexible(
-                fit: FlexFit.tight,
-                flex: flex,
-                // HACK(Craftplacer): I wanted to settle on a `AnimatedCrossFade`
-                // but given how ass it is to layout `TextField`s and make them
-                // responsive, they give me too many problems with constraints
-                // and bounds, so I just give up on making it look fancy.
-                child: widget.showPreview
-                    ? PostPreview(draft: postDraft)
-                    : buildEdit(context),
+            Expanded(
+              flex: flex,
+              child: Card(
+                elevation: 0,
+                shape: const Border(),
+                child: widget.minimal
+                    ? Row(
+                        children: [
+                          Expanded(child: buildEdit(context)),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: FilledButton.icon(
+                              label: Text(l10n.submitButtonTooltip),
+                              onPressed: () => post(context),
+                              icon: const Icon(Icons.send_rounded),
+                              style: FilledButton.styleFrom(
+                                visualDensity: VisualDensity.standard,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    // HACK(Craftplacer): I wanted to settle on a, `AnimatedCrossFade`
+                    // but given how ass it is to layout `TextField`s and make them
+                    // responsive, they give me too many problems with constraints
+                    // and bounds, so I just give up on making it look fancy.
+                    : widget.showPreview
+                        ? PostPreview(draft: postDraft)
+                        : buildEdit(context),
               ),
             ),
-            if (attachments.isNotEmpty) ...[
+            if (!widget.minimal) ...[
+              if (attachments.isNotEmpty) ...[
+                const Divider(height: 1),
+                AttachmentTray(
+                  attachments: attachments,
+                  onRemoveAttachment: (index) {
+                    setState(() => attachments.removeAt(index));
+                  },
+                  onToggleSensitive: _onToggleSensitive,
+                  onChangeDescription: _onChangeDescription,
+                ),
+              ],
               const Divider(height: 1),
-              AttachmentTray(
-                attachments: attachments,
-                onRemoveAttachment: (i) => setState(() {
-                  attachments.removeAt(i);
-                }),
-                onToggleSensitive: (i) => setState(() {
-                  attachments[i] = attachments[i].copyWith(
-                    isSensitive: !attachments[i].isSensitive,
-                  );
-                }),
-                onChangeDescription: (i) async {
-                  final attachment = attachments[i];
-                  final description = await showDialog<String>(
-                    context: context,
-                    builder: (context) => AttachmentTextDialog(
-                      attachment: attachment,
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  right: 10.0,
+                  top: 8.0,
+                  bottom: 8.0,
+                ),
+                child: Row(
+                  children: [
+                    ..._buildActions(context),
+                    const Spacer(),
+                    FloatingActionButton.small(
+                      elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
+                      onPressed: () => post(context),
+                      tooltip: l10n.submitButtonTooltip,
+                      child: const Icon(Icons.send_rounded),
                     ),
-                  );
-
-                  if (description != null) {
-                    setState(() {
-                      attachments[i] =
-                          attachments[i].copyWith(description: description);
-                    });
-                  }
-                },
+                  ],
+                ),
               ),
             ],
-            const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-                right: 10.0,
-                top: 8.0,
-                bottom: 8.0,
-              ),
-              child: Row(
-                children: [
-                  ..._buildActions(context),
-                  const Spacer(),
-                  FloatingActionButton.small(
-                    elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
-                    onPressed: () => post(context),
-                    tooltip: l10n.submitButtonTooltip,
-                    child: const Icon(Icons.send_rounded),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
     );
+  }
+
+  void _onToggleSensitive(index) {
+    final attachment = attachments[index];
+    setState(() {
+      attachments[index] = attachment.copyWith(
+        isSensitive: !attachment.isSensitive,
+      );
+    });
+  }
+
+  Future<void> _onChangeDescription(int index) async {
+    final attachment = attachments[index];
+    final description = await showDialog<String>(
+      context: context,
+      builder: (context) => AttachmentTextDialog(attachment: attachment),
+    );
+
+    if (description == null) return;
+
+    setState(() {
+      attachments[index] = attachment.copyWith(description: description);
+    });
   }
 
   Widget buildEdit(BuildContext context) {
@@ -247,7 +271,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
                 const SizedBox(height: 8),
               ],
             ),
-          Flexible(
+          Expanded(
             flex: flex,
             child: TextField(
               autofocus: true,

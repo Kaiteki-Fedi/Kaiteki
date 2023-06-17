@@ -32,7 +32,8 @@ class _AttachmentTextDialogState extends State<AttachmentTextDialog> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveDialog(
-      builder: (context, fullscreen) {
+      builder: (context, axis) {
+        final fullscreen = axis != null;
         final attachment = widget.attachment;
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -41,64 +42,50 @@ class _AttachmentTextDialogState extends State<AttachmentTextDialog> {
               title: const Text("Change alt text"),
               forceMaterialTransparency: true,
               actions: [
-                if (fullscreen)
-                  TextButton(
-                    onPressed: () => _onApply(context),
-                    child: const Text("Apply"),
-                  ),
+                TextButton(
+                  onPressed: () => _onApply(context),
+                  child: const Text("Apply"),
+                ),
                 const SizedBox(width: 8),
               ],
             ),
-            const SizedBox(height: 16),
-            if (attachment != null)
-              AspectRatio(
-                aspectRatio: 16.0 / 9.0,
-                child: Image(
-                  image: attachment.file!.getImageProvider(),
-                ),
-              ),
             Flexible(
               flex: fullscreen ? 1 : 0,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: _controller,
-                  autofocus: true,
-                  expands: fullscreen,
-                  minLines: fullscreen ? null : 6,
-                  maxLines: fullscreen ? null : 8,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Describe the attachment",
-                  ),
-                  textAlignVertical: TextAlignVertical.top,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (attachment != null)
+                      AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Image(
+                          image: attachment.file!.getImageProvider(),
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: _controller,
+                        autofocus: true,
+                        expands: fullscreen,
+                        minLines: fullscreen ? null : 1,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Describe the attachment",
+                        ),
+                        textAlignVertical: TextAlignVertical.top,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            if (!fullscreen) ...[
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => _onCancel(context),
-                    child: const Text("Cancel"),
-                  ),
-                  TextButton(
-                    onPressed: () => _onApply(context),
-                    child: const Text("Apply"),
-                  ),
-                ],
-              ),
-            ],
           ],
         );
       },
     );
-  }
-
-  void _onCancel(BuildContext context) {
-    Navigator.of(context).pop();
   }
 
   void _onApply(BuildContext context) {
