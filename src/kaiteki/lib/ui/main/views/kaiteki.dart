@@ -17,6 +17,7 @@ import "package:kaiteki/ui/main/navigation/navigation_rail.dart";
 import "package:kaiteki/ui/main/tab.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
+import "package:kaiteki/ui/shared/side_sheet_manager.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
@@ -82,36 +83,40 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
     final tabItems = _tabs.map((e) => buildTabItem(context, e)).toList();
     final tabItem = tabItems.firstWhereOrNull((e) => e.kind == widget.tab);
 
-    return Scaffold(
-      backgroundColor: isCompact ? null : getOutsideColor(context),
-      appBar: buildAppBar(context, !isCompact),
-      body: isCompact
-          ? body
-          : _buildDesktopView(
-              context,
-              windowClass,
-              body,
-              tabItems,
-            ),
-      bottomNavigationBar: isCompact
-          ? MainScreenNavigationBar(
-              tabs: tabItems,
-              currentIndex: _tabs.indexOf(widget.tab),
-              onChangeIndex: (i) => widget.onChangeTab(_tabs[i]),
-            )
-          : null,
-      floatingActionButton:
-          (!isCompact && (tabItem?.hideFabWhenDesktop ?? false))
-              ? null
-              : tabItem?.fab.nullTransform<Widget?>(
-                  (data) => buildFloatingActionButton(
-                    context,
-                    data,
-                    windowClass >= WindowClass.expanded,
+    return SideSheetManager(
+      builder: (sideSheet) => Scaffold(
+        backgroundColor: isCompact ? null : getOutsideColor(context),
+        appBar: buildAppBar(context, !isCompact),
+        endDrawer: sideSheet,
+        endDrawerEnableOpenDragGesture: false,
+        body: isCompact
+            ? body
+            : _buildDesktopView(
+                context,
+                windowClass,
+                body,
+                tabItems,
+              ),
+        bottomNavigationBar: isCompact
+            ? MainScreenNavigationBar(
+                tabs: tabItems,
+                currentIndex: _tabs.indexOf(widget.tab),
+                onChangeIndex: (i) => widget.onChangeTab(_tabs[i]),
+              )
+            : null,
+        floatingActionButton:
+            (!isCompact && (tabItem?.hideFabWhenDesktop ?? false))
+                ? null
+                : tabItem?.fab.nullTransform<Widget?>(
+                    (data) => buildFloatingActionButton(
+                      context,
+                      data,
+                      windowClass >= WindowClass.expanded,
+                    ),
                   ),
-                ),
-      drawer: MainScreenDrawer(
-        onSwitchLayout: () => widget.onChangeView(),
+        drawer: MainScreenDrawer(
+          onSwitchLayout: () => widget.onChangeView(),
+        ),
       ),
     );
   }
