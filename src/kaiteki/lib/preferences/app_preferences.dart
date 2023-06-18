@@ -92,6 +92,12 @@ final visibleLanguages = createSettingProvider<ISet<String>>(
   provider: sharedPreferencesProvider,
 );
 
+final coloredPostVisibilities = createSettingProvider<bool>(
+  key: "coloredPostVisibilities",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
 final underlineLinks = createSettingProvider<bool>(
   key: "underlineLinks",
   initialValue: false,

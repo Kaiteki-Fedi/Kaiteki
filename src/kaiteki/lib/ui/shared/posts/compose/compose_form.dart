@@ -18,6 +18,7 @@ import "package:kaiteki/ui/shared/enum_icon_button.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_text_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_tray.dart";
 import "package:kaiteki/ui/shared/posts/compose/post_preview.dart";
+import "package:kaiteki/ui/shared/visibility_icon.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
@@ -546,7 +547,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
           value: _visibility,
           values: supportedScopes,
           splashRadius: splashRadius,
-          iconBuilder: (_, value) => Icon(value.toIconData()),
+          iconBuilder: (_, value) => VisibilityIcon(value),
           textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
           subtitleBuilder: (_, value) => Text(value.toDescription(l10n)),
         ),

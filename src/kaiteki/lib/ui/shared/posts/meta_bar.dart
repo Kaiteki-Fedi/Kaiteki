@@ -5,6 +5,7 @@ import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/users/user_badge.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
+import "package:kaiteki/ui/shared/visibility_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 
@@ -131,14 +132,7 @@ class MetaBar extends ConsumerWidget {
       if (visibility != null && showVisibility)
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: Tooltip(
-            message: visibility.toDisplayString(l10n),
-            child: Icon(
-              visibility.toIconData(),
-              size: iconSize,
-              color: secondaryColor,
-            ),
-          ),
+          child: VisibilityIcon(visibility, showTooltip: true),
         ),
       if (onOpen == null)
         const SizedBox(width: 8)

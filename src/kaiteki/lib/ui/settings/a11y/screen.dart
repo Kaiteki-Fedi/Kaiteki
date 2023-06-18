@@ -49,6 +49,16 @@ class AccessibilityScreen extends StatelessWidget {
                 title: const Text("Visuals"),
                 children: [
                   PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.colorize_rounded),
+                    title: const Text(
+                      "Colorize post scopes",
+                    ),
+                    subtitle: const Text(
+                      "Gives the scope icon a distinct color for each scope.",
+                    ),
+                    provider: coloredPostVisibilities,
+                  ),
+                  PreferenceSwitchListTile(
                     secondary: const Icon(Icons.format_underline_rounded),
                     title: const Text("Underline links"),
                     provider: underlineLinks,
