@@ -330,123 +330,130 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       actions: _actions,
       child: InkWell(
         onTap: _onTap,
-        child: Semantics(
-          customSemanticsActions: _getSemanticsActions(context, adapter),
-          child: Padding(
-            padding: padding.copyWith(
-              bottom: 0.0,
-              right: 0.0,
-              top: isWide || isExpanded ? null : 0.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (!(isWide || isExpanded) && widget.showAvatar) ...[
-                      Padding(
-                        padding: EdgeInsets.only(top: padding.top),
-                        child: AvatarWidget(
-                          _post.author,
-                          onTap: showAuthor,
-                          focusNode: FocusNode(skipTraversal: true),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTertiaryTapUp: widget.onOpen.nullTransform(
+            (callback) => (_) => callback(),
+          ),
+          child: Semantics(
+            customSemanticsActions: _getSemanticsActions(context, adapter),
+            child: Padding(
+              padding: padding.copyWith(
+                bottom: 0.0,
+                right: 0.0,
+                top: isWide || isExpanded ? null : 0.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (!(isWide || isExpanded) && widget.showAvatar) ...[
+                        Padding(
+                          padding: EdgeInsets.only(top: padding.top),
+                          child: AvatarWidget(
+                            _post.author,
+                            onTap: showAuthor,
+                            focusNode: FocusNode(skipTraversal: true),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
+                        const SizedBox(width: 8),
+                      ],
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: children,
+                        ),
+                      )
                     ],
-                    Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: children,
+                  ),
+                  if (isExpanded) const Divider(height: 25),
+                  if (isExpanded)
+                    OverflowBar(
+                      spacing: 16.0,
+                      overflowSpacing: 8.0,
+                      children: [
+                        Text(
+                          DateFormat.yMMMMd(
+                            Localizations.localeOf(context).toString(),
+                          ).add_jm().format(_post.postedAt),
+                          style: outlineTextStyle,
+                        ),
+                        if (_post.visibility != null)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                _post.visibility!.toIconData(),
+                                size: 16,
+                                color: outlineColor,
+                              ),
+                              const SizedBox(width: 3.0),
+                              Text(
+                                _post.visibility!.toDisplayString(l10n),
+                                style: outlineTextStyle,
+                              ),
+                            ],
+                          ),
+                        if (clientText != null) clientText,
+                      ],
+                    ),
+                  if (isExpanded) const Divider(height: 25),
+                  if (isExpanded) PostMetricBar(_post.metrics),
+                  if (widget.showActions) ...[
+                    if (isExpanded)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 12.0,
+                          bottom: kPostPadding.bottom,
+                        ),
+                        child: const Divider(height: 1),
+                      ),
+                    Semantics(
+                      focusable: false,
+                      child: Padding(
+                        padding: isExpanded || isWide
+                            ? EdgeInsets.zero
+                            : const EdgeInsets.only(
+                                left: leftPostContentInset - 8,
+                              ),
+                        child: InteractionBar(
+                          metrics: _post.metrics,
+                          onReply: adapter.authenticated ? _onReply : null,
+                          onFavorite:
+                              adapter.authenticated ? _onFavorite : null,
+                          onRepeat: adapter.authenticated ? _onRepeat : null,
+                          onReact: adapter.authenticated ? _onReact : null,
+                          showLabels: !isExpanded,
+                          spread: isExpanded,
+                          favorited: adapter is FavoriteSupport //
+                              ? _post.state.favorited
+                              : null,
+                          onShowFavoritees: () => context.pushNamed(
+                            "postFavorites",
+                            pathParameters: {
+                              ...ref.accountRouterParams,
+                              "id": _post.id,
+                            },
+                          ),
+                          onShowRepeatees: () => context.pushNamed(
+                            "postRepeats",
+                            pathParameters: {
+                              ...ref.accountRouterParams,
+                              "id": _post.id,
+                            },
+                          ),
+                          repeated: _post.state.repeated,
+                          reacted: adapter is ReactionSupport ? false : null,
+                          menuChildren: _buildMenuItems(context),
+                        ),
                       ),
                     )
                   ],
-                ),
-                if (isExpanded) const Divider(height: 25),
-                if (isExpanded)
-                  OverflowBar(
-                    spacing: 16.0,
-                    overflowSpacing: 8.0,
-                    children: [
-                      Text(
-                        DateFormat.yMMMMd(
-                          Localizations.localeOf(context).toString(),
-                        ).add_jm().format(_post.postedAt),
-                        style: outlineTextStyle,
-                      ),
-                      if (_post.visibility != null)
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              _post.visibility!.toIconData(),
-                              size: 16,
-                              color: outlineColor,
-                            ),
-                            const SizedBox(width: 3.0),
-                            Text(
-                              _post.visibility!.toDisplayString(l10n),
-                              style: outlineTextStyle,
-                            ),
-                          ],
-                        ),
-                      if (clientText != null) clientText,
-                    ],
-                  ),
-                if (isExpanded) const Divider(height: 25),
-                if (isExpanded) PostMetricBar(_post.metrics),
-                if (widget.showActions) ...[
-                  if (isExpanded)
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 12.0,
-                        bottom: kPostPadding.bottom,
-                      ),
-                      child: const Divider(height: 1),
-                    ),
-                  Semantics(
-                    focusable: false,
-                    child: Padding(
-                      padding: isExpanded || isWide
-                          ? EdgeInsets.zero
-                          : const EdgeInsets.only(
-                              left: leftPostContentInset - 8,
-                            ),
-                      child: InteractionBar(
-                        metrics: _post.metrics,
-                        onReply: _onReply,
-                        onFavorite: _onFavorite,
-                        onRepeat: _onRepeat,
-                        onReact: _onReact,
-                        showLabels: !isExpanded,
-                        spread: isExpanded,
-                        favorited: adapter is FavoriteSupport //
-                            ? _post.state.favorited
-                            : null,
-                        onShowFavoritees: () => context.pushNamed(
-                          "postFavorites",
-                          pathParameters: {
-                            ...ref.accountRouterParams,
-                            "id": _post.id,
-                          },
-                        ),
-                        onShowRepeatees: () => context.pushNamed(
-                          "postRepeats",
-                          pathParameters: {
-                            ...ref.accountRouterParams,
-                            "id": _post.id,
-                          },
-                        ),
-                        repeated: _post.state.repeated,
-                        reacted: adapter is ReactionSupport ? false : null,
-                        menuChildren: _buildMenuItems(context),
-                      ),
-                    ),
-                  )
                 ],
-              ],
+              ),
             ),
           ),
         ),
