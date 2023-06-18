@@ -32,16 +32,19 @@ import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
-const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 const kArticleViewThreshold = 300;
+const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 
 const spacer = SizedBox(height: 8);
 
 final sensitiveWords = {"cw", "mh", "ph", "pol", "suicide", "selfharm", "nsfw"};
 
 class PostWidget extends ConsumerStatefulWidget {
+  static final _logger = Logger("PostWidget");
+
   final Post post;
   final bool showParentPost;
   final bool showActions;
@@ -220,7 +223,9 @@ class _PostContentWidgetState extends ConsumerState<_PostContent> {
 class _PostWidgetState extends ConsumerState<PostWidget> {
   late Post _post;
   Post? _translatedPost;
-  final _interactionBarKey = GlobalKey<InteractionBarState>();
+  final _menuController = MenuController();
+  late final FocusNode _menuButtonFocusNode;
+  final _menuAnchorKey = GlobalKey();
 
   Map<Type, Action<Intent>> get _actions {
     return {
@@ -230,7 +235,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       BookmarkIntent: CallbackAction(onInvoke: (_) => _onBookmark()),
       ReactIntent: CallbackAction(onInvoke: (_) => _onReact()),
       OpenMenuIntent: CallbackAction(
-        onInvoke: (_) => _interactionBarKey.currentState?.showMenu(),
+        onInvoke: (_) => _menuController.open(),
       ),
     };
   }
@@ -275,12 +280,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final outlineColor = Theme.of(context).colorScheme.outline;
     final outlineTextStyle = outlineColor.textStyle;
 
-    final signature = buildSignature(context);
+    final signature = _buildSignature(context);
     const padding = EdgeInsets.all(8);
 
     final children = [
       InkWell(
-        onTap: (isWide || isExpanded) ? showAuthor : null,
+        onTap: (isWide || isExpanded) ? _showAuthor : null,
         child: MetaBar(
           post: _post,
           showAvatar: widget.showAvatar && (isWide || isExpanded),
@@ -330,248 +335,278 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       actions: _actions,
       child: InkWell(
         onTap: _onTap,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTertiaryTapUp: widget.onOpen.nullTransform(
-            (callback) => (_) => callback(),
-          ),
-          child: Semantics(
-            customSemanticsActions: _getSemanticsActions(context, adapter),
-            child: Padding(
-              padding: padding.copyWith(
-                bottom: 0.0,
-                right: 0.0,
-                top: isWide || isExpanded ? null : 0.0,
+        child: MenuAnchor(
+          key: _menuAnchorKey,
+          anchorTapClosesMenu: true,
+          menuChildren: _buildMenuItems(context),
+          controller: _menuController,
+          childFocusNode: _menuButtonFocusNode,
+          crossAxisUnconstrained: false,
+          builder: (context, controller, _) {
+            return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onSecondaryTapUp: (details) {
+                controller.open(position: details.localPosition);
+              },
+              onTertiaryTapUp: widget.onOpen.nullTransform(
+                (callback) => (_) => callback(),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+              child: Semantics(
+                customSemanticsActions: _getSemanticsActions(context, adapter),
+                child: Padding(
+                  padding: padding.copyWith(
+                    bottom: 0.0,
+                    right: 0.0,
+                    top: isWide || isExpanded ? null : 0.0,
+                  ),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (!(isWide || isExpanded) && widget.showAvatar) ...[
-                        Padding(
-                          padding: EdgeInsets.only(top: padding.top),
-                          child: AvatarWidget(
-                            _post.author,
-                            onTap: showAuthor,
-                            focusNode: FocusNode(skipTraversal: true),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (!(isWide || isExpanded) && widget.showAvatar) ...[
+                            Padding(
+                              padding: EdgeInsets.only(top: padding.top),
+                              child: AvatarWidget(
+                                _post.author,
+                                onTap: _showAuthor,
+                                focusNode: FocusNode(skipTraversal: true),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: children,
+                            ),
+                          )
+                        ],
+                      ),
+                      if (isExpanded) const Divider(height: 25),
+                      if (isExpanded)
+                        OverflowBar(
+                          spacing: 16.0,
+                          overflowSpacing: 8.0,
+                          children: [
+                            Text(
+                              DateFormat.yMMMMd(
+                                Localizations.localeOf(context).toString(),
+                              ).add_jm().format(_post.postedAt),
+                              style: outlineTextStyle,
+                            ),
+                            if (_post.visibility != null)
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    _post.visibility!.toIconData(),
+                                    size: 16,
+                                    color: outlineColor,
+                                  ),
+                                  const SizedBox(width: 3.0),
+                                  Text(
+                                    _post.visibility!.toDisplayString(l10n),
+                                    style: outlineTextStyle,
+                                  ),
+                                ],
+                              ),
+                            if (clientText != null) clientText,
+                          ],
+                        ),
+                      if (isExpanded) const Divider(height: 25),
+                      if (isExpanded) PostMetricBar(_post.metrics),
+                      if (widget.showActions) ...[
+                        if (isExpanded)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              top: 12.0,
+                              bottom: kPostPadding.bottom,
+                            ),
+                            child: const Divider(height: 1),
                           ),
-                        ),
-                        const SizedBox(width: 8),
+                        Semantics(
+                          focusable: false,
+                          child: Padding(
+                            padding: isExpanded || isWide
+                                ? EdgeInsets.zero
+                                : const EdgeInsets.only(
+                                    left: leftPostContentInset - 8,
+                                  ),
+                            child: InteractionBar(
+                              metrics: _post.metrics,
+                              onReply: adapter.authenticated ? _onReply : null,
+                              onFavorite:
+                                  adapter.authenticated ? _onFavorite : null,
+                              onRepeat:
+                                  adapter.authenticated ? _onRepeat : null,
+                              onReact: adapter.authenticated ? _onReact : null,
+                              showLabels: !isExpanded,
+                              spread: isExpanded,
+                              favorited: adapter is FavoriteSupport //
+                                  ? _post.state.favorited
+                                  : null,
+                              onShowFavoritees: () => context.pushNamed(
+                                "postFavorites",
+                                pathParameters: {
+                                  ...ref.accountRouterParams,
+                                  "id": _post.id,
+                                },
+                              ),
+                              onShowRepeatees: () => context.pushNamed(
+                                "postRepeats",
+                                pathParameters: {
+                                  ...ref.accountRouterParams,
+                                  "id": _post.id,
+                                },
+                              ),
+                              repeated: _post.state.repeated,
+                              reacted:
+                                  adapter is ReactionSupport ? false : null,
+                              onShowMenu: () {
+                                final anchor = _menuAnchorKey.currentContext!
+                                    .findRenderObject() as RenderBox?;
+                                final button = _menuButtonFocusNode.context!
+                                    .findRenderObject() as RenderBox?;
+
+                                final offset = button!.localToGlobal(
+                                  Offset.zero,
+                                  ancestor: anchor,
+                                );
+                                controller.open(position: offset);
+                              },
+                              menuFocusNode: _menuButtonFocusNode,
+                            ),
+                          ),
+                        )
                       ],
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: children,
-                        ),
-                      )
                     ],
                   ),
-                  if (isExpanded) const Divider(height: 25),
-                  if (isExpanded)
-                    OverflowBar(
-                      spacing: 16.0,
-                      overflowSpacing: 8.0,
-                      children: [
-                        Text(
-                          DateFormat.yMMMMd(
-                            Localizations.localeOf(context).toString(),
-                          ).add_jm().format(_post.postedAt),
-                          style: outlineTextStyle,
-                        ),
-                        if (_post.visibility != null)
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                _post.visibility!.toIconData(),
-                                size: 16,
-                                color: outlineColor,
-                              ),
-                              const SizedBox(width: 3.0),
-                              Text(
-                                _post.visibility!.toDisplayString(l10n),
-                                style: outlineTextStyle,
-                              ),
-                            ],
-                          ),
-                        if (clientText != null) clientText,
-                      ],
-                    ),
-                  if (isExpanded) const Divider(height: 25),
-                  if (isExpanded) PostMetricBar(_post.metrics),
-                  if (widget.showActions) ...[
-                    if (isExpanded)
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 12.0,
-                          bottom: kPostPadding.bottom,
-                        ),
-                        child: const Divider(height: 1),
-                      ),
-                    Semantics(
-                      focusable: false,
-                      child: Padding(
-                        padding: isExpanded || isWide
-                            ? EdgeInsets.zero
-                            : const EdgeInsets.only(
-                                left: leftPostContentInset - 8,
-                              ),
-                        child: InteractionBar(
-                          metrics: _post.metrics,
-                          onReply: adapter.authenticated ? _onReply : null,
-                          onFavorite:
-                              adapter.authenticated ? _onFavorite : null,
-                          onRepeat: adapter.authenticated ? _onRepeat : null,
-                          onReact: adapter.authenticated ? _onReact : null,
-                          showLabels: !isExpanded,
-                          spread: isExpanded,
-                          favorited: adapter is FavoriteSupport //
-                              ? _post.state.favorited
-                              : null,
-                          onShowFavoritees: () => context.pushNamed(
-                            "postFavorites",
-                            pathParameters: {
-                              ...ref.accountRouterParams,
-                              "id": _post.id,
-                            },
-                          ),
-                          onShowRepeatees: () => context.pushNamed(
-                            "postRepeats",
-                            pathParameters: {
-                              ...ref.accountRouterParams,
-                              "id": _post.id,
-                            },
-                          ),
-                          repeated: _post.state.repeated,
-                          reacted: adapter is ReactionSupport ? false : null,
-                          menuChildren: _buildMenuItems(context),
-                        ),
-                      ),
-                    )
-                  ],
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
   }
 
-  MenuItemButton buildBookmarkMenuItem(BuildContext context) {
-    final l10n = context.l10n;
-    return MenuItemButton(
-      onPressed: _onBookmark,
-      leadingIcon: Icon(
-        _post.state.bookmarked
-            ? Icons.bookmark_rounded
-            : Icons.bookmark_border_rounded,
-        color: Theme.of(context).ktkColors?.bookmarkColor,
-      ),
-      child: Text(
-        _post.state.bookmarked
-            ? l10n.postRemoveFromBookmarks
-            : l10n.postAddToBookmarks,
-      ),
-    );
-  }
-
-  MenuItemButton buildDebugTextRenderingMenuItem(BuildContext context) {
-    return MenuItemButton(
-      leadingIcon: const Icon(Icons.bug_report_rounded),
-      onPressed: () => showDialog(
-        context: context,
-        builder: (context) => TextRenderDialog(_post),
-      ),
-      child: const Text("Debug text rendering"),
-    );
-  }
-
-  MenuItemButton buildOpenInBrowserMenuItem(BuildContext context) {
-    final l10n = context.l10n;
-    final openInBrowserAvailable = _post.externalUrl != null;
-
-    return MenuItemButton(
-      leadingIcon: const Icon(Icons.open_in_new_rounded),
-      onPressed: !openInBrowserAvailable
-          ? null
-          : () async {
-              final url = _post.externalUrl;
-              if (url == null) return;
-              await launchUrl(url, mode: LaunchMode.externalApplication);
-            },
-      child: Text(l10n.openInBrowserLabel),
-    );
-  }
-
-  List<Widget>? buildSignature(BuildContext context) {
-    final showSig = ref.watch(AppExperiment.userSignatures.provider);
-
-    if (!showSig || _post.author.description?.isNotEmpty != true) return null;
-
-    final outlineColor = Theme.of(context).colorScheme.outline;
-    final outlineTextStyle = outlineColor.textStyle;
-    return [
-      const SizedBox(
-        width: 48,
-        child: Divider(height: 25),
-      ),
-      Text.rich(
-        _post.author.renderDescription(context, ref),
-        style: outlineTextStyle,
-        maxLines: 3,
-        overflow: TextOverflow.ellipsis,
-      ),
-    ];
-  }
-
-  MenuItemButton buildTranslateMenuItem(BuildContext context) {
-    final translationAvailable = _isTranslationAvailable(ref);
-    if (_translatedPost != null) {
-      return MenuItemButton(
-        leadingIcon: const Icon(Icons.undo_rounded),
-        onPressed: () => setState(() => _translatedPost = null),
-        child: Text(context.l10n.undoTranslateButton),
-      );
-    }
-
-    return MenuItemButton(
-      onPressed: translationAvailable ? _onTranslate : null,
-      leadingIcon: const Icon(Icons.translate_rounded),
-      child: Text(context.l10n.translateButton),
-    );
-  }
-
-  MenuItemButton buildVetInstanceMenuItem(BuildContext context) {
-    return MenuItemButton(
-      leadingIcon: const Icon(Icons.shield_rounded),
-      onPressed: () async => showModalBottomSheet(
-        context: context,
-        useRootNavigator: true,
-        isScrollControlled: true,
-        constraints: bottomSheetConstraints,
-        showDragHandle: true,
-        builder: (_) => InstanceVettingBottomSheet(
-          instance: _post.author.host,
-        ),
-      ),
-      child: const Text("Vet instance"),
-    );
+  @override
+  void dispose() {
+    _menuButtonFocusNode.dispose();
+    super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    _menuButtonFocusNode = FocusNode();
     _post = widget.post;
   }
 
-  Future<void> showAuthor() async => context.showUser(_post.author, ref);
+  Widget? _buildExpandedMetaBeta() {
+    final client = _post.client;
+
+    if (client == null) return null;
+
+    return Text(
+      client,
+      style: Theme.of(context).colorScheme.outline.textStyle,
+    );
+  }
 
   List<Widget> _buildMenuItems(BuildContext context) {
     final adapter = ref.read(adapterProvider);
+
+    MenuItemButton buildShareMenuItem(BuildContext context) {
+      return MenuItemButton(
+        leadingIcon: const Icon(Icons.share_rounded),
+        onPressed: () => share(context, _post),
+        child: Text(context.l10n.shareButtonLabel),
+      );
+    }
+
+    MenuItemButton buildBookmarkMenuItem(BuildContext context) {
+      final l10n = context.l10n;
+      return MenuItemButton(
+        onPressed: _onBookmark,
+        leadingIcon: Icon(
+          _post.state.bookmarked
+              ? Icons.bookmark_rounded
+              : Icons.bookmark_border_rounded,
+          color: Theme.of(context).ktkColors?.bookmarkColor,
+        ),
+        child: Text(
+          _post.state.bookmarked
+              ? l10n.postRemoveFromBookmarks
+              : l10n.postAddToBookmarks,
+        ),
+      );
+    }
+
+    MenuItemButton buildDebugTextRenderingMenuItem(BuildContext context) {
+      return MenuItemButton(
+        leadingIcon: const Icon(Icons.bug_report_rounded),
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => TextRenderDialog(_post),
+        ),
+        child: const Text("Debug text rendering"),
+      );
+    }
+
+    MenuItemButton buildOpenInBrowserMenuItem(BuildContext context) {
+      final l10n = context.l10n;
+      final openInBrowserAvailable = _post.externalUrl != null;
+
+      return MenuItemButton(
+        leadingIcon: const Icon(Icons.open_in_new_rounded),
+        onPressed: !openInBrowserAvailable
+            ? null
+            : () async {
+                final url = _post.externalUrl;
+                if (url == null) return;
+                await launchUrl(url, mode: LaunchMode.externalApplication);
+              },
+        child: Text(l10n.openInBrowserLabel),
+      );
+    }
+
+    MenuItemButton buildTranslateMenuItem(BuildContext context) {
+      final translationAvailable = _isTranslationAvailable(ref);
+      if (_translatedPost != null) {
+        return MenuItemButton(
+          leadingIcon: const Icon(Icons.undo_rounded),
+          onPressed: () => setState(() => _translatedPost = null),
+          child: Text(context.l10n.undoTranslateButton),
+        );
+      }
+
+      return MenuItemButton(
+        onPressed: translationAvailable ? _onTranslate : null,
+        leadingIcon: const Icon(Icons.translate_rounded),
+        child: Text(context.l10n.translateButton),
+      );
+    }
+
+    MenuItemButton buildVetInstanceMenuItem(BuildContext context) {
+      return MenuItemButton(
+        leadingIcon: const Icon(Icons.shield_rounded),
+        onPressed: () async => showModalBottomSheet(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          constraints: bottomSheetConstraints,
+          showDragHandle: true,
+          builder: (_) => InstanceVettingBottomSheet(
+            instance: _post.author.host,
+          ),
+        ),
+        child: const Text("Vet instance"),
+      );
+    }
 
     return [
       if (adapter is BookmarkSupport) buildBookmarkMenuItem(context),
@@ -602,15 +637,25 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     ];
   }
 
-  Widget? _buildExpandedMetaBeta() {
-    final client = _post.client;
+  List<Widget>? _buildSignature(BuildContext context) {
+    final showSig = ref.watch(AppExperiment.userSignatures.provider);
 
-    if (client == null) return null;
+    if (!showSig || _post.author.description?.isNotEmpty != true) return null;
 
-    return Text(
-      client,
-      style: Theme.of(context).colorScheme.outline.textStyle,
-    );
+    final outlineColor = Theme.of(context).colorScheme.outline;
+    final outlineTextStyle = outlineColor.textStyle;
+    return [
+      const SizedBox(
+        width: 48,
+        child: Divider(height: 25),
+      ),
+      Text.rich(
+        _post.author.renderDescription(context, ref),
+        style: outlineTextStyle,
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ];
   }
 
   Map<CustomSemanticsAction, VoidCallback> _getSemanticsActions(
@@ -680,6 +725,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         text: Text(l10n.postBookmarkFailed),
         error: (e, s),
       );
+      PostWidget._logger.warning("Failed to bookmark post", e, s);
     }
   }
 
@@ -722,6 +768,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           ),
         ),
       );
+      PostWidget._logger.warning("Failed to react to post", e, s);
     }
   }
 
@@ -747,6 +794,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         text: Text(l10n.postFavoriteFailed),
         error: (e, s),
       );
+      PostWidget._logger.warning("Failed to favorite post", e, s);
     }
   }
 
@@ -793,11 +841,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         text: Text(l10n.postRepeatFailed),
         error: (e, s),
       );
+      PostWidget._logger.warning("Failed to repeat post", e, s);
     }
   }
 
-  void _onReply() {
-    context.pushNamed(
+  Future<void> _onReply() async {
+    final router = GoRouter.of(context);
+    // ignore: cascade_invocations
+    router.pushNamed(
       "compose",
       pathParameters: ref.accountRouterParams,
       extra: _post,
@@ -854,11 +905,5 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     }
   }
 
-  MenuItemButton buildShareMenuItem(BuildContext context) {
-    return MenuItemButton(
-      leadingIcon: const Icon(Icons.share_rounded),
-      onPressed: () => share(context, _post),
-      child: Text(context.l10n.shareButtonLabel),
-    );
-  }
+  Future<void> _showAuthor() async => context.showUser(_post.author, ref);
 }

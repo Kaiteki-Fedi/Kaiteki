@@ -18,7 +18,8 @@ class InteractionBar extends StatefulWidget {
     this.onShowRepeatees,
     this.showLabels = true,
     this.spread = false,
-    this.menuChildren,
+    this.menuFocusNode,
+    this.onShowMenu,
   });
 
   final PostMetrics metrics;
@@ -30,23 +31,20 @@ class InteractionBar extends StatefulWidget {
 
   final VoidCallback? onRepeat;
   final VoidCallback? onShowRepeatees;
+  final VoidCallback? onShowMenu;
 
   final bool? repeated;
   final bool showLabels;
   final bool spread;
   final VoidCallback? onReact;
   final bool? reacted;
-  final List<Widget>? menuChildren;
+  final FocusNode? menuFocusNode;
 
   @override
-  State<InteractionBar> createState() => InteractionBarState();
+  State<InteractionBar> createState() => _InteractionBarState();
 }
 
-class InteractionBarState extends State<InteractionBar> {
-  final _popupMenuButtonKey = GlobalKey<PopupMenuButtonState>();
-
-  void showMenu() => _popupMenuButtonKey.currentState!.showButtonMenu();
-
+class _InteractionBarState extends State<InteractionBar> {
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
@@ -57,6 +55,7 @@ class InteractionBarState extends State<InteractionBar> {
         icon: const Icon(Icons.reply_rounded),
         onTap: widget.onReply,
         showNumber: widget.showLabels,
+        enabled: widget.onReply != null,
       ),
       if (widget.repeated != null)
         if (true)
@@ -91,6 +90,7 @@ class InteractionBarState extends State<InteractionBar> {
           onTap: widget.onFavorite,
           onLongPress: widget.onShowFavoritees,
           showNumber: widget.showLabels,
+          enabled: widget.onFavorite != null,
         ),
       if (widget.reacted != null)
         CountButton(
@@ -98,6 +98,7 @@ class InteractionBarState extends State<InteractionBar> {
           icon: const Icon(Icons.mood_rounded),
           onTap: widget.onReact,
           showNumber: widget.showLabels,
+          enabled: widget.onReact != null,
         ),
     ];
 
@@ -105,22 +106,17 @@ class InteractionBarState extends State<InteractionBar> {
       buttons = buttons.map<Widget>((e) => Flexible(child: e)).toList();
     }
 
-    final menuChildren = widget.menuChildren;
-    if (menuChildren != null) {
+    final onShowMenu = widget.onShowMenu;
+    if (onShowMenu != null) {
       buttons.add(
-        MenuAnchor(
-          menuChildren: menuChildren,
-          key: _popupMenuButtonKey,
-          builder: (context, controller, _) {
-            return IconButton(
-              onPressed: controller.open,
-              icon: Icon(
-                Icons.more_horiz,
-                color: Theme.of(context).colorScheme.outline,
-              ),
-              splashRadius: 24,
-            );
-          },
+        IconButton(
+          focusNode: widget.menuFocusNode,
+          onPressed: onShowMenu,
+          icon: Icon(
+            Icons.more_horiz,
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          splashRadius: 24,
         ),
       );
     }
@@ -147,6 +143,7 @@ class InteractionBarState extends State<InteractionBar> {
       onTap: onTap,
       onLongPress: widget.onShowRepeatees,
       showNumber: widget.showLabels,
+      enabled: onTap != null,
     );
   }
 }
