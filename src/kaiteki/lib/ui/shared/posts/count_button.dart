@@ -42,7 +42,6 @@ class CountButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final callback = enabled ? onTap : null;
     final color = _getColor(context);
     final count = this.count;
 
@@ -60,8 +59,8 @@ class CountButton extends ConsumerWidget {
             DefaultKaitekiTextTheme(context).countTextStyle)
         .copyWith(color: color);
     return RawMaterialButton(
-      onPressed: callback,
-      onLongPress: onLongPress,
+      onPressed: enabled ? onTap : null,
+      onLongPress: enabled ? onLongPress : null,
       enableFeedback: enabled,
       focusNode: focusNode,
       constraints: BoxConstraints(
