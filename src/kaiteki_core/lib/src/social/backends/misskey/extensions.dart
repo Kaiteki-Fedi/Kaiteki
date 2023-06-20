@@ -5,7 +5,7 @@ import 'package:kaiteki_core/social.dart';
 import 'package:kaiteki_core/src/social/backends/misskey/model/list.dart';
 import 'package:kaiteki_core/utils.dart';
 
-final misskeyNotificationTypeRosetta = Rosetta(const {
+final misskeyNotificationTypeRosetta = {
   misskey.NotificationType.follow: NotificationType.followed,
   misskey.NotificationType.mention: NotificationType.mentioned,
   misskey.NotificationType.reply: NotificationType.replied,
@@ -18,7 +18,7 @@ final misskeyNotificationTypeRosetta = Rosetta(const {
   misskey.NotificationType.followRequestAccepted: NotificationType.followed,
   misskey.NotificationType.groupInvited: NotificationType.groupInvite,
   misskey.NotificationType.achievementEarned: NotificationType.unsupported,
-});
+};
 
 final misskeyVisibilityRosetta = Rosetta<String, Visibility>(const {
   'specified': Visibility.direct,
@@ -226,7 +226,7 @@ extension KaitekiMisskeyNotificationExtension on misskey.Notification {
   Notification toKaiteki(String localHost) {
     return Notification(
       createdAt: createdAt,
-      type: misskeyNotificationTypeRosetta.getRight(type),
+      type: misskeyNotificationTypeRosetta[type]!,
       user: user?.toKaiteki(localHost),
       post: note?.toKaiteki(localHost),
       unread: isRead ?? false,
