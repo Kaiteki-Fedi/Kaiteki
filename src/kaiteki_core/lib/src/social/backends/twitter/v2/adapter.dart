@@ -73,12 +73,15 @@ class TwitterAdapter extends CentralizedBackendAdapter
       final me = await client.getMe(userFields: UserField.values.toSet());
       client.userId = me.id;
 
+      super.applySecrets(clientSecret, userSecret);
       return;
     }
 
     client
       ..userId = userSecret.userId
       ..token = userSecret.accessToken;
+
+    super.applySecrets(clientSecret, userSecret);
   }
 
   @override

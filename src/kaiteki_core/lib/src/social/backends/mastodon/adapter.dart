@@ -1,6 +1,4 @@
-import 'package:kaiteki_core/src/social/api_type.dart';
-import 'package:kaiteki_core/src/social/interfaces/explore_support.dart';
-import 'package:kaiteki_core/model.dart';
+import 'package:kaiteki_core/kaiteki_core.dart';
 
 import 'client.dart';
 import 'extensions.dart';

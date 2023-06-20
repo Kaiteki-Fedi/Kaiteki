@@ -200,6 +200,8 @@ class OldTwitterAdapter extends CentralizedBackendAdapter
     ClientSecret? clientSecret,
     UserSecret userSecret,
   ) {
+    super.applySecrets(clientSecret, userSecret);
+
     // TODO(Craftplacer): implement applySecrets
     throw UnimplementedError();
   }

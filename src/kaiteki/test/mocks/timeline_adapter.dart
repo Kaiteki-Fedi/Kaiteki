@@ -13,12 +13,6 @@ class TimelineAdapter extends BackendAdapter {
   ]);
 
   @override
-  FutureOr<void> applySecrets(
-    ClientSecret? clientSecret,
-    UserSecret accountSecret,
-  ) {}
-
-  @override
   Future<User?> followUser(String id) => throw UnimplementedError();
 
   @override

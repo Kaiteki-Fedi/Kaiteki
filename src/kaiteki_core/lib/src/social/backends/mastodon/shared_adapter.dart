@@ -402,6 +402,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     ClientSecret? clientSecret,
     UserSecret userSecret,
   ) {
+    super.applySecrets(clientSecret, userSecret);
     client.accessToken = userSecret.accessToken;
   }
 

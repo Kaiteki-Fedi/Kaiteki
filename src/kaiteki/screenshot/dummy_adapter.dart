@@ -99,12 +99,6 @@ class DummyAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  FutureOr<void> applySecrets(
-    ClientSecret? clientSecret,
-    UserSecret userSecret,
-  ) {}
-
-  @override
   Future<PaginatedList<String?, User>> getFollowers(
     String userId, {
     String? sinceId,

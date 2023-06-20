@@ -485,6 +485,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     ClientSecret? clientSecret,
     UserSecret userSecret,
   ) {
+    super.applySecrets(clientSecret, userSecret);
     client.i = userSecret.accessToken;
   }
 
