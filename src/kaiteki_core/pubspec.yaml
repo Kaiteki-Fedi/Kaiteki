@@ -5,7 +5,7 @@ repository: https://github.com/Kaiteki-Fedi/kaiteki
 publish_to: none
 
 environment:
-  sdk: ^3.1.0-81.0.dev
+  sdk: '>=3.1.0-81.0.dev <4.0.0'
 
 dependencies:
   equatable: ^2.0.5
