@@ -78,7 +78,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
           {
             'response_type': 'code',
             'client_id': application.clientId,
-            'redirect_uri': url,
+            'redirect_uri': url.toString(),
             'scope': scopes,
           },
         );
