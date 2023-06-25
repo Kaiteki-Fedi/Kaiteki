@@ -43,7 +43,7 @@ extension ThemeDataExtensions on ThemeData {
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
-        elevation: 0,
+        elevation: useMaterial3 ? 0.0 : null,
         scrolledUnderElevation: 4.0,
       ),
       snackBarTheme: const SnackBarThemeData(

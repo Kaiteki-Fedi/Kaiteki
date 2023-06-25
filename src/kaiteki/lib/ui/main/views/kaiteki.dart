@@ -259,7 +259,7 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
             currentIndex: _tabs.indexOf(widget.tab),
             onChangeIndex: (i) => widget.onChangeTab(_tabs[i]),
             extended: windowClass >= WindowClass.expanded,
-            backgroundColor: getOutsideColor(context),
+            backgroundColor: getOutsideColor(context) ?? Colors.transparent,
           ),
           if (!m3) const VerticalDivider(thickness: 1, width: 1),
         ],
@@ -323,7 +323,6 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
             DefaultKaitekiTextTheme(context).kaitekiTextStyle,
       ),
       actions: _buildAppBarActions(context),
-      elevation: 0.0,
       scrolledUnderElevation: immerse ? 0.0 : 4.0,
     );
   }
