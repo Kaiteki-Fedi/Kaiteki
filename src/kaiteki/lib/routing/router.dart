@@ -352,10 +352,21 @@ Widget _authenticatedBuilder(
         if (user != null && host != null) {
           account = ref.watch(
             accountManagerProvider.select(
-              (manager) => manager.accounts.firstWhere(
-                (account) =>
-                    account.key.username == user && account.key.host == host,
-              ),
+              (manager) {
+                final matchedAccount = manager.accounts.firstWhereOrNull(
+                  (account) =>
+                      account.key.username == user && account.key.host == host,
+                );
+
+                if (matchedAccount == null) {
+                  _logger.warning(
+                    "Couldn't find @$user@$host, providing first account",
+                  );
+                  return manager.accounts.firstOrNull;
+                }
+
+                return matchedAccount;
+              },
             ),
           );
         } else {
