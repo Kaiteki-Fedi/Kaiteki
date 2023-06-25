@@ -31,16 +31,22 @@ class MetaBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        minHeight: 32,
+    return IconTheme.merge(
+      data: IconThemeData(
+        size: 18,
+        color: Theme.of(context).colorScheme.outline,
       ),
-      child: Row(
-        children: [
-          ...buildLeft(context, ref),
-          const SizedBox(width: 8),
-          ...buildRight(context),
-        ],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minHeight: 32,
+        ),
+        child: Row(
+          children: [
+            ...buildLeft(context, ref),
+            const SizedBox(width: 8),
+            ...buildRight(context),
+          ],
+        ),
       ),
     );
   }
@@ -58,7 +64,7 @@ class MetaBar extends ConsumerWidget {
       Expanded(
         child: Row(
           children: [
-            Flexible(
+            Expanded(
               child: UserDisplayNameWidget(
                 _post.author,
                 orientation: twolineAuthor ? Axis.vertical : Axis.horizontal,
