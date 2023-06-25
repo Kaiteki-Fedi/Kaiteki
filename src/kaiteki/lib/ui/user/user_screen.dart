@@ -35,7 +35,7 @@ class UserScreen extends ConsumerStatefulWidget {
 }
 
 class _UserScreenState extends ConsumerState<UserScreen> {
-  Future<User>? _future;
+  Future<User?>? _future;
 
   late StateProvider<bool> _showReplies;
 
@@ -86,7 +86,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   Widget build(BuildContext context) {
     final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
 
-    return FutureBuilder<User>(
+    return FutureBuilder<User?>(
       future: _future,
       builder: (context, snapshot) {
         final user = snapshot.data;

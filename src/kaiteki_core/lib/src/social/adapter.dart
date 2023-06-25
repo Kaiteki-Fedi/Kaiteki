@@ -45,10 +45,10 @@ abstract class BackendAdapter {
   }
 
   /// Retrieves an user of another instance
-  Future<User> getUser(String username, [String? instance]);
+  Future<User?> getUser(String username, [String? instance]);
 
   /// Retrieves an user using an instance specific ID.
-  Future<User> getUserById(String id);
+  Future<User?> getUserById(String id);
 
   /// Posts a status, optionally in reply to another post.
   Future<Post> postStatus(PostDraft draft, {Post? parentPost});
@@ -107,4 +107,6 @@ abstract class BackendAdapter {
   });
 
   Future<User> lookupUser(String username, [String? host]);
+
+  Future<Object?> resolveUrl(Uri url);
 }

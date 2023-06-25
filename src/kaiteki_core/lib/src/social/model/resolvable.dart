@@ -21,7 +21,7 @@ class ResolvableUser implements Resolvable<String, User> {
   factory ResolvableUser.fromId(String id) => ResolvableUser(id, null);
   factory ResolvableUser.fromData(User user) => ResolvableUser(user.id, user);
 
-  FutureOr<User> resolve(BackendAdapter adapter) {
+  FutureOr<User?> resolve(BackendAdapter adapter) {
     if (data != null) return data!;
     return adapter.getUserById(id);
   }

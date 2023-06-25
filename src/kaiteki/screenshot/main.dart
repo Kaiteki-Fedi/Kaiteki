@@ -141,7 +141,7 @@ void takeScreenshots(
 
       runApp(
         bootstrapper.wrap(
-          UserScreen.fromUser(user: user),
+          UserScreen.fromUser(user: user!),
           screenSize,
         ),
       );

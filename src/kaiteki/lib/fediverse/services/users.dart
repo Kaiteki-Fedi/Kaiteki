@@ -10,7 +10,7 @@ class UsersService extends _$UsersService {
   late BackendAdapter _backend;
 
   @override
-  FutureOr<User> build(AccountKey key, String id) async {
+  FutureOr<User?> build(AccountKey key, String id) async {
     final manager = ref.read(accountManagerProvider);
     _backend = manager.accounts.firstWhere((a) => a.key == key).adapter;
     return await _backend.getUser(id);

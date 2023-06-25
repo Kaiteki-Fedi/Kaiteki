@@ -249,10 +249,13 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<User> getUser(String username, [String? instance]) async {
+  Future<User?> getUser(String username, [String? instance]) async {
+    final acct = instance == null || instance == this.instance
+        ? username
+        : '$username@$instance';
     final results = await client.searchAccounts(username);
-    final account = results.firstWhere((a) => a.username == username);
-    return account.toKaiteki(this.instance);
+    final account = results.firstWhereOrNull((a) => a.acct == acct);
+    return account?.toKaiteki(this.instance);
   }
 
   @override
