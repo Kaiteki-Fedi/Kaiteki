@@ -210,7 +210,15 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 name: "search",
                 path: "search",
                 // parentNavigatorKey: _authNavigatorKey,
-                builder: (_, __) => const SearchScreen(),
+                builder: (_, state) {
+                  final query = state.queryParameters["q"];
+
+                  if (query == null || query.isEmpty) {
+                    return const SearchScreen();
+                  }
+
+                  return SearchScreen(query: query);
+                },
               ),
               GoRoute(
                 name: "user",

@@ -9,7 +9,9 @@ import "package:kaiteki/utils/extensions/build_context.dart";
 import "package:kaiteki_core/social.dart";
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({super.key});
+  final String? query;
+
+  const SearchScreen({super.key, this.query});
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
@@ -17,6 +19,26 @@ class SearchScreen extends ConsumerStatefulWidget {
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
   Future<SearchResults>? _results;
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final query = widget.query;
+
+    if (query != null) {
+      _controller.text = query;
+      _onSubmitted(query);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +49,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           backgroundColor: Theme.of(context).colorScheme.surface,
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           title: TextField(
+            controller: _controller,
             decoration: const InputDecoration(hintText: "Search"),
             textInputAction: TextInputAction.search,
             onSubmitted: _onSubmitted,
