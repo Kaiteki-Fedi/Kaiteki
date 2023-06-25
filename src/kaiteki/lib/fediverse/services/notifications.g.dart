@@ -7,7 +7,7 @@ part of 'notifications.dart';
 // **************************************************************************
 
 String _$notificationServiceHash() =>
-    r'7c1059c06e5a9217672d2d31d3dcca09c884059a';
+    r'b9ef16f1e5d194b601b22b7d9f90ee44f464284f';
 
 /// Copied from Dart SDK
 class _SystemHash {
