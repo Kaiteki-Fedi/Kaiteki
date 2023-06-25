@@ -10,6 +10,7 @@ import "package:kaiteki/ui/account/settings_screen.dart";
 import "package:kaiteki/ui/account_required_screen.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/feedback_screen.dart";
+import "package:kaiteki/ui/launcher/dialog.dart";
 import "package:kaiteki/ui/lists/lists_screen.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/search/screen.dart";
@@ -29,6 +30,7 @@ import "package:kaiteki/ui/shared/account_list/dialog.dart";
 import "package:kaiteki/ui/shared/conversation_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
@@ -327,39 +329,52 @@ Widget _authenticatedBuilder(
   GoRouterState state,
   Widget child,
 ) {
-  return Consumer(
-    child: child,
-    builder: (context, ref, child) {
-      final Account? account;
-
-      final user = state.pathParameters["accountUsername"];
-      final host = state.pathParameters["accountHost"];
-
-      if (user != null && host != null) {
-        account = ref.watch(
-          accountManagerProvider.select(
-            (manager) => manager.accounts.firstWhere(
-              (account) =>
-                  account.key.username == user && account.key.host == host,
-            ),
-          ),
-        );
-      } else {
-        account = ref.watch(accountProvider);
-      }
-
-      if (account != null) {
-        return ProviderScope(
-          overrides: [
-            adapterProvider.overrideWithValue(account.adapter),
-            accountProvider.overrideWithValue(account),
-          ],
-          child: child!,
-        );
-      } else {
-        return child!;
-      }
+  return FocusableActionDetector(
+    actions: {
+      OpenLauncherIntent: CallbackAction<OpenLauncherIntent>(
+        onInvoke: (_) {
+          showDialog(
+            context: context,
+            builder: (context) => const LauncherDialog(),
+          );
+          return null;
+        },
+      ),
     },
+    child: Consumer(
+      child: child,
+      builder: (context, ref, child) {
+        final Account? account;
+
+        final user = state.pathParameters["accountUsername"];
+        final host = state.pathParameters["accountHost"];
+
+        if (user != null && host != null) {
+          account = ref.watch(
+            accountManagerProvider.select(
+              (manager) => manager.accounts.firstWhere(
+                (account) =>
+                    account.key.username == user && account.key.host == host,
+              ),
+            ),
+          );
+        } else {
+          account = ref.watch(accountProvider);
+        }
+
+        if (account != null) {
+          return ProviderScope(
+            overrides: [
+              adapterProvider.overrideWithValue(account.adapter),
+              accountProvider.overrideWithValue(account),
+            ],
+            child: child!,
+          );
+        } else {
+          return child!;
+        }
+      },
+    ),
   );
 }
 

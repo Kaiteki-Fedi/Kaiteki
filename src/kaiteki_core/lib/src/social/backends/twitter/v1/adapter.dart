@@ -234,4 +234,10 @@ class OldTwitterAdapter extends CentralizedBackendAdapter
 
   @override
   Future<User?> unfollowUser(String id) => throw UnimplementedError();
+
+  @override
+  Future<Object?> resolveUrl(Uri url) {
+    // TODO: implement resolveUrl
+    throw UnimplementedError();
+  }
 }

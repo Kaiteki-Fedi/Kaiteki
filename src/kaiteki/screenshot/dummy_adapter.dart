@@ -123,6 +123,9 @@ class DummyAdapter extends BackendAdapter {
 
   @override
   Future<User?> unfollowUser(String id) => throw UnimplementedError();
+
+  @override
+  Future<Object?> resolveUrl(Uri url) => throw UnimplementedError();
 }
 
 class DummyAdapterCapability extends AdapterCapabilities {

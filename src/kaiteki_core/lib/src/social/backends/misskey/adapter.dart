@@ -654,4 +654,10 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     await client.unfollowUser(id);
     return null;
   }
+
+  @override
+  Future<Object?> resolveUrl(Uri url) {
+    // TODO: implement resolveUrl
+    throw UnimplementedError();
+  }
 }

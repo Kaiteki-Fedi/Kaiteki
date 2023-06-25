@@ -442,4 +442,10 @@ class TwitterAdapter extends CentralizedBackendAdapter
     // TODO(Craftplacer): implement uploadAttachment
     throw UnimplementedError();
   }
+
+  @override
+  Future<Object?> resolveUrl(Uri url) {
+    // TODO: implement resolveUrl
+    throw UnimplementedError();
+  }
 }

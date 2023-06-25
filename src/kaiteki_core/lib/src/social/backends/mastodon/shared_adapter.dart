@@ -549,4 +549,24 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     final user = await client.lookupAccount(acct);
     return user.toKaiteki(instance);
   }
+
+  @override
+  Future<Object?> resolveUrl(Uri url) async {
+    final results = await client.search(url.toString(), resolve: true);
+
+    bool isHostMatch(mastodon.Account account) {
+      final instance =
+          account.acct.split('@').elementAtOrNull(1) ?? this.instance;
+      return instance == url.host;
+    }
+
+    final status =
+        results.statuses.firstWhereOrNull((e) => isHostMatch(e.account));
+    if (status != null) return status.toKaiteki(instance);
+
+    final account = results.accounts.firstWhereOrNull(isHostMatch);
+    if (account != null) return account.toKaiteki(instance);
+
+    return null;
+  }
 }
