@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/theming/default/colors.dart";
 
 final lightColorScheme = ColorScheme.light(
+  background: Colors.grey.shade100,
   // primary
   primary: kaitekiPink.shade500,
   primaryContainer: kaitekiPink.shade700,
