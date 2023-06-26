@@ -17,7 +17,7 @@ enum TabKind {
   String getLabel(BuildContext context) {
     final l10n = context.l10n;
     return switch (this) {
-      home => l10n.timelineTab,
+      home => l10n.homeTab,
       notifications => l10n.notificationsTab,
       chats => l10n.chatsTab,
       bookmarks => l10n.bookmarksTab,
