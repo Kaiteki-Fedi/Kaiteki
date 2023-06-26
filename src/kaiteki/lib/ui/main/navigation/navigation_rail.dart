@@ -10,7 +10,6 @@ class MainScreenNavigationRail extends ConsumerWidget {
   final List<MainScreenTab> tabs;
   final int currentIndex;
   final ValueChanged<int>? onChangeIndex;
-  final bool extended;
   final Color? backgroundColor;
 
   const MainScreenNavigationRail({
@@ -18,7 +17,6 @@ class MainScreenNavigationRail extends ConsumerWidget {
     required this.tabs,
     required this.currentIndex,
     this.onChangeIndex,
-    required this.extended,
     this.backgroundColor,
   });
 
@@ -47,18 +45,23 @@ class MainScreenNavigationRail extends ConsumerWidget {
       useIndicator: theme.useMaterial3,
       selectedIndex: currentIndex,
       onDestinationSelected: onChangeIndex,
-      extended: extended,
       minWidth: theme.useMaterial3 ? null : 56,
+      labelType: NavigationRailLabelType.all,
       leading: ComposeFloatingActionButton(
         backgroundColor: theme.colorScheme.tertiaryContainer,
         foregroundColor: theme.colorScheme.onTertiaryContainer,
-        type: extended
-            ? ComposeFloatingActionButtonType.extended
-            : ComposeFloatingActionButtonType.small,
+        type: ComposeFloatingActionButtonType.small,
         onTap: () {
           context.pushNamed("compose", pathParameters: ref.accountRouterParams);
         },
       ),
+      unselectedLabelTextStyle:
+          Theme.of(context).textTheme.labelMedium!.copyWith(
+                letterSpacing: -0.5,
+              ),
+      selectedLabelTextStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+            letterSpacing: -0.5,
+          ),
       destinations: _destinations(context),
     );
   }

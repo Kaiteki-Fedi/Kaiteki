@@ -258,7 +258,6 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
             tabs: tabItems,
             currentIndex: _tabs.indexOf(widget.tab),
             onChangeIndex: (i) => widget.onChangeTab(_tabs[i]),
-            extended: windowClass >= WindowClass.expanded,
             backgroundColor: getOutsideColor(context) ?? Colors.transparent,
           ),
           if (!m3) const VerticalDivider(thickness: 1, width: 1),
