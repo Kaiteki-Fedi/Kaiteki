@@ -289,7 +289,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   }) async {
     Iterable<misskey.Note> notes;
@@ -300,11 +300,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     );
 
     notes = switch (type) {
-      TimelineKind.home => await client.getTimeline(request),
-      TimelineKind.local => await client.getLocalTimeline(request),
-      TimelineKind.recommended => await client.getRecommendedTimeline(request),
-      TimelineKind.hybrid => await client.getHybridTimeline(request),
-      TimelineKind.federated => await client.getGlobalTimeline(request),
+      TimelineType.following => await client.getTimeline(request),
+      TimelineType.local => await client.getLocalTimeline(request),
+      TimelineType.recommended => await client.getRecommendedTimeline(request),
+      TimelineType.hybrid => await client.getHybridTimeline(request),
+      TimelineType.federated => await client.getGlobalTimeline(request),
       _ => throw UnsupportedError('Timeline type $type is not supported.'),
     };
 

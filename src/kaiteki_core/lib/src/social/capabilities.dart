@@ -1,5 +1,5 @@
 import 'model/formatting.dart';
-import 'model/timeline_kind.dart';
+import 'model/timeline_type.dart';
 import 'model/visibility.dart';
 
 abstract class AdapterCapabilities {
@@ -12,7 +12,7 @@ abstract class AdapterCapabilities {
 
   Set<Formatting> get supportedFormattings;
 
-  Set<TimelineKind> get supportedTimelines;
+  Set<TimelineType> get supportedTimelines;
 
   /// Specifies the maximum amount of characters for the content within a post.
   ///

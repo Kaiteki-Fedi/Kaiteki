@@ -9,7 +9,7 @@ import 'model/attachment.dart';
 import 'model/instance.dart';
 import 'model/pagination.dart';
 import 'model/post.dart';
-import 'model/timeline_kind.dart';
+import 'model/timeline_type.dart';
 import 'model/timeline_query.dart';
 import 'model/user.dart';
 
@@ -57,7 +57,7 @@ abstract class BackendAdapter {
   Future<Iterable<Post>> getThread(Post reply);
 
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   });
 

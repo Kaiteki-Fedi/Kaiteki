@@ -8,7 +8,7 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 
 class TimelinePage extends ConsumerStatefulWidget {
-  final TimelineKind? initialTimeline;
+  final TimelineType? initialTimeline;
 
   const TimelinePage({super.key, this.initialTimeline});
 
@@ -18,19 +18,19 @@ class TimelinePage extends ConsumerStatefulWidget {
 
 class TimelinePageState extends ConsumerState<TimelinePage> {
   final _timelineKey = GlobalKey<TimelineState>();
-  late TimelineKind? _kind = widget.initialTimeline;
+  late TimelineType? _kind = widget.initialTimeline;
 
   /// Timeline tabs to show.
   ///
-  /// This is intentionally not [TimelineKind.values] because the values might
+  /// This is intentionally not [TimelineType.values] because the values might
   /// not be important to the user.
-  Set<TimelineKind> get _defaultKinds {
+  Set<TimelineType> get _defaultKinds {
     return const {
-      TimelineKind.home,
-      TimelineKind.local,
-      TimelineKind.bubble,
-      TimelineKind.hybrid,
-      TimelineKind.federated,
+      TimelineType.following,
+      TimelineType.local,
+      TimelineType.bubble,
+      TimelineType.hybrid,
+      TimelineType.federated,
     };
   }
 
@@ -93,7 +93,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
 
   void refresh() => _timelineKey.currentState!.refresh();
 
-  Widget _buildTab(BuildContext context, TimelineKind kind, bool showLabel) {
+  Widget _buildTab(BuildContext context, TimelineType kind, bool showLabel) {
     final l10n = context.l10n;
 
     return Semantics(
@@ -114,7 +114,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
     );
   }
 
-  void _onTabTap(int value, Iterable<TimelineKind> kinds) {
+  void _onTabTap(int value, Iterable<TimelineType> kinds) {
     final kind = kinds.elementAt(value);
     setState(() => _kind = kind);
   }

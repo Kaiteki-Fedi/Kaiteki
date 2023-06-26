@@ -65,14 +65,14 @@ class _DeckMainScreenViewState extends ConsumerState<DeckMainScreenView> {
               const SizedBox(
                 width: width,
                 child: TimelineDeckColumn(
-                  timelineKind: TimelineKind.home,
+                  timelineKind: TimelineType.following,
                 ),
               ),
               const SizedBox(width: 8),
               const SizedBox(
                 width: width,
                 child: TimelineDeckColumn(
-                  timelineKind: TimelineKind.federated,
+                  timelineKind: TimelineType.federated,
                 ),
               ),
               const SizedBox(width: 8),
@@ -169,7 +169,7 @@ class DeckColumn extends StatelessWidget {
 }
 
 class TimelineDeckColumn extends StatelessWidget {
-  final TimelineKind timelineKind;
+  final TimelineType timelineKind;
 
   const TimelineDeckColumn({super.key, required this.timelineKind});
 

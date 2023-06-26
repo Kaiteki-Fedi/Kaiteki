@@ -18,7 +18,7 @@ class TrendingMastodonAdapter extends MastodonAdapter {
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   }) async =>
       getTrendingPosts();

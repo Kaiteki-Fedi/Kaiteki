@@ -1,8 +1,8 @@
-enum TimelineKind {
+enum TimelineType {
   /// The default timeline visible to the user.
   ///
   /// It has posts from the people that the user follows.
-  home,
+  following,
 
   /// Timeline that has the public posts of this instance.
   local,

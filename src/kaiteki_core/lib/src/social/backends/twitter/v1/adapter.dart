@@ -49,11 +49,11 @@ class OldTwitterAdapter extends CentralizedBackendAdapter
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery? query,
   }) async {
     switch (type) {
-      case TimelineKind.home:
+      case TimelineType.following:
         final timeline = await client.getHomeTimeline(
           sinceId: query?.sinceId as String?,
           maxId: query?.untilId as String?,

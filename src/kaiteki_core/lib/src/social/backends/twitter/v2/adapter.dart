@@ -254,10 +254,10 @@ class TwitterAdapter extends CentralizedBackendAdapter
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   }) async {
-    if (type != TimelineKind.home) {
+    if (type != TimelineType.following) {
       throw UnsupportedError("Twitter doesn't support $type");
     }
     final response = await client.getReverseChronologicalTimeline(

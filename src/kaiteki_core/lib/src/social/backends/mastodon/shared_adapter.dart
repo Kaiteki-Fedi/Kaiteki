@@ -220,24 +220,24 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   }) async {
     final Iterable<mastodon.Status> posts;
 
     posts = switch (type) {
-      TimelineKind.home => await client.getHomeTimeline(
+      TimelineType.following => await client.getHomeTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
           onlyMedia: query?.onlyMedia,
         ),
-      TimelineKind.local => await client.getPublicTimeline(
+      TimelineType.local => await client.getPublicTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
           onlyMedia: query?.onlyMedia,
           local: true,
         ),
-      TimelineKind.federated => await client.getPublicTimeline(
+      TimelineType.federated => await client.getPublicTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
           onlyMedia: query?.onlyMedia,

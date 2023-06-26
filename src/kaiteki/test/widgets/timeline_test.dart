@@ -42,15 +42,15 @@ void main() {
     );
 
     await tester.pumpAndSettle();
-    expect(find.text(TimelineKind.home.toString()), findsOneWidget);
+    expect(find.text(TimelineType.following.toString()), findsOneWidget);
 
     // Switch to federated timeline
     await tester.pumpWidget(
-      await wrapper(const Timeline.kind(kind: TimelineKind.federated)),
+      await wrapper(const Timeline.kind(kind: TimelineType.federated)),
     );
 
     await tester.pumpAndSettle();
-    expect(find.text(TimelineKind.federated.toString()), findsOneWidget);
+    expect(find.text(TimelineType.federated.toString()), findsOneWidget);
   });
 
   testWidgets("Timeline shows failures properly", (tester) async {
@@ -60,7 +60,7 @@ void main() {
           adapterProvider.overrideWith((ref) {
             return TimelineAdapter(
               TimelineAdapterCapabilities(),
-              {TimelineKind.federated, TimelineKind.hybrid},
+              {TimelineType.federated, TimelineType.hybrid},
             );
           }),
           sharedPreferencesProvider.overrideWith((_) => sharedPreferences),
@@ -80,11 +80,11 @@ void main() {
     );
 
     await tester.pumpAndSettle();
-    expect(find.text(TimelineKind.home.toString()), findsOneWidget);
+    expect(find.text(TimelineType.following.toString()), findsOneWidget);
 
     // Switch to federated timeline
     await tester.pumpWidget(
-      await wrapper(const Timeline.kind(kind: TimelineKind.federated)),
+      await wrapper(const Timeline.kind(kind: TimelineType.federated)),
     );
 
     await tester.pumpAndSettle();
@@ -92,7 +92,7 @@ void main() {
 
     // Switch to hybrid timeline
     await tester.pumpWidget(
-      await wrapper(const Timeline.kind(kind: TimelineKind.hybrid)),
+      await wrapper(const Timeline.kind(kind: TimelineType.hybrid)),
     );
 
     await tester.pumpAndSettle();

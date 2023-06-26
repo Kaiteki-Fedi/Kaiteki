@@ -32,7 +32,7 @@ final notificationCountProvider = FutureProvider<int?>(
 
 class MainScreen extends ConsumerStatefulWidget {
   @visibleForTesting
-  final TimelineKind? initialTimeline;
+  final TimelineType? initialTimeline;
 
   const MainScreen({super.key, this.initialTimeline});
 

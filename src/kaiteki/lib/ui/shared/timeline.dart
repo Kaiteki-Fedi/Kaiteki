@@ -15,7 +15,7 @@ final _logger = Logger("Timeline");
 class TimelineSliver extends ConsumerStatefulWidget {
   final double? maxWidth;
   final PostWidgetLayout? postLayout;
-  final TimelineKind? kind;
+  final TimelineType? kind;
   final String? userId;
   final String? listId;
   final bool includeReplies;
@@ -24,7 +24,7 @@ class TimelineSliver extends ConsumerStatefulWidget {
     super.key,
     this.maxWidth,
     this.postLayout,
-    this.kind = TimelineKind.home,
+    this.kind = TimelineType.following,
     this.includeReplies = true,
   })  : userId = null,
         listId = null;
@@ -199,7 +199,7 @@ class TimelineState extends ConsumerState<TimelineSliver> {
 class Timeline extends StatelessWidget {
   final double? maxWidth;
   final PostWidgetLayout? postLayout;
-  final TimelineKind? kind;
+  final TimelineType? kind;
   final String? userId;
   final String? listId;
 
@@ -207,7 +207,7 @@ class Timeline extends StatelessWidget {
     super.key,
     this.maxWidth,
     this.postLayout,
-    this.kind = TimelineKind.home,
+    this.kind = TimelineType.following,
   })  : userId = null,
         listId = null;
 

@@ -13,5 +13,5 @@ class TwitterCapabilities extends AdapterCapabilities {
   bool get supportsSubjects => false;
 
   @override
-  Set<TimelineKind> get supportedTimelines => const {TimelineKind.home};
+  Set<TimelineType> get supportedTimelines => const {TimelineType.following};
 }

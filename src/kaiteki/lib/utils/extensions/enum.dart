@@ -63,29 +63,29 @@ extension FormattingExtensions on Formatting {
   }
 }
 
-extension TimelindKindExtensions on TimelineKind {
+extension TimelindKindExtensions on TimelineType {
   IconData getIconData() {
     return switch (this) {
-      TimelineKind.home => Icons.home_rounded,
-      TimelineKind.local => Icons.people_rounded,
-      TimelineKind.bubble => Icons.workspaces_rounded,
-      TimelineKind.hybrid => Icons.handshake_rounded,
-      TimelineKind.federated => Icons.public_rounded,
-      TimelineKind.directMessages => Icons.mail_rounded,
-      TimelineKind.recommended => Icons.auto_awesome_rounded,
+      TimelineType.following => Icons.home_rounded,
+      TimelineType.local => Icons.people_rounded,
+      TimelineType.bubble => Icons.workspaces_rounded,
+      TimelineType.hybrid => Icons.handshake_rounded,
+      TimelineType.federated => Icons.public_rounded,
+      TimelineType.directMessages => Icons.mail_rounded,
+      TimelineType.recommended => Icons.auto_awesome_rounded,
     };
   }
 
   String getDisplayName(KaitekiLocalizations l10n) {
     return switch (this) {
-      TimelineKind.home => l10n.timelineHome,
-      TimelineKind.local => l10n.timelineLocal,
-      TimelineKind.bubble => l10n.timelineBubble,
-      TimelineKind.hybrid => l10n.timelineHybrid,
-      TimelineKind.federated => l10n.timelineFederated,
-      TimelineKind.directMessages => l10n.timelineDirectMessages,
+      TimelineType.following => l10n.timelineFollowing,
+      TimelineType.local => l10n.timelineLocal,
+      TimelineType.bubble => l10n.timelineBubble,
+      TimelineType.hybrid => l10n.timelineHybrid,
+      TimelineType.federated => l10n.timelineFederated,
+      TimelineType.directMessages => l10n.timelineDirectMessages,
       // TODO(Craftplacer): Translate
-      TimelineKind.recommended => "Recommended",
+      TimelineType.recommended => "Recommended",
     };
   }
 }

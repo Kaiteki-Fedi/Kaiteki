@@ -94,7 +94,7 @@ void takeScreenshots(
       final bootstrapper = await Bootstrapper.getInstance(locale);
       runApp(
         bootstrapper.wrap(
-          const MainScreen(initialTimeline: TimelineKind.federated),
+          const MainScreen(initialTimeline: TimelineType.federated),
           screenSize,
         ),
       );

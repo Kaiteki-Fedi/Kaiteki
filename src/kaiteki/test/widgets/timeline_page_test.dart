@@ -23,14 +23,14 @@ void main() {
   });
 
   testWidgets("TimelinePage updates Timeline correctly", (tester) async {
-    for (final kind in TimelineKind.values) {
+    for (final kind in TimelineType.values) {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             adapterProvider.overrideWith(
               (ref) => TimelineAdapter(
                 TimelineAdapterCapabilities(
-                  TimelineKind.values.toSet(),
+                  TimelineType.values.toSet(),
                 ),
               ),
             ),

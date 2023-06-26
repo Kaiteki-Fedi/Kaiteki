@@ -57,7 +57,7 @@ class DummyAdapter extends BackendAdapter {
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   }) async {
     final untilId = query?.untilId;
@@ -136,7 +136,7 @@ class DummyAdapterCapability extends AdapterCapabilities {
   Set<Visibility> get supportedScopes => Visibility.values.toSet();
 
   @override
-  Set<TimelineKind> get supportedTimelines => TimelineKind.values.toSet();
+  Set<TimelineType> get supportedTimelines => TimelineType.values.toSet();
 
   @override
   bool get supportsSubjects => true;

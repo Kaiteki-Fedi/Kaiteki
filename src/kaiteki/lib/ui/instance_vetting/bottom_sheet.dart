@@ -16,7 +16,6 @@ import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
 
-
 class InstanceVettingBottomSheet extends ConsumerStatefulWidget {
   final String instance;
 
@@ -138,7 +137,7 @@ class _InstanceVettingBottomSheetState
                   ),
                 ),
                 if (info != null)
-                  const TimelineSliver.kind(kind: TimelineKind.local),
+                  const TimelineSliver.kind(kind: TimelineType.local),
               ],
             ),
           );

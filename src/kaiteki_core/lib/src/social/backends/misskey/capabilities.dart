@@ -26,11 +26,11 @@ class MisskeyCapabilities extends AdapterCapabilities
   factory MisskeyCapabilities.fromMeta(Meta meta) {
     return MisskeyCapabilities(
       supportedTimelines: {
-        TimelineKind.home,
-        if (meta.disableLocalTimeline != true) TimelineKind.local,
-        if (meta.disableRecommendedTimeline == false) TimelineKind.recommended,
-        TimelineKind.hybrid,
-        if (meta.disableGlobalTimeline != true) TimelineKind.federated,
+        TimelineType.following,
+        if (meta.disableLocalTimeline != true) TimelineType.local,
+        if (meta.disableRecommendedTimeline == false) TimelineType.recommended,
+        TimelineType.hybrid,
+        if (meta.disableGlobalTimeline != true) TimelineType.federated,
       },
     );
   }
@@ -44,7 +44,7 @@ class MisskeyCapabilities extends AdapterCapabilities
   bool get supportsSubjects => true;
 
   @override
-  final Set<TimelineKind> supportedTimelines;
+  final Set<TimelineType> supportedTimelines;
 
   @override
   bool get supportsMultipleReactions => false;

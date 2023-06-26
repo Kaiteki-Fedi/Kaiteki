@@ -2,7 +2,7 @@ import "package:kaiteki_core/kaiteki_core.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 class TimelineAdapter extends BackendAdapter {
-  final Set<TimelineKind> brokenTimelines;
+  final Set<TimelineType> brokenTimelines;
 
   @override
   final TimelineAdapterCapabilities capabilities;
@@ -40,7 +40,7 @@ class TimelineAdapter extends BackendAdapter {
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   }) async {
     if (brokenTimelines.contains(type)) throw UnimplementedError();
@@ -124,7 +124,7 @@ class TimelineAdapterCapabilities extends AdapterCapabilities {
   Set<Visibility> get supportedScopes => {};
 
   @override
-  final Set<TimelineKind> supportedTimelines;
+  final Set<TimelineType> supportedTimelines;
 
   @override
   bool get supportsSubjects => false;

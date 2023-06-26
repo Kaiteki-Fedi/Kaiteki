@@ -15,7 +15,7 @@ export 'src/social/model/post_list.dart';
 export 'src/social/model/reaction.dart';
 export 'src/social/model/resolvable.dart';
 export 'src/social/model/mock_data.dart';
-export 'src/social/model/timeline_kind.dart';
+export 'src/social/model/timeline_type.dart';
 export 'src/social/model/timeline_query.dart';
 export 'src/social/model/user.dart';
 export 'src/social/model/user_handle.dart';

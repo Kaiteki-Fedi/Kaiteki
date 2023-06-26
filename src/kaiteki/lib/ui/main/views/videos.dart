@@ -37,7 +37,7 @@ class VideoMainScreenView extends ConsumerStatefulWidget
 class FilteredTimelineStream {
   late StreamController<Iterable<Post>?> controller;
   final BackendAdapter adapter;
-  final TimelineKind timelineKind;
+  final TimelineType timelineKind;
   final bool Function(Post post)? filter;
   final bool onlyMedia;
 
@@ -128,7 +128,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
 
         _stream = FilteredTimelineStream(
           next,
-          TimelineKind.federated,
+          TimelineType.federated,
           onlyMedia: true,
           filter: (p) {
             return p.attachments?.isNotEmpty == true &&

@@ -21,12 +21,12 @@ class MastodonCapabilities extends AdapterCapabilities
   Set<Formatting> get supportedFormattings => const {Formatting.plainText};
 
   @override
-  Set<TimelineKind> get supportedTimelines {
+  Set<TimelineType> get supportedTimelines {
     return const {
-      TimelineKind.home,
-      TimelineKind.local,
-      TimelineKind.federated,
-      TimelineKind.directMessages,
+      TimelineType.following,
+      TimelineType.local,
+      TimelineType.federated,
+      TimelineType.directMessages,
     };
   }
 

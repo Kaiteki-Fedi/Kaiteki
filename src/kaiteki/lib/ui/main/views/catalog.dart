@@ -45,7 +45,7 @@ class _CatalogMainScreenViewState extends ConsumerState<CatalogMainScreenView> {
         final Iterable<Post> posts;
         final query = TimelineQuery(untilId: id);
 
-        posts = await adapter.getTimeline(TimelineKind.federated, query: query);
+        posts = await adapter.getTimeline(TimelineType.federated, query: query);
         final filtered = posts
             .where(
               (p) =>
