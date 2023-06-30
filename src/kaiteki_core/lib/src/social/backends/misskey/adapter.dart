@@ -193,6 +193,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
     if (signInResponse == null) return null;
 
+    authenticated = true;
+
     return (signInResponse.i, signInResponse.id, null);
   }
 
