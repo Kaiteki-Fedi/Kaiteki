@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/pride.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
 final useSystemColorScheme = createSettingProvider<bool>(
@@ -87,5 +88,18 @@ final cropAttachments = createSettingProvider<bool>(
 final usePostCards = createSettingProvider<bool>(
   key: "usePostCards",
   initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final enablePrideFlag = createSettingProvider<bool>(
+  key: "enablePrideFlag",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
+final prideFlag = createEnumSettingProvider<PrideFlag>(
+  key: "prideFlag",
+  initialValue: PrideFlag.pride,
+  values: PrideFlag.values,
   provider: sharedPreferencesProvider,
 );

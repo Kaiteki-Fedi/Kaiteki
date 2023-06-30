@@ -8,6 +8,7 @@ import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/main/drawer.dart";
 import "package:kaiteki/ui/main/fab_data.dart";
@@ -16,6 +17,7 @@ import "package:kaiteki/ui/main/navigation/navigation_bar.dart";
 import "package:kaiteki/ui/main/navigation/navigation_rail.dart";
 import "package:kaiteki/ui/main/tab.dart";
 import "package:kaiteki/ui/main/views/view.dart";
+import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/shared/side_sheet_manager.dart";
 import "package:kaiteki/ui/window_class.dart";
@@ -313,16 +315,58 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
     }
 
     final theme = Theme.of(context);
-    return AppBar(
-      backgroundColor: backgroundColor,
-      foregroundColor: foregroundColor,
-      title: Text(
-        appName,
-        style: theme.ktkTextTheme?.kaitekiTextStyle ??
-            DefaultKaitekiTextTheme(context).kaitekiTextStyle,
+    const shadows = [
+      Shadow(color: Colors.white, blurRadius: 1),
+      Shadow(color: Colors.white, blurRadius: 2),
+      Shadow(color: Colors.white, blurRadius: 4),
+    ];
+    final prideEnabled = ref.watch(enablePrideFlag).value;
+    final prideFlagDesign = ref.watch(prideFlag).value;
+    return PreferredSizeStack(
+      bottom: prideEnabled
+          ? CustomPaint(painter: PridePainter(prideFlagDesign))
+          : null,
+      primary: AppBar(
+        foregroundColor: Colors.black,
+        forceMaterialTransparency: true,
+        title: Text(
+          appName,
+          style: (theme.ktkTextTheme?.kaitekiTextStyle ??
+                  DefaultKaitekiTextTheme(context).kaitekiTextStyle)
+              .copyWith(
+            shadows: prideEnabled ? shadows : null,
+          ),
+        ),
+        iconTheme: prideEnabled ? const IconThemeData(shadows: shadows) : null,
+        actions: _buildAppBarActions(context),
+        scrolledUnderElevation: immerse ? 0.0 : 4.0,
       ),
-      actions: _buildAppBarActions(context),
-      scrolledUnderElevation: immerse ? 0.0 : 4.0,
+    );
+  }
+}
+
+class PreferredSizeStack extends StatelessWidget
+    implements PreferredSizeWidget {
+  final PreferredSizeWidget primary;
+  final Widget? bottom;
+
+  const PreferredSizeStack({
+    super.key,
+    required this.primary,
+    required this.bottom,
+  });
+
+  @override
+  Size get preferredSize => primary.preferredSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final bottom = this.bottom;
+    return Stack(
+      children: [
+        if (bottom != null) Positioned.fill(child: bottom),
+        primary,
+      ],
     );
   }
 }

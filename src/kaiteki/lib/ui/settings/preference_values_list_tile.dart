@@ -4,7 +4,7 @@ import "package:kaiteki/ui/shared/dialogs/options_dialog.dart";
 import "package:notified_preferences/notified_preferences.dart";
 
 Widget defaultTextBuilder<T>(BuildContext context, T value) {
-  return Text(value.toString());
+  return Text(value is Enum ? value.name : value.toString());
 }
 
 class PreferenceValuesListTile<T> extends ConsumerWidget {

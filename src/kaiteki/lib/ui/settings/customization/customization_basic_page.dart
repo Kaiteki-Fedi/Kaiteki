@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/settings/customization/theme_selector.dart";
 import "package:kaiteki/ui/settings/preference_slider_list_tile.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
@@ -118,6 +119,20 @@ class _CustomizationBasicPageState
                     if (value <= 0) return "Square";
                     return "${value}dp";
                   },
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: SectionHeader(context.l10n.prideSettingsHeader),
+              children: [
+                PreferenceSwitchListTile(
+                  provider: enablePrideFlag,
+                  title: Text(context.l10n.enablePrideFlag),
+                ),
+                PreferenceValuesListTile(
+                  provider: prideFlag,
+                  values: PrideFlag.values,
+                  title: Text(context.l10n.prideFlag),
                 ),
               ],
             ),
