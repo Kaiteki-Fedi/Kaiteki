@@ -31,6 +31,10 @@ enum AppExperiment {
   articleView(
     "Article view",
     "Read posts like articles",
+  ),
+  notificationMenu(
+    "Notification menu",
+    "See your notifications in a popup menu",
   );
 
   final String displayName;

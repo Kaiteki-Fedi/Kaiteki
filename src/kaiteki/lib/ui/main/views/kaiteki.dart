@@ -15,6 +15,7 @@ import "package:kaiteki/ui/main/fab_data.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/main/navigation/navigation_bar.dart";
 import "package:kaiteki/ui/main/navigation/navigation_rail.dart";
+import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/main/tab.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/pride.dart";
@@ -191,6 +192,23 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
         onPressed: getSearchCallback(context, ref),
         tooltip: l10n.searchButtonLabel,
       ),
+      if (ref.watch(experimentsProvider(AppExperiment.notificationMenu)))
+        MenuAnchor(
+          menuChildren: const [
+            SizedBox(
+              width: 400,
+              height: 600,
+              child: NotificationsPage(),
+            ),
+          ],
+          builder: (context, controller, child) {
+            return IconButton(
+              icon: const Icon(Icons.notifications),
+              onPressed: controller.open,
+              tooltip: "Notifications",
+            );
+          },
+        ),
       IconButton(
         icon: const Icon(Icons.refresh_rounded),
         onPressed: switch (widget.tab) {
