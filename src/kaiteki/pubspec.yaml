@@ -37,7 +37,6 @@ dependencies:
   go_router: ^8.0.1
   google_fonts: ^5.0.0
   hive: ^2.2.3
-  hive_flutter: ^1.1.0
   html: ^0.15.0
   http: ^1.0.0
   infinite_scroll_pagination: ^3.1.0
@@ -57,8 +56,8 @@ dependencies:
   notified_preferences: ^2.0.0
   notified_preferences_riverpod: ^1.0.0
   page_view_dot_indicator: ^2.0.0
-  path: ^1.8.1
-  path_provider: ^2.0.11
+  path: ^1.8.3
+  path_provider: ^2.0.15
   qr_bar_code_scanner_dialog: ^0.0.5
   qr_flutter: ^4.0.0
   riverpod_annotation: ^2.0.4
