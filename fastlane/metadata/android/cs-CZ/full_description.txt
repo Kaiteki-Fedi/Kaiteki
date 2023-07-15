@@ -1,0 +1,1 @@
+<p><i>Kaiteki</i> je klient pro sociální sítě pro více platforem. Aktuálně podporuje software Mastodon, Pleroma, Misskey a Twitter. V budoucnu mohou přibývat další.</p>
