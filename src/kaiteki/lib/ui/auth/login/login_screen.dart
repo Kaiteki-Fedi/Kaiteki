@@ -4,6 +4,7 @@ import "package:animations/animations.dart";
 import "package:async/async.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/auth/login_functions.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
@@ -369,12 +370,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login(InstanceCompound instance) async {
-    final accounts = ref.read(accountManagerProvider);
+    final accountManager = ref.read(accountManagerProvider.notifier);
     final adapter = await instance.createAdapter();
 
     final loginInterface = adapter as LoginSupport;
 
-    final clientSecret = await accounts.getClientSecret(instance.host);
+    final clientSecret = await accountManager.getClientSecret(instance.host);
     final loginContext = LoginContext(
       clientSecret:
           clientSecret.nullTransform((e) => (e.clientId, e.clientSecret)),
@@ -421,7 +422,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    await accounts.add(account);
+    await accountManager.add(account);
     router.goNamed("home", pathParameters: account.key.routerParams);
   }
 

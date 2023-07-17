@@ -3,6 +3,7 @@ import "dart:convert";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
@@ -20,12 +21,12 @@ class AccountListDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DynamicDialogContainer(
       builder: (context, fullscreen) {
-        final manager = ref.watch(accountManagerProvider);
+        final accounts = ref.watch(accountManagerProvider).accounts;
         final currentAccount = ref.watch(accountProvider);
         final l10n = context.l10n;
 
         final unselectedAccounts =
-            manager.accounts.whereNot((e) => e.key == currentAccount?.key);
+            accounts.whereNot((e) => e.key == currentAccount?.key);
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -109,8 +110,7 @@ class AccountListDialog extends ConsumerWidget {
 
     if (result != true) return;
 
-    final manager = ref.read(accountManagerProvider);
-    await manager.remove(account);
+    await ref.read(accountManagerProvider.notifier).remove(account);
   }
 
   Future<void> _onHandoff(

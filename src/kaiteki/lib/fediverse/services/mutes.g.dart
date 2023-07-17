@@ -6,7 +6,7 @@ part of 'mutes.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mutesServiceHash() => r'f9f50d1f9e4830e1d6c54a89701e3b4d18f8fce4';
+String _$mutesServiceHash() => r'7d56e6c364e776cc79f09982ad2f070193281c80';
 
 /// Copied from Dart SDK
 class _SystemHash {

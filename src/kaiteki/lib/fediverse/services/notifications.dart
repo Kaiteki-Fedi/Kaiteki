@@ -6,7 +6,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/painting.dart";
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:http/http.dart";
-import "package:kaiteki/di.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/utils/image.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
@@ -40,8 +40,10 @@ class NotificationService extends _$NotificationService {
 
   @override
   FutureOr<List<Notification>> build(AccountKey key) async {
-    final manager = ref.read(accountManagerProvider);
-    final account = manager.accounts.firstWhere((a) => a.key == key);
+    final account = ref
+        .read(accountManagerProvider)
+        .accounts
+        .firstWhere((a) => a.key == key);
     _backend = account.adapter as NotificationSupport;
     return await _backend.getNotifications();
   }

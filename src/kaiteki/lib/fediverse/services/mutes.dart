@@ -1,4 +1,5 @@
-import "package:kaiteki/di.dart";
+import "package:kaiteki/account_manager.dart";
+
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/pagination_state.dart";
 import "package:kaiteki_core/social.dart";
@@ -13,8 +14,10 @@ class MutesService extends _$MutesService {
 
   @override
   FutureOr<PaginationState<User>> build(AccountKey key) async {
-    final manager = ref.read(accountManagerProvider);
-    final account = manager.accounts.firstWhere((a) => a.key == key);
+    final account = ref
+        .read(accountManagerProvider)
+        .accounts
+        .firstWhere((a) => a.key == key);
     _backend = account.adapter as MuteSupport;
     return _fetch();
   }

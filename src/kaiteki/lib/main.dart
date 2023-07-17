@@ -20,27 +20,38 @@ import "package:shared_preferences/shared_preferences.dart";
 
 /// Main entrypoint.
 Future<void> main() async {
-  Logger.root.level = kDebugMode ? Level.ALL : Level.INFO;
+  Logger.root.level = kDebugMode ? Level.FINEST : Level.INFO;
 
   final Widget app;
 
   try {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // initialize hive & account manager
-    await initializeHive();
-    await migrateHiveBoxes();
-    final accountManager = await getAccountManager();
-
     // Initialize shared preferences
     final sharedPrefs = await SharedPreferences.getInstance();
 
-    // construct app & run
-    app = ProviderScope(
+    // initialize hive
+    await initializeHive();
+    await migrateHiveBoxes();
+
+    // load repositories
+    final accountRepository = await getAccountRepository();
+    final clientRepository = await getClientRepository();
+
+    final container = ProviderContainer(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPrefs),
-        accountManagerProvider.overrideWith((_) => accountManager),
+        accountSecretRepositoryProvider.overrideWithValue(accountRepository),
+        clientSecretRepositoryProvider.overrideWithValue(clientRepository),
       ],
+    );
+
+    final accountManager = container.read(accountManagerProvider.notifier);
+    await accountManager.restoreSessions();
+
+    // construct app & run
+    app = ProviderScope(
+      parent: container,
       child: const KaitekiApp(),
     );
   } catch (e, s) {
@@ -51,6 +62,28 @@ Future<void> main() async {
   runApp(app);
 }
 
+AccountKey fromHive(dynamic k) => AccountKey.fromUri(k as String);
+
+Future<HiveRepository<AccountSecret, AccountKey>> getAccountRepository() async {
+  final accountBox = await Hive.openBox<AccountSecret>("account-secrets");
+  return HiveRepository<AccountSecret, AccountKey>(
+    accountBox,
+    fromHive,
+    toHive,
+    true,
+  );
+}
+
+Future<HiveRepository<ClientSecret, AccountKey>> getClientRepository() async {
+  final clientBox = await Hive.openBox<ClientSecret>("client-secrets");
+  return HiveRepository<ClientSecret, AccountKey>(
+    clientBox,
+    fromHive,
+    toHive,
+    true,
+  );
+}
+
 void handleFatalError(TraceableError error) {
   final crashScreen = MaterialApp(
     theme: getDefaultTheme(Brightness.light, true),
@@ -58,6 +91,16 @@ void handleFatalError(TraceableError error) {
     home: CrashScreen(error),
   );
   runApp(crashScreen);
+}
+
+Future<void> initializeHive() async {
+  final appSupportDir = await getApplicationSupportDirectory();
+
+  Hive
+    ..init(appSupportDir.path)
+    ..registerAdapter(AccountKeyAdapter())
+    ..registerAdapter(ClientSecretAdapter())
+    ..registerAdapter(AccountSecretAdapter());
 }
 
 Future<bool> migrateHiveBoxes() async {
@@ -118,38 +161,4 @@ Future<bool> migrateHiveBoxes() async {
   return boxMigrated;
 }
 
-Future<void> initializeHive() async {
-  final appSupportDir = await getApplicationSupportDirectory();
-
-  Hive
-    ..init(appSupportDir.path)
-    ..registerAdapter(AccountKeyAdapter())
-    ..registerAdapter(ClientSecretAdapter())
-    ..registerAdapter(AccountSecretAdapter());
-}
-
-/// Initializes the account manager.
-Future<AccountManager> getAccountManager() async {
-  AccountKey fromHive(dynamic k) => AccountKey.fromUri(k as String);
-  String toHive(AccountKey k) => k.toUri().toString();
-
-  final accountBox = await Hive.openBox<AccountSecret>("account-secrets");
-  final accountRepository = HiveRepository<AccountSecret, AccountKey>(
-    accountBox,
-    fromHive,
-    toHive,
-    true,
-  );
-
-  final clientBox = await Hive.openBox<ClientSecret>("client-secrets");
-  final clientRepository = HiveRepository<ClientSecret, AccountKey>(
-    clientBox,
-    fromHive,
-    toHive,
-    true,
-  );
-
-  final manager = AccountManager(accountRepository, clientRepository);
-  await manager.restoreSessions();
-  return manager;
-}
+String toHive(AccountKey k) => k.toUri().toString();

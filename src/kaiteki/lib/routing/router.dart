@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/routing/notifier.dart";
@@ -164,18 +165,16 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
               ),
             );
 
+            final previousAccount = ref.read(accountProvider);
             if (account == null) {
               _logger.info(
                 "No account matching to @$user@$host, so no account was switched",
               );
-            }
+            } else if (previousAccount != account) {
+              ref.read(accountManagerProvider.notifier).change(account);
 
-            final accountManager = ref.read(accountManagerProvider);
-            final previousAccount = accountManager.current;
-            if (previousAccount != account) {
-              accountManager.current = account;
               _logger.info(
-                "Switched from ${previousAccount?.key.handle} to ${account!.key.handle} due to navigation path",
+                "Switched from ${previousAccount?.key.handle} to ${account.key.handle} due to navigation path",
               );
             }
           }

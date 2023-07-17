@@ -1,4 +1,5 @@
-import "package:kaiteki/di.dart";
+import "package:kaiteki/account_manager.dart";
+
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki_core/social.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
@@ -11,8 +12,11 @@ class UsersService extends _$UsersService {
 
   @override
   FutureOr<User?> build(AccountKey key, String id) async {
-    final manager = ref.read(accountManagerProvider);
-    _backend = manager.accounts.firstWhere((a) => a.key == key).adapter;
+    _backend = ref
+        .read(accountManagerProvider)
+        .accounts
+        .firstWhere((a) => a.key == key)
+        .adapter;
     return await _backend.getUser(id);
   }
 }

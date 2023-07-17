@@ -3,7 +3,6 @@ import "dart:convert";
 
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/model/auth/account.dart";
@@ -25,27 +24,15 @@ export "package:flutter_riverpod/flutter_riverpod.dart";
 
 part "di.g.dart";
 
-final accountManagerProvider = ChangeNotifierProvider<AccountManager>((_) {
-  throw UnimplementedError();
-});
-
 final sharedPreferencesProvider = Provider<SharedPreferences>((_) {
   throw UnimplementedError();
 });
 
-final accountProvider = Provider<Account?>(
-  (ref) {
-    final accountManager = ref.watch(accountManagerProvider);
-    // ignore: deprecated_member_use_from_same_package
-    return accountManager.current;
-  },
-  dependencies: [accountManagerProvider],
-);
+@Riverpod(keepAlive: true, dependencies: [AccountManager])
+Account? account(AccountRef ref) => ref.watch(accountManagerProvider).current;
 
-final adapterProvider = Provider<BackendAdapter>(
-  (ref) => ref.watch(accountProvider)!.adapter,
-  dependencies: [accountProvider],
-);
+@Riverpod(keepAlive: true, dependencies: [account])
+BackendAdapter adapter(AdapterRef ref) => ref.watch(accountProvider)!.adapter;
 
 @Riverpod()
 Translator? translator(TranslatorRef _) => null;
@@ -55,20 +42,22 @@ LanguageIdentificator? languageIdentificator(LanguageIdentificatorRef _) {
   return null;
 }
 
-final textParserProvider = Provider<Set<TextParser>>(
-  (ref) {
-    const socialTextParser = SocialTextParser();
-    final adapter = ref.watch(adapterProvider);
-    if (adapter is MisskeyAdapter) {
-      return const {MarkdownTextParser(), MfmTextParser(), socialTextParser};
-    } else if (adapter is SharedMastodonAdapter) {
-      return const {MastodonHtmlTextParser(), socialTextParser};
-    } else {
-      return const {socialTextParser};
-    }
-  },
-  dependencies: [adapterProvider],
-);
+@Riverpod(keepAlive: true, dependencies: [adapter])
+Set<TextParser> textParser(TextParserRef ref) {
+  const socialTextParser = SocialTextParser();
+  return switch (ref.watch(adapterProvider)) {
+    MisskeyAdapter() => const {
+        MarkdownTextParser(),
+        MfmTextParser(),
+        socialTextParser
+      },
+    SharedMastodonAdapter() => const {
+        MastodonHtmlTextParser(),
+        socialTextParser
+      },
+    _ => const {socialTextParser}
+  };
+}
 
 @Riverpod(keepAlive: true)
 Future<UnmodifiableListView<Language>> languageList(LanguageListRef ref) async {
