@@ -342,6 +342,8 @@ class TwitterAdapter extends CentralizedBackendAdapter
     final me = await client.getMe(userFields: UserField.values.toSet());
     client.userId = me.id;
 
+    authenticated = true;
+
     return LoginSuccess(
       userSecret: (
         accessToken: token.accessToken,

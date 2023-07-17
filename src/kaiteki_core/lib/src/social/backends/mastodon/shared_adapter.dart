@@ -183,6 +183,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       return LoginFailure((e, s));
     }
 
+    authenticated = true;
+
     return LoginSuccess(
       user: account.toKaiteki(instance),
       clientSecret: (

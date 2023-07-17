@@ -134,6 +134,8 @@ class OldTwitterAdapter extends CentralizedBackendAdapter
       return LoginFailure((e, s));
     }
 
+    authenticated = true;
+
     // Create and set account secret
     return LoginSuccess(
       user: account.toKaiteki(),

@@ -213,6 +213,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
     final user = credentials.$3 ?? await client.showUser(credentials.$2!);
 
+    authenticated = true;
+
     return LoginSuccess(
       user: user.toKaiteki(instance),
       userSecret: (
