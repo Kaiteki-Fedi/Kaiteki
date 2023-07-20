@@ -40,16 +40,16 @@ Uri buildEmojiUri(String localHost, EmojiHandle handle) {
   );
 }
 
-Emoji getEmojiFromString(String key, List<CustomEmoji> mappedEmoji) {
+Emoji? getEmojiFromString(String key, List<CustomEmoji> mappedEmoji) {
   final emoji = mappedEmoji.firstWhereOrNull(
     (e) {
       if (key.length < 3) return false;
-      final emojiName = key.substring(1, key.length - 1);
-      return e.short == emojiName;
+      final split = key.substring(1, key.length - 1).split('@');
+      final name = split[0];
+      final host = split.length == 2 ? split[1] : null;
+      return e.short == name && (host == null || e.instance == host);
     },
   );
-
-  if (emoji == null) return UnicodeEmoji(key);
 
   return emoji;
 }
@@ -176,7 +176,7 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
     }
 
     Reaction convertReaction(MapEntry<String, int> reaction) {
-      final Emoji emoji;
+      Emoji? emoji;
 
       if (mappedEmoji != null) {
         emoji = getEmojiFromString(reaction.key, mappedEmoji);
@@ -188,14 +188,12 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
           url: emojiUrl,
           instance: emojiKey.$2 ?? localHost,
         );
-      } else {
-        emoji = UnicodeEmoji(reaction.key);
       }
 
       return Reaction(
         count: reaction.value,
         includesMe: reaction.key == myReaction,
-        emoji: emoji,
+        emoji: emoji ?? UnicodeEmoji(reaction.key),
       );
     }
 
