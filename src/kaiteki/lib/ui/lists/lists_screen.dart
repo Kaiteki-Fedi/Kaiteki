@@ -7,7 +7,8 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
@@ -149,7 +150,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
     } else if (listsAvailable) {
       body = TabBarView(
         children: [
-          for (final list in lists) Timeline.list(listId: list.id),
+          for (final list in lists) Timeline(ListTimelineSource(list.id)),
         ],
       );
     } else {
@@ -247,7 +248,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
     } else if (listsAvailable) {
       body = TabBarView(
         children: [
-          for (final list in lists) Timeline.list(listId: list.id),
+          for (final list in lists) Timeline(ListTimelineSource(list.id)),
         ],
       );
     } else {

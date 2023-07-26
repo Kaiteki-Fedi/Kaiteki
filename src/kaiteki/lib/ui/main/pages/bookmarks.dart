@@ -82,10 +82,11 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
         return Material(
           child: InkWell(
             onTap: () {
-              final accountKey = ref.read(accountProvider)!.key;
+              final accountKey = ref.read(currentAccountProvider)!.key;
               final username = accountKey.username;
               final instance = accountKey.host;
 
+              // TODO(Craftplacer): use named routes
               context.push(
                 "/@$username@$instance/posts/${item.id}",
                 extra: item,

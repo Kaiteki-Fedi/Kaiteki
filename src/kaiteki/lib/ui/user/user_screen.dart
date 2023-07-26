@@ -6,7 +6,8 @@ import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/timeline.dart";
 import "package:kaiteki/ui/user/user_panel.dart";
 import "package:kaiteki/ui/user/user_sliver.dart";
 import "package:kaiteki/ui/window_class.dart";
@@ -422,8 +423,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 ),
               ),
             ),
-            TimelineSliver.user(
-              userId: widget.id,
+            TimelineSliver(
+              UserTimelineSource(widget.id),
               includeReplies: includeReplies,
             ),
           ],
@@ -490,7 +491,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 
   Widget? buildPrimaryButton(User? user, [bool small = false]) {
-    if (user?.id == ref.watch(accountProvider)?.user.id) {
+    if (user?.id == ref.watch(currentAccountProvider)?.user.id) {
       if (small) {
         return IconButton.filled(
           onPressed: () {},

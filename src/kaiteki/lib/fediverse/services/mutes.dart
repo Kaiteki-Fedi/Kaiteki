@@ -30,8 +30,8 @@ class MutesService extends _$MutesService {
       final pagination = await _backend.getMutedUsers(nextId: _nextId);
       _nextId = pagination.next;
       return PaginationState(
-        [...?state.valueOrNull?.list, ...pagination.data],
-        _nextId != null,
+        [...?state.valueOrNull?.items, ...pagination.data],
+        canPaginateFurther: _nextId != null,
       );
     });
   }
@@ -41,7 +41,7 @@ class MutesService extends _$MutesService {
     _nextId = pagination.next;
     return PaginationState(
       pagination.data.toList(),
-      _nextId != null,
+      canPaginateFurther: _nextId != null,
     );
   }
 

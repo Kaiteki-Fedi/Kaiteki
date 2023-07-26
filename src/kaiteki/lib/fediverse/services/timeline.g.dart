@@ -6,7 +6,7 @@ part of 'timeline.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$timelineServiceHash() => r'b5fc76f1452c1ad405ac5169d6343a820e5f8fb8';
+String _$timelineServiceHash() => r'251e4212ba6075bef40c60a381dc1de7f995d8ce';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,11 +29,13 @@ class _SystemHash {
   }
 }
 
-abstract class _$TimelineService extends BuildlessAsyncNotifier<
-    ({bool hasReachedEnd, Iterable<Post<dynamic>> posts})> {
+abstract class _$TimelineService
+    extends BuildlessAsyncNotifier<PaginationState<Post<dynamic>>> {
+  late final AccountKey key;
   late final TimelineSource source;
 
-  FutureOr<({bool hasReachedEnd, Iterable<Post<dynamic>> posts})> build(
+  FutureOr<PaginationState<Post<dynamic>>> build(
+    AccountKey key,
     TimelineSource source,
   );
 }
@@ -43,16 +45,18 @@ abstract class _$TimelineService extends BuildlessAsyncNotifier<
 const timelineServiceProvider = TimelineServiceFamily();
 
 /// See also [TimelineService].
-class TimelineServiceFamily extends Family<
-    AsyncValue<({bool hasReachedEnd, Iterable<Post<dynamic>> posts})>> {
+class TimelineServiceFamily
+    extends Family<AsyncValue<PaginationState<Post<dynamic>>>> {
   /// See also [TimelineService].
   const TimelineServiceFamily();
 
   /// See also [TimelineService].
   TimelineServiceProvider call(
+    AccountKey key,
     TimelineSource source,
   ) {
     return TimelineServiceProvider(
+      key,
       source,
     );
   }
@@ -62,12 +66,14 @@ class TimelineServiceFamily extends Family<
     covariant TimelineServiceProvider provider,
   ) {
     return call(
+      provider.key,
       provider.source,
     );
   }
 
   static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
-    adapterProvider
+    adapterProvider,
+    accountProvider
   ];
 
   @override
@@ -76,7 +82,9 @@ class TimelineServiceFamily extends Family<
   static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
       <ProviderOrFamily>{
     adapterProvider,
-    ...?adapterProvider.allTransitiveDependencies
+    ...?adapterProvider.allTransitiveDependencies,
+    accountProvider,
+    ...?accountProvider.allTransitiveDependencies
   };
 
   @override
@@ -89,12 +97,15 @@ class TimelineServiceFamily extends Family<
 
 /// See also [TimelineService].
 class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
-    ({bool hasReachedEnd, Iterable<Post<dynamic>> posts})> {
+    PaginationState<Post<dynamic>>> {
   /// See also [TimelineService].
   TimelineServiceProvider(
+    this.key,
     this.source,
   ) : super.internal(
-          () => TimelineService()..source = source,
+          () => TimelineService()
+            ..key = key
+            ..source = source,
           from: timelineServiceProvider,
           name: r'timelineServiceProvider',
           debugGetCreateSourceHash:
@@ -106,27 +117,31 @@ class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
               TimelineServiceFamily._allTransitiveDependencies,
         );
 
+  final AccountKey key;
   final TimelineSource source;
 
   @override
   bool operator ==(Object other) {
-    return other is TimelineServiceProvider && other.source == source;
+    return other is TimelineServiceProvider &&
+        other.key == key &&
+        other.source == source;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, key.hashCode);
     hash = _SystemHash.combine(hash, source.hashCode);
 
     return _SystemHash.finish(hash);
   }
 
   @override
-  FutureOr<({bool hasReachedEnd, Iterable<Post<dynamic>> posts})>
-      runNotifierBuild(
+  FutureOr<PaginationState<Post<dynamic>>> runNotifierBuild(
     covariant TimelineService notifier,
   ) {
     return notifier.build(
+      key,
       source,
     );
   }

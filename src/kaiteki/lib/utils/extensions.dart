@@ -95,19 +95,19 @@ extension UserReferenceExtensions on UserReference {
 
 extension WidgetRefExtensions on WidgetRef {
   String getCurrentAccountHandle() {
-    final accountKey = read(accountProvider)!.key;
+    final accountKey = read(currentAccountProvider)!.key;
     return "@${accountKey.username}@${accountKey.host}";
   }
 
   Map<String, String> get accountRouterParams {
-    final accountKey = read(accountProvider)!.key;
+    final accountKey = read(currentAccountProvider)!.key;
     return accountKey.routerParams;
   }
 }
 
 extension ProviderContainerExtensions on ProviderContainer {
   Map<String, String> get accountRouterParams {
-    final accountKey = read(accountProvider)!.key;
+    final accountKey = read(currentAccountProvider)!.key;
     return accountKey.routerParams;
   }
 }

@@ -67,7 +67,7 @@ class _PostPreviewState extends ConsumerState<PostPreview> {
                 (element) => element.has((element) => element is EmojiElement),
               );
 
-      final account = ref.read(accountProvider);
+      final account = ref.read(currentAccountProvider);
       if (needsRemoteData && account != null) {
         _future = () async {
           final categories = await ref.read(
@@ -110,7 +110,7 @@ class _PostPreviewState extends ConsumerState<PostPreview> {
   Post get post {
     return Post(
       postedAt: DateTime.now(),
-      author: ref.read(accountProvider)!.user,
+      author: ref.read(currentAccountProvider)!.user,
       id: "preview",
       content: widget.draft.content,
       subject: widget.draft.subject,
@@ -164,7 +164,7 @@ class _PostPreviewState extends ConsumerState<PostPreview> {
             emojiResolver: (e) => resolveEmoji(
               e,
               ref,
-              ref.read(accountProvider)?.user.host,
+              ref.read(currentAccountProvider)?.user.host,
               snapshot.data!.post.emojis,
             ),
           ),

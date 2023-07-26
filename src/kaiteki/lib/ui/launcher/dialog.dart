@@ -144,7 +144,7 @@ class _LauncherDialogState extends ConsumerState<LauncherDialog> {
       final atInput = beginsWithAt ? query.substring(1) : query;
       final atSplit = atInput.split("@");
       if (atSplit.length == 2 || (beginsWithAt && atSplit.length == 1)) {
-        final currentHost = ref.read(accountProvider)!.key.host;
+        final currentHost = ref.read(currentAccountProvider)!.key.host;
 
         final username = atSplit[0];
         final host = atSplit.elementAtOrNull(1) ?? currentHost;
@@ -181,7 +181,7 @@ class _LauncherDialogState extends ConsumerState<LauncherDialog> {
                 Icons.keyboard_double_arrow_right_rounded,
                 color: Colors.white,
                 shadows: [
-                  const Shadow(blurRadius: 8.0, offset: Offset(0, 2)),
+                  Shadow(blurRadius: 8.0, offset: Offset(0, 2)),
                 ],
               ),
               const SizedBox(width: 8),

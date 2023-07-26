@@ -1,6 +1,5 @@
 import 'package:fediverse_objects/mastodon_v1.dart';
 import 'package:kaiteki_core/backends/mastodon.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
 import 'package:kaiteki_core/social.dart' hide Instance;
 
 class PleromaCapabilities extends MastodonCapabilities

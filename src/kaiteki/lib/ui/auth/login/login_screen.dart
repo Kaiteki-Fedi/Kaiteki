@@ -193,7 +193,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return l10n.authNoUrlAllowed;
     }
 
-    // var accounts = ref.read(accountProvider);
+    // var accounts = ref.read(currentAccountProvider);
     // if (accounts.accounts.any((compound) =>
     //     compound.instance == instance &&
     //     compound.accountSecret.username == username)) {

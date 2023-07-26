@@ -61,7 +61,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
     final op = widget.replyTo;
 
     if (op != null) {
-      final currentUser = ref.read(accountProvider)!.user;
+      final currentUser = ref.read(currentAccountProvider)!.user;
 
       final handles = <String>[
         if (op.author.id != currentUser.id) op.author.handle.toString(),

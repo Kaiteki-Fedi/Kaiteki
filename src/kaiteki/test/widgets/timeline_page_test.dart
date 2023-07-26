@@ -7,7 +7,8 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/main/pages/timeline.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -66,7 +67,10 @@ void main() {
         continue;
       }
 
-      expect((timeline.widget as Timeline).kind, equals(kind));
+      expect(
+        (timeline.widget as Timeline).source,
+        predicate((p0) => p0 is StandardTimelineSource && p0.type == kind),
+      );
     }
   });
 }

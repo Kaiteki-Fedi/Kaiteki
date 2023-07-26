@@ -22,7 +22,7 @@ class AccountListDialog extends ConsumerWidget {
     return DynamicDialogContainer(
       builder: (context, fullscreen) {
         final accounts = ref.watch(accountManagerProvider).accounts;
-        final currentAccount = ref.watch(accountProvider);
+        final currentAccount = ref.watch(currentAccountProvider);
         final l10n = context.l10n;
 
         final unselectedAccounts =
@@ -34,6 +34,7 @@ class AccountListDialog extends ConsumerWidget {
             AppBar(
               title: Text(l10n.manageAccountsTitle),
               forceMaterialTransparency: true,
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
             ),
             Flexible(
               child: SingleChildScrollView(
@@ -140,6 +141,7 @@ class AccountListDialog extends ConsumerWidget {
                   AppBar(
                     title: const Text("Sign in another device"),
                     forceMaterialTransparency: true,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -154,8 +156,13 @@ class AccountListDialog extends ConsumerWidget {
                     data: jsonEncode(
                       TransitAccount.fromAccount(account).toJson(),
                     ),
+                    eyeStyle: QrEyeStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      eyeShape: QrEyeShape.square,
+                    ),
                     dataModuleStyle: QrDataModuleStyle(
                       color: Theme.of(context).colorScheme.onSurface,
+                      dataModuleShape: QrDataModuleShape.square,
                     ),
                   ),
                 ],

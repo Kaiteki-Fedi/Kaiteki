@@ -4,7 +4,8 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki_core/model.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
@@ -38,7 +39,9 @@ void main() {
 
     // Switch to home timeline
     await tester.pumpWidget(
-      await wrapper(const Timeline.kind()),
+      await wrapper(
+        const Timeline(StandardTimelineSource(TimelineType.following)),
+      ),
     );
 
     await tester.pumpAndSettle();
@@ -46,7 +49,9 @@ void main() {
 
     // Switch to federated timeline
     await tester.pumpWidget(
-      await wrapper(const Timeline.kind(kind: TimelineType.federated)),
+      await wrapper(
+        const Timeline(StandardTimelineSource(TimelineType.federated)),
+      ),
     );
 
     await tester.pumpAndSettle();
@@ -76,7 +81,9 @@ void main() {
 
     // Switch to home timeline
     await tester.pumpWidget(
-      await wrapper(const Timeline.kind()),
+      await wrapper(
+        const Timeline(StandardTimelineSource(TimelineType.following)),
+      ),
     );
 
     await tester.pumpAndSettle();
@@ -84,7 +91,9 @@ void main() {
 
     // Switch to federated timeline
     await tester.pumpWidget(
-      await wrapper(const Timeline.kind(kind: TimelineType.federated)),
+      await wrapper(
+        const Timeline(StandardTimelineSource(TimelineType.federated)),
+      ),
     );
 
     await tester.pumpAndSettle();
@@ -92,7 +101,9 @@ void main() {
 
     // Switch to hybrid timeline
     await tester.pumpWidget(
-      await wrapper(const Timeline.kind(kind: TimelineType.hybrid)),
+      await wrapper(
+        const Timeline(StandardTimelineSource(TimelineType.hybrid)),
+      ),
     );
 
     await tester.pumpAndSettle();

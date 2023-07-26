@@ -9,6 +9,7 @@ import "package:flutter/rendering.dart"
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import "package:flutter_test/flutter_test.dart";
 import "package:integration_test/integration_test.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
@@ -135,9 +136,8 @@ void takeScreenshots(
       await tester.setScreenSize(screenSize, screenDensity);
       final bootstrapper = await Bootstrapper.getInstance(locale);
 
-      final user = await bootstrapper.adapter.getUserById(
-        "109349633552584749",
-      );
+      final adapter = bootstrapper.container.read(adapterProvider);
+      final user = await adapter.getUserById("109349633552584749");
 
       runApp(
         bootstrapper.wrap(

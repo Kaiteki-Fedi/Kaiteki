@@ -10,7 +10,8 @@ import "package:kaiteki/text/parsers/html_text_parser.dart";
 import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/timeline.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
@@ -137,7 +138,9 @@ class _InstanceVettingBottomSheetState
                   ),
                 ),
                 if (info != null)
-                  const TimelineSliver.kind(kind: TimelineType.local),
+                  const TimelineSliver(
+                    StandardTimelineSource(TimelineType.local),
+                  ),
               ],
             ),
           );

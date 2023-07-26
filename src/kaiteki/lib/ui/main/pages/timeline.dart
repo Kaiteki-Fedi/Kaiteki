@@ -3,7 +3,8 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 
@@ -17,7 +18,6 @@ class TimelinePage extends ConsumerStatefulWidget {
 }
 
 class TimelinePageState extends ConsumerState<TimelinePage> {
-  final _timelineKey = GlobalKey<TimelineState>();
   late TimelineType? _kind = widget.initialTimeline;
 
   /// Timeline tabs to show.
@@ -35,63 +35,67 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final adapter = ref.watch(adapterProvider);
     final supportedKinds = adapter.capabilities.supportedTimelines;
-    final kinds = _defaultKinds.where(supportedKinds.contains);
+    final types = _defaultKinds.where(supportedKinds.contains);
     if (!supportedKinds.contains(_kind)) {
       _kind = supportedKinds.first;
     }
 
-    final initialIndex = kinds.toList().indexOf(_kind!);
+    final initialIndex = types.toList().indexOf(_kind!);
+    final showTabBar = types.length >= 2;
+    final showTabLabel = types.length <= 3;
     return DefaultTabController(
-      length: kinds.length,
+      length: types.length,
       initialIndex: initialIndex,
       child: NestedScrollView(
         floatHeaderSlivers: true,
         dragStartBehavior: DragStartBehavior.down,
-        headerSliverBuilder: (context, _) => [
-          if (kinds.length >= 2)
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  TabBar(
-                    isScrollable: true,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    onTap: (i) => _onTabTap(i, kinds),
-                    tabs: [
-                      for (final kind in kinds)
-                        _buildTab(context, kind, kinds.length <= 3),
-                    ],
-                  ),
-                  const Divider(height: 1),
-                ],
+        headerSliverBuilder: (context, _) {
+          return [
+            if (showTabBar)
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    TabBar(
+                      isScrollable: true,
+                      onTap: (i) => _onTabTap(i, types),
+                      tabs: [
+                        for (final type in types)
+                          _buildTab(context, type, showTabLabel),
+                      ],
+                    ),
+                    const Divider(height: 1),
+                  ],
+                ),
               ),
-            ),
-        ],
-        body: Align(
-          alignment: Alignment.topCenter,
-          child: SizedBox(
-            width: 800,
-            child: Timeline.kind(
-              key: _timelineKey,
-              kind: _kind ?? kinds.first,
-              postLayout: ref.watch(useWidePostLayout).value
-                  ? PostWidgetLayout.wide
-                  : PostWidgetLayout.normal,
-            ),
-          ),
+          ];
+        },
+        body: TabBarView(
+          children: [
+            for (final type in types)
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: 800,
+                  child: Timeline(
+                    StandardTimelineSource(type),
+                    postLayout: ref.watch(useWidePostLayout).value
+                        ? PostWidgetLayout.wide
+                        : PostWidgetLayout.normal,
+                  ),
+                ),
+              )
+          ],
         ),
       ),
     );
   }
 
-  void refresh() => _timelineKey.currentState!.refresh();
+  void refresh() {
+    // _timelineKey.currentState!.refresh();
+  }
 
   Widget _buildTab(BuildContext context, TimelineType kind, bool showLabel) {
     final l10n = context.l10n;

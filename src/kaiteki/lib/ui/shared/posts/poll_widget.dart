@@ -92,7 +92,10 @@ class PollWidget extends StatelessWidget {
                                     emojiResolver: (e) => resolveEmoji(
                                       e,
                                       ref,
-                                      ref.read(accountProvider)?.user.host,
+                                      ref
+                                          .read(currentAccountProvider)
+                                          ?.user
+                                          .host,
                                       emojis,
                                     ),
                                   ),

@@ -24,7 +24,7 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
   void initState() {
     super.initState();
 
-    final accountKey = ref.read(accountProvider)!.key;
+    final accountKey = ref.read(currentAccountProvider)!.key;
     final mutesService = mutesServiceProvider(accountKey);
 
     // FIXME(Craftplacer): MutesScreen isn't listening for changes
@@ -77,7 +77,7 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
               trailing: [
                 FilledButton.tonal(
                   onPressed: () async {
-                    final account = ref.read(accountProvider)!;
+                    final account = ref.read(currentAccountProvider)!;
                     final mutesProvider = mutesServiceProvider(account.key);
                     await ref.read(mutesProvider.notifier).unmute(item.id);
                   },
@@ -139,7 +139,7 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
       barrierDismissible: false,
     );
 
-    final account = ref.read(accountProvider)!;
+    final account = ref.read(currentAccountProvider)!;
     final mutesProvider = mutesServiceProvider(account.key);
 
     try {

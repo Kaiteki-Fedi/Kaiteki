@@ -43,7 +43,7 @@ class _BirdMainScreenViewState extends ConsumerState<BirdMainScreenView> {
     }
 
     final explore = ref.watch(adapterProvider).safeCast<ExploreSupport>();
-    final account = ref.watch(accountProvider);
+    final account = ref.watch(currentAccountProvider);
 
     return Scaffold(
       body: Row(
@@ -75,7 +75,7 @@ class _BirdMainScreenViewState extends ConsumerState<BirdMainScreenView> {
                         child: Row(
                           children: [
                             InstanceIcon(
-                              ref.watch(accountProvider)!.key.host,
+                              ref.watch(currentAccountProvider)!.key.host,
                             ),
                           ],
                         ),
@@ -300,7 +300,7 @@ class _BirdMainScreenViewState extends ConsumerState<BirdMainScreenView> {
       appBar: AppBar(
         centerTitle: true,
         title: InstanceIcon(
-          ref.watch(accountProvider)!.key.host,
+          ref.watch(currentAccountProvider)!.key.host,
         ),
         leading: const AccountSwitcherWidget(),
       ),
@@ -329,7 +329,7 @@ class _BirdMainScreenViewState extends ConsumerState<BirdMainScreenView> {
         widget.onChangeTab(TabKind.bookmarks);
         break;
       case 5:
-        context.showUser(ref.read(accountProvider)!.user, ref);
+        context.showUser(ref.read(currentAccountProvider)!.user, ref);
         break;
       case 6:
         widget.onChangeView();

@@ -165,7 +165,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
               ),
             );
 
-            final previousAccount = ref.read(accountProvider);
+            final previousAccount = ref.read(currentAccountProvider);
             if (account == null) {
               _logger.info(
                 "No account matching to @$user@$host, so no account was switched",
@@ -369,14 +369,14 @@ Widget _authenticatedBuilder(
             ),
           );
         } else {
-          account = ref.watch(accountProvider);
+          account = ref.watch(currentAccountProvider);
         }
 
         if (account != null) {
           return ProviderScope(
             overrides: [
               adapterProvider.overrideWithValue(account.adapter),
-              accountProvider.overrideWithValue(account),
+              currentAccountProvider.overrideWithValue(account),
             ],
             child: child!,
           );

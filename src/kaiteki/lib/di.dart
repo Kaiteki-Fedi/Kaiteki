@@ -1,11 +1,12 @@
-import "dart:collection";
 import "dart:convert";
 
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/language.dart";
 import "package:kaiteki/text/parsers/html_text_parser.dart";
 import "package:kaiteki/text/parsers/md_text_parser.dart";
@@ -29,10 +30,22 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((_) {
 });
 
 @Riverpod(keepAlive: true, dependencies: [AccountManager])
-Account? account(AccountRef ref) => ref.watch(accountManagerProvider).current;
+Account? account(AccountRef ref, AccountKey key) {
+  return ref.watch(
+    accountManagerProvider.select(
+      (e) => e.accounts.firstWhereOrNull((e) => e.key == key),
+    ),
+  );
+}
 
-@Riverpod(keepAlive: true, dependencies: [account])
-BackendAdapter adapter(AdapterRef ref) => ref.watch(accountProvider)!.adapter;
+@Riverpod(keepAlive: true, dependencies: [AccountManager])
+Account? currentAccount(AccountRef ref) {
+  return ref.watch(accountManagerProvider.select((e) => e.current));
+}
+
+@Riverpod(keepAlive: true, dependencies: [currentAccount])
+BackendAdapter adapter(AdapterRef ref) =>
+    ref.watch(currentAccountProvider)!.adapter;
 
 @Riverpod()
 Translator? translator(TranslatorRef _) => null;

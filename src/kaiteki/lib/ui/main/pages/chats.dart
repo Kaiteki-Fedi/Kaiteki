@@ -138,7 +138,7 @@ class ChatView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final adapter = ref.watch(adapterProvider) as ChatSupport;
-    final currentUser = ref.watch(accountProvider)?.user;
+    final currentUser = ref.watch(currentAccountProvider)?.user;
 
     return Column(
       children: [

@@ -731,7 +731,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
   Future<void> _onChangeReaction(Emoji emoji) async {
     final messenger = ScaffoldMessenger.of(context);
-    final account = ref.read(accountProvider)!;
+    final account = ref.read(currentAccountProvider)!;
     final adapter = account.adapter as ReactionSupport;
 
     try {

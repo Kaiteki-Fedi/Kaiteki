@@ -6,15 +6,125 @@ part of 'di.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$accountHash() => r'0d16b5ab3d5fbdcaf4fc1f12f9e7a7be5ca08259';
+String _$accountHash() => r'2266072226784fe67869921140f52e7d96e912de';
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+typedef AccountRef = ProviderRef<Account?>;
 
 /// See also [account].
 @ProviderFor(account)
-final accountProvider = Provider<Account?>.internal(
-  account,
-  name: r'accountProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$accountHash,
+const accountProvider = AccountFamily();
+
+/// See also [account].
+class AccountFamily extends Family<Account?> {
+  /// See also [account].
+  const AccountFamily();
+
+  /// See also [account].
+  AccountProvider call(
+    AccountKey key,
+  ) {
+    return AccountProvider(
+      key,
+    );
+  }
+
+  @override
+  AccountProvider getProviderOverride(
+    covariant AccountProvider provider,
+  ) {
+    return call(
+      provider.key,
+    );
+  }
+
+  static final Iterable<ProviderOrFamily> _dependencies = <ProviderOrFamily>[
+    accountManagerProvider
+  ];
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static final Iterable<ProviderOrFamily> _allTransitiveDependencies =
+      <ProviderOrFamily>{
+    accountManagerProvider,
+    ...?accountManagerProvider.allTransitiveDependencies
+  };
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'accountProvider';
+}
+
+/// See also [account].
+class AccountProvider extends Provider<Account?> {
+  /// See also [account].
+  AccountProvider(
+    this.key,
+  ) : super.internal(
+          (ref) => account(
+            ref,
+            key,
+          ),
+          from: accountProvider,
+          name: r'accountProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$accountHash,
+          dependencies: AccountFamily._dependencies,
+          allTransitiveDependencies: AccountFamily._allTransitiveDependencies,
+        );
+
+  final AccountKey key;
+
+  @override
+  bool operator ==(Object other) {
+    return other is AccountProvider && other.key == key;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, key.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+String _$currentAccountHash() => r'bf8f5f20a32fb77b3fa00dbee0ef51264ca0180c';
+
+/// See also [currentAccount].
+@ProviderFor(currentAccount)
+final currentAccountProvider = Provider<Account?>.internal(
+  currentAccount,
+  name: r'currentAccountProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentAccountHash,
   dependencies: <ProviderOrFamily>[accountManagerProvider],
   allTransitiveDependencies: <ProviderOrFamily>{
     accountManagerProvider,
@@ -22,8 +132,8 @@ final accountProvider = Provider<Account?>.internal(
   },
 );
 
-typedef AccountRef = ProviderRef<Account?>;
-String _$adapterHash() => r'de277e9ae747c0f9b420465b09f3d2a8e80f1af7';
+typedef CurrentAccountRef = ProviderRef<Account?>;
+String _$adapterHash() => r'e1e9a834a2efa3ce4571410de0caac89ee84e019';
 
 /// See also [adapter].
 @ProviderFor(adapter)
