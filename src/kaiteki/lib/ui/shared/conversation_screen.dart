@@ -1,6 +1,8 @@
 import "package:anchor_scroll_controller/anchor_scroll_controller.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -112,43 +114,92 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   }
 
   Widget buildFlat(BuildContext context) {
+    final useCards = ref.watch(usePostCards).value;
     return FutureBuilder<Iterable<Post>>(
       future: _threadFetchFuture,
       builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.separated(
-            controller: _scrollController,
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final post = snapshot.data!.elementAt(index);
-              final isSelected = post.id == selectedPostId;
-              return AnchorItemWrapper(
-                index: index,
-                controller: _scrollController,
-                child: PostWidget(
-                  post,
-                  onOpen: isSelected
-                      ? null
-                      : () => setState(() => selectedPostId = post.id),
-                  layout: isSelected
-                      ? PostWidgetLayout.expanded
-                      : PostWidgetLayout.normal,
-                ),
-              );
-            },
-            separatorBuilder: (_, __) => const Divider(height: 1),
-          );
-        } else if (snapshot.hasError) {
+        if (snapshot.hasError) {
           return Column(
             children: [
               PostWidget(widget.post, layout: PostWidgetLayout.expanded),
               _buildErrorListTile(context, snapshot),
             ],
           );
-        } else {
+        } else if (!snapshot.hasData) {
           return centeredCircularProgressIndicator;
         }
+
+        final posts = snapshot.data!;
+
+        if (useCards) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(8),
+            // TODO(Craftplacer): might have to nag the flutter team to make this widget material you
+            child: MergeableMaterial(
+              hasDividers: true,
+              elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
+              children: posts
+                  .mapIndexed((i, e) {
+                    final preGapValue = Object.hash(e.id.hashCode, "before");
+                    final afterGapValue = Object.hash(e.id.hashCode, "after");
+
+                    final isSelected = e.id == selectedPostId;
+                    return [
+                      if (isSelected && i != 0)
+                        MaterialGap(key: ValueKey(preGapValue)),
+                      MaterialSlice(
+                        key: ValueKey(e.id),
+                        child: buildPost(i, e),
+                        color: Theme.of(context).useMaterial3
+                            ? ElevationOverlay.applySurfaceTint(
+                                Theme.of(context).colorScheme.surface,
+                                Theme.of(context).colorScheme.surfaceTint,
+                                2.0,
+                              )
+                            : null,
+                      ),
+                      if (isSelected && i != (posts.length - 1))
+                        MaterialGap(key: ValueKey(afterGapValue)),
+                    ];
+                  })
+                  .flattened
+                  .toList(),
+            ),
+          );
+        }
+
+        return ListView.separated(
+          controller: _scrollController,
+          itemCount: posts.length,
+          itemBuilder: (context, index) {
+            final post = posts.elementAt(index);
+            return buildPost(index, post);
+          },
+          separatorBuilder: (_, __) => const Divider(height: 1),
+        );
       },
+    );
+  }
+
+  AnchorItemWrapper buildPost(int index, Post post) {
+    final isSelected = post.id == selectedPostId;
+
+    return AnchorItemWrapper(
+      index: index,
+      controller: _scrollController,
+      child: AnimatedCrossFade(
+        crossFadeState:
+            isSelected ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+        firstChild: PostWidget(
+          post,
+          onOpen: () => setState(() => selectedPostId = post.id),
+        ),
+        secondChild: PostWidget(
+          post,
+          layout: PostWidgetLayout.expanded,
+        ),
+        duration: const Duration(milliseconds: 100),
+      ),
     );
   }
 }

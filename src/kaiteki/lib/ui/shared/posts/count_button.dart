@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/social_icon_animation.dart";
 
 class CountButton extends ConsumerWidget {
@@ -116,11 +117,13 @@ class CountButton extends ConsumerWidget {
   }
 
   Color _getColor(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
 
-    if (!enabled || onTap == null) return colorScheme.outlineVariant;
+    if (!enabled || onTap == null) return theme.colorScheme.outlineVariant;
 
-    final inactiveColor = color ?? colorScheme.outline;
+    final defaultInactiveColor = theme.getEmphasisColor(EmphasisColor.medium);
+    final inactiveColor = color ?? defaultInactiveColor;
+
     if (active) return activeColor ?? inactiveColor;
 
     return inactiveColor;

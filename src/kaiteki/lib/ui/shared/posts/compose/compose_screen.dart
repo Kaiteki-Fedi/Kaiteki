@@ -91,6 +91,7 @@ class _PostScreenState extends ConsumerState<ComposeScreen> {
                 ? Text(l10n.composeDialogTitle)
                 : Text.rich(replyTextSpan),
             forceMaterialTransparency: true,
+            foregroundColor: Theme.of(context).colorScheme.onSurface,
           ),
           const Divider(),
         ],

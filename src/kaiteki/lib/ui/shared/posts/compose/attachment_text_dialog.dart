@@ -41,6 +41,7 @@ class _AttachmentTextDialogState extends State<AttachmentTextDialog> {
             AppBar(
               title: const Text("Change alt text"),
               forceMaterialTransparency: true,
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
               actions: [
                 TextButton(
                   onPressed: () => _onApply(context),

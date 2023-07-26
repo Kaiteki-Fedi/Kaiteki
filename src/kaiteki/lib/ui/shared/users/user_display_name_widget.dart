@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 
@@ -21,35 +22,51 @@ class UserDisplayNameWidget extends ConsumerWidget {
     );
     const primaryTextStyle = TextStyle(fontWeight: FontWeight.bold);
     final textSpacing = !content.separate ? 0.0 : 6.0;
+    final secondaryText = content.secondary;
+    final disabledColor =
+        Theme.of(context).getEmphasisColor(EmphasisColor.disabled);
 
-    return buildFlowWidget([
-      Text.rich(
-        user.renderText(context, ref, content.primary),
-        style: primaryTextStyle,
-        maxLines: 1,
-        overflow: TextOverflow.fade,
-        softWrap: false,
-      ),
-      SizedBox(width: textSpacing),
-      if (content.secondary != null)
-        Text(
-          content.secondary!,
-          style: TextStyle(color: Theme.of(context).disabledColor),
-          overflow: TextOverflow.fade,
+    switch (orientation) {
+      case Axis.horizontal:
+        return Text.rich(
+          TextSpan(
+            children: [
+              user.renderText(context, ref, content.primary),
+              if (secondaryText != null) ...[
+                WidgetSpan(child: SizedBox(width: textSpacing)),
+                TextSpan(
+                  text: secondaryText,
+                  style: TextStyle(color: disabledColor),
+                ),
+              ],
+            ],
+            style: primaryTextStyle,
+          ),
           maxLines: 1,
+          overflow: TextOverflow.fade,
           softWrap: false,
-        ),
-    ]);
-  }
-
-  Widget buildFlowWidget(List<Widget> children) {
-    return Flex(
-      direction: orientation,
-      crossAxisAlignment: orientation == Axis.horizontal
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
-      children: children,
-    );
+        );
+      case Axis.vertical:
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text.rich(
+              user.renderText(context, ref, content.primary),
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            ),
+            if (secondaryText != null)
+              Text(
+                secondaryText,
+                style: disabledColor.textStyle,
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
+          ],
+        );
+    }
   }
 }
 

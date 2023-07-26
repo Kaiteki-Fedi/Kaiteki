@@ -89,3 +89,41 @@ class CustomColorPalette {
     );
   }
 }
+
+enum EmphasisColor { high, medium, disabled }
+
+extension ThemeDataExtension on ThemeData {
+  Color getEmphasisColor(EmphasisColor emphasis) {
+    if (useMaterial3) {
+      return switch (emphasis) {
+        EmphasisColor.high => colorScheme.onSurface,
+        EmphasisColor.medium => colorScheme.onSurfaceVariant,
+        EmphasisColor.disabled => colorScheme.onSurface.withOpacity(.38),
+      };
+    }
+
+    return switch (emphasis) {
+      EmphasisColor.high => colorScheme.onSurface.withOpacity(.87),
+      EmphasisColor.medium => colorScheme.onSurface.withOpacity(.60),
+      EmphasisColor.disabled => colorScheme.onSurface.withOpacity(.38),
+    };
+  }
+}
+
+class ContentColor extends StatelessWidget {
+  final Widget child;
+  final Color color;
+
+  const ContentColor({super.key, required this.child, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconTheme.merge(
+      data: IconThemeData(color: color),
+      child: DefaultTextStyle.merge(
+        style: TextStyle(color: color),
+        child: child,
+      ),
+    );
+  }
+}

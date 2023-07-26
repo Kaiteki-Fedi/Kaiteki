@@ -42,6 +42,30 @@ const spacer = SizedBox(height: 8);
 
 final sensitiveWords = {"cw", "mh", "ph", "pol", "suicide", "selfharm", "nsfw"};
 
+final userThemeProvider =
+    FutureProvider.family<({ColorScheme light, ColorScheme dark})?, String>(
+  (ref, userId) async {
+    final adapter = ref.watch(adapterProvider);
+    final user = await adapter.getUserById(userId);
+
+    if (user == null) return null;
+
+    final url = user.bannerUrl ?? user.avatarUrl;
+
+    if (url == null) return null;
+
+    final imageProvider = NetworkImage(url.toString());
+    return (
+      light: await ColorScheme.fromImageProvider(provider: imageProvider),
+      dark: await ColorScheme.fromImageProvider(
+        provider: imageProvider,
+        brightness: Brightness.dark,
+      ),
+    );
+  },
+  dependencies: [adapterProvider],
+);
+
 class PostWidget extends ConsumerStatefulWidget {
   static final _logger = Logger("PostWidget");
 
@@ -323,6 +347,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
     final clientText = _buildExpandedMetaBeta();
 
+    final mediumEmphasis =
+        Theme.of(context).getEmphasisColor(EmphasisColor.medium);
+
     return FocusableActionDetector(
       shortcuts: const {
         reply: ReplyIntent(),
@@ -385,39 +412,46 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                           )
                         ],
                       ),
-                      if (isExpanded) const Divider(height: 25),
                       if (isExpanded)
-                        OverflowBar(
-                          spacing: 16.0,
-                          overflowSpacing: 8.0,
-                          children: [
-                            Text(
-                              DateFormat.yMMMMd(
-                                Localizations.localeOf(context).toString(),
-                              ).add_jm().format(_post.postedAt),
-                              style: outlineTextStyle,
-                            ),
-                            if (_post.visibility != null)
-                              Row(
-                                mainAxisSize: MainAxisSize.min,
+                        ContentColor(
+                          color: mediumEmphasis,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              const Divider(height: 25),
+                              OverflowBar(
+                                spacing: 16.0,
+                                overflowSpacing: 8.0,
                                 children: [
-                                  Icon(
-                                    _post.visibility!.toIconData(),
-                                    size: 16,
-                                    color: outlineColor,
-                                  ),
-                                  const SizedBox(width: 3.0),
                                   Text(
-                                    _post.visibility!.toDisplayString(l10n),
-                                    style: outlineTextStyle,
+                                    DateFormat.yMMMMd(
+                                      Localizations.localeOf(context)
+                                          .toString(),
+                                    ).add_jm().format(_post.postedAt),
                                   ),
+                                  if (_post.visibility != null)
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          _post.visibility!.toIconData(),
+                                          size: 16,
+                                        ),
+                                        const SizedBox(width: 3.0),
+                                        Text(
+                                          _post.visibility!
+                                              .toDisplayString(l10n),
+                                        ),
+                                      ],
+                                    ),
+                                  if (clientText != null) clientText,
                                 ],
                               ),
-                            if (clientText != null) clientText,
-                          ],
+                              const Divider(height: 25),
+                              PostMetricBar(_post.metrics),
+                            ],
+                          ),
                         ),
-                      if (isExpanded) const Divider(height: 25),
-                      if (isExpanded) PostMetricBar(_post.metrics),
                       if (widget.showActions) ...[
                         if (isExpanded)
                           Padding(

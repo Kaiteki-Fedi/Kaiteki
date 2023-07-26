@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
 import "package:kaiteki_core/model.dart";
 
@@ -47,6 +48,8 @@ class InteractionBar extends StatefulWidget {
 class _InteractionBarState extends State<InteractionBar> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     // ignore: omit_local_variable_types
     List<Widget> buttons = <Widget>[
       CountButton(
@@ -114,7 +117,7 @@ class _InteractionBarState extends State<InteractionBar> {
           onPressed: onShowMenu,
           icon: Icon(
             Icons.more_horiz,
-            color: Theme.of(context).colorScheme.outline,
+            color: theme.getEmphasisColor(EmphasisColor.medium),
           ),
           splashRadius: 24,
         ),

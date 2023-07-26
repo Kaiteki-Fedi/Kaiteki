@@ -128,6 +128,7 @@ class _NotificationPanel extends ConsumerWidget {
           AppBar(
             title: const Text("Notifications"),
             forceMaterialTransparency: true,
+            foregroundColor: Theme.of(context).colorScheme.onSurface,
           ),
           if (notifications != null)
             for (final notification in notifications)

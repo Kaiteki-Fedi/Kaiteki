@@ -91,7 +91,13 @@ class DefaultKaitekiTextTheme extends KaitekiTextTheme {
         super();
 
   TextStyle get _accentTextStyle {
-    return TextStyle(color: Theme.of(_context).colorScheme.secondary);
+    final theme = Theme.of(_context);
+
+    return TextStyle(
+      color: theme.useMaterial3
+          ? theme.colorScheme.tertiary
+          : theme.colorScheme.secondary,
+    );
   }
 
   @override

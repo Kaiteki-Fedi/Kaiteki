@@ -25,43 +25,46 @@ ColorScheme getColorScheme(Brightness brightness, bool useM3) {
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyKaitekiTweaks() {
     return copyWith(
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
+      floatingActionButtonTheme: floatingActionButtonTheme.copyWith(
         backgroundColor: useMaterial3 ? null : colorScheme.primary,
         foregroundColor: useMaterial3 ? null : colorScheme.onPrimary,
         extendedTextStyle: textTheme.labelLarge,
       ),
-      cardTheme: CardTheme(
+      cardTheme: cardTheme.copyWith(
         shadowColor: useMaterial3 ? Colors.transparent : null,
         margin: EdgeInsets.zero,
       ),
       menuButtonTheme: MenuButtonThemeData(
-        style: MenuItemButton.styleFrom(
-          iconColor:
-              useMaterial3 ? null : colorScheme.onSurface.withOpacity(.6),
+        style: (menuButtonTheme.style ?? const ButtonStyle()).copyWith(
+          iconColor: useMaterial3
+              ? null
+              : MaterialStatePropertyAll(colorScheme.onSurface.withOpacity(.6)),
         ),
       ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
+      appBarTheme: appBarTheme.copyWith(
+        backgroundColor: useMaterial3 ? colorScheme.surface : null,
+        foregroundColor: useMaterial3 ? colorScheme.onSurface : null,
         elevation: useMaterial3 ? 0.0 : null,
         scrolledUnderElevation: 4.0,
       ),
-      snackBarTheme: const SnackBarThemeData(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      snackBarTheme: snackBarTheme.copyWith(
+        shape: const RoundedRectangleBorder(borderRadius: borderRadius),
         behavior: SnackBarBehavior.floating,
       ),
-      dialogTheme: const DialogTheme(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      dialogTheme: dialogTheme.copyWith(
+        shape: const RoundedRectangleBorder(borderRadius: borderRadius),
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
       ),
-      badgeTheme: BadgeThemeData(
-        backgroundColor: useMaterial3 ? null : colorScheme.error,
-        textColor: useMaterial3 ? null : colorScheme.onError,
-      ),
+      badgeTheme: useMaterial3
+          ? null
+          : badgeTheme.copyWith(
+              backgroundColor: colorScheme.error,
+              textColor: colorScheme.onError,
+            ),
       textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
     );
   }

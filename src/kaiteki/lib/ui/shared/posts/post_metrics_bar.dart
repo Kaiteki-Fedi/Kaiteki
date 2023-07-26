@@ -24,12 +24,7 @@ class PostMetricBar extends StatelessWidget {
                   text: item.$1.toString(),
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                TextSpan(
-                  text: " ${item.$2}",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
+                TextSpan(text: " ${item.$2}"),
               ],
             ),
           ),

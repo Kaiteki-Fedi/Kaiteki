@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/timeline/source.dart";
@@ -102,7 +103,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           ),
           builder: (context, snapshot) {
             return Theme(
-              data: theme.copyWith(colorScheme: snapshot.data),
+              data: theme
+                  .copyWith(colorScheme: snapshot.data)
+                  .applyDefaultTweaks(),
               child: DefaultTabController(
                 length: 3,
                 child: Builder(

@@ -13,18 +13,16 @@ final lightColorScheme = ColorScheme.light(
   error: Colors.red,
 );
 
-final _brandedDarkBackgroundColor = Color.alphaBlend(
-  kaitekiPink.shade200.withOpacity(.08),
-  Colors.black,
-);
-final _brandedDarkSurfaceColor = Color.alphaBlend(
-  kaitekiPink.shade200.withOpacity(.08),
-  const Color(0xFF121212),
-);
 // based on https://m2.material.io/design/color/dark-theme.html
 final darkColorScheme = ColorScheme.dark(
-  background: _brandedDarkBackgroundColor,
-  surface: _brandedDarkSurfaceColor,
+  background: Color.alphaBlend(
+    kaitekiPink.withOpacity(.08),
+    const Color(0xFF121212),
+  ),
+  surface: Color.alphaBlend(
+    kaitekiPink.withOpacity(.08),
+    const Color(0xFF121212),
+  ),
   // primary
   primary: kaitekiPink.shade200,
   primaryContainer: kaitekiPink.shade700,
