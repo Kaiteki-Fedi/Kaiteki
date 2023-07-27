@@ -85,7 +85,8 @@ class _CatMainScreenViewState extends ConsumerState<CatMainScreenView> {
                 //   opacity: const AlwaysStoppedAnimation(0.25),
                 // ),
                 Center(
-                  child: InstanceIcon(ref.watch(accountProvider)!.key.host),
+                  child:
+                      InstanceIcon(ref.watch(currentAccountProvider)!.key.host),
                 ),
               ],
             ),

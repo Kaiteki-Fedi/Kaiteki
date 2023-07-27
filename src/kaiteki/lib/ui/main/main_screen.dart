@@ -19,7 +19,7 @@ import "package:kaiteki_core/social.dart";
 
 final notificationCountProvider = FutureProvider<int?>(
   (ref) {
-    final account = ref.watch(accountProvider);
+    final account = ref.watch(currentAccountProvider);
 
     if (account == null) return null;
     if (account.adapter is! NotificationSupport) return null;
@@ -27,7 +27,7 @@ final notificationCountProvider = FutureProvider<int?>(
     final notifications = ref.watch(notificationServiceProvider(account.key));
     return notifications.valueOrNull?.where((n) => n.unread != false).length;
   },
-  dependencies: [accountProvider, notificationServiceProvider],
+  dependencies: [currentAccountProvider, notificationServiceProvider],
 );
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -52,7 +52,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         return _timelineKey.currentState?.refresh;
 
       case TabKind.notifications:
-        final account = ref.watch(accountProvider)!.key;
+        final account = ref.watch(currentAccountProvider)!.key;
         return ref.read(notificationServiceProvider(account).notifier).refresh;
 
       default:

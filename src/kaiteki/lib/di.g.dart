@@ -133,7 +133,7 @@ final currentAccountProvider = Provider<Account?>.internal(
 );
 
 typedef CurrentAccountRef = ProviderRef<Account?>;
-String _$adapterHash() => r'e1e9a834a2efa3ce4571410de0caac89ee84e019';
+String _$adapterHash() => r'3a7624e3a59ce66597fe9a517264dad933d16a06';
 
 /// See also [adapter].
 @ProviderFor(adapter)
@@ -142,10 +142,10 @@ final adapterProvider = Provider<BackendAdapter>.internal(
   name: r'adapterProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$adapterHash,
-  dependencies: <ProviderOrFamily>[accountProvider],
+  dependencies: <ProviderOrFamily>[currentAccountProvider],
   allTransitiveDependencies: <ProviderOrFamily>{
-    accountProvider,
-    ...?accountProvider.allTransitiveDependencies
+    currentAccountProvider,
+    ...?currentAccountProvider.allTransitiveDependencies
   },
 );
 

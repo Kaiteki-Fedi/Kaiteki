@@ -45,7 +45,7 @@ Account? currentAccount(AccountRef ref) {
 
 @Riverpod(keepAlive: true, dependencies: [currentAccount])
 BackendAdapter adapter(AdapterRef ref) =>
-    ref.watch(currentAccountProvider)!.adapter;
+    ref.watch(currentAccountProvider.select((e) => e!.adapter));
 
 @Riverpod()
 Translator? translator(TranslatorRef _) => null;

@@ -14,7 +14,7 @@ class MainScreenDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final account = ref.watch(accountProvider)!;
+    final account = ref.watch(currentAccountProvider)!;
     final adapter = ref.watch(adapterProvider);
     final feedbackEnabled = ref.watch(AppExperiment.feedback.provider);
     final layoutsEnabled = ref.watch(AppExperiment.timelineViews.provider);

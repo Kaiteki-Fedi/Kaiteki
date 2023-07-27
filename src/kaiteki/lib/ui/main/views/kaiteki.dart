@@ -216,7 +216,7 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
               await ref
                   .read(
                     notificationServiceProvider(
-                      ref.read(accountProvider)!.key,
+                      ref.read(currentAccountProvider)!.key,
                     ).notifier,
                   )
                   .refresh();

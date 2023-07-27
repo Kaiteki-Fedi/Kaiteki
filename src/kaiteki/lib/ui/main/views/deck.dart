@@ -5,7 +5,8 @@ import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_form.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:kaiteki_core/model.dart";
@@ -85,7 +86,7 @@ class _DeckMainScreenViewState extends ConsumerState<DeckMainScreenView> {
                     IconButton(
                       icon: const Icon(Icons.refresh_rounded),
                       onPressed: () {
-                        final account = ref.read(accountProvider)!;
+                        final account = ref.read(currentAccountProvider)!;
                         ref
                             .read(
                               notificationServiceProvider(account.key).notifier,
@@ -179,8 +180,8 @@ class TimelineDeckColumn extends StatelessWidget {
     return DeckColumn(
       icon: Icon(timelineKind.getIconData()),
       title: Text(timelineKind.getDisplayName(l10n)),
-      child: Timeline.kind(
-        kind: timelineKind,
+      child: Timeline(
+        StandardTimelineSource(timelineKind),
         maxWidth: 800,
         postLayout: PostWidgetLayout.wide,
       ),

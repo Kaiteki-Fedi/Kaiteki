@@ -42,7 +42,7 @@ class _FoxMainScreenViewState extends ConsumerState<FoxMainScreenView> {
                 child: Row(
                   children: [
                     const SizedBox(width: 24),
-                    Text("${ref.watch(accountProvider)?.key.host}"),
+                    Text("${ref.watch(currentAccountProvider)?.key.host}"),
                     const Spacer(),
                     Row(
                       children: [
@@ -118,7 +118,7 @@ class _FoxMainScreenViewState extends ConsumerState<FoxMainScreenView> {
 class _NotificationPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = ref.watch(accountProvider);
+    final account = ref.watch(currentAccountProvider);
     final notificationService = notificationServiceProvider(account!.key);
     final notifications = ref.watch(notificationService).valueOrNull;
 
@@ -151,7 +151,7 @@ class _UserPanelState extends ConsumerState<_UserPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider)!;
+    final account = ref.watch(currentAccountProvider)!;
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Column(
