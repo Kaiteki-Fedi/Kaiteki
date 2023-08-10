@@ -4,3 +4,4 @@ output-localization-file: localizations.dart
 output-class: KaitekiLocalizations
 synthetic-package: false
 preferred-supported-locales: ['en']
+suppress-warnings: true
