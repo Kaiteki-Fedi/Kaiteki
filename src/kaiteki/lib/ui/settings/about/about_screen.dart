@@ -43,12 +43,14 @@ class AboutScreen extends StatelessWidget {
                         children: [
                           Text(
                             appName,
-                            textScaleFactor: 2,
-                            style: Theme.of(context)
-                                    .ktkTextTheme
-                                    ?.kaitekiTextStyle ??
-                                DefaultKaitekiTextTheme(context)
-                                    .kaitekiTextStyle,
+                            style:
+                                Theme.of(context).textTheme.titleLarge!.merge(
+                                      Theme.of(context)
+                                              .ktkTextTheme
+                                              ?.kaitekiTextStyle ??
+                                          DefaultKaitekiTextTheme(context)
+                                              .kaitekiTextStyle,
+                                    ),
                           ),
                           if (badge != null)
                             Padding(

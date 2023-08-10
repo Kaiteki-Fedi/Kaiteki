@@ -44,7 +44,7 @@ class TimelineSliverState extends ConsumerState<TimelineSliver> {
       ref.read(provider.notifier).loadMore();
     });
 
-    final key = ref.listenManual(
+    ref.listenManual(
       currentAccountProvider,
       (previous, next) {
         final provider = TimelineServiceProvider(next!.key, widget.source);
