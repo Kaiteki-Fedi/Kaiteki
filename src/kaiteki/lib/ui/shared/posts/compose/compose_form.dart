@@ -276,10 +276,37 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
             flex: flex,
             child: TextField(
               autofocus: true,
+              textInputAction: TextInputAction.newline,
               decoration: InputDecoration(
                 hintText: l10n.composeBodyHint,
                 border: InputBorder.none,
                 isCollapsed: true,
+              ),
+              contentInsertionConfiguration: ContentInsertionConfiguration(
+                onContentInserted: (value) {
+                  AttachmentDraft? draft;
+
+                  if (value.hasData) {
+                    draft = AttachmentDraft(
+                      file: KaitekiMemoryFile(value.data!),
+                    );
+                  } else {
+                    // TODO(Craftplacer): handle content insertion URIs
+                  }
+
+                  if (draft == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "Kaiteki cannot handle the media inserted.",
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+
+                  setState(() => attachments.add(draft!));
+                },
               ),
               textAlignVertical: TextAlignVertical.top,
               expands: widget.expands,
