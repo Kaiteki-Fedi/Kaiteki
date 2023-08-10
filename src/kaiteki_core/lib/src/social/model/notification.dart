@@ -1,9 +1,8 @@
-
-
 import 'post.dart';
 import 'user.dart';
 
 class Notification {
+  final String id;
   final User? user;
   final Post? post;
   final NotificationType type;
@@ -11,6 +10,7 @@ class Notification {
   final DateTime createdAt;
 
   const Notification({
+    required this.id,
     required this.type,
     required this.createdAt,
     this.user,
@@ -38,6 +38,9 @@ class GroupedNotification implements Notification {
   User? get user => notifications.last.user;
 
   const GroupedNotification(this.notifications);
+
+  @override
+  String get id => notifications.first.id;
 }
 
 enum NotificationType {

@@ -208,6 +208,7 @@ extension KaitekiMastodonNotificationExtension on mastodon.Notification {
     }
 
     return Notification(
+      id: id,
       createdAt: createdAt,
       type: mastodonNotificationTypeMap[type]!,
       user: account.nullTransform((e) => e.toKaiteki(localHost)),

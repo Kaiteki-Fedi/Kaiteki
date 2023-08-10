@@ -223,6 +223,7 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
 extension KaitekiMisskeyNotificationExtension on misskey.Notification {
   Notification toKaiteki(String localHost) {
     return Notification(
+      id: id,
       createdAt: createdAt,
       type: misskeyNotificationTypeRosetta[type]!,
       user: user?.toKaiteki(localHost),
