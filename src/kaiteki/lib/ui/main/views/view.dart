@@ -5,7 +5,6 @@ import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/ui/main/tab_kind.dart";
 import "package:kaiteki/ui/main/views/bird.dart";
 import "package:kaiteki/ui/main/views/cat/view.dart";
-import "package:kaiteki/ui/main/views/catalog.dart";
 import "package:kaiteki/ui/main/views/deck.dart";
 import "package:kaiteki/ui/main/views/fox.dart";
 import "package:kaiteki/ui/main/views/kaiteki.dart";
@@ -48,7 +47,6 @@ VoidCallback? getSearchCallback(BuildContext context, WidgetRef ref) {
 enum MainScreenViewType<T extends MainScreenView> {
   stream(KaitekiMainScreenView.new),
   deck(DeckMainScreenView.new),
-  catalog(CatalogMainScreenView.new),
   videos(VideoMainScreenView.new),
   fox(FoxMainScreenView.new),
   cat(CatMainScreenView.new),
@@ -76,7 +74,6 @@ enum MainScreenViewType<T extends MainScreenView> {
     return switch (this) {
       MainScreenViewType.stream => const Icon(Icons.view_stream_rounded),
       MainScreenViewType.deck => const Icon(Icons.view_column_rounded),
-      MainScreenViewType.catalog => const Icon(Icons.view_module_rounded),
       MainScreenViewType.videos => const Icon(Icons.videocam_rounded),
       MainScreenViewType.fox => buildFunnyEmojiIcon("🦊"),
       MainScreenViewType.cat => buildFunnyEmojiIcon("🐱"),
@@ -88,7 +85,6 @@ enum MainScreenViewType<T extends MainScreenView> {
     return switch (this) {
       MainScreenViewType.stream => "Stream",
       MainScreenViewType.deck => "Deck",
-      MainScreenViewType.catalog => "Catalog",
       MainScreenViewType.videos => "Videos",
       MainScreenViewType.fox => "Fox",
       MainScreenViewType.cat => "Cat",
