@@ -17,7 +17,6 @@ import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/search/screen.dart";
 import "package:kaiteki/ui/settings/a11y/screen.dart";
 import "package:kaiteki/ui/settings/about/about_screen.dart";
-import "package:kaiteki/ui/settings/credits_screen.dart";
 import "package:kaiteki/ui/settings/customization/customization_settings_screen.dart";
 import "package:kaiteki/ui/settings/customization/post_layout.dart";
 import "package:kaiteki/ui/settings/debug/theme_screen.dart";
@@ -140,11 +139,6 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         name: "login",
         path: "/login",
         builder: (_, __) => const LoginScreen(),
-        parentNavigatorKey: _rootNavigatorKey,
-      ),
-      GoRoute(
-        path: "/credits",
-        builder: (_, __) => const CreditsScreen(),
         parentNavigatorKey: _rootNavigatorKey,
       ),
       GoRoute(
