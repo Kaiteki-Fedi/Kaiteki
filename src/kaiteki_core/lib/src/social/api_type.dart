@@ -3,13 +3,6 @@ import 'package:kaiteki_core/src/social/backends/glitch/adapter.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/adapter.dart';
 import 'package:kaiteki_core/src/social/backends/misskey/adapter.dart';
 import 'package:kaiteki_core/src/social/backends/pleroma/adapter.dart';
-import 'package:kaiteki_core/src/social/backends/twitter/v1/adapter.dart';
-import 'package:kaiteki_core/src/social/backends/twitter/v2/adapter.dart';
-
-Future<TwitterAdapter> _instantiateTwitterV2(ApiType _, String __) async =>
-    TwitterAdapter();
-Future<OldTwitterAdapter> _instantiateTwitterV1(ApiType _, String __) async =>
-    OldTwitterAdapter();
 
 enum ApiType<T extends BackendAdapter> {
   mastodon(MastodonAdapter.create),
@@ -18,13 +11,7 @@ enum ApiType<T extends BackendAdapter> {
   misskey(MisskeyAdapter.create),
   akkoma(PleromaAdapter.create, probingPriority: null),
   foundkey(MisskeyAdapter.create, probingPriority: null),
-  calckey(MisskeyAdapter.create, probingPriority: null),
-  twitter(_instantiateTwitterV2, hosts: ['twitter.com']),
-  twitterV1(
-    _instantiateTwitterV1,
-    hosts: ['twitter.com'],
-    probingPriority: null,
-  );
+  calckey(MisskeyAdapter.create, probingPriority: null);
   // TODO(Craftplacer): I'm too lazy, sowwy
   // goToSocial(MastodonAdapter.create, theme: goToSocialTheme),
 

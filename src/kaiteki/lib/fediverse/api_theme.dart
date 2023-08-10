@@ -1,5 +1,4 @@
 import "package:flutter/painting.dart";
-
 import "package:kaiteki_core/kaiteki_core.dart";
 
 class ApiTheme {
@@ -27,11 +26,6 @@ const pleromaTheme = ApiTheme(
   "assets/icons/pleroma.png",
 );
 
-const twitterTheme = ApiTheme(
-  Color(0xFF1DA1F2),
-  "assets/icons/twitter.png",
-);
-
 const akkomaTheme = ApiTheme(
   Color(0xFF462D7A),
   "assets/icons/akkoma.png",
@@ -54,8 +48,6 @@ extension ApiThemeExtension on ApiType {
       ApiType.glitch => mastodonTheme,
       ApiType.misskey => misskeyTheme,
       ApiType.pleroma => pleromaTheme,
-      ApiType.twitter => twitterTheme,
-      ApiType.twitterV1 => twitterTheme,
       ApiType.akkoma => akkomaTheme,
       ApiType.foundkey => foundKeyTheme,
       ApiType.calckey => calckeyTheme

@@ -47,6 +47,4 @@ const _$ApiTypeEnumMap = {
   ApiType.akkoma: 'akkoma',
   ApiType.foundkey: 'foundkey',
   ApiType.calckey: 'calckey',
-  ApiType.twitter: 'twitter',
-  ApiType.twitterV1: 'twitterV1',
 };
