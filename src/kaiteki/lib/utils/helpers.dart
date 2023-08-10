@@ -17,7 +17,12 @@ Future<void> resolveAndOpenUser(
   final adapter = ref.read(adapterProvider);
   user.resolve(adapter).then((user) async {
     // lookupSnackbar.close();
-    if (user == null) throw Exception("User not found");
+    if (user == null) {
+      messenger.showSnackBar(
+        SnackBar(content: Text("Couldn't find $handle")),
+      );
+      return;
+    }
     await context.showUser(user, ref);
   }).catchError((e) {
     Logger("resolveAndOpenUser").warning("Failed to resolve handle $handle", e);

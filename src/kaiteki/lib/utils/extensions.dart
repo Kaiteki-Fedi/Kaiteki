@@ -4,6 +4,7 @@ import "package:html/dom.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:logging/logging.dart";
 
 export "package:kaiteki/text/rendering_extensions.dart";
 export "package:kaiteki/utils/extensions/build_context.dart";
@@ -79,6 +80,8 @@ extension HtmlNodeExtensions on Node {
 
 extension UserReferenceExtensions on UserReference {
   Future<User?> resolve(BackendAdapter adapter) async {
+    Logger("resolve").finest("Resolving user: $this");
+
     final id = this.id;
     if (id != null) {
       return adapter.getUserById(id);
@@ -87,6 +90,12 @@ extension UserReferenceExtensions on UserReference {
     final username = this.username;
     if (username != null) {
       return adapter.lookupUser(username, host);
+    }
+
+    final url = remoteUrl;
+    if (url != null) {
+      final entity = await adapter.resolveUrl(Uri.parse(url));
+      if (entity is User) return entity;
     }
 
     return null;
