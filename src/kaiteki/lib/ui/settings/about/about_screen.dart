@@ -1,6 +1,5 @@
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:kaiteki/app.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
@@ -66,29 +65,9 @@ class AboutScreen extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
                       ],
-                      Card(
-                        margin: const EdgeInsets.only(
-                          left: 4.0,
-                          right: 4.0,
-                          top: 24.0,
-                          bottom: 4.0,
-                        ),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.gavel_rounded),
-                              title: Text(l10n.creditsLicenses),
-                              trailing: const Icon(Icons.chevron_right_rounded),
-                              onTap: () => _onShowLicenses(context),
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.people_rounded),
-                              title: Text(l10n.creditsTitle),
-                              onTap: () => context.push("/credits"),
-                              trailing: const Icon(Icons.chevron_right_rounded),
-                            ),
-                          ],
-                        ),
+                      TextButton(
+                        child: Text(l10n.creditsLicenses),
+                        onPressed: () => _onShowLicenses(context),
                       ),
                       const SizedBox(height: 12.0),
                       IconTheme(
