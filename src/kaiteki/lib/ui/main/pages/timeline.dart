@@ -98,6 +98,7 @@ class TimelinePageState extends ConsumerState<TimelinePage>
                   TabBar(
                     controller: _tabController,
                     isScrollable: true,
+                    tabAlignment: TabAlignment.center,
                     onTap: (i) => _onTabTap(i, tabs),
                     tabs: [
                       for (final type in tabs)
