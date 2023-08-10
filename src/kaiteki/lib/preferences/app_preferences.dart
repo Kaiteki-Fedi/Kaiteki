@@ -48,12 +48,6 @@ final hidePostMetrics = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
-final showReadNotifications = createSettingProvider<bool>(
-  key: "showReadNotifications",
-  initialValue: false,
-  provider: sharedPreferencesProvider,
-);
-
 final showAttachmentDescriptionWarning = createSettingProvider<bool>(
   key: "showAttachmentDescriptionWarning",
   initialValue: false,
