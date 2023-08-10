@@ -49,7 +49,7 @@ dependencies:
       url: https://github.com/Kaiteki-Fedi/kaiteki_material.git
   logging: ^1.2.0
   markdown: ^7.0.1
-  material_color_utilities: ^0.3.0
+  material_color_utilities: <1.0.0
   mdi: ^5.0.0-nullsafety.0
   mek_data_class: ^1.0.0
   meta: ^1.8.0
