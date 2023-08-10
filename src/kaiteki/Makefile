@@ -24,7 +24,7 @@ endif
 $(info build number: $(BUILD_NUMBER))
 
 # Define targets and their dependencies
-	all: generate-l10n analyze
+all: generate-l10n analyze
 
 build-android:
 ifdef $(STORE)
