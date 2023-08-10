@@ -139,7 +139,7 @@ class MentionElement extends Element {
   MentionElement(this.reference) : super(text: reference.handle);
 
   @override
-  String toString() => "Mention";
+  String toString() => reference.toString();
 
   @override
   List<Object?> get props => [reference];
