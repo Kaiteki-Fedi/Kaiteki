@@ -5,6 +5,7 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
+import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -16,11 +17,13 @@ import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/main/navigation/navigation_bar.dart";
 import "package:kaiteki/ui/main/navigation/navigation_rail.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
+import "package:kaiteki/ui/main/pages/timeline.dart";
 import "package:kaiteki/ui/main/tab.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/shared/side_sheet_manager.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
@@ -176,10 +179,10 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
         return FadeThroughTransition(
           animation: primaryAnimation,
           secondaryAnimation: secondaryAnimation,
-          child: Material(child: child),
+          child: child,
         );
       },
-      child: widget.getPage(widget.tab),
+      child: Material(child: widget.getPage(widget.tab)),
     );
   }
 
@@ -211,21 +214,9 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
         ),
       IconButton(
         icon: const Icon(Icons.refresh_rounded),
-        onPressed: switch (widget.tab) {
-          TabKind.notifications => () async {
-              await ref
-                  .read(
-                    notificationServiceProvider(
-                      ref.read(currentAccountProvider)!.key,
-                    ).notifier,
-                  )
-                  .refresh();
-            },
-          _ => null,
-        },
+        onPressed: onRefresh,
         tooltip: l10n.refreshTimelineButtonLabel,
       ),
-
       // TODO(Craftplacer): hide if no keyboard is detected
       MenuAnchor(
         builder: (context, controller, child) {
@@ -262,6 +253,34 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
       ),
       const AccountSwitcherWidget(size: 40),
     ];
+  }
+
+  Future<void> onRefresh() async {
+    final accountKey = ref.read(currentAccountProvider)!.key;
+    switch (widget.tab) {
+      case TabKind.notifications:
+        final notifier =
+            ref.read(notificationServiceProvider(accountKey).notifier);
+        await notifier.refresh();
+        break;
+
+      case TabKind.home:
+        final timeline = ref.read(currentTimelineProvider);
+        final notifier = ref.read(
+          timelineServiceProvider(
+            accountKey,
+            StandardTimelineSource(timeline),
+          ).notifier,
+        );
+        await notifier.refresh();
+        break;
+
+      case TabKind.chats:
+      case TabKind.bookmarks:
+      case TabKind.explore:
+      case TabKind.directMessages:
+        break;
+    }
   }
 
   Widget _buildDesktopView(
@@ -345,8 +364,8 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
           ? CustomPaint(painter: PridePainter(prideFlagDesign))
           : null,
       primary: AppBar(
-        foregroundColor: Colors.black,
-        forceMaterialTransparency: true,
+        foregroundColor: prideEnabled ? Colors.black : foregroundColor,
+        forceMaterialTransparency: theme.useMaterial3,
         title: Text(
           appName,
           style: (theme.ktkTextTheme?.kaitekiTextStyle ??

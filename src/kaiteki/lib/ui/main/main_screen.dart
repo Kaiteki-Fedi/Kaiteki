@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
+import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
 import "package:kaiteki/ui/main/pages/chats.dart";
@@ -13,6 +14,7 @@ import "package:kaiteki/ui/main/pages/timeline.dart";
 import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/options_dialog.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
@@ -37,10 +39,10 @@ class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key, this.initialTimeline});
 
   @override
-  ConsumerState<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => MainScreenState();
 }
 
-class _MainScreenState extends ConsumerState<MainScreen> {
+class MainScreenState extends ConsumerState<MainScreen> {
   // Why does this exist? In order to refresh the timeline
   final _timelineKey = GlobalKey<TimelinePageState>();
   TabKind _currentTab = TabKind.home;
@@ -49,7 +51,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   VoidCallback? get _refresh {
     switch (_currentTab) {
       case TabKind.home:
-        return _timelineKey.currentState?.refresh;
+        final timeline = _timelineKey.currentState?.timeline;
+        if (timeline == null) return null;
+        final account = ref.watch(currentAccountProvider)!.key;
+        return ref
+            .read(
+              timelineServiceProvider(
+                account,
+                StandardTimelineSource(timeline),
+              ).notifier,
+            )
+            .refresh;
 
       case TabKind.notifications:
         final account = ref.watch(currentAccountProvider)!.key;
@@ -158,7 +170,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget buildPage(BuildContext context, TabKind tab) {
     return switch (tab) {
       TabKind.home => TimelinePage(
-          key: _timelineKey,
           initialTimeline: widget.initialTimeline,
         ),
       TabKind.notifications => const NotificationsPage(),
