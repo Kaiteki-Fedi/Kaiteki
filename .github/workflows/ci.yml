@@ -39,6 +39,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Analyze
         run: 'flutter analyze --no-pub --no-fatal-infos --no-congratulate --no-preamble'
 
@@ -84,6 +87,9 @@ jobs:
 
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
 
       - name: Build
         run: 'make build-linux ${{needs.test.outputs.make-args}}'
@@ -154,6 +160,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Build (unsigned)
         if: github.event_name == 'pull_request'
         run: 'make build-android ${{needs.test.outputs.make-args}}'
@@ -201,6 +210,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Build
         run: 'make build-windows'
         
@@ -233,6 +245,9 @@ jobs:
 
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
 
       - name: Build
         run: 'make build-web'

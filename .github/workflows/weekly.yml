@@ -38,6 +38,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Analyze
         run: 'flutter analyze --no-pub --no-fatal-infos --no-congratulate --no-preamble'
 
@@ -80,6 +83,9 @@ jobs:
 
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
 
       - name: Build
         run: 'make build-linux ${{needs.test.outputs.make-args}}'
@@ -151,6 +157,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Dump signing key
         uses: timheuer/base64-to-file@v1.2
         with:
@@ -193,6 +202,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Build
         run: 'make build-windows ${{needs.test.outputs.make-args}}'
         
@@ -225,6 +237,9 @@ jobs:
         
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
       
       - name: Build
         run: 'make build-web ${{needs.test.outputs.make-args}}'

@@ -24,7 +24,7 @@ endif
 $(info build number: $(BUILD_NUMBER))
 
 # Define targets and their dependencies
-all: analyze
+	all: generate-l10n analyze
 
 build-android:
 ifdef $(STORE)
@@ -58,5 +58,8 @@ run: analyze
 test:
 	@$(FLUTTER) test
 
+generate-l10n:
+	@$(FLUTTER) gen-l10n
+
 # Define phony targets
-.PHONY: all analyze clean run test build-android build-web build-windows build-linux
+.PHONY: all analyze clean run test build-android build-web build-windows build-linux generate-l10n
