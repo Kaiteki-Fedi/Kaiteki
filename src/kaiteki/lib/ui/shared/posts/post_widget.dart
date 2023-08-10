@@ -301,8 +301,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
     final isExpanded = widget.layout == PostWidgetLayout.expanded;
     final isWide = widget.layout == PostWidgetLayout.wide;
-    final outlineColor = Theme.of(context).colorScheme.outline;
-    final outlineTextStyle = outlineColor.textStyle;
 
     final signature = _buildSignature(context);
     const padding = EdgeInsets.all(8);
