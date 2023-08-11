@@ -4,15 +4,16 @@ import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:kaiteki_core/social.dart';
-import 'extensions.dart';
+import 'package:logging/logging.dart';
+import 'package:uuid/uuid.dart';
+
 import 'capabilities.dart';
 import 'client.dart';
 import 'exception.dart';
+import 'extensions.dart';
 import 'requests/sign_in.dart';
 import 'responses/check_session.dart';
 import 'responses/signin.dart';
-import 'package:logging/logging.dart';
-import 'package:uuid/uuid.dart';
 
 // TODO(Craftplacer): Consider adding additional permissions based on version like Milktea, https://github.com/pantasystem/Milktea/blob/develop/features/auth/src/main/java/net/pantasystem/milktea/auth/viewmodel/Permissions.kt
 const List<String> permissions = [
@@ -588,7 +589,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     return PaginatedList(
       users.map((e) => e.follower!.toKaiteki(instance)).toList(),
       null,
-      users.last.followerId,
+      users.lastOrNull?.followerId,
     );
   }
 
@@ -606,7 +607,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     return PaginatedList(
       users.map((e) => e.followee!.toKaiteki(instance)).toList(),
       null,
-      users.last.followeeId,
+      users.lastOrNull?.followeeId,
     );
   }
 
