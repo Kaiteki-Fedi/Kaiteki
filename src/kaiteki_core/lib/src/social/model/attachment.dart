@@ -1,6 +1,5 @@
-import 'package:kaiteki_core/src/social/model/adapted_entity.dart';
-
-class Attachment<T> extends AdaptedEntity<T> {
+class Attachment<T> {
+  final T? source;
   final Uri? previewUrl;
   final Uri url;
   final String? fileName;
@@ -11,7 +10,7 @@ class Attachment<T> extends AdaptedEntity<T> {
   final String? blurHash;
 
   const Attachment({
-    super.source,
+    this.source,
     required this.previewUrl,
     required this.url,
     this.description,

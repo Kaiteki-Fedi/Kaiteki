@@ -1,6 +1,5 @@
-import 'package:kaiteki_core/src/social/model/adapted_entity.dart';
-
-class Poll<T> extends AdaptedEntity<T> {
+class Poll<T> {
+  final T? source;
   final String id;
   final bool allowMultipleChoices;
   final bool hasVoted;
@@ -11,7 +10,7 @@ class Poll<T> extends AdaptedEntity<T> {
   final int? voterCount;
 
   const Poll({
-    super.source,
+    this.source,
     required this.hasEnded,
     required this.id,
     required this.allowMultipleChoices,

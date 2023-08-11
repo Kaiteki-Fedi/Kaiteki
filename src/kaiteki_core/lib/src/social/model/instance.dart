@@ -1,7 +1,7 @@
-import 'adapted_entity.dart';
 import 'user.dart';
 
-class Instance<T> extends AdaptedEntity<T> {
+class Instance<T> {
+  final T? source;
   final String name;
   final Uri? iconUrl;
   final Uri? mascotUrl;
@@ -22,7 +22,7 @@ class Instance<T> extends AdaptedEntity<T> {
   final Uri? tosUrl;
 
   const Instance({
-    super.source,
+    this.source,
     required this.name,
     this.iconUrl,
     this.backgroundUrl,

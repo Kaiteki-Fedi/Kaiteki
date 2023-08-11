@@ -1,10 +1,11 @@
-import 'package:kaiteki_core/src/social/model/adapted_entity.dart';
 import 'emoji.dart';
 import 'user_flags.dart';
 import 'user_handle.dart';
 
 /// A class representing an user or account.
-class User<T> extends AdaptedEntity<T> {
+class User<T> {
+  final T? source;
+
   /// The time that this user was created.
   final DateTime? joinDate;
 
@@ -54,7 +55,7 @@ class User<T> extends AdaptedEntity<T> {
     required this.host,
     required this.id,
     required this.username,
-    super.source,
+    this.source,
     this.avatarBlurHash,
     this.avatarUrl,
     this.bannerBlurHash,

@@ -2,7 +2,6 @@
 
 import 'package:collection/collection.dart';
 
-import 'adapted_entity.dart';
 import 'attachment.dart';
 import 'embed.dart';
 import 'emoji.dart';
@@ -20,7 +19,8 @@ export 'post_metrics.dart';
 export 'post_state.dart';
 
 /// A class representing a post.
-class Post<T> extends AdaptedEntity<T> {
+class Post<T>{
+  final T? source;
   final String id;
   final DateTime postedAt;
   final User author;
@@ -46,7 +46,7 @@ class Post<T> extends AdaptedEntity<T> {
   final String? language;
 
   const Post({
-    super.source,
+    this.source,
     required this.postedAt,
     required this.author,
     required this.id,
