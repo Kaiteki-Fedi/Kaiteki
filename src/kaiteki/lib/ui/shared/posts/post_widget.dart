@@ -642,7 +642,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     }
 
     Widget buildOpenInMenuItem(BuildContext context) {
-      final l10n = context.l10n;
       final currentAccount = ref.read(currentAccountProvider);
       final federatedAccounts = ref.read(accountManagerProvider).accounts.where(
           (e) =>
@@ -661,10 +660,10 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         menuChildren: [
           MenuItemButton(
             leadingIcon: const Icon(Icons.web_asset_rounded),
-            onPressed: () async {
-              if (url == null) return;
-              await launchUrl(url, mode: LaunchMode.externalApplication);
-            },
+            onPressed: () async => launchUrl(
+              url,
+              mode: LaunchMode.externalApplication,
+            ),
             child: const Text("Browser"),
           ),
           for (final account in federatedAccounts)
