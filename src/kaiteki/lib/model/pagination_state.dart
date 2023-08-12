@@ -21,7 +21,7 @@ extension AsyncValueToPagingState<T> on AsyncValue<PaginationState<T>> {
         nextPageKey: data.value.canPaginateFurther ? nextPageKey : null,
         itemList: data.value.items,
       ),
-      error: (error) => PagingState(error: error.error),
+      error: (error) => PagingState(error: (error.error, error.stackTrace)),
     );
   }
 }
