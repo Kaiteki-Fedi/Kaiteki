@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter/semantics.dart";
 import "package:go_router/go_router.dart";
 import "package:intl/intl.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
@@ -640,6 +641,70 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       );
     }
 
+    Widget buildOpenInMenuItem(BuildContext context) {
+      final l10n = context.l10n;
+      final currentAccount = ref.read(currentAccountProvider);
+      final federatedAccounts = ref.read(accountManagerProvider).accounts.where(
+          (e) =>
+              e != currentAccount && e.adapter is DecentralizedBackendAdapter);
+
+      final url = _post.externalUrl;
+      if (url == null) {
+        return const MenuItemButton(
+          leadingIcon: Icon(Icons.open_in_new),
+          child: Text("Open in..."),
+        );
+      }
+
+      return SubmenuButton(
+        leadingIcon: const Icon(Icons.open_in_new),
+        menuChildren: [
+          MenuItemButton(
+            leadingIcon: const Icon(Icons.web_asset_rounded),
+            onPressed: () async {
+              if (url == null) return;
+              await launchUrl(url, mode: LaunchMode.externalApplication);
+            },
+            child: const Text("Browser"),
+          ),
+          for (final account in federatedAccounts)
+            MenuItemButton(
+              leadingIcon: AvatarWidget(
+                account.user,
+                size: 24,
+              ),
+              child: Text(account.user.handle.toString()),
+              onPressed: () async {
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
+                final router = GoRouter.of(context);
+
+                final adapter = account.adapter;
+                final post = await adapter.resolveUrl(url);
+                if (post is! Post) {
+                  scaffoldMessenger.showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Couldn't find post on ${account.key.host}",
+                      ),
+                    ),
+                  );
+                  return;
+                }
+
+                router.pushNamed(
+                  "post",
+                  pathParameters: {
+                    ...account.key.routerParams,
+                    "id": post.id,
+                  },
+                );
+              },
+            )
+        ],
+        child: const Text("Open in..."),
+      );
+    }
+
     return [
       if (adapter is BookmarkSupport) buildBookmarkMenuItem(context),
       buildTranslateMenuItem(context),
@@ -660,7 +725,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         buildVetInstanceMenuItem(context),
       const Divider(),
       buildShareMenuItem(context),
-      buildOpenInBrowserMenuItem(context),
+      buildOpenInMenuItem(context),
       if (_post.content != null &&
           ref.watch(preferences.developerMode).value) ...[
         const Divider(),
