@@ -1,18 +1,15 @@
 import "dart:async";
-import "dart:developer";
 
 import "package:animations/animations.dart";
 import "package:async/async.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/auth/login_functions.dart";
-import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/instance_prober.dart";
-import "package:kaiteki/fediverse/model/instance.dart";
+import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/auth/login/dialogs/api_type_dialog.dart";
 import "package:kaiteki/ui/auth/login/pages/code_page.dart";
 import "package:kaiteki/ui/auth/login/pages/handoff_page.dart";
@@ -23,8 +20,10 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart";
 import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
-import "package:tuple/tuple.dart";
+import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -73,7 +72,7 @@ class InstanceCompound {
   @override
   int get hashCode => host.hashCode ^ type.hashCode ^ data.hashCode;
 
-  BackendAdapter createAdapter() => type.createAdapter(host);
+  Future<BackendAdapter> createAdapter() => type.createAdapter(host);
 }
 
 class CallbackRequest<T, K extends Function> {
@@ -103,8 +102,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _loginFuture = () async {
         try {
           await _loginToInstance(host);
-        } catch (s, e) {
-          _showError(s, e);
+        } catch (e, s) {
+          _showError((e, s));
         } finally {
           setState(() => _instance = null);
         }
@@ -136,7 +135,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               duration: const Duration(milliseconds: 500),
               child: instanceBackgroundUrl == null
                   ? const SizedBox()
-                  : Image.network(instanceBackgroundUrl, fit: BoxFit.cover),
+                  : Image.network(
+                      instanceBackgroundUrl.toString(),
+                      fit: BoxFit.cover,
+                    ),
             ),
           ),
           Scaffold(
@@ -191,7 +193,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return l10n.authNoUrlAllowed;
     }
 
-    // var accounts = ref.read(accountProvider);
+    // var accounts = ref.read(currentAccountProvider);
     // if (accounts.accounts.any((compound) =>
     //     compound.instance == instance &&
     //     compound.accountSecret.username == username)) {
@@ -305,7 +307,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (selectedType == null) return null;
       type = selectedType;
 
-      final adapter = type.createAdapter(host);
+      final adapter = await type.createAdapter(host);
       instance = await adapter.getInstance();
     }
 
@@ -370,31 +372,48 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login(InstanceCompound instance) async {
-    final accounts = ref.read(accountManagerProvider);
-    final adapter = instance.createAdapter();
+    final accountManager = ref.read(accountManagerProvider.notifier);
+    final adapter = await instance.createAdapter();
 
-    final result = await adapter.login(
-      await accounts.getClientSecret(instance.host),
-      _askForCredentials,
-      _askForCode,
-      _handleOAuth,
+    final loginInterface = adapter as LoginSupport;
+
+    final clientSecret = await accountManager.getClientSecret(instance.host);
+    final loginContext = LoginContext(
+      clientSecret:
+          clientSecret.nullTransform((e) => (e.clientId, e.clientSecret)),
+      requestCredentials: _askForCredentials,
+      requestCode: _askForCode,
+      requestOAuth: _handleOAuth,
+      openUrl: (uri) async {
+        await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      },
+      application: appId,
     );
 
-    if (result.aborted) return;
+    final result = await loginInterface.login(loginContext);
 
-    if (!result.successful) {
-      final error = result.error!;
-      _showError(error.item1, error.item2);
+    if (result is! LoginSuccess) {
+      if (result is LoginFailure) _showError(result.error);
       return;
     }
 
-    final account = result.account!;
+    final account = Account.fromLoginResult(
+      result,
+      adapter,
+      instance.host,
+    );
+
     if (account.accountSecret == null) {
       await _showTemporaryAccountNotice();
     }
 
     if (!mounted) {
-      log("Login screen was unmounted before login could be completed");
+      Logger("LoginScreen").warning(
+        "Login screen was unmounted before login could be completed",
+      );
       return;
     }
 
@@ -405,15 +424,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    await accounts.add(account);
-    router.goNamed("home", params: account.key.routerParams);
+    await accountManager.add(account);
+    router.goNamed("home", pathParameters: account.key.routerParams);
   }
 
-  Future<void> _showError(Object error, StackTrace? stack) async {
+  Future<void> _showError(TraceableError error) async {
     await showDialog(
       context: context,
       builder: (_) => AuthenticationUnsuccessfulDialog(
-        error: Tuple2(error, stack),
+        error: error,
       ),
     );
   }
@@ -426,7 +445,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final credentialRequest = _credentialRequest;
     if (credentialRequest != null) {
       return UserPage(
-        image: _instance?.data.iconUrl,
+        image: _instance?.data.iconUrl.toString(),
         onBack: _onBackButtonPressed,
         onSubmit: (username, password) async {
           final credentials = Credentials(username, password);
@@ -474,8 +493,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       _loginFuture = () async {
         try {
           await _loginToInstance(host);
-        } catch (s, e) {
-          _showError(s, e);
+        } catch (e, s) {
+          _showError((e, s));
         } finally {
           setState(() => _instance = null);
         }

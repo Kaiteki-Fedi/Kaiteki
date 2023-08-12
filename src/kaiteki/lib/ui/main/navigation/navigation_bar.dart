@@ -23,28 +23,28 @@ class MainScreenNavigationBar extends StatelessWidget {
         onDestinationSelected: onChangeIndex,
         selectedIndex: currentIndex,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        destinations: _navigationDestinations,
+        destinations: _buildNavigationDestinations(context),
       );
     }
 
     return BottomNavigationBar(
       selectedFontSize: 12,
-      showUnselectedLabels: false,
       onTap: onChangeIndex,
       currentIndex: currentIndex,
       items: _buildBottomNavigationBarItems(context),
     );
   }
 
-  List<Widget> get _navigationDestinations {
+  List<Widget> _buildNavigationDestinations(BuildContext context) {
     final navigationDestinations = <NavigationDestination>[];
     for (final tab in tabs) {
       final unreadCount = tab.fetchUnreadCount?.call();
       navigationDestinations.add(
         NavigationDestination(
-          icon: Icon(tab.icon).wrapWithLargeBadge(unreadCount),
-          selectedIcon: Icon(tab.selectedIcon).wrapWithLargeBadge(unreadCount),
-          label: tab.text,
+          icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
+          selectedIcon:
+              Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          label: tab.kind.getLabel(context),
         ),
       );
     }
@@ -59,9 +59,10 @@ class MainScreenNavigationBar extends StatelessWidget {
       final unreadCount = tab.fetchUnreadCount?.call();
       bottomNavigationBarItems.add(
         BottomNavigationBarItem(
-          icon: Icon(tab.icon).wrapWithLargeBadge(unreadCount),
-          activeIcon: Icon(tab.selectedIcon).wrapWithLargeBadge(unreadCount),
-          label: tab.text,
+          icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
+          activeIcon:
+              Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          label: tab.kind.getLabel(context),
         ),
       );
     }

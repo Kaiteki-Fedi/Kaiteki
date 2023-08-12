@@ -1,12 +1,37 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/poll.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class PollWidget extends StatelessWidget {
   final Poll poll;
+  final List<CustomEmoji> emojis;
   final EdgeInsets padding;
 
-  const PollWidget(this.poll, {super.key, this.padding = EdgeInsets.zero});
+  const PollWidget(
+    this.poll, {
+    super.key,
+    this.padding = EdgeInsets.zero,
+    this.emojis = const [],
+  });
+
+  factory PollWidget.fromPost(
+    Post post, {
+    Key? key,
+    EdgeInsets padding = EdgeInsets.zero,
+  }) {
+    final poll = post.poll;
+
+    if (poll == null) throw ArgumentError("Post has no poll", "post");
+
+    return PollWidget(
+      post.poll!,
+      key: key,
+      padding: padding,
+      emojis: post.emojis?.whereType<CustomEmoji>().toList() ?? [],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +81,33 @@ class PollWidget extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(option.text),
+                          Consumer(
+                            builder: (context, ref, _) {
+                              return Text.rich(
+                                TextRenderer.fromContext(
+                                  context,
+                                  ref,
+                                  TextContext(
+                                    // HACK(Craftplacer): this is jank
+                                    emojiResolver: (e) => resolveEmoji(
+                                      e,
+                                      ref,
+                                      ref
+                                          .read(currentAccountProvider)
+                                          ?.user
+                                          .host,
+                                      emojis,
+                                    ),
+                                  ),
+                                ).render(
+                                  parseText(
+                                    option.text,
+                                    ref.read(textParserProvider),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                           Text(
                             "${option.voteCount} votes",
                             style: theme.textTheme.labelSmall,

@@ -17,6 +17,7 @@ final shortcuts = <ShortcutActivator, Intent>{
   gotoNotifications: const GoToAppLocationIntent(AppLocation.notifications),
   newPost: const NewPostIntent(),
   openMenu: const OpenMenuIntent(),
+  openLauncher: const OpenLauncherIntent(),
 };
 
 final propagatingTextFieldShortcuts = {

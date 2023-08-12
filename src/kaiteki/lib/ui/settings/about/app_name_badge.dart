@@ -9,19 +9,20 @@ class AppNameBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: kind.backgroundColor,
         borderRadius: const BorderRadius.all(Radius.circular(24)),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Text(
-        kind.name.toUpperCase(),
-        style: GoogleFonts.robotoMono(
-          color: kind.foregroundColor,
-          fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Text(
+          kind.name.toUpperCase(),
+          style: GoogleFonts.robotoMono(
+            color: kind.foregroundColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        textScaleFactor: 1.5,
       ),
     );
   }

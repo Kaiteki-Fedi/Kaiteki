@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
@@ -8,6 +7,8 @@ import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class UserListDialog extends StatelessWidget {
   final Widget title;
@@ -57,9 +58,16 @@ class UserListDialog extends StatelessWidget {
   }
 
   Widget _buildList(List<User> users) {
-    return ListView.builder(
-      itemCount: users.length,
-      itemBuilder: (_, i) => UserListTile(user: users[i]),
+    return Consumer(
+      builder: (context, ref, _) {
+        return ListView.builder(
+          itemCount: users.length,
+          itemBuilder: (context, i) => UserListTile(
+            user: users[i],
+            onPressed: () => context.showUser(users[i], ref),
+          ),
+        );
+      },
     );
   }
 
@@ -78,63 +86,35 @@ class UserListTile extends ConsumerWidget {
     super.key,
     required this.user,
     this.onPressed,
+    this.showDescription = true,
     this.trailing = const [],
-    this.minLeadingWidget = 52.0,
   });
 
   final User user;
   final VoidCallback? onPressed;
   final List<Widget> trailing;
-  final double minLeadingWidget;
+  final bool showDescription;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final description = user.description?.trim();
-    const avatarOffset = -4;
-    final leftSideWidth = minLeadingWidget - avatarOffset;
-
-    return InkWell(
-      onTap: onPressed ?? () => context.showUser(user, ref),
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: 16.0 + avatarOffset,
-          right: 16.0,
-          top: 8.0,
-          bottom: 8.0,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+    final hasDescription = description != null && description.isNotEmpty;
+    return ListTile(
+      onTap: onPressed,
+      title: UserDisplayNameWidget(user),
+      leading: AvatarWidget(user, size: 32),
+      titleAlignment: ListTileTitleAlignment.top,
+      subtitle: hasDescription && showDescription
+          ? Text.rich(
+              user.renderText(context, ref, description),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
+      trailing: trailing.nullTransform(
+        (e) => Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 32),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: leftSideWidth,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: AvatarWidget(user, size: 32),
-                    ),
-                  ),
-                  Expanded(child: UserDisplayNameWidget(user)),
-                  if (trailing.isNotEmpty) const SizedBox(width: 8),
-                  ...trailing,
-                ],
-              ),
-            ),
-            if (description != null && description.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Padding(
-                padding: EdgeInsets.only(left: leftSideWidth),
-                child: Text.rich(
-                  user.renderText(context, ref, description),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ],
+          children: e,
         ),
       ),
     );

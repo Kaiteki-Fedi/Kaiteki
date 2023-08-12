@@ -1,34 +1,29 @@
-import "dart:convert";
 import "dart:math";
 
-import "package:async/async.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart" hide Visibility;
 import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" show bottomSheetConstraints;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
-import "package:kaiteki/fediverse/interfaces/preview_support.dart";
-import "package:kaiteki/fediverse/interfaces/search_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
-import "package:kaiteki/model/file.dart";
+import "package:kaiteki/model/language.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
-import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/adaptive_menu_anchor.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/missing_description.dart";
+import "package:kaiteki/ui/shared/dialogs/post_too_long_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/enum_icon_button.dart";
-import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_text_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_tray.dart";
-import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/ui/shared/posts/compose/post_preview.dart";
+import "package:kaiteki/ui/shared/visibility_icon.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 const double splashRadius = 20.0;
 
@@ -38,6 +33,7 @@ class ComposeForm extends ConsumerStatefulWidget {
   final bool showPreview;
   final bool expands;
   final VoidCallback? onSubmit;
+  final bool minimal;
 
   const ComposeForm({
     super.key,
@@ -46,27 +42,16 @@ class ComposeForm extends ConsumerStatefulWidget {
     this.showPreview = false,
     this.expands = false,
     this.onSubmit,
+    this.minimal = false,
   });
 
   @override
-  ConsumerState<ComposeForm> createState() => PostFormState();
+  ConsumerState<ComposeForm> createState() => ComposeFormState();
 }
 
-class PostFormState extends ConsumerState<ComposeForm> {
-  late final TextEditingController _bodyController =
-      TextEditingController(text: initialBody)..addListener(_typingTimer.reset);
-
-  late final TextEditingController _subjectController = TextEditingController()
-    ..addListener(_typingTimer.reset);
-
-  late final RestartableTimer _typingTimer = RestartableTimer(
-    const Duration(seconds: 1),
-    () {
-      _typingTimer.cancel();
-      setState(() {});
-    },
-  );
-
+class ComposeFormState extends ConsumerState<ComposeForm> {
+  late final TextEditingController _bodyController;
+  late final TextEditingController _subjectController;
   final List<AttachmentDraft> attachments = [];
   var _visibility = Visibility.public;
   Formatting? _formatting;
@@ -76,7 +61,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
     final op = widget.replyTo;
 
     if (op != null) {
-      final currentUser = ref.read(accountProvider)!.user;
+      final currentUser = ref.read(currentAccountProvider)!.user;
 
       final handles = <String>[
         if (op.author.id != currentUser.id) op.author.handle.toString(),
@@ -127,13 +112,6 @@ class PostFormState extends ConsumerState<ComposeForm> {
   ];
 
   @override
-  void dispose() {
-    super.dispose();
-
-    _typingTimer.cancel();
-  }
-
-  @override
   void initState() {
     super.initState();
 
@@ -141,6 +119,11 @@ class PostFormState extends ConsumerState<ComposeForm> {
     if (op?.visibility != null) {
       _visibility = op!.visibility!;
     }
+
+    _bodyController = TextEditingController(text: initialBody)
+      ..addListener(() => setState(() {}));
+    _subjectController = TextEditingController()
+      ..addListener(() => setState(() {}));
   }
 
   @override
@@ -151,10 +134,10 @@ class PostFormState extends ConsumerState<ComposeForm> {
     _language = opLanguage ?? Localizations.localeOf(context).languageCode;
   }
 
+  int get flex => widget.expands ? 1 : 0;
+
   @override
   Widget build(BuildContext context) {
-    final adapter = ref.watch(adapterProvider);
-    final flex = widget.expands ? 1 : 0;
     final l10n = context.l10n;
 
     return Shortcuts(
@@ -163,172 +146,205 @@ class PostFormState extends ConsumerState<ComposeForm> {
         shortcuts: const {commit: SendIntent()},
         actions: {
           SendIntent: CallbackAction(
-            onInvoke: (_) => post(context, adapter),
+            onInvoke: (_) => post(context),
           ),
         },
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (widget.showPreview && adapter is PreviewSupport) ...[
-              FutureBuilder(
-                future: getPreviewFuture(adapter as PreviewSupport),
-                builder: buildPreview,
-              ),
-              const Divider(height: 15),
-            ],
-            Flexible(
+            Expanded(
               flex: flex,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                child: Column(
-                  children: [
-                    if (widget.enableSubject)
-                      Column(
+              child: Card(
+                elevation: 0,
+                shape: const Border(),
+                child: widget.minimal
+                    ? Row(
                         children: [
-                          TextField(
-                            decoration: InputDecoration(
-                              hintText: l10n.composeContentWarningHint,
-                              border: InputBorder.none,
+                          Expanded(child: buildEdit(context)),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: FilledButton.icon(
+                              label: Text(l10n.submitButtonTooltip),
+                              onPressed: () => post(context),
+                              icon: const Icon(Icons.send_rounded),
+                              style: FilledButton.styleFrom(
+                                visualDensity: VisualDensity.standard,
+                              ),
                             ),
-                            controller: _subjectController,
                           ),
-                          const Divider(),
                         ],
-                      ),
-                    Flexible(
-                      flex: flex,
-                      child: TextField(
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          hintText: l10n.composeBodyHint,
-                          border: InputBorder.none,
-                        ),
-                        textAlignVertical: TextAlignVertical.top,
-                        expands: widget.expands,
-                        minLines: widget.expands ? null : 6,
-                        maxLines: widget.expands ? null : 8,
-                        controller: _bodyController,
-                      ),
+                      )
+                    // HACK(Craftplacer): I wanted to settle on a, `AnimatedCrossFade`
+                    // but given how ass it is to layout `TextField`s and make them
+                    // responsive, they give me too many problems with constraints
+                    // and bounds, so I just give up on making it look fancy.
+                    : widget.showPreview
+                        ? PostPreview(draft: postDraft)
+                        : buildEdit(context),
+              ),
+            ),
+            if (!widget.minimal) ...[
+              if (attachments.isNotEmpty) ...[
+                const Divider(height: 1),
+                AttachmentTray(
+                  attachments: attachments,
+                  onRemoveAttachment: (index) {
+                    setState(() => attachments.removeAt(index));
+                  },
+                  onToggleSensitive: _onToggleSensitive,
+                  onChangeDescription: _onChangeDescription,
+                ),
+              ],
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  right: 10.0,
+                  top: 8.0,
+                  bottom: 8.0,
+                ),
+                child: Row(
+                  children: [
+                    ..._buildActions(context),
+                    const Spacer(),
+                    FloatingActionButton.small(
+                      elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
+                      onPressed: () => post(context),
+                      tooltip: l10n.submitButtonTooltip,
+                      child: const Icon(Icons.send_rounded),
                     ),
                   ],
                 ),
               ),
-            ),
-            if (attachments.isNotEmpty) const Divider(height: 1),
-            if (attachments.isNotEmpty)
-              AttachmentTray(
-                attachments: attachments,
-                onRemoveAttachment: (i) => setState(() {
-                  attachments.removeAt(i);
-                }),
-                onToggleSensitive: (i) => setState(() {
-                  attachments[i] = attachments[i].copyWith(
-                    isSensitive: !attachments[i].isSensitive,
-                  );
-                }),
-                onChangeDescription: (i) async {
-                  final attachment = attachments[i];
-                  final description = await showDialog<String>(
-                    context: context,
-                    builder: (context) => AttachmentTextDialog(
-                      attachment: attachment,
-                    ),
-                  );
-
-                  if (description != null) {
-                    setState(() {
-                      attachments[i] =
-                          attachments[i].copyWith(description: description);
-                    });
-                  }
-                },
-              ),
-            const Divider(height: 1),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-                right: 10.0,
-                top: 8.0,
-                bottom: 8.0,
-              ),
-              child: Row(
-                children: [
-                  ..._buildActions(context),
-                  const Spacer(),
-                  FloatingActionButton.small(
-                    elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
-                    onPressed: () => post(context, adapter),
-                    tooltip: l10n.submitButtonTooltip,
-                    child: const Icon(Icons.send_rounded),
-                  ),
-                ],
-              ),
-            ),
+            ],
           ],
         ),
       ),
     );
   }
 
-  Widget buildPreview(
-    BuildContext context,
-    AsyncSnapshot<Post<dynamic>> snapshot,
-  ) {
+  void _onToggleSensitive(index) {
+    final attachment = attachments[index];
+    setState(() {
+      attachments[index] = attachment.copyWith(
+        isSensitive: !attachment.isSensitive,
+      );
+    });
+  }
+
+  Future<void> _onChangeDescription(int index) async {
+    final attachment = attachments[index];
+    final description = await showDialog<String>(
+      context: context,
+      builder: (context) => AttachmentTextDialog(attachment: attachment),
+    );
+
+    if (description == null) return;
+
+    setState(() {
+      attachments[index] = attachment.copyWith(description: description);
+    });
+  }
+
+  Widget buildEdit(BuildContext context) {
+    final adapter = ref.watch(adapterProvider);
     final l10n = context.l10n;
 
-    switch (snapshot.connectionState) {
-      case ConnectionState.none:
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(child: Text(l10n.postPreviewWaiting)),
-        );
-
-      case ConnectionState.done:
-        if (snapshot.hasError) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: ErrorLandingWidget.fromAsyncSnapshot(snapshot),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
+        vertical: 8.0,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.enableSubject)
+            Column(
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: l10n.composeContentWarningHint,
+                    border: InputBorder.none,
+                  ),
+                  controller: _subjectController,
+                ),
+                const Divider(),
+                const SizedBox(height: 8),
+              ],
             ),
-          );
-        } else {
-          return PostWidget(snapshot.data!, showActions: false);
-        }
-    }
+          Expanded(
+            flex: flex,
+            child: TextField(
+              autofocus: true,
+              textInputAction: TextInputAction.newline,
+              decoration: InputDecoration(
+                hintText: l10n.composeBodyHint,
+                border: InputBorder.none,
+                isCollapsed: true,
+              ),
+              contentInsertionConfiguration: ContentInsertionConfiguration(
+                onContentInserted: (value) {
+                  AttachmentDraft? draft;
 
-    return const Padding(
-      padding: EdgeInsets.all(8.0),
-      child: centeredCircularProgressIndicator,
+                  if (value.hasData) {
+                    draft = AttachmentDraft(
+                      file: KaitekiMemoryFile(value.data!),
+                    );
+                  } else {
+                    // TODO(Craftplacer): handle content insertion URIs
+                  }
+
+                  if (draft == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          "Kaiteki cannot handle the media inserted.",
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+
+                  setState(() => attachments.add(draft!));
+                },
+              ),
+              textAlignVertical: TextAlignVertical.top,
+              expands: widget.expands,
+              minLines: widget.expands ? null : 6,
+              maxLines: widget.expands ? null : 8,
+              controller: _bodyController,
+              maxLength: adapter.capabilities.maxPostContentLength,
+              maxLengthEnforcement: MaxLengthEnforcement.none,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Future<Post>? getPreviewFuture(PreviewSupport adapter) {
-    if (_bodyController.value.text.isEmpty) return null;
+  PostDraft get postDraft {
+    final subject =
+        _subjectController.text.isEmpty ? null : _subjectController.text;
+    final content = _bodyController.value.text;
 
-    final draft = _getPostDraft([]);
-    return adapter.getPreview(draft);
-  }
-
-  PostDraft _getPostDraft(List<Attachment> attachments) {
     return PostDraft(
-      subject: _subjectController.text.isEmpty ? null : _subjectController.text,
-      content: _bodyController.value.text,
+      subject: subject,
+      content: content,
       visibility: _visibility,
       formatting: _formatting ?? Formatting.plainText,
       replyTo: widget.replyTo,
-      attachments: attachments,
       language: _language,
     );
   }
 
-  Future<void> post(BuildContext context, BackendAdapter adapter) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final l10n = context.l10n;
-    final goRouter = GoRouter.of(context);
-
+  /// Shows a attachment description reminder when enabled and there's at least
+  /// one attachment without description.
+  ///
+  /// Returns true, if the user cancelled the post submission. Returns false, if
+  /// reminders are disabled or the user acknowledged the dialog.
+  Future<bool> _checkForUndescribedAttachments(
+    List<AttachmentDraft> attachments,
+  ) async {
     final showMissingDescriptionWarnings =
         ref.read(showAttachmentDescriptionWarning).value;
     final hasUndescribedAttachments = attachments.any((e) {
@@ -340,15 +356,39 @@ class PostFormState extends ConsumerState<ComposeForm> {
         context: context,
         builder: (context) => const MissingDescriptionDialog(),
       );
-      if (result != true) return;
+      if (result != true) return true;
     }
+
+    return false;
+  }
+
+  Future<void> post(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final navigatorContext = Navigator.of(context).context;
+    final l10n = context.l10n;
+    final goRouter = GoRouter.of(context);
+    final adapter = ref.read(adapterProvider);
+
+    // pin state
+    final draft = postDraft;
+    final draftAttachments = attachments;
+
+    final maxPostContentLength = adapter.capabilities.maxPostContentLength;
+    if (maxPostContentLength != null &&
+        draft.content.length >= maxPostContentLength) {
+      await showDialog(
+        context: context,
+        builder: (_) => PostTooLongDialog(characterLimit: maxPostContentLength),
+      );
+      return;
+    }
+    if (await _checkForUndescribedAttachments(draftAttachments)) return;
 
     Future<Post> submitPost() async {
       final attachments = await Future.wait(
-        this.attachments.map(adapter.uploadAttachment),
+        draftAttachments.map(adapter.uploadAttachment),
       );
-      final draft = _getPostDraft(attachments);
-      return adapter.postStatus(draft);
+      return adapter.postStatus(draft.copyWith(attachments: attachments));
     }
 
     var snackBarController = messenger.showSnackBar(
@@ -367,7 +407,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
             onPressed: () {
               goRouter.pushNamed(
                 "post",
-                params: {...accountRouterParams, "id": post.id},
+                pathParameters: {...accountRouterParams, "id": post.id},
                 extra: post,
               );
               messenger.hideCurrentSnackBar();
@@ -382,10 +422,9 @@ class PostFormState extends ConsumerState<ComposeForm> {
           content: Text(l10n.postSubmissionFailed),
           action: SnackBarAction(
             label: l10n.whyButtonLabel,
-            onPressed: () => context.showExceptionDialog(
-              e as Object,
-              s as StackTrace?,
-            ),
+            onPressed: () {
+              navigatorContext.showExceptionDialog((e, s));
+            },
           ),
         ),
       );
@@ -480,7 +519,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
 
     final pickedFile = result.files.first;
     final attachment = AttachmentDraft(
-      file: KaitekiFile.path(pickedFile.path!, name: pickedFile.name),
+      file: KaitekiLocalFile(pickedFile.path!),
     );
 
     setState(() => attachments.add(attachment));
@@ -535,7 +574,7 @@ class PostFormState extends ConsumerState<ComposeForm> {
           value: _visibility,
           values: supportedScopes,
           splashRadius: splashRadius,
-          iconBuilder: (_, value) => Icon(value.toIconData()),
+          iconBuilder: (_, value) => VisibilityIcon(value),
           textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
           subtitleBuilder: (_, value) => Text(value.toDescription(l10n)),
         ),
@@ -550,58 +589,111 @@ class PostFormState extends ConsumerState<ComposeForm> {
           textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
         ),
       if (supportsLanguageTagging)
-        IconButton(
-          icon: Text(
-            _language.toUpperCase(),
-            style: Theme.of(context)
-                .ktkTextTheme
-                ?.monospaceTextStyle
-                .fallback
-                .copyWith(fontWeight: FontWeight.bold),
-          ),
-          tooltip: "Language",
-          splashRadius: splashRadius,
-          onPressed: _onSelectLanguage,
+        LanguageSwitcher(
+          language: _language,
+          onSelected: (language) => setState(() => _language = language),
         ),
     ];
   }
 
-  Future<void> _onSelectLanguage() async {
-    // FIXME(Craftplacer): Use providers to cache loading from rootBundle
-    final languagesJson = await rootBundle.loadString("assets/languages.json");
-    final languages = (jsonDecode(languagesJson) as List<dynamic>)
-        .cast<List<dynamic>>()
-        .map((e) => e.cast<String>())
-        .toList()
-      ..sort((a, b) => a[1].compareTo(b[1]));
+  void reset() {
+    setState(() {
+      _bodyController.clear();
+      _subjectController.clear();
+      attachments.clear();
+    });
+  }
+}
 
-    if (!mounted) {
-      return;
-    }
+class LanguageIcon extends StatelessWidget {
+  const LanguageIcon(
+    this.language, {
+    super.key,
+  });
 
-    final result = await showDialog(
-      context: context,
-      builder: (context) {
-        return SimpleDialog(
-          title: const Text("Select language"),
-          children: [
-            for (var tuple in languages)
-              RadioListTile(
-                title: Text(tuple[1]),
-                groupValue: _language,
-                value: tuple[0],
-                contentPadding: const EdgeInsets.symmetric(horizontal: 18),
-                onChanged: (languageCode) =>
-                    Navigator.of(context).pop(languageCode),
+  final String language;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return DefaultTextStyle.merge(
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: IconTheme.of(context).color,
+      ),
+      child: Text(
+        language.toUpperCase(),
+        style: theme.ktkTextTheme?.monospaceTextStyle ??
+            DefaultKaitekiTextTheme(context).monospaceTextStyle,
+      ),
+    );
+  }
+}
+
+class LanguageSwitcher extends ConsumerWidget {
+  final String language;
+  final Function(String language) onSelected;
+
+  const LanguageSwitcher({
+    super.key,
+    required this.language,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FutureBuilder(
+      future: ref.read(languageListProvider.future),
+      builder: (context, snapshot) {
+        return AdaptiveMenu(
+          builder: (context, onTap) {
+            return IconButton(
+              icon: LanguageIcon(language),
+              tooltip: "Language",
+              splashRadius: splashRadius,
+              onPressed: snapshot.hasData ? onTap : null,
+            );
+          },
+          itemBuilder: (context, onClose) {
+            final visible = ref.watch(visibleLanguages).value;
+            final languages = snapshot.data;
+            var list = languages?.where((e) => visible.contains(e.code));
+
+            if (list?.isEmpty ?? false) {
+              list = languages?.where((e) {
+                return Localizations.localeOf(context).languageCode == e.code ||
+                    e.code == language;
+              });
+            }
+
+            return [
+              for (var tuple in list ?? <Language>[])
+                MenuItemButton(
+                  leadingIcon: const SizedBox.square(dimension: 24),
+                  trailingIcon: language == tuple.code
+                      ? const Icon(Icons.check)
+                      : const SizedBox.square(dimension: 24),
+                  onPressed: () {
+                    onSelected.call(tuple.code);
+                    onClose?.call();
+                  },
+                  child: Text(tuple.englishName ?? tuple.code),
+                ),
+              const Divider(),
+              MenuItemButton(
+                leadingIcon: const Icon(Icons.add),
+                onPressed: () {
+                  context.pushNamed("visibleLanguageSettings");
+                  onClose?.call();
+                },
+                trailingIcon: const SizedBox.square(dimension: 24),
+                child: const Text("Add a language"),
               ),
-          ],
+            ];
+          },
         );
       },
     );
-
-    if (result == null) return;
-
-    setState(() => _language = result);
   }
 }
 

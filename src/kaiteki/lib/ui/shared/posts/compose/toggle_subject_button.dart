@@ -18,6 +18,10 @@ class ToggleSubjectButton extends StatelessWidget {
       onPressed: onChanged,
       isSelected: value,
       icon: const Icon(Icons.short_text_rounded),
+      selectedIcon: Icon(
+        Icons.short_text_rounded,
+        color: Theme.of(context).colorScheme.primary,
+      ),
       tooltip: value
           ? l10n.contentWarningButtonLabelDisable
           : l10n.contentWarningButtonLabelEnable,

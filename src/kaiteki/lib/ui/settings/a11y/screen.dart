@@ -16,6 +16,7 @@ class AccessibilityScreen extends StatelessWidget {
           child: Column(
             children: [
               SettingsSection(
+                title: const Text("Inclusion"),
                 children: [
                   PreferenceSwitchListTile(
                     secondary: const Icon(Icons.image_rounded),
@@ -26,6 +27,41 @@ class AccessibilityScreen extends StatelessWidget {
                       "Prevent you from accidentally uploading attachments without a description",
                     ),
                     provider: showAttachmentDescriptionWarning,
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: const Text("Ease of use"),
+                children: [
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.open_in_full_rounded),
+                    title: const Text(
+                      "Show dedicated post open button",
+                    ),
+                    subtitle: const Text(
+                      "Adds a button for opening the conversation of a post without having to click on the post itself.",
+                    ),
+                    provider: showDedicatedPostOpenButton,
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: const Text("Visuals"),
+                children: [
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.colorize_rounded),
+                    title: const Text(
+                      "Colorize post scopes",
+                    ),
+                    subtitle: const Text(
+                      "Gives the scope icon a distinct color for each scope.",
+                    ),
+                    provider: coloredPostVisibilities,
+                  ),
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.format_underline_rounded),
+                    title: const Text("Underline links"),
+                    provider: underlineLinks,
                   ),
                 ],
               ),

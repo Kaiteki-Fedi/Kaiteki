@@ -38,6 +38,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Analyze
         run: 'flutter analyze --no-pub --no-fatal-infos --no-congratulate --no-preamble'
 
@@ -73,13 +76,16 @@ jobs:
         run: 'sudo apt-get update --fix-missing && sudo apt-get -y upgrade'
 
       - name: Install Linux build requirements
-        run: 'sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev'
+        run: 'sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev libhandy-1-dev'
 
       - name: Enable Linux Desktop
         run: 'flutter config --enable-linux-desktop'
 
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
 
       - name: Build
         run: 'make build-linux ${{needs.test.outputs.make-args}}'
@@ -151,16 +157,17 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Dump signing key
         uses: timheuer/base64-to-file@v1.2
-        if: github.event_name != 'pull_request'
         with:
           fileName: 'keystore.pfx'
           fileDir: '${{ env.SOURCE_PATH }}/android/app/'
           encodedString: ${{ secrets.ANDROID_KEYSTORE }}
 
       - name: Build (signed)
-        if: github.event_name != 'pull_request'
         run: 'make build-android ${{needs.test.outputs.make-args}}'
         env:
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -195,6 +202,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Build
         run: 'make build-windows ${{needs.test.outputs.make-args}}'
         
@@ -227,6 +237,9 @@ jobs:
         
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
       
       - name: Build
         run: 'make build-web ${{needs.test.outputs.make-args}}'

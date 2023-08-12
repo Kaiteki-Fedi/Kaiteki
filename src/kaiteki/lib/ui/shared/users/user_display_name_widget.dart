@@ -1,16 +1,17 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 class UserDisplayNameWidget extends ConsumerWidget {
   final User user;
-  final Axis? orientation;
+  final Axis orientation;
 
   const UserDisplayNameWidget(
     this.user, {
     super.key,
-    this.orientation,
+    this.orientation = Axis.horizontal,
   });
 
   @override
@@ -21,72 +22,88 @@ class UserDisplayNameWidget extends ConsumerWidget {
     );
     const primaryTextStyle = TextStyle(fontWeight: FontWeight.bold);
     final textSpacing = !content.separate ? 0.0 : 6.0;
+    final secondaryText = content.secondary;
+    final disabledColor =
+        Theme.of(context).getEmphasisColor(EmphasisColor.disabled);
 
-    return buildFlowWidget([
-      if (user.hasDisplayName)
-        Text.rich(
-          user.renderDisplayName(context, ref),
-          style: primaryTextStyle,
-        )
-      else
-        Text(
-          user.username,
-          style: primaryTextStyle,
-          overflow: TextOverflow.fade,
-          maxLines: 1,
-          softWrap: false,
-        ),
-      SizedBox(width: textSpacing),
-      if (content.secondary != null)
-        Text(
-          content.secondary!,
-          style: TextStyle(color: Theme.of(context).disabledColor),
-          overflow: TextOverflow.fade,
-          maxLines: 1,
-          softWrap: false,
-        ),
-    ]);
-  }
-
-  Widget buildFlowWidget(List<Widget> children) {
     switch (orientation) {
       case Axis.horizontal:
-        return Row(children: children);
+        return Text.rich(
+          TextSpan(
+            children: [
+              user.renderText(context, ref, content.primary),
+              if (secondaryText != null) ...[
+                WidgetSpan(child: SizedBox(width: textSpacing)),
+                TextSpan(
+                  text: secondaryText,
+                  style: TextStyle(color: disabledColor),
+                ),
+              ],
+            ],
+            style: primaryTextStyle,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.fade,
+          softWrap: false,
+        );
       case Axis.vertical:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
+          children: [
+            Text.rich(
+              user.renderText(context, ref, content.primary),
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            ),
+            if (secondaryText != null)
+              Text(
+                secondaryText,
+                style: disabledColor.textStyle,
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
+          ],
         );
-      default:
-        return OverflowBar(children: children);
     }
   }
 }
 
 class DisplayNameTuple {
+  final String primary;
   final String? secondary;
   final bool separate;
 
-  const DisplayNameTuple(this.secondary, this.separate);
+  const DisplayNameTuple(this.primary, this.secondary, this.separate);
 
   factory DisplayNameTuple.fromUser(
     User user, [
     bool forceShowUsername = false,
   ]) {
     final username = user.username;
-    final display = user.displayName;
+    final display = user.displayName ?? username;
     final host = user.host;
+    final handle = user.handle;
 
-    final hasDisplay = user.hasDisplayName;
-    final prefixUsername =
-        (hasDisplay && (display!.toLowerCase() != username.toLowerCase())) ||
-            forceShowUsername;
+    if (!forceShowUsername) {
+      final normalizedDisplay = display.toLowerCase().trim();
 
-    String? secondary;
-    if (prefixUsername) secondary = "@${user.username}";
-    final prefix = secondary ?? "";
-    secondary = "$prefix@$host";
+      final similarToHandle = [
+        handle.toString().toLowerCase(),
+        handle.toString(false).toLowerCase(),
+        username.toLowerCase(),
+      ];
 
-    return DisplayNameTuple(secondary, prefixUsername);
+      if (similarToHandle.contains(normalizedDisplay)) {
+        return DisplayNameTuple(username, "@$host", false);
+      }
+    }
+
+    return DisplayNameTuple(
+      display,
+      handle.toString(),
+      true,
+    );
   }
 }

@@ -1,11 +1,11 @@
 import "package:collection/collection.dart";
 import "package:html/dom.dart" as dom;
 import "package:html/parser.dart" show parseFragment;
-import "package:kaiteki/fediverse/model/user/reference.dart";
-import "package:kaiteki/logger.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
+import "package:logging/logging.dart";
 
 typedef HtmlElementConstructor = List<Element>? Function(
   dom.Element element,
@@ -13,7 +13,7 @@ typedef HtmlElementConstructor = List<Element>? Function(
 );
 
 class HtmlTextParser implements TextParser {
-  static final _logger = getLogger("HtmlTextParser");
+  static final _logger = Logger("HtmlTextParser");
 
   @override
   List<Element> parse(String text, [List<Element>? children]) {
@@ -51,22 +51,17 @@ class HtmlTextParser implements TextParser {
       if (constructor != null) {
         final rendered = constructor.call(node, renderedSubNodes);
         if (rendered != null) return rendered;
-        _logger.w(
-          "Couldn't render HTML tag ($tag), returning it as TextElement.",
-        );
+        _logger.warning("Couldn't render HTML tag ($tag)");
       } else {
-        _logger.w("Unhandled HTML tag ($tag), returning it as TextElement.");
+        _logger.warning("Unhandled HTML tag ($tag)");
       }
     }
-    // else if (node is dom.Text) {
-    //  return TextElement(node.text, children: renderedSubNodes);
-    //}
 
-    if (node.text == null) {
-      return renderedSubNodes;
-    } else {
-      return [TextElement(node.text, children: renderedSubNodes)];
+    if (node is dom.Text) {
+      return [if (node.data.isNotEmpty) TextElement(node.text)];
     }
+
+    return renderedSubNodes;
   }
 
   Element? renderNodeOverride(dom.Node node) => null;

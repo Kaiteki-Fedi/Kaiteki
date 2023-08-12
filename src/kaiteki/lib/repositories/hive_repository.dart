@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:collection/collection.dart";
 import "package:hive/hive.dart";
 import "package:kaiteki/repositories/repository.dart";
 
@@ -7,11 +8,13 @@ class HiveRepository<T extends Object, K> extends Repository<T, K> {
   final Box<T> box;
   final dynamic Function(K key)? toHiveKeyConverter;
   final K Function(dynamic key)? fromHiveKeyConverter;
+  final bool ignoreKeySerializationErrors;
 
   HiveRepository(
     this.box, [
     this.fromHiveKeyConverter,
     this.toHiveKeyConverter,
+    this.ignoreKeySerializationErrors = false,
   ]);
 
   @override
@@ -22,12 +25,19 @@ class HiveRepository<T extends Object, K> extends Repository<T, K> {
 
   @override
   Map<K, T> read() {
-    final entries = box.keys.map<MapEntry<K, T>>(
-      (key) => MapEntry(
-        _convertFromHiveKey(key),
-        box.get(key)!,
-      ),
-    );
+    final entries = box.keys.map((hiveKey) {
+      late final K key;
+
+      try {
+        key = _convertFromHiveKey(hiveKey);
+      } catch (e) {
+        if (ignoreKeySerializationErrors) return null;
+        rethrow;
+      }
+
+      return MapEntry(key, box.get(hiveKey)!);
+    }).whereNotNull();
+
     return Map.fromEntries(entries.toList(growable: false));
   }
 

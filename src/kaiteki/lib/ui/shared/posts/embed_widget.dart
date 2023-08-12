@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/embed.dart";
+import "package:kaiteki_core/model.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class EmbedWidget extends StatelessWidget {
@@ -10,43 +10,27 @@ class EmbedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return InkWell(
-      onTap: () => launchUrl(embed.uri),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceVariant,
+    final description = embed.description;
+    return Card(
+      child: InkWell(
+        onTap: () => launchUrl(embed.uri),
+        child: SizedBox(
+          height: 8 * 12,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceVariant,
+                ),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: buildIcon(context),
+                ),
               ),
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: embed.largeImageUrl == null
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Icon(
-                            Icons.public_rounded,
-                            size: 32,
-                            color: Theme.of(context).disabledColor,
-                          ),
-                        ),
-                      )
-                    : Image.network(
-                        embed.largeImageUrl!,
-                        width: 120,
-                        fit: BoxFit.cover,
-                      ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DefaultTextStyle.merge(
-                  softWrap: false,
-                  maxLines: 1,
-                  overflow: TextOverflow.fade,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,9 +39,17 @@ class EmbedWidget extends StatelessWidget {
                         Text(
                           embed.title!,
                           style: const TextStyle(fontWeight: FontWeight.bold),
+                          maxLines: 1,
                         ),
-                      if (embed.description != null) Text(embed.description!),
-
+                      if (description != null && description.isNotEmpty)
+                        Text(
+                          description
+                              .split("\n")
+                              .where((e) => e.isNotEmpty)
+                              .join(" "),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       Text(
                         embed.uri.host,
                         style: TextStyle(
@@ -74,11 +66,32 @@ class EmbedWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget buildIcon(BuildContext context) {
+    if (embed.imageUrl == null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Icon(
+            Icons.public_rounded,
+            size: 32,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+      );
+    }
+
+    return Image.network(
+      embed.imageUrl!.toString(),
+      width: 120,
+      fit: BoxFit.cover,
     );
   }
 }

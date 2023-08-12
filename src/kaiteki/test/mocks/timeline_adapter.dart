@@ -1,14 +1,8 @@
-import "package:kaiteki/auth/login_typedefs.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/capabilities.dart";
-import "package:kaiteki/fediverse/model/model.dart";
-import "package:kaiteki/fediverse/model/timeline_query.dart";
-import "package:kaiteki/model/auth/login_result.dart";
-import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 class TimelineAdapter extends BackendAdapter {
-  final Set<TimelineKind> brokenTimelines;
+  final Set<TimelineType> brokenTimelines;
 
   @override
   final TimelineAdapterCapabilities capabilities;
@@ -17,12 +11,6 @@ class TimelineAdapter extends BackendAdapter {
     this.capabilities, [
     this.brokenTimelines = const {},
   ]);
-
-  @override
-  FutureOr<void> applySecrets(
-    ClientSecret? clientSecret,
-    AccountSecret accountSecret,
-  ) {}
 
   @override
   Future<User?> followUser(String id) => throw UnimplementedError();
@@ -52,7 +40,7 @@ class TimelineAdapter extends BackendAdapter {
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   }) async {
     if (brokenTimelines.contains(type)) throw UnimplementedError();
@@ -78,15 +66,6 @@ class TimelineAdapter extends BackendAdapter {
 
   @override
   Future<User> getUserById(String id) => throw UnimplementedError();
-
-  @override
-  Future<LoginResult> login(
-    ClientSecret? clientSecret,
-    CredentialsCallback requestCredentials,
-    CodeCallback requestMfa,
-    OAuthCallback requestOAuth,
-  ) =>
-      throw UnimplementedError();
 
   @override
   Future<Post> postStatus(PostDraft draft, {Post? parentPost}) =>
@@ -124,6 +103,15 @@ class TimelineAdapter extends BackendAdapter {
   @override
   Future<User> lookupUser(String username, [String? host]) =>
       throw UnimplementedError();
+
+  @override
+  ApiType get type => ApiType.mastodon;
+
+  @override
+  Future<User?> unfollowUser(String id) => throw UnimplementedError();
+
+  @override
+  Future<Object?> resolveUrl(Uri url) => throw UnimplementedError();
 }
 
 class TimelineAdapterCapabilities extends AdapterCapabilities {
@@ -136,7 +124,7 @@ class TimelineAdapterCapabilities extends AdapterCapabilities {
   Set<Visibility> get supportedScopes => {};
 
   @override
-  final Set<TimelineKind> supportedTimelines;
+  final Set<TimelineType> supportedTimelines;
 
   @override
   bool get supportsSubjects => false;

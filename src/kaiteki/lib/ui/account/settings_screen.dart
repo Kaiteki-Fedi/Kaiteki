@@ -43,7 +43,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                     title: const Text("Mutes"),
                     onTap: () => context.pushNamed(
                       "accountMutes",
-                      params: ref.accountRouterParams,
+                      pathParameters: ref.accountRouterParams,
                     ),
                   ),
                   const ListTile(
@@ -109,9 +109,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                       color: Theme.of(context).colorScheme.error,
                     ),
                     title: const Text("Delete Account"),
-                    onTap: () {
-                      _onDelete(ref.read(accountManagerProvider));
-                    },
+                    onTap: () => _onDelete(ref),
                   ),
                   const ListTile(
                     leading: Icon(
@@ -130,15 +128,16 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     );
   }
 
-  Future<void> _onDelete(AccountManager accountManager) async {
-    final account = accountManager.current!;
+  Future<void> _onDelete(WidgetRef ref) async {
+    final account = ref.read(currentAccountProvider);
+    if (account == null) return;
     await showDialog(
       context: context,
       builder: (_) => AccountDeletionDialog(
         account: account,
         onDelete: (password) async {
           await account.adapter.deleteAccount(password);
-          await accountManager.remove(account);
+          await ref.read(accountManagerProvider.notifier).remove(account);
 
           if (mounted) Navigator.of(context).pop();
         },

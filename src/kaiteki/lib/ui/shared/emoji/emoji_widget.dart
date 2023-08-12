@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
+import "package:kaiteki_core/model.dart";
 
 const _defaultEmojiSize = 24.0;
 
@@ -61,7 +61,7 @@ class EmojiWidget extends StatelessWidget {
     );
 
     final theme = Theme.of(context).extension<EmojiTheme>();
-    final size = this.size ?? theme!.size;
+    final size = this.size ?? theme?.size ?? _defaultEmojiSize;
 
     return SizedBox(
       width: size,

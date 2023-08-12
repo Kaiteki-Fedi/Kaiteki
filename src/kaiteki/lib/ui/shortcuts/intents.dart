@@ -42,8 +42,16 @@ class GoToAppLocationIntent extends Intent {
   const GoToAppLocationIntent(this.location);
 }
 
+class OpenLauncherIntent extends Intent {
+  const OpenLauncherIntent();
+}
+
 enum AppLocation { home, notifications, profile, settings, bookmarks }
 
 class ShortcutsHelpIntent extends Intent {
   const ShortcutsHelpIntent();
+}
+
+class SearchIntent extends Intent {
+  const SearchIntent();
 }

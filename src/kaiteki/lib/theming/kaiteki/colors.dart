@@ -1,30 +1,22 @@
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 class KaitekiColors extends ThemeExtension<KaitekiColors> {
   /// Primary color used for bookmarks.
-  final Color bookmarkColor;
+  final Color? bookmarkColor;
 
   /// Primary color used for favorites.
-  final Color favoriteColor;
+  final Color? favoriteColor;
 
   /// Primary color used for repeats.
-  final Color repeatColor;
+  final Color? repeatColor;
 
   const KaitekiColors({
-    required this.bookmarkColor,
-    required this.favoriteColor,
-    required this.repeatColor,
+    this.bookmarkColor,
+    this.favoriteColor,
+    this.repeatColor,
   });
-
-  factory KaitekiColors.fromMaterialTheme(ThemeData theme) {
-    final primaryColor = theme.colorScheme.primary;
-    return KaitekiColors(
-      bookmarkColor: Colors.pink.harmonizeWith(primaryColor),
-      favoriteColor: Colors.orange.harmonizeWith(primaryColor),
-      repeatColor: Colors.green.harmonizeWith(primaryColor),
-    );
-  }
 
   @override
   KaitekiColors copyWith({
@@ -44,10 +36,35 @@ class KaitekiColors extends ThemeExtension<KaitekiColors> {
     if (other is! KaitekiColors) return this;
 
     return KaitekiColors(
-      bookmarkColor: Color.lerp(bookmarkColor, other.bookmarkColor, t)!,
-      favoriteColor: Color.lerp(favoriteColor, other.favoriteColor, t)!,
-      repeatColor: Color.lerp(repeatColor, other.repeatColor, t)!,
+      bookmarkColor: Color.lerp(bookmarkColor, other.bookmarkColor, t),
+      favoriteColor: Color.lerp(favoriteColor, other.favoriteColor, t),
+      repeatColor: Color.lerp(repeatColor, other.repeatColor, t),
     );
+  }
+}
+
+class DefaultKaitekiColors extends KaitekiColors {
+  final BuildContext _context;
+
+  const DefaultKaitekiColors(BuildContext context)
+      : _context = context,
+        super();
+
+  @override
+  Color get bookmarkColor => _harmonize(Colors.pink);
+
+  @override
+  Color get favoriteColor => _harmonize(Colors.orange);
+
+  @override
+  Color get repeatColor => _harmonize(Colors.green);
+
+  Color _harmonize(Color base) {
+    final colorScheme = Theme.of(_context).colorScheme;
+    return createCustomColorPalette(
+      base.harmonizeWith(colorScheme.primary),
+      colorScheme.brightness,
+    ).color;
   }
 }
 

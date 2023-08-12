@@ -6,17 +6,19 @@ import "package:flutter/foundation.dart";
 import "package:flutter/painting.dart";
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:http/http.dart";
-import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/notification_support.dart";
-import "package:kaiteki/fediverse/model/notification.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/utils/image.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
+import "package:logging/logging.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "notifications.g.dart";
 
 @Riverpod(keepAlive: true)
 class NotificationService extends _$NotificationService {
+  static final _logger = Logger("NotificationService");
+
   late NotificationSupport _backend;
 
   Future<void> refresh() async {
@@ -28,6 +30,9 @@ class NotificationService extends _$NotificationService {
     state = const AsyncLoading();
     try {
       await _backend.markAllNotificationsAsRead();
+    } catch (e, s) {
+      _logger.warning("Failed to mark all notifications as read", e, s);
+      rethrow;
     } finally {
       state = await AsyncValue.guard(_backend.getNotifications);
     }
@@ -35,8 +40,10 @@ class NotificationService extends _$NotificationService {
 
   @override
   FutureOr<List<Notification>> build(AccountKey key) async {
-    final manager = ref.read(accountManagerProvider);
-    final account = manager.accounts.firstWhere((a) => a.key == key);
+    final account = ref
+        .read(accountManagerProvider)
+        .accounts
+        .firstWhere((a) => a.key == key);
     _backend = account.adapter as NotificationSupport;
     return await _backend.getNotifications();
   }

@@ -1,5 +1,5 @@
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
+import "package:kaiteki_core/model.dart";
 import "package:test/test.dart";
 
 void main() {

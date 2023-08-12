@@ -1,23 +1,33 @@
 import "dart:async";
-import "dart:developer";
 
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/model/model.dart";
-import "package:kaiteki/fediverse/model/timeline_query.dart";
+import "package:kaiteki/text/rendering_extensions.dart";
+import "package:kaiteki/ui/main/views/view.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
-import "package:kaiteki/utils/extensions.dart";
-import "package:tuple/tuple.dart";
+import "package:kaiteki_core/social.dart";
+import "package:logging/logging.dart";
 import "package:video_player/video_player.dart";
 
-typedef _PostAttachmentCompound = Tuple2<Post, Attachment>;
+typedef _PostAttachmentCompound = (Post, Attachment);
 
-class VideoMainScreenView extends ConsumerStatefulWidget {
-  const VideoMainScreenView({super.key});
+class VideoMainScreenView extends ConsumerStatefulWidget
+    implements MainScreenView {
+  final Widget Function(TabKind tab) getPage;
+  final TabKind tab;
+  final Function(TabKind tab) onChangeTab;
+  final Function(MainScreenViewType view) onChangeView;
+
+  const VideoMainScreenView({
+    super.key,
+    required this.getPage,
+    required this.onChangeTab,
+    required this.tab,
+    required this.onChangeView,
+  });
 
   @override
   ConsumerState<VideoMainScreenView> createState() =>
@@ -27,9 +37,11 @@ class VideoMainScreenView extends ConsumerStatefulWidget {
 class FilteredTimelineStream {
   late StreamController<Iterable<Post>?> controller;
   final BackendAdapter adapter;
-  final TimelineKind timelineKind;
+  final TimelineType timelineKind;
   final bool Function(Post post)? filter;
   final bool onlyMedia;
+
+  static final _logger = Logger("FilteredTimelineStream");
 
   List<Post> posts = [];
   String? _lastId;
@@ -55,10 +67,12 @@ class FilteredTimelineStream {
     var attempts = 0;
     do {
       if (attempts >= 5) {
-        final message =
-            "Giving up after $attempts attempt(s) - your timeline has no matching posts";
-        log(message, name: "FilteredTimelineStream");
-        controller.addError(Exception(message));
+        _logger.warning("Giving up after $attempts attempt(s)");
+        controller.addError(
+          Exception(
+            "Hmm... your timeline seems a bit empty of content, check back later again!",
+          ),
+        );
         return;
       }
 
@@ -71,7 +85,7 @@ class FilteredTimelineStream {
         );
 
         if (posts.isEmpty) {
-          log("Received no posts", name: "FilteredTimelineStream");
+          _logger.fine("Received no posts");
           attempts++;
           break;
         }
@@ -82,15 +96,12 @@ class FilteredTimelineStream {
         if (filter != null) posts = posts.where(filter).toList();
 
         if (posts.isEmpty) {
-          log(
-            "${posts.length} posts match the filter",
-            name: "FilteredTimelineStream",
-          );
+          _logger.fine("${posts.length} posts match the filter");
           attempts++;
           continue;
         }
 
-        log("Loaded ${posts.length} posts", name: "FilteredTimelineStream");
+        _logger.fine("Loaded ${posts.length} posts");
       } catch (e, s) {
         if (!controller.isClosed) controller.addError(e, s);
         return;
@@ -98,10 +109,7 @@ class FilteredTimelineStream {
     } while (posts.isEmpty);
 
     controller.add(this.posts..addAll(posts));
-    log(
-      "Contain ${this.posts.length} posts now",
-      name: "FilteredTimelineStream",
-    );
+    _logger.fine("Contain ${this.posts.length} posts now");
   }
 }
 
@@ -120,7 +128,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
 
         _stream = FilteredTimelineStream(
           next,
-          TimelineKind.federated,
+          TimelineType.federated,
           onlyMedia: true,
           filter: (p) {
             return p.attachments?.isNotEmpty == true &&
@@ -170,7 +178,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          CircularProgressIndicator(),
+                          circularProgressIndicator,
                           SizedBox(height: 16),
                           Text(
                             "Fetching the next post, hang tight...",
@@ -180,12 +188,11 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                     );
                   }
 
-                  final posts = snapshot.data?.expand(
-                    (p) {
-                      return p.attachments!
-                          .map((a) => _PostAttachmentCompound(p, a));
-                    },
-                  ).toList();
+                  final posts = snapshot.data
+                      ?.expand(
+                        (p) => p.attachments!.map((a) => (p, a)),
+                      )
+                      .toList();
 
                   final _PostAttachmentCompound? compound;
 
@@ -195,7 +202,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                     compound = null;
                   }
 
-                  final post = compound?.item1;
+                  final post = compound?.$1;
 
                   return Stack(
                     children: [
@@ -216,7 +223,7 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CircularProgressIndicator(),
+                                  circularProgressIndicator,
                                   SizedBox(height: 16),
                                   Text(
                                     "Fetching the next post, hang tight...",
@@ -227,8 +234,8 @@ class _VideoMainScreenViewState extends ConsumerState<VideoMainScreenView> {
                           }
 
                           return _VideoWidget(
-                            compound.item2.url,
-                            key: ValueKey(compound.item2.url),
+                            compound.$2.url,
+                            key: ValueKey(compound.$2.url),
                             onProgressChanged: (v) {
                               if (mounted) {
                                 setState(

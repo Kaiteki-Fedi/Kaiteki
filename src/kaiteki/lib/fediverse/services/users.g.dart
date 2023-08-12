@@ -6,7 +6,7 @@ part of 'users.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$usersServiceHash() => r'631460631420ad196db95a548ee5e2272b9cc151';
+String _$usersServiceHash() => r'03291de8674c3ae95ac80b3e062d7c9ab371dbd9';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,11 +29,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$UsersService extends BuildlessAsyncNotifier<User<dynamic>> {
+abstract class _$UsersService extends BuildlessAsyncNotifier<User<dynamic>?> {
   late final AccountKey key;
   late final String id;
 
-  FutureOr<User<dynamic>> build(
+  FutureOr<User<dynamic>?> build(
     AccountKey key,
     String id,
   );
@@ -44,7 +44,7 @@ abstract class _$UsersService extends BuildlessAsyncNotifier<User<dynamic>> {
 const usersServiceProvider = UsersServiceFamily();
 
 /// See also [UsersService].
-class UsersServiceFamily extends Family<AsyncValue<User<dynamic>>> {
+class UsersServiceFamily extends Family<AsyncValue<User<dynamic>?>> {
   /// See also [UsersService].
   const UsersServiceFamily();
 
@@ -86,7 +86,7 @@ class UsersServiceFamily extends Family<AsyncValue<User<dynamic>>> {
 
 /// See also [UsersService].
 class UsersServiceProvider
-    extends AsyncNotifierProviderImpl<UsersService, User<dynamic>> {
+    extends AsyncNotifierProviderImpl<UsersService, User<dynamic>?> {
   /// See also [UsersService].
   UsersServiceProvider(
     this.key,
@@ -124,7 +124,7 @@ class UsersServiceProvider
   }
 
   @override
-  FutureOr<User<dynamic>> runNotifierBuild(
+  FutureOr<User<dynamic>?> runNotifierBuild(
     covariant UsersService notifier,
   ) {
     return notifier.build(

@@ -41,9 +41,11 @@ Map<String, dynamic> _$TransitAccountToJson(TransitAccount instance) {
 
 const _$ApiTypeEnumMap = {
   ApiType.mastodon: 'mastodon',
+  ApiType.glitch: 'glitch',
   ApiType.pleroma: 'pleroma',
   ApiType.misskey: 'misskey',
-  ApiType.twitter: 'twitter',
-  ApiType.twitterV1: 'twitterV1',
+  ApiType.akkoma: 'akkoma',
+  ApiType.foundkey: 'foundkey',
+  ApiType.calckey: 'calckey',
   ApiType.tumblr: 'tumblr',
 };

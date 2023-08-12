@@ -1,31 +1,28 @@
-import "dart:developer";
-
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/favorite_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/model/auth/account.dart";
-import "package:kaiteki/preferences/app_experiment.dart";
-import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/routing/notifier.dart";
 import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
 import "package:kaiteki/ui/account_required_screen.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/feedback_screen.dart";
+import "package:kaiteki/ui/launcher/dialog.dart";
 import "package:kaiteki/ui/lists/lists_screen.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/search/screen.dart";
 import "package:kaiteki/ui/settings/a11y/screen.dart";
 import "package:kaiteki/ui/settings/about/about_screen.dart";
-import "package:kaiteki/ui/settings/credits_screen.dart";
 import "package:kaiteki/ui/settings/customization/customization_settings_screen.dart";
+import "package:kaiteki/ui/settings/customization/post_layout.dart";
 import "package:kaiteki/ui/settings/debug/theme_screen.dart";
 import "package:kaiteki/ui/settings/debug_screen.dart";
 import "package:kaiteki/ui/settings/experiments.dart";
+import "package:kaiteki/ui/settings/manage_languages.dart";
 import "package:kaiteki/ui/settings/pedantry_screen.dart";
 import "package:kaiteki/ui/settings/settings_screen.dart";
 import "package:kaiteki/ui/settings/wellbeing/wellbeing_screen.dart";
@@ -33,36 +30,33 @@ import "package:kaiteki/ui/shared/account_list/dialog.dart";
 import "package:kaiteki/ui/shared/conversation_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
+import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
-import "package:kaiteki/ui/user/user_screen_old.dart";
-import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
+import "package:logging/logging.dart";
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "root");
-final GlobalKey<NavigatorState> _authNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: "authenticated");
 
 const authenticatedPath = "/@:accountUsername@:accountHost";
 
-final routerProvider = Provider.autoDispose<GoRouter>((ref) {
-  final sub = ref.listen(routerNotifierProvider, (_, __) {});
-  ref.onDispose(sub.close);
+final _logger = Logger("Router");
 
+final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ref.read(routerNotifierProvider.notifier);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: kDebugMode,
-    refreshListenable: notifier,
     redirect: notifier.redirect,
     routes: [
       GoRoute(
         path: "/",
-        builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
-          final scope = ProviderScope.containerOf(context);
-          if (scope.read(accountProvider) == null) return "/welcome";
-          return "/${notifier.currentHandle}/home";
+          final account = ref.read(routerNotifierProvider);
+          if (account == null) return "/welcome";
+          return "/${account.handle}/home";
         },
       ),
       GoRoute(
@@ -93,6 +87,12 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
           GoRoute(
             path: "customization",
             builder: (_, __) => const CustomizationSettingsScreen(),
+            routes: [
+              GoRoute(
+                path: "post-layout",
+                builder: (_, __) => const PostLayoutSettingsScreen(),
+              ),
+            ],
           ),
           GoRoute(
             name: "experiments",
@@ -123,6 +123,11 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
             path: "accessibility",
             builder: (_, __) => const AccessibilityScreen(),
           ),
+          GoRoute(
+            path: "visible-languages",
+            name: "visibleLanguageSettings",
+            builder: (_, __) => const ManageLanaguagesScreen(),
+          )
         ],
       ),
       GoRoute(
@@ -132,17 +137,11 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
         parentNavigatorKey: _rootNavigatorKey,
       ),
       GoRoute(
-        path: "/credits",
-        builder: (_, __) => const CreditsScreen(),
-        parentNavigatorKey: _rootNavigatorKey,
-      ),
-      GoRoute(
         name: "authenticated",
         path: authenticatedPath,
-        builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
-          final user = state.params["accountUsername"];
-          final host = state.params["accountHost"];
+          final user = state.pathParameters["accountUsername"];
+          final host = state.pathParameters["accountHost"];
 
           if (user != null && host != null) {
             final account = ref.read(
@@ -154,26 +153,29 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
               ),
             );
 
+            final previousAccount = ref.read(currentAccountProvider);
             if (account == null) {
-              log("No account matching to @$user@$host, so no account was switched");
-            }
+              _logger.info(
+                "No account matching to @$user@$host, so no account was switched",
+              );
+            } else if (previousAccount != account) {
+              ref.read(accountManagerProvider.notifier).change(account);
 
-            final accountManager = ref.read(accountManagerProvider);
-            final previousAccount = accountManager.current;
-            if (previousAccount != account) {
-              accountManager.current = account;
-              log("Switched from ${previousAccount?.key.handle} to ${account!.key.handle} due to navigation path");
+              _logger.info(
+                "Switched from ${previousAccount?.key.handle} to ${account.key.handle} due to navigation path",
+              );
             }
           }
 
-          if (state.fullpath == authenticatedPath) {
-            return "${state.location}/home";
+          if (state.fullPath == authenticatedPath) {
+            return "${state.uri}/home";
           }
+
           return null;
         },
         routes: [
           ShellRoute(
-            navigatorKey: _authNavigatorKey,
+            // navigatorKey: _authNavigatorKey,
             builder: _authenticatedBuilder,
             routes: [
               GoRoute(
@@ -198,23 +200,23 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 name: "search",
                 path: "search",
                 // parentNavigatorKey: _authNavigatorKey,
-                builder: (_, __) => const SearchScreen(),
+                builder: (_, state) {
+                  final query = state.uri.queryParameters["q"];
+
+                  if (query == null || query.isEmpty) {
+                    return const SearchScreen();
+                  }
+
+                  return SearchScreen(query: query);
+                },
               ),
               GoRoute(
                 name: "user",
                 // parentNavigatorKey: _authNavigatorKey,
                 path: "users/:id",
                 builder: (context, state) {
-                  final experiments = ref.read(preferences.experiments).value;
-                  if (experiments.contains(AppExperiment.newUserScreen)) {
-                    return UserScreen(id: state.params["id"]!);
-                  }
-
-                  if (state.extra == null) {
-                    return OldUserScreen.fromId(state.params["id"]!);
-                  } else {
-                    return OldUserScreen.fromUser(state.extra! as User);
-                  }
+                  final id = state.pathParameters["id"]!;
+                  return UserScreen(id: id);
                 },
               ),
               GoRoute(
@@ -244,7 +246,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                       return _DialogPage(
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
-                            final postId = state.params["id"]!;
+                            final postId = state.pathParameters["id"]!;
                             final l10n = context.l10n;
                             final adapter = ref.watch(adapterProvider);
                             return UserListDialog(
@@ -270,7 +272,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                       return _DialogPage(
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
-                            final postId = state.params["id"]!;
+                            final postId = state.pathParameters["id"]!;
                             final l10n = context.l10n;
                             final adapter = ref.watch(adapterProvider);
                             return UserListDialog(
@@ -315,39 +317,65 @@ Widget _authenticatedBuilder(
   GoRouterState state,
   Widget child,
 ) {
-  return Consumer(
-    child: child,
-    builder: (context, ref, child) {
-      final Account? account;
-
-      final user = state.params["accountUsername"];
-      final host = state.params["accountHost"];
-
-      if (user != null && host != null) {
-        account = ref.watch(
-          accountManagerProvider.select(
-            (manager) => manager.accounts.firstWhere(
-              (account) =>
-                  account.key.username == user && account.key.host == host,
-            ),
-          ),
-        );
-      } else {
-        account = ref.watch(accountProvider);
-      }
-
-      if (account != null) {
-        return ProviderScope(
-          overrides: [
-            adapterProvider.overrideWithValue(account.adapter),
-            accountProvider.overrideWithValue(account),
-          ],
-          child: child!,
-        );
-      } else {
-        return child!;
-      }
+  return FocusableActionDetector(
+    actions: {
+      OpenLauncherIntent: CallbackAction<OpenLauncherIntent>(
+        onInvoke: (_) {
+          showDialog(
+            context: context,
+            builder: (context) => const LauncherDialog(),
+          );
+          return null;
+        },
+      ),
     },
+    child: Consumer(
+      child: child,
+      builder: (context, ref, child) {
+        final Account? account;
+
+        final user = state.pathParameters["accountUsername"];
+        final host = state.pathParameters["accountHost"];
+
+        if (user != null && host != null) {
+          account = ref.read(
+            accountManagerProvider.select(
+              (manager) {
+                final matchedAccount = manager.accounts.firstWhereOrNull(
+                  (account) =>
+                      account.key.username == user && account.key.host == host,
+                );
+
+                if (matchedAccount == null) {
+                  _logger.warning(
+                    "Couldn't find @$user@$host, providing first account",
+                  );
+                  return manager.accounts.firstOrNull;
+                }
+
+                return matchedAccount;
+              },
+            ),
+          );
+        } else {
+          account = ref.read(currentAccountProvider);
+        }
+
+        _logger.finest("Consumer Rebuild: ${account?.user.handle}");
+
+        if (account != null) {
+          return ProviderScope(
+            overrides: [
+              adapterProvider.overrideWithValue(account.adapter),
+              currentAccountProvider.overrideWithValue(account),
+            ],
+            child: child!,
+          );
+        }
+
+        return child!;
+      },
+    ),
   );
 }
 

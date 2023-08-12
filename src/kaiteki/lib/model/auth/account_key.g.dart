@@ -17,7 +17,7 @@ class AccountKeyAdapter extends TypeAdapter<AccountKey> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AccountKey(
-      fields[0] as ApiType?,
+      fields[0] as ApiType<BackendAdapter>?,
       fields[1] as String,
       fields[2] as String,
     );
@@ -66,9 +66,11 @@ Map<String, dynamic> _$AccountKeyToJson(AccountKey instance) =>
 
 const _$ApiTypeEnumMap = {
   ApiType.mastodon: 'mastodon',
+  ApiType.glitch: 'glitch',
   ApiType.pleroma: 'pleroma',
   ApiType.misskey: 'misskey',
-  ApiType.twitter: 'twitter',
-  ApiType.twitterV1: 'twitterV1',
+  ApiType.akkoma: 'akkoma',
+  ApiType.foundkey: 'foundkey',
+  ApiType.calckey: 'calckey',
   ApiType.tumblr: 'tumblr',
 };

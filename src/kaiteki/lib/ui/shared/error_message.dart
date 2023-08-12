@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ErrorMessageWidget extends StatelessWidget {
-  final Object error;
-  final StackTrace? stackTrace;
+  final TraceableError error;
 
-  const ErrorMessageWidget({super.key, required this.error, this.stackTrace});
+  const ErrorMessageWidget(this.error, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class ErrorMessageWidget extends StatelessWidget {
             size: 20,
           ),
           splashRadius: 16,
-          onPressed: () => context.showExceptionDialog(error, stackTrace),
+          onPressed: () => context.showExceptionDialog(error),
         ),
       ],
     );

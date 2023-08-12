@@ -4,9 +4,20 @@ import "package:material_color_utilities/material_color_utilities.dart";
 
 export "package:kaiteki/common.dart";
 
+typedef LocalizableStringBuilder = String Function(BuildContext context);
+
 const centeredCircularProgressIndicator = Center(
-  child: CircularProgressIndicator(),
+  child: circularProgressIndicator,
 );
+
+const circularProgressIndicator = CircularProgressIndicator.adaptive(
+  strokeCap: StrokeCap.round,
+);
+
+/// A [SizedBox] with a height of 26, which is the default height of a
+/// bottom sheet drag handle. This is used to inset the content of a
+/// bottom sheet in case the drag handle is not used.
+const dragHandleInset = SizedBox(height: 26);
 
 Future<void> showTextAlert(BuildContext context, String title, String body) {
   return showDialog(
@@ -75,6 +86,44 @@ class CustomColorPalette {
       Color(palette.get(20)),
       Color(palette.get(30)),
       Color(palette.get(90)),
+    );
+  }
+}
+
+enum EmphasisColor { high, medium, disabled }
+
+extension ThemeDataExtension on ThemeData {
+  Color getEmphasisColor(EmphasisColor emphasis) {
+    if (useMaterial3) {
+      return switch (emphasis) {
+        EmphasisColor.high => colorScheme.onSurface,
+        EmphasisColor.medium => colorScheme.onSurfaceVariant,
+        EmphasisColor.disabled => colorScheme.onSurface.withOpacity(.38),
+      };
+    }
+
+    return switch (emphasis) {
+      EmphasisColor.high => colorScheme.onSurface.withOpacity(.87),
+      EmphasisColor.medium => colorScheme.onSurface.withOpacity(.60),
+      EmphasisColor.disabled => colorScheme.onSurface.withOpacity(.38),
+    };
+  }
+}
+
+class ContentColor extends StatelessWidget {
+  final Widget child;
+  final Color color;
+
+  const ContentColor({super.key, required this.child, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconTheme.merge(
+      data: IconThemeData(color: color),
+      child: DefaultTextStyle.merge(
+        style: TextStyle(color: color),
+        child: child,
+      ),
     );
   }
 }

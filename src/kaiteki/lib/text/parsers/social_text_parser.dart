@@ -1,7 +1,7 @@
-import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers/text_parser.dart";
 import "package:kaiteki/text/text_renderer.dart";
+import "package:kaiteki_core/model.dart";
 
 class SocialTextParser implements TextParser {
   static final _mentionPattern = RegExp(r"\B\@([\w\-]+)(?:\@([\w\-\.]+))?");

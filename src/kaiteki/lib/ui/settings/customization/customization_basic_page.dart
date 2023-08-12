@@ -1,9 +1,12 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/settings/customization/theme_selector.dart";
 import "package:kaiteki/ui/settings/preference_slider_list_tile.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
+import "package:kaiteki/ui/settings/preference_values_list_tile.dart";
 import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
@@ -40,6 +43,20 @@ class _CustomizationBasicPageState
             ),
             SettingsSection(
               children: [
+                PreferenceValuesListTile(
+                  provider: themeMode,
+                  values: ThemeMode.values,
+                  title: const Text("Theme mode"),
+                  textBuilder: (context, value) {
+                    return Text(
+                      switch (value) {
+                        ThemeMode.light => context.l10n.themeLight,
+                        ThemeMode.dark => context.l10n.themeDark,
+                        ThemeMode.system => context.l10n.themeSystem
+                      },
+                    );
+                  },
+                ),
                 PreferenceSwitchListTile(
                   provider: useMaterial3,
                   title: Text(l10n.useMaterialYou),
@@ -56,6 +73,11 @@ class _CustomizationBasicPageState
                 PreferenceSwitchListTile(
                   provider: showUserBadges,
                   title: const Text("Show user badges"),
+                ),
+                ListTile(
+                  title: const Text("Post layout settings"),
+                  onTap: () =>
+                      context.push("/settings/customization/post-layout"),
                 ),
               ],
             ),
@@ -97,6 +119,20 @@ class _CustomizationBasicPageState
                     if (value <= 0) return "Square";
                     return "${value}dp";
                   },
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: SectionHeader(context.l10n.prideSettingsHeader),
+              children: [
+                PreferenceSwitchListTile(
+                  provider: enablePrideFlag,
+                  title: Text(context.l10n.enablePrideFlag),
+                ),
+                PreferenceValuesListTile(
+                  provider: prideFlag,
+                  values: PrideFlag.values,
+                  title: Text(context.l10n.prideFlag),
                 ),
               ],
             ),

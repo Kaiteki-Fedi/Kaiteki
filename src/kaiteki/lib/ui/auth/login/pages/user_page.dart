@@ -1,9 +1,9 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/ui/auth/login/constants.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/shared/common.dart";
@@ -69,10 +69,7 @@ class _UserPageState extends State<UserPage> {
                   if (snapshot.hasError)
                     Padding(
                       padding: fieldMargin,
-                      child: ErrorMessageWidget(
-                        error: snapshot.error!,
-                        stackTrace: snapshot.stackTrace,
-                      ),
+                      child: ErrorMessageWidget(snapshot.traceableError!),
                     ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -103,7 +100,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  TextFormField _buildPasswordField(AppLocalizations l10n) {
+  TextFormField _buildPasswordField(KaitekiLocalizations l10n) {
     return TextFormField(
       controller: _passwordController,
       decoration: InputDecoration(
@@ -123,7 +120,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  TextFormField _buildUsernameField(AppLocalizations l10n) {
+  TextFormField _buildUsernameField(KaitekiLocalizations l10n) {
     return TextFormField(
       autofocus: true,
       controller: _usernameController,

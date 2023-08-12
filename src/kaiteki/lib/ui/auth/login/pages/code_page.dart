@@ -3,11 +3,11 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/auth/login/constants.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_message.dart";
+import "package:kaiteki_core/social.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
 
 class CodePage extends StatefulWidget {
@@ -105,10 +105,7 @@ class _CodePageState extends State<CodePage> {
                   ),
                   const SizedBox(height: 24),
                   if (snapshot.hasError)
-                    ErrorMessageWidget(
-                      error: snapshot.error!,
-                      stackTrace: snapshot.stackTrace,
-                    ),
+                    ErrorMessageWidget(snapshot.traceableError!),
                 ],
               ),
             ),

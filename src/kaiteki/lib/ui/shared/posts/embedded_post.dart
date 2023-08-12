@@ -1,11 +1,10 @@
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/ui/shared/posts/attachment_row.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class EmbeddedPostWidget extends ConsumerWidget {
   final Post post;
@@ -18,7 +17,7 @@ class EmbeddedPostWidget extends ConsumerWidget {
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => openPost(context, ref),
+        onTap: () => context.showPost(post, ref),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -42,16 +41,6 @@ class EmbeddedPostWidget extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-
-  void openPost(BuildContext context, WidgetRef ref) {
-    final accountKey = ref.read(accountProvider)!.key;
-    final instance = accountKey.host;
-    final username = accountKey.username;
-    context.push(
-      "/@$username@$instance/posts/${post.id}",
-      extra: post,
     );
   }
 }

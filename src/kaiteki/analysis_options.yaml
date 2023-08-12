@@ -1,8 +1,11 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
+  plugins:
+    - custom_lint
   exclude:
     - '**.g.dart'
+    - 'lib/l10n/**'
   errors:
     missing_enum_constant_in_switch: ignore
     # Ignoring TODO comments since they're obnoxious
@@ -11,6 +14,11 @@ analyzer:
     todo: ignore
     fixme: ignore
     hack: ignore
+
+custom_lint:
+  rules:
+    # Unreliable, triggers on variables and methods returning expected Widget type.
+    - missing_provider_scope: false
 
 linter:
   rules:

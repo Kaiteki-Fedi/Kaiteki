@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/account_list/list_tile.dart";
 
@@ -8,15 +9,15 @@ class AccountSetupPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final manager = ref.watch(accountManagerProvider);
+    final accountManager = ref.watch(accountManagerProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Expanded(
           child: ListView.builder(
-            itemCount: manager.accounts.length,
+            itemCount: accountManager.accounts.length,
             itemBuilder: (context, index) {
-              final compound = manager.accounts.elementAt(index);
+              final compound = accountManager.accounts.elementAt(index);
               return AccountListTile(account: compound);
             },
           ),

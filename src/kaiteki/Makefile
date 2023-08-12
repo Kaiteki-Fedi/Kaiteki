@@ -2,7 +2,7 @@
 FLUTTER := flutter
 DART := $(FLUTTER) pub run dart
 
-BUILD_NUMBER=$(date +%s)
+BUILD_NUMBER := $(shell date +%s)
 
 # Define build args
 BUILD_MODE := $(if $(DEBUG),--debug)$(if $(RELEASE),--release)$(if $(PROFILE),--profile)
@@ -21,18 +21,20 @@ ifneq ($(WEEKLY_EPOCH),)
 	BUILD_ARGS += "--dart-define=VERSION_NAME=Weekly $(BUILD_NAME)"
 endif
 
+$(info build number: $(BUILD_NUMBER))
+
 # Define targets and their dependencies
-all: analyze
+all: generate-l10n analyze
 
 build-android:
 ifdef $(STORE)
-	@$(FLUTTER) build appbundle $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),)
+	@$(FLUTTER) build appbundle $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),) $(if $(SPLIT_PER_ABI),--split-per-abi,)
 else
-	@$(FLUTTER) build apk $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),)
+	@$(FLUTTER) build apk $(BUILD_ARGS) $(if $(FLAVOR),--flavor $(FLAVOR),) $(if $(SPLIT_PER_ABI),--split-per-abi,)
 endif
 
 build-web:
-	@$(FLUTTER) build web $(BUILD_ARGS) --source-maps $(if $(SPLIT_PER_ABI),--split-per-abi,)
+	@$(FLUTTER) build web $(BUILD_ARGS) --source-maps
 
 build-windows:
 	@$(FLUTTER) build windows $(BUILD_ARGS)
@@ -56,5 +58,8 @@ run: analyze
 test:
 	@$(FLUTTER) test
 
+generate-l10n:
+	@$(FLUTTER) gen-l10n
+
 # Define phony targets
-.PHONY: all analyze clean run test build-android build-web build-windows build-linux
+.PHONY: all analyze clean run test build-android build-web build-windows build-linux generate-l10n

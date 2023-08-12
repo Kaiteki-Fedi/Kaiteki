@@ -10,7 +10,6 @@ class MainScreenNavigationRail extends ConsumerWidget {
   final List<MainScreenTab> tabs;
   final int currentIndex;
   final ValueChanged<int>? onChangeIndex;
-  final bool extended;
   final Color? backgroundColor;
 
   const MainScreenNavigationRail({
@@ -18,19 +17,19 @@ class MainScreenNavigationRail extends ConsumerWidget {
     required this.tabs,
     required this.currentIndex,
     this.onChangeIndex,
-    required this.extended,
     this.backgroundColor,
   });
 
-  List<NavigationRailDestination> get _destinations {
+  List<NavigationRailDestination> _destinations(BuildContext context) {
     final destinations = <NavigationRailDestination>[];
     for (final tab in tabs) {
       final unreadCount = tab.fetchUnreadCount?.call();
       destinations.add(
         NavigationRailDestination(
-          icon: Icon(tab.icon).wrapWithLargeBadge(unreadCount),
-          selectedIcon: Icon(tab.selectedIcon).wrapWithLargeBadge(unreadCount),
-          label: Text(tab.text),
+          icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
+          selectedIcon:
+              Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          label: Text(tab.kind.getLabel(context)),
         ),
       );
     }
@@ -46,19 +45,24 @@ class MainScreenNavigationRail extends ConsumerWidget {
       useIndicator: theme.useMaterial3,
       selectedIndex: currentIndex,
       onDestinationSelected: onChangeIndex,
-      extended: extended,
       minWidth: theme.useMaterial3 ? null : 56,
+      labelType: NavigationRailLabelType.all,
       leading: ComposeFloatingActionButton(
         backgroundColor: theme.colorScheme.tertiaryContainer,
         foregroundColor: theme.colorScheme.onTertiaryContainer,
-        type: extended
-            ? ComposeFloatingActionButtonType.extended
-            : ComposeFloatingActionButtonType.small,
+        type: ComposeFloatingActionButtonType.small,
         onTap: () {
-          context.pushNamed("compose", params: ref.accountRouterParams);
+          context.pushNamed("compose", pathParameters: ref.accountRouterParams);
         },
       ),
-      destinations: _destinations,
+      unselectedLabelTextStyle:
+          Theme.of(context).textTheme.labelMedium!.copyWith(
+                letterSpacing: -0.5,
+              ),
+      selectedLabelTextStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
+            letterSpacing: -0.5,
+          ),
+      destinations: _destinations(context),
     );
   }
 }

@@ -1,9 +1,8 @@
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:kaiteki/fediverse/model/chat_target.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/ui/chats/chat_target_tile.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
-import "package:mdi/mdi.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class ChatTargetList extends StatelessWidget {
   const ChatTargetList({
@@ -48,8 +47,8 @@ class _Placeholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: IconLandingWidget(
-        icon: const Icon(Mdi.messageOutline),
-        text: Text(AppLocalizations.of(context)!.empty),
+        icon: const Icon(Icons.message_rounded),
+        text: Text(KaitekiLocalizations.of(context)!.empty),
       ),
     );
   }

@@ -1,12 +1,6 @@
 import "dart:async";
 
-import "package:kaiteki/auth/login_typedefs.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/capabilities.dart";
-import "package:kaiteki/fediverse/model/model.dart";
-import "package:kaiteki/fediverse/model/timeline_query.dart";
-import "package:kaiteki/model/auth/login_result.dart";
-import "package:kaiteki/model/auth/secret.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 import "example_data.dart";
 
@@ -21,6 +15,9 @@ class DummyAdapter extends BackendAdapter {
 
   @override
   AdapterCapabilities get capabilities => DummyAdapterCapability();
+
+  @override
+  ApiType get type => ApiType.mastodon;
 
   @override
   Future<User?> followUser(String id) {
@@ -60,7 +57,7 @@ class DummyAdapter extends BackendAdapter {
 
   @override
   Future<List<Post>> getTimeline(
-    TimelineKind type, {
+    TimelineType type, {
     TimelineQuery<String>? query,
   }) async {
     final untilId = query?.untilId;
@@ -85,15 +82,6 @@ class DummyAdapter extends BackendAdapter {
   }
 
   @override
-  Future<LoginResult> login(
-    ClientSecret? clientSecret,
-    CredentialsCallback requestCredentials,
-    CodeCallback requestMfa,
-    OAuthCallback requestOAuth,
-  ) =>
-      throw UnimplementedError();
-
-  @override
   Future<Post> postStatus(
     PostDraft draft, {
     Post? parentPost,
@@ -109,12 +97,6 @@ class DummyAdapter extends BackendAdapter {
   @override
   Future<Attachment> uploadAttachment(AttachmentDraft draft) =>
       throw UnimplementedError();
-
-  @override
-  FutureOr<void> applySecrets(
-    ClientSecret? clientSecret,
-    AccountSecret accountSecret,
-  ) {}
 
   @override
   Future<PaginatedList<String?, User>> getFollowers(
@@ -138,6 +120,12 @@ class DummyAdapter extends BackendAdapter {
   @override
   Future<User> lookupUser(String username, [String? host]) =>
       throw UnimplementedError();
+
+  @override
+  Future<User?> unfollowUser(String id) => throw UnimplementedError();
+
+  @override
+  Future<Object?> resolveUrl(Uri url) => throw UnimplementedError();
 }
 
 class DummyAdapterCapability extends AdapterCapabilities {
@@ -148,7 +136,7 @@ class DummyAdapterCapability extends AdapterCapabilities {
   Set<Visibility> get supportedScopes => Visibility.values.toSet();
 
   @override
-  Set<TimelineKind> get supportedTimelines => TimelineKind.values.toSet();
+  Set<TimelineType> get supportedTimelines => TimelineType.values.toSet();
 
   @override
   bool get supportsSubjects => true;

@@ -1,19 +1,17 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/interfaces/chat_support.dart";
-import "package:kaiteki/fediverse/model/chat_message.dart";
-import "package:kaiteki/fediverse/model/chat_target.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/chats/chat_message.dart";
 import "package:kaiteki/ui/chats/chat_target_list.dart";
 import "package:kaiteki/ui/chats/compose_message_bar.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:mdi/mdi.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ChatsPage extends ConsumerStatefulWidget {
   const ChatsPage({super.key});
@@ -27,8 +25,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final experiments = ref.watch(preferences.experiments).value;
-    if (!experiments.contains(AppExperiment.chats)) {
+    if (!ref.watch(AppExperiment.chats.provider)) {
       return Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -41,7 +38,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
             ElevatedButton(
               onPressed: () {
                 final notifier = ref.read(preferences.experiments);
-                notifier.value = notifier.value..add(AppExperiment.chats);
+                notifier.value = [...notifier.value, AppExperiment.chats];
               },
               child: const Text("Enable Experiment"),
             ),
@@ -51,7 +48,8 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
     }
 
     final adapter = ref.watch(adapterProvider);
-    if (adapter is! ChatSupport) {
+    final chatAdapter = adapter.safeCast<ChatSupport>();
+    if (chatAdapter == null || !chatAdapter.capabilities.supportsChat) {
       return Center(
         child: IconLandingWidget(
           icon: const Icon(Icons.forum_outlined),
@@ -60,13 +58,10 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
       );
     }
 
-    final chatAdapter = adapter as ChatSupport;
     final chatList = FutureBuilder<Iterable<ChatTarget>>(
       future: chatAdapter.getChats(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        if (!snapshot.hasData) return centeredCircularProgressIndicator;
 
         final chats = snapshot.data!;
 
@@ -90,7 +85,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
                   );
                 },
                 tooltip: "Start a new chat",
-                child: const Icon(Mdi.plus),
+                child: const Icon(Icons.add_rounded),
               ),
             ),
           ],
@@ -101,7 +96,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
     final chatView = selectedChat == null
         ? const Center(
             child: IconLandingWidget(
-              icon: Icon(Mdi.forumOutline),
+              icon: Icon(Icons.forum_rounded),
               text: Text("Select a chat to begin"),
             ),
           )
@@ -143,7 +138,7 @@ class ChatView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final adapter = ref.watch(adapterProvider) as ChatSupport;
-    final currentUser = ref.watch(accountProvider)?.user;
+    final currentUser = ref.watch(currentAccountProvider)?.user;
 
     return Column(
       children: [
@@ -192,16 +187,14 @@ class ChatView extends ConsumerWidget {
             builder: (context, snapshot) {
               final data = snapshot.data;
 
-              if (data == null) {
-                return const Center(child: CircularProgressIndicator());
-              }
+              if (data == null) return centeredCircularProgressIndicator;
 
               final messages = data;
 
               if (messages.isEmpty) {
                 return const Center(
                   child: IconLandingWidget(
-                    icon: Icon(Mdi.messageOutline),
+                    icon: Icon(Icons.message_rounded),
                     text: Text("Looks empty here..."),
                   ),
                 );

@@ -1,12 +1,9 @@
 import "package:animations/animations.dart";
-import "package:flutter/gestures.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart" hide Notification;
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/notification_support.dart";
-import "package:kaiteki/fediverse/model/notification.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/ui/animation_functions.dart" as animations;
 import "package:kaiteki/ui/shared/common.dart";
@@ -14,6 +11,7 @@ import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
@@ -25,7 +23,7 @@ class NotificationsPage extends ConsumerStatefulWidget {
 class _NotificationsPageState extends ConsumerState<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider);
+    final account = ref.watch(currentAccountProvider);
 
     if (account == null) return IconLandingWidget.notSignedIn();
 
@@ -41,156 +39,154 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 
     final notifications = notificationServiceProvider(account.key);
 
-    return DefaultTabController(
-      length: 2,
-      initialIndex: _getInitialIndex(ref),
-      child: NestedScrollView(
-        floatHeaderSlivers: true,
-        dragStartBehavior: DragStartBehavior.down,
-        headerSliverBuilder: (context, _) => [
-          const SliverToBoxAdapter(
-            child: Column(
-              children: [
-                TabBar(
-                  isScrollable: true,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  // TODO(Craftplacer): Localize
-                  tabs: [
-                    Tab(text: "Unread"),
-                    Tab(text: "Read"),
-                  ],
-                ),
-                Divider(height: 1),
-              ],
-            ),
-          ),
-        ],
-        body: PageTransitionSwitcher(
-          transitionBuilder: animations.fadeThrough,
-          child: ref.watch(notifications).when(
-                data: (data) =>
-                    _buildBody(data, ref.read(notifications.notifier)),
-                error: (error, stackTrace) => Center(
-                  child: ErrorLandingWidget(
-                    error: error,
-                    stackTrace: stackTrace,
-                  ),
-                ),
-                loading: () => centeredCircularProgressIndicator,
-              ),
-        ),
-      ),
-    );
-  }
-
-  int _getInitialIndex(WidgetRef ref) {
-    if (ref.read(showReadNotifications).value) {
-      final account = ref.read(accountProvider);
-      if (account != null) {
-        final notifications =
-            ref.read(notificationServiceProvider(account.key)).valueOrNull;
-        if (notifications != null &&
-            notifications.any((e) => e.unread ?? false)) {
-          return 1;
-        }
-      }
-    }
-
-    return 0;
-  }
-
-  Widget _buildBody(List<Notification> data, NotificationService service) {
-    final unread = data.where((n) => n.unread != false);
-    final unreadLength = unread.length;
-
-    final read = data.where((n) => n.unread == false);
-    final readLength = read.length;
-
-    return Column(
-      children: [
-        // TextButton(
-        //   onPressed: () async {
-        //     await NativeNotificationPoster().sendNotification(data.first);
-        //   },
-        //   child: const Text("Send native notification"),
-        // ),
-        Expanded(
-          child: Material(
-            child: TabBarView(
-              children: [
-                if (unreadLength < 1)
-                  const Center(
-                    child: IconLandingWidget(
-                      icon: Icon(Icons.notifications_active_rounded),
-                      text: Text("New notifications will appear here"),
-                    ),
-                  )
-                else
-                  Stack(
-                    children: [
-                      _buildList(unread, true),
-                      Positioned(
+    return RefreshIndicator(
+      onRefresh: () => ref.read(notifications.notifier).refresh(),
+      child: PageTransitionSwitcher(
+        transitionBuilder: animations.fadeThrough,
+        child: ref.watch(notifications).when(
+              data: (data) {
+                final hasUnread = data.any((e) => e.unread == true);
+                final grouped = groupNotifications(data);
+                return Stack(
+                  children: [
+                    _buildList(grouped, true),
+                    if (hasUnread)
+                      const Positioned(
                         bottom: kFloatingActionButtonMargin,
                         left: kFloatingActionButtonMargin,
                         right: kFloatingActionButtonMargin,
                         child: Align(
-                          child: FloatingActionButton.extended(
-                            onPressed: () {
-                              final messenger = ScaffoldMessenger.of(context);
-                              service
-                                  .markAllAsRead()
-                                  .onError<Object>((error, stackTrace) {
-                                messenger.showSnackBar(
-                                  SnackBar(
-                                    content: const Text(
-                                      "Failed to mark notification as read",
-                                    ),
-                                    action: SnackBarAction(
-                                      label: "Show details",
-                                      onPressed: () =>
-                                          context.showExceptionDialog(
-                                        error,
-                                        stackTrace,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              });
-                            },
-                            label: const Text("Mark all as read"),
-                            icon: const Icon(Icons.done_all_rounded),
-                          ),
+                          child: ReadNotificationsFloatingActionButton(),
                         ),
                       ),
-                    ],
-                  ),
-                if (readLength < 1)
-                  const Center(
-                    child: IconLandingWidget(
-                      icon: Icon(Icons.notifications_none_rounded),
-                      text: Text("Read notifications will appear here"),
-                    ),
-                  )
-                else
-                  _buildList(read),
-              ],
+                  ],
+                );
+              },
+              error: (e, s) => Center(child: ErrorLandingWidget((e, s))),
+              loading: () => centeredCircularProgressIndicator,
             ),
-          ),
-        ),
-      ],
+      ),
     );
+  }
+
+  List<Notification> groupNotifications(List<Notification> ungrouped) {
+    final groups = ungrouped.groupBy((e) {
+      String? followRequestValue;
+
+      if (e.type == NotificationType.followRequest) {
+        followRequestValue = e.user?.id;
+      }
+
+      return (
+        e.type,
+        e.post?.id,
+        followRequestValue,
+      );
+    });
+
+    return groups.entries
+        .map((kv) {
+          final notifications = kv.value;
+
+          if (notifications.length <= 2) return kv.value.toList();
+
+          return [GroupedNotification(notifications.toList())];
+        })
+        .flattened
+        .toList();
   }
 
   Widget _buildList(Iterable<Notification> data, [bool addFABPadding = false]) {
     // TODO(Craftplacer): Make notifications infinitely scrollable
     return ListView.separated(
       itemBuilder: (context, i) => NotificationWidget(data.elementAt(i)),
-      separatorBuilder: (context, _) => const Divider(height: 2),
+      separatorBuilder: (context, _) => const Divider(),
       itemCount: data.length,
       padding: addFABPadding
           ? const EdgeInsets.only(bottom: kFloatingActionButtonMargin * 2 + 56)
           : null,
     );
+  }
+}
+
+class ReadNotificationsFloatingActionButton extends ConsumerWidget {
+  const ReadNotificationsFloatingActionButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        final accountKey = ref.read(currentAccountProvider)!.key;
+        final service =
+            ref.read(notificationServiceProvider(accountKey).notifier);
+        service
+            .markAllAsRead()
+            .onError<Object>((e, s) => _onError(context, e, s));
+      },
+      label: const Text("Mark all as read"),
+      icon: const Icon(Icons.done_all_rounded),
+    );
+  }
+
+  void _onError(BuildContext context, Object error, StackTrace stackTrace) {
+    final messenger = ScaffoldMessenger.of(context);
+    final snackBar = SnackBar(
+      content: const Text("Failed to mark notification as read"),
+      action: SnackBarAction(
+        label: "Show details",
+        onPressed: () => context.showExceptionDialog((error, stackTrace)),
+      ),
+    );
+    messenger.showSnackBar(snackBar);
+  }
+}
+
+enum Corner {
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+}
+
+class CornerPainter extends CustomPainter {
+  final Paint cornerPaint;
+  final Corner corner;
+
+  const CornerPainter(this.corner, this.cornerPaint);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final points = switch (corner) {
+      Corner.topLeft => [
+          Offset.zero,
+          Offset(size.width, 0),
+          Offset(0, size.height),
+        ],
+      Corner.topRight => [
+          Offset.zero,
+          Offset(size.width, 0),
+          Offset(size.width, size.height),
+        ],
+      Corner.bottomLeft => [
+          Offset.zero,
+          Offset(0, size.height),
+          Offset(size.width, 0),
+        ],
+      Corner.bottomRight => [
+          Offset(size.width, 0),
+          Offset(size.width, size.height),
+          Offset(0, size.height),
+        ],
+    };
+
+    final path = Path()..addPolygon(points, true);
+    canvas.drawPath(path, cornerPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CornerPainter oldDelegate) {
+    return oldDelegate.cornerPaint != cornerPaint &&
+        oldDelegate.corner != corner;
   }
 }
 
@@ -206,188 +202,180 @@ class NotificationWidget extends ConsumerWidget {
     final icon = _getNotificationIcon(notification.type);
     final post = notification.post;
     final user = notification.user;
+    final unreadPaint = Paint()..color = Theme.of(context).colorScheme.error;
     return InkWell(
       onTap: () => _onTap(context, ref),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
+      child: Stack(
+        children: [
+          if (notification.unread == true)
+            Positioned(
+              top: 0,
+              right: 0,
+              width: 8,
+              height: 8,
+              child: CustomPaint(
+                painter: CornerPainter(Corner.topRight, unreadPaint),
+              ),
+            ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (user != null)
-                  AvatarWidget(user, size: 40)
-                else
-                  const SizedBox(width: 40),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.background,
-                        width: 2,
-                        strokeAlign: BorderSide.strokeAlignOutside,
+                Stack(
+                  children: [
+                    if (user != null)
+                      AvatarWidget(user, size: 40)
+                    else
+                      const SizedBox(width: 40),
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.background,
+                            width: 2,
+                            strokeAlign: BorderSide.strokeAlignOutside,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Icon(
+                            icon ?? Icons.notifications_rounded,
+                            size: 12,
+                            color: ThemeData.estimateBrightnessForColor(color)
+                                .inverted
+                                .getColor(),
+                          ),
+                        ),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Icon(
-                        icon ?? Icons.notifications_rounded,
-                        size: 12,
-                        color: ThemeData.estimateBrightnessForColor(color)
-                            .inverted
-                            .getColor(),
+                  ],
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text.rich(
+                              TextSpan(
+                                children: [
+                                  if (user != null)
+                                    TextSpan(
+                                      children: [
+                                        user.renderDisplayName(context, ref),
+                                        if (notification is GroupedNotification)
+                                          TextSpan(
+                                            text:
+                                                " and ${(notification as GroupedNotification).notifications.length - 1} others",
+                                          ),
+                                      ],
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  TextSpan(
+                                    text: _getTitle(context, notification.type),
+                                  ),
+                                ],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Tooltip(
+                            message: notification.createdAt.toString(),
+                            child: Text(
+                              DateTime.now()
+                                  .difference(notification.createdAt)
+                                  .toStringHuman(context: context),
+                              style: TextStyle(
+                                color: Theme.of(context).disabledColor,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                      const SizedBox(height: 3),
+                      if (post != null && post.content != null)
+                        Text.rich(
+                          post.renderContent(context, ref),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: inheritedTextStyle.copyWith(
+                            color: inheritedTextStyle.color?.withOpacity(.5),
+                          ),
+                        ),
+                      // if (notification.type == NotificationType.followRequest)
+                      //   Row(
+                      //     children: [
+                      //       OutlinedButton.icon(
+                      //         onPressed: null,
+                      //         icon: const Icon(Icons.check_rounded),
+                      //         label: const Text("Accept"),
+                      //       ),
+                      //       const SizedBox(width: 6),
+                      //       TextButton.icon(
+                      //         onPressed: null,
+                      //         icon: const Icon(Icons.close_rounded),
+                      //         label: const Text("Reject"),
+                      //       ),
+                      //     ],
+                      //   ),
+                    ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text.rich(
-                          TextSpan(
-                            children: [
-                              if (user != null)
-                                TextSpan(
-                                  children: [
-                                    user.renderDisplayName(context, ref)
-                                  ],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              TextSpan(
-                                text: _getTitle(context, notification.type),
-                              ),
-                            ],
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                      Tooltip(
-                        message: notification.createdAt.toString(),
-                        child: Text(
-                          DateTime.now()
-                              .difference(notification.createdAt)
-                              .toStringHuman(context: context),
-                          style: TextStyle(
-                            color: Theme.of(context).disabledColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 3),
-                  if (post != null && post.content != null)
-                    Text.rich(
-                      post.renderContent(context, ref),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: inheritedTextStyle.copyWith(
-                        color: inheritedTextStyle.color?.withOpacity(.5),
-                      ),
-                    ),
-                  if (notification.type == NotificationType.followRequest)
-                    Row(
-                      children: [
-                        // TODO(Craftplacer): add following implementation
-                        OutlinedButton.icon(
-                          onPressed: null,
-                          icon: const Icon(Icons.check_rounded),
-                          label: const Text("Accept"),
-                        ),
-                        const SizedBox(width: 6),
-                        TextButton.icon(
-                          onPressed: null,
-                          icon: const Icon(Icons.close_rounded),
-                          label: const Text("Reject"),
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   IconData? _getNotificationIcon(NotificationType type) {
-    switch (type) {
-      case NotificationType.liked:
-        return Icons.star_rounded;
-
-      case NotificationType.repeated:
-        return Icons.repeat_rounded;
-
-      case NotificationType.mentioned:
-        return Icons.alternate_email_rounded;
-
-      case NotificationType.followed:
-        return Icons.person_add_rounded;
-
-      case NotificationType.followRequest:
-        return Icons.person_add_rounded;
-
-      case NotificationType.reacted:
-        return Icons.emoji_emotions_rounded;
-
-      case NotificationType.groupInvite:
-        return Icons.group_add_rounded;
-
-      case NotificationType.pollEnded:
-        return Icons.poll_rounded;
-
-      case NotificationType.quoted:
-        return Icons.format_quote_rounded;
-
-      case NotificationType.replied:
-        return Icons.reply_rounded;
-
-      case NotificationType.updated:
-        return Icons.edit_rounded;
-
-      case NotificationType.reported:
-        return Icons.report_rounded;
-
-      case NotificationType.signedUp:
-        return Icons.person_add_rounded;
-
-      case NotificationType.newPost:
-        return Icons.post_add_rounded;
-
-      case NotificationType.userMigrated:
-        return Icons.swap_horiz_rounded;
-
-      case NotificationType.unsupported:
-        return Icons.question_mark;
-    }
+    return switch (type) {
+      NotificationType.liked => Icons.star_rounded,
+      NotificationType.repeated => Icons.repeat_rounded,
+      NotificationType.mentioned => Icons.alternate_email_rounded,
+      NotificationType.followed => Icons.add_rounded,
+      NotificationType.followRequest => Icons.person_outline_rounded,
+      NotificationType.reacted => Icons.emoji_emotions_rounded,
+      NotificationType.groupInvite => Icons.group_add_rounded,
+      NotificationType.pollEnded => Icons.poll_rounded,
+      NotificationType.quoted => Icons.format_quote_rounded,
+      NotificationType.replied => Icons.reply_rounded,
+      NotificationType.updated => Icons.edit_rounded,
+      NotificationType.reported => Icons.report_rounded,
+      NotificationType.signedUp => Icons.person_add_rounded,
+      NotificationType.newPost => Icons.post_add_rounded,
+      NotificationType.userMigrated => Icons.swap_horiz_rounded,
+      NotificationType.unsupported => Icons.question_mark
+    };
   }
 
   Color _getColor(BuildContext context) {
     final theme = Theme.of(context);
     final ktkColors = theme.ktkColors;
+    final defaults = DefaultKaitekiColors(context);
+
     final colorScheme = theme.colorScheme;
 
     switch (notification.type) {
       case NotificationType.liked:
-        return ktkColors!.favoriteColor;
+        return ktkColors?.favoriteColor ?? defaults.favoriteColor;
 
       case NotificationType.repeated:
-        return ktkColors!.repeatColor;
+        return ktkColors?.repeatColor ?? defaults.repeatColor;
 
       case NotificationType.reported:
         return colorScheme.error;
@@ -416,59 +404,49 @@ class NotificationWidget extends ConsumerWidget {
   }
 
   String _getTitle(BuildContext context, NotificationType type) {
-    switch (type) {
-      case NotificationType.liked:
-        return " favorited your post";
-      case NotificationType.repeated:
-        return " repeated your post";
-      case NotificationType.reacted:
-        return " reacted to your post";
-      case NotificationType.followed:
-        return " followed you";
-      case NotificationType.mentioned:
-        return " mentioned you";
-      case NotificationType.followRequest:
-        return " wants to follow you";
-      case NotificationType.groupInvite:
-        return " invited you to a group";
-      case NotificationType.pollEnded:
-        return "'s poll has ended";
-      case NotificationType.quoted:
-        return " quoted you";
-      case NotificationType.replied:
-        return " replied to you";
-      case NotificationType.updated:
-        return " updated their post";
-      case NotificationType.reported:
-        return "New report";
-      case NotificationType.signedUp:
-        return " has joined the instance";
-      case NotificationType.newPost:
-        return " made a new post";
-      case NotificationType.userMigrated:
-        return " migrated to a new account";
-      case NotificationType.unsupported:
-        return "Unsupported notification";
-    }
+    return switch (type) {
+      NotificationType.liked => " favorited your post",
+      NotificationType.repeated => " repeated your post",
+      NotificationType.reacted => " reacted to your post",
+      NotificationType.followed => " followed you",
+      NotificationType.mentioned => " mentioned you",
+      NotificationType.followRequest => " wants to follow you",
+      NotificationType.groupInvite => " invited you to a group",
+      NotificationType.pollEnded => "'s poll has ended",
+      NotificationType.quoted => " quoted you",
+      NotificationType.replied => " replied to you",
+      NotificationType.updated => " updated their post",
+      NotificationType.reported => "New report",
+      NotificationType.signedUp => " has joined the instance",
+      NotificationType.newPost => " made a new post",
+      NotificationType.userMigrated => " migrated to a new account",
+      NotificationType.unsupported => "Unsupported notification"
+    };
   }
 
   void _onTap(BuildContext context, WidgetRef ref) {
     if (notification.post != null) {
-      final accountKey = ref.read(accountProvider)!.key;
+      final accountKey = ref.read(currentAccountProvider)!.key;
       context.pushNamed(
         "post",
         extra: notification.post,
-        params: {...accountKey.routerParams, "id": notification.post!.id},
+        pathParameters: {
+          ...accountKey.routerParams,
+          "id": notification.post!.id,
+        },
       );
       return;
     }
 
     if (notification.user != null) {
-      final accountKey = ref.read(accountProvider)!.key;
+      final accountKey = ref.read(currentAccountProvider)!.key;
       context.pushNamed(
         "user",
         extra: notification.user,
-        params: {...accountKey.routerParams, "id": notification.user!.id},
+        pathParameters: {
+          ...accountKey.routerParams,
+          "id": notification.user!.id,
+        },
       );
       return;
     }

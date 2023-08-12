@@ -4,10 +4,10 @@ import "package:meta/meta.dart";
 
 @immutable
 class PaginationState<T> {
-  final List<T> list;
+  final List<T> items;
   final bool canPaginateFurther;
 
-  const PaginationState(this.list, this.canPaginateFurther);
+  const PaginationState(this.items, {this.canPaginateFurther = true});
 }
 
 extension AsyncValueToPagingState<T> on AsyncValue<PaginationState<T>> {
@@ -15,13 +15,13 @@ extension AsyncValueToPagingState<T> on AsyncValue<PaginationState<T>> {
     return map(
       loading: (loading) => PagingState(
         nextPageKey: nextPageKey,
-        itemList: loading.valueOrNull?.list,
+        itemList: loading.valueOrNull?.items,
       ),
       data: (data) => PagingState(
         nextPageKey: data.value.canPaginateFurther ? nextPageKey : null,
-        itemList: data.value.list,
+        itemList: data.value.items,
       ),
-      error: (error) => PagingState(error: error.error),
+      error: (error) => PagingState(error: (error.error, error.stackTrace)),
     );
   }
 }

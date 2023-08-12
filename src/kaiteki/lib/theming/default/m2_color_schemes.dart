@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/theming/default/colors.dart";
 
 final lightColorScheme = ColorScheme.light(
+  background: Colors.grey.shade100,
   // primary
   primary: kaitekiPink.shade500,
   primaryContainer: kaitekiPink.shade700,
@@ -10,21 +11,18 @@ final lightColorScheme = ColorScheme.light(
   secondaryContainer: kaitekiOrange.shade600,
   // error
   error: Colors.red,
-  onError: Colors.black,
 );
 
-final _brandedDarkBackgroundColor = Color.alphaBlend(
-  kaitekiPink.shade200.withOpacity(.08),
-  Colors.black,
-);
-final _brandedDarkSurfaceColor = Color.alphaBlend(
-  kaitekiPink.shade200.withOpacity(.08),
-  const Color(0xFF121212),
-);
 // based on https://m2.material.io/design/color/dark-theme.html
 final darkColorScheme = ColorScheme.dark(
-  background: _brandedDarkBackgroundColor,
-  surface: _brandedDarkSurfaceColor,
+  background: Color.alphaBlend(
+    kaitekiPink.withOpacity(.08),
+    const Color(0xFF121212),
+  ),
+  surface: Color.alphaBlend(
+    kaitekiPink.withOpacity(.08),
+    const Color(0xFF121212),
+  ),
   // primary
   primary: kaitekiPink.shade200,
   primaryContainer: kaitekiPink.shade700,

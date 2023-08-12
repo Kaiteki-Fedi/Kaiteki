@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/post/metrics.dart";
-import "package:tuple/tuple.dart";
+import "package:kaiteki_core/social.dart";
 
 class PostMetricBar extends StatelessWidget {
   final PostMetrics metrics;
@@ -10,8 +9,8 @@ class PostMetricBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      Tuple2(metrics.repeatCount, "repeats"),
-      Tuple2(metrics.favoriteCount, "favorites"),
+      (metrics.repeatCount, "repeats"),
+      (metrics.favoriteCount, "favorites"),
     ];
     return Wrap(
       spacing: 8.0,
@@ -22,15 +21,10 @@ class PostMetricBar extends StatelessWidget {
             TextSpan(
               children: [
                 TextSpan(
-                  text: item.item1.toString(),
+                  text: item.$1.toString(),
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                TextSpan(
-                  text: " ${item.item2}",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
+                TextSpan(text: " ${item.$2}"),
               ],
             ),
           ),

@@ -1,12 +1,47 @@
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/fediverse/services/timeline.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+
+/// Timeline tabs to show.
+///
+/// This is intentionally not [TimelineType.values] because the values might
+/// not be important to the user.
+Set<TimelineType> get _defaultKinds {
+  return const {
+    TimelineType.following,
+    TimelineType.local,
+    TimelineType.bubble,
+    TimelineType.hybrid,
+    TimelineType.federated,
+  };
+}
+
+final currentTimelineProvider = StateProvider(
+  (ref) => ref.read(_tabsProvider).first,
+  dependencies: [_tabsProvider],
+);
+
+final _tabsProvider = Provider(
+  (ref) {
+    return ref.watch(
+      adapterProvider.select((adapter) {
+        final supportedKinds = adapter.capabilities.supportedTimelines;
+        return _defaultKinds.where(supportedKinds.contains);
+      }),
+    );
+  },
+  dependencies: [adapterProvider],
+);
 
 class TimelinePage extends ConsumerStatefulWidget {
-  final TimelineKind? initialTimeline;
+  final TimelineType? initialTimeline;
 
   const TimelinePage({super.key, this.initialTimeline});
 
@@ -14,76 +49,99 @@ class TimelinePage extends ConsumerStatefulWidget {
   ConsumerState<TimelinePage> createState() => TimelinePageState();
 }
 
-class TimelinePageState extends ConsumerState<TimelinePage> {
-  final _timelineKey = GlobalKey<TimelineState>();
-  late TimelineKind? _kind = widget.initialTimeline;
+class TimelinePageState extends ConsumerState<TimelinePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
 
-  /// Timeline tabs to show.
-  ///
-  /// This is intentionally not [TimelineKind.values] because the values might
-  /// not be important to the user.
-  Set<TimelineKind> get _defaultKinds {
-    return const {
-      TimelineKind.home,
-      TimelineKind.local,
-      TimelineKind.bubble,
-      TimelineKind.hybrid,
-      TimelineKind.federated,
-    };
+  TimelineType get timeline {
+    return ref.read(_tabsProvider).elementAt(_tabController.index);
   }
 
   @override
   void initState() {
     super.initState();
+
+    final tabs = ref.read(_tabsProvider);
+    final currentTimeline = ref.read(currentTimelineProvider);
+    _tabController = TabController(
+      vsync: this,
+      length: tabs.length,
+      initialIndex: tabs.toList().indexOf(currentTimeline),
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final adapter = ref.watch(adapterProvider);
-    final supportedKinds = adapter.capabilities.supportedTimelines;
-    final kinds = _defaultKinds.where(supportedKinds.contains);
-    if (!supportedKinds.contains(_kind)) {
-      _kind = supportedKinds.first;
+    final tab = ref.watch(currentTimelineProvider);
+    final tabs = ref.watch(_tabsProvider);
+    if (!tabs.contains(tab)) {
+      ref.read(currentTimelineProvider.notifier).state = tabs.first;
     }
 
-    final initialIndex = kinds.toList().indexOf(_kind!);
-    return DefaultTabController(
-      length: kinds.length,
-      initialIndex: initialIndex,
-      child: NestedScrollView(
-        floatHeaderSlivers: true,
-        dragStartBehavior: DragStartBehavior.down,
-        headerSliverBuilder: (context, _) => [
-          if (kinds.length >= 2)
+    final showTabBar = tabs.length >= 2;
+    final showTabLabel = tabs.length <= 3;
+    return NestedScrollView(
+      floatHeaderSlivers: true,
+      dragStartBehavior: DragStartBehavior.down,
+      headerSliverBuilder: (context, _) {
+        return [
+          if (showTabBar)
             SliverToBoxAdapter(
               child: Column(
                 children: [
                   TabBar(
+                    controller: _tabController,
                     isScrollable: true,
-                    indicatorSize: TabBarIndicatorSize.label,
-                    onTap: (i) => _onTabTap(i, kinds),
+                    tabAlignment: TabAlignment.center,
+                    onTap: (i) => _onTabTap(i, tabs),
                     tabs: [
-                      for (final kind in kinds)
-                        _buildTab(context, kind, kinds.length <= 3),
+                      for (final type in tabs)
+                        _buildTab(context, type, showTabLabel),
                     ],
                   ),
                   const Divider(height: 1),
                 ],
               ),
             ),
-        ],
-        body: Timeline.kind(
-          key: _timelineKey,
-          kind: _kind ?? kinds.first,
-          maxWidth: 800,
+        ];
+      },
+      body: TabBarView(
+        controller: _tabController,
+        children: [for (final type in tabs) buildPage(type)],
+      ),
+    );
+  }
+
+  Widget buildPage(TimelineType type) {
+    final timelineSource = StandardTimelineSource(type);
+    return RefreshIndicator(
+      onRefresh: () async {
+        final key = ref.read(currentAccountProvider)!.key;
+        final provider = TimelineServiceProvider(key, timelineSource);
+        await ref.read(provider.notifier).refresh();
+      },
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: SizedBox(
+          width: 800,
+          child: Timeline(
+            timelineSource,
+            postLayout: ref.watch(useWidePostLayout).value
+                ? PostWidgetLayout.wide
+                : PostWidgetLayout.normal,
+          ),
         ),
       ),
     );
   }
 
-  void refresh() => _timelineKey.currentState!.refresh();
-
-  Widget _buildTab(BuildContext context, TimelineKind kind, bool showLabel) {
+  Widget _buildTab(BuildContext context, TimelineType kind, bool showLabel) {
     final l10n = context.l10n;
 
     return Semantics(
@@ -104,8 +162,7 @@ class TimelinePageState extends ConsumerState<TimelinePage> {
     );
   }
 
-  void _onTabTap(int value, Iterable<TimelineKind> kinds) {
-    final kind = kinds.elementAt(value);
-    setState(() => _kind = kind);
+  void _onTabTap(int value, Iterable<TimelineType> kinds) {
+    ref.read(currentTimelineProvider.notifier).state = kinds.elementAt(value);
   }
 }

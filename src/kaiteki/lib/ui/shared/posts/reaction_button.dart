@@ -1,11 +1,10 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
-import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
+import "package:kaiteki_core/model.dart";
 
 class ReactionButton extends ConsumerWidget {
   final Reaction reaction;
@@ -19,10 +18,7 @@ class ReactionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dense = ref
-        .watch(preferences.experiments)
-        .value
-        .contains(AppExperiment.denseReactions);
+    final dense = ref.watch(AppExperiment.denseReactions.provider);
     final emojiSize = dense ? 16.0 : 24.0;
 
     final reacted = reaction.includesMe;
@@ -34,8 +30,8 @@ class ReactionButton extends ConsumerWidget {
         ? Theme.of(context).colorScheme.onInverseSurface
         : Theme.of(context).colorScheme.onSurfaceVariant;
 
-    final textStyle =
-        Theme.of(context).ktkTextTheme?.countTextStyle ?? const TextStyle();
+    final textStyle = Theme.of(context).ktkTextTheme?.countTextStyle ??
+        DefaultKaitekiTextTheme(context).countTextStyle;
 
     var count = reaction.count;
 
@@ -73,7 +69,7 @@ class ReactionButton extends ConsumerWidget {
           side: reacted ? BorderSide.none : BorderSide(color: outlineColor),
         ),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        minWidth: emojiSize,
+        minWidth: emojiSize + 40,
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -86,7 +82,7 @@ class ReactionButton extends ConsumerWidget {
               ),
             ),
             if (!ref.watch(hidePostMetrics).value) ...[
-              const SizedBox(width: 4),
+              const SizedBox(width: 6),
               Text(
                 reaction.count.toString(),
                 style: textStyle.copyWith(color: foregroundColor),

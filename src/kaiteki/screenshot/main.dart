@@ -9,11 +9,11 @@ import "package:flutter/rendering.dart"
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import "package:flutter_test/flutter_test.dart";
 import "package:integration_test/integration_test.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
-import "package:kaiteki/ui/user/user_screen_old.dart";
+import "package:kaiteki/ui/user/user_screen.dart";
+import "package:kaiteki_core/model.dart";
 import "package:path/path.dart" as path;
 
 import "bootstrapper.dart";
@@ -95,7 +95,8 @@ void takeScreenshots(
       final bootstrapper = await Bootstrapper.getInstance(locale);
       runApp(
         bootstrapper.wrap(
-          const MainScreen(initialTimeline: TimelineKind.federated),
+          const MainScreen(initialTimeline: TimelineType.federated),
+          screenSize,
         ),
       );
       await tester.pumpAndSettle(
@@ -113,7 +114,12 @@ void takeScreenshots(
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
       final bootstrapper = await Bootstrapper.getInstance(locale);
-      runApp(bootstrapper.wrap(const ComposeScreen()));
+      runApp(
+        bootstrapper.wrap(
+          const ComposeScreen(),
+          screenSize,
+        ),
+      );
       await tester.pumpAndSettle(
         duration,
         EnginePhase.sendSemanticsUpdate,
@@ -130,18 +136,25 @@ void takeScreenshots(
       await tester.setScreenSize(screenSize, screenDensity);
       final bootstrapper = await Bootstrapper.getInstance(locale);
 
-      final account = await bootstrapper.adapter.getUserById(
-        "109349633552584749",
-      );
+      final adapter = bootstrapper.container.read(adapterProvider);
+      final user = await adapter.getUserById("109349633552584749");
 
-      runApp(bootstrapper.wrap(OldUserScreen.fromUser(account)));
+      runApp(
+        bootstrapper.wrap(
+          UserScreen.fromUser(user: user!),
+          screenSize,
+        ),
+      );
       await tester.pumpAndSettle(
         duration,
         EnginePhase.sendSemanticsUpdate,
         timeout,
       );
+
+      await Future.delayed(const Duration(seconds: 1));
+
       await precacheImages(tester.allStates.first.context);
-      map["user-screen"] = await takeScreenshot<OldUserScreen>();
+      map["user-screen"] = await takeScreenshot<UserScreen>();
     },
   );
 }
@@ -189,7 +202,8 @@ Future<ui.Image> captureImage(Element element) {
 extension SetScreenSize on WidgetTester {
   Future<void> setScreenSize(Size size, [double pixelDensity = 1]) async {
     await binding.setSurfaceSize(size);
-    binding.window.physicalSizeTestValue = size;
-    binding.window.devicePixelRatioTestValue = pixelDensity;
+    view
+      ..physicalSize = size
+      ..devicePixelRatio = pixelDensity;
   }
 }

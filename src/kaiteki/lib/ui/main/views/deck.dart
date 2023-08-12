@@ -1,54 +1,107 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/main/views/view.dart";
+import "package:kaiteki/ui/shared/posts/compose/compose_form.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
+import "package:kaiteki_core/model.dart";
 
-class DeckMainScreenView extends StatefulWidget {
-  const DeckMainScreenView({super.key});
+class DeckMainScreenView extends ConsumerStatefulWidget
+    implements MainScreenView {
+  final Widget Function(TabKind tab) getPage;
+  final TabKind tab;
+  final Function(TabKind tab) onChangeTab;
+  final Function([MainScreenViewType? view]) onChangeView;
+
+  const DeckMainScreenView({
+    super.key,
+    required this.getPage,
+    required this.onChangeTab,
+    required this.tab,
+    required this.onChangeView,
+  });
 
   @override
-  State<DeckMainScreenView> createState() => _DeckMainScreenViewState();
+  ConsumerState<DeckMainScreenView> createState() => _DeckMainScreenViewState();
 }
 
-class _DeckMainScreenViewState extends State<DeckMainScreenView> {
+class _DeckMainScreenViewState extends ConsumerState<DeckMainScreenView> {
   @override
   Widget build(BuildContext context) {
     const width = 8.0 * 40.0;
-    return const Align(
-      alignment: Alignment.centerLeft,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              width: width,
-              child: TimelineDeckColumn(
-                timelineKind: TimelineKind.home,
+    return Scaffold(
+      body: Align(
+        alignment: Alignment.centerLeft,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8),
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: width,
+                child: Column(
+                  children: [
+                    const Card(
+                      child: ComposeForm(),
+                    ),
+                    const SizedBox(height: 8),
+                    Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        leading: const Icon(Icons.swap_horiz_rounded),
+                        title: const Text("Switch Layout"),
+                        onTap: widget.onChangeView,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(width: 8),
-            SizedBox(
-              width: width,
-              child: TimelineDeckColumn(
-                timelineKind: TimelineKind.federated,
+              const SizedBox(width: 8),
+              const SizedBox(
+                width: width,
+                child: TimelineDeckColumn(
+                  timelineKind: TimelineType.following,
+                ),
               ),
-            ),
-            SizedBox(width: 8),
-            SizedBox(
-              width: width,
-              child: DeckColumn(
-                icon: Icon(Icons.notifications_rounded),
-                title: Text("Notifications"),
-                child: NotificationsPage(),
+              const SizedBox(width: 8),
+              const SizedBox(
+                width: width,
+                child: TimelineDeckColumn(
+                  timelineKind: TimelineType.federated,
+                ),
               ),
-            ),
-            SizedBox(width: 8),
-            AddColumnButton(),
-          ],
+              const SizedBox(width: 8),
+              SizedBox(
+                width: width,
+                child: DeckColumn(
+                  icon: const Icon(Icons.notifications_rounded),
+                  title: const Text("Notifications"),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.refresh_rounded),
+                      onPressed: () {
+                        final account = ref.read(currentAccountProvider)!;
+                        ref
+                            .read(
+                              notificationServiceProvider(account.key).notifier,
+                            )
+                            .refresh();
+                      },
+                    ),
+                  ],
+                  child: const NotificationsPage(),
+                ),
+              ),
+              const SizedBox(width: 8),
+              const AddColumnButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -117,7 +170,7 @@ class DeckColumn extends StatelessWidget {
 }
 
 class TimelineDeckColumn extends StatelessWidget {
-  final TimelineKind timelineKind;
+  final TimelineType timelineKind;
 
   const TimelineDeckColumn({super.key, required this.timelineKind});
 
@@ -127,9 +180,10 @@ class TimelineDeckColumn extends StatelessWidget {
     return DeckColumn(
       icon: Icon(timelineKind.getIconData()),
       title: Text(timelineKind.getDisplayName(l10n)),
-      child: Timeline.kind(
-        kind: timelineKind,
+      child: Timeline(
+        StandardTimelineSource(timelineKind),
         maxWidth: 800,
+        postLayout: PostWidgetLayout.wide,
       ),
     );
   }

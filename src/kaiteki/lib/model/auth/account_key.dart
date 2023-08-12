@@ -2,9 +2,8 @@ import "package:equatable/equatable.dart";
 import "package:flutter/foundation.dart" show immutable;
 import "package:hive/hive.dart";
 import "package:json_annotation/json_annotation.dart";
-import "package:kaiteki/fediverse/api_type.dart";
-import "package:kaiteki/fediverse/model/user/handle.dart";
-import "package:kaiteki/utils/utils.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 part "account_key.g.dart";
 

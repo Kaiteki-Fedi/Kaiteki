@@ -1,8 +1,8 @@
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/theme_preferences.dart" as preferences;
 import "package:kaiteki/routing/router.dart";
@@ -36,9 +36,9 @@ class KaitekiApp extends ConsumerWidget {
 
         return MaterialApp.router(
           darkTheme: darkTheme,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
           routerConfig: router,
-          supportedLocales: AppLocalizations.supportedLocales,
+          supportedLocales: KaitekiLocalizations.supportedLocales,
           locale: _createLocale(locale),
           theme: lightTheme,
           themeMode: themeMode,

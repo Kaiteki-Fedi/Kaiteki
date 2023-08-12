@@ -1,11 +1,10 @@
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/ui/shared/common.dart";
-import "package:kaiteki/ui/user/federation_disclaimer.dart";
 import "package:kaiteki/ui/user/text_with_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 class UserPanel extends ConsumerWidget {
   final User user;
@@ -33,8 +32,8 @@ class UserPanel extends ConsumerWidget {
           user.handle.toString(),
           style: Theme.of(context).colorScheme.onSurfaceVariant.textStyle,
         ),
-        const SizedBox(height: 8.0),
-        const FederationDisclaimer(),
+        // const SizedBox(height: 8.0),
+        // const FederationDisclaimer(),
         if (description != null && description.isNotEmpty) ...[
           const SizedBox(height: 8.0),
           Text.rich(user.renderDescription(context, ref)),
@@ -57,9 +56,7 @@ class UserPanel extends ConsumerWidget {
                       ),
                       child: Text(
                         field.key,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
+                        style: Theme.of(context).colorScheme.outline.textStyle,
                       ),
                     ),
                     Padding(

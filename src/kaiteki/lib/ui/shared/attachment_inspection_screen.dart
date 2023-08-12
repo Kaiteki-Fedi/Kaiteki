@@ -6,7 +6,7 @@ import "package:flutter/services.dart";
 import "package:http/http.dart" as http;
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
+import "package:kaiteki_core/model.dart";
 
 class AttachmentInspectionScreen extends StatefulWidget {
   final List<Attachment> attachments;
@@ -78,16 +78,18 @@ class _AttachmentInspectionScreenState
       ),
     );
 
+    final hasDescription = attachment.description?.isNotEmpty == true;
     return Scaffold(
       backgroundColor: background,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: background,
+        foregroundColor: Colors.white,
         title: buildTitle(context),
         actions: [
           IconButton(
             icon: const Icon(Icons.subtitles_rounded),
-            onPressed: attachment.description == null ? null : _showAltText,
+            onPressed: hasDescription ? _showAltText : null,
             tooltip: context.l10n.showAltTextTooltip,
           ),
           IconButton(
@@ -240,13 +242,13 @@ class _AttachmentInspectionScreenState
             ),
           ),
         );
+      default:
+        throw ArgumentError.value(
+          attachment.type,
+          "attachment",
+          "Can't build widget for specified attachment type",
+        );
     }
-
-    throw ArgumentError.value(
-      attachment.type,
-      "attachment",
-      "Can't build widget for specified attachment type",
-    );
   }
 
   Future<void> downloadAttachment(BuildContext context) async {
@@ -259,9 +261,7 @@ class _AttachmentInspectionScreenState
       dialogTitle: l10n.attachmentDownloadDialogTitle,
     );
 
-    if (filePath == null) {
-      return;
-    }
+    if (filePath == null) return;
 
     final request = http.Request("GET", uri);
     final response = await request.send();

@@ -10,6 +10,7 @@ class ThemeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final defaults = DefaultKaitekiColors(context);
     return Scaffold(
       appBar: AppBar(title: const Text("Theme")),
       body: SingleChildScrollView(
@@ -124,7 +125,8 @@ class ThemeScreen extends StatelessWidget {
                   ListTile(
                     leading: Icon(
                       Icons.star_rounded,
-                      color: Theme.of(context).ktkColors?.favoriteColor,
+                      color: Theme.of(context).ktkColors?.favoriteColor ??
+                          defaults.favoriteColor,
                       size: 24,
                     ),
                     title: const Text("Favorite"),
@@ -132,7 +134,8 @@ class ThemeScreen extends StatelessWidget {
                   ListTile(
                     leading: Icon(
                       Icons.repeat_rounded,
-                      color: Theme.of(context).ktkColors?.repeatColor,
+                      color: Theme.of(context).ktkColors?.repeatColor ??
+                          defaults.repeatColor,
                       size: 24,
                     ),
                     title: const Text("Repeat"),
@@ -140,7 +143,8 @@ class ThemeScreen extends StatelessWidget {
                   ListTile(
                     leading: Icon(
                       Icons.bookmark_rounded,
-                      color: Theme.of(context).ktkColors?.bookmarkColor,
+                      color: Theme.of(context).ktkColors?.bookmarkColor ??
+                          defaults.bookmarkColor,
                       size: 24,
                     ),
                     title: const Text("Bookmark"),

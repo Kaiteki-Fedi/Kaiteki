@@ -17,7 +17,10 @@ class AccountRequiredScreen extends StatelessWidget {
           builder: (context, fillsPage) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(l10n.welcome, textScaleFactor: 3),
+              Text(
+                l10n.welcome,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               Text(l10n.accountRequiredToContinue),
               Expanded(
                 child: Center(

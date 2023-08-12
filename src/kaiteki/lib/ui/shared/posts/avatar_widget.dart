@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_blurhash/flutter_blurhash.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
-import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class AvatarWidget extends StatelessWidget {
   final Uri? url;
@@ -10,6 +9,7 @@ class AvatarWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final ShapeBorder? shape;
   final FocusNode? focusNode;
+  final UserType type;
 
   AvatarWidget(
     User user, {
@@ -19,7 +19,8 @@ class AvatarWidget extends StatelessWidget {
     this.shape,
     this.focusNode,
   })  : url = user.avatarUrl,
-        blurHash = user.avatarBlurHash;
+        blurHash = user.avatarBlurHash,
+        type = user.type;
 
   const AvatarWidget.url(
     this.url, {
@@ -29,77 +30,106 @@ class AvatarWidget extends StatelessWidget {
     this.onTap,
     this.shape,
     this.focusNode,
+    this.type = UserType.person,
   });
 
   @override
   Widget build(BuildContext context) {
-    final size = this.size;
-    final url = this.url;
-
-    Widget avatar;
-    final Widget fallback = SizedBox(
+    final fallback = SizedBox(
       width: size,
       height: size,
-      child: const FallbackAvatar(),
+      child: FallbackAvatar(
+        icon: switch (type) {
+          UserType.bot => const Icon(Icons.smart_toy_rounded),
+          UserType.group => const Icon(Icons.groups_rounded),
+          UserType.organization => const Icon(Icons.business_rounded),
+          UserType.person => const Icon(Icons.person_rounded),
+        },
+      ),
     );
 
-    if (url == null) {
-      avatar = fallback;
-    } else {
-      avatar = Image.network(
-        url.toString(),
-        frameBuilder: _frameBuilder,
-        width: size,
-        height: size,
-        errorBuilder: (_, __, ___) => fallback,
-        fit: BoxFit.cover,
-      );
-    }
+    final url = this.url;
+    var avatar = url == null
+        ? fallback
+        : Image.network(
+            url.toString(),
+            frameBuilder: _getFrameBuilder(fallback),
+            width: size,
+            height: size,
+            errorBuilder: (_, __, ___) => fallback,
+            fit: BoxFit.cover,
+          );
 
     if (onTap != null) {
       avatar = InkWell(onTap: onTap, focusNode: focusNode, child: avatar);
     }
 
-    final shape = this.shape ??
-        Theme.of(context).extension<AvatarTheme>()?.shape ??
-        const CircleBorder();
-    // ignore: join_return_with_assignment
-    avatar = Material(
-      clipBehavior: Clip.antiAlias,
-      shape: shape,
-      color: Theme.of(context).colorScheme.surfaceVariant,
-      child: avatar,
-    );
-
-    return avatar;
+    return AvatarSurface(shape: shape, child: avatar);
   }
 
-  Widget _frameBuilder(
-    BuildContext context,
-    Widget child,
-    int? frame,
-    bool wasSynchronouslyLoaded,
-  ) {
-    if (wasSynchronouslyLoaded) return child;
+  ImageFrameBuilder _getFrameBuilder(Widget? fallback) {
+    return (context, child, frame, wasSynchronouslyLoaded) {
+      if (wasSynchronouslyLoaded) return child;
 
-    final blurHash = this.blurHash;
+      Widget getChild() {
+        final blurHash = this.blurHash;
 
-    final blurHashWidget = blurHash.nullTransform(
-      (e) => BlurHash(hash: e, color: Colors.transparent),
-    );
+        if (frame != null) return child;
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 150),
-      child: frame == null
-          ? SizedBox.square(dimension: size, child: blurHashWidget)
-          : SizedBox(child: child),
+        if (blurHash != null) {
+          return SizedBox.square(
+            dimension: size,
+            child: BlurHash(
+              hash: blurHash,
+              color: Colors.transparent,
+            ),
+          );
+        }
+
+        return fallback ?? child;
+      }
+
+      return AnimatedSwitcher(
+        duration: const Duration(milliseconds: 150),
+        child: getChild(),
+      );
+    };
+  }
+}
+
+class AvatarSurface extends StatelessWidget {
+  final Widget? child;
+  final ShapeBorder? shape;
+
+  const AvatarSurface({super.key, this.child, this.shape});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final shape = this.shape ??
+        theme.extension<AvatarTheme>()?.shape ??
+        const CircleBorder();
+
+    return Material(
+      clipBehavior: Clip.antiAlias,
+      shape: shape,
+      color: theme.colorScheme.surfaceVariant,
+      child: IconTheme.merge(
+        data: IconThemeData(
+          color: theme.colorScheme.onSurface,
+        ),
+        child: child ?? const SizedBox(),
+      ),
     );
   }
 }
 
 class FallbackAvatar extends StatelessWidget {
+  final Widget? icon;
+
   const FallbackAvatar({
     super.key,
+    this.icon,
   });
 
   @override
@@ -111,9 +141,11 @@ class FallbackAvatar extends StatelessWidget {
 
         return Padding(
           padding: EdgeInsets.all(padding),
-          child: Icon(
-            Icons.person_rounded,
-            size: size - (padding * 2),
+          child: IconTheme.merge(
+            data: IconThemeData(
+              size: size - (padding * 2),
+            ),
+            child: icon ?? const Icon(Icons.person_rounded),
           ),
         );
       },

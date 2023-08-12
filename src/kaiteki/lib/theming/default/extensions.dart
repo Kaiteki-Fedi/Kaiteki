@@ -1,11 +1,7 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/theming/kaiteki/colors.dart";
-import "package:kaiteki/theming/kaiteki/post.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/theming/kaiteki/theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyDefaultTweaks({bool useNaturalBadgeColors = false}) {
@@ -14,28 +10,36 @@ extension ThemeDataExtensions on ThemeData {
             ? colorScheme.onSurface
             : colorScheme.onPrimary;
     return copyWith(
-      snackBarTheme: const SnackBarThemeData(
+      snackBarTheme: snackBarTheme.copyWith(
         behavior: SnackBarBehavior.floating,
       ),
-      badgeTheme: BadgeThemeData(
+      badgeTheme: badgeTheme.copyWith(
         backgroundColor:
             useNaturalBadgeColors ? colorScheme.inverseSurface : null,
         textColor: useNaturalBadgeColors ? colorScheme.onInverseSurface : null,
       ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
+      floatingActionButtonTheme: floatingActionButtonTheme.copyWith(
         extendedTextStyle: textTheme.labelLarge ?? const TextStyle(),
       ),
       dividerTheme: dividerTheme.copyWith(space: 1, thickness: 1),
-      tabBarTheme: TabBarTheme(
-        indicator: RoundedUnderlineTabIndicator(
-          borderSide: BorderSide(width: 3, color: colorScheme.primary),
-        ),
-        labelColor: colorScheme.primary,
-        unselectedLabelColor: colorScheme.onSurfaceVariant,
+      tabBarTheme: tabBarTheme.copyWith(
+        labelColor: useMaterial3 ? null : colorScheme.primary,
+        indicatorColor: useMaterial3 ? null : colorScheme.primary,
+        indicator: useMaterial3
+            ? null
+            : BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: colorScheme.primary, width: 2),
+                ),
+              ),
+
+        unselectedLabelColor: useMaterial3
+            ? null
+            : colorScheme.onSurface.withOpacity(.6) /* medium emphasis */,
         // And there @Craftplacer said, "THIS DIVIDER SUCKS"
         dividerColor: Colors.transparent,
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
         backgroundColor: colorScheme.brightness == Brightness.dark
             ? colorScheme.surface
             : colorScheme.primary,
@@ -55,10 +59,7 @@ extension ThemeDataExtensions on ThemeData {
     return copyWith(
       extensions: [
         ...extensions.values,
-        KaitekiTextTheme.fromMaterialTheme(this),
-        KaitekiColors.fromMaterialTheme(this),
         KaitekiTheme.fromMaterialTheme(this),
-        KaitekiPostTheme.fallback,
         EmojiTheme(square: squareEmoji ?? true),
         AvatarTheme(shape: avatarShape ?? const CircleBorder()),
       ],

@@ -1,9 +1,8 @@
-import "dart:developer";
-
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
+import "package:logging/logging.dart";
 
 Future<void> resolveAndOpenUser(
   UserReference user,
@@ -18,15 +17,16 @@ Future<void> resolveAndOpenUser(
   final adapter = ref.read(adapterProvider);
   user.resolve(adapter).then((user) async {
     // lookupSnackbar.close();
-    if (user == null) throw Exception("User not found");
+    if (user == null) {
+      messenger.showSnackBar(
+        SnackBar(content: Text("Couldn't find $handle")),
+      );
+      return;
+    }
     await context.showUser(user, ref);
-  }).catchError((error) {
-    // lookupSnackbar.close();
-    log(
-      "Failed to resolve handle $handle",
-      name: "resolveAndOpenUser",
-      error: error,
-    );
+  }).catchError((e) {
+    Logger("resolveAndOpenUser").warning("Failed to resolve handle $handle", e);
+
     messenger.showSnackBar(
       SnackBar(content: Text("Failed to resolve $handle")),
     );

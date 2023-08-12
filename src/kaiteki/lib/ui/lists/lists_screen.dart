@@ -2,15 +2,16 @@ import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:fpdart/fpdart.dart" hide State;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/list_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ListsScreen extends ConsumerStatefulWidget {
   const ListsScreen({super.key});
@@ -42,6 +43,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final isLandscape = MediaQuery.of(context).size.width >= 600;
     return Option<ListSupport>.safeCast(ref.watch(adapterProvider)).match(
       () => Scaffold(
         appBar: AppBar(title: const Text("Lists")),
@@ -55,6 +57,16 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
       (adapter) => FutureBuilder<List<PostList>>(
         future: _future,
         builder: (context, snapshot) {
+          // Widget body;
+          //
+          // if (_editMode) {
+          //   body = _buildEdit(snapshot);
+          // } else {
+          //   body = isLandscape
+          //       ? _buildViewLandscape(context, snapshot)
+          //       : _buildView(snapshot, adapter);
+          // }
+
           return AppBarTabBarTheme(
             child: DefaultTabController(
               length: snapshot.data?.length ?? 0,
@@ -111,6 +123,95 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
     );
   }
 
+  Widget _buildViewLandscape(
+    BuildContext context,
+    AsyncSnapshot<List<PostList>> snapshot,
+  ) {
+    final lists = snapshot.data;
+    final isLoading = snapshot.connectionState == ConnectionState.waiting;
+    final listsAvailable = lists != null && lists.isNotEmpty;
+
+    final appBar = AppBar(
+      title: const Text("Lists"),
+      actions: [
+        if (listsAvailable)
+          IconButton(
+            icon: const Icon(Icons.edit_rounded),
+            tooltip: "Edit lists",
+            onPressed: () => setState(() => _editMode = true),
+          ),
+      ],
+    );
+
+    final Widget body;
+
+    if (isLoading) {
+      body = const SizedBox();
+    } else if (listsAvailable) {
+      body = TabBarView(
+        children: [
+          for (final list in lists) Timeline(ListTimelineSource(list.id)),
+        ],
+      );
+    } else {
+      body = _buildEmptyState();
+    }
+
+    return Scaffold(
+      body: isLoading
+          ? centeredCircularProgressIndicator
+          : Row(
+              children: [
+                SizedBox(
+                  width: 300,
+                  child: Column(
+                    children: [
+                      appBar,
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            return NavigationDrawer(
+                              elevation: 0,
+                              onDestinationSelected: (index) {
+                                DefaultTabController.of(context)
+                                    .animateTo(index);
+                              },
+                              children: [
+                                if (lists != null)
+                                  for (final list in lists)
+                                    NavigationDrawerDestination(
+                                      icon: const Icon(Icons.list_alt_rounded),
+                                      label: Text(list.name),
+                                    ),
+                              ],
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: PageTransitionSwitcher(
+                    transitionBuilder: (
+                      child,
+                      animation,
+                      secondaryAnimation,
+                    ) {
+                      return FadeThroughTransition(
+                        animation: animation,
+                        secondaryAnimation: secondaryAnimation,
+                        child: child,
+                      );
+                    },
+                    child: body,
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+
   Widget _buildView(
     AsyncSnapshot<List<PostList>> snapshot,
     ListSupport adapter,
@@ -147,7 +248,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
     } else if (listsAvailable) {
       body = TabBarView(
         children: [
-          for (final list in lists) Timeline.list(listId: list.id),
+          for (final list in lists) Timeline(ListTimelineSource(list.id)),
         ],
       );
     } else {
@@ -328,6 +429,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
                   final user = snapshot.data![index];
                   return UserListTile(
                     user: user,
+                    onPressed: () => context.showUser(user, ref),
                     trailing: [
                       IconButton(
                         splashRadius: 24,
@@ -406,7 +508,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
           ),
           action: SnackBarAction(
             label: context.l10n.whyButtonLabel,
-            onPressed: () => context.showExceptionDialog(e, s),
+            onPressed: () => context.showExceptionDialog((e, s)),
           ),
         ),
       );
@@ -460,7 +562,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
           ),
           action: SnackBarAction(
             label: context.l10n.whyButtonLabel,
-            onPressed: () => context.showExceptionDialog(e, s),
+            onPressed: () => context.showExceptionDialog((e, s)),
           ),
         ),
       );

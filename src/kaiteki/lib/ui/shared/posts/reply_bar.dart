@@ -1,21 +1,20 @@
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class ReplyBar extends ConsumerWidget {
   const ReplyBar({
     super.key,
     this.textStyle,
     required this.post,
+    this.onTap,
   });
 
+  final VoidCallback? onTap;
   final TextStyle? textStyle;
   final Post post;
 
@@ -24,15 +23,14 @@ class ReplyBar extends ConsumerWidget {
     final disabledColor = Theme.of(context).disabledColor;
     final l10n = context.l10n;
     final adapter = ref.watch(adapterProvider);
-    final userTextStyle = Theme.of(context).ktkTextTheme!.linkTextStyle;
+    final userTextStyle = Theme.of(context).ktkTextTheme?.linkTextStyle ??
+        DefaultKaitekiTextTheme(context).linkTextStyle;
 
     return Padding(
       padding: kPostPadding,
       child: InkWell(
-        onTap: () {
-          final userId = _getUserId();
-          context.push("/${ref.getCurrentAccountHandle()}/users/$userId");
-        },
+        borderRadius: BorderRadius.circular(8.0),
+        onTap: onTap,
         child: FutureBuilder<User?>(
           future: UserReference(_getUserId()).resolve(adapter),
           builder: (context, snapshot) {

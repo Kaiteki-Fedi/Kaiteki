@@ -24,32 +24,47 @@ ColorScheme getColorScheme(Brightness brightness, bool useM3) {
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyKaitekiTweaks() {
-    final navigationBarForegroundColor =
-        colorScheme.brightness == Brightness.dark
-            ? colorScheme.onSurface
-            : colorScheme.onPrimary;
     return copyWith(
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: colorScheme.secondaryContainer,
-        foregroundColor: colorScheme.onSecondaryContainer,
+      floatingActionButtonTheme: floatingActionButtonTheme.copyWith(
+        backgroundColor: useMaterial3 ? null : colorScheme.primary,
+        foregroundColor: useMaterial3 ? null : colorScheme.onPrimary,
         extendedTextStyle: textTheme.labelLarge,
       ),
-      snackBarTheme: const SnackBarThemeData(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      cardTheme: cardTheme.copyWith(
+        shadowColor: useMaterial3 ? Colors.transparent : null,
+        margin: EdgeInsets.zero,
+      ),
+      menuButtonTheme: MenuButtonThemeData(
+        style: (menuButtonTheme.style ?? const ButtonStyle()).copyWith(
+          iconColor: useMaterial3
+              ? null
+              : MaterialStatePropertyAll(colorScheme.onSurface.withOpacity(.6)),
+        ),
+      ),
+      appBarTheme: appBarTheme.copyWith(
+        backgroundColor: useMaterial3 ? colorScheme.surface : null,
+        foregroundColor: useMaterial3 ? colorScheme.onSurface : null,
+        elevation: useMaterial3 ? 0.0 : null,
+        scrolledUnderElevation: 4.0,
+      ),
+      snackBarTheme: snackBarTheme.copyWith(
+        shape: const RoundedRectangleBorder(borderRadius: borderRadius),
         behavior: SnackBarBehavior.floating,
       ),
-      dialogTheme: const DialogTheme(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      dialogTheme: dialogTheme.copyWith(
+        shape: const RoundedRectangleBorder(borderRadius: borderRadius),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: colorScheme.brightness == Brightness.dark
-            ? colorScheme.surface
-            : colorScheme.primary,
-        selectedItemColor: navigationBarForegroundColor,
-        unselectedItemColor: navigationBarForegroundColor.withOpacity(0.76),
+      bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
         showSelectedLabels: true,
+        showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
       ),
+      badgeTheme: useMaterial3
+          ? null
+          : badgeTheme.copyWith(
+              backgroundColor: colorScheme.error,
+              textColor: colorScheme.onError,
+            ),
       textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
     );
   }
@@ -59,11 +74,8 @@ TextTheme _createKaitekiTextTheme(
   TextTheme original,
   KaitekiTextTheme? ktkTextTheme,
 ) {
-  final baseTextTheme = GoogleFonts.robotoTextTheme(original);
+  final baseTextTheme = GoogleFonts.firaSansTextTheme(original);
   return baseTextTheme.copyWith(
-    titleLarge: ktkTextTheme?.kaitekiTextStyle.copyWith(
-      fontSize: baseTextTheme.titleLarge?.fontSize,
-      color: baseTextTheme.titleLarge?.color,
-    ),
+    titleLarge: ktkTextTheme?.kaitekiTextStyle,
   );
 }
