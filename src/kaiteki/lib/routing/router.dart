@@ -43,9 +43,6 @@ const authenticatedPath = "/@:accountUsername@:accountHost";
 
 final _logger = Logger("Router");
 
-final routerProvider = Provider.autoDispose<GoRouter>((ref) {
-  final account = ref.watch(routerNotifierProvider);
-
 final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ref.read(routerNotifierProvider.notifier);
 
