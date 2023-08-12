@@ -38,8 +38,6 @@ import "package:logging/logging.dart";
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "root");
-final GlobalKey<NavigatorState> _authNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: "authenticated");
 
 const authenticatedPath = "/@:accountUsername@:accountHost";
 
@@ -48,18 +46,18 @@ final _logger = Logger("Router");
 final routerProvider = Provider.autoDispose<GoRouter>((ref) {
   final account = ref.watch(routerNotifierProvider);
 
+final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ref.read(routerNotifierProvider.notifier);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: kDebugMode,
-    refreshListenable: notifier,
     redirect: notifier.redirect,
     routes: [
       GoRoute(
         path: "/",
-        builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
+          final account = ref.read(routerNotifierProvider);
           if (account == null) return "/welcome";
           return "/${account.handle}/home";
         },
@@ -144,7 +142,6 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
       GoRoute(
         name: "authenticated",
         path: authenticatedPath,
-        builder: (_, __) => const SizedBox(),
         redirect: (context, state) {
           final user = state.pathParameters["accountUsername"];
           final host = state.pathParameters["accountHost"];
@@ -174,13 +171,14 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
           }
 
           if (state.fullPath == authenticatedPath) {
-            return "${state.location}/home";
+            return "${state.uri}/home";
           }
+
           return null;
         },
         routes: [
           ShellRoute(
-            navigatorKey: _authNavigatorKey,
+            // navigatorKey: _authNavigatorKey,
             builder: _authenticatedBuilder,
             routes: [
               GoRoute(
@@ -206,7 +204,7 @@ final routerProvider = Provider.autoDispose<GoRouter>((ref) {
                 path: "search",
                 // parentNavigatorKey: _authNavigatorKey,
                 builder: (_, state) {
-                  final query = state.queryParameters["q"];
+                  final query = state.uri.queryParameters["q"];
 
                   if (query == null || query.isEmpty) {
                     return const SearchScreen();
@@ -343,7 +341,7 @@ Widget _authenticatedBuilder(
         final host = state.pathParameters["accountHost"];
 
         if (user != null && host != null) {
-          account = ref.watch(
+          account = ref.read(
             accountManagerProvider.select(
               (manager) {
                 final matchedAccount = manager.accounts.firstWhereOrNull(
@@ -363,8 +361,10 @@ Widget _authenticatedBuilder(
             ),
           );
         } else {
-          account = ref.watch(currentAccountProvider);
+          account = ref.read(currentAccountProvider);
         }
+
+        _logger.finest("Consumer Rebuild: ${account?.user.handle}");
 
         if (account != null) {
           return ProviderScope(
@@ -374,9 +374,9 @@ Widget _authenticatedBuilder(
             ],
             child: child!,
           );
-        } else {
-          return child!;
         }
+
+        return child!;
       },
     ),
   );
