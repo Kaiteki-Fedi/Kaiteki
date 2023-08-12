@@ -7,12 +7,12 @@ import 'package:fediverse_objects/mastodon_v1.dart' as v1;
 import 'package:http/http.dart' show Response;
 import 'package:kaiteki_core/http.dart';
 import 'package:kaiteki_core/src/link_header_parser.dart';
-import 'package:kaiteki_core/utils.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/models/pagination.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/models/search.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/responses/context.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/responses/login.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/responses/marker.dart';
+import 'package:kaiteki_core/utils.dart';
 
 class MastodonClient {
   late final KaitekiClient client;
@@ -372,7 +372,6 @@ class MastodonClient {
 
   Future<Search> search(
     String query, {
-    String? type,
     int? offset,
     String? maxId,
     String? minId,
