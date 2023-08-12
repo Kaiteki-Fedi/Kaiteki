@@ -193,42 +193,24 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
   ) {
     final item = items[index];
     final tooltip = _getTooltip(item.emoji);
+
     Widget child = GestureDetector(
-      onLongPress: () async {
-        if (item.variants.isEmpty) return;
-        final variant = await selectVariant(item);
-        if (variant == null) return;
-        _onSelect(variant);
-      },
       child: EmojiButton(
         item.emoji,
         size: _emojiSize,
         onTap: () => _onSelect(item.emoji),
+        onLongTap: item.variants.isEmpty
+            ? null
+            : () async {
+                final variant = await selectVariant(item);
+                if (variant != null) _onSelect(variant);
+              },
       ),
     );
 
     // HACK(Craftplacer): We disable displaying `Tooltip`s on slivers when debugging because that fails an assert when hot-reloading.
     if (!kDebugMode && tooltip != null) {
-      return Tooltip(
-        message: tooltip,
-        child: child,
-      );
-    }
-
-    if (item.variants.isNotEmpty) {
-      child = Stack(
-        children: [
-          Positioned(
-            bottom: -8,
-            right: 0,
-            child: Icon(
-              Icons.more_horiz,
-              color: Theme.of(context).disabledColor,
-            ),
-          ),
-          Positioned.fill(child: child),
-        ],
-      );
+      child = Tooltip(message: tooltip, child: child);
     }
 
     return child;

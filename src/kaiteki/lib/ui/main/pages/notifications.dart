@@ -173,9 +173,9 @@ class CornerPainter extends CustomPainter {
           Offset(size.width, 0),
         ],
       Corner.bottomRight => [
-          Offset.zero,
-          Offset(0, size.height),
           Offset(size.width, 0),
+          Offset(size.width, size.height),
+          Offset(0, size.height),
         ],
     };
 
