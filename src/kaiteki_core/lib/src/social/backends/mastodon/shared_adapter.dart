@@ -1,14 +1,13 @@
-import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:collection/collection.dart';
+import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:kaiteki_core/kaiteki_core.dart';
 
 import 'adapter.dart';
 import 'capabilities.dart';
 import 'client.dart';
+import 'extensions.dart'; // That file contains toEntity() methods
 import 'responses/login.dart';
 import 'responses/marker.dart';
-
-import 'extensions.dart'; // That file contains toEntity() methods
 
 final kOob = Uri.parse('urn:ietf:wg:oauth:2.0:oob');
 
@@ -556,17 +555,17 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   Future<Object?> resolveUrl(Uri url) async {
     final results = await client.search(url.toString(), resolve: true);
 
-    bool isHostMatch(mastodon.Account account) {
-      final instance =
-          account.acct.split('@').elementAtOrNull(1) ?? this.instance;
-      return instance == url.host;
-    }
+    // What if the URL is linking to another instance?
+    // bool isHostMatch(mastodon.Account account) {
+    //   final instance =
+    //       account.acct.split('@').elementAtOrNull(1) ?? this.instance;
+    //   return instance == url.host;
+    // }
 
-    final status =
-        results.statuses.firstWhereOrNull((e) => isHostMatch(e.account));
+    final status = results.statuses.firstOrNull;
     if (status != null) return status.toKaiteki(instance);
 
-    final account = results.accounts.firstWhereOrNull(isHostMatch);
+    final account = results.accounts.firstOrNull;
     if (account != null) return account.toKaiteki(instance);
 
     return null;
