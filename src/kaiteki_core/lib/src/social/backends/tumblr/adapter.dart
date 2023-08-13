@@ -129,11 +129,7 @@ class TumblrAdapter extends CentralizedBackendAdapter
           fields: {'blogs': blogFields},
         );
 
-        return response.posts
-            .map((e) => e.toKaiteki())
-            .toList()
-            .reversed
-            .toList();
+        return response.posts.map((e) => e.toKaiteki()).toList();
 
       default:
         throw UnsupportedError('Timeline type $type is not supported');
