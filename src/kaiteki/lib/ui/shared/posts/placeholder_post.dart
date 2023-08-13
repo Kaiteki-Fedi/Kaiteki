@@ -58,7 +58,7 @@ class PlaceholderPostWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: children,
                 ),
-              )
+              ),
             ],
           ),
           if (isExpanded) const Divider(height: 25),

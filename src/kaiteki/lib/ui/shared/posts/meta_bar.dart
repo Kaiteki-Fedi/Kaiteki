@@ -4,6 +4,7 @@ import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 import "package:kaiteki/ui/shared/users/user_badge.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/ui/shared/visibility_icon.dart";
@@ -15,28 +16,25 @@ class MetaBar extends ConsumerWidget {
     super.key,
     required Post post,
     this.twolineAuthor = false,
-    this.showAvatar = false,
-    this.showTime = true,
-    this.showVisibility = true,
-    this.showLanguage = true,
     this.onOpen,
+    this.showTime,
+    this.showVisibility,
+    this.showLanguage,
+    this.showAvatar,
   }) : _post = post;
 
   final Post _post;
-  final bool showAvatar;
-  final bool showTime;
-  final bool showVisibility;
-  final bool showLanguage;
   final bool twolineAuthor;
+  final bool? showTime;
+  final bool? showAvatar;
+  final bool? showVisibility;
+  final bool? showLanguage;
   final VoidCallback? onOpen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconTheme.merge(
-      data: IconThemeData(
-        size: 18,
-        color: Theme.of(context).colorScheme.outline,
-      ),
+      data: const IconThemeData(size: 18),
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           minHeight: 32,
@@ -56,8 +54,11 @@ class MetaBar extends ConsumerWidget {
     final isAdministrator = _post.author.flags?.isAdministrator ?? false;
     final isModerator = _post.author.flags?.isModerator ?? false;
     final isBot = _post.author.type == UserType.bot;
+
+    final postTheme = PostWidgetTheme.of(context);
+
     return [
-      if (showAvatar)
+      if (showAvatar ?? postTheme?.showAvatar ?? true)
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: AvatarWidget(_post.author, size: 40),
@@ -94,6 +95,7 @@ class MetaBar extends ConsumerWidget {
   Widget buildRight(BuildContext context) {
     final visibility = _post.visibility;
     final l10n = context.l10n;
+    final postTheme = PostWidgetTheme.of(context);
 
     final relativeTime =
         DateTime.now().difference(_post.postedAt).toStringHuman(
@@ -101,9 +103,14 @@ class MetaBar extends ConsumerWidget {
             );
     final language = _post.language;
 
-    const iconSize = 18.0;
     final textTheme =
         Theme.of(context).ktkTextTheme ?? DefaultKaitekiTextTheme(context);
+
+    final showLanguage = this.showLanguage ?? postTheme?.showLanguage ?? true;
+    final showTime = this.showTime ?? postTheme?.showTime ?? true;
+    final showVisibility =
+        this.showVisibility ?? postTheme?.showVisibility ?? true;
+
     return ContentColor(
       color: Theme.of(context).getEmphasisColor(EmphasisColor.medium),
       child: Row(
@@ -114,10 +121,10 @@ class MetaBar extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Tooltip(
                 message: l10n.postPinned,
-                child: const Icon(Icons.push_pin_rounded, size: iconSize),
+                child: const Icon(Icons.push_pin_rounded),
               ),
             ),
-          if (showLanguage && language != null)
+          if (language != null && showLanguage)
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
@@ -142,10 +149,7 @@ class MetaBar extends ConsumerWidget {
             const SizedBox(width: 8)
           else
             IconButton(
-              icon: const Icon(
-                Icons.open_in_full_rounded,
-                size: iconSize,
-              ),
+              icon: const Icon(Icons.open_in_full_rounded),
               visualDensity: VisualDensity.compact,
               onPressed: onOpen,
               tooltip: "Open post",

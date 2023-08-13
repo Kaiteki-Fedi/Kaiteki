@@ -89,7 +89,7 @@ class CountButton extends ConsumerWidget {
                         ),
                       ),
                     ),
-                  ]
+                  ],
                 ],
               ),
       ),

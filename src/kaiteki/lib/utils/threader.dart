@@ -3,6 +3,7 @@ import "dart:math" as math;
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 
@@ -121,13 +122,17 @@ class ThreadPostContainer extends StatelessWidget {
               padding: EdgeInsets.only(
                 left: _lineShouldIndent ? 48.0 : 0.0,
               ),
-              child: PostWidget(
-                post.post,
-                showParentPost: false,
-                showReplyee: false,
-                layout: threadLayer == 0
-                    ? PostWidgetLayout.expanded
-                    : PostWidgetLayout.normal,
+              child: PostWidgetTheme(
+                data: const PostWidgetThemeData(
+                  showParentPost: false,
+                  showReplyee: false,
+                ),
+                child: PostWidget(
+                  post.post,
+                  layout: threadLayer == 0
+                      ? PostWidgetLayout.expanded
+                      : PostWidgetLayout.normal,
+                ),
               ),
             ),
           ],
