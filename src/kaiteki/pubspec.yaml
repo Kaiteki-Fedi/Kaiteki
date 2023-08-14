@@ -55,7 +55,7 @@ dependencies:
   meta: ^1.8.0
   notified_preferences: ^2.0.0
   notified_preferences_riverpod: ^1.0.0
-  page_view_dot_indicator: ^2.0.0
+  page_view_dot_indicator: ^2.3.0
   path: ^1.8.3
   path_provider: ^2.0.15
   qr_bar_code_scanner_dialog: ^0.0.5
