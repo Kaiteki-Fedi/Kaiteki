@@ -27,6 +27,12 @@ Future<InstanceProbeResult> probeInstance(
   InstanceProbeResult? result;
 
   try {
+    result ??= await _checkKnownHosts(host);
+  } catch (e, s) {
+    _logger.warning('Failed to look for known hosts with $host', e, s);
+  }
+
+  try {
     result ??= await _probeActivityPubNodeInfo(host);
   } catch (e, s) {
     _logger.warning("Couldn't check node info for $host", e, s);
@@ -58,6 +64,32 @@ Future<InstanceProbeResult> probeInstance(
   }
 
   return result;
+}
+
+Future<InstanceProbeResult?> _checkKnownHosts(String host) async {
+  for (final apiType in ApiType.values) {
+    final hosts = apiType.hosts;
+
+    if (hosts == null || !hosts.contains(host)) continue;
+
+    final BackendAdapter adapter = await apiType.createAdapter(host);
+    final Instance instance;
+
+    if (adapter is DecentralizedBackendAdapter) {
+      instance = (await adapter.probeInstance())!;
+    } else if (adapter is CentralizedBackendAdapter) {
+      instance = adapter.instance;
+    } else {
+      throw UnimplementedError();
+    }
+
+    return InstanceProbeResult.successful(
+      apiType,
+      instance,
+      InstanceProbeMethod.endpoint,
+    );
+  }
+  return null;
 }
 
 Future<NodeInfo?> fetchNodeInfo(String host) async {
