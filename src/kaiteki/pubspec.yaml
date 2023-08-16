@@ -16,7 +16,7 @@ dependencies:
   collection: ^1.16.0
   copy_with_extension: ^5.0.0
   crypto: ^3.0.1
-  dynamic_color: ^1.6.0
+  dynamic_color: ^1.6.6
   equatable: ^2.0.5
   fast_immutable_collections: ^9.0.0
   fediverse_objects:
