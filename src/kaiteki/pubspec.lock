@@ -850,10 +850,10 @@ packages:
     dependency: "direct main"
     description:
       name: page_view_dot_indicator
-      sha256: "072aa63f4fe94351d921ea0f83ae86089aed9b53a624ae34317e96caff73a635"
+      sha256: "32d73b9de221339a371a229f547eb9cbb6f8114b8770e76a104fb4c30e39cf22"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.3.0"
   path:
     dependency: "direct main"
     description:
