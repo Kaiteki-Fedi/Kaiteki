@@ -75,6 +75,7 @@ dev_dependencies:
   build_runner: ^2.1.4
   build_verify: ^3.1.0
   copy_with_extension_gen: ^5.0.0
+  custom_lint: ^0.5.2
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
@@ -82,6 +83,8 @@ dev_dependencies:
   integration_test: 
     sdk: flutter
   json_serializable: ^6.0.1
+  kaiteki_lints:
+    path: ../kaiteki_lints
   msix: ^3.5.1
   riverpod_generator: ^2.1.6
   test: ^1.17.10

@@ -1,0 +1,18 @@
+name: kaiteki_lints
+version: 0.0.1
+
+environment:
+  sdk: '>=3.2.0-65.0.dev <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  analyzer: ^6.2.0
+  analyzer_plugin: ^0.11.3
+  custom_lint_builder: ^0.5.2
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
