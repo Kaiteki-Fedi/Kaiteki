@@ -24,9 +24,7 @@ class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {
   @override
   void initState() {
     super.initState();
-    _videoController = VideoPlayerController.network(
-      widget.attachment.url.toString(),
-    );
+    _videoController = VideoPlayerController.networkUrl(widget.attachment.url);
     _chewieControllerFuture = _prepareChewie();
   }
 
