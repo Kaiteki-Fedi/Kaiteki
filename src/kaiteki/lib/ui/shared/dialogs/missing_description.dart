@@ -8,10 +8,8 @@ class MissingDescriptionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.accessibility_new_rounded),
-      title: const Text("Your attachment is missing a description"),
-      content: const Text(
-        "Descriptions allow users who are unable to see the attachment to understand what it is about.",
-      ),
+      title: Text(context.l10n.missingDescriptionDialogTitle),
+      content: Text(context.l10n.missingDescriptionDialogDescription),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -19,7 +17,7 @@ class MissingDescriptionDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: const Text("Post anyway"),
+          child: Text(context.l10n.postAnywayButtonLabel),
         ),
       ],
     );

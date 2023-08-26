@@ -6,14 +6,14 @@ enum PrideFlag {
     Color(0xFFF5A9B8),
     Color(0xFFFFFFFF),
     Color(0xFFF5A9B8),
-    Color(0xFF5BCEFA)
+    Color(0xFF5BCEFA),
   ]),
   lesbian([
     Color(0xFFD62900),
     Color(0xFFFF9B55),
     Color(0xFFFFFFFF),
     Color(0xFFD462A6),
-    Color(0xFFA50062)
+    Color(0xFFA50062),
   ]),
   pan([Color(0xFFFF1B8D), Color(0xFFFFD900), Color(0xFF1BB3FF)]),
   bi([
@@ -21,13 +21,13 @@ enum PrideFlag {
     Color(0xFFD70071),
     Color(0xFF9C4E97),
     Color(0xFF0035AA),
-    Color(0xFF0035AA)
+    Color(0xFF0035AA),
   ]),
   nonBinary([
     Color(0xFFFFF42F),
     Color(0xFFFFFFFF),
     Color(0xFF9C59D1),
-    Color(0xFF292929)
+    Color(0xFF292929),
   ]),
   mlm([
     Color(0xFF078D70),
@@ -42,7 +42,7 @@ enum PrideFlag {
     Color(0xFFFFEF00),
     Color(0xFF00821B),
     Color(0xFF004BFF),
-    Color(0xFF780089)
+    Color(0xFF780089),
   ]);
 
   final List<Color> colors;

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
@@ -10,7 +11,9 @@ class AccessibilityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Accessibility")),
+      appBar: AppBar(
+        title: Text(context.l10n.settingsAccessibility),
+      ),
       body: SingleChildScrollView(
         child: SettingsContainer(
           child: Column(

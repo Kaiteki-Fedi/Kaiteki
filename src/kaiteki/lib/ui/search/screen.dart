@@ -55,24 +55,24 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             onSubmitted: _onSubmitted,
             autofocus: true,
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             isScrollable: true,
             tabs: [
               Tab(
                 child: Row(
                   children: [
-                    Icon(Icons.article_rounded),
-                    SizedBox(width: 8),
-                    Text("Posts"),
+                    const Icon(Icons.article_rounded),
+                    const SizedBox(width: 8),
+                    Text(context.l10n.postsTab),
                   ],
                 ),
               ),
               Tab(
                 child: Row(
                   children: [
-                    Icon(Icons.person_rounded),
-                    SizedBox(width: 8),
-                    Text("Users"),
+                    const Icon(Icons.person_rounded),
+                    const SizedBox(width: 8),
+                    Text(context.l10n.usersTab),
                   ],
                 ),
               ),
@@ -101,19 +101,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
                   final results = snapshot.data;
 
-                  if (results == null) {
-                    return const IconLandingWidget(
-                      icon: Icon(Icons.search),
-                      text: Text("Start typing to search"),
-                    );
-                  }
+                  if (results == null) return const SizedBox();
 
                   return TabBarView(
                     children: [
                       if (results.posts.isEmpty)
-                        const IconLandingWidget(
-                          icon: Icon(Icons.article_outlined),
-                          text: Text("No posts found"),
+                        IconLandingWidget(
+                          icon: const Icon(Icons.article_outlined),
+                          text: Text(context.l10n.postsTab),
                         )
                       else
                         ListView.separated(
@@ -130,9 +125,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           itemCount: results.posts.length,
                         ),
                       if (results.users.isEmpty)
-                        const IconLandingWidget(
-                          icon: Icon(Icons.person_outline_rounded),
-                          text: Text("No users found"),
+                        IconLandingWidget(
+                          icon: const Icon(Icons.person_outline_rounded),
+                          text: Text(context.l10n.searchUsersNoResults),
                         )
                       else
                         ListView.separated(

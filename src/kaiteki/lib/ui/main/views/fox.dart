@@ -126,7 +126,7 @@ class _NotificationPanel extends ConsumerWidget {
       child: Column(
         children: [
           AppBar(
-            title: const Text("Notifications"),
+            title: Text(context.l10n.notificationsTab),
             forceMaterialTransparency: true,
             foregroundColor: Theme.of(context).colorScheme.onSurface,
           ),

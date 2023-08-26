@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 
 class PostTooLongDialog extends StatelessWidget {
   final int characterLimit;
@@ -9,9 +10,9 @@ class PostTooLongDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.edit_note_rounded),
-      title: const Text("Your post is too long"),
+      title: Text(context.l10n.postLengthExceededDialogTitle),
       content: Text(
-        "The post exceeds the maximum length of $characterLimit characters",
+        context.l10n.postLengthExceededDialogDescription(characterLimit),
       ),
       actions: [
         TextButton(

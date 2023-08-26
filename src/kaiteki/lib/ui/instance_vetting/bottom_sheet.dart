@@ -131,7 +131,7 @@ class _InstanceVettingBottomSheetState
                                 snapshot.traceableError!,
                               );
                             },
-                            child: const Text("Show details"),
+                            child: Text(context.l10n.showDetailsButtonLabel),
                           ),
                         ),
                     ],
@@ -259,7 +259,7 @@ class _InstanceVettingBottomSheetState
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   : Text(
-                      "No description provided",
+                      context.l10n.attachmentAltTextFallback,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Theme.of(context).colorScheme.outline,
                           ),

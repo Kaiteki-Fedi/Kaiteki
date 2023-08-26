@@ -479,7 +479,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
               childAspectRatio: itemAspectRatio,
               padding: const EdgeInsets.all(8.0),
               children: [
-                for (var item in _attachMenuItems)
+                for (final item in _attachMenuItems)
                   TextButton(
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(
@@ -494,7 +494,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
                         Padding(
                           padding: const EdgeInsets.only(top: 4.0),
                           child: Text(item.label),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -667,7 +667,7 @@ class LanguageSwitcher extends ConsumerWidget {
             }
 
             return [
-              for (var tuple in list ?? <Language>[])
+              for (final tuple in list ?? <Language>[])
                 MenuItemButton(
                   leadingIcon: const SizedBox.square(dimension: 24),
                   trailingIcon: language == tuple.code

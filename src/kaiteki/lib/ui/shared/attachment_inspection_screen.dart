@@ -32,6 +32,7 @@ class _AttachmentInspectionScreenState
   Attachment get attachment => widget.attachments.elementAt(currentPage);
 
   bool get canNavigateBackwards => currentPage > 0;
+
   bool get canNavigateForwards => currentPage < (widget.attachments.length - 1);
 
   @override
@@ -53,7 +54,7 @@ class _AttachmentInspectionScreenState
     final pageView = PageView(
       controller: controller,
       children: [
-        for (var attachment in widget.attachments)
+        for (final attachment in widget.attachments)
           _getAttachmentWidget(attachment),
       ],
     );
@@ -299,7 +300,10 @@ class _AttachmentInspectionScreenState
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Alt text", style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              context.l10n.altText,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             Text(description),
           ],

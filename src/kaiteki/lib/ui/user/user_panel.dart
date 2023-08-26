@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/user/text_with_icon.dart";
@@ -90,15 +89,13 @@ class UserPanel extends ConsumerWidget {
                 if (user.joinDate != null)
                   TextWithIcon(
                     icon: const Icon(Icons.today_rounded),
-                    text: Text(
-                      "Joined ${DateFormat('MMMM yyyy').format(user.joinDate!)}",
-                    ),
+                    text: Text(context.l10n.userJoinDate(user.joinDate!)),
                   ),
                 if (user.details.birthday != null)
                   TextWithIcon(
                     icon: const Icon(Icons.cake_rounded),
                     text: Text(
-                      "Born ${DateFormat('dd MMMM yyyy').format(user.details.birthday!)}",
+                      context.l10n.userJoinDate(user.details.birthday!),
                     ),
                   ),
                 if (user.details.location != null)
@@ -114,7 +111,7 @@ class UserPanel extends ConsumerWidget {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

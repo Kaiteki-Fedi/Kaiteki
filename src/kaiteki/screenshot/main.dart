@@ -4,9 +4,7 @@ import "dart:typed_data";
 import "dart:ui" as ui;
 
 import "package:flutter/material.dart" hide Visibility;
-import "package:flutter/rendering.dart"
-    show NetworkImage, OffsetLayer, RenderObject, Size;
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/rendering.dart" show NetworkImage, OffsetLayer, Size;
 import "package:flutter_test/flutter_test.dart";
 import "package:integration_test/integration_test.dart";
 import "package:kaiteki/di.dart";
@@ -192,7 +190,7 @@ Future<ui.Image> captureImage(Element element) {
   assert(element.renderObject != null);
   var renderObject = element.renderObject!;
   while (!renderObject.isRepaintBoundary) {
-    renderObject = renderObject.parent! as RenderObject;
+    renderObject = renderObject.parent!;
   }
   assert(!renderObject.debugNeedsPaint);
   final layer = renderObject.debugLayer! as OffsetLayer;

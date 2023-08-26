@@ -15,7 +15,7 @@ class ExperimentsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Experiments"),
+        title: Text(context.l10n.settingsExperiments),
       ),
       body: SingleChildScrollView(
         child: SettingsContainer(
@@ -55,7 +55,7 @@ class ExperimentsScreen extends ConsumerWidget {
                       subtitle: experiment.description == null
                           ? null
                           : Text(experiment.description!),
-                    )
+                    ),
                 ],
               ),
             ],

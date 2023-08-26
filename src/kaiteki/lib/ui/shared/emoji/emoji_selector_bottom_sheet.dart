@@ -30,7 +30,9 @@ class _EmojiSelectorBottomSheetState
   Iterable<UnicodeEmojiCategory>? _unicodeEmojis;
 
   _EmojiKindTab? _tabField;
+
   _EmojiKindTab? get _tab => _tabField;
+
   set _tab(_EmojiKindTab? tab) => setState(() => _tabField = tab);
 
   @override
@@ -64,20 +66,21 @@ class _EmojiSelectorBottomSheetState
             child: SegmentedButton(
               segments: [
                 if (availableTabs.contains(_EmojiKindTab.recent))
-                  const ButtonSegment(
+                  ButtonSegment(
                     value: _EmojiKindTab.recent,
-                    label: Text("Recent"),
-                    icon: Icon(Icons.history_rounded),
+                    label: Text(context.l10n.recentEmojisTab),
+                    icon: const Icon(Icons.history_rounded),
                   ),
                 if (availableTabs.contains(_EmojiKindTab.custom))
-                  const ButtonSegment(
+                  ButtonSegment(
                     value: _EmojiKindTab.custom,
-                    label: Text("Custom"),
-                    icon: Icon(Icons.insert_emoticon_rounded),
+                    label: Text(context.l10n.customEmojisTab),
+                    icon: const Icon(Icons.insert_emoticon_rounded),
                   ),
                 if (availableTabs.contains(_EmojiKindTab.unicode))
                   const ButtonSegment(
                     value: _EmojiKindTab.unicode,
+                    // ignore: l10n
                     label: Text("Unicode"),
                     icon: Icon(Mdi.unicode),
                   ),

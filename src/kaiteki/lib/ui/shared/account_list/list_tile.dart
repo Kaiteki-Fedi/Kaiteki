@@ -70,7 +70,7 @@ class AccountListTile extends ConsumerWidget {
                   ),
                 ),
               ),
-            )
+            ),
         ],
       ),
       title: Text(account.key.username),

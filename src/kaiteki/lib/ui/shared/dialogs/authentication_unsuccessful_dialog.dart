@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
@@ -37,12 +38,12 @@ class AuthenticationUnsuccessfulDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () => context.showExceptionDialog(error),
-          child: const Text("Show details"),
+          child: Text(context.l10n.showDetailsButtonLabel),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).maybePop(),
-          child: const Text("Close"),
-        )
+          child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+        ),
       ],
     );
   }

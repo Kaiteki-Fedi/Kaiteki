@@ -3,6 +3,7 @@ import "dart:math";
 import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/onboarding/account_setup_page.dart";
 import "package:kaiteki/ui/onboarding/preferences_setup_page.dart";
 import "package:kaiteki/ui/onboarding/theme_setup_page.dart";
@@ -19,6 +20,7 @@ class SelfSelectScreen extends StatefulWidget {
 class _SelfSelectScreenState extends State<SelfSelectScreen> {
   int currentPage = 0;
   int previousPage = 0;
+
   bool get isLastPage => currentPage >= pages.length - 1;
 
   List<_SelfSelectPage> get pages {
@@ -103,7 +105,7 @@ class _SelfSelectScreenState extends State<SelfSelectScreen> {
                         TextButton.icon(
                           onPressed: currentPage > 0 ? onBackPressed : null,
                           icon: const Icon(Icons.chevron_left_rounded),
-                          label: const Text("Back"),
+                          label: Text(context.l10n.backButtonLabel),
                           style: buttonStyle,
                         ),
                         Flexible(
@@ -138,8 +140,8 @@ class _SelfSelectScreenState extends State<SelfSelectScreen> {
                                 ? const Icon(Icons.check_rounded, size: 20.0)
                                 : const Icon(Icons.chevron_left_rounded),
                             label: isLastPage
-                                ? const Text("Finish")
-                                : const Text("Next"),
+                                ? Text(context.l10n.finishButtonLabel)
+                                : Text(context.l10n.nextButtonLabel),
                           ),
                         ),
                       ],

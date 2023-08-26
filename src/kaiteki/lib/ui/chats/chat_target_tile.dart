@@ -61,9 +61,9 @@ class ChatTargetTile extends ConsumerWidget {
           const Icon(Icons.attach_file_rounded, size: 12.0),
           const SizedBox(width: 6.0),
           Text(
-            "${attachments.length} attachment(s)",
+            context.l10n.chatPreviewAttachments(attachments.length),
             style: const TextStyle(fontStyle: FontStyle.italic),
-          )
+          ),
         ],
       );
     }

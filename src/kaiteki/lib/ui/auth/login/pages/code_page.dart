@@ -67,7 +67,7 @@ class _CodePageState extends State<CodePage> {
                             textInputAction: TextInputAction.done,
                             inputFormatters: [
                               if (widget.options.numericOnly)
-                                FilteringTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.digitsOnly,
                             ],
                             autofocus: true,
                             autocorrect: false,

@@ -81,7 +81,7 @@ class _DeckMainScreenViewState extends ConsumerState<DeckMainScreenView> {
                 width: width,
                 child: DeckColumn(
                   icon: const Icon(Icons.notifications_rounded),
-                  title: const Text("Notifications"),
+                  title: Text(context.l10n.notificationsTab),
                   actions: [
                     IconButton(
                       icon: const Icon(Icons.refresh_rounded),

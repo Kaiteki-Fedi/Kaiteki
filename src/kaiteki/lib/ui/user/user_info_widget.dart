@@ -1,6 +1,5 @@
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
-import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
@@ -65,16 +64,12 @@ class UserInfoWidget extends ConsumerWidget {
         if (joinDate != null)
           _UserInfoRow(
             leading: const Icon(Icons.event_rounded),
-            body: Text(
-              "Joined ${DateFormat('MMMM yyyy').format(joinDate)}",
-            ),
+            body: Text(context.l10n.userJoinDate(joinDate)),
           ),
         if (birthday != null)
           _UserInfoRow(
             leading: const Icon(Icons.cake_rounded),
-            body: Text(
-              "Born ${DateFormat('dd MMMM yyyy').format(birthday)}",
-            ),
+            body: Text(context.l10n.userBirthDate(birthday)),
           ),
       ],
     );

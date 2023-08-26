@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -20,6 +20,7 @@ class ShareSheet extends StatelessWidget {
         final text = getShareText(content);
         final url = getShareUrl(content);
         const margin = EdgeInsets.symmetric(horizontal: 16.0);
+        final host = url?.host;
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,18 +72,20 @@ class ShareSheet extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   FilterChip(
-                    label: const Text("Content"),
+                    label: Text(context.l10n.shareSheetFormatContent),
                     onSelected: (v) {},
                   ),
                   FilterChip(
-                    label: const Text("Link"),
+                    label: Text(context.l10n.shareSheetFormatLink),
                     onSelected: (v) {},
                   ),
-                  FilterChip(
-                    label: Text("Link on ${url?.host}"),
-                    onSelected: (v) {},
-                    selected: true,
-                  ),
+                  if (host != null)
+                    FilterChip(
+                      label:
+                          Text(context.l10n.shareSheetFormatRemoteLink(host)),
+                      onSelected: (v) {},
+                      selected: true,
+                    ),
                 ].joinWithValue(const SizedBox(width: 8)),
               ),
             ),

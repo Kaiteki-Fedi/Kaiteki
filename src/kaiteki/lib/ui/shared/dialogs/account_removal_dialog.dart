@@ -38,7 +38,7 @@ class AccountRemovalDialog extends StatelessWidget {
                     );
                   },
                 ),
-              )
+              ),
           ],
         ),
       ),
@@ -53,7 +53,7 @@ class AccountRemovalDialog extends StatelessWidget {
           ),
           onPressed: () => Navigator.of(context).pop(true),
           child: Text(l10n.removeButtonLabel),
-        )
+        ),
       ],
     );
   }

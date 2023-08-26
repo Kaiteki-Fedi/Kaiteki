@@ -3,6 +3,8 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
+const kTokenPlaceholder = "• • • • • • • •";
+
 class ThirdPartyScreen extends StatelessWidget {
   const ThirdPartyScreen({super.key});
 
@@ -36,12 +38,12 @@ class ThirdPartyScreen extends StatelessWidget {
                   ListTile(
                     leading: SizedBox(),
                     title: Text("Tenor API key"),
-                    subtitle: Text("• • • • • • • •"),
+                    subtitle: Text(kTokenPlaceholder),
                   ),
                   ListTile(
                     leading: SizedBox(),
                     title: Text("DeepL API key"),
-                    subtitle: Text("• • • • • • • •"),
+                    subtitle: Text(kTokenPlaceholder),
                   ),
                 ],
               ),

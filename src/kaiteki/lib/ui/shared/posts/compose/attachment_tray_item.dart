@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 
@@ -58,7 +59,7 @@ class AttachmentTrayItem extends StatelessWidget {
                       Icons.warning_rounded,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
-                  )
+                  ),
               ],
             ),
           ),
@@ -87,21 +88,19 @@ class AttachmentTrayItem extends StatelessWidget {
       ),
       PopupMenuItem(
         onTap: () => onChangeDescription?.call(),
-        child: const ListTile(
+        child: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Icon(
-            Icons.drive_file_rename_outline_rounded,
-          ),
-          title: Text("Change description"),
+          leading: const Icon(Icons.drive_file_rename_outline_rounded),
+          title: Text(context.l10n.changeAltText),
         ),
       ),
       PopupMenuItem(
         onTap: () => onRemove?.call(),
         enabled: onRemove != null,
-        child: const ListTile(
+        child: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Icon(Icons.close_rounded),
-          title: Text("Remove attachment"),
+          leading: const Icon(Icons.close_rounded),
+          title: Text(context.l10n.removeAttachmentButtonLabel),
         ),
       ),
     ];

@@ -102,7 +102,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
               error: (_) => const SizedBox(),
               loading: (_) => Column(
                 children: <Widget>[
-                  for (int i = 0; i < 3; i++) const NewsCard(embed: null)
+                  for (int i = 0; i < 3; i++) const NewsCard(embed: null),
                 ].joinWithValue(const SizedBox(height: 8)),
               ),
             ),
@@ -131,6 +131,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                       children: <Widget>[
                         for (final hashtag in data.value!)
                           ActionChip(
+                            // ignore: l10n
                             label: Text("#$hashtag"),
                             onPressed: () {},
                           ),
@@ -159,36 +160,36 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
     );
   }
 
-  // Widget buildTrendingHashtags(BuildContext context) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     children: [
-  //       Text(
-  //         "Trends",
-  //         style: Theme.of(context).textTheme.headlineSmall,
-  //       ),
-  //       const SizedBox(height: 16),
-  //       FutureBuilder(
-  //         future: ,
-  //         builder: (context, snapshot) {
-  //           if (!snapshot.hasData) return const SizedBox();
-  //
-  //           final hashtags = snapshot.data!.take(5).toList();
-  //           return Card(
-  //             child: Column(
-  //               children: <Widget>[
-  //                 for (var i = 0; i < hashtags.length; i++)
-  //                   ListTile(
-  //                     title: Text("#${hashtags[i]}"),
-  //                   ),
-  //               ].joinWithValue(const SizedBox(height: 8)),
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     ],
-  //   );
-  // }
+// Widget buildTrendingHashtags(BuildContext context) {
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.stretch,
+//     children: [
+//       Text(
+//         "Trends",
+//         style: Theme.of(context).textTheme.headlineSmall,
+//       ),
+//       const SizedBox(height: 16),
+//       FutureBuilder(
+//         future: ,
+//         builder: (context, snapshot) {
+//           if (!snapshot.hasData) return const SizedBox();
+//
+//           final hashtags = snapshot.data!.take(5).toList();
+//           return Card(
+//             child: Column(
+//               children: <Widget>[
+//                 for (var i = 0; i < hashtags.length; i++)
+//                   ListTile(
+//                     title: Text("#${hashtags[i]}"),
+//                   ),
+//               ].joinWithValue(const SizedBox(height: 8)),
+//             ),
+//           );
+//         },
+//       ),
+//     ],
+//   );
+// }
 }
 
 class NewsCard extends StatelessWidget {

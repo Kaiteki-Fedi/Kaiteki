@@ -45,29 +45,29 @@ class ErrorLandingWidget extends StatelessWidget {
         );
       case HttpException()
           when error.statusCode == HttpStatus.internalServerError:
-        return const IconLandingWidget(
-          icon: Icon(Icons.error_rounded),
-          text: Text("Internal Server Error"),
+        return IconLandingWidget(
+          icon: const Icon(Icons.error_rounded),
+          text: Text(context.l10n.exceptionReasonGeneric),
         );
       case HttpException() when error.statusCode == HttpStatus.unauthorized:
-        return const IconLandingWidget(
-          icon: Icon(Icons.lock_rounded),
-          text: Text("Unauthorized"),
+        return IconLandingWidget(
+          icon: const Icon(Icons.lock_rounded),
+          text: Text(context.l10n.exceptionReasonUnauthorized),
         );
       case HttpException() when error.statusCode == HttpStatus.forbidden:
-        return const IconLandingWidget(
-          icon: Icon(Icons.report_rounded),
-          text: Text("Forbidden"),
+        return IconLandingWidget(
+          icon: const Icon(Icons.report_rounded),
+          text: Text(context.l10n.exceptionReasonForbidden),
         );
       case CheckedFromJsonException():
-        return const IconLandingWidget(
-          icon: Icon(Icons.broken_image_rounded),
-          text: Text("Couldn't parse data"),
+        return IconLandingWidget(
+          icon: const Icon(Icons.broken_image_rounded),
+          text: Text(context.l10n.exceptionReasonParseError),
         );
       default:
-        return const IconLandingWidget(
-          icon: Icon(Icons.error_rounded),
-          text: Text("An error occured"),
+        return IconLandingWidget(
+          icon: const Icon(Icons.error_rounded),
+          text: Text(context.l10n.exceptionReasonGeneric),
         );
     }
   }
@@ -89,14 +89,14 @@ class ErrorLandingWidget extends StatelessWidget {
               if (onRetry != null) ...[
                 ElevatedButton.icon(
                   icon: const Icon(Icons.refresh_rounded),
-                  label: const Text("Retry"),
+                  label: Text(context.l10n.retryButtonLabel),
                   onPressed: onRetry,
                 ),
                 const SizedBox(height: 8),
               ],
               OutlinedButton(
                 onPressed: () => context.showExceptionDialog(error),
-                child: const Text("Show details"),
+                child: Text(context.l10n.showDetailsButtonLabel),
               ),
             ],
           ),

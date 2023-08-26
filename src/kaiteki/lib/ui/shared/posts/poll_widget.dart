@@ -108,10 +108,12 @@ class PollWidget extends StatelessWidget {
                               );
                             },
                           ),
-                          Text(
-                            "${option.voteCount} votes",
-                            style: theme.textTheme.labelSmall,
-                          ),
+                          if (option.voteCount != null)
+                            Text(
+                              context.l10n
+                                  .pollOptionVoteCount(option.voteCount ?? 0),
+                              style: theme.textTheme.labelSmall,
+                            ),
                         ],
                       ),
                     ),
@@ -126,16 +128,22 @@ class PollWidget extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
               const SizedBox(height: 16),
               Row(
                 children: [
                   Text(
-                    "${poll.voteCount} votes from ${poll.voterCount} people",
+                    poll.allowMultipleChoices
+                        ? context.l10n.pollTotalVotesMultiple(
+                            poll.voteCount,
+                            poll.voterCount ?? 0,
+                          )
+                        : context.l10n.pollTotalVotes(poll.voteCount),
                     style: theme.textTheme.labelSmall,
                   ),
                   Text(
+                    // ignore: l10n
                     " • ",
                     style: theme.textTheme.labelSmall,
                   ),

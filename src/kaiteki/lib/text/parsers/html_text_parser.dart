@@ -89,7 +89,7 @@ class HtmlTextParser implements TextParser {
         null,
         style: const TextElementStyle(font: TextElementFont.monospace),
         children: subElements,
-      )
+      ),
     ];
   }
 
@@ -102,7 +102,7 @@ class HtmlTextParser implements TextParser {
         null,
         style: const TextElementStyle(italic: true),
         children: subElements,
-      )
+      ),
     ];
   }
 
@@ -115,7 +115,7 @@ class HtmlTextParser implements TextParser {
         null,
         style: const TextElementStyle(bold: true),
         children: subElements,
-      )
+      ),
     ];
   }
 

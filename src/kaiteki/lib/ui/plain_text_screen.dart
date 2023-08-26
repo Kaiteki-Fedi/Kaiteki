@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 
 class PlainTextScreen extends StatelessWidget {
@@ -16,16 +17,16 @@ class PlainTextScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.content_copy_rounded),
-            tooltip: "Copy to clipoboard",
+            tooltip: context.l10n.copyToClipboardButtonTooltip,
             onPressed: () {
               Clipboard.setData(ClipboardData(text: text));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Copied to clipboard"),
+                SnackBar(
+                  content: Text(context.l10n.copiedToClipboard),
                 ),
               );
             },
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(

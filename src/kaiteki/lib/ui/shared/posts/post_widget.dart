@@ -378,7 +378,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
                   },
                 );
               },
-            )
+            ),
         ],
         child: const Text("Open in..."),
       );
@@ -409,7 +409,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           ref.watch(preferences.developerMode).value) ...[
         const Divider(),
         buildDebugTextRenderingMenuItem(context),
-      ]
+      ],
     ];
   }
 

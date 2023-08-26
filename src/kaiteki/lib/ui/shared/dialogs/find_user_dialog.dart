@@ -32,14 +32,14 @@ class _FindUserDialogState extends ConsumerState<FindUserDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       scrollable: true,
-      title: const Text("Find user"),
+      title: Text(context.l10n.findUserDialogTitle),
       content: FutureBuilder<List<User>>(
         future: _future,
         builder: (context, snapshot) {
           final searchBar = KaitekiSearchBar(
             autofocus: true,
             controller: _textController,
-            hintText: "Search for user",
+            hintText: context.l10n.findUserDialogHint,
             onSubmitted: (query) async {
               final adapter = ref.watch(adapterProvider);
               setState(() {

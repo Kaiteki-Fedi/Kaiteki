@@ -23,7 +23,7 @@ class ReactionRow extends ConsumerWidget {
       spacing: spacing,
       runSpacing: spacing,
       children: [
-        for (var reaction in reactions)
+        for (final reaction in reactions)
           ReactionButton(
             reaction: reaction,
             onPressed: () => onPressed(reaction),

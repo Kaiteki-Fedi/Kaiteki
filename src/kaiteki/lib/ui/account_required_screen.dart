@@ -48,7 +48,7 @@ class AccountRequiredScreen extends StatelessWidget {
                     child: Text(l10n.settings),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

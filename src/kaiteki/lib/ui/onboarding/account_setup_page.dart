@@ -27,7 +27,7 @@ class AccountSetupPage extends ConsumerWidget {
           child: ElevatedButton.icon(
             onPressed: () => context.pushNamed("login"),
             icon: const Icon(Icons.add_rounded),
-            label: const Text("Add Account"),
+            label: Text(context.l10n.addAccountButtonLabel),
           ),
         ),
       ],

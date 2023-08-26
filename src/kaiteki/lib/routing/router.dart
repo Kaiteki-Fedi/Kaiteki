@@ -116,7 +116,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: "theme",
                 builder: (_, __) => const ThemeScreen(),
-              )
+              ),
             ],
           ),
           GoRoute(
@@ -127,7 +127,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: "visible-languages",
             name: "visibleLanguageSettings",
             builder: (_, __) => const ManageLanaguagesScreen(),
-          )
+          ),
         ],
       ),
       GoRoute(

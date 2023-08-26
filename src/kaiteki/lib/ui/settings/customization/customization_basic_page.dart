@@ -112,7 +112,7 @@ class _CustomizationBasicPageState
                     16,
                     24,
                     32,
-                    double.infinity
+                    double.infinity,
                   ],
                   labelBuilder: (value) {
                     if (value >= double.infinity) return "Circle";

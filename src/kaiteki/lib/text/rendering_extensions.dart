@@ -24,7 +24,7 @@ extension PostRenderExtensions on Post {
         users: mentionedUsers ?? [],
         excludedUsers: [
           if (!showReplyees && replyee != null)
-            UserReference.handle(replyee.username, replyee.host)
+            UserReference.handle(replyee.username, replyee.host),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/dialogs/responsive_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
@@ -39,13 +40,13 @@ class _AttachmentTextDialogState extends State<AttachmentTextDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppBar(
-              title: const Text("Change alt text"),
+              title: Text(context.l10n.changeAltText),
               forceMaterialTransparency: true,
               foregroundColor: Theme.of(context).colorScheme.onSurface,
               actions: [
                 TextButton(
                   onPressed: () => _onApply(context),
-                  child: const Text("Apply"),
+                  child: Text(context.l10n.applyButtonLabel),
                 ),
                 const SizedBox(width: 8),
               ],

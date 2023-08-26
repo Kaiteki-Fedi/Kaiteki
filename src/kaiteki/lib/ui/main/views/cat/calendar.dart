@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
+import "package:kaiteki/di.dart";
 
 class CatCalendarWidget extends StatelessWidget {
   const CatCalendarWidget({super.key});
@@ -48,8 +49,9 @@ class CatCalendarWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Today"),
+                      Text(context.l10n.misskeyCalendarToday),
                       Text(
+                        // ignore: l10n
                         "${(dayProgress * 100).toStringAsFixed(1)}%",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -64,8 +66,9 @@ class CatCalendarWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Month"),
+                      Text(context.l10n.misskeyCalendarMonth),
                       Text(
+                        // ignore: l10n
                         "${(monthProgress * 100).toStringAsFixed(1)}%",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -80,8 +83,9 @@ class CatCalendarWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Year"),
+                      Text(context.l10n.misskeyCalendarYear),
                       Text(
+                        // ignore: l10n
                         "${(yearProgress * 100).toStringAsFixed(1)}%",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),

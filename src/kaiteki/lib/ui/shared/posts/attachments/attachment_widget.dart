@@ -80,6 +80,7 @@ class AltTextBadge extends StatelessWidget {
         child: DefaultTextStyle(
           style: TextStyle(color: foreground),
           child: Text(
+            // ignore: l10n
             "ALT",
             style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
                 DefaultKaitekiTextTheme(context).monospaceTextStyle,

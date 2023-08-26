@@ -1,3 +1,5 @@
+// ignore_for_file: l10n
+
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/auth/login_functions.dart";

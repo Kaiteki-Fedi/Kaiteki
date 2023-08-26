@@ -1,3 +1,4 @@
+// ignore_for_file: l10n
 import "package:flutter/material.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/ui/settings/section_header.dart";

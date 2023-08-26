@@ -129,19 +129,17 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
               slivers: [
                 if (!hasEmojis)
                   if (_searchTextController.text.isNotEmpty)
-                    const SliverFillRemaining(
+                    SliverFillRemaining(
                       child: IconLandingWidget(
-                        icon: Icon(Icons.search_off_rounded),
-                        // TODO(Craftplacer): Unlocalized string
-                        text: Text("No emojis found"),
+                        icon: const Icon(Icons.search_off_rounded),
+                        text: Text(context.l10n.searchEmojisNoResults),
                       ),
                     )
                   else
-                    const SliverFillRemaining(
+                    SliverFillRemaining(
                       child: IconLandingWidget(
-                        icon: Icon(Icons.sentiment_dissatisfied_rounded),
-                        // TODO(Craftplacer): Unlocalized string
-                        text: Text("No emojis here yet..."),
+                        icon: const Icon(Icons.sentiment_dissatisfied_rounded),
+                        text: Text(context.l10n.noRecentlyUsedEmojis),
                       ),
                     )
                 else
@@ -233,7 +231,7 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
     final asString = toRecent(emoji);
     ref.read(recentlyUsedEmojis).value = [
       asString,
-      ...recents.where((e) => e != asString)
+      ...recents.where((e) => e != asString),
     ];
   }
 

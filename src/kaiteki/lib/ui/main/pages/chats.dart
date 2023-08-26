@@ -40,7 +40,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
                 final notifier = ref.read(preferences.experiments);
                 notifier.value = [...notifier.value, AppExperiment.chats];
               },
-              child: const Text("Enable Experiment"),
+              child: Text(context.l10n.proceedButtonLabel),
             ),
           ],
         ),
@@ -151,18 +151,6 @@ class ChatView extends ConsumerWidget {
               onPressed: callback,
             ),
           ),
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (context) {
-                return List.generate(5, (index) {
-                  return PopupMenuItem(
-                    value: index,
-                    child: Text("button no $index"),
-                  );
-                });
-              },
-            ),
-          ],
           title: InkWell(
             borderRadius: BorderRadius.circular(8),
             onTap: chat is DirectChat

@@ -19,6 +19,7 @@ class ConversationScreen extends ConsumerStatefulWidget {
 
 class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   Future<Iterable<Post>>? _threadFetchFuture;
+
   // Future<ThreadPost>? _threadedFuture;
   bool showThreaded = true;
   late String selectedPostId;
@@ -107,7 +108,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       leading: const Icon(Icons.error_rounded),
       title: Text(l10n.threadRetrievalFailed),
       trailing: OutlinedButton(
-        child: const Text("Show details"),
+        child: Text(context.l10n.showDetailsButtonLabel),
         onPressed: () => context.showExceptionDialog(snapshot.traceableError!),
       ),
     );

@@ -1,3 +1,4 @@
+// ignore_for_file: l10n
 import "package:flutter/material.dart" hide Element;
 import "package:flutter_simple_treeview/flutter_simple_treeview.dart";
 import "package:google_fonts/google_fonts.dart";

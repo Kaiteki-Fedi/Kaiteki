@@ -286,7 +286,7 @@ class _UserBenefitText extends StatelessWidget {
               benefit.description,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-          )
+          ),
         ],
       ),
     );

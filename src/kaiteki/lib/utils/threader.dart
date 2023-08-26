@@ -145,7 +145,7 @@ class ThreadPostContainer extends StatelessWidget {
             ),
             child: Column(
               children: [
-                for (var reply in post.replies)
+                for (final reply in post.replies)
                   ThreadPostContainer(
                     reply,
                     threadLayer: threadLayer + 1,

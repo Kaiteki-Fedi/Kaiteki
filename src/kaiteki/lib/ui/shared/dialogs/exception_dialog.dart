@@ -6,6 +6,7 @@ import "package:flutter/material.dart";
 import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki/app.dart";
 import "package:kaiteki/constants.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/plain_text_screen.dart";
 import "package:kaiteki/ui/stack_trace_screen.dart";
@@ -42,12 +43,12 @@ class ExceptionDialog extends StatelessWidget {
     final stackTrace = error.$2;
     final json = error.$1.safeCast<CheckedFromJsonException>()?.map;
     return AlertDialog(
-      title: const Text("Exception details"),
+      title: Text(context.l10n.exceptionDialogTitle),
       content: ConstrainedBox(
         constraints: dialogConstraints,
         child: Column(
           children: [
-            for (var detail in details.entries)
+            for (final detail in details.entries)
               ListTile(
                 title: Text(detail.key),
                 subtitle: SelectableText(detail.value),
@@ -55,7 +56,7 @@ class ExceptionDialog extends StatelessWidget {
               ),
             const Divider(height: 17),
             ListTile(
-              title: const Text("Show stack trace"),
+              title: Text(context.l10n.showStackTrace),
               leading: const Icon(Icons.segment_rounded),
               enabled: stackTrace != null,
               onTap: () {
@@ -69,7 +70,7 @@ class ExceptionDialog extends StatelessWidget {
             ),
             if (json != null)
               ListTile(
-                title: const Text("Show JSON"),
+                title: Text(context.l10n.exceptionShowJson),
                 leading: const Icon(Icons.data_object_rounded),
                 enabled: stackTrace != null,
                 onTap: () {
@@ -77,6 +78,7 @@ class ExceptionDialog extends StatelessWidget {
                     context: context,
                     builder: (_) => PlainTextScreen(
                       const JsonEncoder.withIndent("  ").convert(json),
+                      // ignore: l10n
                       title: const Text("JSON"),
                     ),
                   );
@@ -84,12 +86,12 @@ class ExceptionDialog extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
               ),
             ListTile(
-              title: const Text("Report on GitHub"),
+              title: Text(context.l10n.exceptionReportOnGitHub),
               leading: const Icon(Icons.error_rounded),
               onTap: onReportIssue,
               contentPadding: EdgeInsets.zero,
             ),
-            for (var detail in longDetails.entries)
+            for (final detail in longDetails.entries)
               if (detail.value.$2)
                 ExpansionTile(
                   tilePadding: EdgeInsets.zero,
@@ -112,7 +114,7 @@ class ExceptionDialog extends StatelessWidget {
       scrollable: true,
       actions: [
         TextButton(
-          child: const Text("Close"),
+          child: Text(context.materialL10n.closeButtonLabel),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],

@@ -9,7 +9,7 @@ final propagatingTextFieldActivators = <ShortcutActivator>[
   gotoHome,
   gotoBookmarks,
   gotoNotifications,
-  gotoSettings
+  gotoSettings,
 ];
 
 const openMenu = SingleActivator(LogicalKeyboardKey.contextMenu);

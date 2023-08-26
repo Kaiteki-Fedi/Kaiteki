@@ -1,6 +1,7 @@
 import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/authentication_page.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/confirmation_page.dart";
@@ -65,15 +66,17 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
     return [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text("Cancel"),
+        child: Text(context.materialL10n.cancelButtonLabel),
       ),
       TextButton(
         style: TextButton.styleFrom(
           foregroundColor: Theme.of(context).colorScheme.error,
         ),
         onPressed: _onNext,
-        child: confirmed ? const Text("Delete") : const Text("Continue"),
-      )
+        child: confirmed
+            ? Text(context.l10n.deleteButtonLabel)
+            : Text(context.materialL10n.continueButtonLabel),
+      ),
     ];
   }
 
@@ -115,11 +118,11 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
               TextButton(
                 onPressed: () =>
                     context.showExceptionDialog((error, stackTrace)),
-                child: const Text("Show details"),
+                child: Text(context.l10n.showDetailsButtonLabel),
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).maybePop(),
-                child: const Text("OK"),
+                child: Text(context.materialL10n.okButtonLabel),
               ),
             ],
           ),

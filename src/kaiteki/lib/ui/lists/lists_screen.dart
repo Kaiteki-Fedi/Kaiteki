@@ -187,7 +187,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
                             );
                           },
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -487,7 +487,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
               text: "Removed ",
               children: [
                 user.renderDisplayName(context, ref),
-                TextSpan(text: " from ${widget.list.name}")
+                TextSpan(text: " from ${widget.list.name}"),
               ],
             ),
           ),
@@ -502,7 +502,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
               text: "There was a problem removing ",
               children: [
                 user.renderDisplayName(context, ref),
-                TextSpan(text: " from ${widget.list.name}")
+                TextSpan(text: " from ${widget.list.name}"),
               ],
             ),
           ),
@@ -523,16 +523,14 @@ class _ListCardState extends ConsumerState<_ListCard> {
       builder: (context) {
         return AlertDialog(
           title: const Text("Delete list?"),
-          content: const Text(
-            "The list will be deleted permanently",
-          ),
+          content: const Text("The list will be deleted permanently"),
           actions: [
             TextButton(
-              child: const Text("Cancel"),
+              child: Text(context.materialL10n.cancelButtonLabel),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: const Text("Delete"),
+              child: Text(context.l10n.deleteButtonLabel),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
@@ -644,11 +642,13 @@ class _NameListDialogState extends State<NameListDialog> {
       actions: [
         TextButton(
           onPressed: _onCancel,
-          child: const Text("Cancel"),
+          child: Text(context.materialL10n.cancelButtonLabel),
         ),
         TextButton(
           onPressed: _onConfirm,
-          child: create ? const Text("Create") : const Text("Rename"),
+          child: create
+              ? Text(context.l10n.createButtonLabel)
+              : Text(context.l10n.renameButtonLabel),
         ),
       ],
     );

@@ -47,7 +47,7 @@ class SelectLocaleDialog extends StatelessWidget {
           ),
         ),
         const Divider(),
-        for (var locale in KaitekiLocalizations.supportedLocales)
+        for (final locale in KaitekiLocalizations.supportedLocales)
           SimpleDialogOption(
             child: Text(
               locale.toString(),

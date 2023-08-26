@@ -39,7 +39,7 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
                 await context.launchUrl(requestBackendUrl);
                 if (mounted) Navigator.pop(context);
               },
-            )
+            ),
           ],
         ),
         actions: <Widget>[

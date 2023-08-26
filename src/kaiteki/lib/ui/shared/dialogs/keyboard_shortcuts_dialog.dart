@@ -150,6 +150,7 @@ class KeyboardShortcut extends StatelessWidget {
             children: shortcuts
                 .map((s) => buildKeyCombination(context, s))
                 .toList()
+                // ignore: l10n
                 .joinWithValue([const Text(" / ")])
                 .expand((e) => e)
                 .toList(),
@@ -185,6 +186,7 @@ class KeyboardShortcut extends StatelessWidget {
     return keys
         .map<Widget>((k) => KeyboardKey.fromKey(context, k))
         .toList()
+        // ignore: l10n
         .joinWithValue(const Text(" + "));
   }
 }

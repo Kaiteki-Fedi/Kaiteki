@@ -51,7 +51,8 @@ class _AttachmentRowState extends ConsumerState<AttachmentRow> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        for (var attachment in widget.post.attachments!.take(4))
+                        for (final attachment
+                            in widget.post.attachments!.take(4))
                           Flexible(
                             child: InkWell(
                               onTap: () {},

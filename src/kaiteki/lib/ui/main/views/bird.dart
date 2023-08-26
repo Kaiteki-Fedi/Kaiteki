@@ -80,30 +80,30 @@ class _BirdMainScreenViewState extends ConsumerState<BirdMainScreenView> {
                           ],
                         ),
                       ),
-                      const NavigationDrawerDestination(
-                        icon: Icon(Icons.home_outlined),
-                        selectedIcon: Icon(Icons.home),
-                        label: Text("Home"),
+                      NavigationDrawerDestination(
+                        icon: const Icon(Icons.home_outlined),
+                        selectedIcon: const Icon(Icons.home),
+                        label: Text(context.l10n.homeTab),
                       ),
-                      const NavigationDrawerDestination(
-                        icon: Icon(Icons.notifications_outlined),
-                        selectedIcon: Icon(Icons.notifications),
-                        label: Text("Notifications"),
+                      NavigationDrawerDestination(
+                        icon: const Icon(Icons.notifications_outlined),
+                        selectedIcon: const Icon(Icons.notifications),
+                        label: Text(context.l10n.notificationsTab),
                       ),
-                      const NavigationDrawerDestination(
-                        icon: Icon(Icons.email_outlined),
-                        selectedIcon: Icon(Icons.email_rounded),
-                        label: Text("Messages"),
+                      NavigationDrawerDestination(
+                        icon: const Icon(Icons.email_outlined),
+                        selectedIcon: const Icon(Icons.email_rounded),
+                        label: Text(context.l10n.messagesTab),
                       ),
-                      const NavigationDrawerDestination(
-                        icon: Icon(Icons.article_outlined),
-                        selectedIcon: Icon(Icons.article),
-                        label: Text("Lists"),
+                      NavigationDrawerDestination(
+                        icon: const Icon(Icons.article_outlined),
+                        selectedIcon: const Icon(Icons.article),
+                        label: Text(context.l10n.listsTab),
                       ),
-                      const NavigationDrawerDestination(
-                        icon: Icon(Icons.bookmark_outline),
-                        selectedIcon: Icon(Icons.bookmark),
-                        label: Text("Bookmarks"),
+                      NavigationDrawerDestination(
+                        icon: const Icon(Icons.bookmark_outline),
+                        selectedIcon: const Icon(Icons.bookmark),
+                        label: Text(context.l10n.bookmarksTab),
                       ),
                       // const NavigationDrawerDestination(
                       //   icon: Icon(Icons.verified_outlined),
@@ -152,7 +152,7 @@ class _BirdMainScreenViewState extends ConsumerState<BirdMainScreenView> {
                       softWrap: false,
                     ),
                     onTap: () => context.pushNamed("accounts"),
-                  )
+                  ),
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki_core/model.dart";
@@ -38,7 +39,7 @@ class AttachmentBottomSheet extends StatelessWidget {
                   ],
                 )
               : Text(
-                  "No description provided",
+                  context.l10n.attachmentAltTextFallback,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.outline,
                   ),

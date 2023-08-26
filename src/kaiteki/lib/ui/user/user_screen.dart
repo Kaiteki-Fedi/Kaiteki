@@ -195,7 +195,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                               buildMenuButton(user),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                     if (user != null) ...[
@@ -421,7 +421,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                       onSelected: (value) =>
                           ref.read(_showReplies.notifier).state = value,
                       label: const Text("Replies"),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -499,7 +499,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         return IconButton.filled(
           onPressed: () {},
           icon: const Icon(Icons.edit_rounded),
-          tooltip: "Edit Profile",
+          tooltip: context.l10n.editProfileButtonLabel,
         );
       }
 
@@ -508,7 +508,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         style: FilledButton.styleFrom(
           visualDensity: VisualDensity.comfortable,
         ),
-        child: const Text("Edit Profile"),
+        child: Text(context.l10n.editProfileButtonLabel),
       );
     }
 
@@ -527,34 +527,34 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           ? IconButton.filledTonal(
               onPressed: onPressed,
               icon: const Icon(Icons.person_remove_rounded),
-              tooltip: "Unfollow",
+              tooltip: context.l10n.unfollowButtonLabel,
             )
           : FilledButton.tonal(
               onPressed: onPressed,
               style: buttonStyle,
-              child: const Text("Unfollow"),
+              child: Text(context.l10n.unfollowButtonLabel),
             ),
       UserFollowState.notFollowing => small
           ? IconButton.filled(
               onPressed: onPressed,
               icon: const Icon(Icons.person_add_rounded),
-              tooltip: "Follow",
+              tooltip: context.l10n.followButtonLabel,
             )
           : FilledButton(
               onPressed: onPressed,
               style: buttonStyle,
-              child: const Text("Follow"),
+              child: Text(context.l10n.followButtonLabel),
             ),
       UserFollowState.pending => small
           ? IconButton.filled(
               onPressed: onPressed,
               icon: const Icon(Icons.lock_clock_rounded),
-              tooltip: "Pending",
+              tooltip: context.l10n.pendingFollowRequestButtonLabel,
             )
           : FilledButton.tonal(
               onPressed: onPressed,
               style: buttonStyle,
-              child: const Text("Pending"),
+              child: Text(context.l10n.pendingFollowRequestButtonLabel),
             ),
     };
   }

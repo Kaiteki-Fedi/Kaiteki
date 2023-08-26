@@ -52,7 +52,7 @@ class AccountListDialog extends ConsumerWidget {
                             _onHandoff(context, ref, currentAccount),
                         showInstanceIcon: true,
                       ),
-                      const Divider()
+                      const Divider(),
                     ],
                     for (final account in unselectedAccounts)
                       AccountListTile(

@@ -55,7 +55,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.science_rounded),
-                    title: const Text("Experiments"),
+                    title: Text(context.l10n.settingsExperiments),
                     subtitle:
                         const Text("Try out experimental Kaiteki features!"),
                     onTap: () => context.pushNamed("experiments"),
