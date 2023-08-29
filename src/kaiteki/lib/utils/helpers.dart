@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/user_resolver.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
@@ -14,8 +15,14 @@ Future<void> resolveAndOpenUser(
   // final lookupSnackbar = messenger.showSnackBar(
   //   SnackBar(content: Text("Looking up $handle...")),
   // );
-  final adapter = ref.read(adapterProvider);
-  user.resolve(adapter).then((user) async {
+  ref
+      .read(
+    resolveProvider(
+      ref.watch(currentAccountProvider)!.key,
+      user,
+    ).future,
+  )
+      .then((user) async {
     // lookupSnackbar.close();
     if (user == null) {
       messenger.showSnackBar(

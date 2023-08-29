@@ -1,0 +1,121 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'user_resolver.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$resolveHash() => r'52da69ea3a3155b1c4b657555c83b1339e24f0b4';
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+typedef ResolveRef = AutoDisposeFutureProviderRef<User<dynamic>?>;
+
+/// See also [resolve].
+@ProviderFor(resolve)
+const resolveProvider = ResolveFamily();
+
+/// See also [resolve].
+class ResolveFamily extends Family<AsyncValue<User<dynamic>?>> {
+  /// See also [resolve].
+  const ResolveFamily();
+
+  /// See also [resolve].
+  ResolveProvider call(
+    AccountKey key,
+    UserReference reference,
+  ) {
+    return ResolveProvider(
+      key,
+      reference,
+    );
+  }
+
+  @override
+  ResolveProvider getProviderOverride(
+    covariant ResolveProvider provider,
+  ) {
+    return call(
+      provider.key,
+      provider.reference,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'resolveProvider';
+}
+
+/// See also [resolve].
+class ResolveProvider extends AutoDisposeFutureProvider<User<dynamic>?> {
+  /// See also [resolve].
+  ResolveProvider(
+    this.key,
+    this.reference,
+  ) : super.internal(
+          (ref) => resolve(
+            ref,
+            key,
+            reference,
+          ),
+          from: resolveProvider,
+          name: r'resolveProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$resolveHash,
+          dependencies: ResolveFamily._dependencies,
+          allTransitiveDependencies: ResolveFamily._allTransitiveDependencies,
+        );
+
+  final AccountKey key;
+  final UserReference reference;
+
+  @override
+  bool operator ==(Object other) {
+    return other is ResolveProvider &&
+        other.key == key &&
+        other.reference == reference;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, key.hashCode);
+    hash = _SystemHash.combine(hash, reference.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/user_resolver.dart";
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
@@ -22,9 +23,10 @@ class ReplyBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledColor = Theme.of(context).disabledColor;
     final l10n = context.l10n;
-    final adapter = ref.watch(adapterProvider);
     final userTextStyle = Theme.of(context).ktkTextTheme?.linkTextStyle ??
         DefaultKaitekiTextTheme(context).linkTextStyle;
+
+    final reference = UserReference(_getUserId());
 
     return Padding(
       padding: kPostPadding,
@@ -32,7 +34,12 @@ class ReplyBar extends ConsumerWidget {
         borderRadius: BorderRadius.circular(8.0),
         onTap: onTap,
         child: FutureBuilder<User?>(
-          future: UserReference(_getUserId()).resolve(adapter),
+          future: ref.watch(
+            resolveProvider(
+              ref.watch(currentAccountProvider)!.key,
+              reference,
+            ).future,
+          ),
           builder: (context, snapshot) {
             final span = snapshot.hasData
                 ? snapshot.data!.renderDisplayName(context, ref)
