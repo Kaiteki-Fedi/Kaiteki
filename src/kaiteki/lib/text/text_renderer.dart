@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Element;
 import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/user_resolver.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
@@ -88,7 +89,7 @@ class TextRenderer {
               mentionTextStyle: textTheme.mentionTextStyle
                   ?.copyWith(decoration: TextDecoration.underline),
               hashtagTextStyle: textTheme.hashtagTextStyle
-                 ?.copyWith(decoration: TextDecoration.underline),
+                  ?.copyWith(decoration: TextDecoration.underline),
             )
           : textTheme,
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
@@ -262,10 +263,14 @@ class UserChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final adapter = ref.watch(adapterProvider);
     return FutureBuilder<User?>(
       initialData: user,
-      future: reference.resolve(adapter),
+      future: ref.watch(
+        resolveProvider(
+          ref.watch(currentAccountProvider)!.key,
+          reference,
+        ).future,
+      ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final user = snapshot.data!;

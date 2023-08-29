@@ -133,13 +133,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
     final callbacks = InteractionCallbacks(
       onReply:
-          adapter.authenticated ? _onReply.toOption() : const Option.none(),
+          adapter.authenticated ? Option.of(_onReply) : const Option.none(),
       onFavorite:
-          adapter.authenticated ? _onFavorite.toOption() : const Option.none(),
+          adapter.authenticated ? Option.of(_onFavorite) : const Option.none(),
       onRepeat:
-          adapter.authenticated ? _onRepeat.toOption() : const Option.none(),
+          adapter.authenticated ? Option.of(_onRepeat) : const Option.none(),
       onReact:
-          adapter.authenticated ? _onReact.toOption() : const Option.none(),
+          adapter.authenticated ? Option.of(_onReact) : const Option.none(),
       onShowFavoritees: _onShowFavoritees,
       onShowRepeatees: _onShowRepeatees,
       onShowMenu: _onShowMenu,
