@@ -31,7 +31,7 @@ class AuthenticationUnsuccessfulDialog extends StatelessWidget {
       icon: icon,
       title: title,
       content: SizedBox(
-        width: dialogConstraints.minWidth,
+        width: kDialogConstraints.minWidth,
         child: description,
       ),
       actionsAlignment: MainAxisAlignment.spaceBetween,

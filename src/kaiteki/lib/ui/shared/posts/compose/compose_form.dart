@@ -4,7 +4,7 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart" hide Visibility;
 import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
-import "package:kaiteki/constants.dart" show bottomSheetConstraints;
+import "package:kaiteki/constants.dart" show kBottomSheetConstraints;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/language.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -436,7 +436,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
   Future<void> openEmojiPicker() async {
     final emoji = await showModalBottomSheet<Emoji?>(
       context: context,
-      constraints: bottomSheetConstraints,
+      constraints: kBottomSheetConstraints,
       builder: (_) => const EmojiSelectorBottomSheet(),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -464,7 +464,7 @@ class ComposeFormState extends ConsumerState<ComposeForm> {
 
   void openAttachDrawer() {
     showModalBottomSheet(
-      constraints: bottomSheetConstraints,
+      constraints: kBottomSheetConstraints,
       context: context,
       builder: (context) {
         return LayoutBuilder(

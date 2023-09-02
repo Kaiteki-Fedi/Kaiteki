@@ -45,7 +45,7 @@ class ExceptionDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(context.l10n.exceptionDialogTitle),
       content: ConstrainedBox(
-        constraints: dialogConstraints,
+        constraints: kDialogConstraints,
         child: Column(
           children: [
             for (final detail in details.entries)

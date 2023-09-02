@@ -300,7 +300,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           context: context,
           useRootNavigator: true,
           isScrollControlled: true,
-          constraints: bottomSheetConstraints,
+          constraints: kBottomSheetConstraints,
           showDragHandle: true,
           builder: (_) => InstanceVettingBottomSheet(
             instance: _post.author.host,
@@ -557,7 +557,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final adapter = ref.read(adapterProvider) as ReactionSupport;
     final emoji = await showModalBottomSheet<Emoji?>(
       context: context,
-      constraints: bottomSheetConstraints,
+      constraints: kBottomSheetConstraints,
       builder: (_) => EmojiSelectorBottomSheet(
         showCustomEmojis: adapter.capabilities.supportsCustomEmojiReactions,
         showUnicodeEmojis: adapter.capabilities.supportsUnicodeEmojiReactions,

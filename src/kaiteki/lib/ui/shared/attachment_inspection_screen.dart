@@ -293,7 +293,7 @@ class _AttachmentInspectionScreenState
     if (description == null) return;
     await showModalBottomSheet(
       context: context,
-      constraints: bottomSheetConstraints,
+      constraints: kBottomSheetConstraints,
       builder: (_) => Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(

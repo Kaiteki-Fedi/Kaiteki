@@ -431,7 +431,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           mode: LaunchMode.externalApplication,
         );
       },
-      application: appId,
+      application: kAppId,
     );
 
     final result = await loginInterface.login(loginContext);
@@ -564,7 +564,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           icon: const Icon(Icons.vpn_key_off_rounded),
           title: const Text("Your session will be temporary"),
           content: ConstrainedBox(
-            constraints: dialogConstraints,
+            constraints: kDialogConstraints,
             child: const Text(
               "The backend implementation of this service did not provide login information when you signed in. This means that you'll be signed out next time you use Kaiteki.",
             ),

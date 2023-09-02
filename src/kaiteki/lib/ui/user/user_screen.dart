@@ -262,7 +262,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           context: context,
           useRootNavigator: true,
           isScrollControlled: true,
-          constraints: bottomSheetConstraints,
+          constraints: kBottomSheetConstraints,
           showDragHandle: true,
           builder: (_) => InstanceVettingBottomSheet(instance: user.host),
         ),

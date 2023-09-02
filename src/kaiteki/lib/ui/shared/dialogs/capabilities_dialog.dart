@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/constants.dart" show dialogConstraints;
+import "package:kaiteki/constants.dart" show kDialogConstraints;
 import "package:kaiteki/di.dart";
 import "package:kaiteki_core/social.dart";
 
@@ -14,7 +14,7 @@ class CapabilitiesDialog extends StatelessWidget {
     final l10n = context.l10n;
     final otherCapabilities = _buildOtherCapabilities(context);
     return ConstrainedBox(
-      constraints: dialogConstraints,
+      constraints: kDialogConstraints,
       child: AlertDialog(
         icon: const Icon(Icons.check_circle_rounded),
         title: const Text("Supported features"),

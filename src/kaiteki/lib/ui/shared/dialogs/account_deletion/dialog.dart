@@ -39,7 +39,7 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
     return WillPopScope(
       onWillPop: () async => _deleteFuture == null,
       child: ConstrainedBox(
-        constraints: dialogConstraints,
+        constraints: kDialogConstraints,
         child: AlertDialog(
           icon: isDeleting ? null : const Icon(Icons.delete_forever_rounded),
           title: isDeleting ? null : const Text("Delete account?"),

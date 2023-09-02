@@ -367,7 +367,7 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
         foregroundColor: prideEnabled ? Colors.black : foregroundColor,
         forceMaterialTransparency: theme.useMaterial3,
         title: Text(
-          appName,
+          kAppName,
           style: (theme.ktkTextTheme?.kaitekiTextStyle ??
                   DefaultKaitekiTextTheme(context).kaitekiTextStyle)
               .copyWith(

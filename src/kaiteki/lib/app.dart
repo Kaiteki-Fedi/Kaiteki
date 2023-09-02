@@ -42,7 +42,7 @@ class KaitekiApp extends ConsumerWidget {
           locale: _createLocale(locale),
           theme: lightTheme,
           themeMode: themeMode,
-          title: consts.appName,
+          title: consts.kAppName,
           shortcuts: shortcuts,
         );
       },

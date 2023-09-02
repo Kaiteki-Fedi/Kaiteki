@@ -20,7 +20,7 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return ConstrainedBox(
-      constraints: consts.dialogConstraints,
+      constraints: consts.kDialogConstraints,
       child: AlertDialog(
         icon: const Icon(Icons.help_rounded),
         title: Text(l10n.apiTypeDialog_title),

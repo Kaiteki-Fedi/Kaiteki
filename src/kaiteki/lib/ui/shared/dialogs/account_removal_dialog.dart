@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/constants.dart" show dialogConstraints;
+import "package:kaiteki/constants.dart" show kDialogConstraints;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
@@ -18,7 +18,7 @@ class AccountRemovalDialog extends StatelessWidget {
       icon: const Icon(Icons.logout_rounded),
       title: Text(l10n.accountRemovalConfirmationTitle),
       content: SizedBox(
-        width: dialogConstraints.minWidth,
+        width: kDialogConstraints.minWidth,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

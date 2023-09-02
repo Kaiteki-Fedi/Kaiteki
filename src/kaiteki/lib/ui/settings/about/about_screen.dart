@@ -29,7 +29,7 @@ class AboutScreen extends StatelessWidget {
               constraints: constraints,
               child: Center(
                 child: SizedBox(
-                  width: defaultFormWidth,
+                  width: kFormWidth,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -42,7 +42,7 @@ class AboutScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            appName,
+                            kAppName,
                             style:
                                 Theme.of(context).textTheme.titleLarge!.merge(
                                       Theme.of(context)
@@ -83,25 +83,25 @@ class AboutScreen extends StatelessWidget {
                               icon: const Icon(Icons.public_rounded),
                               tooltip: l10n.creditsWebsite,
                               onPressed: () {
-                                context.launchUrl(appWebsite);
+                                context.launchUrl(kAppWebsite);
                               },
-                              splashRadius: defaultSplashRadius,
+                              splashRadius: kSplashRadius,
                             ),
                             IconButton(
                               icon: const Icon(Mdi.github),
                               tooltip: l10n.creditsGithubRepo,
                               onPressed: () {
-                                context.launchUrl(githubRepository);
+                                context.launchUrl(kGithubRepository);
                               },
-                              splashRadius: defaultSplashRadius,
+                              splashRadius: kSplashRadius,
                             ),
                             IconButton(
                               icon: const Icon(Mdi.telegram),
                               tooltip: l10n.creditsTelegramChannel,
                               onPressed: () {
-                                context.launchUrl(telegramChannel);
+                                context.launchUrl(kTelegramChannel);
                               },
-                              splashRadius: defaultSplashRadius,
+                              splashRadius: kSplashRadius,
                             ),
                           ],
                         ),
@@ -120,10 +120,10 @@ class AboutScreen extends StatelessWidget {
   void _onShowLicenses(BuildContext context) {
     showLicensePage(
       context: context,
-      applicationName: appName,
+      applicationName: kAppName,
       // ignore: avoid_redundant_argument_values
       applicationVersion: KaitekiApp.versionName,
-      applicationLegalese: appLegalese,
+      applicationLegalese: kAppLegalese,
     );
   }
 

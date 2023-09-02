@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
-import "package:kaiteki/constants.dart" show appName;
+import "package:kaiteki/constants.dart" show kAppName;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -31,7 +31,7 @@ class MainScreenDrawer extends ConsumerWidget {
                   vertical: 16.0,
                 ),
                 child: Text(
-                  appName,
+                  kAppName,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
