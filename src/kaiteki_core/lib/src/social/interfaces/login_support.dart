@@ -76,16 +76,18 @@ class LoginContext {
   });
 }
 
-typedef CodeCallback = Future<T?> Function<T>(
-  CodePromptOptions options,
-  CodeSubmitCallback<T> onSubmit,
-);
-typedef CodeSubmitCallback<T> = Future<T> Function(String totp);
+typedef CodeCallback = Future<String?> Function(
+  CodePromptOptions options, [
+  CodeSubmitCallback? onSubmit,
+]);
 
-typedef CredentialsCallback = Future<T?> Function<T>(
-  CredentialsSubmitCallback<T> onSubmit,
-);
-typedef CredentialsSubmitCallback<T> = Future<T> Function(
+typedef CodeSubmitCallback = FutureOr<void> Function(String totp);
+
+typedef CredentialsCallback = Future<Credentials?> Function([
+  CredentialsSubmitCallback? onSubmit,
+]);
+
+typedef CredentialsSubmitCallback = FutureOr<void> Function(
   Credentials? credentials,
 );
 

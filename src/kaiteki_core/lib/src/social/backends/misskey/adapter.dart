@@ -179,16 +179,16 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       );
     }
 
-    final signInResponse = await context.requestCredentials(
-      (creds) async {
-        if (creds == null) return null;
+    SignInResponse? signInResponse;
 
-        final signInResponse = await loginPrivate(
-          creds.username,
-          creds.password,
+    await context.requestCredentials(
+      (credentials) async {
+        if (credentials == null) return;
+
+        signInResponse = await loginPrivate(
+          credentials.username,
+          credentials.password,
         );
-
-        return signInResponse;
       },
     );
 
@@ -196,7 +196,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
     authenticated = true;
 
-    return (signInResponse.i, signInResponse.id, null);
+    return (signInResponse!.i, signInResponse!.id, null);
   }
 
   @override

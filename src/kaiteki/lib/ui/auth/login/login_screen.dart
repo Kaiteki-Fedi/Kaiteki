@@ -1,7 +1,9 @@
 import "dart:async";
+import "dart:convert";
 
 import "package:animations/animations.dart";
 import "package:async/async.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
@@ -25,6 +27,10 @@ import "package:kaiteki_core/utils.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
+
+final kOAuthPage = Uri.https("kaiteki.app", "/oauth");
+
+T Function(T value) getDefaultSubmitCallback<T>() => (value) => value;
 
 class LoginScreen extends ConsumerStatefulWidget {
   // Whether the login screen only should pop with an account, instead of
@@ -83,9 +89,11 @@ class CallbackRequest<T, K extends Function> {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  static final _logger = Logger("LoginScreen");
+
   InstanceCompound? _instance;
-  CallbackRequest<void, CredentialsSubmitCallback>? _credentialRequest;
-  CallbackRequest<void, CodeSubmitCallback>? _codeRequest;
+  CallbackRequest<Credentials?, CredentialsSubmitCallback>? _credentialRequest;
+  CallbackRequest<String?, CodeSubmitCallback>? _codeRequest;
   CodePromptOptions? _codeOptions;
   VoidCallback? _oAuth;
 
@@ -265,6 +273,36 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<Map<String, String>?> _handleOAuth(
     GenerateOAuthUrlCallback generateUrl,
   ) async {
+    // We cannot start a local web server on web, so we have to redirect
+    // the user to a webpage encoding the OAuth parameters for now.
+    //
+    // This should become deprecated once protocol handlers are supported.
+    if (kIsWeb) {
+      final generatedUrl = await generateUrl(kOAuthPage);
+
+      await launchUrl(
+        generatedUrl,
+        mode: LaunchMode.externalApplication,
+      );
+
+      final code = await _askForCode(
+        const CodePromptOptions(),
+        (code) async => code,
+      );
+
+      if (code == null) return null;
+
+      try {
+        final json = utf8.decode(base64Decode(code));
+        final object = jsonDecode(json) as Map<String, dynamic>;
+        return object.cast<String, String>();
+      } catch (e, s) {
+        _logger.warning("Malformed base64 input for OAuth", e, s);
+      }
+
+      return null;
+    }
+
     final successPage = await generateOAuthLandingPage(
       Theme.of(context).colorScheme,
     );
@@ -327,17 +365,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Future<T?> _askForCredentials<T>(
-    CredentialsSubmitCallback<T> onSubmit,
-  ) async {
+  Future<Credentials?> _askForCredentials([
+    CredentialsSubmitCallback? onSubmit,
+  ]) async {
     assert(
       _credentialRequest == null,
       "Credentials are already being asked for",
     );
 
-    final completer = Completer<T?>();
+    final completer = Completer<Credentials?>();
 
-    setState(() => _credentialRequest = CallbackRequest(completer, onSubmit));
+    setState(
+      () => _credentialRequest = CallbackRequest(
+        completer,
+        onSubmit ?? (code) => code,
+      ),
+    );
 
     try {
       return await completer.future;
@@ -346,16 +389,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  Future<T?> _askForCode<T>(
-    CodePromptOptions options,
-    CodeSubmitCallback<T> onSubmit,
-  ) async {
+  Future<String?> _askForCode(
+    CodePromptOptions options, [
+    CodeSubmitCallback? onSubmit,
+  ]) async {
     assert(_codeRequest == null, "A code is already being requested");
 
-    final completer = Completer<T?>();
+    final completer = Completer<String?>();
 
     setState(() {
-      _codeRequest = CallbackRequest(completer, onSubmit);
+      _codeRequest = CallbackRequest(completer, onSubmit ?? (_) {});
       _codeOptions = options;
     });
 
@@ -409,7 +452,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     if (!mounted) {
-      Logger("LoginScreen").warning(
+      _logger.warning(
         "Login screen was unmounted before login could be completed",
       );
       return;
@@ -436,9 +479,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Widget _buildPage() {
-    if (_oAuth != null) {
-      return OAuthPage(onCancel: _oAuth);
-    }
+    if (_oAuth != null) return OAuthPage(onCancel: _oAuth);
 
     final credentialRequest = _credentialRequest;
     if (credentialRequest != null) {
@@ -451,8 +492,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           // this would move the place where the error is raised to the
           // askForCredentials method and not UserPage wanting to show the
           // error.
-          final result = await credentialRequest.callback(credentials);
-          credentialRequest.completer.complete(result);
+          await credentialRequest.callback(credentials);
+          credentialRequest.completer.complete();
         },
       );
     }
@@ -462,8 +503,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return CodePage(
         options: _codeOptions!,
         onSubmit: (code) async {
-          final result = await codeRequest.callback(code);
-          codeRequest.completer.complete(result);
+          await codeRequest.callback(code);
+          codeRequest.completer.complete(code);
         },
       );
     }
