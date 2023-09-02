@@ -32,8 +32,8 @@ Future<void> main() async {
     final sharedPrefs = await SharedPreferences.getInstance();
 
     // initialize hive
+    if (!kIsWeb) await migrateHiveBoxes();
     await initializeHive();
-    await migrateHiveBoxes();
 
     // load repositories
     final accountRepository = await getAccountRepository();
@@ -97,10 +97,12 @@ void handleFatalError(TraceableError error) {
 }
 
 Future<void> initializeHive() async {
-  final appSupportDir = await getApplicationSupportDirectory();
+  String? path;
+
+  if (!kIsWeb) path = (await getApplicationSupportDirectory()).path;
 
   Hive
-    ..init(appSupportDir.path)
+    ..init(path)
     ..registerAdapter(AccountKeyAdapter())
     ..registerAdapter(ClientSecretAdapter())
     ..registerAdapter(AccountSecretAdapter());
@@ -118,7 +120,7 @@ Future<bool> migrateHiveBoxes() async {
   var boxMigrated = false;
 
   // tampering with FS is probably not possible here
-  if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
+  if (Platform.isAndroid || Platform.isIOS) {
     Future<void> migrateBox<T>(Box<T> from, Box<T> to) async {
       for (final key in from.keys) {
         await to.put(key, from.get(key) as T);
