@@ -7,6 +7,7 @@ import "package:hive/hive.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/app.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/repositories/hive_repository.dart";
@@ -88,6 +89,8 @@ void handleFatalError(TraceableError error) {
   final crashScreen = MaterialApp(
     theme: getDefaultTheme(Brightness.light, true),
     darkTheme: getDefaultTheme(Brightness.dark, true),
+    localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
+    supportedLocales: KaitekiLocalizations.supportedLocales,
     home: CrashScreen(error),
   );
   runApp(crashScreen);
