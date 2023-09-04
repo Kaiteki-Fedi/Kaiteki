@@ -212,22 +212,22 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
             );
           },
         ),
-      IconButton(
-        icon: const Icon(Icons.refresh_rounded),
-        onPressed: onRefresh,
-        tooltip: l10n.refreshTimelineButtonLabel,
-      ),
-      // TODO(Craftplacer): hide if no keyboard is detected
-      MenuAnchor(
-        builder: (context, controller, child) {
-          return IconButton(
-            icon: Icon(Icons.adaptive.more_rounded),
-            tooltip: context.materialL10n.moreButtonTooltip,
-            onPressed: controller.open,
-          );
-        },
-        menuChildren: [
-          if (ref.watch(AppExperiment.timelineViews.provider))
+      if (WidgetsBinding.instance.mouseTracker.mouseIsConnected)
+        IconButton(
+          icon: const Icon(Icons.refresh_rounded),
+          onPressed: onRefresh,
+          tooltip: l10n.refreshTimelineButtonLabel,
+        ),
+      if (ref.watch(AppExperiment.timelineViews.provider))
+        MenuAnchor(
+          builder: (context, controller, child) {
+            return IconButton(
+              icon: Icon(Icons.adaptive.more_rounded),
+              tooltip: context.materialL10n.moreButtonTooltip,
+              onPressed: controller.open,
+            );
+          },
+          menuChildren: [
             SubmenuButton(
               menuChildren: [
                 for (final view in MainScreenViewType.values)
@@ -245,12 +245,8 @@ class _KaitekiMainScreenViewState extends ConsumerState<KaitekiMainScreenView> {
               ],
               child: const Text("View"),
             ),
-          MenuItemButton(
-            onPressed: () => showKeyboardShortcuts(context),
-            child: Text(l10n.keyboardShortcuts),
-          ),
-        ],
-      ),
+          ],
+        ),
       const AccountSwitcherWidget(size: 40),
     ];
   }

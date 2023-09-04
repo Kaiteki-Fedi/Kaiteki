@@ -3,6 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart" show kAppName;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 
@@ -97,6 +98,11 @@ class MainScreenDrawer extends ConsumerWidget {
                   title: const Text("Send Feedback"),
                   onTap: () => context.push("/send-feedback"),
                 ),
+              ListTile(
+                leading: const Icon(Icons.keyboard_rounded),
+                onTap: () => showKeyboardShortcuts(context),
+                title: Text(l10n.keyboardShortcuts),
+              ),
               ListTile(
                 leading: const Icon(Icons.info_rounded),
                 title: Text(l10n.settingsAbout),
