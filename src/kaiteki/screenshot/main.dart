@@ -14,8 +14,8 @@ import "package:kaiteki/ui/user/user_screen.dart";
 import "package:kaiteki_core/model.dart";
 import "package:path/path.dart" as path;
 
-import "bootstrapper.dart";
-import "example_data.dart";
+import '../test/utils/bootstrap.dart';
+import '../test/utils/example_data.dart';
 
 class ScreenConfig {
   final Size size;
@@ -86,15 +86,20 @@ void takeScreenshots(
   double screenDensity = 1,
   String? locale,
 }) {
+  final mediaQuery = MediaQueryData(
+    size: screenSize,
+    devicePixelRatio: screenDensity,
+  );
+
   testWidgets(
     "Main screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale);
+      final bootstrapper = await Bootstrapper.getInstance(locale: locale);
       runApp(
         bootstrapper.wrap(
           const MainScreen(initialTimeline: TimelineType.federated),
-          screenSize,
+          mediaQueryData: mediaQuery,
         ),
       );
       await tester.pumpAndSettle(
@@ -111,11 +116,11 @@ void takeScreenshots(
     "Compose screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale);
+      final bootstrapper = await Bootstrapper.getInstance(locale: locale);
       runApp(
         bootstrapper.wrap(
           const ComposeScreen(),
-          screenSize,
+          mediaQueryData: mediaQuery,
         ),
       );
       await tester.pumpAndSettle(
@@ -132,7 +137,7 @@ void takeScreenshots(
     "User screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale);
+      final bootstrapper = await Bootstrapper.getInstance(locale: locale);
 
       final adapter = bootstrapper.container.read(adapterProvider);
       final user = await adapter.getUserById("109349633552584749");
@@ -140,7 +145,7 @@ void takeScreenshots(
       runApp(
         bootstrapper.wrap(
           UserScreen.fromUser(user: user!),
-          screenSize,
+          mediaQueryData: mediaQuery,
         ),
       );
       await tester.pumpAndSettle(

@@ -6,12 +6,9 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/theming/default/themes.dart";
-import "package:kaiteki_core/social.dart" hide ClientSecret;
 import "package:shared_preferences/shared_preferences.dart";
 
 import "dummy_repository.dart";
-import "example_data.dart";
-import "mastodon.dart";
 
 class Bootstrapper {
   final ProviderContainer container;
@@ -22,7 +19,10 @@ class Bootstrapper {
     this.locale,
   );
 
-  static Future<Bootstrapper> getInstance(String? locale) async {
+  static Future<Bootstrapper> getInstance({
+    String? locale,
+    List<Account> initialAccounts = const [],
+  }) async {
     // ignore: invalid_use_of_visible_for_testing_member
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();
@@ -38,39 +38,34 @@ class Bootstrapper {
         ),
       ],
     );
-    final adapter = TrendingMastodonAdapter("floss.social");
-    final account = Account(
-      accountSecret: null,
-      clientSecret: null,
-      adapter: adapter,
-      key: const AccountKey(ApiType.mastodon, "floss.social", "Kaiteki"),
-      user: alice,
-    );
-    await container.read(accountManagerProvider.notifier).add(account);
+
+    final accountManager = container.read(accountManagerProvider.notifier);
+    for (final account in initialAccounts) {
+      await accountManager.add(account);
+    }
 
     return Bootstrapper._(container, locale);
   }
 
-  Widget wrap(Widget child, Size size) {
+  Widget wrap(Widget child, {MediaQueryData? mediaQueryData}) {
     final locale = this.locale;
-    return ProviderScope(
-      parent: container,
-      child: MediaQuery(
-        data: MediaQueryData(devicePixelRatio: 2.0, size: size),
-        child: MaterialApp(
-          home: Builder(
-            builder: (context) => ColoredBox(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: child,
-            ),
-          ),
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
-          supportedLocales: KaitekiLocalizations.supportedLocales,
-          locale: locale != null ? Locale(locale) : const Locale("en"),
-          theme: getDefaultTheme(Brightness.light, true),
-        ),
-      ),
+
+    Widget widget = MaterialApp(
+      home: child,
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
+      supportedLocales: KaitekiLocalizations.supportedLocales,
+      locale: locale != null ? Locale(locale) : const Locale("en"),
+      theme: getDefaultTheme(Brightness.light, true),
     );
+
+    if (mediaQueryData != null) {
+      widget = MediaQuery(
+        data: mediaQueryData,
+        child: widget,
+      );
+    }
+
+    return ProviderScope(parent: container, child: widget);
   }
 }

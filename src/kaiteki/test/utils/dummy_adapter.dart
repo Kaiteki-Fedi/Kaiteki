@@ -2,7 +2,7 @@ import "dart:async";
 
 import "package:kaiteki_core/kaiteki_core.dart";
 
-import "example_data.dart";
+import 'example_data.dart';
 
 class DummyAdapter extends BackendAdapter {
   final List<Post> posts;
