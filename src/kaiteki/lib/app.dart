@@ -30,16 +30,16 @@ class KaitekiApp extends ConsumerWidget {
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         final darkTheme =
-            _buildTheme(context, ref, Brightness.dark, darkDynamic);
+            buildTheme(context, ref, Brightness.dark, darkDynamic);
         final lightTheme =
-            _buildTheme(context, ref, Brightness.light, lightDynamic);
+            buildTheme(context, ref, Brightness.light, lightDynamic);
 
         return MaterialApp.router(
           darkTheme: darkTheme,
           localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
           routerConfig: router,
           supportedLocales: KaitekiLocalizations.supportedLocales,
-          locale: _createLocale(locale),
+          locale: createLocale(locale),
           theme: lightTheme,
           themeMode: themeMode,
           title: consts.kAppName,
@@ -49,7 +49,7 @@ class KaitekiApp extends ConsumerWidget {
     );
   }
 
-  ThemeData _buildTheme(
+  static ThemeData buildTheme(
     BuildContext context,
     WidgetRef ref,
     Brightness brightness,
@@ -102,7 +102,7 @@ class KaitekiApp extends ConsumerWidget {
     return theme;
   }
 
-  Locale? _createLocale(String? locale) {
+  static Locale? createLocale(String? locale) {
     if (locale == null) return null;
     final split = locale.split("-");
     return Locale.fromSubtags(
