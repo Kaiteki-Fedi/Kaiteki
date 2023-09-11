@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef AccountRef = ProviderRef<Account?>;
-
 /// See also [account].
 @ProviderFor(account)
 const accountProvider = AccountFamily();
@@ -83,10 +81,10 @@ class AccountFamily extends Family<Account?> {
 class AccountProvider extends Provider<Account?> {
   /// See also [account].
   AccountProvider(
-    this.key,
-  ) : super.internal(
+    AccountKey key,
+  ) : this._internal(
           (ref) => account(
-            ref,
+            ref as AccountRef,
             key,
           ),
           from: accountProvider,
@@ -97,9 +95,43 @@ class AccountProvider extends Provider<Account?> {
                   : _$accountHash,
           dependencies: AccountFamily._dependencies,
           allTransitiveDependencies: AccountFamily._allTransitiveDependencies,
+          key: key,
         );
 
+  AccountProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+  }) : super.internal();
+
   final AccountKey key;
+
+  @override
+  Override overrideWith(
+    Account? Function(AccountRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AccountProvider._internal(
+        (ref) => create(ref as AccountRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+      ),
+    );
+  }
+
+  @override
+  ProviderElement<Account?> createElement() {
+    return _AccountProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -115,7 +147,20 @@ class AccountProvider extends Provider<Account?> {
   }
 }
 
-String _$currentAccountHash() => r'bf8f5f20a32fb77b3fa00dbee0ef51264ca0180c';
+mixin AccountRef on ProviderRef<Account?> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+}
+
+class _AccountProviderElement extends ProviderElement<Account?>
+    with AccountRef {
+  _AccountProviderElement(super.provider);
+
+  @override
+  AccountKey get key => (origin as AccountProvider).key;
+}
+
+String _$currentAccountHash() => r'acc6198fcf4092f25572c65b5d04029955101f13';
 
 /// See also [currentAccount].
 @ProviderFor(currentAccount)
@@ -133,6 +178,7 @@ final currentAccountProvider = Provider<Account?>.internal(
 );
 
 typedef CurrentAccountRef = ProviderRef<Account?>;
+
 String _$adapterHash() => r'3a7624e3a59ce66597fe9a517264dad933d16a06';
 
 /// See also [adapter].
@@ -150,6 +196,7 @@ final adapterProvider = Provider<BackendAdapter>.internal(
 );
 
 typedef AdapterRef = ProviderRef<BackendAdapter>;
+
 String _$translatorHash() => r'9df641e03c09009524470d24d553f89d7d580a34';
 
 /// See also [translator].
@@ -164,6 +211,7 @@ final translatorProvider = AutoDisposeProvider<Translator?>.internal(
 );
 
 typedef TranslatorRef = AutoDisposeProviderRef<Translator?>;
+
 String _$languageIdentificatorHash() =>
     r'50116f7b5d56f12c52c6dc1c826703d6054d2a8f';
 
@@ -182,7 +230,8 @@ final languageIdentificatorProvider =
 
 typedef LanguageIdentificatorRef
     = AutoDisposeProviderRef<LanguageIdentificator?>;
-String _$textParserHash() => r'4103e3d4536a1119a0e2cea049bf933ca8f1861c';
+
+String _$textParserHash() => r'4c424236a063be641500d3ccc00827f6d0bc1f58';
 
 /// See also [textParser].
 @ProviderFor(textParser)
@@ -199,6 +248,7 @@ final textParserProvider = Provider<Set<TextParser>>.internal(
 );
 
 typedef TextParserRef = ProviderRef<Set<TextParser>>;
+
 String _$languageListHash() => r'47585c70705158bdd9b5e9b6347637b2f1e3558d';
 
 /// See also [languageList].
@@ -215,4 +265,4 @@ final languageListProvider =
 
 typedef LanguageListRef = FutureProviderRef<UnmodifiableListView<Language>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

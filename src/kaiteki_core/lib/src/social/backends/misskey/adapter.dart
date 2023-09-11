@@ -12,7 +12,6 @@ import 'client.dart';
 import 'exception.dart';
 import 'extensions.dart';
 import 'requests/sign_in.dart';
-import 'responses/check_session.dart';
 import 'responses/signin.dart';
 
 // TODO(Craftplacer): Consider adding additional permissions based on version like Milktea, https://github.com/pantasystem/Milktea/blob/develop/features/auth/src/main/java/net/pantasystem/milktea/auth/viewmodel/Permissions.kt
@@ -56,7 +55,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         SearchSupport,
         ListSupport,
         PostTranslationSupport,
-        LoginSupport {
+        LoginSupport,
+        OAuthReceiver {
   final MisskeyClient client;
 
   static final _logger = Logger('MisskeyAdapter');
@@ -91,32 +91,29 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     return user.toKaiteki(instance);
   }
 
-  Future<CheckSessionResponse?> loginMiAuth(
-    String session,
-    LoginContext context,
-  ) async {
+  Future<LoginResult?> loginMiAuth(LoginContext context) async {
     final requestOAuth = context.requestOAuth;
-
     if (requestOAuth == null) return null;
 
-    final result = await requestOAuth((oauthUrl) async {
-      return Uri.https(instance, '/miauth/$session', {
+    final session = Uuid().v4();
+
+    return await requestOAuth((oauthUrl) async {
+      final uri = Uri.https(instance, '/miauth/$session', {
         'name': context.application.name,
         'icon': context.application.icon!,
         'callback': oauthUrl.toString(),
         'permission': permissions.join(','),
       });
+
+      return (uri, {'session': session});
     });
-
-    if (result == null) return null;
-
-    return client.checkSession(session);
   }
 
-  Future<(misskey.User, String)?> loginAlt(LoginContext context) async {
+  Future<LoginResult> loginAlt(LoginContext context) async {
     late final String appSecret;
     late final String sessionToken;
-    final result = await context.requestOAuth!((oauthUrl) async {
+
+    return await context.requestOAuth!((oauthUrl) async {
       final app = await client.createApp(
         context.application.name,
         context.application.description,
@@ -129,17 +126,11 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       final session = await client.generateSession(app.secret);
       sessionToken = session.token;
 
-      return Uri.parse(session.url);
+      return (
+        Uri.parse(session.url),
+        {'secret': appSecret, 'token': sessionToken},
+      );
     });
-
-    if (result == null) return null;
-
-    final userkeyResponse = await client.userkey(appSecret, sessionToken);
-    final concat = userkeyResponse.accessToken + appSecret;
-    return (
-      userkeyResponse.user!,
-      sha256.convert(concat.codeUnits).toString(),
-    );
   }
 
   Future<SignInResponse> loginPrivate(
@@ -151,13 +142,10 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     );
   }
 
-  Future<(String, String?, misskey.User?)?> authenticate(
-    LoginContext context,
-  ) async {
+  @override
+  Future<LoginResult> login(LoginContext context) async {
     try {
-      final tuple = await loginAlt(context);
-      if (tuple == null) return null;
-      return (tuple.$2, null, tuple.$1);
+      return await loginAlt(context);
     } catch (e, s) {
       _logger.warning(
         'Failed to login using the conventional method. Trying MiAuth instead...',
@@ -167,10 +155,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     }
 
     try {
-      final session = const Uuid().v4();
-      final response = await loginMiAuth(session, context);
-      if (response == null) return null;
-      return (response.token, null, response.user);
+      final result = await loginMiAuth(context);
+      if (result != null) return result;
     } catch (e, s) {
       _logger.warning(
         'Failed to login using MiAuth. Trying private endpoints instead...',
@@ -179,51 +165,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       );
     }
 
-    SignInResponse? signInResponse;
-
-    await context.requestCredentials(
-      (credentials) async {
-        if (credentials == null) return;
-
-        signInResponse = await loginPrivate(
-          credentials.username,
-          credentials.password,
-        );
-      },
-    );
-
-    if (signInResponse == null) return null;
-
-    authenticated = true;
-
-    return (signInResponse!.i, signInResponse!.id, null);
-  }
-
-  @override
-  Future<LoginResult> login(LoginContext context) async {
-    final credentials = await authenticate(context);
-
-    if (credentials == null) return const LoginAborted();
-
-    assert(
-      !(credentials.$3 == null && credentials.$2 == null),
-      'Both user and id are null',
-    );
-
-    client.i = credentials.$1;
-
-    final user = credentials.$3 ?? await client.showUser(credentials.$2!);
-
-    authenticated = true;
-
-    return LoginSuccess(
-      user: user.toKaiteki(instance),
-      userSecret: (
-        accessToken: credentials.$1,
-        refreshToken: null,
-        userId: null,
-      ),
-    );
+    return LoginFailure((UnsupportedError('No available login method.'), null));
   }
 
   @override
@@ -664,5 +606,47 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   Future<Object?> resolveUrl(Uri url) {
     // TODO: implement resolveUrl
     throw UnimplementedError();
+  }
+
+  @override
+  Future<LoginResult> handleOAuth(
+    Map<String, String> query,
+    Map<String, String>? extra,
+  ) async {
+    String? token;
+    misskey.User? user;
+
+    final session = extra?['session'];
+    if (session != null) {
+      final response = await client.checkSession(session);
+      token = response.token;
+      user = response.user;
+    }
+
+    final sessionToken = extra?['token'];
+    final appSecret = extra?['secret'];
+    if (appSecret != null && sessionToken != null) {
+      final response = await client.userkey(appSecret, sessionToken);
+      user = response.user!;
+
+      final concat = response.accessToken + appSecret;
+      token = sha256.convert(concat.codeUnits).toString();
+    }
+
+    if (token == null || user == null) {
+      return LoginAborted();
+    }
+
+    client.i = token;
+    authenticated = true;
+
+    return LoginSuccess(
+      user: user.toKaiteki(instance),
+      userSecret: (
+        accessToken: token,
+        refreshToken: null,
+        userId: null,
+      ),
+    );
   }
 }

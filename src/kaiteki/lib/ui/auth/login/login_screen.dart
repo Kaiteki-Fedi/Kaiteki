@@ -1,5 +1,6 @@
 import "dart:async";
 import "dart:convert";
+import "dart:io";
 
 import "package:animations/animations.dart";
 import "package:async/async.dart";
@@ -7,7 +8,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
-import "package:kaiteki/auth/login_functions.dart";
+import "package:kaiteki/auth/oauth.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/instance_prober.dart";
@@ -146,6 +147,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   : Image.network(
                       instanceBackgroundUrl.toString(),
                       fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => const SizedBox(),
                     ),
             ),
           ),
@@ -270,48 +272,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return true;
   }
 
-  Future<Map<String, String>?> _handleOAuth(
-    GenerateOAuthUrlCallback generateUrl,
+  Future<LoginResult> _oauthLocalServer(
+    BackendAdapter adapter,
+    OAuthInitCallback generateUrl,
   ) async {
-    // We cannot start a local web server on web, so we have to redirect
-    // the user to a webpage encoding the OAuth parameters for now.
-    //
-    // This should become deprecated once protocol handlers are supported.
-    if (kIsWeb) {
-      final generatedUrl = await generateUrl(kOAuthPage);
-
-      await launchUrl(
-        generatedUrl,
-        mode: LaunchMode.externalApplication,
-      );
-
-      final code = await _askForCode(
-        const CodePromptOptions(),
-        (code) async => code,
-      );
-
-      if (code == null) return null;
-
-      try {
-        final json = utf8.decode(base64Decode(code));
-        final object = jsonDecode(json) as Map<String, dynamic>;
-        return object.cast<String, String>();
-      } catch (e, s) {
-        _logger.warning("Malformed base64 input for OAuth", e, s);
-      }
-
-      return null;
-    }
-
-    final successPage = await generateOAuthLandingPage(
-      Theme.of(context).colorScheme,
-    );
+    final successPage =
+        await generateLandingPage(Theme.of(context).colorScheme);
 
     try {
-      return await runOAuthServer(
+      Map<String, String>? extra;
+
+      final query = await runServer(
         (localUrl, cancel) async {
           // TODO(Craftplacer): Show WebView inside login screen when possible
-          final generatedUrl = await generateUrl(localUrl);
+          final Uri generatedUrl;
+
+          (generatedUrl, extra) = await generateUrl(localUrl);
 
           final canLaunch = await canLaunchUrl(generatedUrl);
           if (!canLaunch) throw Exception("Invalid URL");
@@ -321,9 +297,82 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         },
         successPage,
       );
+
+      if (query == null) return const LoginAborted();
+
+      final receiver = adapter as OAuthReceiver;
+      return receiver.handleOAuth(query, extra);
     } finally {
       setState(() => _oAuth = null);
     }
+  }
+
+  Future<LoginResult> _oauthQueryEncode(
+    BackendAdapter adapter,
+    OAuthInitCallback generateUrl,
+  ) async {
+    final (generatedUrl, extra) = await generateUrl(kOAuthPage);
+
+    await launchUrl(
+      generatedUrl,
+      mode: LaunchMode.externalApplication,
+    );
+
+    final code = await _askForCode(
+      const CodePromptOptions(),
+      (code) async => code,
+    );
+
+    if (code == null) return const LoginAborted();
+
+    try {
+      final json = utf8.decode(base64Decode(code));
+      final object = jsonDecode(json) as Map<String, dynamic>;
+      final query = object.cast<String, String>();
+
+      final receiver = adapter as OAuthReceiver;
+      return receiver.handleOAuth(query, extra);
+    } catch (e, s) {
+      _logger.warning("Malformed base64 input for OAuth", e, s);
+    }
+
+    return const LoginAborted();
+  }
+
+  Future<LoginAborted> _oauthDeepLink(
+    BackendAdapter adapter,
+    OAuthInitCallback generateUrl,
+  ) async {
+    final host =
+        adapter.safeCast<DecentralizedBackendAdapter>()?.instance ?? "woozy";
+    final (url, extra) = await generateUrl(
+      Uri(
+        scheme: "web+kaitekisocial",
+        host: "go-router-is-poop",
+        pathSegments: [
+          "oauth",
+          adapter.type.name,
+          host,
+        ],
+      ),
+    );
+
+    if (extra != null) {
+      await pushExtra(
+        ref.read(sharedPreferencesProvider),
+        adapter.type,
+        host,
+        extra,
+      );
+    }
+
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+      webOnlyWindowName: "_self",
+    );
+
+    return const LoginAborted();
   }
 
   Future<InstanceCompound?> _fetchInstance(String host) async {
@@ -413,6 +462,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login(InstanceCompound instance) async {
+    final router = GoRouter.of(context);
+
     final accountManager = ref.read(accountManagerProvider.notifier);
     final adapter = await instance.createAdapter();
 
@@ -424,7 +475,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           clientSecret.nullTransform((e) => (e.clientId, e.clientSecret)),
       requestCredentials: _askForCredentials,
       requestCode: _askForCode,
-      requestOAuth: _handleOAuth,
+      requestOAuth: (generateUrl, [extra]) {
+        assert(adapter is OAuthReceiver);
+
+        // if (kIsWeb) return _oauthQueryEncode(adapter, generateUrl);
+
+        if (kIsWeb || Platform.isAndroid) {
+          return _oauthDeepLink(adapter, generateUrl);
+        }
+
+        return _oauthLocalServer(adapter, generateUrl);
+      },
       openUrl: (uri) async {
         await launchUrl(
           uri,
@@ -458,14 +519,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    final router = GoRouter.of(context);
+    await accountManager.add(account);
 
     if (widget.popOnly) {
       router.pop(account);
       return;
     }
-
-    await accountManager.add(account);
     router.goNamed("home", pathParameters: account.key.routerParams);
   }
 

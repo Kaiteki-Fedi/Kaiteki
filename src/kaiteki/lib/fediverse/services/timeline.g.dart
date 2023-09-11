@@ -6,7 +6,7 @@ part of 'timeline.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$timelineServiceHash() => r'251e4212ba6075bef40c60a381dc1de7f995d8ce';
+String _$timelineServiceHash() => r'1e02d85453e6db68f85197c079ab3d97503e1a6a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -100,9 +100,9 @@ class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
     PaginationState<Post<dynamic>>> {
   /// See also [TimelineService].
   TimelineServiceProvider(
-    this.key,
-    this.source,
-  ) : super.internal(
+    AccountKey key,
+    TimelineSource source,
+  ) : this._internal(
           () => TimelineService()
             ..key = key
             ..source = source,
@@ -115,10 +115,58 @@ class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
           dependencies: TimelineServiceFamily._dependencies,
           allTransitiveDependencies:
               TimelineServiceFamily._allTransitiveDependencies,
+          key: key,
+          source: source,
         );
+
+  TimelineServiceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+    required this.source,
+  }) : super.internal();
 
   final AccountKey key;
   final TimelineSource source;
+
+  @override
+  FutureOr<PaginationState<Post<dynamic>>> runNotifierBuild(
+    covariant TimelineService notifier,
+  ) {
+    return notifier.build(
+      key,
+      source,
+    );
+  }
+
+  @override
+  Override overrideWith(TimelineService Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: TimelineServiceProvider._internal(
+        () => create()
+          ..key = key
+          ..source = source,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+        source: source,
+      ),
+    );
+  }
+
+  @override
+  AsyncNotifierProviderElement<TimelineService, PaginationState<Post<dynamic>>>
+      createElement() {
+    return _TimelineServiceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -135,16 +183,26 @@ class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin TimelineServiceRef
+    on AsyncNotifierProviderRef<PaginationState<Post<dynamic>>> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+
+  /// The parameter `source` of this provider.
+  TimelineSource get source;
+}
+
+class _TimelineServiceProviderElement extends AsyncNotifierProviderElement<
+    TimelineService, PaginationState<Post<dynamic>>> with TimelineServiceRef {
+  _TimelineServiceProviderElement(super.provider);
 
   @override
-  FutureOr<PaginationState<Post<dynamic>>> runNotifierBuild(
-    covariant TimelineService notifier,
-  ) {
-    return notifier.build(
-      key,
-      source,
-    );
-  }
+  AccountKey get key => (origin as TimelineServiceProvider).key;
+
+  @override
+  TimelineSource get source => (origin as TimelineServiceProvider).source;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

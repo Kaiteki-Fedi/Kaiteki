@@ -13,6 +13,7 @@ import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/repositories/hive_repository.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/crash_screen.dart";
+import "package:kaiteki_core/http.dart";
 import "package:kaiteki_core/utils.dart";
 import "package:logging/logging.dart";
 import "package:path/path.dart" as path;
@@ -22,6 +23,8 @@ import "package:shared_preferences/shared_preferences.dart";
 /// Main entrypoint.
 Future<void> main() async {
   Logger.root.level = kDebugMode ? Level.FINEST : Level.INFO;
+
+  if (kIsWeb) KaitekiClient.userAgent = null;
 
   final Widget app;
 

@@ -13,7 +13,6 @@ typedef UserSecret = ({
 abstract class LoginSupport {
   const LoginSupport();
 
-  ///
   Future<LoginResult> login(LoginContext context);
 }
 
@@ -62,6 +61,11 @@ class LoginContext {
   final ClientSecret? clientSecret;
   final CredentialsCallback requestCredentials;
   final CodeCallback requestCode;
+
+  /// Requests an OAuth flow to be started.
+  ///
+  /// The adapter must extend [OAuthReceiver] in order to handle the callback.
+  /// The login result of the callback should be returned by the login method.
   final OAuthCallback? requestOAuth;
   final OpenUrlCallback openUrl;
   final ApplicationId application;
@@ -91,9 +95,7 @@ typedef CredentialsSubmitCallback = FutureOr<void> Function(
   Credentials? credentials,
 );
 
-typedef OAuthCallback = Future<Map<String, String>?> Function(
-  GenerateOAuthUrlCallback generateUrl,
-);
+typedef OAuthCallback = Future<LoginResult> Function(OAuthInitCallback init);
 
 typedef OpenUrlCallback = FutureOr<void> Function(Uri url);
 
@@ -102,7 +104,8 @@ typedef OAuthUrlCreatedCallback = FutureOr<void> Function(
   Function() abort,
 );
 
-typedef GenerateOAuthUrlCallback = Future<Uri> Function(Uri oauthUrl);
+typedef OAuthInitCallback = Future<(Uri, Map<String, String>? extra)> Function(
+    Uri url);
 
 class CodePromptOptions {
   final bool numericOnly;

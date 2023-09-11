@@ -89,9 +89,9 @@ class UsersServiceProvider
     extends AsyncNotifierProviderImpl<UsersService, User<dynamic>?> {
   /// See also [UsersService].
   UsersServiceProvider(
-    this.key,
-    this.id,
-  ) : super.internal(
+    AccountKey key,
+    String id,
+  ) : this._internal(
           () => UsersService()
             ..key = key
             ..id = id,
@@ -104,10 +104,57 @@ class UsersServiceProvider
           dependencies: UsersServiceFamily._dependencies,
           allTransitiveDependencies:
               UsersServiceFamily._allTransitiveDependencies,
+          key: key,
+          id: id,
         );
+
+  UsersServiceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+    required this.id,
+  }) : super.internal();
 
   final AccountKey key;
   final String id;
+
+  @override
+  FutureOr<User<dynamic>?> runNotifierBuild(
+    covariant UsersService notifier,
+  ) {
+    return notifier.build(
+      key,
+      id,
+    );
+  }
+
+  @override
+  Override overrideWith(UsersService Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: UsersServiceProvider._internal(
+        () => create()
+          ..key = key
+          ..id = id,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AsyncNotifierProviderElement<UsersService, User<dynamic>?> createElement() {
+    return _UsersServiceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -122,16 +169,26 @@ class UsersServiceProvider
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin UsersServiceRef on AsyncNotifierProviderRef<User<dynamic>?> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _UsersServiceProviderElement
+    extends AsyncNotifierProviderElement<UsersService, User<dynamic>?>
+    with UsersServiceRef {
+  _UsersServiceProviderElement(super.provider);
 
   @override
-  FutureOr<User<dynamic>?> runNotifierBuild(
-    covariant UsersService notifier,
-  ) {
-    return notifier.build(
-      key,
-      id,
-    );
-  }
+  AccountKey get key => (origin as UsersServiceProvider).key;
+
+  @override
+  String get id => (origin as UsersServiceProvider).id;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

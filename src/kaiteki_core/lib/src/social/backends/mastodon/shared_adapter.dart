@@ -25,7 +25,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         SearchSupport,
         ListSupport,
         MuteSupport,
-        LoginSupport {
+        LoginSupport,
+        OAuthReceiver {
   final T client;
 
   @override
@@ -50,7 +51,6 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<LoginResult> login(LoginContext context) async {
-    late final String accessToken;
     late final mastodon.Application application;
 
     Future<mastodon.Application> createApplication(Uri redirectUri) async {
@@ -68,10 +68,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     if (requestOAuth != null) {
       late final Uri url;
 
-      final response = await requestOAuth((oauthUrl) async {
+      return await requestOAuth((oauthUrl) async {
         application = await createApplication(url = oauthUrl);
 
-        return Uri.https(
+        final authorizationUri = Uri.https(
           instance,
           '/oauth/authorize',
           {
@@ -81,95 +81,60 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
             'scope': scopes,
           },
         );
+
+        final extra = {
+          'id': application.clientId!,
+          'secret': application.clientSecret!,
+          'redirect': url.toString(),
+          'scopes': scopes,
+        };
+
+        return (authorizationUri, extra);
       });
+    }
 
-      if (response == null) return const LoginAborted();
+    application = await createApplication(kOob);
+    await context.openUrl(
+      Uri.https(
+        instance,
+        '/oauth/authorize',
+        {
+          'response_type': 'code',
+          'client_id': application.clientId,
+          'redirect_uri': kOob,
+          'scope': scopes,
+        },
+      ),
+    );
 
-      final loginResponse = await client.getToken(
+    LoginResponse? loginResponse;
+
+    await context.requestCode(const CodePromptOptions(), (code) async {
+      loginResponse = await client.getToken(
         'authorization_code',
         application.clientId!,
         application.clientSecret!,
-        url,
-        // ignore: unnecessary_null_checks, should never be null even if permitted
-        code: response['code']!,
+        kOob,
+        code: code,
         scope: scopes,
       );
+    });
 
-      accessToken = loginResponse.accessToken!;
-    } else {
-      application = await createApplication(kOob);
-      await context.openUrl(
-        Uri.https(
-          instance,
-          '/oauth/authorize',
-          {
-            'response_type': 'code',
-            'client_id': application.clientId,
-            'redirect_uri': kOob,
-            'scope': scopes,
-          },
-        ),
-      );
+    if (loginResponse == null) return const LoginAborted();
 
-      LoginResponse? loginResponse;
+    return _applyLoginResult(
+      loginResponse!,
+      application.clientId!,
+      application.clientSecret!,
+    );
+  }
 
-      await context.requestCode(const CodePromptOptions(), (code) async {
-        loginResponse = await client.getToken(
-          'authorization_code',
-          application.clientId!,
-          application.clientSecret!,
-          kOob,
-          code: code,
-          scope: scopes,
-        );
-      });
-
-      if (loginResponse == null) return const LoginAborted();
-
-      accessToken = loginResponse!.accessToken!;
-    } /*else {
-      application = await createApplication(kOob);
-
-      String? mfaToken;
-
-      final loginResponse = await context.requestCredentials(
-        (credentials) async {
-          if (credentials == null) return null;
-
-          try {
-            return await client.login(
-              credentials.username,
-              credentials.password,
-              application.clientId!,
-              application.clientSecret!,
-            );
-          } on MfaRequiredException catch (e) {
-            mfaToken = e.mfaToken;
-            return null;
-          }
-        },
-      );
-
-      if (mfaToken != null) {
-        final mfaResponse = await context.requestCode.call(
-          const CodePromptOptions(numericOnly: true),
-          (code) => client.respondMfa(
-            mfaToken!,
-            int.parse(code),
-            application.clientId!,
-            application.clientSecret!,
-          ),
-        );
-
-        if (mfaResponse == null) return const LoginAborted();
-
-        accessToken = mfaResponse.accessToken!;
-      } else if (loginResponse == null) {
-        return const LoginAborted();
-      } else {
-        accessToken = loginResponse.accessToken!;
-      }
-    }*/
+  Future<LoginResult> _applyLoginResult(
+    LoginResponse response,
+    String clientId,
+    String clientSecret,
+  ) async {
+    final accessToken = response.accessToken!;
 
     client.accessToken = accessToken;
 
@@ -186,12 +151,41 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
     return LoginSuccess(
       user: account.toKaiteki(instance),
-      clientSecret: (
-        application.clientId!,
-        application.clientSecret!,
-      ),
+      clientSecret: (clientId, clientSecret),
       userSecret: (accessToken: accessToken, refreshToken: null, userId: null),
     );
+  }
+
+  @override
+  Future<LoginResult> handleOAuth(
+    Map<String, String> query,
+    Map<String, String>? extra,
+  ) async {
+    final code = query['code'];
+
+    if (code == null || extra == null) {
+      return LoginFailure((StateError('Data is missing'), null));
+    }
+
+    final id = extra['id'];
+    final secret = extra['secret'];
+    final redirectUri = extra['redirect'];
+    final scopes = extra['scopes'];
+
+    if (id == null || secret == null || redirectUri == null || scopes == null) {
+      return LoginFailure((StateError('Data is missing'), null));
+    }
+
+    final response = await client.getToken(
+      'authorization_code',
+      id,
+      secret,
+      Uri.parse(redirectUri),
+      code: code,
+      scope: scopes,
+    );
+
+    return _applyLoginResult(response, id, secret);
   }
 
   @override

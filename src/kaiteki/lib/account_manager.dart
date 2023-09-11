@@ -78,10 +78,12 @@ class AccountManager extends _$AccountManager {
   Future<void> add(Account account) async {
     final lastState = state;
 
-    assert(
-      !lastState.accounts.any((e) => e.key == account.key),
-      "An account with the same username and instance already exists",
-    );
+    if (lastState.accounts.any((e) => e.key == account.key)) {
+      throw ArgumentError(
+        "An account with the same username and instance already exists",
+        "account",
+      );
+    }
 
     if (account.accountSecret != null) {
       await _accountSecrets.create(account.key, account.accountSecret!);

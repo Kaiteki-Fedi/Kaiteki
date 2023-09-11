@@ -3,6 +3,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
+import "package:kaiteki/auth/oauth.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/routing/notifier.dart";
@@ -10,6 +11,7 @@ import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
 import "package:kaiteki/ui/account_required_screen.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
+import "package:kaiteki/ui/auth/oauth_finalization_screen.dart";
 import "package:kaiteki/ui/feedback_screen.dart";
 import "package:kaiteki/ui/launcher/dialog.dart";
 import "package:kaiteki/ui/lists/lists_screen.dart";
@@ -44,12 +46,13 @@ const authenticatedPath = "/@:accountUsername@:accountHost";
 final _logger = Logger("Router");
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final notifier = ref.read(routerNotifierProvider.notifier);
+  final notifier = ref.watch(routerNotifierProvider.notifier);
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: kDebugMode,
     redirect: notifier.redirect,
+    refreshListenable: notifier,
     routes: [
       GoRoute(
         path: "/",
@@ -60,8 +63,25 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: "/web-protocol-handler",
+        redirect: (context, state) {
+          final rawUrl = state.uri.queryParameters["url"];
+          if (rawUrl == null) return null;
+
+          final url = Uri.tryParse(rawUrl);
+          if (url == null) return null;
+
+          return Uri(path: url.path, query: url.query).toString();
+        },
+      ),
+      GoRoute(
         path: "/welcome",
         builder: (_, __) => const AccountRequiredScreen(),
+        redirect: (context, state) {
+          final account = ref.read(routerNotifierProvider);
+          if (account != null) return "/${account.handle}/home";
+          return null;
+        },
       ),
       GoRoute(
         path: "/about",
@@ -137,6 +157,29 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootNavigatorKey,
       ),
       GoRoute(
+        name: "oauth",
+        path: "/oauth/:type/:host",
+        builder: (_, state) {
+          final type = ApiType.values
+              .firstWhere((e) => e.name == state.pathParameters["type"]!);
+          final host = state.pathParameters["host"]!;
+
+          final extra = popExtra(
+            ref.read(sharedPreferencesProvider),
+            type,
+            host,
+          );
+
+          return OAuthFinalizationScreen(
+            type: type,
+            host: host,
+            query: state.uri.queryParameters,
+            extra: extra,
+          );
+        },
+        parentNavigatorKey: _rootNavigatorKey,
+      ),
+      GoRoute(
         name: "authenticated",
         path: authenticatedPath,
         redirect: (context, state) {
@@ -153,16 +196,16 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             );
 
-            final previousAccount = ref.read(currentAccountProvider);
+            final currentAccount = ref.read(accountManagerProvider).current;
             if (account == null) {
-              _logger.info(
-                "No account matching to @$user@$host, so no account was switched",
-              );
-            } else if (previousAccount != account) {
+              throw StateError("Couldn't find account $user@$host");
+            }
+
+            if (currentAccount != account) {
               ref.read(accountManagerProvider.notifier).change(account);
 
               _logger.info(
-                "Switched from ${previousAccount?.key.handle} to ${account.key.handle} due to navigation path",
+                "Switched from ${currentAccount?.key.handle} to ${account.key.handle} due to navigation path",
               );
             }
           }
@@ -337,29 +380,16 @@ Widget _authenticatedBuilder(
         final user = state.pathParameters["accountUsername"];
         final host = state.pathParameters["accountHost"];
 
-        if (user != null && host != null) {
-          account = ref.read(
-            accountManagerProvider.select(
-              (manager) {
-                final matchedAccount = manager.accounts.firstWhereOrNull(
-                  (account) =>
-                      account.key.username == user && account.key.host == host,
-                );
+        assert(user != null && host != null);
 
-                if (matchedAccount == null) {
-                  _logger.warning(
-                    "Couldn't find @$user@$host, providing first account",
-                  );
-                  return manager.accounts.firstOrNull;
-                }
-
-                return matchedAccount;
-              },
+        account = ref.read(
+          accountManagerProvider.select(
+            (manager) => manager.accounts.firstWhere(
+              (account) =>
+                  account.key.username == user! && account.key.host == host!,
             ),
-          );
-        } else {
-          account = ref.read(currentAccountProvider);
-        }
+          ),
+        );
 
         _logger.finest("Consumer Rebuild: ${account?.user.handle}");
 
@@ -373,6 +403,7 @@ Widget _authenticatedBuilder(
           );
         }
 
+        _logger.warning("Building route on authenticated path without account");
         return child!;
       },
     ),

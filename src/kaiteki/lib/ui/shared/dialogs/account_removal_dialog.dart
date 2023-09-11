@@ -5,13 +5,13 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 
-class AccountRemovalDialog extends StatelessWidget {
-  final Account? account;
+class AccountRemovalDialog extends ConsumerWidget {
+  final Account account;
 
-  const AccountRemovalDialog({super.key, this.account});
+  const AccountRemovalDialog({super.key, required this.account});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
 
     return AlertDialog(
@@ -23,22 +23,17 @@ class AccountRemovalDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(l10n.accountRemovalConfirmationDescription),
-            if (account != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Consumer(
-                  builder: (context, ref, _) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text.rich(
-                        account!.user.renderDisplayName(context, ref),
-                      ),
-                      subtitle: Text(account!.key.host),
-                      leading: AvatarWidget(account!.user),
-                    );
-                  },
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text.rich(
+                  account.user.renderDisplayName(context, ref),
                 ),
+                subtitle: Text(account.key.host),
+                leading: AvatarWidget(account.user),
               ),
+            ),
           ],
         ),
       ),

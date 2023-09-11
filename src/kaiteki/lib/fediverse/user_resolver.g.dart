@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef ResolveRef = AutoDisposeFutureProviderRef<User<dynamic>?>;
-
 /// See also [resolve].
 @ProviderFor(resolve)
 const resolveProvider = ResolveFamily();
@@ -80,11 +78,11 @@ class ResolveFamily extends Family<AsyncValue<User<dynamic>?>> {
 class ResolveProvider extends AutoDisposeFutureProvider<User<dynamic>?> {
   /// See also [resolve].
   ResolveProvider(
-    this.key,
-    this.reference,
-  ) : super.internal(
+    AccountKey key,
+    UserReference reference,
+  ) : this._internal(
           (ref) => resolve(
-            ref,
+            ref as ResolveRef,
             key,
             reference,
           ),
@@ -96,10 +94,47 @@ class ResolveProvider extends AutoDisposeFutureProvider<User<dynamic>?> {
                   : _$resolveHash,
           dependencies: ResolveFamily._dependencies,
           allTransitiveDependencies: ResolveFamily._allTransitiveDependencies,
+          key: key,
+          reference: reference,
         );
+
+  ResolveProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+    required this.reference,
+  }) : super.internal();
 
   final AccountKey key;
   final UserReference reference;
+
+  @override
+  Override overrideWith(
+    FutureOr<User<dynamic>?> Function(ResolveRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ResolveProvider._internal(
+        (ref) => create(ref as ResolveRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+        reference: reference,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<User<dynamic>?> createElement() {
+    return _ResolveProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -117,5 +152,24 @@ class ResolveProvider extends AutoDisposeFutureProvider<User<dynamic>?> {
     return _SystemHash.finish(hash);
   }
 }
+
+mixin ResolveRef on AutoDisposeFutureProviderRef<User<dynamic>?> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+
+  /// The parameter `reference` of this provider.
+  UserReference get reference;
+}
+
+class _ResolveProviderElement
+    extends AutoDisposeFutureProviderElement<User<dynamic>?> with ResolveRef {
+  _ResolveProviderElement(super.provider);
+
+  @override
+  AccountKey get key => (origin as ResolveProvider).key;
+
+  @override
+  UserReference get reference => (origin as ResolveProvider).reference;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

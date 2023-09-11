@@ -86,8 +86,8 @@ class NotificationServiceProvider
     extends AsyncNotifierProviderImpl<NotificationService, List<Notification>> {
   /// See also [NotificationService].
   NotificationServiceProvider(
-    this.key,
-  ) : super.internal(
+    AccountKey key,
+  ) : this._internal(
           () => NotificationService()..key = key,
           from: notificationServiceProvider,
           name: r'notificationServiceProvider',
@@ -98,9 +98,51 @@ class NotificationServiceProvider
           dependencies: NotificationServiceFamily._dependencies,
           allTransitiveDependencies:
               NotificationServiceFamily._allTransitiveDependencies,
+          key: key,
         );
 
+  NotificationServiceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+  }) : super.internal();
+
   final AccountKey key;
+
+  @override
+  FutureOr<List<Notification>> runNotifierBuild(
+    covariant NotificationService notifier,
+  ) {
+    return notifier.build(
+      key,
+    );
+  }
+
+  @override
+  Override overrideWith(NotificationService Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: NotificationServiceProvider._internal(
+        () => create()..key = key,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+      ),
+    );
+  }
+
+  @override
+  AsyncNotifierProviderElement<NotificationService, List<Notification>>
+      createElement() {
+    return _NotificationServiceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -114,15 +156,19 @@ class NotificationServiceProvider
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin NotificationServiceRef on AsyncNotifierProviderRef<List<Notification>> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+}
+
+class _NotificationServiceProviderElement extends AsyncNotifierProviderElement<
+    NotificationService, List<Notification>> with NotificationServiceRef {
+  _NotificationServiceProviderElement(super.provider);
 
   @override
-  FutureOr<List<Notification>> runNotifierBuild(
-    covariant NotificationService notifier,
-  ) {
-    return notifier.build(
-      key,
-    );
-  }
+  AccountKey get key => (origin as NotificationServiceProvider).key;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

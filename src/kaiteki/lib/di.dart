@@ -39,9 +39,8 @@ Account? account(AccountRef ref, AccountKey key) {
 }
 
 @Riverpod(keepAlive: true, dependencies: [AccountManager])
-Account? currentAccount(AccountRef ref) {
-  return ref.watch(accountManagerProvider.select((e) => e.current));
-}
+Account? currentAccount(CurrentAccountRef ref) =>
+    ref.watch(accountManagerProvider).current;
 
 @Riverpod(keepAlive: true, dependencies: [currentAccount])
 BackendAdapter adapter(AdapterRef ref) =>
@@ -58,7 +57,16 @@ LanguageIdentificator? languageIdentificator(LanguageIdentificatorRef _) {
 @Riverpod(keepAlive: true, dependencies: [adapter])
 Set<TextParser> textParser(TextParserRef ref) {
   const socialTextParser = SocialTextParser();
-  return switch (ref.watch(adapterProvider)) {
+
+  BackendAdapter? adapter;
+
+  try {
+    adapter = ref.watch(adapterProvider);
+  } catch (_) {
+    // HACK(Craftplacer)
+  }
+
+  return switch (adapter) {
     MisskeyAdapter() => const {
         MarkdownTextParser(),
         MfmTextParser(),

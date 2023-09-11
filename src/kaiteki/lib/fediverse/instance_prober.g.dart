@@ -29,8 +29,6 @@ class _SystemHash {
   }
 }
 
-typedef ProbeInstanceRef = AutoDisposeFutureProviderRef<InstanceProbeResult>;
-
 /// See also [probeInstance].
 @ProviderFor(probeInstance)
 const probeInstanceProvider = ProbeInstanceFamily();
@@ -78,10 +76,10 @@ class ProbeInstanceProvider
     extends AutoDisposeFutureProvider<InstanceProbeResult> {
   /// See also [probeInstance].
   ProbeInstanceProvider(
-    this.host,
-  ) : super.internal(
+    String host,
+  ) : this._internal(
           (ref) => probeInstance(
-            ref,
+            ref as ProbeInstanceRef,
             host,
           ),
           from: probeInstanceProvider,
@@ -93,9 +91,43 @@ class ProbeInstanceProvider
           dependencies: ProbeInstanceFamily._dependencies,
           allTransitiveDependencies:
               ProbeInstanceFamily._allTransitiveDependencies,
+          host: host,
         );
 
+  ProbeInstanceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.host,
+  }) : super.internal();
+
   final String host;
+
+  @override
+  Override overrideWith(
+    FutureOr<InstanceProbeResult> Function(ProbeInstanceRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ProbeInstanceProvider._internal(
+        (ref) => create(ref as ProbeInstanceRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        host: host,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<InstanceProbeResult> createElement() {
+    return _ProbeInstanceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -110,5 +142,19 @@ class ProbeInstanceProvider
     return _SystemHash.finish(hash);
   }
 }
+
+mixin ProbeInstanceRef on AutoDisposeFutureProviderRef<InstanceProbeResult> {
+  /// The parameter `host` of this provider.
+  String get host;
+}
+
+class _ProbeInstanceProviderElement
+    extends AutoDisposeFutureProviderElement<InstanceProbeResult>
+    with ProbeInstanceRef {
+  _ProbeInstanceProviderElement(super.provider);
+
+  @override
+  String get host => (origin as ProbeInstanceProvider).host;
+}
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
