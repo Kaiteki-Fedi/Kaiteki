@@ -37,7 +37,7 @@ final developerMode = createSettingProvider<bool>(
 
 final cwBehavior = createEnumSettingProvider<ContentWarningBehavior>(
   key: "cwBehavior",
-  initialValue: ContentWarningBehavior.automatic,
+  initialValue: ContentWarningBehavior.collapse,
   values: ContentWarningBehavior.values,
   provider: sharedPreferencesProvider,
 );
