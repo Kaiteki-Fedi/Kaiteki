@@ -186,7 +186,6 @@ class _UsersServiceProviderElement
 
   @override
   AccountKey get key => (origin as UsersServiceProvider).key;
-
   @override
   String get id => (origin as UsersServiceProvider).id;
 }

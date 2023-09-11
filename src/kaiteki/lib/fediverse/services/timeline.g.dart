@@ -200,7 +200,6 @@ class _TimelineServiceProviderElement extends AsyncNotifierProviderElement<
 
   @override
   AccountKey get key => (origin as TimelineServiceProvider).key;
-
   @override
   TimelineSource get source => (origin as TimelineServiceProvider).source;
 }
