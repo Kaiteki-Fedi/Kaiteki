@@ -19,7 +19,10 @@ class TimelineService extends _$TimelineService {
     state = await AsyncValue.guard(
       () async {
         final posts = await _fetch();
-        return PaginationState(posts.toList());
+        return PaginationState(
+          posts.toList(),
+          canPaginateFurther: posts.isNotEmpty,
+        );
       },
     );
   }
@@ -41,7 +44,10 @@ class TimelineService extends _$TimelineService {
 
         final query = TimelineQuery(untilId: previousState.items.last.id);
         final page = await _fetch(query);
-        return PaginationState([...previousState.items, ...page]);
+        return PaginationState(
+          [...previousState.items, ...page],
+          canPaginateFurther: page.isNotEmpty,
+        );
       },
     );
   }
@@ -58,6 +64,9 @@ class TimelineService extends _$TimelineService {
     _adapter = ref.watch(accountProvider(key))!.adapter;
     _source = source;
     final posts = await _fetch();
-    return PaginationState(posts.toList());
+    return PaginationState(
+      posts.toList(),
+      canPaginateFurther: posts.isNotEmpty,
+    );
   }
 }

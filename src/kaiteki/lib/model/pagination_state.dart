@@ -7,7 +7,7 @@ class PaginationState<T> {
   final List<T> items;
   final bool canPaginateFurther;
 
-  const PaginationState(this.items, {this.canPaginateFurther = true});
+  const PaginationState(this.items, {required this.canPaginateFurther});
 }
 
 extension AsyncValueToPagingState<T> on AsyncValue<PaginationState<T>> {
