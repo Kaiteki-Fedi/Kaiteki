@@ -54,45 +54,49 @@ class CountButton extends ConsumerWidget {
     final showCount =
         showNumber && hasNumber && !ref.watch(hidePostMetrics).value;
 
-    final icon = _buildIcon(color);
-
     final textStyle = (Theme.of(context).ktkTextTheme?.countTextStyle ??
             DefaultKaitekiTextTheme(context).countTextStyle)
         .copyWith(color: color);
-    return RawMaterialButton(
+
+    var child = _buildIcon(color);
+
+    if (expanded) {
+      child = Row(
+        children: [
+          child,
+          if (showCount) ...[
+            const SizedBox(width: 8),
+            Expanded(
+              child: DefaultTextStyle.merge(
+                style: textStyle,
+                child: Text(
+                  shortenedCount,
+                  maxLines: 1,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                ),
+              ),
+            ),
+          ],
+        ],
+      );
+    }
+
+    return TextButton(
       onPressed: enabled ? onTap : null,
       onLongPress: enabled ? onLongPress : null,
-      enableFeedback: enabled,
       focusNode: focusNode,
-      constraints: BoxConstraints(
-        minWidth: (expanded && showCount) ? 88.0 : 0.0,
-        minHeight: 36.0,
-      ),
-      shape: const StadiumBorder(),
-      child: Padding(
+      style: TextButton.styleFrom(
+        alignment: Alignment.centerLeft,
         padding: const EdgeInsets.all(8.0),
-        child: !expanded
-            ? icon
-            : Row(
-                children: [
-                  icon,
-                  if (showCount) ...[
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: DefaultTextStyle.merge(
-                        style: textStyle,
-                        child: Text(
-                          shortenedCount,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+        shape: const StadiumBorder(),
+        enableFeedback: enabled,
+        minimumSize: Size(
+          (expanded && showCount) ? 88.0 : 0.0,
+          36.0,
+        ),
       ),
+      child: child,
     );
   }
 
