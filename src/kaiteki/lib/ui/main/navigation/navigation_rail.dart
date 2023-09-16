@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/ui/main/compose_fab.dart";
 import "package:kaiteki/ui/main/tab.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_material/kaiteki_material.dart";
@@ -47,11 +46,12 @@ class MainScreenNavigationRail extends ConsumerWidget {
       onDestinationSelected: onChangeIndex,
       minWidth: theme.useMaterial3 ? null : 56,
       labelType: NavigationRailLabelType.all,
-      leading: ComposeFloatingActionButton(
+      leading: FloatingActionButton(
         backgroundColor: theme.colorScheme.tertiaryContainer,
         foregroundColor: theme.colorScheme.onTertiaryContainer,
-        type: ComposeFloatingActionButtonType.small,
-        onTap: () {
+        child: const Icon(Icons.edit_rounded),
+        elevation: 0,
+        onPressed: () {
           context.pushNamed("compose", pathParameters: ref.accountRouterParams);
         },
       ),
