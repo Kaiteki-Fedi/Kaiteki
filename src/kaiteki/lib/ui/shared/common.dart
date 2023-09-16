@@ -4,6 +4,8 @@ import "package:material_color_utilities/material_color_utilities.dart";
 
 export "package:kaiteki/common.dart";
 
+export "shapes.dart";
+
 typedef LocalizableStringBuilder = String Function(BuildContext context);
 
 const centeredCircularProgressIndicator = Center(

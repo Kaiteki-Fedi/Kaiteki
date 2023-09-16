@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/ui/main/pages/notifications.dart";
+import "package:kaiteki/ui/shared/corner_painter.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki_core/model.dart";
 
