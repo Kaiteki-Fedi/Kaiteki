@@ -8,7 +8,8 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
-import "package:kaiteki/auth/oauth.dart";
+import "package:kaiteki/auth/oauth.dart"
+    if (dart.library.html) "package:kaiteki/auth/oauth_web.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/instance_prober.dart";
