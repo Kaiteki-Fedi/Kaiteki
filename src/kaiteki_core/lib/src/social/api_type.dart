@@ -1,8 +1,10 @@
 import 'package:kaiteki_core/src/social/adapter.dart';
-import 'package:kaiteki_core/src/social/backends/glitch/adapter.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/adapter.dart';
-import 'package:kaiteki_core/src/social/backends/misskey/adapter.dart';
-import 'package:kaiteki_core/src/social/backends/pleroma/adapter.dart';
+import 'package:recase/recase.dart';
+
+import 'backends/glitch/adapter.dart';
+import 'backends/mastodon/adapter.dart';
+import 'backends/misskey/adapter.dart';
+import 'backends/pleroma/adapter.dart';
 
 enum ApiType<T extends BackendAdapter> {
   mastodon(MastodonAdapter.create),
@@ -27,9 +29,7 @@ enum ApiType<T extends BackendAdapter> {
 
   Future<T> createAdapter(String instance) => _createAdapter(this, instance);
 
-  String get displayName {
-    return _displayName ?? name[0].toUpperCase() + name.substring(1);
-  }
+  String get displayName => _displayName ?? name.titleCase;
 
   const ApiType(
     this._createAdapter, {
