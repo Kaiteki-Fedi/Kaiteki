@@ -247,6 +247,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
             Expanded(
               flex: expands ? 1 : 0,
               child: minimal
+                  // ignore: dead_code
                   ? Row(
                       children: [
                         Expanded(child: buildEdit(context, expands)),
