@@ -19,7 +19,7 @@ class ChooseAccountDialog extends ConsumerWidget {
           for (final account in accounts)
             AccountListTile(
               account: account,
-              onSelect: () => Navigator.of(context).pop(account),
+              onTap: () => Navigator.of(context).pop(account),
             ),
         ],
       ),

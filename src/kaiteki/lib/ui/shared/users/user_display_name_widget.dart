@@ -28,33 +28,37 @@ class UserDisplayNameWidget extends ConsumerWidget {
 
     switch (orientation) {
       case Axis.horizontal:
-        return Text.rich(
-          TextSpan(
-            children: [
-              user.renderText(context, ref, content.primary),
-              if (secondaryText != null) ...[
-                WidgetSpan(child: SizedBox(width: textSpacing)),
-                TextSpan(
-                  text: secondaryText,
-                  style: TextStyle(color: disabledColor),
-                ),
+        return RepaintBoundary(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                user.renderText(context, ref, content.primary),
+                if (secondaryText != null) ...[
+                  WidgetSpan(child: SizedBox(width: textSpacing)),
+                  TextSpan(
+                    text: secondaryText,
+                    style: TextStyle(color: disabledColor),
+                  ),
+                ],
               ],
-            ],
-            style: primaryTextStyle,
+              style: primaryTextStyle,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+            softWrap: false,
           ),
-          maxLines: 1,
-          overflow: TextOverflow.fade,
-          softWrap: false,
         );
       case Axis.vertical:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text.rich(
-              user.renderText(context, ref, content.primary),
-              maxLines: 1,
-              overflow: TextOverflow.fade,
-              softWrap: false,
+            RepaintBoundary(
+              child: Text.rich(
+                user.renderText(context, ref, content.primary),
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
             ),
             if (secondaryText != null)
               Text(

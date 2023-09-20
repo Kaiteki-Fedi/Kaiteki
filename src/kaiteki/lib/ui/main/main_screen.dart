@@ -206,7 +206,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
         ),
         iconTheme: prideEnabled ? const IconThemeData(shadows: shadows) : null,
         actions: _buildAppBarActions(context),
-        scrolledUnderElevation: immerse ? 0.0 : 4.0,
+        scrolledUnderElevation: immerse ? 0.0 : null,
       ),
     );
   }
@@ -221,7 +221,12 @@ class MainScreenState extends ConsumerState<MainScreen> {
           child: child,
         );
       },
-      child: Material(child: body),
+      child: Material(
+        color: Theme.of(context).useMaterial3
+            ? Theme.of(context).colorScheme.surface
+            : null,
+        child: body,
+      ),
     );
   }
 
@@ -336,7 +341,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
   Color? getOutsideColor(BuildContext context) {
     final theme = Theme.of(context);
-    if (theme.useMaterial3) return theme.colorScheme.surfaceVariant;
+    if (theme.useMaterial3) return theme.colorScheme.surfaceContainer;
     return null;
   }
 

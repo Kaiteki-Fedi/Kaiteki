@@ -55,49 +55,20 @@ class KaitekiApp extends ConsumerWidget {
     Brightness brightness,
     ColorScheme? systemColorScheme,
   ) {
-    ColorScheme? colorScheme;
     final useMaterial3 = ref.watch(preferences.useMaterial3).value;
-    final useSystemColorScheme =
-        ref.watch(preferences.useSystemColorScheme).value;
 
-    if (useSystemColorScheme) colorScheme = systemColorScheme;
+    ColorScheme? colorScheme;
+    if (ref.watch(preferences.useSystemColorScheme).value) {
+      colorScheme = systemColorScheme;
+    }
 
     colorScheme ??= getColorScheme(brightness, useMaterial3);
 
-    final avatarCornerRadius = ref.watch(preferences.avatarCornerRadius).value;
-    ShapeBorder avatarShape;
-
-    if (avatarCornerRadius <= 0) {
-      avatarShape = const Border();
-    } else if (avatarCornerRadius >= double.infinity) {
-      avatarShape = const CircleBorder();
-    } else {
-      avatarShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(avatarCornerRadius),
-      );
-    }
-
     final theme =
         ThemeData.from(colorScheme: colorScheme, useMaterial3: useMaterial3)
-            .applyDefaultTweaks(
-              useNaturalBadgeColors:
-                  ref.watch(preferences.useNaturalBadgeColors).value,
-            )
-            .addKaitekiExtensions(
-              squareEmoji: ref.watch(preferences.squareEmojis).value,
-              avatarShape: avatarShape,
-            )
-            .applyKaitekiTweaks();
-
-    // ignore: join_return_with_assignment
-    // theme = theme.copyWith(
-    //   snackBarTheme: MediaQuery.of(context).size.width >= 600
-    //       ? theme.snackBarTheme.copyWith(
-    //           width: 200,
-    //           behavior: SnackBarBehavior.floating,
-    //         )
-    //       : null,
-    // );
+            .applyDefaultTweaks()
+            .applyKaitekiTweaks()
+            .applyUserPreferences(ref);
 
     return theme;
   }
