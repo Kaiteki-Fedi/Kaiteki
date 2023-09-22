@@ -91,7 +91,7 @@ class TimelinePageState extends ConsumerState<TimelinePage>
     final showTabBar = tabs.length >= 2;
     return Column(
       children: [
-        if (showTabBar) ...[
+        if (showTabBar)
           TabBar(
             controller: _tabController,
             isScrollable: true,
@@ -101,8 +101,6 @@ class TimelinePageState extends ConsumerState<TimelinePage>
               for (final type in tabs) _buildTab(context, type, true),
             ],
           ),
-          const Divider(height: 1),
-        ],
         Expanded(
           child: TabBarView(
             controller: _tabController,

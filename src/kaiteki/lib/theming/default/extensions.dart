@@ -58,8 +58,6 @@ extension ThemeDataExtensions on ThemeData {
         unselectedLabelColor: useMaterial3
             ? null
             : colorScheme.onSurface.withOpacity(.6) /* medium emphasis */,
-        // And there @Craftplacer said, "THIS DIVIDER SUCKS"
-        dividerColor: Colors.transparent,
       ),
       bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
         backgroundColor: colorScheme.brightness == Brightness.dark

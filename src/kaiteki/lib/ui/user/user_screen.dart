@@ -217,7 +217,6 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                     child: Column(
                       children: [
                         Material(child: buildTabBar()),
-                        const Divider(),
                         Expanded(
                           child: Material(
                             child: buildTabBarView(includeReplies),
