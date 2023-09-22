@@ -74,16 +74,11 @@ extension ThemeDataExtensions on ThemeData {
   }
 
   /// Adds Kaiteki-specific extensions to the theme.
-  ThemeData addKaitekiExtensions({
-    bool? squareEmoji,
-    ShapeBorder? avatarShape,
-  }) {
+  ThemeData addKaitekiTheme() {
     return copyWith(
       extensions: [
         ...extensions.values,
         KaitekiTheme.fromMaterialTheme(this),
-        EmojiTheme(square: squareEmoji ?? true),
-        AvatarTheme(shape: avatarShape ?? const CircleBorder()),
       ],
     );
   }

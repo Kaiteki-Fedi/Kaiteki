@@ -10,7 +10,7 @@ import 'package:kaiteki_ui/src/material/shapes.dart';
 ThemeData getDefaultTheme(Brightness brightness, bool useM3) {
   final colorScheme = getColorScheme(brightness, useM3);
   return ThemeData.from(colorScheme: colorScheme, useMaterial3: useM3)
-      .addKaitekiExtensions()
+      .addKaitekiTheme()
       .applyDefaultTweaks()
       .applyKaitekiTweaks();
 }
