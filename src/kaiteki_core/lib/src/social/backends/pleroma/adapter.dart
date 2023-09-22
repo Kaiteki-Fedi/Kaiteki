@@ -105,6 +105,12 @@ class PleromaAdapter //
     final config = await client.getFrontendConfigurations();
     final pleroma = config.pleroma;
 
+    Uri? ensureAbsolute(Uri? input, String host) {
+      if (input == null) return null;
+      if (!input.isAbsolute) return Uri.https(host).resolveUri(input);
+      return input;
+    }
+
     final background = ensureAbsolute(pleroma?.background, this.instance);
     final logo = ensureAbsolute(pleroma?.logo, this.instance);
 
@@ -125,12 +131,6 @@ class PleromaAdapter //
             '/static/terms-of-service.html',
           ),
     );
-  }
-
-  Uri? ensureAbsolute(Uri? input, String host) {
-    if (input == null) return null;
-    if (!input.isAbsolute) return Uri.https(host).resolveUri(input);
-    return input;
   }
 
   @override
