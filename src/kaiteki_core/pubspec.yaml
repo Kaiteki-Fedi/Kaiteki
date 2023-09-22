@@ -14,7 +14,7 @@ dependencies:
   http: ^1.0.0
   intl: ^0.18.1
   json_annotation: ^4.8.1
-  uuid: ^4.0.0
+  uuid: ^3.0.6
   oauth1:
     git: https://github.com/Kaiteki-Fedi/dart-oauth1.git
   logging: ^1.2.0
