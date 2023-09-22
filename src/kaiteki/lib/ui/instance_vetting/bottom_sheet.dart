@@ -243,6 +243,7 @@ class _InstanceVettingBottomSheetState
           Tab(text: "Staff"),
           Tab(text: "Software"),
         ],
+      ),
       AutoScaleTabBarView(
         children: [
           Padding(
