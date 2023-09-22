@@ -5,6 +5,8 @@ import "package:material_color_utilities/material_color_utilities.dart";
 export "package:kaiteki/common.dart";
 export "package:kaiteki_ui/kaiteki_ui.dart";
 
+const kBullet = "•";
+
 typedef LocalizableStringBuilder = String Function(BuildContext context);
 
 const centeredCircularProgressIndicator = Center(

@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
+import "package:fpdart/fpdart.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/people/dialog.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/user/text_with_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -16,6 +18,8 @@ class UserPanel extends ConsumerWidget {
     final description = user.description;
 
     final displayNameTextStyle = Theme.of(context).textTheme.titleLarge;
+    final followerCount = user.metrics.followerCount;
+    final followingCount = user.metrics.followingCount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -111,6 +115,30 @@ class UserPanel extends ConsumerWidget {
               ],
             ),
           ),
+        ),
+        const SizedBox(height: 8.0),
+        InkWell(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                if (followerCount != null && followerCount > 0)
+                  "$followerCount followers",
+                if (followingCount != null && followingCount > 0)
+                  "$followingCount following",
+              ]
+                  .map((e) => TextSpan(text: e))
+                  .intersperse(const TextSpan(text: " • "))
+                  .toList(),
+              style: Theme.of(context).colorScheme.outline.textStyle,
+            ),
+          ),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (_) => PeopleDialog(userId: user.id),
+              useRootNavigator: false,
+            );
+          },
         ),
       ],
     );
