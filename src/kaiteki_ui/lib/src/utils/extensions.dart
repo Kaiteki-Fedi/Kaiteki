@@ -21,3 +21,7 @@ extension BadgingExtension on Widget {
     );
   }
 }
+
+extension ColorTextStyleExtension on Color {
+  TextStyle get textStyle => TextStyle(color: this);
+}

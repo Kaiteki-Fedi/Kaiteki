@@ -5,7 +5,7 @@ import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/theming/default/m2_color_schemes.dart" as m2;
 import "package:kaiteki/theming/default/m3_color_schemes.dart" as m3;
 import "package:kaiteki/theming/kaiteki/text_theme.dart";
-import "package:kaiteki/ui/shared/shapes.dart";
+import 'package:kaiteki_ui/src/material/shapes.dart';
 
 ThemeData getDefaultTheme(Brightness brightness, bool useM3) {
   final colorScheme = getColorScheme(brightness, useM3);
