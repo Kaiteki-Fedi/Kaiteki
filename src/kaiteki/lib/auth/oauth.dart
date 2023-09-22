@@ -1,46 +1,15 @@
 import "dart:async";
 import "dart:convert";
-import "dart:io";
 
-import "package:async/async.dart";
 import "package:flutter/material.dart" show ColorScheme;
 import "package:flutter/services.dart";
+import "package:kaiteki/auth/oauth_native.dart"
+    if (dart.library.html) "package:kaiteki/auth/oauth_web.dart";
 import "package:kaiteki_core/social.dart";
 import "package:shared_preferences/shared_preferences.dart";
-import "package:shelf/shelf.dart";
-import "package:shelf/shelf_io.dart";
 
-Future<Map<String, String>?> runServer(
-  OAuthUrlCreatedCallback ready,
-  String successPage,
-) async {
-  final requestStream = StreamController<Map<String, String>>();
-  HttpServer? server;
-
-  try {
-    final handler = const Pipeline().addHandler((request) {
-      requestStream.add(request.url.queryParameters);
-      return Response(
-        200,
-        body: successPage,
-        headers: {"Content-Type": "text/html; charset=UTF-8"},
-      );
-    });
-
-    // Start server, close & return when new request comes in
-    const port = 8080;
-    server = await serve(handler, "127.0.0.1", port, shared: true);
-    final operation = CancelableOperation.fromFuture(
-      requestStream.stream.first,
-    );
-
-    await ready(Uri.http("localhost:$port", "/"), operation.cancel);
-    return await operation.valueOrCancellation();
-  } finally {
-    server?.close();
-    requestStream.close();
-  }
-}
+export "package:kaiteki/auth/oauth_native.dart"
+    if (dart.library.html) "package:kaiteki/auth/oauth_web.dart";
 
 String _getExtraKey(ApiType type, String host) =>
     "oAuthExtra_${type.name}_$host";
@@ -55,6 +24,16 @@ Future<void> pushExtra(
   final json = jsonEncode(extra);
 
   await preferences.setString(key, json);
+}
+
+Uri? getRedirectUri(ApiType type, String host) {
+  final baseUri = getBaseUri();
+
+  if (baseUri == null) return null;
+
+  final pathSegments = ["oauth", type.name, host];
+
+  return baseUri.replace(pathSegments: pathSegments);
 }
 
 Map<String, String>? popExtra(
@@ -72,27 +51,6 @@ Map<String, String>? popExtra(
   preferences.remove(key);
 
   return map;
-}
-
-bool? get isProtocolHandlerRegistered => Platform.isAndroid;
-
-Uri? getBaseUri() {
-  if (isProtocolHandlerRegistered == true) {
-    // HACK(Craftplacer): https://github.com/flutter/flutter/issues/124045
-    return Uri(scheme: "web+kaitekisocial", host: "go-router-is-poop");
-  }
-
-  return null;
-}
-
-Uri? getRedirectUri(ApiType type, String host) {
-  final baseUri = getBaseUri();
-
-  if (baseUri == null) return null;
-
-  final pathSegments = ["oauth", type.name, host];
-
-  return baseUri.replace(pathSegments: pathSegments);
 }
 
 /// Fetches the OAuth landing page as well as injects the app's current theme.

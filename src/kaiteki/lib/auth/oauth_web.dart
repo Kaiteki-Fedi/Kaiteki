@@ -4,10 +4,8 @@ import "dart:html" as html;
 import "dart:js" as js;
 import "dart:ui_web" as ui_web show urlStrategy, HashUrlStrategy;
 
-import "package:flutter/material.dart";
+import "package:kaiteki/auth/oauth.dart" as common;
 import "package:kaiteki_core/social.dart";
-
-import "oauth.dart" as non_web;
 
 bool? get isProtocolHandlerRegistered {
   final value = js.context["isProtocolHandlerRegistered"];
@@ -55,10 +53,5 @@ Uri? getRedirectUri(ApiType type, String host) {
     return baseUri.replace(fragment: '/${pathSegments.join('/')}');
   }
 
-  return non_web.getRedirectUri(type, host);
-}
-
-/// Fetches the OAuth landing page as well as injects the app's current theme.
-Future<String> generateLandingPage(ColorScheme? colorScheme) {
-  return non_web.generateLandingPage(colorScheme);
+  return common.getRedirectUri(type, host);
 }

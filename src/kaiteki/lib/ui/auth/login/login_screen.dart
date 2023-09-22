@@ -8,8 +8,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
-import "package:kaiteki/auth/oauth.dart"
-    if (dart.library.html) "package:kaiteki/auth/oauth_web.dart";
+import "package:kaiteki/auth/oauth.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/instance_prober.dart";
@@ -26,7 +25,6 @@ import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
-import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
