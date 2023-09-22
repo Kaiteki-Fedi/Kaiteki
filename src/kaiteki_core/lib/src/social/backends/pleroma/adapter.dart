@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
-import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
 import 'package:kaiteki_core/social.dart';
+import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/shared_adapter.dart';
 import 'package:kaiteki_core/src/social/backends/pleroma/adapter.c.dart';
 import 'package:kaiteki_core/src/social/backends/pleroma/capabilities.dart';
@@ -9,7 +9,11 @@ import 'package:kaiteki_core/src/social/backends/pleroma/client.dart';
 
 class PleromaAdapter //
     extends SharedMastodonAdapter<PleromaClient>
-    implements ChatSupport, ReactionSupport, PreviewSupport {
+    implements
+        ChatSupport,
+        ReactionSupport,
+        PreviewSupport,
+        AccountDeletionSupport {
   @override
   final PleromaCapabilities capabilities;
 

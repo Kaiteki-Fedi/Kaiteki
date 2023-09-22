@@ -9,8 +9,8 @@ import 'model/attachment.dart';
 import 'model/instance.dart';
 import 'model/pagination.dart';
 import 'model/post.dart';
-import 'model/timeline_type.dart';
 import 'model/timeline_query.dart';
+import 'model/timeline_type.dart';
 import 'model/user.dart';
 
 abstract class CentralizedBackendAdapter extends BackendAdapter {
@@ -28,6 +28,7 @@ abstract class DecentralizedBackendAdapter extends BackendAdapter {
 
 abstract class BackendAdapter {
   AdapterCapabilities get capabilities;
+
   ApiType get type;
 
   /// Whether any secret is set.
@@ -90,9 +91,6 @@ abstract class BackendAdapter {
   Future<Attachment> uploadAttachment(AttachmentDraft draft);
 
   Future<List<User>> getRepeatees(String id);
-
-  /// Deletes the user's account.
-  Future<void> deleteAccount(String password);
 
   Future<PaginatedList<String?, User>> getFollowers(
     String userId, {

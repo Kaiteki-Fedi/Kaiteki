@@ -34,12 +34,6 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
   }
 
   @override
-  Future<void> deleteAccount(String password) {
-    // TODO(Craftplacer): implement deleteAccount
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> markAllNotificationsAsRead() async {
     // HACK(Craftplacer): refetching latest notifcation will mark previously unfetched notifications as read as well
     final latest = await client.getNotifications(limit: 1);

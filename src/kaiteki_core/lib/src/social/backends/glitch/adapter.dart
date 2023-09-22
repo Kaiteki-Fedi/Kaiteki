@@ -1,6 +1,6 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
-import 'package:kaiteki_core/src/social/api_type.dart';
 import 'package:kaiteki_core/model.dart';
+import 'package:kaiteki_core/src/social/api_type.dart';
 import 'package:kaiteki_core/src/social/backends/glitch/capabilities.dart';
 import 'package:kaiteki_core/src/social/backends/glitch/client.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
@@ -47,12 +47,6 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
   @override
   Future<Instance> getInstance() async {
     return instanceInfo.toKaiteki(instance);
-  }
-
-  @override
-  Future<void> deleteAccount(String password) {
-    // TODO(Craftplacer): implement deleteAccount
-    throw UnimplementedError();
   }
 
   @override

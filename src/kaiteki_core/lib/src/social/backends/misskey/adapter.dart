@@ -560,12 +560,6 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<void> deleteAccount(String password) {
-    // TODO(Craftplacer): implement deleteAccount
-    throw UnimplementedError();
-  }
-
-  @override
   Future<User> lookupUser(String username, [String? host]) async {
     final users = await client.searchUsersByUsernameAndHost(username, host);
     final user =
