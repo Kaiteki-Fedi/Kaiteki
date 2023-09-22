@@ -42,31 +42,6 @@ Future<Map<String, String>?> runServer(
   }
 }
 
-/// Fetches the OAuth landing page as well as injects the app's current theme.
-Future<String> generateLandingPage(ColorScheme? colorScheme) async {
-  final html = await rootBundle.loadString("assets/oauth-success.html");
-  const cssPlaceholder = "/* INSERT */";
-
-  if (colorScheme == null) return html.replaceAll(cssPlaceholder, "");
-
-  final cssBuffer = StringBuffer(":root{")
-    ..writeAll(
-      {
-        "background": colorScheme.background,
-        "foreground": colorScheme.onBackground,
-        "primary-container": colorScheme.primaryContainer,
-        "on-primary-container": colorScheme.onPrimaryContainer,
-      }.entries.map((kv) {
-        final hex = kv.value.value.toRadixString(16).substring(2);
-        return "--${kv.key}: #$hex";
-      }),
-      ";",
-    )
-    ..write("}");
-
-  return html.replaceAll(cssPlaceholder, cssBuffer.toString());
-}
-
 String _getExtraKey(ApiType type, String host) =>
     "oAuthExtra_${type.name}_$host";
 
@@ -118,4 +93,29 @@ Uri? getRedirectUri(ApiType type, String host) {
   final pathSegments = ["oauth", type.name, host];
 
   return baseUri.replace(pathSegments: pathSegments);
+}
+
+/// Fetches the OAuth landing page as well as injects the app's current theme.
+Future<String> generateLandingPage(ColorScheme? colorScheme) async {
+  final html = await rootBundle.loadString("assets/oauth-success.html");
+  const cssPlaceholder = "/* INSERT */";
+
+  if (colorScheme == null) return html.replaceAll(cssPlaceholder, "");
+
+  final cssBuffer = StringBuffer(":root{")
+    ..writeAll(
+      {
+        "background": colorScheme.background,
+        "foreground": colorScheme.onBackground,
+        "primary-container": colorScheme.primaryContainer,
+        "on-primary-container": colorScheme.onPrimaryContainer,
+      }.entries.map((kv) {
+        final hex = kv.value.value.toRadixString(16).substring(2);
+        return "--${kv.key}: #$hex";
+      }),
+      ";",
+    )
+    ..write("}");
+
+  return html.replaceAll(cssPlaceholder, cssBuffer.toString());
 }

@@ -4,6 +4,7 @@ import "dart:html" as html;
 import "dart:js" as js;
 import "dart:ui_web" as ui_web show urlStrategy, HashUrlStrategy;
 
+import "package:flutter/material.dart";
 import "package:kaiteki_core/social.dart";
 
 import "oauth.dart" as non_web;
@@ -12,6 +13,13 @@ bool? get isProtocolHandlerRegistered {
   final value = js.context["isProtocolHandlerRegistered"];
   if (value is bool) return value;
   return null;
+}
+
+Future<Map<String, String>?> runServer(
+  OAuthUrlCreatedCallback ready,
+  String successPage,
+) async {
+  throw UnsupportedError("runServer is not supported on the web");
 }
 
 Uri? getBaseUri() {
@@ -48,4 +56,9 @@ Uri? getRedirectUri(ApiType type, String host) {
   }
 
   return non_web.getRedirectUri(type, host);
+}
+
+/// Fetches the OAuth landing page as well as injects the app's current theme.
+Future<String> generateLandingPage(ColorScheme? colorScheme) {
+  return non_web.generateLandingPage(colorScheme);
 }
