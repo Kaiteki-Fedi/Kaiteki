@@ -18,12 +18,6 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
   @override
   Future<Instance?> probeInstance() async {
     final instance = await client.getInstance();
-
-    if (instance.version.contains('Pleroma') ||
-        instance.version.contains('+glitch')) {
-      return null;
-    }
-
     return instance.toKaiteki(this.instance);
   }
 
