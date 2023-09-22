@@ -46,9 +46,8 @@ dependencies:
   json_annotation: any
   kaiteki_core:
     path: ../kaiteki_core
-  kaiteki_material:
-    git:
-      url: https://github.com/Kaiteki-Fedi/kaiteki_material.git
+  kaiteki_ui:
+    path: ../kaiteki_ui
   logging: ^1.2.0
   markdown: ^7.0.1
   material_color_utilities: <1.0.0

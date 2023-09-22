@@ -740,14 +740,12 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  kaiteki_material:
+  kaiteki_ui:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "5ea21352e7902fa3d1e370aa1955fd75ccfb5a30"
-      url: "https://github.com/Kaiteki-Fedi/kaiteki_material.git"
-    source: git
+      path: "../kaiteki_ui"
+      relative: true
+    source: path
     version: "0.0.1"
   lints:
     dependency: transitive
@@ -1660,5 +1658,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.2.0-65.0.dev <4.0.0"
+  dart: ">=3.2.0-134.0.dev <4.0.0"
   flutter: ">=3.13.0"

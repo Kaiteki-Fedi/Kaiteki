@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
 
 /// A widget that overrides the [TabBarTheme] for use on backgrounds with surface
 /// color.
@@ -18,12 +17,7 @@ class AppBarTabBarTheme extends StatelessWidget {
     return Theme(
       data: theme.copyWith(
         tabBarTheme: TabBarTheme(
-          indicator: RoundedUnderlineTabIndicator(
-            borderSide: BorderSide(
-              width: 3,
-              color: foregroundColor,
-            ),
-          ),
+          indicatorColor: foregroundColor,
           labelColor: foregroundColor,
           unselectedLabelColor: foregroundColor.withOpacity(.7),
         ),

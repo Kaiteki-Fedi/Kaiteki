@@ -26,7 +26,7 @@ import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 

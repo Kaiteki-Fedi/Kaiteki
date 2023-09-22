@@ -3,7 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/main/tab.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 
 class MainScreenNavigationRail extends ConsumerWidget {
   final List<MainScreenTab> tabs;
@@ -22,12 +22,11 @@ class MainScreenNavigationRail extends ConsumerWidget {
   List<NavigationRailDestination> _destinations(BuildContext context) {
     final destinations = <NavigationRailDestination>[];
     for (final tab in tabs) {
-      final unreadCount = tab.fetchUnreadCount?.call();
+      final unreadCount = tab.fetchUnreadCount?.call() ?? 0;
       destinations.add(
         NavigationRailDestination(
-          icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
-          selectedIcon:
-              Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          icon: Icon(tab.kind.icon).wrapWithBadge(unreadCount),
+          selectedIcon: Icon(tab.kind.selectedIcon).wrapWithBadge(unreadCount),
           label: Text(tab.kind.getLabel(context)),
         ),
       );
@@ -49,16 +48,16 @@ class MainScreenNavigationRail extends ConsumerWidget {
       leading: FloatingActionButton(
         backgroundColor: theme.colorScheme.tertiaryContainer,
         foregroundColor: theme.colorScheme.onTertiaryContainer,
-        child: const Icon(Icons.edit_rounded),
         elevation: 0,
         onPressed: () {
           context.pushNamed("compose", pathParameters: ref.accountRouterParams);
         },
+        child: const Icon(Icons.edit_rounded),
       ),
-      unselectedLabelTextStyle:
-          Theme.of(context).textTheme.labelMedium!.copyWith(
-                letterSpacing: -0.5,
-              ),
+      unselectedLabelTextStyle: Theme.of(context)
+          .textTheme
+          .labelMedium!
+          .copyWith(letterSpacing: -0.5),
       selectedLabelTextStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
             letterSpacing: -0.5,
           ),

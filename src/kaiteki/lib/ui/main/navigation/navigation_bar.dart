@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/main/tab.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 
 class MainScreenNavigationBar extends StatelessWidget {
   final List<MainScreenTab> tabs;
@@ -41,9 +41,8 @@ class MainScreenNavigationBar extends StatelessWidget {
       final unreadCount = tab.fetchUnreadCount?.call();
       navigationDestinations.add(
         NavigationDestination(
-          icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
-          selectedIcon:
-              Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          icon: Icon(tab.kind.icon).wrapWithBadge(unreadCount),
+          selectedIcon: Icon(tab.kind.selectedIcon).wrapWithBadge(unreadCount),
           label: tab.kind.getLabel(context),
         ),
       );
@@ -59,9 +58,8 @@ class MainScreenNavigationBar extends StatelessWidget {
       final unreadCount = tab.fetchUnreadCount?.call();
       bottomNavigationBarItems.add(
         BottomNavigationBarItem(
-          icon: Icon(tab.kind.icon).wrapWithLargeBadge(unreadCount),
-          activeIcon:
-              Icon(tab.kind.selectedIcon).wrapWithLargeBadge(unreadCount),
+          icon: Icon(tab.kind.icon).wrapWithBadge(unreadCount),
+          activeIcon: Icon(tab.kind.selectedIcon).wrapWithBadge(unreadCount),
           label: tab.kind.getLabel(context),
         ),
       );

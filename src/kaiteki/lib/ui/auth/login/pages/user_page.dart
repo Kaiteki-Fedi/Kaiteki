@@ -8,7 +8,7 @@ import "package:kaiteki/ui/auth/login/constants.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_message.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 
 const _instanceIconSize = 96.0;
 
