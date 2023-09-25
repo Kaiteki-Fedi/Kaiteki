@@ -131,15 +131,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   Widget build(BuildContext context) {
     final adapter = ref.watch(adapterProvider);
 
+    final isAuthenticated = adapter.authenticated;
+    final canFavorite = isAuthenticated && adapter is FavoriteSupport;
+    final canReact = isAuthenticated && adapter is ReactionSupport;
     final callbacks = InteractionCallbacks(
-      onReply:
-          adapter.authenticated ? Option.of(_onReply) : const Option.none(),
-      onFavorite:
-          adapter.authenticated ? Option.of(_onFavorite) : const Option.none(),
-      onRepeat:
-          adapter.authenticated ? Option.of(_onRepeat) : const Option.none(),
-      onReact:
-          adapter.authenticated ? Option.of(_onReact) : const Option.none(),
+      onReply: isAuthenticated ? Option.of(_onReply) : const Option.none(),
+      onFavorite: canFavorite ? Option.of(_onFavorite) : const Option.none(),
+      onRepeat: isAuthenticated ? Option.of(_onRepeat) : const Option.none(),
+      onReact: canReact ? Option.of(_onReact) : const Option.none(),
       onShowFavoritees: _onShowFavoritees,
       onShowRepeatees: _onShowRepeatees,
       onShowMenu: _onShowMenu,
