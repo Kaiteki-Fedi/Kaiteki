@@ -54,9 +54,11 @@ class WidePostLayout extends ConsumerWidget {
           ),
           WidePostLayout(
             repeatOf,
-            onOpen: onOpen,
             callbacks: callbacks,
             onReact: onReact,
+            onOpen: onOpen,
+            onTap: onTap,
+            menuFocusNode: menuFocusNode,
           ),
         ],
       );

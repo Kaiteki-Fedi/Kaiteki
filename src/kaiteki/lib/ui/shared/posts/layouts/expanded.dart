@@ -57,9 +57,11 @@ class ExpandedPostLayout extends ConsumerWidget {
           ),
           ExpandedPostLayout(
             repeatOf,
-            onOpen: onOpen,
             callbacks: callbacks,
             onReact: onReact,
+            onOpen: onOpen,
+            onTap: onTap,
+            menuFocusNode: menuFocusNode,
           ),
         ],
       );

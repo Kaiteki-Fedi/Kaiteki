@@ -214,10 +214,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final anchor =
         _menuAnchorKey.currentContext!.findRenderObject() as RenderBox;
 
-    final button =
-        _menuButtonFocusNode.context!.findRenderObject() as RenderBox;
+    final buttonContext = _menuButtonFocusNode.context;
 
-    final offset = button.localToGlobal(Offset.zero, ancestor: anchor);
+    assert(buttonContext != null);
+
+    final buttonRenderBox = buttonContext!.findRenderObject() as RenderBox;
+    final offset = buttonRenderBox.localToGlobal(Offset.zero, ancestor: anchor);
 
     _menuController.open(position: offset);
   }
