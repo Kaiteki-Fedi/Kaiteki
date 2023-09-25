@@ -54,13 +54,6 @@ class MainScreenNavigationRail extends ConsumerWidget {
         },
         child: const Icon(Icons.edit_rounded),
       ),
-      unselectedLabelTextStyle: Theme.of(context)
-          .textTheme
-          .labelMedium!
-          .copyWith(letterSpacing: -0.5),
-      selectedLabelTextStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
-            letterSpacing: -0.5,
-          ),
       destinations: _destinations(context),
     );
   }

@@ -12,6 +12,7 @@ class PreferenceValuesListTile<T> extends ConsumerWidget {
   final Widget? title;
   final List<T>? values;
   final Widget Function(BuildContext context, T value)? textBuilder;
+  final Widget? leading;
 
   const PreferenceValuesListTile({
     super.key,
@@ -19,11 +20,13 @@ class PreferenceValuesListTile<T> extends ConsumerWidget {
     this.title,
     this.values,
     this.textBuilder,
+    this.leading,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
+      leading: leading,
       subtitle: buildText(context, ref.watch(provider).value),
       title: title,
       onTap: () => _onTap(context, ref),

@@ -1,10 +1,8 @@
 import "package:flutter/material.dart";
-import "package:google_fonts/google_fonts.dart";
 import "package:kaiteki/theming/default/constants.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/theming/default/m2_color_schemes.dart" as m2;
 import "package:kaiteki/theming/default/m3_color_schemes.dart" as m3;
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
 import 'package:kaiteki_ui/src/material/shapes.dart';
 
 ThemeData getDefaultTheme(Brightness brightness, bool useM3) {
@@ -50,17 +48,6 @@ extension ThemeDataExtensions on ThemeData {
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
       ),
-      textTheme: _createKaitekiTextTheme(textTheme, ktkTextTheme),
     );
   }
-}
-
-TextTheme _createKaitekiTextTheme(
-  TextTheme original,
-  KaitekiTextTheme? ktkTextTheme,
-) {
-  final baseTextTheme = GoogleFonts.firaSansTextTheme(original);
-  return baseTextTheme.copyWith(
-    titleLarge: ktkTextTheme?.kaitekiTextStyle,
-  );
 }

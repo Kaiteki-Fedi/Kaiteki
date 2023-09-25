@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
+import "package:kaiteki/ui/settings/preference_values_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
@@ -65,6 +66,24 @@ class AccessibilityScreen extends StatelessWidget {
                     secondary: const Icon(Icons.format_underline_rounded),
                     title: const Text("Underline links"),
                     provider: underlineLinks,
+                  ),
+                  PreferenceValuesListTile(
+                    leading: const Icon(Icons.font_download_rounded),
+                    title: const Text("Interface font"),
+                    provider: interfaceFont,
+                    values: InterfaceFont.values,
+                    textBuilder: (_, value) {
+                      return Text(
+                        switch (value) {
+                          InterfaceFont.system => "System default",
+                          InterfaceFont.roboto => "Roboto",
+                          InterfaceFont.kaiteki => "Kaiteki (default)",
+                          InterfaceFont.atkinsonHyperlegible =>
+                            "Atkinson Hyperlegible",
+                          InterfaceFont.openDyslexic => "OpenDyslexic",
+                        },
+                      );
+                    },
                   ),
                 ],
               ),

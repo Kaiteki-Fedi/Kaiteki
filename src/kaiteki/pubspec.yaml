@@ -104,16 +104,41 @@ flutter:
   fonts:
     - family: Quicksand
       fonts:
-        - asset: assets/fonts/Quicksand-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Quicksand-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Quicksand-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Quicksand-SemiBold.ttf
-          weight: 600
         - asset: assets/fonts/Quicksand-Bold.ttf
           weight: 700
+    - family: OpenDyslexic
+      fonts:
+        - asset: assets/fonts/OpenDyslexic-Regular.otf
+        - asset: assets/fonts/OpenDyslexic-Bold.otf
+          weight: 700
+        - asset: assets/fonts/OpenDyslexic-Bold-Italic.otf
+          weight: 700
+          style: italic
+    - family: Fira Mono
+      fonts:
+        - asset: assets/fonts/FiraMono-Regular.ttf
+        - asset: assets/fonts/FiraMono-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/FiraMono-Bold.ttf
+          weight: 700
+    - family: Fira Sans
+      fonts:
+        - asset: assets/fonts/FiraSans-Regular.ttf
+        - asset: assets/fonts/FiraSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/FiraSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/FiraSans-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/FiraSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/FiraSans-BoldItalic.ttf
+          weight: 700
+          style: italic
+    - family: Fira Sans Extra Condensed
+      fonts:
+        - asset: assets/fonts/FiraSansExtraCondensed-Regular.ttf
 
 flutter_intl:
   enabled: true

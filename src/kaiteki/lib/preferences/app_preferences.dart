@@ -5,6 +5,14 @@ import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
+enum InterfaceFont {
+  system,
+  roboto,
+  kaiteki,
+  openDyslexic,
+  atkinsonHyperlegible,
+}
+
 final locale = createSettingProvider<String?>(
   key: "locale",
   initialValue: null,
@@ -95,5 +103,12 @@ final coloredPostVisibilities = createSettingProvider<bool>(
 final underlineLinks = createSettingProvider<bool>(
   key: "underlineLinks",
   initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
+final interfaceFont = createEnumSettingProvider<InterfaceFont>(
+  key: "interfaceFont",
+  initialValue: InterfaceFont.kaiteki,
+  values: InterfaceFont.values,
   provider: sharedPreferencesProvider,
 );
