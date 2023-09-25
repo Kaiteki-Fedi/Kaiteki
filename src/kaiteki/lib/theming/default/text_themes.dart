@@ -4,7 +4,6 @@ import "package:flutter/material.dart";
 TextTheme getTextTheme(TextTheme base) {
   final titleLarge = base.titleLarge ?? const TextStyle();
   final titleMedium = base.titleMedium ?? const TextStyle();
-  final titleSmall = base.titleSmall ?? const TextStyle();
 
   final labelMedium = base.labelMedium ?? const TextStyle();
   final labelSmall = base.labelSmall ?? const TextStyle();
@@ -17,10 +16,6 @@ TextTheme getTextTheme(TextTheme base) {
       fontWeight: FontWeight.w700,
     ),
     titleMedium: titleMedium.copyWith(
-      fontFamily: "Quicksand",
-      fontWeight: FontWeight.w700,
-    ),
-    titleSmall: titleSmall.copyWith(
       fontFamily: "Quicksand",
       fontWeight: FontWeight.w700,
     ),

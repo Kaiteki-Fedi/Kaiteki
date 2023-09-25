@@ -22,12 +22,12 @@ class UserDisplayNameWidget extends ConsumerWidget {
       user,
       orientation == Axis.vertical,
     );
-    const primaryTextStyle = TextStyle(fontWeight: FontWeight.w600);
+    final primaryTextStyle = Theme.of(context).textTheme.titleSmall;
     final textSpacing = !content.separate ? 0.0 : 6.0;
 
     final secondaryText = content.secondary;
     final secondaryColor =
-        Theme.of(context).getEmphasisColor(EmphasisColor.medium);
+        Theme.of(context).getEmphasisColor(EmphasisColor.disabled);
     final secondaryTextStyle =
         this.secondaryTextStyle?.copyWith(color: secondaryColor) ??
             secondaryColor.textStyle;
