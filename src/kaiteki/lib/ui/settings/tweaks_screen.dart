@@ -5,13 +5,13 @@ import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
-class PedantryScreen extends StatelessWidget {
-  const PedantryScreen({super.key});
+class TweaksScreen extends StatelessWidget {
+  const TweaksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.settingsPedantry)),
+      appBar: AppBar(title: Text(context.l10n.settingsTweaks)),
       body: SettingsContainer(
         child: Column(
           children: [
