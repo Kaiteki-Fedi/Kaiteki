@@ -87,15 +87,15 @@ class CountButton extends ConsumerWidget {
       onLongPress: enabled ? onLongPress : null,
       focusNode: focusNode,
       style: TextButton.styleFrom(
-        alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.all(8.0),
-        shape: const StadiumBorder(),
-        enableFeedback: enabled,
-        minimumSize: Size(
-          (expanded && showCount) ? 88.0 : 0.0,
-          36.0,
-        ),
-      ),
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.all(8.0),
+          shape: const StadiumBorder(),
+          enableFeedback: enabled,
+          minimumSize: Size(
+            (expanded && showCount) ? 88.0 : 0.0,
+            40.0,
+          ),
+          visualDensity: VisualDensity.comfortable),
       child: child,
     );
   }
