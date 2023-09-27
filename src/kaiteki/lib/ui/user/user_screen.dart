@@ -44,8 +44,13 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   @override
   void initState() {
     super.initState();
-    _future = widget.user.nullTransform(Future.value) ??
-        ref.read(adapterProvider).getUserById(widget.id);
+
+    try {
+      _future = widget.user.nullTransform(Future.value) ??
+          ref.read(adapterProvider).getUserById(widget.id);
+    } catch (e, s) {
+      _future = Future.error(e, s);
+    }
     _showReplies = StateProvider((_) => true);
   }
 
