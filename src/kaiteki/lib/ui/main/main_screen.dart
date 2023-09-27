@@ -317,7 +317,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
                 body,
                 tabItems,
               ),
-        bottomNavigationBar: isCompact
+        bottomNavigationBar: isCompact && tabItems.length >= 2
             ? MainScreenNavigationBar(
                 tabs: tabItems,
                 currentIndex: _tabs.indexOf(_currentTab),
