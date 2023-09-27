@@ -27,6 +27,7 @@ import "package:kaiteki_core/kaiteki_core.dart";
 
 import "attachment_text_dialog.dart";
 import "language_switcher.dart";
+import "poll_dialog.dart";
 import "post_preview.dart";
 
 class ComposeScreen extends ConsumerStatefulWidget {
@@ -46,6 +47,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   var _enableSubject = false;
   var _showPreview = false;
   Formatting? _formatting;
+  Poll? _poll;
   late String _language;
 
   // FIXME(Craftplacer): Strings for PostForm's attach menu are not localized.
@@ -58,7 +60,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     (
       label: "Create poll",
       icon: Icons.poll_rounded,
-      onPressed: null,
+      onPressed: _onCreatePoll,
     )
   ];
 
@@ -83,6 +85,13 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     }
 
     return null;
+  }
+
+  Future<void> _onCreatePoll() async {
+    await showDialog(
+      context: context,
+      builder: (_) => const PollDialog(),
+    );
   }
 
   bool get isEmpty {
