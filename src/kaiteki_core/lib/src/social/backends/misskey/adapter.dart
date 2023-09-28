@@ -411,8 +411,12 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       throw UnsupportedError('Misskey does not support clearing notifications');
 
   @override
-  Future<List<Notification>> getNotifications() async {
-    final notifications = await client.getNotifications();
+  Future<List<Notification>> getNotifications(
+      {String? sinceId, String? untilId}) async {
+    final notifications = await client.getNotifications(
+      sinceId: sinceId,
+      untilId: untilId,
+    );
     return notifications.map((n) => n.toKaiteki(instance)).toList();
   }
 

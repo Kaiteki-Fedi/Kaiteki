@@ -375,7 +375,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<List<Notification>> getNotifications() async {
+  Future<List<Notification>> getNotifications({
+    String? sinceId,
+    String? untilId,
+  }) async {
     final Marker? marker;
 
     if (this is MastodonAdapter) {
@@ -386,7 +389,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       marker = null;
     }
 
-    final notifications = await client.getNotifications();
+    final notifications = await client.getNotifications(
+      sinceId: sinceId,
+      maxId: untilId,
+    );
     return notifications.map((e) => e.toKaiteki(instance, marker)).toList();
   }
 

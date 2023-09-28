@@ -228,7 +228,7 @@ extension KaitekiMisskeyNotificationExtension on misskey.Notification {
       type: misskeyNotificationTypeRosetta[type]!,
       user: user?.toKaiteki(localHost),
       post: note?.toKaiteki(localHost),
-      unread: isRead ?? false,
+      unread: !(isRead ?? true),
     );
   }
 }

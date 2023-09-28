@@ -1,11 +1,10 @@
-import "package:animations/animations.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart" hide Notification;
+import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
-import "package:kaiteki/ui/animation_functions.dart" as animations;
+import "package:kaiteki/model/pagination_state.dart";
 import "package:kaiteki/ui/notification_widget.dart";
-import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -19,6 +18,39 @@ class NotificationsPage extends ConsumerStatefulWidget {
 }
 
 class _NotificationsPageState extends ConsumerState<NotificationsPage> {
+  late final _controller =
+      PagingController<String?, Notification>(firstPageKey: null);
+  ProviderSubscription<AsyncValue<PaginationState<Notification>>>?
+      _notifications;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addPageRequestListener((pageKey) async {
+      final key = ref.read(currentAccountProvider)!.key;
+      final provider = notificationServiceProvider(key);
+      await ref.read(provider.notifier).loadMore();
+    });
+    ref.listenManual(
+      currentAccountProvider,
+      (previous, next) {
+        final provider = NotificationServiceProvider(next!.key);
+
+        _notifications?.close();
+        _notifications = ref.listenManual(
+          provider,
+          (_, e) => _controller.value = e.getPagingState(
+            "",
+            intercept: groupNotifications,
+          ),
+          fireImmediately: true,
+        );
+      },
+      fireImmediately: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(currentAccountProvider);
@@ -37,32 +69,53 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 
     final notifications = notificationServiceProvider(account.key);
 
+    final hasUnread = ref
+        .watch(notifications)
+        .valueOrNull
+        ?.items
+        .any((e) => e.unread == true);
     return RefreshIndicator(
-      onRefresh: () => ref.read(notifications.notifier).refresh(),
-      child: PageTransitionSwitcher(
-        transitionBuilder: animations.fadeThrough,
-        child: ref.watch(notifications).when(
-              data: (data) {
-                final hasUnread = data.any((e) => e.unread == true);
-                final grouped = groupNotifications(data);
-                return Stack(
-                  children: [
-                    _buildList(grouped, true),
-                    if (hasUnread)
-                      const Positioned(
-                        bottom: kFloatingActionButtonMargin,
-                        left: kFloatingActionButtonMargin,
-                        right: kFloatingActionButtonMargin,
-                        child: Align(
-                          child: _MarkAsReadFAB(),
+      onRefresh: () async => await ref.refresh(notifications),
+      child: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(4.0),
+                sliver: PagedSliverList<String?, Notification>(
+                  pagingController: _controller,
+                  builderDelegate: PagedChildBuilderDelegate(
+                    itemBuilder: (context, notification, i) {
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: NotificationWidget(notification),
                         ),
-                      ),
-                  ],
-                );
-              },
-              error: (e, s) => Center(child: ErrorLandingWidget((e, s))),
-              loading: () => centeredCircularProgressIndicator,
+                      );
+                    },
+                    firstPageErrorIndicatorBuilder: (_) {
+                      return Center(
+                        child: ErrorLandingWidget(
+                          _controller.error as TraceableError,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (hasUnread == true)
+            const Positioned(
+              bottom: kFloatingActionButtonMargin,
+              left: kFloatingActionButtonMargin,
+              right: kFloatingActionButtonMargin,
+              child: Align(
+                child: _MarkAsReadFAB(),
+              ),
             ),
+        ],
       ),
     );
   }
@@ -86,7 +139,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         .map((kv) {
           final notifications = kv.value;
 
-          if (notifications.length <= 2) return kv.value.toList();
+          if (notifications.length < 2) return kv.value.toList();
 
           return [GroupedNotification(notifications.toList())];
         })
@@ -101,16 +154,17 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         EdgeInsets.only(bottom: kFloatingActionButtonMargin * 2 + 56);
 
     return ListView.separated(
-        itemBuilder: (context, i) {
-          return Card(
-            clipBehavior: Clip.antiAlias,
-            child: NotificationWidget(data.elementAt(i)),
-          );
-        },
-        separatorBuilder: (context, _) => const SizedBox(height: 8),
-        itemCount: data.length,
-        padding: const EdgeInsets.all(16)
-            .add(addFABPadding ? fabPadding : EdgeInsets.zero));
+      itemBuilder: (context, i) {
+        return Card(
+          clipBehavior: Clip.antiAlias,
+          child: NotificationWidget(data.elementAt(i)),
+        );
+      },
+      separatorBuilder: (context, _) => const SizedBox(height: 8),
+      itemCount: data.length,
+      padding: const EdgeInsets.all(16)
+          .add(addFABPadding ? fabPadding : EdgeInsets.zero),
+    );
   }
 }
 
