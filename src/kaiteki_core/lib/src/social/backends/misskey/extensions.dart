@@ -197,6 +197,9 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
       );
     }
 
+    final renote = this.renote.nullTransform((n) => n.toKaiteki(localHost));
+    final isQuote = text != null || fileIds?.isNotEmpty == true || poll != null;
+
     return Post(
       source: this,
       postedAt: createdAt,
@@ -206,7 +209,8 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
       emojis: mappedEmoji,
       reactions: reactions.entries.map(convertReaction).toList(),
       replyTo: replyTo,
-      repeatOf: renote.nullTransform((n) => n.toKaiteki(localHost)),
+      repeatOf: isQuote ? null : renote,
+      quotedPost: isQuote ? renote : null,
       id: id,
       visibility: misskeyVisibilityRosetta.getRight(visibility),
       attachments: files?.map((f) => f.toKaiteki()).toList(),
