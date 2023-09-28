@@ -660,7 +660,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
       return adapter.postStatus(draft.copyWith(attachments: attachments));
     }
 
-    navigator.maybePop();
+    navigator.pop();
 
     var snackBarController = messenger.showSnackBar(
       SnackBar(content: Text(l10n.postSubmissionSending)),
