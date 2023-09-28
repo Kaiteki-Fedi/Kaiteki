@@ -513,12 +513,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    await accountManager.add(account);
-
     if (widget.popOnly) {
       router.pop(account);
       return;
     }
+
+    await accountManager.add(account);
     router.goNamed("home", pathParameters: account.key.routerParams);
   }
 
