@@ -1,4 +1,5 @@
 import "package:flutter/material.dart" hide Notification;
+import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
@@ -7,142 +8,202 @@ import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 
-class NotificationWidget extends ConsumerWidget {
+class NotificationWidget extends ConsumerStatefulWidget {
   final Notification notification;
 
   const NotificationWidget(this.notification, {super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NotificationWidget> createState() => _NotificationWidgetState();
+}
+
+class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
     final color = _getColor(context);
+    final notification = widget.notification;
     final icon = _getNotificationIcon(notification.type);
     final post = notification.post;
     final user = notification.user;
     final unreadPaint = Paint()..color = Theme.of(context).colorScheme.error;
-    final relativeTime = DateTime.now()
-        .difference(notification.createdAt)
-        .toStringHuman(context: context);
-    return InkWell(
-      onTap: () => _onTap(context, ref),
-      child: Stack(
-        children: [
-          if (notification.unread == true)
-            Positioned(
-              top: 0,
-              right: 0,
-              width: 8,
-              height: 8,
-              child: CustomPaint(
-                painter: CornerPainter(Corner.topRight, unreadPaint),
-              ),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: SizedBox.square(
-                    dimension: 24,
-                    child: Icon(
-                      icon ?? Icons.notifications_rounded,
-                      size: 14,
-                      color: ThemeData.estimateBrightnessForColor(color)
-                          .inverted
-                          .getColor(),
-                    ),
+
+    final showContent = post != null && post.content != null && !_expanded;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          onTap: () => _onTap(context, ref),
+          child: Stack(
+            children: [
+              if (notification.unread == true)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  width: 8,
+                  height: 8,
+                  child: CustomPaint(
+                    painter: CornerPainter(Corner.topRight, unreadPaint),
                   ),
                 ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      RepaintBoundary(
-                        child: Text.rich(
-                          TextSpan(
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: color,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: SizedBox.square(
+                            dimension: 24,
+                            child: Icon(
+                              icon ?? Icons.notifications_rounded,
+                              size: 14,
+                              color: ThemeData.estimateBrightnessForColor(color)
+                                  .inverted
+                                  .getColor(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              if (user != null)
-                                TextSpan(
-                                  children: [
-                                    user.renderDisplayName(context, ref),
-                                    if (notification is GroupedNotification)
-                                      TextSpan(
-                                        text:
-                                            " and ${(notification as GroupedNotification).notifications.length - 1} others",
-                                      ),
-                                  ],
-                                  style: Theme.of(context).textTheme.titleSmall,
+                              RepaintBoundary(
+                                child: Text.rich(
+                                  buildTitle(context, notification),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
                                 ),
-                              TextSpan(
-                                text: _getTitle(context, notification.type),
                               ),
-                              TextSpan(
-                                text: " • $relativeTime",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurfaceVariant,
-                                    ),
-                              )
+                              if (showContent) ...[
+                                const SizedBox(height: 4),
+                                Text.rich(
+                                  post.renderContent(context, ref),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
                             ],
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      if (post != null && post.content != null)
-                        Text.rich(
+                        const SizedBox(width: 14),
+                        if (user != null &&
+                            !(notification is GroupedNotification && _expanded))
+                          AvatarWidget(
+                            user,
+                            size: 40,
+                            onTap: () => context.showUser(user, ref),
+                          ),
+                        if (notification is GroupedNotification ||
+                            post != null) ...[
+                          const SizedBox(width: 16),
+                          _ExpandIndicator(
+                            expanded: _expanded,
+                            text: notification
+                                .safeCast<GroupedNotification>()
+                                .nullTransform(
+                                  (e) =>
+                                      Text(e.notifications.length.toString()),
+                                ),
+                            onTap: () => setState(() => _expanded = !_expanded),
+                          ),
+                        ],
+                      ],
+                    ),
+                    if (post != null &&
+                        _expanded &&
+                        notification is! GroupedNotification) ...[
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 38.0),
+                        child: Text.rich(
                           post.renderContent(context, ref),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
-                      // if (notification.type == NotificationType.followRequest)
-                      //   Row(
-                      //     children: [
-                      //       OutlinedButton.icon(
-                      //         onPressed: null,
-                      //         icon: const Icon(Icons.check_rounded),
-                      //         label: const Text("Accept"),
-                      //       ),
-                      //       const SizedBox(width: 6),
-                      //       TextButton.icon(
-                      //         onPressed: null,
-                      //         icon: const Icon(Icons.close_rounded),
-                      //         label: const Text("Reject"),
-                      //       ),
-                      //     ],
-                      //   ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Stack(
-                  children: [
-                    if (user != null)
-                      AvatarWidget(user, size: 40)
-                    else
-                      const SizedBox(width: 40),
+                      ),
+                      const SizedBox(height: 12),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 26.0),
+                        child: Wrap(
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                context.pushNamed(
+                                  "compose",
+                                  pathParameters: ref.accountRouterParams,
+                                  extra: post,
+                                );
+                              },
+                              child: Text(context.l10n.replyButtonLabel),
+                            )
+                          ],
+                        ),
+                      ),
+                    ]
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
+        if (_expanded && notification is GroupedNotification) ...[
+          const Divider(),
+          ...notification.notifications
+              .map<Widget>(NotificationWidget.new)
+              .intersperse(const Divider()),
         ],
-      ),
+      ],
+    );
+  }
+
+  TextSpan buildTitle(BuildContext context, Notification notification) {
+    final user = notification.user;
+    final relativeTime = DateTime.now()
+        .difference(notification.createdAt)
+        .toStringHuman(context: context);
+
+    final onSurfaceVariant = Theme.of(context).colorScheme.onSurfaceVariant;
+    final bodySmall = Theme.of(context).textTheme.bodySmall;
+    final titleSmall = Theme.of(context).textTheme.titleSmall;
+
+    return TextSpan(
+      children: [
+        if (user != null)
+          TextSpan(
+            children: [
+              user.renderDisplayName(context, ref),
+              if (notification is GroupedNotification)
+                TextSpan(
+                  text: " and ${notification.notifications.length - 1} others",
+                ),
+            ],
+            style: titleSmall,
+          ),
+        TextSpan(
+          text: _getTitle(context, notification.type),
+        ),
+        TextSpan(
+          text: " • $relativeTime",
+          style: bodySmall?.copyWith(color: onSurfaceVariant),
+        )
+      ],
     );
   }
 
@@ -174,7 +235,7 @@ class NotificationWidget extends ConsumerWidget {
 
     final colorScheme = theme.colorScheme;
 
-    switch (notification.type) {
+    switch (widget.notification.type) {
       case NotificationType.liked:
         return ktkColors?.favoriteColor ?? defaults.favoriteColor;
 
@@ -229,27 +290,27 @@ class NotificationWidget extends ConsumerWidget {
   }
 
   void _onTap(BuildContext context, WidgetRef ref) {
-    if (notification.post != null) {
+    if (widget.notification.post != null) {
       final accountKey = ref.read(currentAccountProvider)!.key;
       context.pushNamed(
         "post",
-        extra: notification.post,
+        extra: widget.notification.post,
         pathParameters: {
           ...accountKey.routerParams,
-          "id": notification.post!.id,
+          "id": widget.notification.post!.id,
         },
       );
       return;
     }
 
-    if (notification.user != null) {
+    if (widget.notification.user != null) {
       final accountKey = ref.read(currentAccountProvider)!.key;
       context.pushNamed(
         "user",
-        extra: notification.user,
+        extra: widget.notification.user,
         pathParameters: {
           ...accountKey.routerParams,
-          "id": notification.user!.id,
+          "id": widget.notification.user!.id,
         },
       );
       return;
@@ -259,6 +320,55 @@ class NotificationWidget extends ConsumerWidget {
       const SnackBar(
         content: Text(
           "This notification doesn't have a post or user attached to it.",
+        ),
+      ),
+    );
+  }
+}
+
+class _ExpandIndicator extends StatelessWidget {
+  final Widget? text;
+  final VoidCallback? onTap;
+  final bool expanded;
+
+  const _ExpandIndicator({
+    super.key,
+    this.text,
+    this.onTap,
+    this.expanded = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      shape: const StadiumBorder(),
+      color: Theme.of(context).colorScheme.surface,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          height: 24,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Row(
+              children: [
+                if (text != null) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: text,
+                  ),
+                  const SizedBox(width: 2),
+                ],
+                Icon(
+                  expanded
+                      ? Icons.expand_less_rounded
+                      : Icons.expand_more_rounded,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
