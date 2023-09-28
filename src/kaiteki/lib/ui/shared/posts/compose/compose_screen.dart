@@ -644,6 +644,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     final l10n = context.l10n;
     final goRouter = GoRouter.of(context);
     final adapter = ref.read(adapterProvider);
+    final routeParams = ref.accountRouterParams;
 
     // pin state
     final draft = postDraft;
@@ -675,7 +676,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
             onPressed: () {
               goRouter.pushNamed(
                 "post",
-                pathParameters: {...ref.accountRouterParams, "id": post.id},
+                pathParameters: {...routeParams, "id": post.id},
                 extra: post,
               );
               messenger.hideCurrentSnackBar();
