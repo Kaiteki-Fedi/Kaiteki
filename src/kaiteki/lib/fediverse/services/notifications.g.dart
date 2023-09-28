@@ -7,7 +7,7 @@ part of 'notifications.dart';
 // **************************************************************************
 
 String _$notificationServiceHash() =>
-    r'b33cfa5639f5f400279558977435f3921518b47b';
+    r'de2a2f7c2575a747f8446b1a7a38b587c391e1be';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$NotificationService
-    extends BuildlessAsyncNotifier<List<Notification>> {
+    extends BuildlessAsyncNotifier<PaginationState<Notification>> {
   late final AccountKey key;
 
-  FutureOr<List<Notification>> build(
+  FutureOr<PaginationState<Notification>> build(
     AccountKey key,
   );
 }
@@ -44,7 +44,8 @@ abstract class _$NotificationService
 const notificationServiceProvider = NotificationServiceFamily();
 
 /// See also [NotificationService].
-class NotificationServiceFamily extends Family<AsyncValue<List<Notification>>> {
+class NotificationServiceFamily
+    extends Family<AsyncValue<PaginationState<Notification>>> {
   /// See also [NotificationService].
   const NotificationServiceFamily();
 
@@ -82,8 +83,8 @@ class NotificationServiceFamily extends Family<AsyncValue<List<Notification>>> {
 }
 
 /// See also [NotificationService].
-class NotificationServiceProvider
-    extends AsyncNotifierProviderImpl<NotificationService, List<Notification>> {
+class NotificationServiceProvider extends AsyncNotifierProviderImpl<
+    NotificationService, PaginationState<Notification>> {
   /// See also [NotificationService].
   NotificationServiceProvider(
     AccountKey key,
@@ -114,7 +115,7 @@ class NotificationServiceProvider
   final AccountKey key;
 
   @override
-  FutureOr<List<Notification>> runNotifierBuild(
+  FutureOr<PaginationState<Notification>> runNotifierBuild(
     covariant NotificationService notifier,
   ) {
     return notifier.build(
@@ -139,8 +140,8 @@ class NotificationServiceProvider
   }
 
   @override
-  AsyncNotifierProviderElement<NotificationService, List<Notification>>
-      createElement() {
+  AsyncNotifierProviderElement<NotificationService,
+      PaginationState<Notification>> createElement() {
     return _NotificationServiceProviderElement(this);
   }
 
@@ -158,13 +159,15 @@ class NotificationServiceProvider
   }
 }
 
-mixin NotificationServiceRef on AsyncNotifierProviderRef<List<Notification>> {
+mixin NotificationServiceRef
+    on AsyncNotifierProviderRef<PaginationState<Notification>> {
   /// The parameter `key` of this provider.
   AccountKey get key;
 }
 
 class _NotificationServiceProviderElement extends AsyncNotifierProviderElement<
-    NotificationService, List<Notification>> with NotificationServiceRef {
+    NotificationService,
+    PaginationState<Notification>> with NotificationServiceRef {
   _NotificationServiceProviderElement(super.provider);
 
   @override

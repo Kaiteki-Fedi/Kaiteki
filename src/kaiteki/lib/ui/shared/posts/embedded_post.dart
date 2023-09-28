@@ -16,6 +16,11 @@ class EmbeddedPostWidget extends ConsumerWidget {
     return Card(
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Theme.of(context).colorScheme.outline),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
       child: InkWell(
         onTap: () => context.showPost(post, ref),
         child: Padding(

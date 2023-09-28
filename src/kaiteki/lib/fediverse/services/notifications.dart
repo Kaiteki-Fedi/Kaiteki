@@ -8,6 +8,7 @@ import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:http/http.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/pagination_state.dart";
 import "package:kaiteki/utils/image.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:logging/logging.dart";
@@ -21,11 +22,6 @@ class NotificationService extends _$NotificationService {
 
   late NotificationSupport _backend;
 
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(_backend.getNotifications);
-  }
-
   Future<void> markAllAsRead() async {
     state = const AsyncLoading();
     try {
@@ -34,18 +30,45 @@ class NotificationService extends _$NotificationService {
       _logger.warning("Failed to mark all notifications as read", e, s);
       rethrow;
     } finally {
-      state = await AsyncValue.guard(_backend.getNotifications);
+      state = await AsyncValue.guard(() async {
+        final notifications = await _backend.getNotifications();
+        return PaginationState(
+          notifications,
+          canPaginateFurther: notifications.isNotEmpty,
+        );
+      });
     }
   }
 
   @override
-  FutureOr<List<Notification>> build(AccountKey key) async {
+  FutureOr<PaginationState<Notification>> build(AccountKey key) async {
     final account = ref
         .read(accountManagerProvider)
         .accounts
         .firstWhere((a) => a.key == key);
     _backend = account.adapter as NotificationSupport;
-    return await _backend.getNotifications();
+
+    final notifications = await _backend.getNotifications();
+    return PaginationState(
+      notifications,
+      canPaginateFurther: notifications.isNotEmpty,
+    );
+  }
+
+  Future<void> loadMore() async {
+    if (state is! AsyncData) return;
+
+    final data = state.value!.items;
+
+    state = await AsyncValue.guard(() async {
+      final newNotifications = await _backend.getNotifications(
+        untilId: data.lastOrNull?.id,
+      );
+      return PaginationState(
+        data + newNotifications,
+        canPaginateFurther: newNotifications.isNotEmpty,
+      );
+    });
   }
 }
 
@@ -105,7 +128,8 @@ class NativeNotificationPoster {
           data: await toUint8List(image),
           height: image.height,
           width: image.width,
-          channels: 4, // The icon has an alpha channel
+          channels: 4,
+          // The icon has an alpha channel
           hasAlpha: true,
         ),
       );

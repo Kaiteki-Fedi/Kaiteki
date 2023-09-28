@@ -319,6 +319,7 @@ extension KaitekiMastodonStatusExtension on mastodon.Status {
       ),
       poll: poll.nullTransform((e) => e.toKaiteki()),
       embeds: card.nullTransform((e) => [e.toKaiteki()]) ?? const [],
+      quotedPost: quote.nullTransform((e) => e.toKaiteki(localHost)),
     );
   }
 }

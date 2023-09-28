@@ -43,7 +43,9 @@ final notificationCountProvider = FutureProvider<int?>(
     if (account.adapter is! NotificationSupport) return null;
 
     final notifications = ref.watch(notificationServiceProvider(account.key));
-    return notifications.valueOrNull?.where((n) => n.unread != false).length;
+    return notifications.valueOrNull?.items
+        .where((n) => n.unread != false)
+        .length;
   },
   dependencies: [currentAccountProvider, notificationServiceProvider],
 );
@@ -89,7 +91,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
       case TabKind.notifications:
         final account = ref.watch(currentAccountProvider)!.key;
-        return ref.read(notificationServiceProvider(account).notifier).refresh;
+        return () => ref.invalidate(notificationServiceProvider(account));
 
       default:
         return null;
@@ -317,7 +319,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
                 body,
                 tabItems,
               ),
-        bottomNavigationBar: isCompact
+        bottomNavigationBar: isCompact && tabItems.length >= 2
             ? MainScreenNavigationBar(
                 tabs: tabItems,
                 currentIndex: _tabs.indexOf(_currentTab),
@@ -369,9 +371,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
     final accountKey = ref.read(currentAccountProvider)!.key;
     switch (_currentTab) {
       case TabKind.notifications:
-        final notifier =
-            ref.read(notificationServiceProvider(accountKey).notifier);
-        await notifier.refresh();
+        ref.invalidate(notificationServiceProvider(accountKey));
         break;
 
       case TabKind.home:
