@@ -60,7 +60,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     (
       label: "Create poll",
       icon: Icons.poll_rounded,
-      onPressed: _onCreatePoll,
+      onPressed: _onChangePoll,
     )
   ];
 
@@ -87,11 +87,15 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     return null;
   }
 
-  Future<void> _onCreatePoll() async {
-    await showDialog(
+  Future<void> _onChangePoll() async {
+    final poll = await showDialog(
       context: context,
-      builder: (_) => const PollDialog(),
+      builder: (_) => PollDialog(poll: _poll),
     );
+
+    if (poll == null) return;
+
+    setState(() => _poll = poll);
   }
 
   bool get isEmpty {
@@ -226,6 +230,19 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
               maxLengthEnforcement: MaxLengthEnforcement.none,
             ),
           ),
+          if (_poll != null) ...[
+            const Divider(height: 16 + 1),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: _onChangePoll,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DraftPollWidget(_poll!),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -281,7 +298,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Material(
                         color: backgroundColor,
-                        borderRadius: Shapes.medium,
+                        shape: Shapes.medium,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisSize: MainAxisSize.min,

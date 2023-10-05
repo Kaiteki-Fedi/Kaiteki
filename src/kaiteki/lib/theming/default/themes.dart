@@ -36,13 +36,8 @@ extension ThemeDataExtensions on ThemeData {
         shape: const RoundedRectangleBorder(borderRadius: borderRadius),
         behavior: SnackBarBehavior.floating,
       ),
-      dialogTheme: useMaterial3
-          ? dialogTheme.copyWith(
-              shape: const RoundedRectangleBorder(
-                borderRadius: Shapes.large,
-              ),
-            )
-          : null,
+      dialogTheme:
+          useMaterial3 ? dialogTheme.copyWith(shape: Shapes.large) : null,
       bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
         showSelectedLabels: true,
         showUnselectedLabels: true,
