@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 /// Builds Kaiteki's default text theme.
 TextTheme getTextTheme(TextTheme base) {
   final titleLarge = base.titleLarge ?? const TextStyle();
-  final titleMedium = base.titleMedium ?? const TextStyle();
 
   final labelMedium = base.labelMedium ?? const TextStyle();
   final labelSmall = base.labelSmall ?? const TextStyle();
@@ -12,10 +11,6 @@ TextTheme getTextTheme(TextTheme base) {
   var textTheme = base.apply(fontFamily: "Fira Sans");
   return textTheme.copyWith(
     titleLarge: titleLarge.copyWith(
-      fontFamily: "Quicksand",
-      fontWeight: FontWeight.w700,
-    ),
-    titleMedium: titleMedium.copyWith(
       fontFamily: "Quicksand",
       fontWeight: FontWeight.w700,
     ),
