@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 0.0.1+1
 
 environment:
-  sdk: '>=3.1.0-81.0.dev <4.0.0'
+  sdk: '>=3.3.0-2.0.dev <4.0.0'
 
 dependencies:
   anchor_scroll_controller: ^0.4.1
@@ -26,7 +26,7 @@ dependencies:
     sdk: flutter
   flutter_blurhash:
     git: https://github.com/Craftplacer/flutter_blurhash.git
-  flutter_local_notifications: ^15.1.1
+  flutter_local_notifications: ^16.1.0
   flutter_localizations:
     sdk: flutter
   flutter_native_splash: ^2.2.8
@@ -62,7 +62,7 @@ dependencies:
   qr_bar_code_scanner_dialog: ^0.0.5
   qr_flutter: ^4.0.0
   riverpod_annotation: ^2.0.4
-  share_plus: ^7.1.0
+  share_plus: ^8.0.0
   shared_preferences: ^2.0.5
   shelf: ^1.3.0
   state_notifier: ^1.0.0

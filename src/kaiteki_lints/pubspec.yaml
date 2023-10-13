@@ -2,7 +2,7 @@ name: kaiteki_lints
 version: 0.0.1
 
 environment:
-  sdk: '>=3.1.0-81.0.dev <4.0.0'
+  sdk: '>=3.3.0-2.0.dev <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:

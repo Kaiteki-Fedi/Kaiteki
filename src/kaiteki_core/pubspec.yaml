@@ -5,7 +5,7 @@ repository: https://github.com/Kaiteki-Fedi/kaiteki
 publish_to: none
 
 environment:
-  sdk: '>=3.1.0-81.0.dev <4.0.0'
+  sdk: '>=3.3.0-2.0.dev <4.0.0'
 
 dependencies:
   equatable: ^2.0.5
@@ -14,7 +14,7 @@ dependencies:
   http: ^1.0.0
   intl: ^0.18.1
   json_annotation: ^4.8.1
-  uuid: ^3.0.6
+  uuid: ^3.0.7
   oauth1:
     git: https://github.com/Kaiteki-Fedi/dart-oauth1.git
   logging: ^1.2.0
