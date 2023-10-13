@@ -22,5 +22,9 @@ abstract class AdapterCapabilities {
   /// Specifies whether the adapter supports submitting posts with a language
   bool get supportsLanguageTagging => false;
 
+  /// Specifies whether the adapter supports submitting posts with a poll
+  /// without a duration.
+  bool get supportsIndefinitePolls => false;
+
   const AdapterCapabilities();
 }

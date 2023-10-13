@@ -220,6 +220,21 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
         repeatCount: renoteCount,
         replyCount: repliesCount,
       ),
+      poll: poll?.toKaiteki(),
+    );
+  }
+}
+
+extension KaitekiMisskeyPollExtension on misskey.Poll {
+  Poll toKaiteki() {
+    final expiresAt = this.expiresAt;
+    return Poll(
+      source: this,
+      options: choices.map((e) => PollOption(e.text, e.votes)).toList(),
+      endsAt: expiresAt,
+      voteCount: choices.map((e) => e.votes).sum,
+      allowMultipleChoices: multiple,
+      hasEnded: expiresAt == null ? false : DateTime.now().isBefore(expiresAt),
     );
   }
 }

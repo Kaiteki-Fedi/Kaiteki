@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:fediverse_objects/mastodon.dart' hide List;
 import 'package:fediverse_objects/mastodon.dart' as mastodon show List;
+import 'package:fediverse_objects/mastodon.dart' hide List;
 import 'package:fediverse_objects/mastodon_v1.dart' as v1;
 import 'package:http/http.dart' show Response;
 import 'package:kaiteki_core/http.dart';
@@ -238,6 +238,12 @@ class MastodonClient {
     String? contentType = 'text/plain',
     List<String> mediaIds = const [],
     String? language,
+    ({
+      int expiresIn,
+      bool multiple,
+      List<String> options,
+      bool hideTotals,
+    })? poll,
   }) async {
     return client
         .sendRequest(
@@ -253,6 +259,13 @@ class MastodonClient {
             'media_ids': mediaIds,
             'sensitive': sensitive,
             'language': language,
+            if (poll != null)
+              'poll': {
+                'expires_in': poll.expiresIn,
+                'multiple': poll.multiple,
+                'options': poll.options,
+                'hide_totals': poll.hideTotals,
+              },
           }.jsonBody,
         )
         .then(Status.fromJson.fromResponse);

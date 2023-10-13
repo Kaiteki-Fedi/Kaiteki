@@ -18,6 +18,7 @@ import "package:kaiteki/ui/shared/enum_icon_button.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_tray.dart";
 import "package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/toggle_subject_button.dart";
+import "package:kaiteki/ui/shared/posts/poll_widget.dart";
 import "package:kaiteki/ui/shared/visibility_icon.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
@@ -47,7 +48,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   var _enableSubject = false;
   var _showPreview = false;
   Formatting? _formatting;
-  Poll? _poll;
+  PollDraft? _poll;
   late String _language;
 
   // FIXME(Craftplacer): Strings for PostForm's attach menu are not localized.
@@ -102,7 +103,8 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     return (_bodyController.text.isEmpty ||
             _bodyController.text == initialBody) &&
         _subjectController.value.text.isEmpty &&
-        attachments.isEmpty;
+        attachments.isEmpty &&
+        _poll != null;
   }
 
   PostDraft get postDraft {
@@ -117,6 +119,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
       formatting: _formatting ?? Formatting.plainText,
       replyTo: widget.replyTo,
       language: _language,
+      poll: _poll,
     );
   }
 
