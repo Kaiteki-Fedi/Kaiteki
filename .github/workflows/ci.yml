@@ -42,7 +42,7 @@ jobs:
       - name: Generate Localizations
         run: 'flutter gen-l10n'
 
-      - name: Analyzer
+      - name: Analyze
         uses: invertase/github-action-dart-analyzer@v2.0.0
 
       - name: Test
