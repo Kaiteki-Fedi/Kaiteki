@@ -99,7 +99,7 @@ class UserPanel extends ConsumerWidget {
                   TextWithIcon(
                     icon: const Icon(Icons.cake_rounded),
                     text: Text(
-                      context.l10n.userJoinDate(user.details.birthday!),
+                      context.l10n.userBirthDate(user.details.birthday!),
                     ),
                   ),
                 if (user.details.location != null)
