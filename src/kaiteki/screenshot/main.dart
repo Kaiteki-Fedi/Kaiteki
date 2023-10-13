@@ -7,15 +7,17 @@ import "package:flutter/material.dart" hide Visibility;
 import "package:flutter/rendering.dart" show NetworkImage, OffsetLayer, Size;
 import "package:flutter_test/flutter_test.dart";
 import "package:integration_test/integration_test.dart";
-import "package:kaiteki/di.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
-import "package:kaiteki_core/model.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:path/path.dart" as path;
 
-import '../test/utils/bootstrap.dart';
-import '../test/utils/example_data.dart';
+import "../test/utils/bootstrap.dart";
+import "../test/utils/example_data.dart";
+import "adapter.dart";
 
 class ScreenConfig {
   final Size size;
@@ -80,6 +82,20 @@ Future<void> main() async {
   }
 }
 
+Future<List<Account>> getDemoAccounts() async {
+  final adapter = await DemoAdapter.create(ApiType.misskey, "fedi.software");
+  final user = await adapter.getUserById(kKaiteki);
+  return [
+    Account(
+      adapter: adapter,
+      key: const AccountKey(ApiType.misskey, "fedi.software", "Kaiteki"),
+      user: user,
+      clientSecret: null,
+      accountSecret: null,
+    )
+  ];
+}
+
 void takeScreenshots(
   Map<String, Uint8List> map, {
   required Size screenSize,
@@ -91,11 +107,20 @@ void takeScreenshots(
     devicePixelRatio: screenDensity,
   );
 
+  late final List<Account> accounts;
+
+  setUpAll(() async {
+    accounts = await getDemoAccounts();
+  });
+
   testWidgets(
     "Main screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale: locale);
+      final bootstrapper = await Bootstrapper.getInstance(
+        locale: locale,
+        initialAccounts: accounts,
+      );
       runApp(
         bootstrapper.wrap(
           const MainScreen(initialTimeline: TimelineType.federated),
@@ -116,7 +141,10 @@ void takeScreenshots(
     "Compose screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale: locale);
+      final bootstrapper = await Bootstrapper.getInstance(
+        locale: locale,
+        initialAccounts: accounts,
+      );
       runApp(
         bootstrapper.wrap(
           const ComposeScreen(),
@@ -137,14 +165,14 @@ void takeScreenshots(
     "User screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale: locale);
-
-      final adapter = bootstrapper.container.read(adapterProvider);
-      final user = await adapter.getUserById("109349633552584749");
+      final bootstrapper = await Bootstrapper.getInstance(
+        locale: locale,
+        initialAccounts: accounts,
+      );
 
       runApp(
         bootstrapper.wrap(
-          UserScreen.fromUser(user: user!),
+          const UserScreen(id: kKaiteki),
           mediaQueryData: mediaQuery,
         ),
       );

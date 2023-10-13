@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:kaiteki_core/kaiteki_core.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 import 'package:uuid/uuid.dart';
 
 import 'capabilities.dart';
@@ -70,14 +71,15 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   static Future<MisskeyAdapter> create(ApiType type, String instance) async {
     final client = MisskeyClient(instance);
     final meta = await client.getMeta();
-    return MisskeyAdapter._(
+    return MisskeyAdapter(
       type,
       client,
       MisskeyCapabilities.fromMeta(meta),
     );
   }
 
-  MisskeyAdapter._(this.type, this.client, this.capabilities);
+  @protected
+  MisskeyAdapter(this.type, this.client, this.capabilities);
 
   @override
   Future<User> getUser(String username, [String? instance]) async {
