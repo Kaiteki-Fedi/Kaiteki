@@ -48,10 +48,9 @@ class SettingsScreen extends StatelessWidget {
                 title: const SectionHeader("Advanced"),
                 children: [
                   ListTile(
-                    onTap: () => context.push("/settings/pedantry"),
-                    leading: const Icon(Icons.rule_rounded),
-                    title: Text(context.l10n.settingsPedantry),
-                    subtitle: const Text("Settings for power users"),
+                    onTap: () => context.push("/settings/tweaks"),
+                    leading: const Icon(Icons.tune_rounded),
+                    title: Text(context.l10n.settingsTweaks),
                   ),
                   ListTile(
                     leading: const Icon(Icons.science_rounded),

@@ -223,7 +223,7 @@ extension KaitekiMastodonPollExtension on mastodon.Poll {
     return Poll(
       id: id,
       hasEnded: expired,
-      endedAt: expiresAt ?? DateTime.now(),
+      endsAt: expiresAt ?? DateTime.now(),
       source: this,
       options: options.map((o) => PollOption(o.title, o.votesCount)).toList(),
       hasVoted: voted ?? false,
@@ -319,6 +319,7 @@ extension KaitekiMastodonStatusExtension on mastodon.Status {
       ),
       poll: poll.nullTransform((e) => e.toKaiteki()),
       embeds: card.nullTransform((e) => [e.toKaiteki()]) ?? const [],
+      quotedPost: quote.nullTransform((e) => e.toKaiteki(localHost)),
     );
   }
 }

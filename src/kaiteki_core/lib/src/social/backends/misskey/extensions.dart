@@ -197,6 +197,9 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
       );
     }
 
+    final renote = this.renote.nullTransform((n) => n.toKaiteki(localHost));
+    final isQuote = text != null || fileIds?.isNotEmpty == true || poll != null;
+
     return Post(
       source: this,
       postedAt: createdAt,
@@ -206,7 +209,8 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
       emojis: mappedEmoji,
       reactions: reactions.entries.map(convertReaction).toList(),
       replyTo: replyTo,
-      repeatOf: renote.nullTransform((n) => n.toKaiteki(localHost)),
+      repeatOf: isQuote ? null : renote,
+      quotedPost: isQuote ? renote : null,
       id: id,
       visibility: misskeyVisibilityRosetta.getRight(visibility),
       attachments: files?.map((f) => f.toKaiteki()).toList(),
@@ -216,6 +220,21 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
         repeatCount: renoteCount,
         replyCount: repliesCount,
       ),
+      poll: poll?.toKaiteki(),
+    );
+  }
+}
+
+extension KaitekiMisskeyPollExtension on misskey.Poll {
+  Poll toKaiteki() {
+    final expiresAt = this.expiresAt;
+    return Poll(
+      source: this,
+      options: choices.map((e) => PollOption(e.text, e.votes)).toList(),
+      endsAt: expiresAt,
+      voteCount: choices.map((e) => e.votes).sum,
+      allowMultipleChoices: multiple,
+      hasEnded: expiresAt == null ? false : DateTime.now().isBefore(expiresAt),
     );
   }
 }
@@ -228,7 +247,7 @@ extension KaitekiMisskeyNotificationExtension on misskey.Notification {
       type: misskeyNotificationTypeRosetta[type]!,
       user: user?.toKaiteki(localHost),
       post: note?.toKaiteki(localHost),
-      unread: isRead ?? false,
+      unread: !(isRead ?? true),
     );
   }
 }

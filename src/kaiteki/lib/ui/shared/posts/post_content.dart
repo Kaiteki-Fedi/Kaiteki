@@ -77,7 +77,6 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
             ),
           ),
         ],
-        if (post.quotedPost != null) EmbeddedPostWidget(post.quotedPost!),
         if (post.attachments?.isNotEmpty == true) ...[
           const SizedBox(height: 8),
           AttachmentRow(post: post),
@@ -93,6 +92,10 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
               ].joinWithValue(const Divider(height: 1)),
             ),
           ),
+        ],
+        if (post.quotedPost != null) ...[
+          const SizedBox(height: 16),
+          EmbeddedPostWidget(post.quotedPost!),
         ],
       ],
     );

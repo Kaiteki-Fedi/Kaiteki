@@ -11,15 +11,24 @@ class PaginationState<T> {
 }
 
 extension AsyncValueToPagingState<T> on AsyncValue<PaginationState<T>> {
-  PagingState<S, T> getPagingState<S>(S? nextPageKey) {
+  PagingState<S, T> getPagingState<S>(
+    S? nextPageKey, {
+    List<T> Function(List<T> items)? intercept,
+  }) {
+    List<T>? magic(List<T>? items) {
+      if (items == null) return null;
+      if (intercept == null) return items;
+      return intercept(items);
+    }
+
     return map(
       loading: (loading) => PagingState(
         nextPageKey: nextPageKey,
-        itemList: loading.valueOrNull?.items,
+        itemList: magic(loading.valueOrNull?.items),
       ),
       data: (data) => PagingState(
         nextPageKey: data.value.canPaginateFurther ? nextPageKey : null,
-        itemList: data.value.items,
+        itemList: magic(data.value.items),
       ),
       error: (error) => PagingState(error: (error.error, error.stackTrace)),
     );

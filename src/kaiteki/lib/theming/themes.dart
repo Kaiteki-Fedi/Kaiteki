@@ -15,7 +15,7 @@ final birdDarkTheme = ThemeData.from(
     secondary: Color(0xFF1D9BF0),
     onSecondary: Colors.white,
   ),
-).addKaitekiExtensions().copyWith(
+).addKaitekiTheme().copyWith(
       appBarTheme: const AppBarTheme(elevation: 0, color: Color(0xFF15202B)),
       badgeTheme: const BadgeThemeData(
         backgroundColor: Color(0xFF1D9BF0),
@@ -35,7 +35,7 @@ final catLightTheme = ThemeData.from(
     secondary: Color(0xFF86B300),
     onSecondary: Colors.white,
   ),
-).addKaitekiExtensions().copyWith(
+).addKaitekiTheme().copyWith(
       appBarTheme: const AppBarTheme(
         elevation: 0,
         backgroundColor: Color(0xFFF9F9F9),

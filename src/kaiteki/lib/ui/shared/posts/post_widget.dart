@@ -131,15 +131,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   Widget build(BuildContext context) {
     final adapter = ref.watch(adapterProvider);
 
+    final isAuthenticated = adapter.authenticated;
+    final canFavorite = isAuthenticated && adapter is FavoriteSupport;
+    final canReact = isAuthenticated && adapter is ReactionSupport;
     final callbacks = InteractionCallbacks(
-      onReply:
-          adapter.authenticated ? Option.of(_onReply) : const Option.none(),
-      onFavorite:
-          adapter.authenticated ? Option.of(_onFavorite) : const Option.none(),
-      onRepeat:
-          adapter.authenticated ? Option.of(_onRepeat) : const Option.none(),
-      onReact:
-          adapter.authenticated ? Option.of(_onReact) : const Option.none(),
+      onReply: isAuthenticated ? Option.of(_onReply) : const Option.none(),
+      onFavorite: canFavorite ? Option.of(_onFavorite) : const Option.none(),
+      onRepeat: isAuthenticated ? Option.of(_onRepeat) : const Option.none(),
+      onReact: canReact ? Option.of(_onReact) : const Option.none(),
       onShowFavoritees: _onShowFavoritees,
       onShowRepeatees: _onShowRepeatees,
       onShowMenu: _onShowMenu,
@@ -215,10 +214,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final anchor =
         _menuAnchorKey.currentContext!.findRenderObject() as RenderBox;
 
-    final button =
-        _menuButtonFocusNode.context!.findRenderObject() as RenderBox;
+    final buttonContext = _menuButtonFocusNode.context;
 
-    final offset = button.localToGlobal(Offset.zero, ancestor: anchor);
+    assert(buttonContext != null);
+
+    final buttonRenderBox = buttonContext!.findRenderObject() as RenderBox;
+    final offset = buttonRenderBox.localToGlobal(Offset.zero, ancestor: anchor);
 
     _menuController.open(position: offset);
   }

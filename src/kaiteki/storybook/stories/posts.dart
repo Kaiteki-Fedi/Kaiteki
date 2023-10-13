@@ -12,7 +12,7 @@ final poll = Story(
         child: PollWidget(
           Poll(
             hasEnded: false,
-            endedAt: DateTime.now().add(const Duration(days: 1)),
+            endsAt: DateTime.now().add(const Duration(days: 1)),
             allowMultipleChoices: false,
             id: "0",
             voteCount: 15,

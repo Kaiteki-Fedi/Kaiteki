@@ -10,8 +10,8 @@ void main() {
     final instance = await client.getInstance();
     log(
       'We are testing on ${instance.domain} (${instance.title}), an instance '
-      'run by ${instance.contact.account.displayName} '
-      '(@${instance.contact.account.acct}), running Mastodon '
+      'run by ${instance.contact.account?.displayName} '
+      '(@${instance.contact.account?.acct}), running Mastodon '
       '${instance.version}.',
     );
   });

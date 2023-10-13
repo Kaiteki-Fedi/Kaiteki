@@ -7,6 +7,7 @@ import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class AccountSettingsScreen extends ConsumerStatefulWidget {
   const AccountSettingsScreen({super.key});
@@ -109,7 +110,10 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                       color: Theme.of(context).colorScheme.error,
                     ),
                     title: const Text("Delete Account"),
-                    onTap: () => _onDelete(ref),
+                    onTap: ref.watch(currentAccountProvider)?.adapter
+                            is AccountDeletionSupport
+                        ? () => _onDelete(ref)
+                        : null,
                   ),
                   const ListTile(
                     leading: Icon(
@@ -136,7 +140,8 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
       builder: (_) => AccountDeletionDialog(
         account: account,
         onDelete: (password) async {
-          await account.adapter.deleteAccount(password);
+          final deletionInterface = account.adapter as AccountDeletionSupport;
+          await deletionInterface.deleteAccount(password);
           await ref.read(accountManagerProvider.notifier).remove(account);
 
           if (mounted) Navigator.of(context).pop();

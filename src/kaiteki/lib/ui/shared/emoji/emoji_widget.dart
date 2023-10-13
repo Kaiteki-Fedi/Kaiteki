@@ -45,12 +45,14 @@ class EmojiWidget extends StatelessWidget {
       width: square ? size : null,
       height: size,
       fit: BoxFit.contain,
-      // cacheHeight: size.toInt(),
+      cacheHeight: (size * MediaQuery.devicePixelRatioOf(context)).toInt(),
       semanticLabel: "Emoji $emoji",
-      loadingBuilder: (_, widget, event) => event == null //
-          ? widget
-          : PlaceholderEmoji(size: size),
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded || frame != null) return child;
+        return PlaceholderEmoji(size: size);
+      },
       errorBuilder: (_, __, ___) => PlaceholderEmoji(size: size),
+      isAntiAlias: true,
     );
   }
 

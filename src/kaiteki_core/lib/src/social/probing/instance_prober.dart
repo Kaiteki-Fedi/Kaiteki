@@ -197,8 +197,8 @@ Future<bool> _checkInstanceAvailability(String instance) async {
   try {
     final request = Request('GET', uri)..followRedirects = false;
     final response = await request.send();
-    return response.statusCode == HttpStatus.ok ||
-        response.statusCode == HttpStatus.found;
+    return response.statusCode >= HttpStatus.ok &&
+        response.statusCode < HttpStatus.badRequest;
   } catch (e) {
     return false;
   }

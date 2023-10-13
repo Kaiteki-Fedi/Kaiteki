@@ -51,4 +51,7 @@ class MisskeyCapabilities extends AdapterCapabilities
 
   @override
   bool get supportsChat => true;
+
+  @override
+  bool get supportsIndefinitePolls => true;
 }

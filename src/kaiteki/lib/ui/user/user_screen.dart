@@ -6,11 +6,11 @@ import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/timeline/source.dart";
 import "package:kaiteki/ui/shared/timeline/timeline.dart";
 import "package:kaiteki/ui/user/user_panel.dart";
-import "package:kaiteki/ui/user/user_sliver.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
@@ -44,8 +44,13 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   @override
   void initState() {
     super.initState();
-    _future = widget.user.nullTransform(Future.value) ??
-        ref.read(adapterProvider).getUserById(widget.id);
+
+    try {
+      _future = widget.user.nullTransform(Future.value) ??
+          ref.read(adapterProvider).getUserById(widget.id);
+    } catch (e, s) {
+      _future = Future.error(e, s);
+    }
     _showReplies = StateProvider((_) => true);
   }
 
@@ -217,7 +222,6 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                     child: Column(
                       children: [
                         Material(child: buildTabBar()),
-                        const Divider(),
                         Expanded(
                           child: Material(
                             child: buildTabBarView(includeReplies),
@@ -432,25 +436,28 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             ),
           ],
         ),
-        CustomScrollView(
-          slivers: [UserSliver.followers(userId: widget.id)],
+        const Center(
+          child: IconLandingWidget(
+            icon: Icon(Icons.image_outlined),
+            text: Text("Media is not implemented yet."),
+          ),
         ),
-        CustomScrollView(
-          slivers: [UserSliver.following(userId: widget.id)],
-        ),
+        const Center(
+          child: IconLandingWidget(
+            icon: Icon(Icons.star_outline_rounded),
+            text: Text("Favorites is not implemented yet."),
+          ),
+        )
       ],
     );
   }
 
   Widget buildTabBar() {
     return const TabBar(
-      //isScrollable: true,
       tabs: [
         Tab(text: "Posts"),
-        //Tab(text: "Media"),
-        //Tab(text: "Likes"),
-        Tab(text: "Followers"),
-        Tab(text: "Following"),
+        Tab(text: "Media"),
+        Tab(text: "Favorites"),
       ],
     );
   }

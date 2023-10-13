@@ -54,9 +54,11 @@ class WidePostLayout extends ConsumerWidget {
           ),
           WidePostLayout(
             repeatOf,
-            onOpen: onOpen,
             callbacks: callbacks,
             onReact: onReact,
+            onOpen: onOpen,
+            onTap: onTap,
+            menuFocusNode: menuFocusNode,
           ),
         ],
       );
@@ -95,30 +97,30 @@ class WidePostLayout extends ConsumerWidget {
       ),
     ];
 
-    return Padding(
-      padding: padding.copyWith(bottom: 0.0, right: 0.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: padding.copyWith(bottom: 0.0, right: 0.0),
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: children,
           ),
-          if (postTheme?.showActions ?? true)
-            Semantics(
-              focusable: false,
-              child: InteractionBar(
-                metrics: post.metrics,
-                callbacks: callbacks,
-                favorited:
-                    adapter is FavoriteSupport ? post.state.favorited : null,
-                repeated: post.state.repeated,
-                menuFocusNode: menuFocusNode,
-              ),
+        ),
+        if (postTheme?.showActions ?? true)
+          Semantics(
+            focusable: false,
+            child: InteractionBar(
+              metrics: post.metrics,
+              callbacks: callbacks,
+              favorited:
+                  adapter is FavoriteSupport ? post.state.favorited : null,
+              repeated: post.state.repeated,
+              menuFocusNode: menuFocusNode,
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

@@ -2,6 +2,7 @@ export 'model.dart';
 export 'src/social/adapter.dart';
 export 'src/social/api_type.dart';
 export 'src/social/capabilities.dart';
+export 'src/social/interfaces/account_deletion_support.dart';
 export 'src/social/interfaces/bookmark_support.dart';
 export 'src/social/interfaces/chat_support.dart';
 export 'src/social/interfaces/custom_emoji_support.dart';

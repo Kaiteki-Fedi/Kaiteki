@@ -64,7 +64,6 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
                     ],
                   ),
                 ),
-                const Divider(height: 1),
                 Expanded(
                   child: TabBarView(
                     children: [

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
-import 'package:kaiteki_core/social.dart';
+import 'package:kaiteki_core/kaiteki_core.dart';
 import 'package:logging/logging.dart';
 import 'package:uuid/uuid.dart';
 
@@ -170,6 +170,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
   @override
   Future<Post> postStatus(PostDraft draft, {Post? parentPost}) async {
+    var poll = draft.poll;
     final response = await client.createNote(
       visibility: misskeyVisibilityRosetta.getLeft(draft.visibility),
       text: draft.content,
@@ -180,6 +181,20 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
           .cast<misskey.DriveFile>()
           .map((a) => a.id)
           .toList(),
+      poll: poll == null
+          ? null
+          : (
+              choices: poll.options,
+              expiredAfter: poll.deadline
+                  .safeCast<RelativeDeadline>()
+                  ?.duration
+                  .inMilliseconds,
+              expiresAt: poll.deadline
+                  .safeCast<AbsoluteDeadline>()
+                  ?.endsAt
+                  .millisecondsSinceEpoch,
+              multiple: poll.allowMultipleChoices
+            ),
     );
 
     return response.createdNote.toKaiteki(instance);
@@ -411,8 +426,12 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       throw UnsupportedError('Misskey does not support clearing notifications');
 
   @override
-  Future<List<Notification>> getNotifications() async {
-    final notifications = await client.getNotifications();
+  Future<List<Notification>> getNotifications(
+      {String? sinceId, String? untilId}) async {
+    final notifications = await client.getNotifications(
+      sinceId: sinceId,
+      untilId: untilId,
+    );
     return notifications.map((n) => n.toKaiteki(instance)).toList();
   }
 
@@ -557,12 +576,6 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   Future<Post> translatePost(Post post, String targetLanguage) async {
     final response = await client.translateNote(post.id, targetLanguage);
     return post.copyWith(content: response.text);
-  }
-
-  @override
-  Future<void> deleteAccount(String password) {
-    // TODO(Craftplacer): implement deleteAccount
-    throw UnimplementedError();
   }
 
   @override

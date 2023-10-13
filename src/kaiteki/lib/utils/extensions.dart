@@ -4,6 +4,7 @@ import "package:html/dom.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:material_color_utilities/material_color_utilities.dart";
 
 export "package:kaiteki/text/rendering_extensions.dart";
 export "package:kaiteki/utils/extensions/build_context.dart";
@@ -139,4 +140,24 @@ extension KaitekiFileExtensions on KaitekiFile {
     if (file is KaitekiLocalFile) return FileImage(file.toDartFile());
     throw UnimplementedError();
   }
+}
+
+extension SurfaceColorExtensions on ColorScheme {
+  Color _getNeutralColor(int lightTone, int darkTone) {
+    final value = switch (brightness) {
+      Brightness.light => corePalette.neutral.get(lightTone),
+      Brightness.dark => corePalette.neutral.get(darkTone),
+    };
+    return Color(value);
+  }
+
+  CorePalette get corePalette => CorePalette.of(primary.value);
+
+  Color get surfaceContainerHigh => _getNeutralColor(92, 17);
+
+  Color get surfaceContainerHighest => _getNeutralColor(90, 22);
+
+  Color get surfaceContainer => _getNeutralColor(94, 12);
+
+  Color get inverseOnSurface => _getNeutralColor(95, 20);
 }

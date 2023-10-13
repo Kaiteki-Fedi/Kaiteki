@@ -190,6 +190,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<Post> postStatus(PostDraft draft, {Post? parentPost}) async {
+    final poll = draft.poll;
     final newPost = await client.postStatus(
       draft.content,
       pleromaPreview: false,
@@ -203,6 +204,14 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
           .map((a) => (a.source as mastodon.Attachment).id)
           .toList(),
       language: draft.language,
+      poll: poll == null
+          ? null
+          : (
+              options: poll.options,
+              expiresIn: poll.deadline!.ensureRelative().duration.inSeconds,
+              multiple: poll.allowMultipleChoices,
+              hideTotals: false,
+            ),
     );
     return newPost.toKaiteki(instance);
   }
@@ -375,7 +384,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<List<Notification>> getNotifications() async {
+  Future<List<Notification>> getNotifications({
+    String? sinceId,
+    String? untilId,
+  }) async {
     final Marker? marker;
 
     if (this is MastodonAdapter) {
@@ -386,7 +398,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       marker = null;
     }
 
-    final notifications = await client.getNotifications();
+    final notifications = await client.getNotifications(
+      sinceId: sinceId,
+      maxId: untilId,
+    );
     return notifications.map((e) => e.toKaiteki(instance, marker)).toList();
   }
 

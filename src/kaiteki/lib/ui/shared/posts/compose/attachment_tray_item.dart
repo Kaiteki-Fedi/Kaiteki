@@ -26,8 +26,7 @@ class AttachmentTrayItem extends StatelessWidget {
     final file = attachment.file;
     final widget = switch (AttachmentType.image) {
       AttachmentType.image when file != null => Image(
-          // ignore: unnecessary_non_null_assertion
-          image: file!.getImageProvider(),
+          image: file.getImageProvider(),
           fit: BoxFit.cover,
           opacity: AlwaysStoppedAnimation(opacity),
         ),
@@ -44,7 +43,6 @@ class AttachmentTrayItem extends StatelessWidget {
         color: Theme.of(context).colorScheme.surfaceVariant,
         elevation: 4.0,
         child: PopupMenuButton(
-          tooltip: "",
           color: Theme.of(context).colorScheme.surfaceVariant,
           itemBuilder: buildItemActions,
           child: SizedBox(

@@ -1,10 +1,10 @@
 class Poll<T> {
   final T? source;
-  final String id;
+  final String? id;
   final bool allowMultipleChoices;
   final bool hasVoted;
   final List<PollOption> options;
-  final DateTime endedAt;
+  final DateTime? endsAt;
   final bool hasEnded;
   final int voteCount;
   final int? voterCount;
@@ -12,11 +12,11 @@ class Poll<T> {
   const Poll({
     this.source,
     required this.hasEnded,
-    required this.id,
+    this.id,
     required this.allowMultipleChoices,
     this.hasVoted = false,
     this.options = const [],
-    required this.endedAt,
+    this.endsAt,
     this.voteCount = 0,
     this.voterCount,
   });

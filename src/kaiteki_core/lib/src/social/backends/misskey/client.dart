@@ -6,6 +6,8 @@ import 'package:http/http.dart'
     show MultipartFile, MultipartRequest, Request, Response;
 import 'package:kaiteki_core/http.dart';
 import 'package:kaiteki_core/utils.dart';
+import 'package:logging/logging.dart';
+
 import 'exception.dart';
 import 'model/follow.dart';
 import 'model/list.dart';
@@ -20,7 +22,6 @@ import 'responses/generate_session.dart';
 import 'responses/note_translate.dart';
 import 'responses/signin.dart';
 import 'responses/userkey.dart';
-import 'package:logging/logging.dart';
 
 export 'requests/timeline.dart';
 
@@ -81,6 +82,12 @@ class MisskeyClient {
     String? cw,
     String? replyId,
     List<String>? fileIds = const [],
+    ({
+      List<String> choices,
+      int? expiredAfter,
+      int? expiresAt,
+      bool multiple
+    })? poll,
   }) async {
     // FIXME(Craftplacer): Properly parse Misskey create note response
     return client
@@ -94,6 +101,14 @@ class MisskeyClient {
             if (cw != null) 'cw': cw,
             if (replyId != null) 'replyId': replyId,
             if (fileIds?.isNotEmpty == true) 'fileIds': fileIds,
+            if (poll != null)
+              'poll': {
+                'choices': poll.choices,
+                if (poll.expiredAfter != null)
+                  'expiredAfter': poll.expiredAfter,
+                if (poll.expiresAt != null) 'expiresAt': poll.expiresAt,
+                'multiple': poll.multiple,
+              }
           }.jsonBody,
         )
         .then(CreateNoteResponse.fromJson.fromResponse);

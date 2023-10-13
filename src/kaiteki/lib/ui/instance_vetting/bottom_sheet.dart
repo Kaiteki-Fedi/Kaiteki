@@ -244,7 +244,6 @@ class _InstanceVettingBottomSheetState
           Tab(text: "Software"),
         ],
       ),
-      const Divider(),
       AutoScaleTabBarView(
         children: [
           Padding(

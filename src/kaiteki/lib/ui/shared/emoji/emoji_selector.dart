@@ -121,7 +121,6 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
             ),
           ),
         ],
-        const Divider(height: 2),
         Expanded(
           child: Material(
             child: CustomScrollView(

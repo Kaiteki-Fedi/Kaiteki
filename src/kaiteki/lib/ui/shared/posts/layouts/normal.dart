@@ -60,6 +60,9 @@ class NormalPostLayout extends ConsumerWidget {
             repeatOf,
             callbacks: callbacks,
             onReact: onReact,
+            onOpen: onOpen,
+            onTap: onTap,
+            menuFocusNode: menuFocusNode,
           ),
         ],
       );

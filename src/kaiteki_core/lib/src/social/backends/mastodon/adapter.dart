@@ -18,12 +18,6 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
   @override
   Future<Instance?> probeInstance() async {
     final instance = await client.getInstance();
-
-    if (instance.version.contains('Pleroma') ||
-        instance.version.contains('+glitch')) {
-      return null;
-    }
-
     return instance.toKaiteki(this.instance);
   }
 
@@ -31,12 +25,6 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
   Future<Instance> getInstance() async {
     var instance = await client.getInstance();
     return instance.toKaiteki(this.instance);
-  }
-
-  @override
-  Future<void> deleteAccount(String password) {
-    // TODO(Craftplacer): implement deleteAccount
-    throw UnimplementedError();
   }
 
   @override

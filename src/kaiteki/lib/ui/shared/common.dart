@@ -3,6 +3,9 @@ import "package:kaiteki/di.dart";
 import "package:material_color_utilities/material_color_utilities.dart";
 
 export "package:kaiteki/common.dart";
+export "package:kaiteki_ui/kaiteki_ui.dart";
+
+const kBullet = "•";
 
 typedef LocalizableStringBuilder = String Function(BuildContext context);
 
@@ -33,18 +36,6 @@ Future<void> showTextAlert(BuildContext context, String title, String body) {
     ),
     context: context,
   );
-}
-
-extension ColorKaitekiExtension on Color {
-  TextStyle get textStyle => TextStyle(color: this);
-}
-
-double getLocalFontSize(BuildContext context) {
-  return DefaultTextStyle.of(context).style.fontSize!;
-}
-
-Color getLocalTextColor(BuildContext context) {
-  return DefaultTextStyle.of(context).style.color!;
 }
 
 CustomColorPalette createCustomColorPalette(

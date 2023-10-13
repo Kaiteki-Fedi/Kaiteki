@@ -7,10 +7,12 @@ import "package:kaiteki_core/social.dart";
 class UserDisplayNameWidget extends ConsumerWidget {
   final User user;
   final Axis orientation;
+  final TextStyle? secondaryTextStyle;
 
   const UserDisplayNameWidget(
     this.user, {
     super.key,
+    this.secondaryTextStyle,
     this.orientation = Axis.horizontal,
   });
 
@@ -20,46 +22,54 @@ class UserDisplayNameWidget extends ConsumerWidget {
       user,
       orientation == Axis.vertical,
     );
-    const primaryTextStyle = TextStyle(fontWeight: FontWeight.bold);
+    final primaryTextStyle = Theme.of(context).textTheme.titleSmall;
     final textSpacing = !content.separate ? 0.0 : 6.0;
+
     final secondaryText = content.secondary;
-    final disabledColor =
+    final secondaryColor =
         Theme.of(context).getEmphasisColor(EmphasisColor.disabled);
+    final secondaryTextStyle =
+        this.secondaryTextStyle?.copyWith(color: secondaryColor) ??
+            secondaryColor.textStyle;
 
     switch (orientation) {
       case Axis.horizontal:
-        return Text.rich(
-          TextSpan(
-            children: [
-              user.renderText(context, ref, content.primary),
-              if (secondaryText != null) ...[
-                WidgetSpan(child: SizedBox(width: textSpacing)),
-                TextSpan(
-                  text: secondaryText,
-                  style: TextStyle(color: disabledColor),
-                ),
+        return RepaintBoundary(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                user.renderText(context, ref, content.primary),
+                if (secondaryText != null) ...[
+                  WidgetSpan(child: SizedBox(width: textSpacing)),
+                  TextSpan(
+                    text: secondaryText,
+                    style: secondaryTextStyle,
+                  ),
+                ],
               ],
-            ],
-            style: primaryTextStyle,
+              style: primaryTextStyle,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+            softWrap: false,
           ),
-          maxLines: 1,
-          overflow: TextOverflow.fade,
-          softWrap: false,
         );
       case Axis.vertical:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text.rich(
-              user.renderText(context, ref, content.primary),
-              maxLines: 1,
-              overflow: TextOverflow.fade,
-              softWrap: false,
+            RepaintBoundary(
+              child: Text.rich(
+                user.renderText(context, ref, content.primary),
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
             ),
             if (secondaryText != null)
               Text(
                 secondaryText,
-                style: disabledColor.textStyle,
+                style: secondaryTextStyle,
                 maxLines: 1,
                 overflow: TextOverflow.fade,
                 softWrap: false,

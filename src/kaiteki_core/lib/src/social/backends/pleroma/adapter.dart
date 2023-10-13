@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
-import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
 import 'package:kaiteki_core/social.dart';
+import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/shared_adapter.dart';
 import 'package:kaiteki_core/src/social/backends/pleroma/adapter.c.dart';
 import 'package:kaiteki_core/src/social/backends/pleroma/capabilities.dart';
@@ -9,7 +9,11 @@ import 'package:kaiteki_core/src/social/backends/pleroma/client.dart';
 
 class PleromaAdapter //
     extends SharedMastodonAdapter<PleromaClient>
-    implements ChatSupport, ReactionSupport, PreviewSupport {
+    implements
+        ChatSupport,
+        ReactionSupport,
+        PreviewSupport,
+        AccountDeletionSupport {
   @override
   final PleromaCapabilities capabilities;
 
@@ -83,11 +87,7 @@ class PleromaAdapter //
   @override
   Future<Instance?> probeInstance() async {
     final instance = await client.getInstanceV1();
-
-    if (!instance.version.contains('Pleroma')) {
-      return null;
-    }
-
+    if (!instance.version.contains('Pleroma')) return null;
     return _injectFE(instance.toKaiteki(this.instance));
   }
 
@@ -100,6 +100,12 @@ class PleromaAdapter //
   Future<Instance> _injectFE(Instance instance) async {
     final config = await client.getFrontendConfigurations();
     final pleroma = config.pleroma;
+
+    Uri? ensureAbsolute(Uri? input, String host) {
+      if (input == null) return null;
+      if (!input.isAbsolute) return Uri.https(host).resolveUri(input);
+      return input;
+    }
 
     final background = ensureAbsolute(pleroma?.background, this.instance);
     final logo = ensureAbsolute(pleroma?.logo, this.instance);
@@ -121,12 +127,6 @@ class PleromaAdapter //
             '/static/terms-of-service.html',
           ),
     );
-  }
-
-  Uri? ensureAbsolute(Uri? input, String host) {
-    if (input == null) return null;
-    if (!input.isAbsolute) return Uri.https(host).resolveUri(input);
-    return input;
   }
 
   @override

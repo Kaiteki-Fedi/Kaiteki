@@ -25,7 +25,6 @@ import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -339,23 +338,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return const LoginAborted();
   }
 
-  Future<LoginAborted> _oauthDeepLink(
+  Future<LoginResult> _oauthDeepLink(
     BackendAdapter adapter,
     OAuthInitCallback generateUrl,
   ) async {
+    // If the adapter is not decentralized, then it won't matter what the host
+    // is, so we can just use a placeholder.
     final host =
         adapter.safeCast<DecentralizedBackendAdapter>()?.instance ?? "woozy";
-    final (url, extra) = await generateUrl(
-      Uri(
-        scheme: "web+kaitekisocial",
-        host: "go-router-is-poop",
-        pathSegments: [
-          "oauth",
-          adapter.type.name,
-          host,
-        ],
-      ),
-    );
+    final redirectUri = getRedirectUri(adapter.type, host);
+
+    if (redirectUri == null) {
+      return LoginFailure(
+        (UnsupportedError("Couldn't generate redirect URI"), null),
+      );
+    }
+
+    final (url, extra) = await generateUrl(redirectUri);
 
     if (extra != null) {
       await pushExtra(
@@ -395,13 +394,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final adapter = await type.createAdapter(host);
       instance = await adapter.getInstance();
     }
-
-    // // Check for known issue with Misskey instances
-    // if (kIsWeb && type == ApiType.misskey) {
-    //   if (!await _showWebCompatibilityDialog()) {
-    //     return null;
-    //   }
-    // }
 
     return InstanceCompound(host, type, instance);
   }
@@ -478,7 +470,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       requestOAuth: (generateUrl, [extra]) {
         assert(adapter is OAuthReceiver);
 
-        // if (kIsWeb) return _oauthQueryEncode(adapter, generateUrl);
+        if (kIsWeb && getBaseUri() == null) {
+          return _oauthQueryEncode(adapter, generateUrl);
+        }
 
         if (kIsWeb || Platform.isAndroid) {
           return _oauthDeepLink(adapter, generateUrl);
@@ -519,12 +513,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    await accountManager.add(account);
-
     if (widget.popOnly) {
       router.pop(account);
       return;
     }
+
+    await accountManager.add(account);
     router.goNamed("home", pathParameters: account.key.routerParams);
   }
 

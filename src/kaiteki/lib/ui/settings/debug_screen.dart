@@ -9,7 +9,7 @@ import "package:kaiteki/ui/onboarding/onboarding_screen.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class DebugScreen extends ConsumerStatefulWidget {

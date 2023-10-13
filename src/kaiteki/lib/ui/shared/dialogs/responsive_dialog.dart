@@ -11,9 +11,11 @@ class ResponsiveDialog extends StatelessWidget {
   const ResponsiveDialog({
     super.key,
     required this.builder,
+    this.backgroundColor,
   });
 
   final ResponsiveDialogBuilder builder;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +30,15 @@ class ResponsiveDialog extends StatelessWidget {
         final axis = getAxis();
         final child = builder.call(context, axis);
 
-        if (axis != null) return Dialog.fullscreen(child: child);
+        if (axis != null) {
+          return Dialog.fullscreen(
+            backgroundColor: backgroundColor,
+            child: child,
+          );
+        }
 
         return Dialog(
+          backgroundColor: backgroundColor,
           child: ConstrainedBox(
             constraints: const BoxConstraints(
               maxWidth: _maxDialogSize,

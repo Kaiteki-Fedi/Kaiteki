@@ -1,4 +1,3 @@
-import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/timeline.dart";
@@ -42,8 +41,13 @@ final _tabsProvider = Provider(
 
 class TimelinePage extends ConsumerStatefulWidget {
   final TimelineType? initialTimeline;
+  final TabAlignment? tabAlignment;
 
-  const TimelinePage({super.key, this.initialTimeline});
+  const TimelinePage({
+    super.key,
+    this.initialTimeline,
+    this.tabAlignment,
+  });
 
   @override
   ConsumerState<TimelinePage> createState() => TimelinePageState();
@@ -85,36 +89,25 @@ class TimelinePageState extends ConsumerState<TimelinePage>
     }
 
     final showTabBar = tabs.length >= 2;
-    final showTabLabel = tabs.length <= 3;
-    return NestedScrollView(
-      floatHeaderSlivers: true,
-      dragStartBehavior: DragStartBehavior.down,
-      headerSliverBuilder: (context, _) {
-        return [
-          if (showTabBar)
-            SliverToBoxAdapter(
-              child: Column(
-                children: [
-                  TabBar(
-                    controller: _tabController,
-                    isScrollable: true,
-                    tabAlignment: TabAlignment.center,
-                    onTap: (i) => _onTabTap(i, tabs),
-                    tabs: [
-                      for (final type in tabs)
-                        _buildTab(context, type, showTabLabel),
-                    ],
-                  ),
-                  const Divider(height: 1),
-                ],
-              ),
-            ),
-        ];
-      },
-      body: TabBarView(
-        controller: _tabController,
-        children: [for (final type in tabs) buildPage(type)],
-      ),
+    return Column(
+      children: [
+        if (showTabBar)
+          TabBar(
+            controller: _tabController,
+            isScrollable: true,
+            onTap: (i) => _onTabTap(i, tabs),
+            tabAlignment: widget.tabAlignment,
+            tabs: [
+              for (final type in tabs) _buildTab(context, type, true),
+            ],
+          ),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [for (final type in tabs) buildPage(type)],
+          ),
+        ),
+      ],
     );
   }
 

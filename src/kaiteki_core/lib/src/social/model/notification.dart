@@ -23,7 +23,7 @@ class GroupedNotification implements Notification {
   final List<Notification> notifications;
 
   @override
-  DateTime get createdAt => notifications.last.createdAt;
+  DateTime get createdAt => notifications.first.createdAt;
 
   @override
   bool get unread => notifications.any((e) => e.unread == true);
@@ -35,7 +35,7 @@ class GroupedNotification implements Notification {
   NotificationType get type => notifications.first.type;
 
   @override
-  User? get user => notifications.last.user;
+  User? get user => notifications.first.user;
 
   const GroupedNotification(this.notifications);
 

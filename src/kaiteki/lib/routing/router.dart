@@ -25,8 +25,8 @@ import "package:kaiteki/ui/settings/debug/theme_screen.dart";
 import "package:kaiteki/ui/settings/debug_screen.dart";
 import "package:kaiteki/ui/settings/experiments.dart";
 import "package:kaiteki/ui/settings/manage_languages.dart";
-import "package:kaiteki/ui/settings/pedantry_screen.dart";
 import "package:kaiteki/ui/settings/settings_screen.dart";
+import "package:kaiteki/ui/settings/tweaks_screen.dart";
 import "package:kaiteki/ui/settings/wellbeing/wellbeing_screen.dart";
 import "package:kaiteki/ui/shared/account_list/dialog.dart";
 import "package:kaiteki/ui/shared/conversation_screen.dart";
@@ -125,9 +125,9 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => const WellbeingScreen(),
           ),
           GoRoute(
-            name: "pedantry",
-            path: "pedantry",
-            builder: (_, __) => const PedantryScreen(),
+            name: "tweaks",
+            path: "tweaks",
+            builder: (_, __) => const TweaksScreen(),
           ),
           GoRoute(
             path: "debug",

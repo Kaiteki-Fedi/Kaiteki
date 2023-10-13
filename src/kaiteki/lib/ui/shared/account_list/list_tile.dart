@@ -8,39 +8,20 @@ class AccountListTile extends ConsumerWidget {
   final Account account;
   final bool selected;
   final bool showInstanceIcon;
-  final VoidCallback? onSelect;
-  final VoidCallback? onSignOut;
-  final VoidCallback? onHandoff;
+  final VoidCallback? onTap;
+  final Widget? trailing;
 
   const AccountListTile({
     super.key,
     required this.account,
     this.selected = false,
     this.showInstanceIcon = false,
-    this.onSelect,
-    this.onSignOut,
-    this.onHandoff,
+    this.onTap,
+    this.trailing,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final actions = [
-      if (onSignOut != null)
-        IconButton(
-          icon: const Icon(Icons.logout_rounded),
-          onPressed: onSignOut,
-          splashRadius: 24,
-          tooltip: "Remove account",
-        ),
-      if (onHandoff != null)
-        IconButton(
-          icon: const Icon(Icons.devices_rounded),
-          onPressed: onHandoff,
-          splashRadius: 24,
-          tooltip: "Sign in on other device",
-        ),
-    ];
-
     return ListTile(
       selected: selected,
       leading: Stack(
@@ -75,8 +56,8 @@ class AccountListTile extends ConsumerWidget {
       ),
       title: Text(account.key.username),
       subtitle: Text(account.key.host),
-      onTap: onSelect,
-      trailing: actions.isNotEmpty
+      onTap: onTap,
+      trailing: trailing != null
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -84,7 +65,7 @@ class AccountListTile extends ConsumerWidget {
                   height: 24,
                   child: VerticalDivider(width: 15),
                 ),
-                ...actions,
+                trailing!,
               ],
             )
           : null,

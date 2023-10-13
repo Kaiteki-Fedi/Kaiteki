@@ -1,45 +1,56 @@
 import "dart:async";
 import "dart:convert";
-import "dart:io";
 
-import "package:async/async.dart";
 import "package:flutter/material.dart" show ColorScheme;
 import "package:flutter/services.dart";
+import "package:kaiteki/auth/oauth_native.dart"
+    if (dart.library.html) "package:kaiteki/auth/oauth_web.dart";
 import "package:kaiteki_core/social.dart";
 import "package:shared_preferences/shared_preferences.dart";
-import "package:shelf/shelf.dart";
-import "package:shelf/shelf_io.dart";
 
-Future<Map<String, String>?> runServer(
-  OAuthUrlCreatedCallback ready,
-  String successPage,
+export "package:kaiteki/auth/oauth_native.dart"
+    if (dart.library.html) "package:kaiteki/auth/oauth_web.dart";
+
+String _getExtraKey(ApiType type, String host) =>
+    "oAuthExtra_${type.name}_$host";
+
+Future<void> pushExtra(
+  SharedPreferences preferences,
+  ApiType type,
+  String host,
+  Map<String, String> extra,
 ) async {
-  final requestStream = StreamController<Map<String, String>>();
-  HttpServer? server;
+  final key = _getExtraKey(type, host);
+  final json = jsonEncode(extra);
 
-  try {
-    final handler = const Pipeline().addHandler((request) {
-      requestStream.add(request.url.queryParameters);
-      return Response(
-        200,
-        body: successPage,
-        headers: {"Content-Type": "text/html; charset=UTF-8"},
-      );
-    });
+  await preferences.setString(key, json);
+}
 
-    // Start server, close & return when new request comes in
-    const port = 8080;
-    server = await serve(handler, "127.0.0.1", port, shared: true);
-    final operation = CancelableOperation.fromFuture(
-      requestStream.stream.first,
-    );
+Uri? getRedirectUri(ApiType type, String host) {
+  final baseUri = getBaseUri();
 
-    await ready(Uri.http("localhost:$port", "/"), operation.cancel);
-    return await operation.valueOrCancellation();
-  } finally {
-    server?.close();
-    requestStream.close();
-  }
+  if (baseUri == null) return null;
+
+  final pathSegments = ["oauth", type.name, host];
+
+  return baseUri.replace(pathSegments: pathSegments);
+}
+
+Map<String, String>? popExtra(
+  SharedPreferences preferences,
+  ApiType type,
+  String host,
+) {
+  final key = _getExtraKey(type, host);
+
+  final json = preferences.getString(key);
+  if (json == null) return null;
+
+  final map = Map<String, String>.from(jsonDecode(json));
+
+  preferences.remove(key);
+
+  return map;
 }
 
 /// Fetches the OAuth landing page as well as injects the app's current theme.
@@ -65,36 +76,4 @@ Future<String> generateLandingPage(ColorScheme? colorScheme) async {
     ..write("}");
 
   return html.replaceAll(cssPlaceholder, cssBuffer.toString());
-}
-
-String _getExtraKey(ApiType type, String host) =>
-    "oAuthExtra_${type.name}_$host";
-
-Future<void> pushExtra(
-  SharedPreferences preferences,
-  ApiType type,
-  String host,
-  Map<String, String> extra,
-) async {
-  final key = _getExtraKey(type, host);
-  final json = jsonEncode(extra);
-
-  await preferences.setString(key, json);
-}
-
-Map<String, String>? popExtra(
-  SharedPreferences preferences,
-  ApiType type,
-  String host,
-) {
-  final key = _getExtraKey(type, host);
-
-  final json = preferences.getString(key);
-  if (json == null) return null;
-
-  final map = Map<String, String>.from(jsonDecode(json));
-
-  preferences.remove(key);
-
-  return map;
 }
