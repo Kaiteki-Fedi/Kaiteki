@@ -29,7 +29,8 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
     final user = notification.user;
     final unreadPaint = Paint()..color = Theme.of(context).colorScheme.error;
 
-    final showContent = post != null && post.content != null && !_expanded;
+    final canShowContent = post != null && post.content?.isNotEmpty == true;
+    final showContent = canShowContent && !_expanded;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -109,7 +110,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
                             onTap: () => context.showUser(user, ref),
                           ),
                         if (notification is GroupedNotification ||
-                            post != null) ...[
+                            canShowContent) ...[
                           const SizedBox(width: 16),
                           _ExpandIndicator(
                             expanded: _expanded,
@@ -124,7 +125,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
                         ],
                       ],
                     ),
-                    if (post != null &&
+                    if (canShowContent &&
                         _expanded &&
                         notification is! GroupedNotification) ...[
                       const SizedBox(height: 12),
