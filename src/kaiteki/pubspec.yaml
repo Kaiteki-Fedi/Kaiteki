@@ -98,7 +98,6 @@ flutter:
   assets:
     - assets/icons/
     - assets/icon.png
-    - assets/instances.json
     - assets/languages.json
     - assets/oauth-success.html
   fonts:
