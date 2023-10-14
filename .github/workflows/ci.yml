@@ -180,6 +180,8 @@ jobs:
       - name: Build (signed)
         if: github.event_name != 'pull_request'
         run: 'make build-android SIGNED=TRUE ${{needs.test.outputs.make-args}}'
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
