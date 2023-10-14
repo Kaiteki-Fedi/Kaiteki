@@ -219,7 +219,8 @@ class _PollDialogState extends ConsumerState<PollDialog> {
                                         border: const OutlineInputBorder(),
                                         suffixIcon: IconButton(
                                           icon: const Icon(
-                                              Icons.watch_later_outlined),
+                                            Icons.watch_later_outlined,
+                                          ),
                                           tooltip: "Select time",
                                           onPressed: _selectTime,
                                         ),
