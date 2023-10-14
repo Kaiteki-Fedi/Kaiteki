@@ -235,15 +235,34 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
           ),
           if (_poll != null) ...[
             const Divider(height: 16 + 1),
-            Card(
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: _onChangePoll,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DraftPollWidget(_poll!),
+            MenuAnchor(
+              menuChildren: [
+                MenuItemButton(
+                  child: Text("Edit poll"),
+                  leadingIcon: const Icon(Icons.edit_rounded),
+                  onPressed: _onChangePoll,
                 ),
+                MenuItemButton(
+                  child: Text("Remove poll"),
+                  leadingIcon: const Icon(Icons.delete_rounded),
+                  onPressed: () => setState(() => _poll = null),
+                ),
+              ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DraftPollWidget(_poll!),
               ),
+              builder: (context, controller, child) {
+                return Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTapUp: (details) {
+                      controller.open(position: details.localPosition);
+                    },
+                    child: child,
+                  ),
+                );
+              },
             ),
           ],
         ],
