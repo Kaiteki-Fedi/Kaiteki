@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: eb376e9acf6938204f90eb3b1f00b578640d3188b4c8a8ec054f9f479af8d051
+      sha256: "36a321c3d2cbe01cbcb3540a87b8843846e0206df3e691fa7b23e19e78de6d49"
       url: "https://pub.dev"
     source: hosted
-    version: "64.0.0"
+    version: "65.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "69f54f967773f6c26c7dcb13e93d7ccee8b17a641689da39e878d5cf13b06893"
+      sha256: dfe03b90ec022450e22513b5e5ca1f01c0c01de9c3fba2f7fd233cb57a6b9a07
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.0"
+    version: "6.3.0"
   analyzer_plugin:
     dependency: transitive
     description:
@@ -349,10 +349,10 @@ packages:
     dependency: "direct main"
     description:
       name: dynamic_color
-      sha256: "5a89443ae2e5bdcbf1a435a8acbd38b7227f6f18945691d3d2223d3b0dff485a"
+      sha256: "96bff3df72e3d428bda2b874c7a521e8c86f592cae626ea594922fcc8d166e0c"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1"
+    version: "1.6.7"
   equatable:
     dependency: "direct main"
     description:
@@ -780,7 +780,7 @@ packages:
     source: hosted
     version: "0.12.16"
   material_color_utilities:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       name: material_color_utilities
       sha256: "0e0a020085b65b6083975e499759762399b4475f766c21668c4ecca34ea74e5a"
@@ -1250,7 +1250,7 @@ packages:
     source: sdk
     version: "0.0.99"
   sliver_tools:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: sliver_tools
       sha256: eae28220badfb9d0559207badcbbc9ad5331aac829a88cb0964d330d2a4636a6
@@ -1365,10 +1365,10 @@ packages:
     dependency: "direct dev"
     description:
       name: test
-      sha256: a20ddc0723556dc6dd56094e58ec1529196d5d7774156604cb14e8445a5a82ff
+      sha256: d983a57c33dde6d44b1fb8635f67c91f4b41d26cf227c147963affa97d63563d
       url: "https://pub.dev"
     source: hosted
-    version: "1.24.7"
+    version: "1.24.8"
   test_api:
     dependency: transitive
     description:
@@ -1381,10 +1381,10 @@ packages:
     dependency: transitive
     description:
       name: test_core
-      sha256: "96382d0bc826e260b077bb496259e58bc82e90b603ab16cd5ae95dfe1dfcba8b"
+      sha256: "2f866bf4b20c11327ac166ee6036bddafb7fe9e35505ff8324f788e66913f967"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.7"
+    version: "0.5.8"
   timezone:
     dependency: transitive
     description:
