@@ -11,7 +11,7 @@ import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/kaiteki/colors.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
 import "package:kaiteki/ui/features/article_view/screen.dart";
-import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
+import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
