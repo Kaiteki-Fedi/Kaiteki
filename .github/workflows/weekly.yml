@@ -214,7 +214,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows
-          path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/'
+          path: '${{ env.SOURCE_PATH }}/build/windows/x64/runner/Release/'
 
   build-web:
     name: Build for Web
