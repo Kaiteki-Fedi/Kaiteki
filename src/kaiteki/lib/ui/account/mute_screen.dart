@@ -112,8 +112,8 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
     showDialog(
       context: context,
       builder: (_) {
-        return WillPopScope(
-          onWillPop: () async => false,
+        return PopScope(
+          canPop: false,
           child: Dialog(
             child: Padding(
               padding: const EdgeInsets.all(16.0),

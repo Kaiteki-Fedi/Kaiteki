@@ -121,7 +121,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   void dispose() {
-    // Avoid setting state when widget becomes unmounted
+    _credentialRequest?.completer.complete(null);
+    _codeRequest?.completer.complete(null);
     _fetchInstanceFuture?.cancel();
     super.dispose();
   }
@@ -172,8 +173,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   color: formWidgetColor,
                   child: SizedBox(
                     height: double.infinity,
-                    child: WillPopScope(
-                      onWillPop: _onBackButtonPressed,
+                    child: PopScope(
+                      canPop: false,
+                      onPopInvoked: _onPopInvoked,
                       child: PageTransitionSwitcher(
                         transitionBuilder: _buildTransition,
                         duration: const Duration(milliseconds: 750),
@@ -248,27 +250,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Future<bool> _onBackButtonPressed() async {
+  Future<void> _onPopInvoked(bool didPop) async {
+    if (didPop) return;
+
+    final navigator = Navigator.of(context);
+
     // Cancel ongoing requests for user input.
     final request = _credentialRequest ?? _codeRequest;
     if (request != null) {
       request.completer.complete(null);
-      return false;
+      return;
     }
 
     // Cancel ongoing OAuth requests.
     if (_oAuth != null) {
       _oAuth!();
-      return false;
+      return;
     }
 
     // Reset instance
     if (_instance != null) {
       setState(() => _instance = null);
-      return false;
+      return;
     }
 
-    return true;
+    navigator.pop();
   }
 
   Future<LoginResult> _oauthLocalServer(
@@ -538,7 +544,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (credentialRequest != null) {
       return UserPage(
         image: _instance?.data.iconUrl.toString(),
-        onBack: _onBackButtonPressed,
         onSubmit: (username, password) async {
           final credentials = Credentials(username, password);
           // Technically we could directly pass the future to the Completer, but

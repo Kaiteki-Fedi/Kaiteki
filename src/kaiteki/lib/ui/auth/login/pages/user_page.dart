@@ -14,12 +14,10 @@ const _instanceIconSize = 96.0;
 class UserPage extends StatefulWidget {
   final String? image;
 
-  final VoidCallback? onBack;
   final FutureOr<void> Function(String username, String password)? onSubmit;
 
   const UserPage({
     this.image,
-    this.onBack,
     this.onSubmit,
     super.key,
   });

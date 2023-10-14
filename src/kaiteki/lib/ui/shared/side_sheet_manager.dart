@@ -33,10 +33,11 @@ class SideSheetManagerState extends State<SideSheetManager> {
     required BuildContext context,
     required WidgetBuilder builder,
   }) {
-    sideSheet = WillPopScope(
-      onWillPop: () {
+    sideSheet = PopScope(
+      canPop: sideSheet != null,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
         setState(() => sideSheet = null);
-        return Future.value(true);
       },
       child: Material(
         clipBehavior: Clip.antiAlias,

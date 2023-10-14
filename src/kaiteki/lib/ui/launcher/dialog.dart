@@ -42,13 +42,9 @@ class _LauncherDialogState extends ConsumerState<LauncherDialog> {
                 final isSuccess =
                     cs == ConnectionState.done && snapshot.data == true;
                 final isRunning = !(isInactive || isSuccess);
-                return WillPopScope(
-                  onWillPop: () {
-                    return Future.value(
-                      !(cs == ConnectionState.waiting ||
-                          cs == ConnectionState.active),
-                    );
-                  },
+                return PopScope(
+                  canPop: !(cs == ConnectionState.waiting ||
+                      cs == ConnectionState.active),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

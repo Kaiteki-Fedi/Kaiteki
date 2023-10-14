@@ -36,8 +36,8 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
   Widget build(BuildContext context) {
     final isDeleting = _page == _AccountDeletionDialogStatePage.deletion;
 
-    return WillPopScope(
-      onWillPop: () async => _deleteFuture == null,
+    return PopScope(
+      canPop: _deleteFuture == null,
       child: ConstrainedBox(
         constraints: kDialogConstraints,
         child: AlertDialog(
