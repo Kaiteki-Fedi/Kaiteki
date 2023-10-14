@@ -146,26 +146,6 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         .flattened
         .toList();
   }
-
-  Widget _buildList(Iterable<Notification> data, [bool addFABPadding = false]) {
-    // TODO(Craftplacer): Make notifications infinitely scrollable
-
-    const fabPadding =
-        EdgeInsets.only(bottom: kFloatingActionButtonMargin * 2 + 56);
-
-    return ListView.separated(
-      itemBuilder: (context, i) {
-        return Card(
-          clipBehavior: Clip.antiAlias,
-          child: NotificationWidget(data.elementAt(i)),
-        );
-      },
-      separatorBuilder: (context, _) => const SizedBox(height: 8),
-      itemCount: data.length,
-      padding: const EdgeInsets.all(16)
-          .add(addFABPadding ? fabPadding : EdgeInsets.zero),
-    );
-  }
 }
 
 class _MarkAsReadFAB extends ConsumerWidget {
