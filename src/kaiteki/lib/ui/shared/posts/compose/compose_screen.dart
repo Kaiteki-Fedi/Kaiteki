@@ -104,7 +104,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
             _bodyController.text == initialBody) &&
         _subjectController.value.text.isEmpty &&
         attachments.isEmpty &&
-        _poll != null;
+        _poll == null;
   }
 
   PostDraft get postDraft {
