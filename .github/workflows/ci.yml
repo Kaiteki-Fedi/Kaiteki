@@ -44,6 +44,7 @@ jobs:
 
       - name: Analyze
         uses: invertase/github-action-dart-analyzer@v2.0.0
+        working-directory: ${{ env.SOURCE_PATH }}
 
       - name: Test
         run: 'flutter test --coverage -r expanded --no-pub'
