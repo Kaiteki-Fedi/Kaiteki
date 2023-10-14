@@ -126,7 +126,8 @@ void main() {
         const HashtagElement("Test"),
         const TextElement(" "),
         MentionElement(
-            const UserReference.url("https://floss.social/@Kaiteki")),
+          const UserReference.url("https://floss.social/@Kaiteki"),
+        ),
       ]),
     );
   });

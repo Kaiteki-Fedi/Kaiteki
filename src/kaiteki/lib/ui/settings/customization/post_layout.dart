@@ -8,7 +8,8 @@ import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki_core/model.dart";
 
 final _example = examplePost.copyWith(
-  author: examplePost.author.copyWith(flags: UserFlags(isAdministrator: true)),
+  author: examplePost.author
+      .copyWith(flags: const UserFlags(isAdministrator: true)),
   attachments: [
     Attachment(
       previewUrl: Uri.parse(

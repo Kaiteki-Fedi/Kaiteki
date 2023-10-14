@@ -62,7 +62,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
       label: "Create poll",
       icon: Icons.poll_rounded,
       onPressed: _onChangePoll,
-    )
+    ),
   ];
 
   String? get initialBody {

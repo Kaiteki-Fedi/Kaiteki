@@ -93,17 +93,20 @@ class AccountListDialog extends ConsumerWidget {
   }
 
   MenuAnchor buildMenuAnchor(
-      BuildContext context, WidgetRef ref, Account account) {
+    BuildContext context,
+    WidgetRef ref,
+    Account account,
+  ) {
     return MenuAnchor(
       menuChildren: [
         MenuItemButton(
           leadingIcon: const Icon(Icons.devices_rounded),
-          child: Text("Sign in on another device"),
+          child: const Text("Sign in on another device"),
           onPressed: () => _onHandoff(context, ref, account),
         ),
         MenuItemButton(
           leadingIcon: const Icon(Icons.logout_rounded),
-          child: Text("Sign out"),
+          child: const Text("Sign out"),
           onPressed: () => _onSignOut(context, ref, account),
         ),
       ],

@@ -8,7 +8,7 @@ TextTheme getTextTheme(TextTheme base) {
   final labelSmall = base.labelSmall ?? const TextStyle();
 
   const kFsec = "Fira Sans Extra Condensed";
-  var textTheme = base.apply(fontFamily: "Fira Sans");
+  final textTheme = base.apply(fontFamily: "Fira Sans");
   return textTheme.copyWith(
     titleLarge: titleLarge.copyWith(
       fontFamily: "Quicksand",

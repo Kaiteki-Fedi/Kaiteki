@@ -44,8 +44,10 @@ class Bootstrapper {
       await accountManager.add(account);
     }
 
-    assert(initialAccounts.isEmpty ||
-        container.read(accountManagerProvider).current != null);
+    assert(
+      initialAccounts.isEmpty ||
+          container.read(accountManagerProvider).current != null,
+    );
 
     return Bootstrapper._(container, locale);
   }

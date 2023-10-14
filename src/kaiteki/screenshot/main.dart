@@ -92,7 +92,7 @@ Future<List<Account>> getDemoAccounts() async {
       user: user,
       clientSecret: null,
       accountSecret: null,
-    )
+    ),
   ];
 }
 

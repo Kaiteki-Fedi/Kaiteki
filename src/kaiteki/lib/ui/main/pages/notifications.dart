@@ -169,7 +169,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 }
 
 class _MarkAsReadFAB extends ConsumerWidget {
-  const _MarkAsReadFAB({super.key});
+  const _MarkAsReadFAB();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

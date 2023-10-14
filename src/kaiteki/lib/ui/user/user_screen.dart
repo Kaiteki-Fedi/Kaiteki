@@ -447,7 +447,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             icon: Icon(Icons.star_outline_rounded),
             text: Text("Favorites is not implemented yet."),
           ),
-        )
+        ),
       ],
     );
   }

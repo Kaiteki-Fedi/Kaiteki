@@ -153,11 +153,11 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
                                 );
                               },
                               child: Text(context.l10n.replyButtonLabel),
-                            )
+                            ),
                           ],
                         ),
                       ),
-                    ]
+                    ],
                   ],
                 ),
               ),
@@ -203,7 +203,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
         TextSpan(
           text: " • $relativeTime",
           style: bodySmall?.copyWith(color: onSurfaceVariant),
-        )
+        ),
       ],
     );
   }
@@ -333,7 +333,6 @@ class _ExpandIndicator extends StatelessWidget {
   final bool expanded;
 
   const _ExpandIndicator({
-    super.key,
     this.text,
     this.onTap,
     this.expanded = false,

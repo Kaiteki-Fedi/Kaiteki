@@ -194,9 +194,10 @@ class _PollDialogState extends ConsumerState<PollDialog> {
                                       ),
                                       decoration: InputDecoration(
                                         labelText: "Date",
-                                        border: OutlineInputBorder(),
+                                        border: const OutlineInputBorder(),
                                         suffixIcon: IconButton(
-                                          icon: Icon(Icons.calendar_today),
+                                          icon:
+                                              const Icon(Icons.calendar_today),
                                           tooltip: "Select date",
                                           onPressed: _selectDate,
                                         ),
@@ -215,10 +216,10 @@ class _PollDialogState extends ConsumerState<PollDialog> {
                                       ),
                                       decoration: InputDecoration(
                                         labelText: "Time",
-                                        border: OutlineInputBorder(),
+                                        border: const OutlineInputBorder(),
                                         suffixIcon: IconButton(
-                                          icon:
-                                              Icon(Icons.watch_later_outlined),
+                                          icon: const Icon(
+                                              Icons.watch_later_outlined),
                                           tooltip: "Select time",
                                           onPressed: _selectTime,
                                         ),
@@ -380,7 +381,6 @@ class _DurationSelector extends StatelessWidget {
   final ValueChanged<_TimeUnit> onTimeUnitChanged;
 
   const _DurationSelector({
-    super.key,
     required this.controller,
     required this.timeUnit,
     required this.onTimeUnitChanged,
@@ -496,7 +496,6 @@ class _TimeOptionSelector extends StatelessWidget {
   final bool showIndefinite;
 
   const _TimeOptionSelector({
-    super.key,
     required this.value,
     required this.onChanged,
     required this.showIndefinite,
