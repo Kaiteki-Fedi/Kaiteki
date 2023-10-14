@@ -185,7 +185,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         onTap: _onTap,
         child: MenuAnchor(
           key: _menuAnchorKey,
-          anchorTapClosesMenu: true,
+          consumeOutsideTap: true,
           menuChildren: _buildMenuItems(context),
           controller: _menuController,
           childFocusNode: _menuButtonFocusNode,
