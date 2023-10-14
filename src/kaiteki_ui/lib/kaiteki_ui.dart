@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 export 'src/async/async_block_widget.dart';
 export 'src/async/async_button.dart';
 export 'src/async/async_snackbar_content.dart';
+export 'src/material/border_radii.dart';
 export 'src/material/main_switch_list_tile.dart';
 export 'src/material/shapes.dart';
 export 'src/utils/extensions.dart';
