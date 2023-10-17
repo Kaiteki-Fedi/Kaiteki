@@ -2,11 +2,17 @@ name: Weekly CI
 
 env:
   SOURCE_PATH: './src/kaiteki'
+  PATCH_VERSION: ${{ github.event.inputs.patch_version }}
 
 on:
   workflow_dispatch:
+    inputs:
+      patch_version:
+        description: 'Patch version'
+        required: false
+        type: string
   schedule:
-      - cron:  '0 0 * * 1'
+      - cron: '0 0 * * 1'
 
 permissions:
   contents: read

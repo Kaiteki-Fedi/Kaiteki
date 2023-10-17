@@ -9,8 +9,13 @@ BUILD_MODE := $(if $(DEBUG),--debug)$(if $(RELEASE),--release)$(if $(PROFILE),--
 FLAVOR := $(if $(SIGNED),signed,unsigned)$(if $(STORE),store,foss) 
 
 ifneq ($(WEEKLY_EPOCH),)
+ifneq ($(PATCH_VERSION),)
+	BUILD_NAME := $(shell date -d "@$(WEEKLY_EPOCH)" +%Y-%U).$(PATCH_VERSION)
+	BUILD_SEMVER := $(shell date -d "@$(WEEKLY_EPOCH)" +%Y.%U).$(PATCH_VERSION)
+else
 	BUILD_NAME := $(shell date -d "@$(WEEKLY_EPOCH)" +%Y-%U)
 	BUILD_SEMVER := $(shell date -d "@$(WEEKLY_EPOCH)" +%Y.%U.0)
+endif
 endif
 
 BUILD_ARGS := $(BUILD_MODE) \
@@ -21,6 +26,7 @@ ifneq ($(WEEKLY_EPOCH),)
 	BUILD_ARGS += "--dart-define=VERSION_NAME=Weekly $(BUILD_NAME)"
 endif
 
+$(info build name: $(BUILD_NAME))
 $(info build number: $(BUILD_NUMBER))
 
 # Define targets and their dependencies
