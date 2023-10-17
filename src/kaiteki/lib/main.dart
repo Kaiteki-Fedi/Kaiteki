@@ -30,7 +30,13 @@ Future<void> main() async {
 
     // initialize hive
     hive.registerAdapters();
-    if (!kIsWeb) await hive.migrateBoxes();
+    if (!kIsWeb) {
+      try {
+        await hive.migrateBoxes();
+      } catch (e, s) {
+        Logger.root.shout("Failed to migrate hive boxes", e, s);
+      }
+    }
     await hive.initialize();
 
     // load repositories
