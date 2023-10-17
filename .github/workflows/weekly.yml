@@ -59,7 +59,7 @@ jobs:
         id: build-variables
         run: |
           echo "WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
-          echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
+          echo "BUILD_NAME=$(date +%Y-%U)${{ github.event.inputs.patch_version && format('.${0}', github.event.inputs.patch_version) || '' }}" >> $GITHUB_OUTPUT
           echo "MAKE_ARGS=RELEASE=TRUE SIGNED=TRUE SPLIT_PER_ABI=TRUE WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
 
   build-linux:
