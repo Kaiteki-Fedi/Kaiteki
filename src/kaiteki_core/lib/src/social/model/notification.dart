@@ -44,51 +44,54 @@ class GroupedNotification implements Notification {
 }
 
 enum NotificationType {
-  /// Someone has liked the user's post
+  /// Someone has liked your post.
   liked,
 
-  /// Someone has repeated the user's post
+  /// Someone has repeated your post.
   repeated,
 
-  /// Someone has reacted to the user's post
+  /// Someone has reacted to your post.
   reacted,
 
-  /// Someone has followed the user
+  /// Someone has followed you.
   followed,
 
-  /// The user has been mentioned in a post
+  /// Someone has mentioned you in a post.
   mentioned,
 
-  /// Someone wants to follow the user
-  followRequest,
+  /// Someone wants to follow you.
+  incomingFollowRequest,
 
-  /// The user has been invited to a group.
+  /// Someone has accepted your follow request.
+  outgoingFollowRequestAccepted,
+
+  /// Someone has invited you to a group.
   groupInvite,
 
-  /// A poll that the user participated in or created has ended
+  /// A poll that you participated in or created has ended.
   pollEnded,
 
-  /// The user's post has been quoted by someone else
+  /// Someone else has quoted your post.
   quoted,
 
-  /// Someone replied to the user's post
+  /// Someone replied to your post.
   replied,
 
-  /// A post that the user has interacted with has been edited
+  /// A post that you have interacted with has been edited.
   updated,
 
-  /// Someone sent a report
+  /// Someone sent a report.
   reported,
 
-  /// A new user has joined the instance
+  /// Someone has joined the instance.
   signedUp,
 
-  /// Someone has made a new post
+  /// Someone has made a new post.
   newPost,
 
-  // Kaiteki received a notification type that it does not support
+  /// Kaiteki received a notification type that it does not support.
   unsupported,
 
-  /// Someone has moved to a new account
+  /// Someone has moved to a new account.
   userMigrated,
 }

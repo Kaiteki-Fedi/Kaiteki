@@ -124,7 +124,8 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     final groups = ungrouped.groupBy((e) {
       String? followRequestValue;
 
-      if (e.type == NotificationType.followRequest) {
+      if (e.type == NotificationType.incomingFollowRequest ||
+          e.type == NotificationType.outgoingFollowRequestAccepted) {
         followRequestValue = e.user?.id;
       }
 

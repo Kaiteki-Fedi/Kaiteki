@@ -214,7 +214,8 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       NotificationType.repeated => Icons.repeat_rounded,
       NotificationType.mentioned => Icons.alternate_email_rounded,
       NotificationType.followed => Icons.add_rounded,
-      NotificationType.followRequest => Icons.person_outline_rounded,
+      NotificationType.incomingFollowRequest => Icons.person_outline_rounded,
+      NotificationType.outgoingFollowRequestAccepted => Icons.check_rounded,
       NotificationType.reacted => Icons.emoji_emotions_rounded,
       NotificationType.groupInvite => Icons.group_add_rounded,
       NotificationType.pollEnded => Icons.poll_rounded,
@@ -258,7 +259,8 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
         return colorScheme.primary;
 
       case NotificationType.followed:
-      case NotificationType.followRequest:
+      case NotificationType.incomingFollowRequest:
+      case NotificationType.outgoingFollowRequestAccepted:
       case NotificationType.groupInvite:
       case NotificationType.signedUp:
       case NotificationType.userMigrated:
@@ -276,7 +278,9 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       NotificationType.reacted => " reacted to your post",
       NotificationType.followed => " followed you",
       NotificationType.mentioned => " mentioned you",
-      NotificationType.followRequest => " wants to follow you",
+      NotificationType.incomingFollowRequest => " wants to follow you",
+      NotificationType.outgoingFollowRequestAccepted =>
+        " accepted your follow request",
       NotificationType.groupInvite => " invited you to a group",
       NotificationType.pollEnded => "'s poll has ended",
       NotificationType.quoted => " quoted you",

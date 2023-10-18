@@ -20,7 +20,7 @@ final mastodonNotificationTypeMap = const {
   'pleroma:emoji_reaction': NotificationType.reacted,
   'follow': NotificationType.followed,
   'mention': NotificationType.mentioned,
-  'follow_request': NotificationType.followRequest,
+  'follow_request': NotificationType.incomingFollowRequest,
   'poll': NotificationType.pollEnded,
   'update': NotificationType.updated,
   'admin.sign_up': NotificationType.signedUp,
