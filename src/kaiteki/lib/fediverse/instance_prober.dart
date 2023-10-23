@@ -1,5 +1,4 @@
 import "package:flutter/foundation.dart";
-import "package:kaiteki_core/kaiteki_core.dart";
 import "package:kaiteki_core/kaiteki_core.dart" as core;
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
