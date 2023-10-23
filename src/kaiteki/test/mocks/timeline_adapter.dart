@@ -13,9 +13,6 @@ class TimelineAdapter extends BackendAdapter {
   ]);
 
   @override
-  Future<User?> followUser(String id) => throw UnimplementedError();
-
-  @override
   FutureOr<Instance> getInstance() => throw UnimplementedError();
 
   @override
@@ -82,30 +79,11 @@ class TimelineAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<PaginatedList<String?, User>> getFollowers(
-    String userId, {
-    String? sinceId,
-    String? untilId,
-  }) =>
-      throw UnimplementedError();
-
-  @override
-  Future<PaginatedList<String?, User>> getFollowing(
-    String userId, {
-    String? sinceId,
-    String? untilId,
-  }) =>
-      throw UnimplementedError();
-
-  @override
   Future<User> lookupUser(String username, [String? host]) =>
       throw UnimplementedError();
 
   @override
   ApiType get type => ApiType.mastodon;
-
-  @override
-  Future<User?> unfollowUser(String id) => throw UnimplementedError();
 
   @override
   Future<Object?> resolveUrl(Uri url) => throw UnimplementedError();

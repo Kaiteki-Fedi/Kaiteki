@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'users.dart';
+part of 'follow_requests.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$usersServiceHash() => r'03291de8674c3ae95ac80b3e062d7c9ab371dbd9';
+String _$followRequestsServiceHash() =>
+    r'73f300f17bcdb992b301b457f4ffd08c97437f6b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,43 +30,40 @@ class _SystemHash {
   }
 }
 
-abstract class _$UsersService extends BuildlessAsyncNotifier<User?> {
+abstract class _$FollowRequestsService
+    extends BuildlessAsyncNotifier<PaginationState<User>> {
   late final AccountKey key;
-  late final String id;
 
-  FutureOr<User?> build(
+  FutureOr<PaginationState<User>> build(
     AccountKey key,
-    String id,
   );
 }
 
-/// See also [UsersService].
-@ProviderFor(UsersService)
-const usersServiceProvider = UsersServiceFamily();
+/// See also [FollowRequestsService].
+@ProviderFor(FollowRequestsService)
+const followRequestsServiceProvider = FollowRequestsServiceFamily();
 
-/// See also [UsersService].
-class UsersServiceFamily extends Family<AsyncValue<User?>> {
-  /// See also [UsersService].
-  const UsersServiceFamily();
+/// See also [FollowRequestsService].
+class FollowRequestsServiceFamily
+    extends Family<AsyncValue<PaginationState<User>>> {
+  /// See also [FollowRequestsService].
+  const FollowRequestsServiceFamily();
 
-  /// See also [UsersService].
-  UsersServiceProvider call(
+  /// See also [FollowRequestsService].
+  FollowRequestsServiceProvider call(
     AccountKey key,
-    String id,
   ) {
-    return UsersServiceProvider(
+    return FollowRequestsServiceProvider(
       key,
-      id,
     );
   }
 
   @override
-  UsersServiceProvider getProviderOverride(
-    covariant UsersServiceProvider provider,
+  FollowRequestsServiceProvider getProviderOverride(
+    covariant FollowRequestsServiceProvider provider,
   ) {
     return call(
       provider.key,
-      provider.id,
     );
   }
 
@@ -81,34 +79,30 @@ class UsersServiceFamily extends Family<AsyncValue<User?>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'usersServiceProvider';
+  String? get name => r'followRequestsServiceProvider';
 }
 
-/// See also [UsersService].
-class UsersServiceProvider
-    extends AsyncNotifierProviderImpl<UsersService, User?> {
-  /// See also [UsersService].
-  UsersServiceProvider(
+/// See also [FollowRequestsService].
+class FollowRequestsServiceProvider extends AsyncNotifierProviderImpl<
+    FollowRequestsService, PaginationState<User>> {
+  /// See also [FollowRequestsService].
+  FollowRequestsServiceProvider(
     AccountKey key,
-    String id,
   ) : this._internal(
-          () => UsersService()
-            ..key = key
-            ..id = id,
-          from: usersServiceProvider,
-          name: r'usersServiceProvider',
+          () => FollowRequestsService()..key = key,
+          from: followRequestsServiceProvider,
+          name: r'followRequestsServiceProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$usersServiceHash,
-          dependencies: UsersServiceFamily._dependencies,
+                  : _$followRequestsServiceHash,
+          dependencies: FollowRequestsServiceFamily._dependencies,
           allTransitiveDependencies:
-              UsersServiceFamily._allTransitiveDependencies,
+              FollowRequestsServiceFamily._allTransitiveDependencies,
           key: key,
-          id: id,
         );
 
-  UsersServiceProvider._internal(
+  FollowRequestsServiceProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -116,78 +110,68 @@ class UsersServiceProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.key,
-    required this.id,
   }) : super.internal();
 
   final AccountKey key;
-  final String id;
 
   @override
-  FutureOr<User?> runNotifierBuild(
-    covariant UsersService notifier,
+  FutureOr<PaginationState<User>> runNotifierBuild(
+    covariant FollowRequestsService notifier,
   ) {
     return notifier.build(
       key,
-      id,
     );
   }
 
   @override
-  Override overrideWith(UsersService Function() create) {
+  Override overrideWith(FollowRequestsService Function() create) {
     return ProviderOverride(
       origin: this,
-      override: UsersServiceProvider._internal(
-        () => create()
-          ..key = key
-          ..id = id,
+      override: FollowRequestsServiceProvider._internal(
+        () => create()..key = key,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         key: key,
-        id: id,
       ),
     );
   }
 
   @override
-  AsyncNotifierProviderElement<UsersService, User?> createElement() {
-    return _UsersServiceProviderElement(this);
+  AsyncNotifierProviderElement<FollowRequestsService, PaginationState<User>>
+      createElement() {
+    return _FollowRequestsServiceProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UsersServiceProvider && other.key == key && other.id == id;
+    return other is FollowRequestsServiceProvider && other.key == key;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, key.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin UsersServiceRef on AsyncNotifierProviderRef<User?> {
+mixin FollowRequestsServiceRef
+    on AsyncNotifierProviderRef<PaginationState<User>> {
   /// The parameter `key` of this provider.
   AccountKey get key;
-
-  /// The parameter `id` of this provider.
-  String get id;
 }
 
-class _UsersServiceProviderElement
-    extends AsyncNotifierProviderElement<UsersService, User?>
-    with UsersServiceRef {
-  _UsersServiceProviderElement(super.provider);
+class _FollowRequestsServiceProviderElement
+    extends AsyncNotifierProviderElement<FollowRequestsService,
+        PaginationState<User>> with FollowRequestsServiceRef {
+  _FollowRequestsServiceProviderElement(super.provider);
 
   @override
-  AccountKey get key => (origin as UsersServiceProvider).key;
-  @override
-  String get id => (origin as UsersServiceProvider).id;
+  AccountKey get key => (origin as FollowRequestsServiceProvider).key;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

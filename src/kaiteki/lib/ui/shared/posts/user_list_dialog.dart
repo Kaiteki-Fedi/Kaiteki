@@ -88,29 +88,40 @@ class UserListTile extends ConsumerWidget {
     this.onPressed,
     this.showDescription = true,
     this.trailing = const [],
+    this.content = const [],
+    this.avatarSize = 32.0,
+    this.titleAlignment,
   });
 
   final User user;
   final VoidCallback? onPressed;
   final List<Widget> trailing;
   final bool showDescription;
+  final List<Widget> content;
+  final double avatarSize;
+  final ListTileTitleAlignment? titleAlignment;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final description = user.description?.trim();
     final hasDescription = description != null && description.isNotEmpty;
+
+    final subtitle = [
+      if (hasDescription && showDescription)
+        Text.rich(
+          user.renderText(context, ref, description),
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+        ),
+      if (content.isNotEmpty) ...content,
+    ];
+
     return ListTile(
       onTap: onPressed,
       title: UserDisplayNameWidget(user),
-      leading: AvatarWidget(user, size: 32),
-      titleAlignment: ListTileTitleAlignment.top,
-      subtitle: hasDescription && showDescription
-          ? Text.rich(
-              user.renderText(context, ref, description),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            )
-          : null,
+      leading: AvatarWidget(user, size: avatarSize),
+      titleAlignment: titleAlignment ?? ListTileTitleAlignment.top,
+      subtitle: subtitle.isNotEmpty ? Column(children: subtitle) : null,
       trailing: trailing.nullTransform(
         (e) => Row(
           mainAxisSize: MainAxisSize.min,

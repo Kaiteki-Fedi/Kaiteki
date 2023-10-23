@@ -18,15 +18,17 @@ const _scopes = ['read', 'write', 'follow', 'push'];
 abstract class SharedMastodonAdapter<T extends MastodonClient>
     extends DecentralizedBackendAdapter
     implements
+        AnnouncementsSupport,
+        BookmarkSupport,
         CustomEmojiSupport,
         FavoriteSupport,
-        BookmarkSupport,
-        NotificationSupport,
-        SearchSupport,
+        FollowSupport,
         ListSupport,
-        MuteSupport,
         LoginSupport,
-        OAuthReceiver {
+        MuteSupport,
+        NotificationSupport,
+        OAuthReceiver,
+        SearchSupport {
   final T client;
 
   @override
@@ -201,7 +203,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       sensitive: draft.attachments.any((e) => e.isSensitive ?? false),
       contentType: pleromaFormattingRosetta.getLeft(draft.formatting),
       mediaIds: draft.attachments
-          .map((a) => (a.source as mastodon.Attachment).id)
+          .map((a) => (a.source as mastodon.MediaAttachment).id)
           .toList(),
       language: draft.language,
       poll: poll == null
@@ -578,5 +580,38 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     if (account != null) return account.toKaiteki(instance);
 
     return null;
+  }
+
+  @override
+  Future<PaginatedSet<String?, User>> getFollowRequests({
+    String? sinceId,
+    String? untilId,
+  }) async {
+    final pagination = await client.getFollowRequests(
+      sinceId: sinceId,
+      maxId: untilId,
+    );
+
+    return PaginatedSet(
+      pagination.data.map((e) => e.toKaiteki(instance)).toSet(),
+      pagination.previousParams?['since_id'],
+      pagination.nextParams?['max_id'],
+    );
+  }
+
+  @override
+  Future<void> acceptFollowRequest(String userId) {
+    return client.authorizeFollowRequest(userId);
+  }
+
+  @override
+  Future<void> rejectFollowRequest(String userId) {
+    return client.rejectFollowRequest(userId);
+  }
+
+  @override
+  Future<List<Announcement>> getAnnouncements() async {
+    final announcements = await client.getAnnouncements();
+    return announcements.map((e) => e.toKaiteki(instance)).toList();
   }
 }

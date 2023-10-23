@@ -10,9 +10,11 @@ import "package:kaiteki/routing/notifier.dart";
 import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
 import "package:kaiteki/ui/account_required_screen.dart";
+import "package:kaiteki/ui/announcements/dialog.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/auth/oauth_finalization_screen.dart";
 import "package:kaiteki/ui/feedback_screen.dart";
+import "package:kaiteki/ui/follow_requests/dialog.dart";
 import "package:kaiteki/ui/launcher/dialog.dart";
 import "package:kaiteki/ui/lists/lists_screen.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
@@ -346,6 +348,24 @@ final routerProvider = Provider<GoRouter>((ref) {
                     builder: (_, __) => const MutesScreen(),
                   ),
                 ],
+              ),
+              GoRoute(
+                path: "announcements",
+                name: "announcements",
+                pageBuilder: (context, state) {
+                  return _DialogPage(
+                    builder: (_) => const AnnouncementsDialog(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: "follow-requests",
+                name: "follow-requests",
+                pageBuilder: (context, state) {
+                  return _DialogPage(
+                    builder: (_) => FollowRequestsDialog(),
+                  );
+                },
               ),
             ],
           ),

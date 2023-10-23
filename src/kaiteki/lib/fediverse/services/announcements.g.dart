@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_resolver.dart';
+part of 'announcements.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$resolveHash() => r'52da69ea3a3155b1c4b657555c83b1339e24f0b4';
+String _$announcementsServiceHash() =>
+    r'5d956ee8eec1b43b33370549e2a538be2e01b32e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,33 +30,40 @@ class _SystemHash {
   }
 }
 
-/// See also [resolve].
-@ProviderFor(resolve)
-const resolveProvider = ResolveFamily();
+abstract class _$AnnouncementsService
+    extends BuildlessAsyncNotifier<List<Announcement>> {
+  late final AccountKey key;
 
-/// See also [resolve].
-class ResolveFamily extends Family<AsyncValue<User?>> {
-  /// See also [resolve].
-  const ResolveFamily();
-
-  /// See also [resolve].
-  ResolveProvider call(
+  Future<List<Announcement>> build(
     AccountKey key,
-    UserReference reference,
+  );
+}
+
+/// See also [AnnouncementsService].
+@ProviderFor(AnnouncementsService)
+const announcementsServiceProvider = AnnouncementsServiceFamily();
+
+/// See also [AnnouncementsService].
+class AnnouncementsServiceFamily
+    extends Family<AsyncValue<List<Announcement>>> {
+  /// See also [AnnouncementsService].
+  const AnnouncementsServiceFamily();
+
+  /// See also [AnnouncementsService].
+  AnnouncementsServiceProvider call(
+    AccountKey key,
   ) {
-    return ResolveProvider(
+    return AnnouncementsServiceProvider(
       key,
-      reference,
     );
   }
 
   @override
-  ResolveProvider getProviderOverride(
-    covariant ResolveProvider provider,
+  AnnouncementsServiceProvider getProviderOverride(
+    covariant AnnouncementsServiceProvider provider,
   ) {
     return call(
       provider.key,
-      provider.reference,
     );
   }
 
@@ -71,34 +79,30 @@ class ResolveFamily extends Family<AsyncValue<User?>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'resolveProvider';
+  String? get name => r'announcementsServiceProvider';
 }
 
-/// See also [resolve].
-class ResolveProvider extends AutoDisposeFutureProvider<User?> {
-  /// See also [resolve].
-  ResolveProvider(
+/// See also [AnnouncementsService].
+class AnnouncementsServiceProvider extends AsyncNotifierProviderImpl<
+    AnnouncementsService, List<Announcement>> {
+  /// See also [AnnouncementsService].
+  AnnouncementsServiceProvider(
     AccountKey key,
-    UserReference reference,
   ) : this._internal(
-          (ref) => resolve(
-            ref as ResolveRef,
-            key,
-            reference,
-          ),
-          from: resolveProvider,
-          name: r'resolveProvider',
+          () => AnnouncementsService()..key = key,
+          from: announcementsServiceProvider,
+          name: r'announcementsServiceProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$resolveHash,
-          dependencies: ResolveFamily._dependencies,
-          allTransitiveDependencies: ResolveFamily._allTransitiveDependencies,
+                  : _$announcementsServiceHash,
+          dependencies: AnnouncementsServiceFamily._dependencies,
+          allTransitiveDependencies:
+              AnnouncementsServiceFamily._allTransitiveDependencies,
           key: key,
-          reference: reference,
         );
 
-  ResolveProvider._internal(
+  AnnouncementsServiceProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -106,70 +110,66 @@ class ResolveProvider extends AutoDisposeFutureProvider<User?> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.key,
-    required this.reference,
   }) : super.internal();
 
   final AccountKey key;
-  final UserReference reference;
 
   @override
-  Override overrideWith(
-    FutureOr<User?> Function(ResolveRef provider) create,
+  Future<List<Announcement>> runNotifierBuild(
+    covariant AnnouncementsService notifier,
   ) {
+    return notifier.build(
+      key,
+    );
+  }
+
+  @override
+  Override overrideWith(AnnouncementsService Function() create) {
     return ProviderOverride(
       origin: this,
-      override: ResolveProvider._internal(
-        (ref) => create(ref as ResolveRef),
+      override: AnnouncementsServiceProvider._internal(
+        () => create()..key = key,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         key: key,
-        reference: reference,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<User?> createElement() {
-    return _ResolveProviderElement(this);
+  AsyncNotifierProviderElement<AnnouncementsService, List<Announcement>>
+      createElement() {
+    return _AnnouncementsServiceProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ResolveProvider &&
-        other.key == key &&
-        other.reference == reference;
+    return other is AnnouncementsServiceProvider && other.key == key;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, key.hashCode);
-    hash = _SystemHash.combine(hash, reference.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin ResolveRef on AutoDisposeFutureProviderRef<User?> {
+mixin AnnouncementsServiceRef on AsyncNotifierProviderRef<List<Announcement>> {
   /// The parameter `key` of this provider.
   AccountKey get key;
-
-  /// The parameter `reference` of this provider.
-  UserReference get reference;
 }
 
-class _ResolveProviderElement extends AutoDisposeFutureProviderElement<User?>
-    with ResolveRef {
-  _ResolveProviderElement(super.provider);
+class _AnnouncementsServiceProviderElement extends AsyncNotifierProviderElement<
+    AnnouncementsService, List<Announcement>> with AnnouncementsServiceRef {
+  _AnnouncementsServiceProviderElement(super.provider);
 
   @override
-  AccountKey get key => (origin as ResolveProvider).key;
-
-  @override
-  UserReference get reference => (origin as ResolveProvider).reference;
+  AccountKey get key => (origin as AnnouncementsServiceProvider).key;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

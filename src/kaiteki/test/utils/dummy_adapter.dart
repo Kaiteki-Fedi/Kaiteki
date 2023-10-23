@@ -20,11 +20,6 @@ class DummyAdapter extends BackendAdapter {
   ApiType get type => ApiType.mastodon;
 
   @override
-  Future<User?> followUser(String id) {
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Instance> getInstance() async => instance;
 
   @override
@@ -99,27 +94,8 @@ class DummyAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  Future<PaginatedList<String?, User>> getFollowers(
-    String userId, {
-    String? sinceId,
-    String? untilId,
-  }) =>
-      throw UnimplementedError();
-
-  @override
-  Future<PaginatedList<String?, User>> getFollowing(
-    String userId, {
-    String? sinceId,
-    String? untilId,
-  }) =>
-      throw UnimplementedError();
-
-  @override
   Future<User> lookupUser(String username, [String? host]) =>
       throw UnimplementedError();
-
-  @override
-  Future<User?> unfollowUser(String id) => throw UnimplementedError();
 
   @override
   Future<Object?> resolveUrl(Uri url) => throw UnimplementedError();

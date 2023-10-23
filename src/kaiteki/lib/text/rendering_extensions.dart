@@ -6,6 +6,17 @@ import "package:kaiteki_core/backends/misskey.dart";
 import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
 
+InlineSpan renderText(
+  BuildContext context,
+  WidgetRef ref,
+  String content, [
+  TextContext? textContext,
+]) {
+  final elements = parseText(content, ref.read(textParserProvider));
+  final renderer = TextRenderer.fromContext(context, ref, textContext);
+  return renderer.render(elements);
+}
+
 extension PostRenderExtensions on Post {
   InlineSpan renderContent(
     BuildContext context,

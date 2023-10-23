@@ -133,9 +133,9 @@ class MastodonClient {
         .then(LoginResponse.fromJson.fromResponse);
   }
 
-  Future<List<Emoji>> getCustomEmojis() async => client
+  Future<List<CustomEmoji>> getCustomEmojis() async => client
       .sendRequest(HttpMethod.get, 'api/v1/custom_emojis')
-      .then(Emoji.fromJson.fromResponseList);
+      .then(CustomEmoji.fromJson.fromResponseList);
 
   Future<Account> verifyCredentials() async => client
       .sendRequest(HttpMethod.get, 'api/v1/accounts/verify_credentials')
@@ -355,7 +355,7 @@ class MastodonClient {
     }
   }
 
-  Future<Attachment> uploadMedia(
+  Future<MediaAttachment> uploadMedia(
     KaitekiFile file,
     String? description,
   ) async {
@@ -364,7 +364,7 @@ class MastodonClient {
       'api/v1/media',
       fields: {if (description != null) 'description': description},
       files: [await file.toMultipartFile('file')],
-    ).then(Attachment.fromJson.fromResponse);
+    ).then(MediaAttachment.fromJson.fromResponse);
   }
 
   Future<List<Account>> getFavouritedBy(String statusId) async => client
@@ -662,5 +662,46 @@ class MastodonClient {
           'api/v1/accounts/$id/unfollow',
         )
         .then(Relationship.fromJson.fromResponse);
+  }
+
+  Future<MastodonPagination<List<Account>>> getFollowRequests({
+    String? maxId,
+    String? sinceId,
+  }) async {
+    final response = await client.sendRequest(
+      HttpMethod.get,
+      'api/v1/follow_requests',
+      query: {
+        if (maxId != null) 'max_id': maxId,
+        if (sinceId != null) 'since_id': sinceId,
+      },
+    );
+    final accounts = Account.fromJson.fromResponseList(response);
+    final linkHeader = response.headers['link'];
+    return _createPagination(accounts, linkHeader);
+  }
+
+  Future<Relationship> rejectFollowRequest(String userId) async {
+    return await client
+        .sendRequest(
+          HttpMethod.post,
+          'api/v1/follow_requests/$userId/reject',
+        )
+        .then(Relationship.fromJson.fromResponse);
+  }
+
+  Future<Relationship> authorizeFollowRequest(String userId) async {
+    return await client
+        .sendRequest(
+          HttpMethod.post,
+          'api/v1/follow_requests/$userId/authorize',
+        )
+        .then(Relationship.fromJson.fromResponse);
+  }
+
+  Future<List<Announcement>> getAnnouncements() async {
+    return await client
+        .sendRequest(HttpMethod.get, 'api/v1/announcements')
+        .then(Announcement.fromJson.fromResponseList);
   }
 }

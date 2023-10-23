@@ -34,7 +34,7 @@ class _SystemHash {
 const probeInstanceProvider = ProbeInstanceFamily();
 
 /// See also [probeInstance].
-class ProbeInstanceFamily extends Family<AsyncValue<InstanceProbeResult>> {
+class ProbeInstanceFamily extends Family<AsyncValue<core.InstanceProbeResult>> {
   /// See also [probeInstance].
   const ProbeInstanceFamily();
 
@@ -73,7 +73,7 @@ class ProbeInstanceFamily extends Family<AsyncValue<InstanceProbeResult>> {
 
 /// See also [probeInstance].
 class ProbeInstanceProvider
-    extends AutoDisposeFutureProvider<InstanceProbeResult> {
+    extends AutoDisposeFutureProvider<core.InstanceProbeResult> {
   /// See also [probeInstance].
   ProbeInstanceProvider(
     String host,
@@ -108,7 +108,8 @@ class ProbeInstanceProvider
 
   @override
   Override overrideWith(
-    FutureOr<InstanceProbeResult> Function(ProbeInstanceRef provider) create,
+    FutureOr<core.InstanceProbeResult> Function(ProbeInstanceRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -125,7 +126,7 @@ class ProbeInstanceProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<InstanceProbeResult> createElement() {
+  AutoDisposeFutureProviderElement<core.InstanceProbeResult> createElement() {
     return _ProbeInstanceProviderElement(this);
   }
 
@@ -143,13 +144,14 @@ class ProbeInstanceProvider
   }
 }
 
-mixin ProbeInstanceRef on AutoDisposeFutureProviderRef<InstanceProbeResult> {
+mixin ProbeInstanceRef
+    on AutoDisposeFutureProviderRef<core.InstanceProbeResult> {
   /// The parameter `host` of this provider.
   String get host;
 }
 
 class _ProbeInstanceProviderElement
-    extends AutoDisposeFutureProviderElement<InstanceProbeResult>
+    extends AutoDisposeFutureProviderElement<core.InstanceProbeResult>
     with ProbeInstanceRef {
   _ProbeInstanceProviderElement(super.provider);
 

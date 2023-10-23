@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$MutesService
-    extends BuildlessAsyncNotifier<PaginationState<User<dynamic>>> {
+    extends BuildlessAsyncNotifier<PaginationState<User>> {
   late final AccountKey key;
 
-  FutureOr<PaginationState<User<dynamic>>> build(
+  FutureOr<PaginationState<User>> build(
     AccountKey key,
   );
 }
@@ -43,8 +43,7 @@ abstract class _$MutesService
 const mutesServiceProvider = MutesServiceFamily();
 
 /// See also [MutesService].
-class MutesServiceFamily
-    extends Family<AsyncValue<PaginationState<User<dynamic>>>> {
+class MutesServiceFamily extends Family<AsyncValue<PaginationState<User>>> {
   /// See also [MutesService].
   const MutesServiceFamily();
 
@@ -82,8 +81,8 @@ class MutesServiceFamily
 }
 
 /// See also [MutesService].
-class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
-    PaginationState<User<dynamic>>> {
+class MutesServiceProvider
+    extends AsyncNotifierProviderImpl<MutesService, PaginationState<User>> {
   /// See also [MutesService].
   MutesServiceProvider(
     AccountKey key,
@@ -114,7 +113,7 @@ class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
   final AccountKey key;
 
   @override
-  FutureOr<PaginationState<User<dynamic>>> runNotifierBuild(
+  FutureOr<PaginationState<User>> runNotifierBuild(
     covariant MutesService notifier,
   ) {
     return notifier.build(
@@ -139,7 +138,7 @@ class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
   }
 
   @override
-  AsyncNotifierProviderElement<MutesService, PaginationState<User<dynamic>>>
+  AsyncNotifierProviderElement<MutesService, PaginationState<User>>
       createElement() {
     return _MutesServiceProviderElement(this);
   }
@@ -158,14 +157,14 @@ class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
   }
 }
 
-mixin MutesServiceRef
-    on AsyncNotifierProviderRef<PaginationState<User<dynamic>>> {
+mixin MutesServiceRef on AsyncNotifierProviderRef<PaginationState<User>> {
   /// The parameter `key` of this provider.
   AccountKey get key;
 }
 
-class _MutesServiceProviderElement extends AsyncNotifierProviderElement<
-    MutesService, PaginationState<User<dynamic>>> with MutesServiceRef {
+class _MutesServiceProviderElement
+    extends AsyncNotifierProviderElement<MutesService, PaginationState<User>>
+    with MutesServiceRef {
   _MutesServiceProviderElement(super.provider);
 
   @override

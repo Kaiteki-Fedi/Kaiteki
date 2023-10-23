@@ -117,7 +117,7 @@ extension KaitekiMastodonAccountExtension on mastodon.Account {
   }
 }
 
-extension KaitekiMastodonAttachmentExtension on mastodon.Attachment {
+extension KaitekiMastodonAttachmentExtension on mastodon.MediaAttachment {
   Attachment toKaiteki({mastodon.Status? status}) {
     final url = Uri.parse(this.url);
     return Attachment(
@@ -144,7 +144,7 @@ extension KaitekiMastodonEmbedExtension on mastodon.PreviewCard {
   }
 }
 
-extension KaitekiMastodonEmojiExtension on mastodon.Emoji {
+extension KaitekiMastodonEmojiExtension on mastodon.CustomEmoji {
   CustomEmoji toKaiteki(String localHost) {
     return CustomEmoji(
       url: Uri.parse(staticUrl),
@@ -236,8 +236,9 @@ extension KaitekiMastodonPollExtension on mastodon.Poll {
 
 extension KaitekiMastodonReactionExtension on mastodon.Reaction {
   Reaction toKaiteki(String localHost) {
+    final url = this.url;
     final emoji = url != null
-        ? CustomEmoji.parse(name, Uri.parse(url ?? ''), localHost)
+        ? CustomEmoji.parse(name, url, localHost)
         : UnicodeEmoji(name);
 
     return Reaction(
@@ -320,6 +321,19 @@ extension KaitekiMastodonStatusExtension on mastodon.Status {
       poll: poll.nullTransform((e) => e.toKaiteki()),
       embeds: card.nullTransform((e) => [e.toKaiteki()]) ?? const [],
       quotedPost: quote.nullTransform((e) => e.toKaiteki(localHost)),
+    );
+  }
+}
+
+extension KaitekiMastodonAnnouncementExtension on mastodon.Announcement {
+  Announcement toKaiteki(String host) {
+    return Announcement(
+      id: id,
+      content: content,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      important: null,
+      isUnread: read.nullTransform((e) => !e),
     );
   }
 }

@@ -741,4 +741,32 @@ class MisskeyClient {
       body: {'userId': id}.jsonBody,
     );
   }
+
+  Future<List<misskey.FollowingRequest>> getFollowingRequests() async {
+    return client
+        .sendRequest(HttpMethod.post, 'api/following/requests/list')
+        .then(misskey.FollowingRequest.fromJson.fromResponseList);
+  }
+
+  Future<void> acceptFollowRequest(String userId) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      'api/following/requests/accept',
+      body: {'userId': userId}.jsonBody,
+    );
+  }
+
+  Future<void> rejectFollowRequest(String userId) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      'api/following/requests/reject',
+      body: {'userId': userId}.jsonBody,
+    );
+  }
+
+  Future<List<misskey.Announcement>> getAnnouncements() async {
+    return client
+        .sendRequest(HttpMethod.post, 'api/announcements')
+        .then(misskey.Announcement.fromJson.fromResponseList);
+  }
 }

@@ -7,7 +7,6 @@ import 'api_type.dart';
 import 'capabilities.dart';
 import 'model/attachment.dart';
 import 'model/instance.dart';
-import 'model/pagination.dart';
 import 'model/post.dart';
 import 'model/timeline_query.dart';
 import 'model/timeline_type.dart';
@@ -78,31 +77,9 @@ abstract class BackendAdapter {
   /// Unrepeats a post.
   Future<void> unrepeatPost(String id);
 
-  /// Follows an user.
-  ///
-  /// May return a [User] with updated user state, otherwise throw on error.
-  Future<User?> followUser(String id);
-
-  /// Unfollows an user.
-  ///
-  /// May return a [User] with updated user state, otherwise throw on error.
-  Future<User?> unfollowUser(String id);
-
   Future<Attachment> uploadAttachment(AttachmentDraft draft);
 
   Future<List<User>> getRepeatees(String id);
-
-  Future<PaginatedList<String?, User>> getFollowers(
-    String userId, {
-    String? sinceId,
-    String? untilId,
-  });
-
-  Future<PaginatedList<String?, User>> getFollowing(
-    String userId, {
-    String? sinceId,
-    String? untilId,
-  });
 
   Future<User> lookupUser(String username, [String? host]);
 

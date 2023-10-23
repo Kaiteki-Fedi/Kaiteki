@@ -17,15 +17,13 @@ class UserSliver extends ConsumerStatefulWidget {
     super.key,
     this.wide = false,
     required this.userId,
-    this.showFollowing = false,
-  });
+  }) : showFollowing = false;
 
   const UserSliver.following({
     super.key,
     this.wide = false,
     required this.userId,
-    this.showFollowing = true,
-  });
+  }) : showFollowing = true;
 
   @override
   ConsumerState createState() => UserSliverState();
@@ -39,7 +37,7 @@ class UserSliverState extends ConsumerState<UserSliver> {
   late ProviderSubscription<BackendAdapter> _subscription;
 
   Future<PaginatedList<String?, User>> Function(String?) get _source {
-    final adapter = _subscription.read();
+    final adapter = _subscription.read() as FollowSupport;
 
     if (widget.showFollowing) {
       return (id) => adapter.getFollowing(widget.userId, untilId: id);

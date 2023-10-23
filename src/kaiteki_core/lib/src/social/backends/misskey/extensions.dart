@@ -306,3 +306,17 @@ extension KaitekiMisskeyUserExtension on misskey.UserLite {
     );
   }
 }
+
+extension KaitekiMisskeyAnnouncementExtension on misskey.Announcement {
+  Announcement toKaiteki() {
+    return Announcement(
+      id: id,
+      important: showPopup == true || needsConfirmationToRead == true,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      title: title,
+      content: text,
+      isUnread: isRead == false,
+    );
+  }
+}

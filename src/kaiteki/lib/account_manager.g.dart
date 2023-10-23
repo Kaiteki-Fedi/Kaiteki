@@ -24,6 +24,7 @@ final accountSecretRepositoryProvider =
 
 typedef AccountSecretRepositoryRef
     = AutoDisposeProviderRef<Repository<AccountSecret, AccountKey>>;
+
 String _$clientSecretRepositoryHash() =>
     r'aed3e9014f61ee4cbc6de2836eb5f3e92d8dc635';
 
@@ -42,12 +43,13 @@ final clientSecretRepositoryProvider =
 
 typedef ClientSecretRepositoryRef
     = AutoDisposeProviderRef<Repository<ClientSecret, AccountKey>>;
+
 String _$accountManagerHash() => r'd06761d4847b0c5faab15d9200c99414dbe5248b';
 
 /// See also [AccountManager].
 @ProviderFor(AccountManager)
-final accountManagerProvider = NotifierProvider<AccountManager,
-    ({Set<Account> accounts, Account? current})>.internal(
+final accountManagerProvider =
+    NotifierProvider<AccountManager, AccountManagerState>.internal(
   AccountManager.new,
   name: r'accountManagerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -65,7 +67,6 @@ final accountManagerProvider = NotifierProvider<AccountManager,
   },
 );
 
-typedef _$AccountManager
-    = Notifier<({Set<Account> accounts, Account? current})>;
+typedef _$AccountManager = Notifier<AccountManagerState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

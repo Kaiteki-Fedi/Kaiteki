@@ -13,8 +13,7 @@ import "package:kaiteki/ui/shared/timeline/timeline.dart";
 import "package:kaiteki/ui/user/user_panel.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki_core/model.dart";
-import "package:kaiteki_core/utils.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:share_plus/share_plus.dart";
 
 const avatarSizeCompact = 72.0;
@@ -463,7 +462,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 
   Future<void> _onFollow(BuildContext context, User user) async {
-    final adapter = ref.read(adapterProvider);
+    final adapter = ref.read(adapterProvider) as FollowSupport;
 
     final followState = user.state.follow;
 

@@ -1,3 +1,4 @@
+export 'src/social/model/announcement.dart';
 export 'src/social/model/attachment.dart';
 export 'src/social/model/chat_message.dart';
 export 'src/social/model/chat_target.dart';

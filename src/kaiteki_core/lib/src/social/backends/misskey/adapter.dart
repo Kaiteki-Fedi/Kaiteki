@@ -48,16 +48,18 @@ const List<String> permissions = [
 // TODO(Craftplacer): add missing implementations
 class MisskeyAdapter extends DecentralizedBackendAdapter
     implements
+        AnnouncementsSupport,
         ChatSupport,
-        ReactionSupport,
         CustomEmojiSupport,
-        NotificationSupport,
-        MuteSupport,
-        SearchSupport,
+        FollowSupport,
         ListSupport,
-        PostTranslationSupport,
         LoginSupport,
-        OAuthReceiver {
+        MuteSupport,
+        NotificationSupport,
+        OAuthReceiver,
+        PostTranslationSupport,
+        ReactionSupport,
+        SearchSupport {
   final MisskeyClient client;
 
   static final _logger = Logger('MisskeyAdapter');
@@ -662,6 +664,42 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         refreshToken: null,
         userId: null,
       ),
+    );
+  }
+
+  @override
+  Future<PaginatedSet<String?, User>> getFollowRequests({
+    String? sinceId,
+    String? untilId,
+  }) async {
+    if (sinceId != null || untilId != null) {
+      return PaginatedSet(const <User>{}, null, null);
+    }
+
+    return await client.getFollowingRequests().then(
+      (requests) {
+        final set = requests.map((e) => e.follower.toKaiteki(instance)).toSet();
+        return PaginatedSet(set, null, null);
+      },
+    );
+  }
+
+  @override
+  Future<void> acceptFollowRequest(String userId) {
+    return client.acceptFollowRequest(userId);
+  }
+
+  @override
+  Future<void> rejectFollowRequest(String userId) {
+    return client.rejectFollowRequest(userId);
+  }
+
+  @override
+  Future<List<Announcement>> getAnnouncements() {
+    return client.getAnnouncements().then(
+      (announcements) {
+        return announcements.map((e) => e.toKaiteki()).toList(growable: false);
+      },
     );
   }
 }

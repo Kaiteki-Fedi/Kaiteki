@@ -30,11 +30,11 @@ class _SystemHash {
 }
 
 abstract class _$TimelineService
-    extends BuildlessAsyncNotifier<PaginationState<Post<dynamic>>> {
+    extends BuildlessAsyncNotifier<PaginationState<Post>> {
   late final AccountKey key;
   late final TimelineSource source;
 
-  FutureOr<PaginationState<Post<dynamic>>> build(
+  FutureOr<PaginationState<Post>> build(
     AccountKey key,
     TimelineSource source,
   );
@@ -45,8 +45,7 @@ abstract class _$TimelineService
 const timelineServiceProvider = TimelineServiceFamily();
 
 /// See also [TimelineService].
-class TimelineServiceFamily
-    extends Family<AsyncValue<PaginationState<Post<dynamic>>>> {
+class TimelineServiceFamily extends Family<AsyncValue<PaginationState<Post>>> {
   /// See also [TimelineService].
   const TimelineServiceFamily();
 
@@ -96,8 +95,8 @@ class TimelineServiceFamily
 }
 
 /// See also [TimelineService].
-class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
-    PaginationState<Post<dynamic>>> {
+class TimelineServiceProvider
+    extends AsyncNotifierProviderImpl<TimelineService, PaginationState<Post>> {
   /// See also [TimelineService].
   TimelineServiceProvider(
     AccountKey key,
@@ -134,7 +133,7 @@ class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
   final TimelineSource source;
 
   @override
-  FutureOr<PaginationState<Post<dynamic>>> runNotifierBuild(
+  FutureOr<PaginationState<Post>> runNotifierBuild(
     covariant TimelineService notifier,
   ) {
     return notifier.build(
@@ -163,7 +162,7 @@ class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
   }
 
   @override
-  AsyncNotifierProviderElement<TimelineService, PaginationState<Post<dynamic>>>
+  AsyncNotifierProviderElement<TimelineService, PaginationState<Post>>
       createElement() {
     return _TimelineServiceProviderElement(this);
   }
@@ -185,8 +184,7 @@ class TimelineServiceProvider extends AsyncNotifierProviderImpl<TimelineService,
   }
 }
 
-mixin TimelineServiceRef
-    on AsyncNotifierProviderRef<PaginationState<Post<dynamic>>> {
+mixin TimelineServiceRef on AsyncNotifierProviderRef<PaginationState<Post>> {
   /// The parameter `key` of this provider.
   AccountKey get key;
 
@@ -194,8 +192,9 @@ mixin TimelineServiceRef
   TimelineSource get source;
 }
 
-class _TimelineServiceProviderElement extends AsyncNotifierProviderElement<
-    TimelineService, PaginationState<Post<dynamic>>> with TimelineServiceRef {
+class _TimelineServiceProviderElement
+    extends AsyncNotifierProviderElement<TimelineService, PaginationState<Post>>
+    with TimelineServiceRef {
   _TimelineServiceProviderElement(super.provider);
 
   @override
