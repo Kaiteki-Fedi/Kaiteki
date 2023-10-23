@@ -237,6 +237,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     _post = widget.post;
   }
 
+  @override
+  void didUpdateWidget(covariant PostWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _post = widget.post;
+  }
+
   List<Widget> _buildMenuItems(BuildContext context) {
     final adapter = ref.read(adapterProvider);
 
