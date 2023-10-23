@@ -17,7 +17,6 @@ import "package:kaiteki/ui/main/pages/explore.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/main/pages/placeholder.dart";
 import "package:kaiteki/ui/main/pages/timeline.dart";
-import "package:kaiteki/ui/preferred_size_stack.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
@@ -172,44 +171,24 @@ class MainScreenState extends ConsumerState<MainScreen> {
       );
     }
 
-    Color? backgroundColor, foregroundColor;
+    final theme = Theme.of(context);
+
+    Color? foregroundColor;
 
     if (immerse) {
-      backgroundColor = getOutsideColor(context);
-      if (backgroundColor != null) {
-        foregroundColor = ThemeData.estimateBrightnessForColor(backgroundColor)
-            .inverted
-            .getColor();
-      }
+      foregroundColor = theme.colorScheme.onSurface;
     }
 
-    final theme = Theme.of(context);
-    const shadows = [
-      Shadow(color: Colors.white, blurRadius: 1),
-      Shadow(color: Colors.white, blurRadius: 2),
-      Shadow(color: Colors.white, blurRadius: 4),
-    ];
-    final prideEnabled = ref.watch(enablePrideFlag).value;
-    final prideFlagDesign = ref.watch(prideFlag).value;
-    return PreferredSizeStack(
-      bottom: prideEnabled
-          ? CustomPaint(painter: PridePainter(prideFlagDesign))
-          : null,
-      primary: AppBar(
-        foregroundColor: prideEnabled ? Colors.black : foregroundColor,
-        forceMaterialTransparency: theme.useMaterial3,
-        title: Text(
-          kAppName,
-          style: (theme.ktkTextTheme?.kaitekiTextStyle ??
-                  DefaultKaitekiTextTheme(context).kaitekiTextStyle)
-              .copyWith(
-            shadows: prideEnabled ? shadows : null,
-          ),
-        ),
-        iconTheme: prideEnabled ? const IconThemeData(shadows: shadows) : null,
-        actions: _buildAppBarActions(context),
-        scrolledUnderElevation: immerse ? 0.0 : null,
+    return AppBar(
+      foregroundColor: foregroundColor,
+      forceMaterialTransparency: immerse && theme.useMaterial3,
+      title: Text(
+        kAppName,
+        style: theme.ktkTextTheme?.kaitekiTextStyle ??
+            DefaultKaitekiTextTheme(context).kaitekiTextStyle,
       ),
+      actions: _buildAppBarActions(context),
+      scrolledUnderElevation: immerse ? 0.0 : null,
     );
   }
 
@@ -305,38 +284,53 @@ class MainScreenState extends ConsumerState<MainScreen> {
     final tabItems = _tabs.map((e) => buildTabItem(context, e)).toList();
     final tabItem = tabItems.firstWhereOrNull((e) => e.kind == _currentTab);
 
+    final prideEnabled = ref.watch(enablePrideFlag).value;
+    final prideFlagDesign = ref.watch(prideFlag).value;
     return SideSheetManager(
-      builder: (sideSheet) => Scaffold(
-        backgroundColor: isCompact ? null : getOutsideColor(context),
-        appBar: buildAppBar(context, !isCompact),
-        endDrawer: sideSheet,
-        endDrawerEnableOpenDragGesture: false,
-        body: isCompact
-            ? body
-            : _buildDesktopView(
-                context,
-                windowClass,
-                body,
-                tabItems,
+      builder: (sideSheet) => Stack(
+        children: [
+          if (prideEnabled && !isCompact)
+            Positioned.fill(
+              child: ColoredBox(
+                color: getOutsideColor(context) ?? Colors.transparent,
+                child: CustomPaint(
+                  painter: PridePainter(prideFlagDesign, opacity: .35),
+                ),
               ),
-        bottomNavigationBar: isCompact && tabItems.length >= 2
-            ? MainScreenNavigationBar(
-                tabs: tabItems,
-                currentIndex: _tabs.indexOf(_currentTab),
-                onChangeIndex: (i) => _changeTab(_tabs[i]),
-              )
-            : null,
-        floatingActionButton:
-            (!isCompact && (tabItem?.hideFabWhenDesktop ?? false))
-                ? null
-                : tabItem?.fab.nullTransform<Widget?>(
-                    (data) => buildFloatingActionButton(
-                      context,
-                      data,
-                      windowClass >= WindowClass.expanded,
-                    ),
+            ),
+          Scaffold(
+            backgroundColor: prideEnabled ? Colors.transparent : null,
+            appBar: buildAppBar(context, !isCompact),
+            endDrawer: sideSheet,
+            endDrawerEnableOpenDragGesture: false,
+            body: isCompact
+                ? body
+                : _buildDesktopView(
+                    context,
+                    windowClass,
+                    body,
+                    tabItems,
                   ),
-        drawer: const MainScreenDrawer(),
+            bottomNavigationBar: isCompact && tabItems.length >= 2
+                ? MainScreenNavigationBar(
+                    tabs: tabItems,
+                    currentIndex: _tabs.indexOf(_currentTab),
+                    onChangeIndex: (i) => _changeTab(_tabs[i]),
+                  )
+                : null,
+            floatingActionButton:
+                (!isCompact && (tabItem?.hideFabWhenDesktop ?? false))
+                    ? null
+                    : tabItem?.fab.nullTransform<Widget?>(
+                        (data) => buildFloatingActionButton(
+                          context,
+                          data,
+                          windowClass >= WindowClass.expanded,
+                        ),
+                      ),
+            drawer: const MainScreenDrawer(),
+          ),
+        ],
       ),
     );
   }
@@ -443,7 +437,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
             tabs: tabItems,
             currentIndex: _tabs.indexOf(_currentTab),
             onChangeIndex: (i) => _changeTab(_tabs[i]),
-            backgroundColor: getOutsideColor(context) ?? Colors.transparent,
+            backgroundColor: Colors.transparent,
           ),
           if (!m3) const VerticalDivider(thickness: 1, width: 1),
         ],

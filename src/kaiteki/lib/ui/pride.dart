@@ -52,8 +52,9 @@ enum PrideFlag {
 
 class PridePainter extends CustomPainter {
   final PrideFlag flag;
+  final double opacity;
 
-  const PridePainter(this.flag);
+  const PridePainter(this.flag, {this.opacity = 1});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -66,9 +67,9 @@ class PridePainter extends CustomPainter {
           0,
           y,
           size.width,
-          size.height - y,
+          (y + height).ceilToDouble(),
         ),
-        Paint()..color = stripes[i],
+        Paint()..color = stripes[i].withOpacity(opacity),
       );
     }
   }
