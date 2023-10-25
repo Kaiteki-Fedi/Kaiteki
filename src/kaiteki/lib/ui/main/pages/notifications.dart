@@ -147,18 +147,16 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 
   List<Notification> groupNotifications(List<Notification> ungrouped) {
     final groups = ungrouped.groupBy((e) {
-      String? followRequestValue;
-
-      if (e.type == NotificationType.incomingFollowRequest ||
-          e.type == NotificationType.outgoingFollowRequestAccepted) {
-        followRequestValue = e.user?.id;
+      switch (e.type) {
+        case NotificationType.incomingFollowRequest:
+        case NotificationType.outgoingFollowRequestAccepted:
+          return (e.type, e.user?.id);
+        case NotificationType.mentioned:
+        case NotificationType.replied:
+          return (e.type, e.post?.threadId ?? e.post?.id);
+        default:
+          return (e.type, e.post?.id);
       }
-
-      return (
-        e.type,
-        e.post?.id,
-        followRequestValue,
-      );
     });
 
     return groups.entries

@@ -25,7 +25,6 @@ final _announcementsSupportedProvider = AutoDisposeProvider<bool>.internal(
 );
 
 typedef _AnnouncementsSupportedRef = AutoDisposeProviderRef<bool>;
-
 String _$followingSupportedHash() =>
     r'142ee3f4d4eb70047a377dd8af7902f3e0e6c702';
 
@@ -45,7 +44,6 @@ final _followingSupportedProvider = AutoDisposeProvider<bool>.internal(
 );
 
 typedef _FollowingSupportedRef = AutoDisposeProviderRef<bool>;
-
 String _$followRequestCountHash() =>
     r'd4a2f755d0bf7a75ef269e656578816e97da7b94';
 
@@ -71,7 +69,6 @@ final _followRequestCountProvider =
 );
 
 typedef _FollowRequestCountRef = FutureProviderRef<(int count, bool hasMore)?>;
-
 String _$unreadAnnouncementCountHash() =>
     r'bae26132eb44cb04b63c145b6ed7ecfd48971aa1';
 
