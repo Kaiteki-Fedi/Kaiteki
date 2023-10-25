@@ -166,7 +166,6 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                         value: _enableSubject,
                         onChanged: _showPreview ? null : toggleSubject,
                       ),
-                    buildTogglePreviewButton(context),
                     if (!fullscreen && closeButton != null) closeButton,
                   ],
                   automaticallyImplyLeading: false,
@@ -358,9 +357,11 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                         child: Row(children: _buildActions(context)),
                       ),
                     ),
+                    buildTogglePreviewButton(context),
+                    const SizedBox(width: 8),
                     FilledButton.icon(
                       style: FilledButton.styleFrom(
-                        visualDensity: VisualDensity.comfortable,
+                        visualDensity: VisualDensity.standard,
                         elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
                       ),
                       onPressed: () => _post(context),
@@ -378,16 +379,11 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   }
 
   IconButton buildTogglePreviewButton(BuildContext context) {
-    return IconButton(
+    return IconButton.outlined(
       isSelected: _showPreview,
       onPressed: togglePreview,
       icon: const Icon(Icons.preview_rounded),
       tooltip: "Toggle preview",
-      // HACK(Craftplacer): `AppBar`s break the selected color in `IconButton`s, https://github.com/flutter/flutter/issues/127626
-      selectedIcon: Icon(
-        Icons.preview_rounded,
-        color: Theme.of(context).colorScheme.primary,
-      ),
     );
   }
 
