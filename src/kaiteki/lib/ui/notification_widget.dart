@@ -184,16 +184,18 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
     final bodySmall = Theme.of(context).textTheme.bodySmall;
     final titleSmall = Theme.of(context).textTheme.titleSmall;
 
+    final userCount = notification is GroupedNotification
+        ? notification.notifications.groupBy((e) => e.user?.id).length
+        : 1;
+
     return TextSpan(
       children: [
         if (user != null)
           TextSpan(
             children: [
               user.renderDisplayName(context, ref),
-              if (notification is GroupedNotification)
-                TextSpan(
-                  text: " and ${notification.notifications.length - 1} others",
-                ),
+              if (notification is GroupedNotification && userCount > 1)
+                TextSpan(text: " and ${userCount - 1} others"),
             ],
             style: titleSmall,
           ),
@@ -218,7 +220,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       NotificationType.outgoingFollowRequestAccepted => Icons.check_rounded,
       NotificationType.reacted => Icons.emoji_emotions_rounded,
       NotificationType.groupInvite => Icons.group_add_rounded,
-      NotificationType.pollEnded => Icons.poll_rounded,
+      NotificationType.pollEnded => Icons.bar_chart_rounded,
       NotificationType.quoted => Icons.format_quote_rounded,
       NotificationType.replied => Icons.reply_rounded,
       NotificationType.updated => Icons.edit_rounded,
@@ -249,22 +251,20 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
 
       case NotificationType.reacted:
       case NotificationType.updated:
-      case NotificationType.newPost:
-        return colorScheme.secondary;
-
       case NotificationType.quoted:
       case NotificationType.replied:
       case NotificationType.mentioned:
-      case NotificationType.pollEnded:
         return colorScheme.primary;
 
+      case NotificationType.newPost:
       case NotificationType.followed:
       case NotificationType.incomingFollowRequest:
       case NotificationType.outgoingFollowRequestAccepted:
       case NotificationType.groupInvite:
       case NotificationType.signedUp:
       case NotificationType.userMigrated:
-        return colorScheme.tertiary;
+      case NotificationType.pollEnded:
+        return colorScheme.secondary;
 
       case NotificationType.unsupported:
         return colorScheme.outline;
