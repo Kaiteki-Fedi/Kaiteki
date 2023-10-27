@@ -4,12 +4,16 @@ import "package:flutter/material.dart";
 import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/telemetry/report.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/telemetry/customize_report_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/http.dart";
+import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
+import "package:url_launcher/url_launcher.dart";
 
-class ErrorLandingWidget extends StatelessWidget {
+class ErrorLandingWidget extends StatefulWidget {
   final TraceableError error;
   final VoidCallback? onRetry;
 
@@ -35,8 +39,13 @@ class ErrorLandingWidget extends StatelessWidget {
     );
   }
 
+  @override
+  State<ErrorLandingWidget> createState() => _ErrorLandingWidgetState();
+}
+
+class _ErrorLandingWidgetState extends State<ErrorLandingWidget> {
   Widget getMessageWidget(BuildContext context) {
-    final error = this.error.$1;
+    final error = this.widget.error.$1;
     switch (error) {
       case UnimplementedError():
         return IconLandingWidget(
@@ -86,22 +95,65 @@ class ErrorLandingWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (onRetry != null) ...[
+              if (widget.onRetry != null) ...[
                 ElevatedButton.icon(
                   icon: const Icon(Icons.refresh_rounded),
                   label: Text(context.l10n.retryButtonLabel),
-                  onPressed: onRetry,
+                  onPressed: widget.onRetry,
                 ),
                 const SizedBox(height: 8),
               ],
-              OutlinedButton(
-                onPressed: () => context.showExceptionDialog(error),
-                child: Text(context.l10n.showDetailsButtonLabel),
+              Row(
+                children: [
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      visualDensity: VisualDensity.standard,
+                    ),
+                    child: Text("Report error"),
+                    onPressed: _onReport,
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.outlined(
+                      onPressed: () =>
+                          context.showExceptionDialog(widget.error),
+                      tooltip: context.l10n.showDetailsButtonLabel,
+                      icon: const Icon(Icons.info_rounded)),
+                ],
               ),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _onReport() async {
+    late final BackendAdapter? adapter;
+
+    try {
+      adapter = ProviderScope.containerOf(context).read(adapterProvider);
+    } catch (_) {
+      adapter = null;
+    }
+
+    final report = ExceptionReport.fromException(
+      widget.error.$1,
+      stackTrace: widget.error.$2,
+      backend: adapter == null ? null : retrieveBackendInformation(adapter),
+    );
+
+    final result = await showDialog<ExceptionReport>(
+      context: context,
+      builder: (_) => CustomizeReportDialog(report),
+    );
+
+    if (result == null) return;
+
+    final url = result.getGitHubFormUrl();
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+      webOnlyWindowName: "_blank",
     );
   }
 }
