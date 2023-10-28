@@ -89,7 +89,7 @@ class UserListTile extends ConsumerWidget {
     this.showDescription = true,
     this.trailing = const [],
     this.content = const [],
-    this.avatarSize = 32.0,
+    this.avatarSize = 40.0,
     this.titleAlignment,
   });
 
@@ -120,8 +120,13 @@ class UserListTile extends ConsumerWidget {
       onTap: onPressed,
       title: UserDisplayNameWidget(user),
       leading: AvatarWidget(user, size: avatarSize),
-      titleAlignment: titleAlignment ?? ListTileTitleAlignment.top,
-      subtitle: subtitle.isNotEmpty ? Column(children: subtitle) : null,
+      titleAlignment: titleAlignment ?? ListTileTitleAlignment.threeLine,
+      subtitle: subtitle.isNotEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: subtitle,
+            )
+          : null,
       trailing: trailing.nullTransform(
         (e) => Row(
           mainAxisSize: MainAxisSize.min,
