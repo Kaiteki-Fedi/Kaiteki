@@ -287,50 +287,52 @@ class MainScreenState extends ConsumerState<MainScreen> {
     final prideEnabled = ref.watch(enablePrideFlag).value;
     final prideFlagDesign = ref.watch(prideFlag).value;
     return SideSheetManager(
-      builder: (sideSheet) => Stack(
-        children: [
-          if (prideEnabled && !isCompact)
-            Positioned.fill(
-              child: ColoredBox(
-                color: getOutsideColor(context) ?? Colors.transparent,
+      builder: (sideSheet) => ColoredBox(
+        color:
+            getOutsideColor(context) ?? Theme.of(context).colorScheme.surface,
+        child: Stack(
+          children: [
+            if (prideEnabled && !isCompact)
+              Positioned.fill(
                 child: CustomPaint(
                   painter: PridePainter(prideFlagDesign, opacity: .35),
                 ),
               ),
-            ),
-          Scaffold(
-            backgroundColor: prideEnabled ? Colors.transparent : null,
-            appBar: buildAppBar(context, !isCompact),
-            endDrawer: sideSheet,
-            endDrawerEnableOpenDragGesture: false,
-            body: isCompact
-                ? body
-                : _buildDesktopView(
-                    context,
-                    windowClass,
-                    body,
-                    tabItems,
-                  ),
-            bottomNavigationBar: isCompact && tabItems.length >= 2
-                ? MainScreenNavigationBar(
-                    tabs: tabItems,
-                    currentIndex: _tabs.indexOf(_currentTab),
-                    onChangeIndex: (i) => _changeTab(_tabs[i]),
-                  )
-                : null,
-            floatingActionButton:
-                (!isCompact && (tabItem?.hideFabWhenDesktop ?? false))
-                    ? null
-                    : tabItem?.fab.nullTransform<Widget?>(
-                        (data) => buildFloatingActionButton(
-                          context,
-                          data,
-                          windowClass >= WindowClass.expanded,
+            Scaffold(
+              backgroundColor:
+                  prideEnabled || !isCompact ? Colors.transparent : null,
+              appBar: buildAppBar(context, !isCompact),
+              endDrawer: sideSheet,
+              endDrawerEnableOpenDragGesture: false,
+              body: isCompact
+                  ? body
+                  : _buildDesktopView(
+                      context,
+                      windowClass,
+                      body,
+                      tabItems,
+                    ),
+              bottomNavigationBar: isCompact && tabItems.length >= 2
+                  ? MainScreenNavigationBar(
+                      tabs: tabItems,
+                      currentIndex: _tabs.indexOf(_currentTab),
+                      onChangeIndex: (i) => _changeTab(_tabs[i]),
+                    )
+                  : null,
+              floatingActionButton:
+                  (!isCompact && (tabItem?.hideFabWhenDesktop ?? false))
+                      ? null
+                      : tabItem?.fab.nullTransform<Widget?>(
+                          (data) => buildFloatingActionButton(
+                            context,
+                            data,
+                            windowClass >= WindowClass.expanded,
+                          ),
                         ),
-                      ),
-            drawer: const MainScreenDrawer(),
-          ),
-        ],
+              drawer: const MainScreenDrawer(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -444,8 +446,8 @@ class MainScreenState extends ConsumerState<MainScreen> {
         Expanded(
           child: Theme.of(context).useMaterial3
               ? ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16.0),
+                  borderRadius: const BorderRadiusDirectional.only(
+                    topStart: Radius.circular(16.0),
                   ),
                   child: child,
                 )

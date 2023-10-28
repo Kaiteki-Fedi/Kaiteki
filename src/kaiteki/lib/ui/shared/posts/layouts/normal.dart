@@ -15,6 +15,7 @@ import "package:kaiteki/ui/shared/posts/reply_bar.dart";
 import "package:kaiteki/ui/shared/posts/signature.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 
 class NormalPostLayout extends ConsumerWidget {
   final Post post;
@@ -72,7 +73,7 @@ class NormalPostLayout extends ConsumerWidget {
     final showSignature = ref.watch(AppExperiment.userSignatures.provider) &&
         post.author.description?.isNotEmpty == true;
 
-    const padding = EdgeInsets.all(8);
+    const padding = EdgeInsetsDirectional.all(8);
 
     final showParentPost = postTheme?.showParentPost ?? true;
     final children = [
@@ -82,7 +83,7 @@ class NormalPostLayout extends ConsumerWidget {
         onOpen: ref.watch(showDedicatedPostOpenButton).value ? onOpen : null,
       ),
       Padding(
-        padding: EdgeInsets.only(right: padding.right),
+        padding: EdgeInsetsDirectional.only(end: padding.end),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -104,7 +105,7 @@ class NormalPostLayout extends ConsumerWidget {
     return Padding(
       padding: padding.copyWith(
         bottom: 0.0,
-        right: 0.0,
+        end: 0.0,
         top: 0.0,
       ),
       child: Column(
