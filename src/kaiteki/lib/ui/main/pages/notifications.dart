@@ -15,6 +15,7 @@ import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
+import "package:sliver_tools/sliver_tools.dart";
 
 part 'notifications.g.dart';
 
@@ -99,34 +100,38 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         children: [
           CustomScrollView(
             slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
-                sliver: SliverToBoxAdapter(
-                  child: _SecondaryNotificationBar(),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.all(4.0),
-                sliver: PagedSliverList<String?, Notification>(
-                  pagingController: _controller,
-                  builderDelegate: PagedChildBuilderDelegate(
-                    itemBuilder: (context, notification, i) {
-                      return Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Card(
-                          clipBehavior: Clip.antiAlias,
-                          child: NotificationWidget(notification),
-                        ),
-                      );
-                    },
-                    firstPageErrorIndicatorBuilder: (_) {
-                      return Center(
-                        child: ErrorLandingWidget(
-                          _controller.error as TraceableError,
-                        ),
-                      );
-                    },
-                  ),
+              SliverCrossAxisConstrained(
+                maxCrossAxisExtent: 600,
+                child: SliverMainAxisGroup(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
+                        child: _SecondaryNotificationBar(),
+                      ),
+                    ),
+                    PagedSliverList<String?, Notification>(
+                      pagingController: _controller,
+                      builderDelegate: PagedChildBuilderDelegate(
+                        itemBuilder: (context, notification, i) {
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              child: NotificationWidget(notification),
+                            ),
+                          );
+                        },
+                        firstPageErrorIndicatorBuilder: (_) {
+                          return Center(
+                            child: ErrorLandingWidget(
+                              _controller.error as TraceableError,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

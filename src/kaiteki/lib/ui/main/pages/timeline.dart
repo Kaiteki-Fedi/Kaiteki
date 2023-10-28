@@ -121,14 +121,12 @@ class TimelinePageState extends ConsumerState<TimelinePage>
       },
       child: Align(
         alignment: Alignment.topCenter,
-        child: SizedBox(
-          width: 800,
-          child: Timeline(
-            timelineSource,
-            postLayout: ref.watch(useWidePostLayout).value
-                ? PostWidgetLayout.wide
-                : PostWidgetLayout.normal,
-          ),
+        child: Timeline(
+          timelineSource,
+          maxWidth: 600,
+          postLayout: ref.watch(useWidePostLayout).value
+              ? PostWidgetLayout.wide
+              : PostWidgetLayout.normal,
         ),
       ),
     );

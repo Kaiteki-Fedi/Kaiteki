@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:sliver_tools/sliver_tools.dart";
 
 import "source.dart";
 import "timeline.dart";
@@ -18,13 +19,20 @@ class Timeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget sliver = TimelineSliver(
+      source,
+      postLayout: postLayout,
+    );
+
+    if (maxWidth != null) {
+      sliver = SliverCrossAxisConstrained(
+        maxCrossAxisExtent: maxWidth!,
+        child: sliver,
+      );
+    }
+
     return CustomScrollView(
-      slivers: [
-        TimelineSliver(
-          source,
-          postLayout: postLayout,
-        ),
-      ],
+      slivers: [sliver],
     );
   }
 }
