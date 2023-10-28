@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/settings/locale_list_tile.dart";
-import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
@@ -45,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
                 ],
               ),
               SettingsSection(
-                title: const SectionHeader("Advanced"),
+                title: const Text("Advanced"),
                 children: [
                   ListTile(
                     onTap: () => context.push("/settings/tweaks"),

@@ -1,7 +1,6 @@
 // ignore_for_file: l10n
 import "package:flutter/material.dart";
 import "package:kaiteki/theming/colors.dart";
-import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
@@ -20,7 +19,7 @@ class ThemeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SettingsSection(
-                title: const SectionHeader("Material colors"),
+                title: const Text("Material colors"),
                 divideChildren: false,
                 children: [
                   _ColorPatch(
@@ -121,7 +120,7 @@ class ThemeScreen extends StatelessWidget {
                 ],
               ),
               SettingsSection(
-                title: const SectionHeader("Kaiteki colors"),
+                title: const Text("Kaiteki colors"),
                 children: [
                   ListTile(
                     leading: Icon(

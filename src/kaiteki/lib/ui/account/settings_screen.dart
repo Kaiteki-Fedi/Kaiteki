@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/dialog.dart";
@@ -37,7 +36,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SettingsSection(
-                title: const SectionHeader("Safety"),
+                title: const Text("Safety"),
                 children: [
                   ListTile(
                     leading: const Icon(Icons.volume_off),
@@ -55,7 +54,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 ],
               ),
               const SettingsSection(
-                title: SectionHeader("Privacy"),
+                title: Text("Privacy"),
                 children: [
                   SwitchListTile.adaptive(
                     secondary: Icon(Icons.person_add_disabled_rounded),
@@ -77,7 +76,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 ],
               ),
               const SettingsSection(
-                title: SectionHeader("Security"),
+                title: Text("Security"),
                 children: [
                   ListTile(
                     leading: Icon(Icons.email_rounded),
@@ -102,7 +101,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 ],
               ),
               SettingsSection(
-                title: const SectionHeader("Account management"),
+                title: const Text("Account management"),
                 children: [
                   ListTile(
                     leading: Icon(

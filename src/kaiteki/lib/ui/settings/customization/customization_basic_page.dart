@@ -5,9 +5,9 @@ import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/settings/customization/theme_selector.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/preference_values_list_tile.dart";
-import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 
 class CustomizationBasicPage extends ConsumerStatefulWidget {
   const CustomizationBasicPage({super.key});
@@ -31,7 +31,10 @@ class _CustomizationBasicPageState
             const SizedBox(height: 16.0),
             Padding(
               padding: kSectionSubheaderMargin,
-              child: SectionHeader(l10n.theme),
+              child: Text(
+                l10n.theme,
+                style: getSubheaderTextStyle(Theme.of(context)),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(

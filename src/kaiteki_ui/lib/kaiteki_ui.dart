@@ -21,4 +21,13 @@ Color getLocalTextColor(BuildContext context) {
   return DefaultTextStyle.of(context).style.color!;
 }
 
+TextStyle getSubheaderTextStyle(ThemeData theme) {
+  final labelLarge = theme.textTheme.labelLarge;
+  final primary = theme.colorScheme.primary;
+
+  if (labelLarge == null) return TextStyle(color: primary);
+
+  return labelLarge.copyWith(color: primary);
+}
+
 typedef ColorSchemeBundle = ({ColorScheme dark, ColorScheme light});

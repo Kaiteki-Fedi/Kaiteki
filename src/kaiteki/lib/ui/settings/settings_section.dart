@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 
 const kSectionSubheaderMargin = EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 8.0);
 
@@ -39,7 +40,10 @@ class SettingsSection extends StatelessWidget {
         if (title != null)
           Padding(
             padding: kSectionSubheaderMargin,
-            child: title,
+            child: DefaultTextStyle.merge(
+              style: getSubheaderTextStyle(Theme.of(context)),
+              child: title,
+            ),
           ),
         if (useCard)
           Card(

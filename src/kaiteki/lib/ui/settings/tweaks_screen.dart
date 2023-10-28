@@ -6,7 +6,6 @@ import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/settings/preference_slider_list_tile.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/preference_values_list_tile.dart";
-import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
@@ -32,7 +31,7 @@ class TweaksScreen extends StatelessWidget {
               ],
             ),
             SettingsSection(
-              title: SectionHeader(context.l10n.settingsEmojisHeader),
+              title: Text(context.l10n.settingsEmojisHeader),
               children: [
                 PreferenceSliderListTile.values(
                   provider: emojiScale,
@@ -47,7 +46,7 @@ class TweaksScreen extends StatelessWidget {
               ],
             ),
             SettingsSection(
-              title: const SectionHeader("Avatars"),
+              title: const Text("Avatars"),
               children: [
                 PreferenceSliderListTile.values(
                   provider: avatarCornerRadius,
@@ -73,7 +72,7 @@ class TweaksScreen extends StatelessWidget {
               ],
             ),
             SettingsSection(
-              title: SectionHeader(context.l10n.prideSettingsHeader),
+              title: Text(context.l10n.prideSettingsHeader),
               children: [
                 PreferenceSwitchListTile(
                   provider: enablePrideFlag,
