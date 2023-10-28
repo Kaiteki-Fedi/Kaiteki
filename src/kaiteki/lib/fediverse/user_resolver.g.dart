@@ -6,7 +6,7 @@ part of 'user_resolver.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$resolveHash() => r'52da69ea3a3155b1c4b657555c83b1339e24f0b4';
+String _$resolveHash() => r'bbc6f53c8bdb3885e1a5b5f3cfb46659e1545ada';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const resolveProvider = ResolveFamily();
 
 /// See also [resolve].
-class ResolveFamily extends Family<AsyncValue<User?>> {
+class ResolveFamily extends Family<AsyncValue<ResolveUserResult?>> {
   /// See also [resolve].
   const ResolveFamily();
 
@@ -75,7 +75,7 @@ class ResolveFamily extends Family<AsyncValue<User?>> {
 }
 
 /// See also [resolve].
-class ResolveProvider extends AutoDisposeFutureProvider<User?> {
+class ResolveProvider extends AutoDisposeFutureProvider<ResolveUserResult?> {
   /// See also [resolve].
   ResolveProvider(
     AccountKey key,
@@ -114,7 +114,7 @@ class ResolveProvider extends AutoDisposeFutureProvider<User?> {
 
   @override
   Override overrideWith(
-    FutureOr<User?> Function(ResolveRef provider) create,
+    FutureOr<ResolveUserResult?> Function(ResolveRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -132,7 +132,7 @@ class ResolveProvider extends AutoDisposeFutureProvider<User?> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<User?> createElement() {
+  AutoDisposeFutureProviderElement<ResolveUserResult?> createElement() {
     return _ResolveProviderElement(this);
   }
 
@@ -153,7 +153,7 @@ class ResolveProvider extends AutoDisposeFutureProvider<User?> {
   }
 }
 
-mixin ResolveRef on AutoDisposeFutureProviderRef<User?> {
+mixin ResolveRef on AutoDisposeFutureProviderRef<ResolveUserResult?> {
   /// The parameter `key` of this provider.
   AccountKey get key;
 
@@ -161,7 +161,8 @@ mixin ResolveRef on AutoDisposeFutureProviderRef<User?> {
   UserReference get reference;
 }
 
-class _ResolveProviderElement extends AutoDisposeFutureProviderElement<User?>
+class _ResolveProviderElement
+    extends AutoDisposeFutureProviderElement<ResolveUserResult?>
     with ResolveRef {
   _ResolveProviderElement(super.provider);
 

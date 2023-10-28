@@ -6,8 +6,10 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "user_resolver.g.dart";
 
+final _logger = Logger("User Resolver");
+
 @riverpod
-Future<User?> resolve(
+Future<ResolveUserResult?> resolve(
   ResolveRef ref,
   AccountKey key,
   UserReference reference,
@@ -18,25 +20,59 @@ Future<User?> resolve(
 }
 
 extension UserReferenceExtensions on UserReference {
-  Future<User?> resolve(BackendAdapter adapter) async {
-    Logger("resolve").finest("Resolving user: $this");
+  Future<ResolveUserResult?> resolve(BackendAdapter adapter) async {
+    _logger.finest("Resolving user: $this");
 
     final id = this.id;
     if (id != null) {
-      return adapter.getUserById(id);
+      return adapter
+          .getUserById(id)
+          .then((e) => e == null ? null : ResolvedInternalUser(e));
     }
 
     final username = this.username;
     if (username != null) {
-      return adapter.lookupUser(username, host);
+      try {
+        final user = await adapter.lookupUser(username);
+        return ResolvedInternalUser(user);
+      } catch (e, s) {
+        _logger.warning("Failed to resolve user by username", e, s);
+      }
     }
 
-    final url = remoteUrl;
-    if (url != null) {
-      final entity = await adapter.resolveUrl(Uri.parse(url));
-      if (entity is User) return entity;
+    final urlString = remoteUrl;
+    if (urlString != null) {
+      final url = Uri.parse(urlString);
+
+      try {
+        final entity = await adapter.resolveUrl(url);
+        if (entity is User) return ResolvedInternalUser(entity);
+      } catch (e, s) {
+        _logger.warning("Failed to resolve user by URL", e, s);
+      }
+
+      return ResolvedExternalUser(url);
     }
 
     return null;
   }
+}
+
+sealed class ResolveUserResult {
+  const ResolveUserResult();
+}
+
+/// The user was able to be found on the local instance.
+class ResolvedInternalUser extends ResolveUserResult {
+  final User user;
+
+  const ResolvedInternalUser(this.user);
+}
+
+/// The user couldn't be found on the local instance, but a URL linking to the
+/// user was found instead.
+class ResolvedExternalUser extends ResolveUserResult {
+  final Uri url;
+
+  const ResolvedExternalUser(this.url);
 }

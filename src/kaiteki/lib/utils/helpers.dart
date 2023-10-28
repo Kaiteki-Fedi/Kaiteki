@@ -4,6 +4,7 @@ import "package:kaiteki/fediverse/user_resolver.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
+import "package:url_launcher/url_launcher.dart";
 
 Future<void> resolveAndOpenUser(
   UserReference user,
@@ -15,22 +16,22 @@ Future<void> resolveAndOpenUser(
   // final lookupSnackbar = messenger.showSnackBar(
   //   SnackBar(content: Text("Looking up $handle...")),
   // );
-  ref
-      .read(
-    resolveProvider(
-      ref.watch(currentAccountProvider)!.key,
-      user,
-    ).future,
-  )
-      .then((user) async {
+  final future = resolveProvider(
+    ref.watch(currentAccountProvider)!.key,
+    user,
+  ).future;
+  ref.read(future).then((result) async {
     // lookupSnackbar.close();
-    if (user == null) {
-      messenger.showSnackBar(
-        SnackBar(content: Text("Couldn't find $handle")),
-      );
-      return;
+    switch (result) {
+      case null:
+        messenger.showSnackBar(
+          SnackBar(content: Text("Couldn't find $handle")),
+        );
+      case ResolvedInternalUser():
+        await context.showUser(result.user, ref);
+      case ResolvedExternalUser():
+        await launchUrl(result.url, mode: LaunchMode.externalApplication);
     }
-    await context.showUser(user, ref);
   }).catchError((e) {
     Logger("resolveAndOpenUser").warning("Failed to resolve handle $handle", e);
 

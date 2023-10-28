@@ -14,7 +14,7 @@ import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
-import "package:kaiteki_core/model.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:url_launcher/url_launcher.dart";
 
 List<Element> parseText(
@@ -289,8 +289,8 @@ class UserChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder<User?>(
-      initialData: user,
+    return FutureBuilder<ResolveUserResult?>(
+      initialData: user.nullTransform(ResolvedInternalUser.new),
       future: ref.watch(
         resolveProvider(
           ref.watch(currentAccountProvider)!.key,
@@ -298,9 +298,9 @@ class UserChip extends ConsumerWidget {
         ).future,
       ),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final user = snapshot.data!;
-
+        final result = snapshot.data;
+        if (result is ResolvedInternalUser) {
+          final user = result.user;
           return Tooltip(
             message: user.handle.toString(),
             child: ActionChip(

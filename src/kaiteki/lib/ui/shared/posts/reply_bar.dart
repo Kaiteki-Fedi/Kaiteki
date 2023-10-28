@@ -33,7 +33,7 @@ class ReplyBar extends ConsumerWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(8.0),
         onTap: onTap,
-        child: FutureBuilder<User?>(
+        child: FutureBuilder<ResolveUserResult?>(
           future: ref.watch(
             resolveProvider(
               ref.watch(currentAccountProvider)!.key,
@@ -41,8 +41,9 @@ class ReplyBar extends ConsumerWidget {
             ).future,
           ),
           builder: (context, snapshot) {
-            final span = snapshot.hasData
-                ? snapshot.data!.renderDisplayName(context, ref)
+            final result = snapshot.data;
+            final span = result is ResolvedInternalUser
+                ? result.user.renderDisplayName(context, ref)
                 : TextSpan(text: _getText());
 
             return Text.rich(
