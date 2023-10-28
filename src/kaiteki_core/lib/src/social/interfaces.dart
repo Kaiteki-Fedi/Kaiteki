@@ -6,6 +6,7 @@ export 'interfaces/custom_emoji_support.dart';
 export 'interfaces/explore_support.dart';
 export 'interfaces/favorite_support.dart';
 export 'interfaces/follow_support.dart';
+export 'interfaces/hashtag_support.dart';
 export 'interfaces/list_support.dart';
 export 'interfaces/login_support.dart';
 export 'interfaces/mute_support.dart';

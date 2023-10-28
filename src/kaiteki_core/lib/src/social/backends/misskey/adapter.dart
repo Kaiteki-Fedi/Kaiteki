@@ -52,6 +52,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         ChatSupport,
         CustomEmojiSupport,
         FollowSupport,
+        HashtagSupport,
         ListSupport,
         LoginSupport,
         MuteSupport,
@@ -464,12 +465,14 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     return SearchResults(
       users: await searchForUsers(query),
       posts: await searchForPosts(query),
+      hashtags: await searchForHashtags(query),
     );
   }
 
   @override
-  Future<List<String>> searchForHashtags(String query) {
-    throw UnimplementedError();
+  Future<List<String>> searchForHashtags(String query) async {
+    final hashtags = await client.searchHashtags(query);
+    return hashtags;
   }
 
   @override
@@ -702,4 +705,27 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
       },
     );
   }
+
+  @override
+  Future<void> followHashtag(String hashtag) =>
+      throw UnsupportedError('Misskey does not support following hashtags');
+
+  @override
+  Future<List<Post>> getPostsByHashtag(
+    String hashtag, {
+    TimelineQuery<String>? query,
+  }) {
+    return client.searchNotesByTag(hashtag).then(
+          (notes) => notes.map((e) => e.toKaiteki(instance)).toList(),
+        );
+  }
+
+  @override
+  Future<void> unfollowHashtag(String hashtag) {
+    // TODO: implement unfollowHashtag
+    throw UnimplementedError();
+  }
+
+  @override
+  Hashtag getHashtag(String hashtag) => Hashtag(hashtag);
 }

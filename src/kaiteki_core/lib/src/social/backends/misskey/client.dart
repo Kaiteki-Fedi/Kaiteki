@@ -769,4 +769,32 @@ class MisskeyClient {
         .sendRequest(HttpMethod.post, 'api/announcements')
         .then(misskey.Announcement.fromJson.fromResponseList);
   }
+
+  Future<List<String>> searchHashtags(String query) async {
+    return client
+        .sendRequest(
+      HttpMethod.post,
+      'api/hashtags/search',
+      body: {'query': query}.jsonBody,
+    )
+        .then((response) {
+      final list = jsonDecode(response.body) as List<dynamic>;
+      return list.cast<String>();
+    });
+  }
+
+  Future<List<misskey.Note>> searchNotesByTag(
+    String hashtag, {
+    String? sinceId,
+    String? untilId,
+    int? limit,
+  }) async {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          'api/notes/search-by-tag',
+          body: {'tag': hashtag}.jsonBody,
+        )
+        .then(misskey.Note.fromJson.fromResponseList);
+  }
 }

@@ -23,6 +23,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         CustomEmojiSupport,
         FavoriteSupport,
         FollowSupport,
+        HashtagSupport,
         ListSupport,
         LoginSupport,
         MuteSupport,
@@ -428,6 +429,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     return SearchResults(
       users: results.accounts.map((a) => a.toKaiteki(instance)).toList(),
       posts: results.statuses.map((s) => s.toKaiteki(instance)).toList(),
+      hashtags: results.hashtags.map((e) => e.name).toList(),
     );
   }
 
@@ -613,5 +615,34 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   Future<List<Announcement>> getAnnouncements() async {
     final announcements = await client.getAnnouncements();
     return announcements.map((e) => e.toKaiteki(instance)).toList();
+  }
+
+  @override
+  Future<void> followHashtag(String hashtag) async {
+    await client.followHashtag(hashtag);
+  }
+
+  @override
+  Future<void> unfollowHashtag(String hashtag) async {
+    await client.unfollowHashtag(hashtag);
+  }
+
+  @override
+  Future<List<Post>> getPostsByHashtag(
+    String hashtag, {
+    TimelineQuery<String>? query,
+  }) async {
+    final statuses = await client.getHashtagTimeline(
+      hashtag,
+      sinceId: query?.sinceId,
+      maxId: query?.untilId,
+    );
+    return statuses.map((e) => e.toKaiteki(instance)).toList();
+  }
+
+  @override
+  Future<Hashtag> getHashtag(String hashtag) async {
+    final tag = await client.getHashtag(hashtag);
+    return tag.toKaiteki();
   }
 }

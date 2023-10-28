@@ -337,3 +337,12 @@ extension KaitekiMastodonAnnouncementExtension on mastodon.Announcement {
     );
   }
 }
+
+extension KaitekiMastodonTagExtension on mastodon.Tag {
+  Hashtag toKaiteki() {
+    return Hashtag(
+      name,
+      isFollowing: following,
+    );
+  }
+}

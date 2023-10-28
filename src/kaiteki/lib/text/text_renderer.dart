@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Element;
+import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/user_resolver.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -14,7 +15,6 @@ import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
 import "package:kaiteki_core/model.dart";
-import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
 
 List<Element> parseText(
@@ -63,6 +63,7 @@ class TextRenderer {
   final KaitekiTextTheme? textTheme;
   final Function(UserReference reference)? onUserClick;
   final Function(Uri uri)? onLinkClick;
+  final Function(String hashtag)? onHashtagClick;
   final TextContext? context;
 
   const TextRenderer({
@@ -70,6 +71,7 @@ class TextRenderer {
     this.textTheme,
     this.onUserClick,
     this.onLinkClick,
+    this.onHashtagClick,
     this.context,
   });
 
@@ -95,6 +97,12 @@ class TextRenderer {
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       onLinkClick: (url) async {
         await launchUrl(url, mode: LaunchMode.externalApplication);
+      },
+      onHashtagClick: (hashtag) {
+        context.pushNamed(
+          "hashtag",
+          pathParameters: {...ref.accountRouterParams, "hashtag": hashtag},
+        );
       },
       context: textContext,
     );
@@ -142,24 +150,40 @@ class TextRenderer {
   }
 
   TextSpan renderHashtag(HashtagElement hashtag) {
+    final onClick = onHashtagClick;
+
+    if (onClick == null) return TextSpan(text: "#${hashtag.name}");
+
     final textStyle = textTheme?.linkTextStyle;
     final color = textStyle?.color?.withOpacity(.65);
+    final recognizer = TapGestureRecognizer()
+      ..onTap = () => onClick(hashtag.name);
     return TextSpan(
       children: [
-        TextSpan(text: "#", style: TextStyle(color: color)),
-        TextSpan(text: hashtag.name),
+        TextSpan(
+          text: "#",
+          style: TextStyle(color: color),
+          recognizer: recognizer,
+        ),
+        TextSpan(
+          text: hashtag.name,
+          recognizer: recognizer,
+        ),
       ],
       style: textStyle,
+      recognizer: recognizer,
     );
   }
 
   TextSpan renderLink(LinkElement link) {
+    final onClick = onLinkClick;
+
+    if (onClick == null) return TextSpan(text: link.allText);
+
     // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
     return TextSpan(
-      recognizer: onLinkClick.nullTransform(
-        (onClick) =>
-            TapGestureRecognizer()..onTap = () => onClick(link.destination),
-      ),
+      recognizer: TapGestureRecognizer()
+        ..onTap = () => onClick(link.destination),
       text: link.allText,
       style: textTheme?.linkTextStyle,
     );
@@ -175,6 +199,8 @@ class TextRenderer {
 
     const useUserChip = false;
 
+    final onClick = onUserClick;
+
     // ignore: dead_code
     if (useUserChip) {
       return WidgetSpan(
@@ -182,11 +208,11 @@ class TextRenderer {
         baseline: TextBaseline.alphabetic,
         alignment: PlaceholderAlignment.middle,
       );
+    } else if (onClick == null) {
+      return TextSpan(text: reference.toString());
     } else {
       return TextSpan(
-        recognizer: onUserClick.nullTransform(
-          (onTap) => TapGestureRecognizer()..onTap = () => onTap(reference),
-        ),
+        recognizer: TapGestureRecognizer()..onTap = () => onClick(reference),
         text: reference.toString(),
         style: textTheme?.mentionTextStyle,
       );

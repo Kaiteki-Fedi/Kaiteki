@@ -1,11 +1,12 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
-import "package:kaiteki/utils/extensions/build_context.dart";
+import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 
 class SearchScreen extends ConsumerStatefulWidget {
@@ -43,7 +44,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.surface,
@@ -76,80 +77,110 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   ],
                 ),
               ),
-              // Tab(text: "Hashtags"),
+              Tab(
+                child: Row(
+                  children: [
+                    const Icon(Icons.tag_rounded),
+                    const SizedBox(width: 8),
+                    Text("Hashtags"),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-        body: Column(
-          children: [
-            const Divider(height: 2),
-            Expanded(
-              child: FutureBuilder<SearchResults>(
-                future: _results,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: ErrorLandingWidget.fromAsyncSnapshot(
-                        snapshot,
-                      ),
-                    );
-                  }
+        body: FutureBuilder<SearchResults>(
+          future: _results,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: ErrorLandingWidget.fromAsyncSnapshot(
+                  snapshot,
+                ),
+              );
+            }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return centeredCircularProgressIndicator;
-                  }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return centeredCircularProgressIndicator;
+            }
 
-                  final results = snapshot.data;
+            final results = snapshot.data;
 
-                  if (results == null) return const SizedBox();
+            if (results == null) return const SizedBox();
 
-                  return TabBarView(
-                    children: [
-                      if (results.posts.isEmpty)
-                        IconLandingWidget(
-                          icon: const Icon(Icons.article_outlined),
-                          text: Text(context.l10n.postsTab),
-                        )
-                      else
-                        ListView.separated(
-                          separatorBuilder: (context, i) {
-                            return const Divider(height: 2);
-                          },
-                          itemBuilder: (context, i) {
-                            final post = results.posts[i];
-                            return InkWell(
-                              onTap: () => context.showPost(post, ref),
-                              child: PostWidget(post),
+            return TabBarView(
+              children: [
+                if (results.posts.isEmpty)
+                  IconLandingWidget(
+                    icon: const Icon(Icons.article_outlined),
+                    text: Text(context.l10n.postsTab),
+                  )
+                else
+                  ListView.separated(
+                    separatorBuilder: (context, i) {
+                      return const Divider(height: 2);
+                    },
+                    itemBuilder: (context, i) {
+                      final post = results.posts[i];
+                      return InkWell(
+                        onTap: () => context.showPost(post, ref),
+                        child: PostWidget(post),
+                      );
+                    },
+                    itemCount: results.posts.length,
+                  ),
+                if (results.users.isEmpty)
+                  IconLandingWidget(
+                    icon: const Icon(Icons.person_outline_rounded),
+                    text: Text(context.l10n.searchUsersNoResults),
+                  )
+                else
+                  ListView.separated(
+                    separatorBuilder: (context, i) {
+                      return const Divider(height: 2);
+                    },
+                    itemBuilder: (context, i) {
+                      final user = results.users[i];
+                      return UserListTile(
+                        user: user,
+                        onPressed: () => context.showUser(user, ref),
+                      );
+                    },
+                    itemCount: results.users.length,
+                  ),
+                if (results.hashtags.isEmpty)
+                  IconLandingWidget(
+                    icon: const Icon(Icons.tag_rounded),
+                    text: Text("No results"),
+                  )
+                else
+                  ListView.separated(
+                    padding: const EdgeInsets.all(16.0),
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    itemBuilder: (context, i) {
+                      final hashtag = results.hashtags[i];
+                      return Card(
+                        clipBehavior: Clip.antiAlias,
+                        child: ListTile(
+                          leading: const Icon(Icons.tag_rounded),
+                          title: Text(hashtag),
+                          onTap: () {
+                            context.pushReplacementNamed(
+                              "hashtag",
+                              pathParameters: {
+                                ...ref.accountRouterParams,
+                                "hashtag": hashtag,
+                              },
                             );
                           },
-                          itemCount: results.posts.length,
                         ),
-                      if (results.users.isEmpty)
-                        IconLandingWidget(
-                          icon: const Icon(Icons.person_outline_rounded),
-                          text: Text(context.l10n.searchUsersNoResults),
-                        )
-                      else
-                        ListView.separated(
-                          separatorBuilder: (context, i) {
-                            return const Divider(height: 2);
-                          },
-                          itemBuilder: (context, i) {
-                            final user = results.users[i];
-                            return UserListTile(
-                              user: user,
-                              onPressed: () => context.showUser(user, ref),
-                            );
-                          },
-                          itemCount: results.users.length,
-                        ),
-                      // Container(),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
+                      );
+                    },
+                    itemCount: results.hashtags.length,
+                  ),
+              ],
+            );
+          },
         ),
       ),
     );

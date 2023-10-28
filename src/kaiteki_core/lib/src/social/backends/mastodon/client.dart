@@ -704,4 +704,47 @@ class MastodonClient {
         .sendRequest(HttpMethod.get, 'api/v1/announcements')
         .then(Announcement.fromJson.fromResponseList);
   }
+
+  Future<void> followHashtag(String hashtag) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      'api/v1/tags/$hashtag/follow',
+    );
+  }
+
+  Future<void> unfollowHashtag(String hashtag) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      'api/v1/tags/$hashtag/unfollow',
+    );
+  }
+
+  // TODO(Craftplacer): implement `any`, `all`, `none`, `local`, `remote`, `only_media`; https://docs.joinmastodon.org/methods/timelines/#tag
+  Future<List<Status>> getHashtagTimeline(
+    String hashtag, {
+    String? maxId,
+    String? sinceId,
+    String? minId,
+    int? limit,
+  }) async {
+    return client.sendRequest(
+      HttpMethod.get,
+      'api/v1/timelines/tag/$hashtag',
+      query: {
+        'max_id': maxId,
+        'since_id': sinceId,
+        'min_id': minId,
+        'limit': limit,
+      },
+    ).then(Status.fromJson.fromResponseList);
+  }
+
+  Future<Tag> getHashtag(String hashtag) async {
+    return client
+        .sendRequest(
+          HttpMethod.get,
+          'api/v1/tags/$hashtag',
+        )
+        .then(Tag.fromJson.fromResponse);
+  }
 }

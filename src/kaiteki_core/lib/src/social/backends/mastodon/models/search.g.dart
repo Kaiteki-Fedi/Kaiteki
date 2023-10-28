@@ -15,9 +15,14 @@ Search _$SearchFromJson(Map<String, dynamic> json) => Search(
               ?.map((e) => Account.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      hashtags: (json['hashtags'] as List<dynamic>?)
+              ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$SearchToJson(Search instance) => <String, dynamic>{
       'statuses': instance.statuses,
       'accounts': instance.accounts,
+      'hashtags': instance.hashtags,
     };

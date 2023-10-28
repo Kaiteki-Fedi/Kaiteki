@@ -1,8 +1,11 @@
 import 'package:kaiteki_core/social.dart';
 
 class MastodonCapabilities extends AdapterCapabilities
-    implements ExploreCapabilities {
+    implements HashtagSupportCapabilities, ExploreCapabilities {
   const MastodonCapabilities();
+
+  @override
+  Set<Formatting> get supportedFormattings => const {Formatting.plainText};
 
   @override
   Set<Visibility> get supportedScopes {
@@ -15,12 +18,6 @@ class MastodonCapabilities extends AdapterCapabilities
   }
 
   @override
-  bool get supportsSubjects => true;
-
-  @override
-  Set<Formatting> get supportedFormattings => const {Formatting.plainText};
-
-  @override
   Set<TimelineType> get supportedTimelines {
     return const {
       TimelineType.following,
@@ -31,7 +28,13 @@ class MastodonCapabilities extends AdapterCapabilities
   }
 
   @override
+  bool get supportsFollowingHashtags => true;
+
+  @override
   bool get supportsLanguageTagging => true;
+
+  @override
+  bool get supportsSubjects => true;
 
   @override
   bool get supportsTrendingLinks => true;

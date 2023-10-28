@@ -8,6 +8,7 @@ export 'src/social/model/emoji.dart';
 export 'src/social/model/emoji_category.dart';
 export 'src/social/model/formatting.dart';
 export 'src/social/model/gif.dart';
+export 'src/social/model/hashtag.dart';
 export 'src/social/model/instance.dart';
 export 'src/social/model/mock_data.dart';
 export 'src/social/model/notification.dart';

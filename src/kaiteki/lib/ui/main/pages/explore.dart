@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart";
+import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
@@ -133,7 +134,15 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                           ActionChip(
                             // ignore: l10n
                             label: Text("#$hashtag"),
-                            onPressed: () {},
+                            onPressed: () {
+                              context.pushNamed(
+                                "hashtag",
+                                pathParameters: {
+                                  ...ref.accountRouterParams,
+                                  "hashtag": hashtag,
+                                },
+                              );
+                            },
                           ),
                       ],
                     ),

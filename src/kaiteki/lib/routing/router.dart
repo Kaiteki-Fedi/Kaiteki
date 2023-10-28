@@ -15,6 +15,7 @@ import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/auth/oauth_finalization_screen.dart";
 import "package:kaiteki/ui/feedback_screen.dart";
 import "package:kaiteki/ui/follow_requests/dialog.dart";
+import "package:kaiteki/ui/hashtag/screen.dart";
 import "package:kaiteki/ui/launcher/dialog.dart";
 import "package:kaiteki/ui/lists/lists_screen.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
@@ -265,6 +266,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                 },
               ),
               GoRoute(
+                name: "hashtag",
+                path: "hashtags/:hashtag",
+                pageBuilder: (context, state) {
+                  final hashtag = state.pathParameters["hashtag"]!;
+                  return _DialogPage(
+                    builder: (_) => HashtagScreen(hashtag),
+                  );
+                },
+              ),
+              GoRoute(
                 name: "lists",
                 path: "lists",
                 builder: (_, __) => const ListsScreen(),
@@ -363,7 +374,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 name: "follow-requests",
                 pageBuilder: (context, state) {
                   return _DialogPage(
-                    builder: (_) => FollowRequestsDialog(),
+                    builder: (_) => const FollowRequestsDialog(),
                   );
                 },
               ),

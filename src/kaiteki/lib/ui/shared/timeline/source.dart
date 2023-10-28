@@ -78,3 +78,33 @@ class ListTimelineSource implements TimelineSource {
   bool operator ==(covariant ListTimelineSource other) =>
       listId == other.listId;
 }
+
+class HashtagTimelineSource implements TimelineSource {
+  final String hashtag;
+
+  const HashtagTimelineSource(this.hashtag);
+
+  @override
+  Future<Iterable<Post>> fetch(
+    BackendAdapter adapter,
+    TimelineQuery<String>? query,
+  ) {
+    if (adapter is! HashtagSupport) {
+      throw ArgumentError.value(
+        adapter,
+        "adapter",
+        "Adapter needs to support hashtags in order to fetch them.",
+      );
+    }
+
+    final hashtags = adapter as HashtagSupport;
+    return hashtags.getPostsByHashtag(hashtag, query: query);
+  }
+
+  @override
+  int get hashCode => hashtag.hashCode;
+
+  @override
+  bool operator ==(covariant HashtagTimelineSource other) =>
+      hashtag == other.hashtag;
+}
