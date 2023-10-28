@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki_core/model.dart";
 
@@ -57,11 +58,6 @@ class EmojiWidget extends StatelessWidget {
   }
 
   Widget buildUnicodeEmoji(BuildContext context, UnicodeEmoji unicodeEmoji) {
-    const textStyle = TextStyle(
-      fontFamily: "Noto Color Emoji",
-      fontFamilyFallback: ["Segoe UI Emoji"],
-    );
-
     final theme = Theme.of(context).extension<EmojiTheme>();
     final size = this.size ?? theme?.size ?? _defaultEmojiSize;
 
@@ -69,10 +65,7 @@ class EmojiWidget extends StatelessWidget {
       width: size,
       height: size,
       child: FittedBox(
-        child: Text(
-          unicodeEmoji.short,
-          style: textStyle,
-        ),
+        child: Text(unicodeEmoji.short, style: kEmojiTextStyle),
       ),
     );
   }

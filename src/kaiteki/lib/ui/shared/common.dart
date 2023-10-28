@@ -10,6 +10,11 @@ final systemColorSchemeProvider = Provider<ColorSchemeBundle?>((_) => null);
 
 const kBullet = "•";
 
+const kEmojiTextStyle = TextStyle(
+  fontFamily: "Noto Color Emoji",
+  fontFamilyFallback: ["Segoe UI Emoji"],
+);
+
 typedef LocalizableStringBuilder = String Function(BuildContext context);
 
 const centeredCircularProgressIndicator = Center(
