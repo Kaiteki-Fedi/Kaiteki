@@ -33,45 +33,42 @@ class PostLayoutSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Post layout")),
+      appBar: AppBar(title: const Text("Post appearance")),
       body: SingleChildScrollView(
         child: SettingsContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16.0),
-              Consumer(
-                builder: (context, ref, child) {
-                  return Theme(
-                    data: ref.watch(usePostCards).value
-                        ? Theme.of(context)
-                        : Theme.of(context).copyWith(
-                            cardTheme: CardTheme.of(context).copyWith(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                                side: BorderSide(
-                                  color: Theme.of(context).colorScheme.outline,
+              SettingsSection(
+                children: [
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final theme = Theme.of(context);
+                      return Theme(
+                        data: ref.watch(usePostCards).value
+                            ? theme
+                            : theme.copyWith(
+                                cardTheme: CardTheme.of(context).copyWith(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    side: BorderSide(
+                                      color: theme.colorScheme.outline,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                    child: SettingsSection(
-                      children: [
-                        Consumer(
-                          builder: (context, ref, _) {
-                            return PostWidget(
-                              _example,
-                              layout: ref.watch(useWidePostLayout).value
-                                  ? PostWidgetLayout.wide
-                                  : PostWidgetLayout.normal,
-                            );
-                          },
+                        child: PostWidget(
+                          _example,
+                          layout: ref.watch(useWidePostLayout).value
+                              ? PostWidgetLayout.wide
+                              : PostWidgetLayout.normal,
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ],
               ),
               SettingsSection(
                 children: [

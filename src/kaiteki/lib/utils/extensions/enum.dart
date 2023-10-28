@@ -89,3 +89,13 @@ extension TimelindKindExtensions on TimelineType {
     };
   }
 }
+
+extension ThemeModeExtensions on ThemeMode {
+  String getDisplayString(KaitekiLocalizations l10n) {
+    return switch (this) {
+      ThemeMode.system => l10n.themeSystem,
+      ThemeMode.light => l10n.themeLight,
+      ThemeMode.dark => l10n.themeDark,
+    };
+  }
+}
