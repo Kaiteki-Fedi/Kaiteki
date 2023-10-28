@@ -20,16 +20,18 @@ class LocaleListTile extends ConsumerWidget {
   }
 
   Future<void> _onTap(BuildContext context, WidgetRef ref) async {
-    final locale = await showDialog<LocaleChoice?>(
+    final locale = await showDialog<SelectLocaleDialogResult?>(
       context: context,
       builder: (_) => const SelectLocaleDialog(),
     );
 
     if (locale == null) return;
 
-    ref.read(preferences.locale).value = locale.languageCode;
+    ref.read(preferences.locale).value = locale.$1;
   }
 }
+
+typedef SelectLocaleDialogResult = (Locale?,);
 
 class SelectLocaleDialog extends StatelessWidget {
   const SelectLocaleDialog({super.key});
@@ -42,9 +44,8 @@ class SelectLocaleDialog extends StatelessWidget {
       children: [
         SimpleDialogOption(
           child: Text(l10n.localeSystem),
-          onPressed: () => Navigator.of(context).maybePop(
-            const LocaleChoice.systemDefault(),
-          ),
+          onPressed: () =>
+              Navigator.of(context).pop<SelectLocaleDialogResult>((null,)),
         ),
         const Divider(),
         for (final locale in KaitekiLocalizations.supportedLocales)
@@ -54,17 +55,10 @@ class SelectLocaleDialog extends StatelessWidget {
               style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
                   DefaultKaitekiTextTheme(context).monospaceTextStyle,
             ),
-            onPressed: () => Navigator.of(context).maybePop(
-              LocaleChoice(locale.toLanguageTag()),
-            ),
+            onPressed: () =>
+                Navigator.of(context).pop<SelectLocaleDialogResult>((locale,)),
           ),
       ],
     );
   }
-}
-
-class LocaleChoice {
-  final String? languageCode;
-  const LocaleChoice(String this.languageCode);
-  const LocaleChoice.systemDefault() : languageCode = null;
 }

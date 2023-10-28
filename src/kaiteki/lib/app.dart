@@ -24,8 +24,6 @@ class KaitekiApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(preferences.themeMode).value;
-    final router = ref.watch(routerProvider);
-    final locale = ref.watch(preferences.locale).value;
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
@@ -37,9 +35,9 @@ class KaitekiApp extends ConsumerWidget {
         return MaterialApp.router(
           darkTheme: darkTheme,
           localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
-          routerConfig: router,
+          routerConfig: ref.watch(routerProvider),
           supportedLocales: KaitekiLocalizations.supportedLocales,
-          locale: createLocale(locale),
+          locale: ref.watch(preferences.locale).value,
           theme: lightTheme,
           themeMode: themeMode,
           title: consts.kAppName,
@@ -71,14 +69,5 @@ class KaitekiApp extends ConsumerWidget {
             .applyUserPreferences(ref);
 
     return theme;
-  }
-
-  static Locale? createLocale(String? locale) {
-    if (locale == null) return null;
-    final split = locale.split("-");
-    return Locale.fromSubtags(
-      languageCode: split[0],
-      scriptCode: split.length == 2 ? split[1] : null,
-    );
   }
 }

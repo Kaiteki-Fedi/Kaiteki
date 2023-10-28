@@ -1,8 +1,13 @@
+import "dart:ui" show Locale;
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/utils.dart";
+import "package:logging/logging.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
 enum InterfaceFont {
@@ -13,10 +18,29 @@ enum InterfaceFont {
   atkinsonHyperlegible,
 }
 
-final locale = createSettingProvider<String?>(
+final locale = createSettingProvider<Locale?>(
   key: "locale",
   initialValue: null,
   provider: sharedPreferencesProvider,
+  read: (prefs, key) {
+    try {
+      return prefs.getString(key).nullTransform(parseLocale);
+    } catch (e, s) {
+      Logger("locale").warning(
+        "Failed to parse locale, is this using a deprecated format?",
+        e,
+        s,
+      );
+      return null;
+    }
+  },
+  write: (prefs, key, value) async {
+    if (value == null) {
+      await prefs.remove(key);
+    } else {
+      await prefs.setString(key, value.toLanguageTag());
+    }
+  },
 );
 
 final experiments = createSettingProvider<List<AppExperiment>>(
