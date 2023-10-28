@@ -52,6 +52,7 @@ class MainScreenNavigationRail extends ConsumerWidget {
         onPressed: () {
           context.pushNamed("compose", pathParameters: ref.accountRouterParams);
         },
+        heroTag: const ValueKey("navigation rail"),
         child: const Icon(Icons.edit_rounded),
       ),
       destinations: _destinations(context),
