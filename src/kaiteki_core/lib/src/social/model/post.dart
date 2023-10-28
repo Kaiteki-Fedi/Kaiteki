@@ -7,19 +7,19 @@ import 'embed.dart';
 import 'emoji.dart';
 import 'formatting.dart';
 import 'poll.dart';
+import 'post.dart';
 import 'reaction.dart';
 import 'resolvable.dart';
 import 'user.dart';
 import 'user_reference.dart';
 import 'visibility.dart';
-import 'post.dart';
 
 export 'draft.dart';
 export 'post_metrics.dart';
 export 'post_state.dart';
 
 /// A class representing a post.
-class Post<T>{
+class Post<T> {
   final T? source;
   final String id;
   final DateTime postedAt;
@@ -44,6 +44,9 @@ class Post<T>{
   final List<UserReference>? mentionedUsers;
   final Uri? externalUrl;
   final String? language;
+
+  /// The ID of the thread this post belongs to.
+  final String? threadId;
 
   const Post({
     this.source,
@@ -70,6 +73,7 @@ class Post<T>{
     this.client,
     this.poll,
     this.language,
+    this.threadId,
   });
 
   Post<T> copyWith({
@@ -96,6 +100,7 @@ class Post<T>{
     List<UserReference>? mentionedUsers,
     Uri? externalUrl,
     String? language,
+    String? threadId,
   }) {
     return Post(
       id: id ?? this.id,
@@ -121,6 +126,7 @@ class Post<T>{
       mentionedUsers: mentionedUsers ?? this.mentionedUsers,
       externalUrl: externalUrl ?? this.externalUrl,
       language: language ?? this.language,
+      threadId: threadId ?? this.threadId,
     );
   }
 
