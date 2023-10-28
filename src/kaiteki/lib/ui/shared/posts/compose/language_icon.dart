@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 
 class LanguageIcon extends StatelessWidget {
   const LanguageIcon(this.language, {super.key});

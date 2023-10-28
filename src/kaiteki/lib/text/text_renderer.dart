@@ -8,7 +8,7 @@ import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/text/unblur_on_hover.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";

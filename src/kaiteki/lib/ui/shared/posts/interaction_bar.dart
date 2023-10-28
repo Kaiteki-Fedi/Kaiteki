@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
 import "package:kaiteki/ui/shared/posts/layouts/layout.dart";

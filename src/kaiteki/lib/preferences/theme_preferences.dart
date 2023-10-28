@@ -1,17 +1,32 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/theming/themes.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
-
-final useSystemColorScheme = createSettingProvider<bool>(
-  key: "useSystemColorScheme",
-  initialValue: true,
-  provider: sharedPreferencesProvider,
-);
 
 final useMaterial3 = createSettingProvider<bool>(
   key: "useMaterial3",
   initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final theme = createSettingProvider<AppTheme?>(
+  key: "theme",
+  initialValue: AppTheme.affection,
+  read: (prefs, key) {
+    final value = prefs.getString(key);
+    if (value == null) return null;
+    return AppTheme.values.firstWhereOrNull((theme) => theme.name == value);
+  },
+  write: (prefs, key, value) async {
+    final name = value?.name;
+    if (name == null) {
+      await prefs.remove(key);
+    } else {
+      await prefs.setString(key, name);
+    }
+  },
   provider: sharedPreferencesProvider,
 );
 

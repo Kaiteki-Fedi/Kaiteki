@@ -20,3 +20,5 @@ double getLocalFontSize(BuildContext context) {
 Color getLocalTextColor(BuildContext context) {
   return DefaultTextStyle.of(context).style.color!;
 }
+
+typedef ColorSchemeBundle = ({ColorScheme dark, ColorScheme light});

@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki_core/model.dart";
 

@@ -5,7 +5,7 @@ import "package:fpdart/fpdart.dart" show FpdartOnIterable;
 import "package:intl/intl.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki_core/model.dart";
 
 const _kSecondsPerYear = Duration.secondsPerDay * 365;

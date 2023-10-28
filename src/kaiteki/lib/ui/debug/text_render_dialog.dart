@@ -7,7 +7,7 @@ import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/text/parsers/md_text_parser.dart";
 import "package:kaiteki/text/text_renderer.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/dialogs/dialog_close_button.dart";
 import "package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart";
 import "package:kaiteki/utils/extensions.dart";

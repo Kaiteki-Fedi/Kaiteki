@@ -8,7 +8,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
 import "package:kaiteki/ui/features/article_view/screen.dart";
 import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";

@@ -69,8 +69,8 @@ Future<void> main() async {
 
 void handleFatalError(TraceableError error) {
   final crashScreen = MaterialApp(
-    theme: getDefaultTheme(Brightness.light, true),
-    darkTheme: getDefaultTheme(Brightness.dark, true),
+    theme: makeDefaultTheme(Brightness.light, true),
+    darkTheme: makeDefaultTheme(Brightness.dark, true),
     localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
     supportedLocales: KaitekiLocalizations.supportedLocales,
     home: CrashScreen(error),

@@ -2,7 +2,7 @@ import "package:flutter/material.dart" hide Notification;
 import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/corner_painter.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";

@@ -1,9 +1,12 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:material_color_utilities/material_color_utilities.dart";
 
 export "package:kaiteki/common.dart";
 export "package:kaiteki_ui/kaiteki_ui.dart";
+
+final systemColorSchemeProvider = Provider<ColorSchemeBundle?>((_) => null);
 
 const kBullet = "•";
 

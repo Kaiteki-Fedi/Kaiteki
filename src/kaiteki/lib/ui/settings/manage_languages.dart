@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/language.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/shared/common.dart";
 

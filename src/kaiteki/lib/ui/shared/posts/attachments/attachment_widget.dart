@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_blurhash/flutter_blurhash.dart";
 import "package:kaiteki/platform_checks.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/posts/attachments/fallback_attachment_widget.dart";
 import "package:kaiteki/ui/shared/posts/attachments/image_attachment_widget.dart";
 import "package:kaiteki/ui/shared/posts/attachments/video_attachment_widget.dart";

@@ -29,15 +29,22 @@ class _CustomizationBasicPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16.0),
-            SettingsSection(
-              title: SectionHeader(l10n.theme),
-              useCard: false,
-              children: [
-                ThemeSelector(
-                  theme: ref.watch(themeMode).value,
-                  onSelected: (value) => ref.read(themeMode).value = value,
+            Padding(
+              padding: kSectionSubheaderMargin,
+              child: SectionHeader(l10n.theme),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                top: 8.0,
+              ),
+              child: Center(
+                child: ThemeSelector(
+                  selected: ref.watch(theme).value,
+                  onSelected: (value) => ref.read(theme).value = value,
                 ),
-              ],
+              ),
             ),
             SettingsSection(
               children: [
@@ -58,10 +65,6 @@ class _CustomizationBasicPageState
                 PreferenceSwitchListTile(
                   provider: useMaterial3,
                   title: Text(l10n.useMaterialYou),
-                ),
-                PreferenceSwitchListTile(
-                  provider: useSystemColorScheme,
-                  title: Text(l10n.useSystemColorScheme),
                 ),
               ],
             ),

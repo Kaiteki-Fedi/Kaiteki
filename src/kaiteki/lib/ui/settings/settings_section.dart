@@ -1,6 +1,8 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 
+const kSectionSubheaderMargin = EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 8.0);
+
 class SettingsSection extends StatelessWidget {
   final Widget? title;
   final List<Widget> children;
@@ -36,7 +38,7 @@ class SettingsSection extends StatelessWidget {
       children: [
         if (title != null)
           Padding(
-            padding: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 8.0),
+            padding: kSectionSubheaderMargin,
             child: title,
           ),
         if (useCard)

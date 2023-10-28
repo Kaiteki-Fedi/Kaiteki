@@ -10,7 +10,7 @@ import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
 import "package:kaiteki/ui/main/pages/chats.dart";
 import "package:kaiteki/ui/main/pages/explore.dart";

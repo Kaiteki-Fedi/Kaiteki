@@ -5,7 +5,7 @@ import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart" as preferences;
 import "package:kaiteki/theming/default/text_themes.dart" as kaiteki;
-import "package:kaiteki/theming/kaiteki/theme.dart";
+import "package:kaiteki/theming/theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 

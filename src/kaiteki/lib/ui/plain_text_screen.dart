@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 
 class PlainTextScreen extends StatelessWidget {
   final String text;

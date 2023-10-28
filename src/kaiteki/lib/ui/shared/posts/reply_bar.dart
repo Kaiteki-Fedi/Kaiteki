@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/user_resolver.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";

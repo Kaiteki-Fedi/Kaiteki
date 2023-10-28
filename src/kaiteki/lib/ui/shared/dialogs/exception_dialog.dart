@@ -4,7 +4,7 @@ import "package:flutter/material.dart";
 import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/plain_text_screen.dart";
 import "package:kaiteki/ui/stack_trace_screen.dart";
 import "package:kaiteki_core/utils.dart";

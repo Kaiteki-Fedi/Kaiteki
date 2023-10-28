@@ -2,7 +2,7 @@ import "package:flutter/material.dart" hide Visibility;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/kaiteki/colors.dart";
+import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/posts/interaction_bar.dart";
 import "package:kaiteki/ui/shared/posts/interaction_event_bar.dart";
 import "package:kaiteki/ui/shared/posts/layouts/layout.dart";
