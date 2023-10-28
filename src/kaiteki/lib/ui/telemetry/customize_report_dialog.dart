@@ -7,7 +7,7 @@ import "package:kaiteki/telemetry/report.dart";
 class CustomizeReportDialog extends ConsumerStatefulWidget {
   final ExceptionReport report;
 
-  const CustomizeReportDialog(this.report);
+  const CustomizeReportDialog(this.report, {super.key});
 
   @override
   ConsumerState<CustomizeReportDialog> createState() =>
@@ -21,9 +21,7 @@ class _CustomizeReportDialogState extends ConsumerState<CustomizeReportDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final adapter = ref.read(adapterProvider);
-
-    const horizontalPadding = const EdgeInsets.symmetric(horizontal: 24.0);
+    const horizontalPadding = EdgeInsets.symmetric(horizontal: 24.0);
     final json = widget.report.json;
 
     const versionName = KaitekiApp.versionName;
