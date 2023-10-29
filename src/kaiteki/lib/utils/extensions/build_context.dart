@@ -63,7 +63,7 @@ extension BuildContextExtensions on BuildContext {
       SnackBar(
         content: text,
         action: SnackBarAction(
-          label: l10n.whyButtonLabel,
+          label: l10n.showDetailsButtonLabel,
           onPressed: () => showExceptionDialog(error),
         ),
       ),

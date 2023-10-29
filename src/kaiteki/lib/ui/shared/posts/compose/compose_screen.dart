@@ -734,7 +734,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
         SnackBar(
           content: Text(l10n.postSubmissionFailed),
           action: SnackBarAction(
-            label: l10n.whyButtonLabel,
+            label: l10n.showDetailsButtonLabel,
             onPressed: () => navigator.context.showExceptionDialog((e, s)),
           ),
         ),
