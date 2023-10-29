@@ -104,43 +104,56 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
   }
 
   @override
+  void didUpdateWidget(covariant PostContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.post != widget.post) {
+      _renderContent();
+      _updateCollapsed();
+    }
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     _renderContent();
+    _updateCollapsed();
+  }
 
+  void _updateCollapsed() {
     final cwBehavior = ref.watch(preferences.cwBehavior).value;
 
     final subject = widget.post.subject;
     final hasSubject = subject != null && subject.isNotEmpty;
 
-    if (hasSubject) {
-      switch (cwBehavior) {
-        case ContentWarningBehavior.collapse:
-          collapsed = true;
-          break;
-        case ContentWarningBehavior.expanded:
-          collapsed = false;
-          break;
-        case ContentWarningBehavior.automatic:
-          final plainText = renderedContent?.toPlainText(
-            includeSemanticsLabels: false,
-            includePlaceholders: false,
-          );
+    collapsed = switch (cwBehavior) {
+      ContentWarningBehavior.collapse => hasSubject,
+      ContentWarningBehavior.expanded => false,
+      ContentWarningBehavior.automatic => _containsSensitiveWords(),
+    };
+  }
 
-          final strings = [if (plainText != null) plainText, subject];
+  bool _containsSensitiveWords() {
+    final plainText = renderedContent?.toPlainText(
+      includeSemanticsLabels: false,
+      includePlaceholders: false,
+    );
 
-          if (strings.isEmpty) break;
+    final subject = widget.post.subject;
 
-          final words = strings
-              .map((e) => e.toLowerCase())
-              .map((e) => e.split(RegExp(r"([\s:])+")))
-              .flattened;
+    final strings = [
+      if (plainText != null) plainText,
+      if (subject != null) subject,
+    ];
 
-          collapsed = sensitiveWords.any(words.contains);
-          break;
-      }
-    }
+    if (strings.isEmpty) return false;
+
+    final words = strings
+        .map((e) => e.toLowerCase())
+        .map((e) => e.split(RegExp(r"([\s:])+")))
+        .flattened;
+
+    return sensitiveWords.any(words.contains);
   }
 
   void _renderContent() {
