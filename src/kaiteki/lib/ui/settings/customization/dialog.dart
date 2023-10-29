@@ -43,7 +43,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
           const Divider(height: 1 + 8 * 2),
           SwitchListTile(
             value: _useMaterial3,
-            onChanged: (value) => setState(() => _useMaterial3 = value!),
+            onChanged: (value) => setState(() => _useMaterial3 = value),
             title: Text(context.l10n.useMaterialYou),
             contentPadding: const EdgeInsets.symmetric(horizontal: 24.0),
           ),
