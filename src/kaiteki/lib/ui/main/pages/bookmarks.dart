@@ -1,10 +1,15 @@
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/fediverse/services/bookmarks.dart";
+import "package:kaiteki/model/pagination_state.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
-import "package:kaiteki_core/social.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
+import "package:sliver_tools/sliver_tools.dart";
 
 class BookmarksPage extends ConsumerStatefulWidget {
   const BookmarksPage({super.key});
@@ -13,93 +18,98 @@ class BookmarksPage extends ConsumerStatefulWidget {
   ConsumerState<BookmarksPage> createState() => _BookmarkPageState();
 }
 
+// HACK(Craftplacer): this widget cannot be used as-is, it lacks adapter capability checking
 class _BookmarkPageState extends ConsumerState<BookmarksPage> {
-  final _pagingController = PagingController<String?, Post>(
-    firstPageKey: null,
-  );
+  late final _controller = PagingController<String?, Post>(firstPageKey: null);
+  ProviderSubscription<AsyncValue<PaginationState<Post>>>? _timeline;
 
   @override
   void initState() {
-    _pagingController.addPageRequestListener((id) async {
-      try {
-        final adapter = ref.watch(adapterProvider) as BookmarkSupport;
-        final posts = await adapter.getBookmarks(sinceId: id);
+    super.initState();
 
-        if (posts.isEmpty) {
-          _pagingController.appendLastPage(posts.toList());
-        } else {
-          _pagingController.appendPage(posts.toList(), posts.last.id);
-        }
-      } catch (e) {
-        _pagingController.error = e;
-      }
+    _controller.addPageRequestListener((pageKey) {
+      final key = ref.read(currentAccountProvider)!.key;
+      final provider = BookmarksServiceProvider(key);
+      ref.read(provider.notifier).loadMore();
     });
 
-    super.initState();
-  }
+    ref.listenManual(
+      currentAccountProvider,
+      (previous, next) {
+        final provider = BookmarksServiceProvider(next!.key);
 
-  @override
-  void dispose() {
-    _pagingController.dispose();
-    super.dispose();
+        _timeline?.close();
+        _timeline = ref.listenManual(
+          provider,
+          (_, e) => _controller.value = e.getPagingState(""),
+          fireImmediately: true,
+        );
+      },
+      fireImmediately: true,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return PagedListView<String?, Post>.separated(
-          padding: EdgeInsets.symmetric(
-            horizontal: getPadding(constraints.maxWidth),
-          ),
-          pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<Post>(
-            itemBuilder: _buildPost,
-            noItemsFoundIndicatorBuilder: (_) => IconLandingWidget(
-              icon: const Icon(Icons.bookmark_outline_rounded),
-              text: Text(l10n.bookmarksEmpty),
+    return CustomScrollView(
+      slivers: [
+        SliverCrossAxisConstrained(
+          maxCrossAxisExtent: 600,
+          child: SliverPadding(
+            padding: useCards ? const EdgeInsets.all(8) : EdgeInsets.zero,
+            sliver: PagedSliverList<String?, Post>.separated(
+              pagingController: _controller,
+              builderDelegate: PagedChildBuilderDelegate<Post>(
+                itemBuilder: (context, post, _) => _buildPost(context, post),
+                animateTransitions: true,
+                firstPageErrorIndicatorBuilder: (context) {
+                  return Center(
+                    child:
+                        ErrorLandingWidget(_controller.error as TraceableError),
+                  );
+                },
+                firstPageProgressIndicatorBuilder: (context) => const Padding(
+                  padding: EdgeInsets.all(32),
+                  child: centeredCircularProgressIndicator,
+                ),
+                noMoreItemsIndicatorBuilder: (context) {
+                  final l10n = context.l10n;
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Text(
+                        l10n.noMorePosts,
+                        style:
+                            TextStyle(color: Theme.of(context).disabledColor),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              separatorBuilder: _buildSeparator,
             ),
           ),
-          separatorBuilder: _buildSeparator,
-        );
-      },
+        ),
+      ],
     );
   }
 
-  double getPadding(double width) {
-    const maxWidth = 800;
-    if (width <= maxWidth) {
-      return 0;
-    } else {
-      return width / 2 - maxWidth / 2;
+  bool get useCards => ref.watch(usePostCards).value;
+
+  Widget _buildPost(BuildContext context, Post post) {
+    Widget widget = PostWidget(
+      post,
+      onOpen: () => context.showPost(post, ref),
+    );
+
+    if (useCards) {
+      widget = Card(clipBehavior: Clip.antiAlias, child: widget);
     }
-  }
 
-  Widget _buildPost(BuildContext context, Post item, int index) {
-    return Consumer(
-      builder: (context, ref, child) {
-        return Material(
-          child: InkWell(
-            onTap: () {
-              final accountKey = ref.read(currentAccountProvider)!.key;
-              final username = accountKey.username;
-              final instance = accountKey.host;
-
-              // TODO(Craftplacer): use named routes
-              context.push(
-                "/@$username@$instance/posts/${item.id}",
-                extra: item,
-              );
-            },
-            child: PostWidget(item),
-          ),
-        );
-      },
-    );
+    return widget;
   }
 
   Widget _buildSeparator(BuildContext context, int index) {
-    return const Divider(height: 1);
+    return useCards ? const SizedBox(height: 8) : const Divider(height: 1);
   }
 }

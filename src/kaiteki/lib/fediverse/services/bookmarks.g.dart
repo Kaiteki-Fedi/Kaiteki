@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'timeline.dart';
+part of 'bookmarks.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$timelineServiceHash() => r'470a3bff3a013cfd8ca5f35639792ec0e0d04158';
+String _$bookmarksServiceHash() => r'92d583738e62712f6716f5df4f2f910fa6f6b895';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,44 +29,39 @@ class _SystemHash {
   }
 }
 
-abstract class _$TimelineService
+abstract class _$BookmarksService
     extends BuildlessAsyncNotifier<PaginationState<Post>> {
   late final AccountKey key;
-  late final TimelineSource source;
 
   FutureOr<PaginationState<Post>> build(
     AccountKey key,
-    TimelineSource source,
   );
 }
 
-/// See also [TimelineService].
-@ProviderFor(TimelineService)
-const timelineServiceProvider = TimelineServiceFamily();
+/// See also [BookmarksService].
+@ProviderFor(BookmarksService)
+const bookmarksServiceProvider = BookmarksServiceFamily();
 
-/// See also [TimelineService].
-class TimelineServiceFamily extends Family<AsyncValue<PaginationState<Post>>> {
-  /// See also [TimelineService].
-  const TimelineServiceFamily();
+/// See also [BookmarksService].
+class BookmarksServiceFamily extends Family<AsyncValue<PaginationState<Post>>> {
+  /// See also [BookmarksService].
+  const BookmarksServiceFamily();
 
-  /// See also [TimelineService].
-  TimelineServiceProvider call(
+  /// See also [BookmarksService].
+  BookmarksServiceProvider call(
     AccountKey key,
-    TimelineSource source,
   ) {
-    return TimelineServiceProvider(
+    return BookmarksServiceProvider(
       key,
-      source,
     );
   }
 
   @override
-  TimelineServiceProvider getProviderOverride(
-    covariant TimelineServiceProvider provider,
+  BookmarksServiceProvider getProviderOverride(
+    covariant BookmarksServiceProvider provider,
   ) {
     return call(
       provider.key,
-      provider.source,
     );
   }
 
@@ -91,34 +86,30 @@ class TimelineServiceFamily extends Family<AsyncValue<PaginationState<Post>>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'timelineServiceProvider';
+  String? get name => r'bookmarksServiceProvider';
 }
 
-/// See also [TimelineService].
-class TimelineServiceProvider
-    extends AsyncNotifierProviderImpl<TimelineService, PaginationState<Post>> {
-  /// See also [TimelineService].
-  TimelineServiceProvider(
+/// See also [BookmarksService].
+class BookmarksServiceProvider
+    extends AsyncNotifierProviderImpl<BookmarksService, PaginationState<Post>> {
+  /// See also [BookmarksService].
+  BookmarksServiceProvider(
     AccountKey key,
-    TimelineSource source,
   ) : this._internal(
-          () => TimelineService()
-            ..key = key
-            ..source = source,
-          from: timelineServiceProvider,
-          name: r'timelineServiceProvider',
+          () => BookmarksService()..key = key,
+          from: bookmarksServiceProvider,
+          name: r'bookmarksServiceProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$timelineServiceHash,
-          dependencies: TimelineServiceFamily._dependencies,
+                  : _$bookmarksServiceHash,
+          dependencies: BookmarksServiceFamily._dependencies,
           allTransitiveDependencies:
-              TimelineServiceFamily._allTransitiveDependencies,
+              BookmarksServiceFamily._allTransitiveDependencies,
           key: key,
-          source: source,
         );
 
-  TimelineServiceProvider._internal(
+  BookmarksServiceProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -126,81 +117,66 @@ class TimelineServiceProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.key,
-    required this.source,
   }) : super.internal();
 
   final AccountKey key;
-  final TimelineSource source;
 
   @override
   FutureOr<PaginationState<Post>> runNotifierBuild(
-    covariant TimelineService notifier,
+    covariant BookmarksService notifier,
   ) {
     return notifier.build(
       key,
-      source,
     );
   }
 
   @override
-  Override overrideWith(TimelineService Function() create) {
+  Override overrideWith(BookmarksService Function() create) {
     return ProviderOverride(
       origin: this,
-      override: TimelineServiceProvider._internal(
-        () => create()
-          ..key = key
-          ..source = source,
+      override: BookmarksServiceProvider._internal(
+        () => create()..key = key,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         key: key,
-        source: source,
       ),
     );
   }
 
   @override
-  AsyncNotifierProviderElement<TimelineService, PaginationState<Post>>
+  AsyncNotifierProviderElement<BookmarksService, PaginationState<Post>>
       createElement() {
-    return _TimelineServiceProviderElement(this);
+    return _BookmarksServiceProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TimelineServiceProvider &&
-        other.key == key &&
-        other.source == source;
+    return other is BookmarksServiceProvider && other.key == key;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, key.hashCode);
-    hash = _SystemHash.combine(hash, source.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin TimelineServiceRef on AsyncNotifierProviderRef<PaginationState<Post>> {
+mixin BookmarksServiceRef on AsyncNotifierProviderRef<PaginationState<Post>> {
   /// The parameter `key` of this provider.
   AccountKey get key;
-
-  /// The parameter `source` of this provider.
-  TimelineSource get source;
 }
 
-class _TimelineServiceProviderElement
-    extends AsyncNotifierProviderElement<TimelineService, PaginationState<Post>>
-    with TimelineServiceRef {
-  _TimelineServiceProviderElement(super.provider);
+class _BookmarksServiceProviderElement extends AsyncNotifierProviderElement<
+    BookmarksService, PaginationState<Post>> with BookmarksServiceRef {
+  _BookmarksServiceProviderElement(super.provider);
 
   @override
-  AccountKey get key => (origin as TimelineServiceProvider).key;
-  @override
-  TimelineSource get source => (origin as TimelineServiceProvider).source;
+  AccountKey get key => (origin as BookmarksServiceProvider).key;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

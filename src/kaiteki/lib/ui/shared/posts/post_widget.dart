@@ -5,6 +5,7 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/services/bookmarks.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -454,18 +455,17 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   }
 
   Future<void> _onBookmark() async {
-    final adapter = ref.read(adapterProvider);
+    final accountKey = ref.read(currentAccountProvider)!.key;
+    final bookmarks = ref.read(bookmarksServiceProvider(accountKey).notifier);
     final l10n = context.l10n;
 
     try {
-      final f = adapter as BookmarkSupport;
-
       final PostState newState;
       if (_post.state.bookmarked) {
-        await f.unbookmarkPost(_post.id);
+        await bookmarks.remove(_post.id);
         newState = _post.state.copyWith(bookmarked: false);
       } else {
-        await f.bookmarkPost(_post.id);
+        await bookmarks.add(_post.id);
         newState = _post.state.copyWith(bookmarked: true);
       }
 

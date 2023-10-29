@@ -5,6 +5,7 @@ import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/fediverse/services/bookmarks.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
@@ -294,9 +295,11 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
         ref.invalidate(timelineServiceProvider(accountKey, timeline));
         break;
+      case TabKind.bookmarks:
+        ref.invalidate(bookmarksServiceProvider(accountKey));
+        break;
 
       case TabKind.chats:
-      case TabKind.bookmarks:
       case TabKind.explore:
       case TabKind.directMessages:
         break;
