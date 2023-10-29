@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki/l10n/localizations_en.dart";
 import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:material_color_utilities/material_color_utilities.dart";
 
@@ -125,4 +127,14 @@ class ContentColor extends StatelessWidget {
       ),
     );
   }
+}
+
+String? getLocaleName(Locale locale) {
+  final languageName = lookupKaitekiLocalizations(locale).languageName;
+  final isEnglish = locale == const Locale("en");
+  final isDefaultLanguageName =
+      languageName == KaitekiLocalizationsEn().languageName;
+
+  if (isDefaultLanguageName && !isEnglish) return null;
+  return languageName;
 }

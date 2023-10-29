@@ -3,6 +3,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/theming/text_theme.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 class LocaleListTile extends ConsumerWidget {
   const LocaleListTile({super.key});
@@ -11,10 +12,12 @@ class LocaleListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     // final prefs = ref.watch(preferencesProvider);
+    final locale = Localizations.localeOf(context);
+    final localeName = getLocaleName(locale);
     return ListTile(
       leading: const Icon(Icons.public),
       title: Text(l10n.settingsLocale),
-      subtitle: Text(Localizations.localeOf(context).toLanguageTag()),
+      subtitle: Text(localeName ?? locale.toString()),
       onTap: () => _onTap(context, ref),
     );
   }
@@ -22,7 +25,9 @@ class LocaleListTile extends ConsumerWidget {
   Future<void> _onTap(BuildContext context, WidgetRef ref) async {
     final locale = await showDialog<SelectLocaleDialogResult?>(
       context: context,
-      builder: (_) => const SelectLocaleDialog(),
+      builder: (_) => SelectLocaleDialog(
+        selectedLocale: ref.read(preferences.locale).value,
+      ),
     );
 
     if (locale == null) return;
@@ -34,31 +39,70 @@ class LocaleListTile extends ConsumerWidget {
 typedef SelectLocaleDialogResult = (Locale?,);
 
 class SelectLocaleDialog extends StatelessWidget {
-  const SelectLocaleDialog({super.key});
+  final Locale? selectedLocale;
+
+  const SelectLocaleDialog({
+    required this.selectedLocale,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return SimpleDialog(
+
+    return AlertDialog(
       title: Text(l10n.selectLocaleTitle),
-      children: [
-        SimpleDialogOption(
-          child: Text(l10n.localeSystem),
-          onPressed: () =>
-              Navigator.of(context).pop<SelectLocaleDialogResult>((null,)),
-        ),
-        const Divider(),
-        for (final locale in KaitekiLocalizations.supportedLocales)
-          SimpleDialogOption(
-            child: Text(
-              locale.toString(),
-              style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
-                  DefaultKaitekiTextTheme(context).monospaceTextStyle,
-            ),
-            onPressed: () =>
-                Navigator.of(context).pop<SelectLocaleDialogResult>((locale,)),
+      contentPadding: EdgeInsets.zero,
+      scrollable: true,
+      content: Column(
+        children: [
+          RadioListTile(
+            groupValue: selectedLocale,
+            value: null,
+            title: Text(l10n.localeSystem),
+            onChanged: (value) {
+              Navigator.of(context).pop<SelectLocaleDialogResult>((value,));
+            },
+            dense: true,
           ),
-      ],
+          const Divider(),
+          for (final locale in KaitekiLocalizations.supportedLocales)
+            _LocaleRadioListTile(
+              selectedLocale: selectedLocale,
+              locale: locale,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LocaleRadioListTile extends StatelessWidget {
+  const _LocaleRadioListTile({
+    required this.selectedLocale,
+    required this.locale,
+  });
+
+  final Locale? selectedLocale;
+  final Locale locale;
+
+  @override
+  Widget build(BuildContext context) {
+    final monospaceTextStyle =
+        Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
+            DefaultKaitekiTextTheme(context).monospaceTextStyle;
+    final languageTag = Text(locale.toString(), style: monospaceTextStyle);
+    final localeName = getLocaleName(locale);
+
+    return RadioListTile(
+      groupValue: selectedLocale,
+      value: locale,
+      title: localeName == null ? languageTag : Text(localeName),
+      secondary: localeName == null ? null : languageTag,
+      dense: true,
+      onChanged: (value) {
+        Navigator.of(context).pop<SelectLocaleDialogResult>((value,));
+      },
     );
   }
 }
