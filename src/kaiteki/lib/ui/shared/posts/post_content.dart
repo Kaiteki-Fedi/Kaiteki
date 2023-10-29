@@ -52,50 +52,52 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
             collapsed: collapsed,
             onTap: () => setState(() => collapsed = !collapsed),
           ),
-        if (hasContent && !collapsed)
-          Padding(
-            padding: kPostPadding,
-            child: SelectableText.rich(
-              TextSpan(children: [renderedContent!]),
-              // FIXME(Craftplacer): https://github.com/flutter/flutter/issues/53797
-              onTap: widget.onTap,
-              style: widget.style,
-            ),
-          ),
-        if (post.poll != null) ...[
-          const SizedBox(height: 8),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.outline,
+        if (!collapsed) ...[
+          if (hasContent)
+            Padding(
+              padding: kPostPadding,
+              child: SelectableText.rich(
+                TextSpan(children: [renderedContent!]),
+                // FIXME(Craftplacer): https://github.com/flutter/flutter/issues/53797
+                onTap: widget.onTap,
+                style: widget.style,
               ),
-              borderRadius: BorderRadius.circular(16.0),
             ),
-            child: PollWidget.fromPost(
-              post,
-              padding: const EdgeInsets.all(16),
+          if (post.poll != null) ...[
+            const SizedBox(height: 8),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: PollWidget.fromPost(
+                post,
+                padding: const EdgeInsets.all(16),
+              ),
             ),
-          ),
-        ],
-        if (post.attachments?.isNotEmpty == true) ...[
-          const SizedBox(height: 8),
-          AttachmentRow(post: post),
-        ],
-        if (post.embeds.isNotEmpty) ...[
-          const SizedBox(height: 8),
-          Card(
-            margin: EdgeInsets.zero,
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: <Widget>[
-                for (final embed in post.embeds) EmbedWidget(embed),
-              ].joinWithValue(const Divider(height: 1)),
+          ],
+          if (post.attachments?.isNotEmpty == true) ...[
+            const SizedBox(height: 8),
+            AttachmentRow(post: post),
+          ],
+          if (post.embeds.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Card(
+              margin: EdgeInsets.zero,
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: <Widget>[
+                  for (final embed in post.embeds) EmbedWidget(embed),
+                ].joinWithValue(const Divider(height: 1)),
+              ),
             ),
-          ),
-        ],
-        if (post.quotedPost != null) ...[
-          const SizedBox(height: 16),
-          EmbeddedPostWidget(post.quotedPost!),
+          ],
+          if (post.quotedPost != null) ...[
+            const SizedBox(height: 16),
+            EmbeddedPostWidget(post.quotedPost!),
+          ],
         ],
       ],
     );
