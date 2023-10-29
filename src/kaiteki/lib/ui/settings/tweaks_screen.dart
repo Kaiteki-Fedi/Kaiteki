@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/settings/preference_slider_list_tile.dart";
@@ -19,17 +18,6 @@ class TweaksScreen extends StatelessWidget {
       body: SettingsContainer(
         child: Column(
           children: [
-            SettingsSection(
-              children: [
-                PreferenceSwitchListTile(
-                  provider: useSearchBar,
-                  title: const Text("Use search bar"),
-                  subtitle: const Text(
-                    "Replaces the app bar with a search bar",
-                  ),
-                ),
-              ],
-            ),
             SettingsSection(
               title: Text(context.l10n.settingsEmojisHeader),
               children: [

@@ -8,7 +8,6 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
@@ -19,8 +18,8 @@ import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/main/pages/placeholder.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
-import "package:kaiteki/ui/shared/side_sheet_manager.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -82,70 +81,91 @@ class MainScreenState extends ConsumerState<MainScreen> {
   @override
   Widget build(BuildContext context) {
     if (ref.read(AppExperiment.navigationBarTheming.provider)) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          systemNavigationBarColor: ElevationOverlay.applySurfaceTint(
-            Theme.of(context).colorScheme.surface,
-            Theme.of(context).colorScheme.surfaceTint,
-            3,
-          ),
-          systemNavigationBarDividerColor:
-              Theme.of(context).colorScheme.surfaceVariant,
-          systemNavigationBarIconBrightness:
-              Theme.of(context).colorScheme.brightness.inverted,
-        ),
+      setSystemUIOverlayStyle(context);
+    }
+
+    _tabs = getTabs();
+
+    final windowClass = WindowClass.fromContext(context);
+    final isCompact = windowClass <= WindowClass.compact;
+
+    final tabItems = _tabs.map((e) => buildTabItem(context, e)).toList();
+    final tabItem = tabItems.firstWhereOrNull((e) => e.kind == _currentTab);
+
+    Widget? buildFloatingActionButton() {
+      final fabData = tabItem?.fab;
+      if (fabData == null) return null;
+
+      final hideFabWhenDesktop = tabItem?.hideFabWhenDesktop ?? false;
+      if (!isCompact && hideFabWhenDesktop) return null;
+
+      if (windowClass >= WindowClass.expanded) {
+        return FloatingActionButton.extended(
+          label: Text(fabData.text),
+          icon: Icon(fabData.icon),
+          onPressed: fabData.onTap,
+        );
+      }
+
+      return FloatingActionButton(
+        tooltip: fabData.tooltip,
+        onPressed: fabData.onTap,
+        child: Icon(fabData.icon),
       );
     }
 
+    int getCurrentIndex() {
+      final index = _tabs.indexOf(_currentTab);
+      if (index == -1) return 0;
+      return index;
+    }
+
+    final prideEnabled = ref.watch(enablePrideFlag).value;
+    final prideFlagDesign = ref.watch(prideFlag).value;
+
+    final scaffold = Scaffold(
+      backgroundColor: prideEnabled || !isCompact ? Colors.transparent : null,
+      appBar: buildAppBar(context, !isCompact),
+      body: _BodyWrapper(
+        tabs: tabItems,
+        currentIndex: getCurrentIndex(),
+        onChangeIndex: (i) => _changeTab(_tabs[i]),
+        child: buildPage(context, _currentTab),
+      ),
+      bottomNavigationBar: isCompact && tabItems.length >= 2
+          ? MainScreenNavigationBar(
+              tabs: tabItems,
+              currentIndex: getCurrentIndex(),
+              onChangeIndex: (i) => _changeTab(_tabs[i]),
+            )
+          : null,
+      floatingActionButton: buildFloatingActionButton(),
+      drawer: const MainScreenDrawer(),
+    );
+
     return FocusableActionDetector(
       autofocus: true,
-      actions: {
-        NewPostIntent: CallbackAction(
-          onInvoke: (_) => context.pushNamed(
-            "compose",
-            pathParameters: ref.accountRouterParams,
-          ),
-        ),
-        SearchIntent: CallbackAction(
-          onInvoke: (_) => _search?.call(),
-        ),
-        RefreshIntent: CallbackAction(onInvoke: (_) => onRefresh()),
-        GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
-          onInvoke: _changeLocation,
-        ),
-        ShortcutsHelpIntent: CallbackAction(
-          onInvoke: (_) => showKeyboardShortcuts(context),
-        ),
-      },
-      child: buildView(context),
+      actions: getActions(context),
+      child: ColoredBox(
+        color:
+            getOutsideColor(context) ?? Theme.of(context).colorScheme.surface,
+        child: prideEnabled && !isCompact
+            ? Stack(
+                children: [
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: PridePainter(prideFlagDesign, opacity: .35),
+                    ),
+                  ),
+                  scaffold,
+                ],
+              )
+            : scaffold,
+      ),
     );
   }
 
   PreferredSizeWidget buildAppBar(BuildContext context, bool immerse) {
-    if (ref.watch(useSearchBar).value) {
-      return PreferredSize(
-        preferredSize: const Size.fromHeight(56.0 + 8.0 * 2),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchBar(
-              focusNode: FocusNode(canRequestFocus: false, skipTraversal: true),
-              onTap: () => context.pushNamed(
-                "search",
-                pathParameters: ref.accountRouterParams,
-              ),
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              leading: const DrawerButton(),
-              hintText: "Search",
-              trailing: const [
-                AccountSwitcherWidget(size: 30),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     final theme = Theme.of(context);
 
     Color? foregroundColor;
@@ -154,56 +174,14 @@ class MainScreenState extends ConsumerState<MainScreen> {
       foregroundColor = theme.colorScheme.onSurface;
     }
 
+    final kaitekiTextStyle = theme.ktkTextTheme?.kaitekiTextStyle ??
+        DefaultKaitekiTextTheme(context).kaitekiTextStyle;
     return AppBar(
       foregroundColor: foregroundColor,
       forceMaterialTransparency: immerse && theme.useMaterial3,
-      title: Text(
-        kAppName,
-        style: theme.ktkTextTheme?.kaitekiTextStyle ??
-            DefaultKaitekiTextTheme(context).kaitekiTextStyle,
-      ),
+      title: Text(kAppName, style: kaitekiTextStyle),
       actions: _buildAppBarActions(context),
       scrolledUnderElevation: immerse ? 0.0 : null,
-    );
-  }
-
-  Widget buildBody(BuildContext context) {
-    final body = buildPage(context, _currentTab);
-    final useMaterial3 = Theme.of(context).useMaterial3;
-    return PageTransitionSwitcher(
-      transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
-        return FadeThroughTransition(
-          animation: primaryAnimation,
-          secondaryAnimation: secondaryAnimation,
-          child: child,
-        );
-      },
-      child: useMaterial3
-          ? Material(
-              color: Theme.of(context).colorScheme.surface,
-              child: body,
-            )
-          : body,
-    );
-  }
-
-  Widget? buildFloatingActionButton(
-    BuildContext context,
-    FloatingActionButtonData data,
-    bool extended,
-  ) {
-    if (extended) {
-      return FloatingActionButton.extended(
-        label: Text(data.text),
-        icon: Icon(data.icon),
-        onPressed: data.onTap,
-      );
-    }
-
-    return FloatingActionButton(
-      tooltip: data.tooltip,
-      onPressed: data.onTap,
-      child: Icon(data.icon),
     );
   }
 
@@ -249,71 +227,25 @@ class MainScreenState extends ConsumerState<MainScreen> {
     };
   }
 
-  Widget buildView(BuildContext context) {
-    _tabs = getTabs();
-
-    final body = buildBody(context);
-
-    final windowClass = WindowClass.fromContext(context);
-    final isCompact = windowClass <= WindowClass.compact;
-
-    final tabItems = _tabs.map((e) => buildTabItem(context, e)).toList();
-    final tabItem = tabItems.firstWhereOrNull((e) => e.kind == _currentTab);
-
-    final prideEnabled = ref.watch(enablePrideFlag).value;
-    final prideFlagDesign = ref.watch(prideFlag).value;
-    return SideSheetManager(
-      builder: (sideSheet) {
-        final hideFabWhenDesktop = tabItem?.hideFabWhenDesktop ?? false;
-        final showPrideBackdrop = prideEnabled && !isCompact;
-        return ColoredBox(
-          color:
-              getOutsideColor(context) ?? Theme.of(context).colorScheme.surface,
-          child: Stack(
-            children: [
-              if (showPrideBackdrop)
-                Positioned.fill(
-                  child: CustomPaint(
-                    painter: PridePainter(prideFlagDesign, opacity: .35),
-                  ),
-                ),
-              Scaffold(
-                backgroundColor:
-                    prideEnabled || !isCompact ? Colors.transparent : null,
-                appBar: buildAppBar(context, !isCompact),
-                endDrawer: sideSheet,
-                endDrawerEnableOpenDragGesture: false,
-                body: isCompact
-                    ? body
-                    : _buildDesktopView(
-                        context,
-                        windowClass,
-                        body,
-                        tabItems,
-                      ),
-                bottomNavigationBar: isCompact && tabItems.length >= 2
-                    ? MainScreenNavigationBar(
-                        tabs: tabItems,
-                        currentIndex: _tabs.indexOf(_currentTab),
-                        onChangeIndex: (i) => _changeTab(_tabs[i]),
-                      )
-                    : null,
-                floatingActionButton: (!isCompact && hideFabWhenDesktop)
-                    ? null
-                    : tabItem?.fab.nullTransform<Widget?>(
-                        (data) => buildFloatingActionButton(
-                          context,
-                          data,
-                          windowClass >= WindowClass.expanded,
-                        ),
-                      ),
-                drawer: const MainScreenDrawer(),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+  Map<Type, Action<Intent>> getActions(BuildContext context) {
+    return {
+      NewPostIntent: CallbackAction(
+        onInvoke: (_) => context.pushNamed(
+          "compose",
+          pathParameters: ref.accountRouterParams,
+        ),
+      ),
+      SearchIntent: CallbackAction(
+        onInvoke: (_) => _search?.call(),
+      ),
+      RefreshIntent: CallbackAction(onInvoke: (_) => onRefresh()),
+      GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
+        onInvoke: _changeLocation,
+      ),
+      ShortcutsHelpIntent: CallbackAction(
+        onInvoke: (_) => showKeyboardShortcuts(context),
+      ),
+    };
   }
 
   Color? getOutsideColor(BuildContext context) {
@@ -371,6 +303,22 @@ class MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
+  void setSystemUIOverlayStyle(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: ElevationOverlay.applySurfaceTint(
+          Theme.of(context).colorScheme.surface,
+          Theme.of(context).colorScheme.surfaceTint,
+          3,
+        ),
+        systemNavigationBarDividerColor:
+            Theme.of(context).colorScheme.surfaceVariant,
+        systemNavigationBarIconBrightness:
+            Theme.of(context).colorScheme.brightness.inverted,
+      ),
+    );
+  }
+
   List<Widget> _buildAppBarActions(BuildContext context) {
     final l10n = context.l10n;
 
@@ -380,24 +328,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
         onPressed: _search,
         tooltip: l10n.searchButtonLabel,
       ),
-      if (ref.watch(experimentsProvider(AppExperiment.notificationMenu)))
-        MenuAnchor(
-          menuChildren: const [
-            SizedBox(
-              width: 400,
-              height: 600,
-              child: NotificationsPage(),
-            ),
-          ],
-          builder: (context, controller, child) {
-            return IconButton(
-              icon: const Icon(Icons.notifications),
-              onPressed: controller.open,
-              tooltip: "Notifications",
-            );
-          },
-        ),
-      if (WidgetsBinding.instance.mouseTracker.mouseIsConnected)
+      if (ref.watch(pointingDeviceProvider) == PointingDevice.mouse)
         IconButton(
           icon: const Icon(Icons.refresh_rounded),
           onPressed: onRefresh,
@@ -405,38 +336,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
         ),
       const AccountSwitcherWidget(size: 40),
     ];
-  }
-
-  Widget _buildDesktopView(
-    BuildContext context,
-    WindowClass windowClass,
-    Widget child,
-    List<MainScreenTab> tabItems,
-  ) {
-    final m3 = Theme.of(context).useMaterial3;
-    return Row(
-      children: [
-        if (_tabs.length >= 2) ...[
-          MainScreenNavigationRail(
-            tabs: tabItems,
-            currentIndex: _tabs.indexOf(_currentTab),
-            onChangeIndex: (i) => _changeTab(_tabs[i]),
-            backgroundColor: Colors.transparent,
-          ),
-          if (!m3) const VerticalDivider(thickness: 1, width: 1),
-        ],
-        Expanded(
-          child: Theme.of(context).useMaterial3
-              ? ClipRRect(
-                  borderRadius: const BorderRadiusDirectional.only(
-                    topStart: Radius.circular(16.0),
-                  ),
-                  child: child,
-                )
-              : child,
-        ),
-      ],
-    );
   }
 
   void _changeLocation(GoToAppLocationIntent i) {
@@ -459,4 +358,75 @@ class MainScreenState extends ConsumerState<MainScreen> {
   }
 
   void _changeTab(TabKind tab) => setState(() => _currentTab = tab);
+}
+
+class _BodyWrapper extends StatelessWidget {
+  final Widget child;
+  final List<MainScreenTab>? tabs;
+  final int currentIndex;
+  final ValueChanged<int>? onChangeIndex;
+
+  const _BodyWrapper({
+    required this.child,
+    this.tabs,
+    required this.currentIndex,
+    required this.onChangeIndex,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var body = child;
+
+    final useMaterial3 = Theme.of(context).useMaterial3;
+
+    if (useMaterial3) {
+      body = Material(
+        color: Theme.of(context).colorScheme.surface,
+        child: body,
+      );
+    }
+
+    body = PageTransitionSwitcher(
+      transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+        return FadeThroughTransition(
+          animation: primaryAnimation,
+          secondaryAnimation: secondaryAnimation,
+          child: child,
+        );
+      },
+      child: child,
+    );
+
+    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
+    if (isCompact) return body;
+
+    if (useMaterial3) {
+      body = ClipRRect(
+        borderRadius: const BorderRadiusDirectional.only(
+          topStart: Radius.circular(16.0),
+        ),
+        child: body,
+      );
+    }
+
+    final tabs = this.tabs;
+    final canShowRail = !(tabs == null || tabs.length < 2);
+
+    if (canShowRail) {
+      body = Row(
+        children: [
+          MainScreenNavigationRail(
+            tabs: tabs,
+            currentIndex: currentIndex,
+            onChangeIndex: onChangeIndex,
+            backgroundColor: Colors.transparent,
+          ),
+          if (!useMaterial3) const VerticalDivider(thickness: 1, width: 1),
+          Expanded(child: body),
+        ],
+      );
+    }
+
+    return body;
+  }
 }

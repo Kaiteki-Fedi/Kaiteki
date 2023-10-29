@@ -10,6 +10,27 @@ export "package:kaiteki_ui/kaiteki_ui.dart";
 
 final systemColorSchemeProvider = Provider<ColorSchemeBundle?>((_) => null);
 
+final _mouseTrackerProvider = ChangeNotifierProvider((_) {
+  return WidgetsBinding.instance.mouseTracker;
+});
+
+final pointingDeviceProvider = Provider<PointingDevice>(
+  (ref) {
+    return ref.watch(
+      _mouseTrackerProvider.select(
+        (mouseTracker) {
+          return mouseTracker.mouseIsConnected
+              ? PointingDevice.mouse
+              : PointingDevice.touch;
+        },
+      ),
+    );
+  },
+  dependencies: [_mouseTrackerProvider],
+);
+
+enum PointingDevice { mouse, touch }
+
 const kBullet = "•";
 
 const kEmojiTextStyle = TextStyle(

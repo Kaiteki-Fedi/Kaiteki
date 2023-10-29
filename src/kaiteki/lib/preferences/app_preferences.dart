@@ -92,12 +92,6 @@ final showDedicatedPostOpenButton = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
-final useSearchBar = createSettingProvider<bool>(
-  key: "useSearchBar",
-  initialValue: false,
-  provider: sharedPreferencesProvider,
-);
-
 final recentlyUsedEmojis = createSettingProvider<List<String>>(
   key: "recentlyUsedEmojis",
   initialValue: const [],
