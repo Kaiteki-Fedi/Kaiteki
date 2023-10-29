@@ -169,8 +169,8 @@ Locale parseLocale(String locale) {
     2 => Locale(split[0], split[1]),
     3 => Locale.fromSubtags(
         languageCode: split[0],
-        countryCode: split[1],
-        scriptCode: split[2],
+        scriptCode: split[1],
+        countryCode: split[2],
       ),
     _ => throw ArgumentError.value(locale, "locale", "Must be a valid locale"),
   };
