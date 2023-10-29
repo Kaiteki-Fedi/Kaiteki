@@ -14,19 +14,6 @@ class TimelineService extends _$TimelineService {
   late TimelineSource _source;
   late BackendAdapter _adapter;
 
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(
-      () async {
-        final posts = await _fetch();
-        return PaginationState(
-          posts.toList(),
-          canPaginateFurther: posts.isNotEmpty,
-        );
-      },
-    );
-  }
-
   Future<void> loadMore() async {
     final previousState = state.valueOrNull;
 

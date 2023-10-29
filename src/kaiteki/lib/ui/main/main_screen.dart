@@ -14,18 +14,18 @@ import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
 import "package:kaiteki/ui/main/pages/chats.dart";
 import "package:kaiteki/ui/main/pages/explore.dart";
+import "package:kaiteki/ui/main/pages/home.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/main/pages/placeholder.dart";
-import "package:kaiteki/ui/main/pages/timeline.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shared/side_sheet_manager.dart";
-import "package:kaiteki/ui/shared/timeline/source.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:logging/logging.dart";
 
 import "drawer.dart";
 import "fab_data.dart";
@@ -67,35 +67,10 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class MainScreenState extends ConsumerState<MainScreen> {
-  // Why does this exist? In order to refresh the timeline
-  final _timelineKey = GlobalKey<TimelinePageState>();
+  final _homePageKey = GlobalKey<HomePageState>();
   TabKind _currentTab = TabKind.home;
 
   late List<TabKind> _tabs;
-
-  VoidCallback? get _refresh {
-    switch (_currentTab) {
-      case TabKind.home:
-        final timeline = _timelineKey.currentState?.timeline;
-        if (timeline == null) return null;
-        final account = ref.watch(currentAccountProvider)!.key;
-        return ref
-            .read(
-              timelineServiceProvider(
-                account,
-                StandardTimelineSource(timeline),
-              ).notifier,
-            )
-            .refresh;
-
-      case TabKind.notifications:
-        final account = ref.watch(currentAccountProvider)!.key;
-        return () => ref.invalidate(notificationServiceProvider(account));
-
-      default:
-        return null;
-    }
-  }
 
   VoidCallback? get _search {
     if (ref.watch(adapterProvider) is! SearchSupport) return null;
@@ -134,7 +109,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
         SearchIntent: CallbackAction(
           onInvoke: (_) => _search?.call(),
         ),
-        RefreshIntent: CallbackAction(onInvoke: (_) => _refresh?.call()),
+        RefreshIntent: CallbackAction(onInvoke: (_) => onRefresh()),
         GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
           onInvoke: _changeLocation,
         ),
@@ -194,6 +169,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
   Widget buildBody(BuildContext context) {
     final body = buildPage(context, _currentTab);
+    final useMaterial3 = Theme.of(context).useMaterial3;
     return PageTransitionSwitcher(
       transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
         return FadeThroughTransition(
@@ -202,12 +178,12 @@ class MainScreenState extends ConsumerState<MainScreen> {
           child: child,
         );
       },
-      child: Material(
-        color: Theme.of(context).useMaterial3
-            ? Theme.of(context).colorScheme.surface
-            : null,
-        child: body,
-      ),
+      child: useMaterial3
+          ? Material(
+              color: Theme.of(context).colorScheme.surface,
+              child: body,
+            )
+          : body,
     );
   }
 
@@ -232,12 +208,12 @@ class MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget buildPage(BuildContext context, TabKind tab) {
+    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
     return switch (tab) {
-      TabKind.home => TimelinePage(
+      TabKind.home => HomePage(
+          key: _homePageKey,
           initialTimeline: widget.initialTimeline,
-          tabAlignment: WindowClass.fromContext(context) <= WindowClass.compact
-              ? null
-              : TabAlignment.center,
+          tabAlignment: isCompact ? null : TabAlignment.center,
         ),
       TabKind.notifications => const NotificationsPage(),
       TabKind.chats => const ChatsPage(),
@@ -287,53 +263,56 @@ class MainScreenState extends ConsumerState<MainScreen> {
     final prideEnabled = ref.watch(enablePrideFlag).value;
     final prideFlagDesign = ref.watch(prideFlag).value;
     return SideSheetManager(
-      builder: (sideSheet) => ColoredBox(
-        color:
-            getOutsideColor(context) ?? Theme.of(context).colorScheme.surface,
-        child: Stack(
-          children: [
-            if (prideEnabled && !isCompact)
-              Positioned.fill(
-                child: CustomPaint(
-                  painter: PridePainter(prideFlagDesign, opacity: .35),
+      builder: (sideSheet) {
+        final hideFabWhenDesktop = tabItem?.hideFabWhenDesktop ?? false;
+        final showPrideBackdrop = prideEnabled && !isCompact;
+        return ColoredBox(
+          color:
+              getOutsideColor(context) ?? Theme.of(context).colorScheme.surface,
+          child: Stack(
+            children: [
+              if (showPrideBackdrop)
+                Positioned.fill(
+                  child: CustomPaint(
+                    painter: PridePainter(prideFlagDesign, opacity: .35),
+                  ),
                 ),
-              ),
-            Scaffold(
-              backgroundColor:
-                  prideEnabled || !isCompact ? Colors.transparent : null,
-              appBar: buildAppBar(context, !isCompact),
-              endDrawer: sideSheet,
-              endDrawerEnableOpenDragGesture: false,
-              body: isCompact
-                  ? body
-                  : _buildDesktopView(
-                      context,
-                      windowClass,
-                      body,
-                      tabItems,
-                    ),
-              bottomNavigationBar: isCompact && tabItems.length >= 2
-                  ? MainScreenNavigationBar(
-                      tabs: tabItems,
-                      currentIndex: _tabs.indexOf(_currentTab),
-                      onChangeIndex: (i) => _changeTab(_tabs[i]),
-                    )
-                  : null,
-              floatingActionButton:
-                  (!isCompact && (tabItem?.hideFabWhenDesktop ?? false))
-                      ? null
-                      : tabItem?.fab.nullTransform<Widget?>(
-                          (data) => buildFloatingActionButton(
-                            context,
-                            data,
-                            windowClass >= WindowClass.expanded,
-                          ),
+              Scaffold(
+                backgroundColor:
+                    prideEnabled || !isCompact ? Colors.transparent : null,
+                appBar: buildAppBar(context, !isCompact),
+                endDrawer: sideSheet,
+                endDrawerEnableOpenDragGesture: false,
+                body: isCompact
+                    ? body
+                    : _buildDesktopView(
+                        context,
+                        windowClass,
+                        body,
+                        tabItems,
+                      ),
+                bottomNavigationBar: isCompact && tabItems.length >= 2
+                    ? MainScreenNavigationBar(
+                        tabs: tabItems,
+                        currentIndex: _tabs.indexOf(_currentTab),
+                        onChangeIndex: (i) => _changeTab(_tabs[i]),
+                      )
+                    : null,
+                floatingActionButton: (!isCompact && hideFabWhenDesktop)
+                    ? null
+                    : tabItem?.fab.nullTransform<Widget?>(
+                        (data) => buildFloatingActionButton(
+                          context,
+                          data,
+                          windowClass >= WindowClass.expanded,
                         ),
-              drawer: const MainScreenDrawer(),
-            ),
-          ],
-        ),
-      ),
+                      ),
+                drawer: const MainScreenDrawer(),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -365,20 +344,23 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
   Future<void> onRefresh() async {
     final accountKey = ref.read(currentAccountProvider)!.key;
+
     switch (_currentTab) {
       case TabKind.notifications:
         ref.invalidate(notificationServiceProvider(accountKey));
         break;
 
       case TabKind.home:
-        final timeline = ref.read(currentTimelineProvider);
-        final notifier = ref.read(
-          timelineServiceProvider(
-            accountKey,
-            StandardTimelineSource(timeline),
-          ).notifier,
-        );
-        await notifier.refresh();
+        final timeline = _homePageKey.currentState?.timeline;
+
+        if (timeline == null) {
+          Logger("MainScreen").warning(
+            "I wanted to refresh the timeline, but I didn't get the timeline source back from the home page.",
+          );
+          return;
+        }
+
+        ref.invalidate(timelineServiceProvider(accountKey, timeline));
         break;
 
       case TabKind.chats:
