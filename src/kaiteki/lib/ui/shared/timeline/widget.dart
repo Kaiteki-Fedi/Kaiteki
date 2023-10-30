@@ -9,12 +9,14 @@ class Timeline extends StatelessWidget {
   final double? maxWidth;
   final PostWidgetLayout? postLayout;
   final TimelineSource source;
+  final ScrollController? scrollController;
 
   const Timeline(
     this.source, {
     super.key,
     this.maxWidth,
     this.postLayout,
+    this.scrollController,
   });
 
   @override
@@ -32,6 +34,7 @@ class Timeline extends StatelessWidget {
     }
 
     return CustomScrollView(
+      controller: scrollController,
       slivers: [sliver],
     );
   }

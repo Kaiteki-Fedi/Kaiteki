@@ -53,6 +53,7 @@ class HomePageState extends ConsumerState<HomePage>
     with TickerProviderStateMixin {
   TabController? _tabController;
   TimelineSource? _currentTimeline;
+  final Map<TimelineSource, ScrollController> _scrollControllers = {};
 
   TimelineSource? get timeline => _currentTimeline;
 
@@ -84,6 +85,19 @@ class HomePageState extends ConsumerState<HomePage>
             initialIndex: next.toList().indexOf(_currentTimeline!),
           );
         }
+
+        // remove or add scroll controllers as needed
+        final previousSet = previous?.toSet() ?? {};
+        final nextSet = next.toSet();
+        final removed = previousSet.difference(nextSet);
+        final added = nextSet.difference(previousSet);
+        for (final timeline in removed) {
+          _scrollControllers.remove(timeline);
+        }
+
+        for (final timeline in added) {
+          _scrollControllers[timeline] = ScrollController();
+        }
       },
       fireImmediately: true,
     );
@@ -113,8 +127,14 @@ class HomePageState extends ConsumerState<HomePage>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children:
-                timelines.map((e) => _TimelineTabPage(timeline: e)).toList(),
+            children: timelines
+                .map(
+                  (e) => _TimelineTabPage(
+                    timeline: e,
+                    scrollController: _scrollControllers[e],
+                  ),
+                )
+                .toList(),
           ),
         ),
       ],
@@ -126,10 +146,13 @@ class HomePageState extends ConsumerState<HomePage>
     _currentTimeline = timelines.elementAt(value);
   }
 
-  void _onRefresh() {
-    final key = ref.read(currentAccountProvider)!.key;
-    final provider = TimelineServiceProvider(key, _currentTimeline!);
-    ref.invalidate(provider);
+  void scrollToTop() {
+    final scrollController = _scrollControllers[_currentTimeline];
+    scrollController?.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 }
 
@@ -190,8 +213,12 @@ class _TimelineTab extends StatelessWidget {
 
 class _TimelineTabPage extends ConsumerWidget {
   final TimelineSource timeline;
+  final ScrollController? scrollController;
 
-  const _TimelineTabPage({required this.timeline});
+  const _TimelineTabPage({
+    required this.timeline,
+    this.scrollController,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -206,6 +233,7 @@ class _TimelineTabPage extends ConsumerWidget {
         child: Timeline(
           timeline,
           maxWidth: 600,
+          scrollController: scrollController,
           postLayout: ref.watch(useWidePostLayout).value
               ? PostWidgetLayout.wide
               : PostWidgetLayout.normal,

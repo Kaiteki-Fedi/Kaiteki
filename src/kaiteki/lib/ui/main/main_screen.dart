@@ -360,7 +360,17 @@ class MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
-  void _changeTab(TabKind tab) => setState(() => _currentTab = tab);
+  void _changeTab(TabKind tab) {
+    if (_currentTab == tab) {
+      if (tab == TabKind.home) {
+        _homePageKey.currentState?.scrollToTop();
+      }
+
+      return;
+    }
+
+    setState(() => _currentTab = tab);
+  }
 }
 
 class _BodyWrapper extends StatelessWidget {
