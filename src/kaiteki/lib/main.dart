@@ -7,6 +7,7 @@ import "package:kaiteki/app.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/hive.dart" as hive;
 import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/startup_state.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/default/themes.dart";
@@ -81,7 +82,7 @@ Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
     ],
   );
 
-  var accountSeen = false;
+  AccountKey? lastAccount;
   final priorityAccount = _container.read(lastUsedAccount).value;
   final accountManager = _container.read(accountManagerProvider.notifier);
 
@@ -92,14 +93,12 @@ Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
   await for (final account in sessions) {
     yield StartupSignIn(account);
 
-    if (account == priorityAccount) {
-      accountSeen = true;
-    } else if (accountSeen) {
-      break;
-    }
+    if (priorityAccount == null || lastAccount == priorityAccount) break;
+
+    lastAccount = account;
   }
 
-  sessions.last;
+  sessions.last; // force sessions to continue restoring
 
   _accountManagerSubscription = _container.listen(
     accountManagerProvider,
