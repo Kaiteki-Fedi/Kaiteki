@@ -7,6 +7,7 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
+import "package:sliver_tools/sliver_tools.dart";
 
 class ConversationScreen extends ConsumerStatefulWidget {
   final Post post;
@@ -66,13 +67,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       appBar: AppBar(
         title: Text(l10n.conversationTitle),
       ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: buildFlat(context),
-        ),
-      ),
+      body: buildFlat(context),
     );
   }
 
@@ -136,47 +131,64 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
           return SingleChildScrollView(
             padding: const EdgeInsets.all(8),
             // TODO(Craftplacer): might have to nag the flutter team to make this widget material you
-            child: MergeableMaterial(
-              hasDividers: true,
-              elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
-              children: posts
-                  .mapIndexed((i, e) {
-                    final preGapValue = Object.hash(e.id.hashCode, "before");
-                    final afterGapValue = Object.hash(e.id.hashCode, "after");
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: MergeableMaterial(
+                    hasDividers: true,
+                    elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
+                    children: posts
+                        .mapIndexed((i, e) {
+                          final preGapValue =
+                              Object.hash(e.id.hashCode, "before");
+                          final afterGapValue =
+                              Object.hash(e.id.hashCode, "after");
 
-                    final isSelected = e.id == selectedPostId;
-                    return [
-                      if (isSelected && i != 0)
-                        MaterialGap(key: ValueKey(preGapValue)),
-                      MaterialSlice(
-                        key: ValueKey(e.id),
-                        child: buildPost(i, e),
-                        color: Theme.of(context).useMaterial3
-                            ? ElevationOverlay.applySurfaceTint(
-                                Theme.of(context).colorScheme.surface,
-                                Theme.of(context).colorScheme.surfaceTint,
-                                2.0,
-                              )
-                            : null,
-                      ),
-                      if (isSelected && i != (posts.length - 1))
-                        MaterialGap(key: ValueKey(afterGapValue)),
-                    ];
-                  })
-                  .flattened
-                  .toList(),
+                          final isSelected = e.id == selectedPostId;
+                          return [
+                            if (isSelected && i != 0)
+                              MaterialGap(key: ValueKey(preGapValue)),
+                            MaterialSlice(
+                              key: ValueKey(e.id),
+                              child: buildPost(i, e),
+                              color: Theme.of(context).useMaterial3
+                                  ? ElevationOverlay.applySurfaceTint(
+                                      Theme.of(context).colorScheme.surface,
+                                      Theme.of(context).colorScheme.surfaceTint,
+                                      2.0,
+                                    )
+                                  : null,
+                            ),
+                            if (isSelected && i != (posts.length - 1))
+                              MaterialGap(key: ValueKey(afterGapValue)),
+                          ];
+                        })
+                        .flattened
+                        .toList(),
+                  ),
+                ),
+              ],
             ),
           );
         }
 
-        return ListView.separated(
+        return CustomScrollView(
           controller: _scrollController,
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            final post = posts.elementAt(index);
-            return buildPost(index, post);
-          },
-          separatorBuilder: (_, __) => const Divider(height: 1),
+          slivers: [
+            SliverCrossAxisConstrained(
+              maxCrossAxisExtent: 600,
+              child: SliverList.separated(
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  final post = posts.elementAt(index);
+                  return buildPost(index, post);
+                },
+                separatorBuilder: (_, __) => const Divider(height: 1),
+              ),
+            ),
+          ],
         );
       },
     );
