@@ -1,4 +1,5 @@
 import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
@@ -101,29 +102,47 @@ class AccountManager extends _$AccountManager {
     );
   }
 
-  Future<void> restoreSessions() async {
+  /// Tries to restore all sessions provided.
+  ///
+  /// If [priorityAccount] is provided, it attempts to restore that account
+  /// first.
+  Stream<AccountKey> restoreSessions({AccountKey? priorityAccount}) async* {
     final accountSecrets = await _accountSecrets.read();
     final clientSecrets = await _clientSecrets.read();
 
     final secretPairs = accountSecrets.entries.map((kv) {
       final clientSecret = clientSecrets[kv.key];
       return (kv.key, kv.value, clientSecret);
-    });
+    }).toList();
 
     if (secretPairs.isEmpty) {
       _logger.fine("No accounts signed into");
       return;
     }
 
-    await Future.forEach(secretPairs, (tuple) async {
+    if (priorityAccount != null) {
+      final priorityPair = secretPairs.firstWhereOrNull((tuple) {
+        return tuple.$1 == priorityAccount;
+      });
+
+      if (priorityPair != null) {
+        secretPairs
+          ..remove(priorityPair)
+          ..insert(0, priorityPair);
+      }
+    }
+
+    for (final tuple in secretPairs) {
+      yield tuple.$1;
+
       final account = await restoreSession(tuple);
 
-      if (account == null) return;
+      if (account == null) continue;
 
       _logger.fine("Signed into @${account.user.username}@${account.key.host}");
 
       await add(account);
-    });
+    }
   }
 
   /// Retrieves the client secret for a given instance.
@@ -145,6 +164,8 @@ class AccountManager extends _$AccountManager {
     final type = key.type!;
 
     _logger.fine("Trying to recover a ${type.displayName} account");
+
+    if (kDebugMode) await Future.delayed(const Duration(seconds: 2));
 
     BackendAdapter adapter;
 

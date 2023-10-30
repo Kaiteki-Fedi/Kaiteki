@@ -168,7 +168,6 @@ class _ResolveProviderElement
 
   @override
   AccountKey get key => (origin as ResolveProvider).key;
-
   @override
   UserReference get reference => (origin as ResolveProvider).reference;
 }

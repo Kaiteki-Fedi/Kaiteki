@@ -3,6 +3,7 @@ import "dart:ui" show Locale;
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -96,6 +97,24 @@ final recentlyUsedEmojis = createSettingProvider<List<String>>(
   key: "recentlyUsedEmojis",
   initialValue: const [],
   provider: sharedPreferencesProvider,
+);
+
+final lastUsedAccount = createSettingProvider<AccountKey?>(
+  key: "lastUsedAccount",
+  provider: sharedPreferencesProvider,
+  read: (prefs, key) {
+    final value = prefs.getString(key);
+    if (value == null) return null;
+    return AccountKey.fromUri(value);
+  },
+  write: (prefs, key, value) async {
+    if (value == null) {
+      await prefs.remove(key);
+    } else {
+      await prefs.setString(key, value.toUri().toString());
+    }
+  },
+  initialValue: null,
 );
 
 final visibleLanguages = createSettingProvider<ISet<String>>(
