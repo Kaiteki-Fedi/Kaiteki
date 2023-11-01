@@ -45,7 +45,7 @@ class ErrorLandingWidget extends StatefulWidget {
 
 class _ErrorLandingWidgetState extends State<ErrorLandingWidget> {
   Widget getMessageWidget(BuildContext context) {
-    final error = this.widget.error.$1;
+    final error = widget.error.$1;
     switch (error) {
       case UnimplementedError():
         return IconLandingWidget(
