@@ -6,6 +6,7 @@ import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
+import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
@@ -15,7 +16,6 @@ import "package:kaiteki/ui/user/user_panel.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
-import "package:share_plus/share_plus.dart";
 
 const avatarSizeCompact = 72.0;
 const avatarSize = 96.0;
@@ -256,7 +256,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     return [
       MenuItemButton(
         onPressed: user.url.nullTransform(
-          (url) => () async => Share.share(url.toString()),
+          (url) => () async => share(context, url),
         ),
         leadingIcon: Icon(Icons.adaptive.share_rounded),
         child: const Text("Share"),
