@@ -1,21 +1,22 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/ui/main/tab.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/main/tabs/tab.dart";
 import "package:kaiteki_ui/kaiteki_ui.dart";
 
-class MainScreenNavigationBar extends StatelessWidget {
-  final List<MainScreenTab> tabs;
+class MainScreenNavigationBar extends ConsumerWidget {
+  final List<MainScreenTabType> tabTypes;
   final int currentIndex;
   final ValueChanged<int>? onChangeIndex;
 
   const MainScreenNavigationBar({
     super.key,
-    required this.tabs,
+    required this.tabTypes,
     required this.currentIndex,
     required this.onChangeIndex,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
     if (theme.useMaterial3) {
@@ -23,7 +24,7 @@ class MainScreenNavigationBar extends StatelessWidget {
         onDestinationSelected: onChangeIndex,
         selectedIndex: currentIndex,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        destinations: _buildNavigationDestinations(context),
+        destinations: _buildDestinations(context, ref).toList(),
       );
     }
 
@@ -31,39 +32,32 @@ class MainScreenNavigationBar extends StatelessWidget {
       selectedFontSize: 12,
       onTap: onChangeIndex,
       currentIndex: currentIndex,
-      items: _buildBottomNavigationBarItems(context),
+      items: _buildItems(context, ref).toList(),
     );
   }
 
-  List<Widget> _buildNavigationDestinations(BuildContext context) {
-    final navigationDestinations = <NavigationDestination>[];
-    for (final tab in tabs) {
-      final unreadCount = tab.fetchUnreadCount?.call();
-      navigationDestinations.add(
-        NavigationDestination(
-          icon: Icon(tab.kind.icon).wrapWithBadge(unreadCount),
-          selectedIcon: Icon(tab.kind.selectedIcon).wrapWithBadge(unreadCount),
-          label: tab.kind.getLabel(context),
-        ),
+  Iterable<Widget> _buildDestinations(BuildContext context, WidgetRef ref) {
+    return tabTypes.map((type) {
+      final unreadCount = type.tab?.fetchUnreadCount.call(ref);
+      return NavigationDestination(
+        icon: type.icon.wrapWithBadge(unreadCount),
+        selectedIcon: type.selectedIcon.wrapWithBadge(unreadCount),
+        label: type.getLabel(context.l10n),
       );
-    }
-    return navigationDestinations;
+    });
   }
 
-  List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
+  Iterable<BottomNavigationBarItem> _buildItems(
     BuildContext context,
+    WidgetRef ref,
   ) {
-    final bottomNavigationBarItems = <BottomNavigationBarItem>[];
-    for (final tab in tabs) {
-      final unreadCount = tab.fetchUnreadCount?.call();
-      bottomNavigationBarItems.add(
-        BottomNavigationBarItem(
-          icon: Icon(tab.kind.icon).wrapWithBadge(unreadCount),
-          activeIcon: Icon(tab.kind.selectedIcon).wrapWithBadge(unreadCount),
-          label: tab.kind.getLabel(context),
-        ),
+    return tabTypes.map((type) {
+      final unreadCount = type.tab?.fetchUnreadCount.call(ref);
+      return BottomNavigationBarItem(
+        icon: type.icon.wrapWithBadge(unreadCount),
+        activeIcon: type.selectedIcon.wrapWithBadge(unreadCount),
+        label: type.getLabel(context.l10n),
       );
-    }
-    return bottomNavigationBarItems;
+    });
   }
 }
