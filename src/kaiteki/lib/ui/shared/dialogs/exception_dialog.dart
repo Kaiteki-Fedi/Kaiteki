@@ -6,7 +6,6 @@ import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/plain_text_screen.dart";
-import "package:kaiteki/ui/stack_trace_screen.dart";
 import "package:kaiteki_core/utils.dart";
 
 class ExceptionDialog extends StatelessWidget {
@@ -46,7 +45,7 @@ class ExceptionDialog extends StatelessWidget {
           children: [
             for (final detail in details.entries)
               ListTile(
-                leading: SizedBox(),
+                leading: const SizedBox(),
                 title: Text(detail.key),
                 subtitle: SelectableText(detail.value),
                 contentPadding: EdgeInsets.zero,
@@ -60,7 +59,11 @@ class ExceptionDialog extends StatelessWidget {
                 if (stackTrace == null) return;
                 showDialog(
                   context: context,
-                  builder: (_) => StackTraceScreen(stackTrace: stackTrace),
+                  builder: (_) => PlainTextScreen(
+                    stackTrace.toString(),
+                    // ignore: l10n
+                    title: const Text("Stack Trace"),
+                  ),
                 );
               },
               contentPadding: EdgeInsets.zero,

@@ -41,7 +41,7 @@ class AnnouncementCard extends StatelessWidget {
             if (createdAt != null) ...[
               const SizedBox(height: 8),
               Text(
-                "Published at ${formattedCreatedAt}",
+                "Published at $formattedCreatedAt",
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],

@@ -17,7 +17,7 @@ import "package:kaiteki_core/kaiteki_core.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:sliver_tools/sliver_tools.dart";
 
-part 'notifications.g.dart';
+part "notifications.g.dart";
 
 @Riverpod(dependencies: [adapter])
 bool _announcementsSupported(_AnnouncementsSupportedRef ref) {
@@ -196,7 +196,7 @@ class _SecondaryNotificationBar extends ConsumerWidget {
         Expanded(
           flex: isCompact ? 1 : 0,
           child: _FollowRequestsButton(expand: isCompact),
-        )
+        ),
     ];
 
     if (buttons.isEmpty) return const SizedBox.shrink();

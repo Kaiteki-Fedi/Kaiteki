@@ -77,11 +77,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   ],
                 ),
               ),
-              Tab(
+              const Tab(
                 child: Row(
                   children: [
-                    const Icon(Icons.tag_rounded),
-                    const SizedBox(width: 8),
+                    Icon(Icons.tag_rounded),
+                    SizedBox(width: 8),
                     Text("Hashtags"),
                   ],
                 ),
@@ -149,8 +149,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     itemCount: results.users.length,
                   ),
                 if (results.hashtags.isEmpty)
-                  IconLandingWidget(
-                    icon: const Icon(Icons.tag_rounded),
+                  const IconLandingWidget(
+                    icon: Icon(Icons.tag_rounded),
                     text: Text("No results"),
                   )
                 else

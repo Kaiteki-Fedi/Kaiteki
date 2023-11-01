@@ -107,7 +107,7 @@ class _HashtagScreenState extends ConsumerState<HashtagScreen> {
         },
         onError: (error) {
           messenger.showSnackBar(
-            SnackBar(content: Text("Failed to follow hashtag")),
+            const SnackBar(content: Text("Failed to follow hashtag")),
           );
         },
       );

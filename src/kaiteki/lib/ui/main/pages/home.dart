@@ -162,6 +162,7 @@ class _TimelineTab extends StatelessWidget {
 
   const _TimelineTab({
     required this.timeline,
+    // ignore: unused_element
     this.showLabel = true,
   });
 

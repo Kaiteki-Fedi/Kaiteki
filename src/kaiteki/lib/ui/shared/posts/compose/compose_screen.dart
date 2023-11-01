@@ -237,14 +237,14 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
             MenuAnchor(
               menuChildren: [
                 MenuItemButton(
-                  child: Text("Edit poll"),
                   leadingIcon: const Icon(Icons.edit_rounded),
                   onPressed: _onChangePoll,
+                  child: const Text("Edit poll"),
                 ),
                 MenuItemButton(
-                  child: Text("Remove poll"),
                   leadingIcon: const Icon(Icons.delete_rounded),
                   onPressed: () => setState(() => _poll = null),
+                  child: const Text("Remove poll"),
                 ),
               ],
               child: Padding(

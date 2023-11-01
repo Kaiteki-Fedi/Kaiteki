@@ -63,6 +63,7 @@ class AboutScreen extends StatelessWidget {
                       if (version != null) ...[
                         const SizedBox(height: 8.0),
                         Text(
+                          // ignore: l10n
                           "Version $version",
                           style: Theme.of(context).textTheme.labelMedium,
                         ),

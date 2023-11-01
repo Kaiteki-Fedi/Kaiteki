@@ -109,15 +109,15 @@ class _ErrorLandingWidgetState extends State<ErrorLandingWidget> {
                     style: OutlinedButton.styleFrom(
                       visualDensity: VisualDensity.standard,
                     ),
-                    child: Text("Report error"),
                     onPressed: _onReport,
+                    child: const Text("Report error"),
                   ),
                   const SizedBox(width: 8),
                   IconButton.outlined(
-                      onPressed: () =>
-                          context.showExceptionDialog(widget.error),
-                      tooltip: context.l10n.showDetailsButtonLabel,
-                      icon: const Icon(Icons.info_rounded)),
+                    onPressed: () => context.showExceptionDialog(widget.error),
+                    tooltip: context.l10n.showDetailsButtonLabel,
+                    icon: const Icon(Icons.info_rounded),
+                  ),
                 ],
               ),
             ],

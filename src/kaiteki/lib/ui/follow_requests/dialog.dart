@@ -71,7 +71,7 @@ class _FollowRequestsDialogState extends ConsumerState<FollowRequestsDialog> {
                         .read(followRequestsServiceProvider(account).notifier)
                         .accept(user.id);
                   },
-                  icon: Icon(Icons.check_rounded),
+                  icon: const Icon(Icons.check_rounded),
                   label: const Text("Accept"),
                 ),
                 const SizedBox(width: 8),
@@ -81,7 +81,7 @@ class _FollowRequestsDialogState extends ConsumerState<FollowRequestsDialog> {
                         .read(followRequestsServiceProvider(account).notifier)
                         .reject(user.id);
                   },
-                  icon: Icon(Icons.close_rounded),
+                  icon: const Icon(Icons.close_rounded),
                   label: const Text("Reject"),
                 ),
               ],

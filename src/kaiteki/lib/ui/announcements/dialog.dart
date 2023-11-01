@@ -27,7 +27,7 @@ class _AnnouncementsDialogState extends ConsumerState<AnnouncementsDialog> {
             final announcements = e.value;
 
             if (announcements.isEmpty) {
-              return IconLandingWidget(
+              return const IconLandingWidget(
                 icon: Icon(Icons.campaign_rounded),
                 text: Text("New announcements will appear here."),
               );
