@@ -17,30 +17,62 @@ class Notification {
     this.post,
     this.unread,
   });
+
+  Notification copyWith({
+    String? id,
+    User? user,
+    Post? post,
+    NotificationType? type,
+    bool? unread,
+    DateTime? createdAt,
+  }) {
+    return Notification(
+      id: id ?? this.id,
+      user: user ?? this.user,
+      post: post ?? this.post,
+      type: type ?? this.type,
+      unread: unread ?? this.unread,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }
 
 class GroupedNotification implements Notification {
   final List<Notification> notifications;
 
+  Notification get _latest => notifications.first;
+
   @override
-  DateTime get createdAt => notifications.first.createdAt;
+  DateTime get createdAt => _latest.createdAt;
 
   @override
   bool get unread => notifications.any((e) => e.unread == true);
 
   @override
-  Post? get post => notifications.last.post;
+  Post? get post => _latest.post;
 
   @override
-  NotificationType get type => notifications.first.type;
+  NotificationType get type => _latest.type;
 
   @override
-  User? get user => notifications.first.user;
+  User? get user => _latest.user;
 
   const GroupedNotification(this.notifications);
 
   @override
-  String get id => notifications.first.id;
+  String get id => _latest.id;
+
+  @override
+  Notification copyWith({
+    String? id,
+    User? user,
+    Post? post,
+    NotificationType? type,
+    bool? unread,
+    DateTime? createdAt,
+  }) {
+    throw UnsupportedError('Cannot copy a grouped notification');
+  }
 }
 
 enum NotificationType {

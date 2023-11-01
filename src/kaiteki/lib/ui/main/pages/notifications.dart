@@ -51,6 +51,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
       final provider = notificationServiceProvider(key);
       await ref.read(provider.notifier).loadMore();
     });
+
     ref.listenManual(
       currentAccountProvider,
       (previous, next) {
@@ -61,7 +62,12 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
           provider,
           (_, e) => _controller.value = e.getPagingState(
             "",
-            intercept: groupNotifications,
+            intercept: (e) {
+              var notifications = e;
+              notifications = enhanceNotificationTypes(notifications);
+              notifications = groupNotifications(notifications);
+              return notifications;
+            },
           ),
           fireImmediately: true,
         );
@@ -88,63 +94,45 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 
     final notifications = notificationServiceProvider(account.key);
 
-    final hasUnread = ref
-        .watch(notifications)
-        .valueOrNull
-        ?.items
-        .any((e) => e.unread == true);
-
     return RefreshIndicator(
       onRefresh: () async => await ref.refresh(notifications),
-      child: Stack(
-        children: [
-          CustomScrollView(
-            slivers: [
-              SliverCrossAxisConstrained(
-                maxCrossAxisExtent: 600,
-                child: SliverMainAxisGroup(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
-                        child: _SecondaryNotificationBar(),
-                      ),
-                    ),
-                    PagedSliverList<String?, Notification>(
-                      pagingController: _controller,
-                      builderDelegate: PagedChildBuilderDelegate(
-                        itemBuilder: (context, notification, i) {
-                          return Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              child: NotificationWidget(notification),
-                            ),
-                          );
-                        },
-                        firstPageErrorIndicatorBuilder: (_) {
-                          return Center(
-                            child: ErrorLandingWidget(
-                              _controller.error as TraceableError,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+      child: CustomScrollView(
+        slivers: [
+          SliverCrossAxisConstrained(
+            maxCrossAxisExtent: 600,
+            child: SliverMainAxisGroup(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                    child: _SecondaryNotificationBar(),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          if (hasUnread == true)
-            const Positioned(
-              bottom: kFloatingActionButtonMargin,
-              left: kFloatingActionButtonMargin,
-              right: kFloatingActionButtonMargin,
-              child: Align(
-                child: _MarkAsReadFAB(),
-              ),
+                SliverPadding(
+                  padding: const EdgeInsets.all(8.0),
+                  sliver: PagedSliverList<String?, Notification>.separated(
+                    pagingController: _controller,
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    builderDelegate: PagedChildBuilderDelegate(
+                      itemBuilder: (context, notification, i) {
+                        return Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: NotificationWidget(notification),
+                        );
+                      },
+                      firstPageErrorIndicatorBuilder: (_) {
+                        return Center(
+                          child: ErrorLandingWidget(
+                            _controller.error as TraceableError,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
+          ),
         ],
       ),
     );
@@ -174,6 +162,19 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         })
         .flattened
         .toList();
+  }
+
+  List<Notification> enhanceNotificationTypes(
+    List<Notification> notifications,
+  ) {
+    final ourId = ref.read(currentAccountProvider)!.user.id;
+    return notifications.map((e) {
+      if (e.type == NotificationType.mentioned &&
+          e.post?.replyToUser?.id == ourId) {
+        return e.copyWith(type: NotificationType.replied);
+      }
+      return e;
+    }).toList();
   }
 }
 
@@ -233,6 +234,7 @@ class _AnnouncementsButton extends ConsumerWidget {
           horizontal: 16.0,
           vertical: 8.0,
         ),
+        visualDensity: VisualDensity.standard,
       ),
       child: Row(
         children: [
@@ -304,6 +306,7 @@ class _FollowRequestsButton extends ConsumerWidget {
           horizontal: 16.0,
           vertical: 8.0,
         ),
+        visualDensity: VisualDensity.standard,
       ),
       child: Row(
         children: [
@@ -328,37 +331,5 @@ class _FollowRequestsButton extends ConsumerWidget {
     final buffer = StringBuffer(state.$1.toString());
     if (state.$2) buffer.write("+");
     return buffer.toString();
-  }
-}
-
-class _MarkAsReadFAB extends ConsumerWidget {
-  const _MarkAsReadFAB();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FloatingActionButton.extended(
-      onPressed: () {
-        final accountKey = ref.read(currentAccountProvider)!.key;
-        final service =
-            ref.read(notificationServiceProvider(accountKey).notifier);
-        service
-            .markAllAsRead()
-            .onError<Object>((e, s) => _onError(context, e, s));
-      },
-      label: const Text("Mark all as read"),
-      icon: const Icon(Icons.done_all_rounded),
-    );
-  }
-
-  void _onError(BuildContext context, Object error, StackTrace stackTrace) {
-    final messenger = ScaffoldMessenger.of(context);
-    final snackBar = SnackBar(
-      content: const Text("Failed to mark notification as read"),
-      action: SnackBarAction(
-        label: context.l10n.showDetailsButtonLabel,
-        onPressed: () => context.showExceptionDialog((error, stackTrace)),
-      ),
-    );
-    messenger.showSnackBar(snackBar);
   }
 }
