@@ -4,6 +4,7 @@ import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/follow_requests.dart";
 import "package:kaiteki/model/pagination_state.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
@@ -124,7 +125,7 @@ class _FollowRequestsDialogState extends ConsumerState<FollowRequestsDialog> {
               leading: closeButton,
               title: const Text("Follow requests"),
               forceMaterialTransparency: true,
-              actions: [refreshButton, const SizedBox(width: 8)],
+              actions: [refreshButton, kAppBarActionsSpacer],
             ),
             Expanded(child: body),
           ],

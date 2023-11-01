@@ -6,6 +6,7 @@ import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/timeline/source.dart";
@@ -318,28 +319,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               ),
               backgroundColor: _getBackgroundColor(context),
               scrolledUnderElevation: 0,
-              actions: [
-                if (innerBoxIsScrolled)
-                  moreButton
-                else
-                  Stack(
-                    children: [
-                      Positioned.fill(
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                            borderRadius: const BorderRadius.horizontal(
-                              left: Radius.circular(24),
-                            ),
-                          ),
-                        ),
-                      ),
-                      moreButton,
-                    ],
-                  ),
-              ],
+              actions: [moreButton, kAppBarActionsSpacer],
               title: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 150),
                 child: !innerBoxIsScrolled

@@ -38,6 +38,9 @@ const kEmojiTextStyle = TextStyle(
   fontFamilyFallback: ["Segoe UI Emoji"],
 );
 
+// Deprecate once https://github.com/flutter/flutter/issues/137274 is resolved.
+const kAppBarActionsSpacer = SizedBox(width: 8);
+
 typedef LocalizableStringBuilder = String Function(BuildContext context);
 
 const centeredCircularProgressIndicator = Center(
