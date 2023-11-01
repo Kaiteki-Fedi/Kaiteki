@@ -27,6 +27,7 @@ class SplashScreen extends StatelessWidget {
                   StartupSignIn() => "Signing into ${state.accountKey.host}...",
                   StartupLoadingAccounts() => "Loading accounts...",
                   StartupLoadingDatabase() => "Loading database...",
+                  StartupStarting() => "Starting...",
                   _ => "Loading...",
                 };
 

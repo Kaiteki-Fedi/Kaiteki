@@ -44,6 +44,12 @@ Future<void> main() async {
     // wait for startup to finish
     await startup.last;
 
+    // save last used account
+    _accountManagerSubscription = _container.listen(
+      accountManagerProvider,
+      (_, next) => _container.read(lastUsedAccount).value = next.current?.key,
+    );
+
     // construct app & run
     runApp(
       ProviderScope(
@@ -100,10 +106,7 @@ Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
 
   sessions.last; // force sessions to continue restoring
 
-  _accountManagerSubscription = _container.listen(
-    accountManagerProvider,
-    (_, next) => _container.read(lastUsedAccount).value = next.current?.key,
-  );
+  yield const StartupStarting();
 }
 
 void handleFatalError(TraceableError error) {
