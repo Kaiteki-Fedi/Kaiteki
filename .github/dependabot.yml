@@ -4,3 +4,6 @@ updates:
     directory: "/src/kaiteki"
     schedule:
       interval: "weekly"
+    groups:
+      minor-dependencies:
+        update-types: ["minor"]

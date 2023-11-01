@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/embed.dart";
+import "package:kaiteki_core/model.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class EmbedWidget extends StatelessWidget {
@@ -66,7 +66,7 @@ class EmbedWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

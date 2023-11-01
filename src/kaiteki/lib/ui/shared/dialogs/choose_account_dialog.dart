@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/account_list/list_tile.dart";
 
@@ -18,7 +19,7 @@ class ChooseAccountDialog extends ConsumerWidget {
           for (final account in accounts)
             AccountListTile(
               account: account,
-              onSelect: () => Navigator.of(context).pop(account),
+              onTap: () => Navigator.of(context).pop(account),
             ),
         ],
       ),

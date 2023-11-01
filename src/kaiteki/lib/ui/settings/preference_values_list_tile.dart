@@ -4,7 +4,7 @@ import "package:kaiteki/ui/shared/dialogs/options_dialog.dart";
 import "package:notified_preferences/notified_preferences.dart";
 
 Widget defaultTextBuilder<T>(BuildContext context, T value) {
-  return Text(value.toString());
+  return Text(value is Enum ? value.name : value.toString());
 }
 
 class PreferenceValuesListTile<T> extends ConsumerWidget {
@@ -12,6 +12,7 @@ class PreferenceValuesListTile<T> extends ConsumerWidget {
   final Widget? title;
   final List<T>? values;
   final Widget Function(BuildContext context, T value)? textBuilder;
+  final Widget? leading;
 
   const PreferenceValuesListTile({
     super.key,
@@ -19,11 +20,13 @@ class PreferenceValuesListTile<T> extends ConsumerWidget {
     this.title,
     this.values,
     this.textBuilder,
+    this.leading,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
+      leading: leading,
       subtitle: buildText(context, ref.watch(provider).value),
       title: title,
       onTap: () => _onTap(context, ref),

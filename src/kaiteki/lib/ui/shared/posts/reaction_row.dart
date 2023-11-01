@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/reaction.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/ui/shared/posts/reaction_button.dart";
+import "package:kaiteki_core/model.dart";
 
 class ReactionRow extends ConsumerWidget {
   final List<Reaction> reactions;
@@ -23,7 +23,7 @@ class ReactionRow extends ConsumerWidget {
       spacing: spacing,
       runSpacing: spacing,
       children: [
-        for (var reaction in reactions)
+        for (final reaction in reactions)
           ReactionButton(
             reaction: reaction,
             onPressed: () => onPressed(reaction),

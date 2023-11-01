@@ -4,20 +4,20 @@ import "dart:typed_data";
 import "dart:ui" as ui;
 
 import "package:flutter/material.dart" hide Visibility;
-import "package:flutter/rendering.dart"
-    show NetworkImage, OffsetLayer, RenderObject, Size;
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import "package:flutter/rendering.dart" show NetworkImage, OffsetLayer, Size;
 import "package:flutter_test/flutter_test.dart";
 import "package:integration_test/integration_test.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
+import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:path/path.dart" as path;
 
-import "bootstrapper.dart";
-import "example_data.dart";
+import "../test/utils/bootstrap.dart";
+import "../test/utils/example_data.dart";
+import "adapter.dart";
 
 class ScreenConfig {
   final Size size;
@@ -82,21 +82,49 @@ Future<void> main() async {
   }
 }
 
+Future<List<Account>> getDemoAccounts() async {
+  final adapter = await DemoAdapter.create(ApiType.misskey, "fedi.software");
+  final user = await adapter.getUserById(kKaiteki);
+  return [
+    Account(
+      adapter: adapter,
+      key: const AccountKey(ApiType.misskey, "fedi.software", "Kaiteki"),
+      user: user,
+      clientSecret: null,
+      accountSecret: null,
+    ),
+  ];
+}
+
 void takeScreenshots(
   Map<String, Uint8List> map, {
   required Size screenSize,
   double screenDensity = 1,
   String? locale,
 }) {
+  final mediaQuery = MediaQueryData(
+    size: screenSize,
+    devicePixelRatio: screenDensity,
+  );
+
+  late final List<Account> accounts;
+
+  setUpAll(() async {
+    accounts = await getDemoAccounts();
+  });
+
   testWidgets(
     "Main screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale);
+      final bootstrapper = await Bootstrapper.getInstance(
+        locale: locale,
+        initialAccounts: accounts,
+      );
       runApp(
         bootstrapper.wrap(
-          const MainScreen(initialTimeline: TimelineKind.federated),
-          screenSize,
+          const MainScreen(initialTimeline: TimelineType.federated),
+          mediaQueryData: mediaQuery,
         ),
       );
       await tester.pumpAndSettle(
@@ -113,11 +141,14 @@ void takeScreenshots(
     "Compose screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale);
+      final bootstrapper = await Bootstrapper.getInstance(
+        locale: locale,
+        initialAccounts: accounts,
+      );
       runApp(
         bootstrapper.wrap(
           const ComposeScreen(),
-          screenSize,
+          mediaQueryData: mediaQuery,
         ),
       );
       await tester.pumpAndSettle(
@@ -134,16 +165,15 @@ void takeScreenshots(
     "User screen",
     (tester) async {
       await tester.setScreenSize(screenSize, screenDensity);
-      final bootstrapper = await Bootstrapper.getInstance(locale);
-
-      final user = await bootstrapper.adapter.getUserById(
-        "109349633552584749",
+      final bootstrapper = await Bootstrapper.getInstance(
+        locale: locale,
+        initialAccounts: accounts,
       );
 
       runApp(
         bootstrapper.wrap(
-          UserScreen.fromUser(user: user),
-          screenSize,
+          const UserScreen(id: kKaiteki),
+          mediaQueryData: mediaQuery,
         ),
       );
       await tester.pumpAndSettle(
@@ -193,7 +223,7 @@ Future<ui.Image> captureImage(Element element) {
   assert(element.renderObject != null);
   var renderObject = element.renderObject!;
   while (!renderObject.isRepaintBoundary) {
-    renderObject = renderObject.parent! as RenderObject;
+    renderObject = renderObject.parent!;
   }
   assert(!renderObject.debugNeedsPaint);
   final layer = renderObject.debugLayer! as OffsetLayer;

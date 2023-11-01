@@ -6,7 +6,7 @@ part of 'emoji.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$emojiServiceHash() => r'f49fb3422094cdee597f163a27acb60f264ce4db';
+String _$emojiServiceHash() => r'fcc7d2b7ac11ec921d24313e3f7fc0330a7a5eab';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -85,8 +85,8 @@ class EmojiServiceProvider
     extends AsyncNotifierProviderImpl<EmojiService, List<EmojiCategory>> {
   /// See also [EmojiService].
   EmojiServiceProvider(
-    this.key,
-  ) : super.internal(
+    AccountKey key,
+  ) : this._internal(
           () => EmojiService()..key = key,
           from: emojiServiceProvider,
           name: r'emojiServiceProvider',
@@ -97,9 +97,51 @@ class EmojiServiceProvider
           dependencies: EmojiServiceFamily._dependencies,
           allTransitiveDependencies:
               EmojiServiceFamily._allTransitiveDependencies,
+          key: key,
         );
 
+  EmojiServiceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+  }) : super.internal();
+
   final AccountKey key;
+
+  @override
+  FutureOr<List<EmojiCategory>> runNotifierBuild(
+    covariant EmojiService notifier,
+  ) {
+    return notifier.build(
+      key,
+    );
+  }
+
+  @override
+  Override overrideWith(EmojiService Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: EmojiServiceProvider._internal(
+        () => create()..key = key,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+      ),
+    );
+  }
+
+  @override
+  AsyncNotifierProviderElement<EmojiService, List<EmojiCategory>>
+      createElement() {
+    return _EmojiServiceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -113,14 +155,20 @@ class EmojiServiceProvider
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin EmojiServiceRef on AsyncNotifierProviderRef<List<EmojiCategory>> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+}
+
+class _EmojiServiceProviderElement
+    extends AsyncNotifierProviderElement<EmojiService, List<EmojiCategory>>
+    with EmojiServiceRef {
+  _EmojiServiceProviderElement(super.provider);
 
   @override
-  FutureOr<List<EmojiCategory>> runNotifierBuild(
-    covariant EmojiService notifier,
-  ) {
-    return notifier.build(
-      key,
-    );
-  }
+  AccountKey get key => (origin as EmojiServiceProvider).key;
 }
-// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

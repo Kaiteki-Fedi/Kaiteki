@@ -1,14 +1,47 @@
+import "dart:ui" show Locale;
+
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/utils.dart";
+import "package:logging/logging.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
-final locale = createSettingProvider<String?>(
+enum InterfaceFont {
+  system,
+  roboto,
+  kaiteki,
+  openDyslexic,
+  atkinsonHyperlegible,
+}
+
+final locale = createSettingProvider<Locale?>(
   key: "locale",
   initialValue: null,
   provider: sharedPreferencesProvider,
+  read: (prefs, key) {
+    try {
+      return prefs.getString(key).nullTransform(parseLocale);
+    } catch (e, s) {
+      Logger("locale").warning(
+        "Failed to parse locale, is this using a deprecated format?",
+        e,
+        s,
+      );
+      return null;
+    }
+  },
+  write: (prefs, key, value) async {
+    if (value == null) {
+      await prefs.remove(key);
+    } else {
+      await prefs.setString(key, value.toLanguageTag());
+    }
+  },
 );
 
 final experiments = createSettingProvider<List<AppExperiment>>(
@@ -37,19 +70,13 @@ final developerMode = createSettingProvider<bool>(
 
 final cwBehavior = createEnumSettingProvider<ContentWarningBehavior>(
   key: "cwBehavior",
-  initialValue: ContentWarningBehavior.automatic,
+  initialValue: ContentWarningBehavior.collapse,
   values: ContentWarningBehavior.values,
   provider: sharedPreferencesProvider,
 );
 
 final hidePostMetrics = createSettingProvider<bool>(
   key: "hidePostMetrics",
-  initialValue: false,
-  provider: sharedPreferencesProvider,
-);
-
-final showReadNotifications = createSettingProvider<bool>(
-  key: "showReadNotifications",
   initialValue: false,
   provider: sharedPreferencesProvider,
 );
@@ -66,16 +93,28 @@ final showDedicatedPostOpenButton = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
-final useSearchBar = createSettingProvider<bool>(
-  key: "useSearchBar",
-  initialValue: false,
-  provider: sharedPreferencesProvider,
-);
-
 final recentlyUsedEmojis = createSettingProvider<List<String>>(
   key: "recentlyUsedEmojis",
   initialValue: const [],
   provider: sharedPreferencesProvider,
+);
+
+final lastUsedAccount = createSettingProvider<AccountKey?>(
+  key: "lastUsedAccount",
+  provider: sharedPreferencesProvider,
+  read: (prefs, key) {
+    final value = prefs.getString(key);
+    if (value == null) return null;
+    return AccountKey.fromUri(value);
+  },
+  write: (prefs, key, value) async {
+    if (value == null) {
+      await prefs.remove(key);
+    } else {
+      await prefs.setString(key, value.toUri().toString());
+    }
+  },
+  initialValue: null,
 );
 
 final visibleLanguages = createSettingProvider<ISet<String>>(
@@ -89,5 +128,24 @@ final visibleLanguages = createSettingProvider<ISet<String>>(
   write: (prefs, key, value) async {
     await prefs.setStringList(key, value.toList());
   },
+  provider: sharedPreferencesProvider,
+);
+
+final coloredPostVisibilities = createSettingProvider<bool>(
+  key: "coloredPostVisibilities",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
+final underlineLinks = createSettingProvider<bool>(
+  key: "underlineLinks",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
+final interfaceFont = createEnumSettingProvider<InterfaceFont>(
+  key: "interfaceFont",
+  initialValue: InterfaceFont.kaiteki,
+  values: InterfaceFont.values,
   provider: sharedPreferencesProvider,
 );

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/window_class.dart";
-import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/utils.dart";
 
 class AdaptiveMenu extends StatelessWidget {
   final Function(BuildContext context, VoidCallback onTap)? builder;

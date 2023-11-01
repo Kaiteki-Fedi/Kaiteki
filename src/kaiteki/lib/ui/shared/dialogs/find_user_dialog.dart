@@ -1,9 +1,8 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/search_support.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/shared/search_bar.dart";
+import "package:kaiteki_core/social.dart";
 
 class FindUserDialog extends ConsumerStatefulWidget {
   const FindUserDialog({super.key});
@@ -33,14 +32,14 @@ class _FindUserDialogState extends ConsumerState<FindUserDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       scrollable: true,
-      title: const Text("Find user"),
+      title: Text(context.l10n.findUserDialogTitle),
       content: FutureBuilder<List<User>>(
         future: _future,
         builder: (context, snapshot) {
           final searchBar = KaitekiSearchBar(
             autofocus: true,
             controller: _textController,
-            hintText: "Search for user",
+            hintText: context.l10n.findUserDialogHint,
             onSubmitted: (query) async {
               final adapter = ref.watch(adapterProvider);
               setState(() {

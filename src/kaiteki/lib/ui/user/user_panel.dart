@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
-import "package:intl/intl.dart";
+import "package:fpdart/fpdart.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/ui/people/dialog.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/user/text_with_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 class UserPanel extends ConsumerWidget {
   final User user;
@@ -17,6 +18,8 @@ class UserPanel extends ConsumerWidget {
     final description = user.description;
 
     final displayNameTextStyle = Theme.of(context).textTheme.titleLarge;
+    final followerCount = user.metrics.followerCount;
+    final followingCount = user.metrics.followingCount;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -90,15 +93,13 @@ class UserPanel extends ConsumerWidget {
                 if (user.joinDate != null)
                   TextWithIcon(
                     icon: const Icon(Icons.today_rounded),
-                    text: Text(
-                      "Joined ${DateFormat('MMMM yyyy').format(user.joinDate!)}",
-                    ),
+                    text: Text(context.l10n.userJoinDate(user.joinDate!)),
                   ),
                 if (user.details.birthday != null)
                   TextWithIcon(
                     icon: const Icon(Icons.cake_rounded),
                     text: Text(
-                      "Born ${DateFormat('dd MMMM yyyy').format(user.details.birthday!)}",
+                      context.l10n.userBirthDate(user.details.birthday!),
                     ),
                   ),
                 if (user.details.location != null)
@@ -114,7 +115,31 @@ class UserPanel extends ConsumerWidget {
               ],
             ),
           ),
-        )
+        ),
+        const SizedBox(height: 8.0),
+        InkWell(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                if (followerCount != null && followerCount > 0)
+                  "$followerCount followers",
+                if (followingCount != null && followingCount > 0)
+                  "$followingCount following",
+              ]
+                  .map((e) => TextSpan(text: e))
+                  .intersperse(const TextSpan(text: " • "))
+                  .toList(),
+              style: Theme.of(context).colorScheme.outline.textStyle,
+            ),
+          ),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (_) => PeopleDialog(userId: user.id),
+              useRootNavigator: false,
+            );
+          },
+        ),
       ],
     );
   }

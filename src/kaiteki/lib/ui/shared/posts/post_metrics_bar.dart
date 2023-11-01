@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/post/metrics.dart";
+import "package:kaiteki_core/social.dart";
 
 class PostMetricBar extends StatelessWidget {
   final PostMetrics metrics;
@@ -24,12 +24,7 @@ class PostMetricBar extends StatelessWidget {
                   text: item.$1.toString(),
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                TextSpan(
-                  text: " ${item.$2}",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
+                TextSpan(text: " ${item.$2}"),
               ],
             ),
           ),

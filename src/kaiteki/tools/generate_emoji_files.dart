@@ -4,7 +4,7 @@ import "dart:convert";
 import "dart:io";
 
 import "package:http/http.dart" as http;
-import "package:kaiteki/utils/utils.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:path/path.dart";
 
 final emojiListUri = Uri.parse(

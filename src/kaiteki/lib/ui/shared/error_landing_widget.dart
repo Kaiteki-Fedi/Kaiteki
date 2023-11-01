@@ -1,13 +1,19 @@
 import "dart:io";
 
 import "package:flutter/material.dart";
+import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/exceptions/http_exception.dart";
+import "package:kaiteki/telemetry/report.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/telemetry/customize_report_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/http.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
+import "package:url_launcher/url_launcher.dart";
 
-class ErrorLandingWidget extends StatelessWidget {
+class ErrorLandingWidget extends StatefulWidget {
   final TraceableError error;
   final VoidCallback? onRetry;
 
@@ -34,53 +40,120 @@ class ErrorLandingWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final error = this.error.$1;
-    if (error is UnimplementedError) {
-      return IconLandingWidget(
-        icon: const Icon(Icons.assignment_late_rounded),
-        text: Text(context.l10n.niy),
-      );
-    }
+  State<ErrorLandingWidget> createState() => _ErrorLandingWidgetState();
+}
 
-    if (error is HttpException) {
-      if (error.statusCode == HttpStatus.unauthorized) {
-        return const IconLandingWidget(
-          icon: Icon(Icons.lock_rounded),
-          text: Text("Unauthorized"),
+class _ErrorLandingWidgetState extends State<ErrorLandingWidget> {
+  Widget getMessageWidget(BuildContext context) {
+    final error = widget.error.$1;
+    switch (error) {
+      case UnimplementedError():
+        return IconLandingWidget(
+          icon: const Icon(Icons.assignment_late_rounded),
+          text: Text(context.l10n.niy),
         );
-      }
+      case HttpException()
+          when error.statusCode == HttpStatus.internalServerError:
+        return IconLandingWidget(
+          icon: const Icon(Icons.error_rounded),
+          text: Text(context.l10n.exceptionReasonGeneric),
+        );
+      case HttpException() when error.statusCode == HttpStatus.unauthorized:
+        return IconLandingWidget(
+          icon: const Icon(Icons.lock_rounded),
+          text: Text(context.l10n.exceptionReasonUnauthorized),
+        );
+      case HttpException() when error.statusCode == HttpStatus.forbidden:
+        return IconLandingWidget(
+          icon: const Icon(Icons.report_rounded),
+          text: Text(context.l10n.exceptionReasonForbidden),
+        );
+      case CheckedFromJsonException():
+        return IconLandingWidget(
+          icon: const Icon(Icons.broken_image_rounded),
+          text: Text(context.l10n.exceptionReasonParseError),
+        );
+      default:
+        return IconLandingWidget(
+          icon: const Icon(Icons.error_rounded),
+          text: Text(context.l10n.exceptionReasonGeneric),
+        );
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final messageWidget = getMessageWidget(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const IconLandingWidget(
-          icon: Icon(Icons.error_rounded),
-          text: Text("An error occured"),
-        ),
+        messageWidget,
         const SizedBox(height: 16),
         IntrinsicWidth(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (onRetry != null) ...[
+              if (widget.onRetry != null) ...[
                 ElevatedButton.icon(
                   icon: const Icon(Icons.refresh_rounded),
-                  label: const Text("Retry"),
-                  onPressed: onRetry,
+                  label: Text(context.l10n.retryButtonLabel),
+                  onPressed: widget.onRetry,
                 ),
                 const SizedBox(height: 8),
               ],
-              OutlinedButton(
-                onPressed: () => context.showExceptionDialog(this.error),
-                child: const Text("Show details"),
+              Row(
+                children: [
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      visualDensity: VisualDensity.standard,
+                    ),
+                    onPressed: _onReport,
+                    child: const Text("Report error"),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton.outlined(
+                    onPressed: () => context.showExceptionDialog(widget.error),
+                    tooltip: context.l10n.showDetailsButtonLabel,
+                    icon: const Icon(Icons.info_rounded),
+                  ),
+                ],
               ),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _onReport() async {
+    late final BackendAdapter? adapter;
+
+    try {
+      adapter = ProviderScope.containerOf(context).read(adapterProvider);
+    } catch (_) {
+      adapter = null;
+    }
+
+    final report = ExceptionReport.fromException(
+      widget.error.$1,
+      stackTrace: widget.error.$2,
+      backend: adapter == null ? null : retrieveBackendInformation(adapter),
+    );
+
+    final result = await showDialog<ExceptionReport>(
+      context: context,
+      builder: (_) => CustomizeReportDialog(report),
+    );
+
+    if (result == null) return;
+
+    final url = result.getGitHubFormUrl();
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+      webOnlyWindowName: "_blank",
     );
   }
 }

@@ -2,11 +2,17 @@ name: Weekly CI
 
 env:
   SOURCE_PATH: './src/kaiteki'
+  PATCH_VERSION: ${{ github.event.inputs.patch_version }}
 
 on:
   workflow_dispatch:
+    inputs:
+      patch_version:
+        description: 'Patch version'
+        required: false
+        type: string
   schedule:
-      - cron:  '0 0 * * 1'
+      - cron: '0 0 * * 1'
 
 permissions:
   contents: read
@@ -38,8 +44,13 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Analyze
-        run: 'flutter analyze --no-pub --no-fatal-infos --no-congratulate --no-preamble'
+        uses: invertase/github-action-dart-analyzer@v2.0.0
+        with:
+          working-directory: ${{ env.SOURCE_PATH }}
 
       - name: Test
         run: 'flutter test --coverage -r expanded --no-pub'
@@ -48,7 +59,7 @@ jobs:
         id: build-variables
         run: |
           echo "WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
-          echo "BUILD_NAME=$(date +%Y-%U)" >> $GITHUB_OUTPUT
+          echo "BUILD_NAME=$(date +%Y-%U)${{ github.event.inputs.patch_version && format('.${0}', github.event.inputs.patch_version) || '' }}" >> $GITHUB_OUTPUT
           echo "MAKE_ARGS=RELEASE=TRUE SIGNED=TRUE SPLIT_PER_ABI=TRUE WEEKLY_EPOCH=$(date +%s)" >> $GITHUB_OUTPUT
 
   build-linux:
@@ -80,6 +91,9 @@ jobs:
 
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
 
       - name: Build
         run: 'make build-linux ${{needs.test.outputs.make-args}}'
@@ -177,6 +191,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Dump signing key
         uses: timheuer/base64-to-file@v1.2
         with:
@@ -219,6 +236,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Build
         run: 'make build-windows ${{needs.test.outputs.make-args}}'
         
@@ -226,7 +246,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows
-          path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/'
+          path: '${{ env.SOURCE_PATH }}/build/windows/x64/runner/Release/'
 
   build-web:
     name: Build for Web
@@ -251,6 +271,9 @@ jobs:
         
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
       
       - name: Build
         run: 'make build-web ${{needs.test.outputs.make-args}}'

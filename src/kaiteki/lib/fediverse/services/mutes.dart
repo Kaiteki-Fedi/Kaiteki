@@ -1,8 +1,8 @@
-import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/mute_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/account_manager.dart";
+
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/pagination_state.dart";
+import "package:kaiteki_core/social.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "mutes.g.dart";
@@ -14,8 +14,10 @@ class MutesService extends _$MutesService {
 
   @override
   FutureOr<PaginationState<User>> build(AccountKey key) async {
-    final manager = ref.read(accountManagerProvider);
-    final account = manager.accounts.firstWhere((a) => a.key == key);
+    final account = ref
+        .read(accountManagerProvider)
+        .accounts
+        .firstWhere((a) => a.key == key);
     _backend = account.adapter as MuteSupport;
     return _fetch();
   }
@@ -28,8 +30,8 @@ class MutesService extends _$MutesService {
       final pagination = await _backend.getMutedUsers(nextId: _nextId);
       _nextId = pagination.next;
       return PaginationState(
-        [...?state.valueOrNull?.list, ...pagination.data],
-        _nextId != null,
+        [...?state.valueOrNull?.items, ...pagination.data],
+        canPaginateFurther: _nextId != null,
       );
     });
   }
@@ -39,7 +41,7 @@ class MutesService extends _$MutesService {
     _nextId = pagination.next;
     return PaginationState(
       pagination.data.toList(),
-      _nextId != null,
+      canPaginateFurther: _nextId != null,
     );
   }
 

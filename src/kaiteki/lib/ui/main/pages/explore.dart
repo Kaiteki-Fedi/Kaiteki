@@ -1,14 +1,14 @@
 import "package:flutter/material.dart";
 import "package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart";
+import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/explore_support.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
-
-import "../../../fediverse/model/model.dart";
 
 final trendingLinksProvider = FutureProvider<List<Embed>?>(
   (ref) async {
@@ -103,7 +103,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
               error: (_) => const SizedBox(),
               loading: (_) => Column(
                 children: <Widget>[
-                  for (int i = 0; i < 3; i++) const NewsCard(embed: null)
+                  for (int i = 0; i < 3; i++) const NewsCard(embed: null),
                 ].joinWithValue(const SizedBox(height: 8)),
               ),
             ),
@@ -132,8 +132,17 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
                       children: <Widget>[
                         for (final hashtag in data.value!)
                           ActionChip(
+                            // ignore: l10n
                             label: Text("#$hashtag"),
-                            onPressed: () {},
+                            onPressed: () {
+                              context.pushNamed(
+                                "hashtag",
+                                pathParameters: {
+                                  ...ref.accountRouterParams,
+                                  "hashtag": hashtag,
+                                },
+                              );
+                            },
                           ),
                       ],
                     ),
@@ -160,36 +169,36 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
     );
   }
 
-  // Widget buildTrendingHashtags(BuildContext context) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     children: [
-  //       Text(
-  //         "Trends",
-  //         style: Theme.of(context).textTheme.headlineSmall,
-  //       ),
-  //       const SizedBox(height: 16),
-  //       FutureBuilder(
-  //         future: ,
-  //         builder: (context, snapshot) {
-  //           if (!snapshot.hasData) return const SizedBox();
-  //
-  //           final hashtags = snapshot.data!.take(5).toList();
-  //           return Card(
-  //             child: Column(
-  //               children: <Widget>[
-  //                 for (var i = 0; i < hashtags.length; i++)
-  //                   ListTile(
-  //                     title: Text("#${hashtags[i]}"),
-  //                   ),
-  //               ].joinWithValue(const SizedBox(height: 8)),
-  //             ),
-  //           );
-  //         },
-  //       ),
-  //     ],
-  //   );
-  // }
+// Widget buildTrendingHashtags(BuildContext context) {
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.stretch,
+//     children: [
+//       Text(
+//         "Trends",
+//         style: Theme.of(context).textTheme.headlineSmall,
+//       ),
+//       const SizedBox(height: 16),
+//       FutureBuilder(
+//         future: ,
+//         builder: (context, snapshot) {
+//           if (!snapshot.hasData) return const SizedBox();
+//
+//           final hashtags = snapshot.data!.take(5).toList();
+//           return Card(
+//             child: Column(
+//               children: <Widget>[
+//                 for (var i = 0; i < hashtags.length; i++)
+//                   ListTile(
+//                     title: Text("#${hashtags[i]}"),
+//                   ),
+//               ].joinWithValue(const SizedBox(height: 8)),
+//             ),
+//           );
+//         },
+//       ),
+//     ],
+//   );
+// }
 }
 
 class NewsCard extends StatelessWidget {

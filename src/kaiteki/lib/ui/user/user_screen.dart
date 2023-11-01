@@ -4,15 +4,18 @@ import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
-import "package:kaiteki/ui/instance_vetting/bottom_sheet.dart";
+import "package:kaiteki/theming/default/extensions.dart";
+import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
+import "package:kaiteki/ui/share_sheet/share.dart";
+import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/timeline.dart";
 import "package:kaiteki/ui/user/user_panel.dart";
-import "package:kaiteki/ui/user/user_sliver.dart";
 import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:share_plus/share_plus.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 const avatarSizeCompact = 72.0;
 const avatarSize = 96.0;
@@ -34,15 +37,20 @@ class UserScreen extends ConsumerStatefulWidget {
 }
 
 class _UserScreenState extends ConsumerState<UserScreen> {
-  Future<User>? _future;
+  Future<User?>? _future;
 
   late StateProvider<bool> _showReplies;
 
   @override
   void initState() {
     super.initState();
-    _future = widget.user.nullTransform(Future.value) ??
-        ref.read(adapterProvider).getUserById(widget.id);
+
+    try {
+      _future = widget.user.nullTransform(Future.value) ??
+          ref.read(adapterProvider).getUserById(widget.id);
+    } catch (e, s) {
+      _future = Future.error(e, s);
+    }
     _showReplies = StateProvider((_) => true);
   }
 
@@ -85,7 +93,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   Widget build(BuildContext context) {
     final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
 
-    return FutureBuilder<User>(
+    return FutureBuilder<User?>(
       future: _future,
       builder: (context, snapshot) {
         final user = snapshot.data;
@@ -100,7 +108,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           ),
           builder: (context, snapshot) {
             return Theme(
-              data: theme.copyWith(colorScheme: snapshot.data),
+              data: theme
+                  .copyWith(colorScheme: snapshot.data)
+                  .applyDefaultTweaks(),
               child: DefaultTabController(
                 length: 3,
                 child: Builder(
@@ -190,7 +200,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                               buildMenuButton(user),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                     if (user != null) ...[
@@ -212,7 +222,6 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                     child: Column(
                       children: [
                         Material(child: buildTabBar()),
-                        const Divider(),
                         Expanded(
                           child: Material(
                             child: buildTabBarView(includeReplies),
@@ -247,7 +256,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     return [
       MenuItemButton(
         onPressed: user.url.nullTransform(
-          (url) => () async => Share.share(url.toString()),
+          (url) => () async => share(context, url),
         ),
         leadingIcon: Icon(Icons.adaptive.share_rounded),
         child: const Text("Share"),
@@ -257,7 +266,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           context: context,
           useRootNavigator: true,
           isScrollControlled: true,
-          constraints: bottomSheetConstraints,
+          constraints: kBottomSheetConstraints,
           showDragHandle: true,
           builder: (_) => InstanceVettingBottomSheet(instance: user.host),
         ),
@@ -310,28 +319,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               ),
               backgroundColor: _getBackgroundColor(context),
               scrolledUnderElevation: 0,
-              actions: [
-                if (innerBoxIsScrolled)
-                  moreButton
-                else
-                  Stack(
-                    children: [
-                      Positioned.fill(
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                            borderRadius: const BorderRadius.horizontal(
-                              left: Radius.circular(24),
-                            ),
-                          ),
-                        ),
-                      ),
-                      moreButton,
-                    ],
-                  ),
-              ],
+              actions: [moreButton, kAppBarActionsSpacer],
               title: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 150),
                 child: !innerBoxIsScrolled
@@ -416,22 +404,28 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                       onSelected: (value) =>
                           ref.read(_showReplies.notifier).state = value,
                       label: const Text("Replies"),
-                    )
+                    ),
                   ],
                 ),
               ),
             ),
-            TimelineSliver.user(
-              userId: widget.id,
+            TimelineSliver(
+              UserTimelineSource(widget.id),
               includeReplies: includeReplies,
             ),
           ],
         ),
-        CustomScrollView(
-          slivers: [UserSliver.followers(userId: widget.id)],
+        const Center(
+          child: IconLandingWidget(
+            icon: Icon(Icons.image_outlined),
+            text: Text("Media is not implemented yet."),
+          ),
         ),
-        CustomScrollView(
-          slivers: [UserSliver.following(userId: widget.id)],
+        const Center(
+          child: IconLandingWidget(
+            icon: Icon(Icons.star_outline_rounded),
+            text: Text("Favorites is not implemented yet."),
+          ),
         ),
       ],
     );
@@ -439,19 +433,16 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 
   Widget buildTabBar() {
     return const TabBar(
-      //isScrollable: true,
       tabs: [
         Tab(text: "Posts"),
-        //Tab(text: "Media"),
-        //Tab(text: "Likes"),
-        Tab(text: "Followers"),
-        Tab(text: "Following"),
+        Tab(text: "Media"),
+        Tab(text: "Favorites"),
       ],
     );
   }
 
   Future<void> _onFollow(BuildContext context, User user) async {
-    final adapter = ref.read(adapterProvider);
+    final adapter = ref.read(adapterProvider) as FollowSupport;
 
     final followState = user.state.follow;
 
@@ -489,12 +480,12 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 
   Widget? buildPrimaryButton(User? user, [bool small = false]) {
-    if (user?.id == ref.watch(accountProvider)?.user.id) {
+    if (user?.id == ref.watch(currentAccountProvider)?.user.id) {
       if (small) {
         return IconButton.filled(
           onPressed: () {},
           icon: const Icon(Icons.edit_rounded),
-          tooltip: "Edit Profile",
+          tooltip: context.l10n.editProfileButtonLabel,
         );
       }
 
@@ -503,7 +494,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         style: FilledButton.styleFrom(
           visualDensity: VisualDensity.comfortable,
         ),
-        child: const Text("Edit Profile"),
+        child: Text(context.l10n.editProfileButtonLabel),
       );
     }
 
@@ -522,34 +513,34 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           ? IconButton.filledTonal(
               onPressed: onPressed,
               icon: const Icon(Icons.person_remove_rounded),
-              tooltip: "Unfollow",
+              tooltip: context.l10n.unfollowButtonLabel,
             )
           : FilledButton.tonal(
               onPressed: onPressed,
               style: buttonStyle,
-              child: const Text("Unfollow"),
+              child: Text(context.l10n.unfollowButtonLabel),
             ),
       UserFollowState.notFollowing => small
           ? IconButton.filled(
               onPressed: onPressed,
               icon: const Icon(Icons.person_add_rounded),
-              tooltip: "Follow",
+              tooltip: context.l10n.followButtonLabel,
             )
           : FilledButton(
               onPressed: onPressed,
               style: buttonStyle,
-              child: const Text("Follow"),
+              child: Text(context.l10n.followButtonLabel),
             ),
       UserFollowState.pending => small
           ? IconButton.filled(
               onPressed: onPressed,
               icon: const Icon(Icons.lock_clock_rounded),
-              tooltip: "Pending",
+              tooltip: context.l10n.pendingFollowRequestButtonLabel,
             )
           : FilledButton.tonal(
               onPressed: onPressed,
               style: buttonStyle,
-              child: const Text("Pending"),
+              child: Text(context.l10n.pendingFollowRequestButtonLabel),
             ),
     };
   }

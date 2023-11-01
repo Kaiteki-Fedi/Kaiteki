@@ -1,41 +1,84 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/theming/kaiteki/colors.dart";
-import "package:kaiteki/theming/kaiteki/post.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
-import "package:kaiteki/theming/kaiteki/theme.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
+import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/preferences/theme_preferences.dart" as preferences;
+import "package:kaiteki/theming/default/text_themes.dart" as kaiteki;
+import "package:kaiteki/theming/theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
 
 extension ThemeDataExtensions on ThemeData {
-  ThemeData applyDefaultTweaks({bool useNaturalBadgeColors = false}) {
+  ThemeData applyUserPreferences(WidgetRef ref) {
+    ShapeBorder getAvatarShape(double cornerRadius) {
+      return switch (cornerRadius) {
+        <= 0 => const Border(),
+        >= double.infinity => const CircleBorder(),
+        _ => RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(cornerRadius),
+          ),
+      };
+    }
+
+    final avatarCornerRadius = ref.watch(preferences.avatarCornerRadius).value;
+    final useNaturalBadgeColors =
+        ref.watch(preferences.useNaturalBadgeColors).value;
+    final interfaceFont = ref.watch(preferences.interfaceFont).value;
+
+    TextTheme? getTextTheme(TextTheme? original) {
+      final textTheme = original ?? const TextTheme();
+      return switch (interfaceFont) {
+        InterfaceFont.system => null,
+        InterfaceFont.roboto => textTheme.apply(fontFamily: "Roboto"),
+        InterfaceFont.kaiteki => kaiteki.getTextTheme(textTheme),
+        InterfaceFont.atkinsonHyperlegible =>
+          GoogleFonts.atkinsonHyperlegibleTextTheme(original),
+        InterfaceFont.openDyslexic =>
+          textTheme.apply(fontFamily: "OpenDyslexic"),
+      };
+    }
+
+    return copyWith(
+      extensions: [
+        ...extensions.values,
+        EmojiTheme(square: ref.watch(preferences.squareEmojis).value),
+        AvatarTheme(shape: getAvatarShape(avatarCornerRadius)),
+      ],
+      badgeTheme: useNaturalBadgeColors
+          ? badgeTheme.copyWith(
+              backgroundColor: colorScheme.inverseSurface,
+              textColor: colorScheme.onInverseSurface,
+            )
+          : null,
+      textTheme: getTextTheme(textTheme),
+    );
+  }
+
+  ThemeData applyDefaultTweaks() {
     final navigationBarForegroundColor =
         colorScheme.brightness == Brightness.dark
             ? colorScheme.onSurface
             : colorScheme.onPrimary;
     return copyWith(
-      snackBarTheme: const SnackBarThemeData(
+      snackBarTheme: snackBarTheme.copyWith(
         behavior: SnackBarBehavior.floating,
       ),
-      badgeTheme: BadgeThemeData(
-        backgroundColor:
-            useNaturalBadgeColors ? colorScheme.inverseSurface : null,
-        textColor: useNaturalBadgeColors ? colorScheme.onInverseSurface : null,
-      ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
+      floatingActionButtonTheme: floatingActionButtonTheme.copyWith(
         extendedTextStyle: textTheme.labelLarge ?? const TextStyle(),
       ),
       dividerTheme: dividerTheme.copyWith(space: 1, thickness: 1),
-      tabBarTheme: TabBarTheme(
-        indicator: RoundedUnderlineTabIndicator(
-          borderSide: BorderSide(width: 3, color: colorScheme.primary),
-        ),
-        labelColor: colorScheme.primary,
-        unselectedLabelColor: colorScheme.onSurfaceVariant,
-        // And there @Craftplacer said, "THIS DIVIDER SUCKS"
-        dividerColor: Colors.transparent,
+      tabBarTheme: tabBarTheme.copyWith(
+        // Flutter themes the TabBar to be readable against the primary color,
+        // since we don't live in Material Design 1 times where everything is
+        // eye-soring colorful, we'll use the primary color.
+        labelColor: useMaterial3 ? null : colorScheme.primary,
+        indicatorColor: useMaterial3 ? null : colorScheme.primary,
+        unselectedLabelColor: useMaterial3
+            ? null
+            : colorScheme.onSurface.withOpacity(.6) /* medium emphasis */,
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
         backgroundColor: colorScheme.brightness == Brightness.dark
             ? colorScheme.surface
             : colorScheme.primary,
@@ -48,19 +91,11 @@ extension ThemeDataExtensions on ThemeData {
   }
 
   /// Adds Kaiteki-specific extensions to the theme.
-  ThemeData addKaitekiExtensions({
-    bool? squareEmoji,
-    ShapeBorder? avatarShape,
-  }) {
+  ThemeData addKaitekiTheme() {
     return copyWith(
       extensions: [
         ...extensions.values,
-        KaitekiTextTheme.fromMaterialTheme(this),
-        KaitekiColors.fromMaterialTheme(this),
         KaitekiTheme.fromMaterialTheme(this),
-        KaitekiPostTheme.fallback,
-        EmojiTheme(square: squareEmoji ?? true),
-        AvatarTheme(shape: avatarShape ?? const CircleBorder()),
       ],
     );
   }

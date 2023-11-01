@@ -1,11 +1,11 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/custom_emoji_support.dart";
-import "package:kaiteki/fediverse/model/emoji/category.dart";
+import "package:kaiteki/emoji/unicode.dart";
 import "package:kaiteki/fediverse/services/emoji.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:mdi/mdi.dart";
 
 class EmojiSelectorBottomSheet extends ConsumerStatefulWidget {
@@ -30,12 +30,14 @@ class _EmojiSelectorBottomSheetState
   Iterable<UnicodeEmojiCategory>? _unicodeEmojis;
 
   _EmojiKindTab? _tabField;
+
   _EmojiKindTab? get _tab => _tabField;
+
   set _tab(_EmojiKindTab? tab) => setState(() => _tabField = tab);
 
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider)!;
+    final account = ref.watch(currentAccountProvider)!;
 
     // "Basic" error checking whether tab can disappear between rebuilds
     final availableTabs = [
@@ -64,20 +66,21 @@ class _EmojiSelectorBottomSheetState
             child: SegmentedButton(
               segments: [
                 if (availableTabs.contains(_EmojiKindTab.recent))
-                  const ButtonSegment(
+                  ButtonSegment(
                     value: _EmojiKindTab.recent,
-                    label: Text("Recent"),
-                    icon: Icon(Icons.history_rounded),
+                    label: Text(context.l10n.recentEmojisTab),
+                    icon: const Icon(Icons.history_rounded),
                   ),
                 if (availableTabs.contains(_EmojiKindTab.custom))
-                  const ButtonSegment(
+                  ButtonSegment(
                     value: _EmojiKindTab.custom,
-                    label: Text("Custom"),
-                    icon: Icon(Mdi.emoticon),
+                    label: Text(context.l10n.customEmojisTab),
+                    icon: const Icon(Icons.insert_emoticon_rounded),
                   ),
                 if (availableTabs.contains(_EmojiKindTab.unicode))
                   const ButtonSegment(
                     value: _EmojiKindTab.unicode,
+                    // ignore: l10n
                     label: Text("Unicode"),
                     icon: Icon(Mdi.unicode),
                   ),
@@ -118,7 +121,7 @@ class _EmojiSelectorBottomSheetState
 
     switch (tab) {
       case _EmojiKindTab.recent:
-        final account = ref.read(accountProvider)!;
+        final account = ref.read(currentAccountProvider)!;
         final customEmojis = emojiServiceProvider(account.key);
 
         return ref
@@ -137,7 +140,7 @@ class _EmojiSelectorBottomSheetState
               loading: () => centeredCircularProgressIndicator,
             );
       case _EmojiKindTab.custom:
-        final account = ref.read(accountProvider)!;
+        final account = ref.read(currentAccountProvider)!;
         final customEmojis = emojiServiceProvider(account.key);
         return ref
             .watch(customEmojis) //

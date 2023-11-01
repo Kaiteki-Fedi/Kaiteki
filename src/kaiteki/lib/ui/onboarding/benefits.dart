@@ -2,11 +2,12 @@ import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
 
 const _iconSize = 192.0;
+
 List<UserBenefit> get benefits {
   return <UserBenefit>[
     UserBenefit(
       "Welcome to Kaiteki",
-      appDescription,
+      kAppDescription,
       () => Image.asset(
         "assets/icon.png",
         key: const ValueKey(0),

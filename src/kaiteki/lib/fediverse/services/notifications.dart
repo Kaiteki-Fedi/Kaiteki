@@ -6,39 +6,69 @@ import "package:flutter/foundation.dart";
 import "package:flutter/painting.dart";
 import "package:flutter_local_notifications/flutter_local_notifications.dart";
 import "package:http/http.dart";
-import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/notification_support.dart";
-import "package:kaiteki/fediverse/model/notification.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/model/auth/account_key.dart";
+import "package:kaiteki/model/pagination_state.dart";
 import "package:kaiteki/utils/image.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
+import "package:logging/logging.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 part "notifications.g.dart";
 
 @Riverpod(keepAlive: true)
 class NotificationService extends _$NotificationService {
-  late NotificationSupport _backend;
+  static final _logger = Logger("NotificationService");
 
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(_backend.getNotifications);
-  }
+  late NotificationSupport _backend;
 
   Future<void> markAllAsRead() async {
     state = const AsyncLoading();
     try {
       await _backend.markAllNotificationsAsRead();
+    } catch (e, s) {
+      _logger.warning("Failed to mark all notifications as read", e, s);
+      rethrow;
     } finally {
-      state = await AsyncValue.guard(_backend.getNotifications);
+      state = await AsyncValue.guard(() async {
+        final notifications = await _backend.getNotifications();
+        return PaginationState(
+          notifications,
+          canPaginateFurther: notifications.isNotEmpty,
+        );
+      });
     }
   }
 
   @override
-  FutureOr<List<Notification>> build(AccountKey key) async {
-    final manager = ref.read(accountManagerProvider);
-    final account = manager.accounts.firstWhere((a) => a.key == key);
+  FutureOr<PaginationState<Notification>> build(AccountKey key) async {
+    final account = ref
+        .read(accountManagerProvider)
+        .accounts
+        .firstWhere((a) => a.key == key);
     _backend = account.adapter as NotificationSupport;
-    return await _backend.getNotifications();
+
+    final notifications = await _backend.getNotifications();
+    return PaginationState(
+      notifications,
+      canPaginateFurther: notifications.isNotEmpty,
+    );
+  }
+
+  Future<void> loadMore() async {
+    if (state is! AsyncData) return;
+
+    final data = state.value!.items;
+
+    state = await AsyncValue.guard(() async {
+      final newNotifications = await _backend.getNotifications(
+        untilId: data.lastOrNull?.id,
+      );
+      return PaginationState(
+        data + newNotifications,
+        canPaginateFurther: newNotifications.isNotEmpty,
+      );
+    });
   }
 }
 
@@ -98,7 +128,8 @@ class NativeNotificationPoster {
           data: await toUint8List(image),
           height: image.height,
           width: image.width,
-          channels: 4, // The icon has an alpha channel
+          channels: 4,
+          // The icon has an alpha channel
           hasAlpha: true,
         ),
       );

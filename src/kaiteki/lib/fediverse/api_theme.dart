@@ -1,4 +1,5 @@
 import "package:flutter/painting.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class ApiTheme {
   final Color accent;
@@ -25,11 +26,6 @@ const pleromaTheme = ApiTheme(
   "assets/icons/pleroma.png",
 );
 
-const twitterTheme = ApiTheme(
-  Color(0xFF1DA1F2),
-  "assets/icons/twitter.png",
-);
-
 const akkomaTheme = ApiTheme(
   Color(0xFF462D7A),
   "assets/icons/akkoma.png",
@@ -44,3 +40,17 @@ const calckeyTheme = ApiTheme(
   Color(0xFF2d7590),
   "assets/icons/calckey.png",
 );
+
+extension ApiThemeExtension on ApiType {
+  ApiTheme get theme {
+    return switch (this) {
+      ApiType.mastodon => mastodonTheme,
+      ApiType.glitch => mastodonTheme,
+      ApiType.misskey => misskeyTheme,
+      ApiType.pleroma => pleromaTheme,
+      ApiType.akkoma => akkomaTheme,
+      ApiType.foundkey => foundKeyTheme,
+      ApiType.calckey => calckeyTheme
+    };
+  }
+}

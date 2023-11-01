@@ -3,12 +3,11 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:kaiteki/auth/login_typedefs.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/auth/login/constants.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_message.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
+import "package:kaiteki_core/social.dart";
 
 class CodePage extends StatefulWidget {
   final CodePromptOptions options;
@@ -67,7 +66,7 @@ class _CodePageState extends State<CodePage> {
                             textInputAction: TextInputAction.done,
                             inputFormatters: [
                               if (widget.options.numericOnly)
-                                FilteringTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.digitsOnly,
                             ],
                             autofocus: true,
                             autocorrect: false,

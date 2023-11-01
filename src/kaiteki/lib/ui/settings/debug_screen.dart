@@ -1,13 +1,15 @@
+// ignore_for_file: l10n
+
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
-import "package:kaiteki/auth/login_functions.dart";
+import "package:kaiteki/auth/oauth.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/onboarding/onboarding_screen.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class DebugScreen extends ConsumerStatefulWidget {
@@ -91,10 +93,10 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
   }
 
   Future<void> onRunOAuthServer() async {
-    final successPage = await generateOAuthLandingPage(
+    final successPage = await generateLandingPage(
       Theme.of(context).colorScheme,
     );
-    await runOAuthServer((u, _) => launchUrl(u), successPage);
+    await runServer((u, _) => launchUrl(u), successPage);
   }
 
   Future<void> onOpenExceptionDialog() async {

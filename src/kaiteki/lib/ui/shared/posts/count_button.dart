@@ -2,7 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:intl/intl.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/social_icon_animation.dart";
 
 class CountButton extends ConsumerWidget {
@@ -42,7 +43,6 @@ class CountButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final callback = enabled ? onTap : null;
     final color = _getColor(context);
     final count = this.count;
 
@@ -54,45 +54,50 @@ class CountButton extends ConsumerWidget {
     final showCount =
         showNumber && hasNumber && !ref.watch(hidePostMetrics).value;
 
-    final icon = _buildIcon(color);
+    final textStyle = (Theme.of(context).ktkTextTheme?.countTextStyle ??
+            DefaultKaitekiTextTheme(context).countTextStyle)
+        .copyWith(color: color);
 
-    return RawMaterialButton(
-      onPressed: callback,
-      onLongPress: onLongPress,
-      enableFeedback: enabled,
-      focusNode: focusNode,
-      constraints: BoxConstraints(
-        minWidth: (expanded && showCount) ? 88.0 : 0.0,
-        minHeight: 36.0,
-      ),
-      shape: const StadiumBorder(),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: !expanded
-            ? icon
-            : Row(
-                children: [
-                  icon,
-                  if (showCount) ...[
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: DefaultTextStyle.merge(
-                        style: Theme.of(context)
-                            .ktkTextTheme!
-                            .countTextStyle
-                            .copyWith(color: color),
-                        child: Text(
-                          shortenedCount,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                      ),
-                    ),
-                  ]
-                ],
+    var child = _buildIcon(color);
+
+    if (expanded) {
+      child = Row(
+        children: [
+          child,
+          if (showCount) ...[
+            const SizedBox(width: 8),
+            Expanded(
+              child: DefaultTextStyle.merge(
+                style: textStyle,
+                child: Text(
+                  shortenedCount,
+                  maxLines: 1,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                ),
               ),
+            ),
+          ],
+        ],
+      );
+    }
+
+    return TextButton(
+      onPressed: enabled ? onTap : null,
+      onLongPress: enabled ? onLongPress : null,
+      focusNode: focusNode,
+      style: TextButton.styleFrom(
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.all(8.0),
+        shape: const StadiumBorder(),
+        enableFeedback: enabled,
+        minimumSize: Size(
+          (expanded && showCount) ? 88.0 : 0.0,
+          40.0,
+        ),
+        visualDensity: VisualDensity.comfortable,
       ),
+      child: child,
     );
   }
 
@@ -117,11 +122,13 @@ class CountButton extends ConsumerWidget {
   }
 
   Color _getColor(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
 
-    if (!enabled || onTap == null) return colorScheme.outlineVariant;
+    if (!enabled || onTap == null) return theme.colorScheme.outlineVariant;
 
-    final inactiveColor = color ?? colorScheme.outline;
+    final defaultInactiveColor = theme.getEmphasisColor(EmphasisColor.medium);
+    final inactiveColor = color ?? defaultInactiveColor;
+
     if (active) return activeColor ?? inactiveColor;
 
     return inactiveColor;

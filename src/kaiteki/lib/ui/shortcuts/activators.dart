@@ -9,7 +9,7 @@ final propagatingTextFieldActivators = <ShortcutActivator>[
   gotoHome,
   gotoBookmarks,
   gotoNotifications,
-  gotoSettings
+  gotoSettings,
 ];
 
 const openMenu = SingleActivator(LogicalKeyboardKey.contextMenu);
@@ -52,6 +52,7 @@ final gotoBookmarks = LogicalKeySet(
   LogicalKeyboardKey.keyG,
   LogicalKeyboardKey.keyB,
 );
+const openLauncher = SingleActivator(LogicalKeyboardKey.keyK, control: true);
 const shortcutsHelp = CharacterActivator("?");
 const refresh = SingleActivator(LogicalKeyboardKey.f5);
 const refresh2 = SingleActivator(LogicalKeyboardKey.keyR, control: true);

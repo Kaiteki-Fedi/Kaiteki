@@ -1,6 +1,8 @@
+// ignore_for_file: l10n
+
 import "package:flutter/material.dart";
-import "package:kaiteki/common.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/utils.dart";
 
 class CrashScreen extends StatelessWidget {
   final TraceableError error;

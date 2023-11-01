@@ -6,7 +6,7 @@ part of 'mutes.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mutesServiceHash() => r'f9f50d1f9e4830e1d6c54a89701e3b4d18f8fce4';
+String _$mutesServiceHash() => r'da65ccfba745c9c0ba42f24404b9dcc1af207e99';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$MutesService
-    extends BuildlessAsyncNotifier<PaginationState<User<dynamic>>> {
+    extends BuildlessAsyncNotifier<PaginationState<User>> {
   late final AccountKey key;
 
-  FutureOr<PaginationState<User<dynamic>>> build(
+  FutureOr<PaginationState<User>> build(
     AccountKey key,
   );
 }
@@ -43,8 +43,7 @@ abstract class _$MutesService
 const mutesServiceProvider = MutesServiceFamily();
 
 /// See also [MutesService].
-class MutesServiceFamily
-    extends Family<AsyncValue<PaginationState<User<dynamic>>>> {
+class MutesServiceFamily extends Family<AsyncValue<PaginationState<User>>> {
   /// See also [MutesService].
   const MutesServiceFamily();
 
@@ -82,12 +81,12 @@ class MutesServiceFamily
 }
 
 /// See also [MutesService].
-class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
-    PaginationState<User<dynamic>>> {
+class MutesServiceProvider
+    extends AsyncNotifierProviderImpl<MutesService, PaginationState<User>> {
   /// See also [MutesService].
   MutesServiceProvider(
-    this.key,
-  ) : super.internal(
+    AccountKey key,
+  ) : this._internal(
           () => MutesService()..key = key,
           from: mutesServiceProvider,
           name: r'mutesServiceProvider',
@@ -98,9 +97,51 @@ class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
           dependencies: MutesServiceFamily._dependencies,
           allTransitiveDependencies:
               MutesServiceFamily._allTransitiveDependencies,
+          key: key,
         );
 
+  MutesServiceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+  }) : super.internal();
+
   final AccountKey key;
+
+  @override
+  FutureOr<PaginationState<User>> runNotifierBuild(
+    covariant MutesService notifier,
+  ) {
+    return notifier.build(
+      key,
+    );
+  }
+
+  @override
+  Override overrideWith(MutesService Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: MutesServiceProvider._internal(
+        () => create()..key = key,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+      ),
+    );
+  }
+
+  @override
+  AsyncNotifierProviderElement<MutesService, PaginationState<User>>
+      createElement() {
+    return _MutesServiceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -114,14 +155,20 @@ class MutesServiceProvider extends AsyncNotifierProviderImpl<MutesService,
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin MutesServiceRef on AsyncNotifierProviderRef<PaginationState<User>> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+}
+
+class _MutesServiceProviderElement
+    extends AsyncNotifierProviderElement<MutesService, PaginationState<User>>
+    with MutesServiceRef {
+  _MutesServiceProviderElement(super.provider);
 
   @override
-  FutureOr<PaginationState<User<dynamic>>> runNotifierBuild(
-    covariant MutesService notifier,
-  ) {
-    return notifier.build(
-      key,
-    );
-  }
+  AccountKey get key => (origin as MutesServiceProvider).key;
 }
-// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

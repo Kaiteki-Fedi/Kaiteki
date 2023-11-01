@@ -1,12 +1,31 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/mock_data.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
+import "package:kaiteki_core/model.dart";
+
+final _example = examplePost.copyWith(
+  author: examplePost.author
+      .copyWith(flags: const UserFlags(isAdministrator: true)),
+  attachments: [
+    Attachment(
+      previewUrl: Uri.parse(
+        "https://img3.gelbooru.com//samples/35/d0/sample_35d062999d7da01dba7e93899ea72a38.jpg",
+      ),
+      url: Uri.parse(
+        "https://img3.gelbooru.com/images/35/d0/35d062999d7da01dba7e93899ea72a38.jpg",
+      ),
+      type: AttachmentType.image,
+    ),
+    Attachment(
+      previewUrl: null,
+      url: Uri.parse("https://example.org"),
+    ),
+  ],
+);
 
 class PostLayoutSettingsScreen extends StatelessWidget {
   const PostLayoutSettingsScreen({super.key});
@@ -14,7 +33,7 @@ class PostLayoutSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Post layout")),
+      appBar: AppBar(title: const Text("Post appearance")),
       body: SingleChildScrollView(
         child: SettingsContainer(
           child: Column(
@@ -25,27 +44,27 @@ class PostLayoutSettingsScreen extends StatelessWidget {
                 children: [
                   Consumer(
                     builder: (context, ref, _) {
-                      return PostWidget(
-                        examplePost.copyWith(
-                          attachments: [
-                            Attachment(
-                              previewUrl: Uri.parse(
-                                "https://img3.gelbooru.com//samples/35/d0/sample_35d062999d7da01dba7e93899ea72a38.jpg",
+                      final theme = Theme.of(context);
+                      return Theme(
+                        data: ref.watch(usePostCards).value
+                            ? theme
+                            : theme.copyWith(
+                                cardTheme: CardTheme.of(context).copyWith(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    side: BorderSide(
+                                      color: theme.colorScheme.outline,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              url: Uri.parse(
-                                "https://img3.gelbooru.com/images/35/d0/35d062999d7da01dba7e93899ea72a38.jpg",
-                              ),
-                              type: AttachmentType.image,
-                            ),
-                            Attachment(
-                              previewUrl: null,
-                              url: Uri.parse("https://example.org"),
-                            ),
-                          ],
+                        child: PostWidget(
+                          _example,
+                          layout: ref.watch(useWidePostLayout).value
+                              ? PostWidgetLayout.wide
+                              : PostWidgetLayout.normal,
                         ),
-                        layout: ref.watch(useWidePostLayout).value
-                            ? PostWidgetLayout.wide
-                            : PostWidgetLayout.normal,
                       );
                     },
                   ),
@@ -60,6 +79,14 @@ class PostLayoutSettingsScreen extends StatelessWidget {
                   PreferenceSwitchListTile(
                     provider: cropAttachments,
                     title: const Text("Crop attachments"),
+                  ),
+                  PreferenceSwitchListTile(
+                    provider: usePostCards,
+                    title: const Text("Use cards"),
+                  ),
+                  PreferenceSwitchListTile(
+                    provider: showUserBadges,
+                    title: const Text("Show user badges"),
                   ),
                 ],
               ),

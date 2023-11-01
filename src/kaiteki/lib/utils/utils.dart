@@ -1,7 +1,5 @@
 import "package:http/http.dart" show Response;
 
-typedef JsonMap = Map<String, dynamic>;
-
 void checkResponse(Response response) {
   assert(
     200 <= response.statusCode && response.statusCode < 400,

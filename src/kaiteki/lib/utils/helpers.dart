@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
+import "package:kaiteki/fediverse/user_resolver.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
+import "package:url_launcher/url_launcher.dart";
 
 Future<void> resolveAndOpenUser(
   UserReference user,
@@ -14,11 +16,22 @@ Future<void> resolveAndOpenUser(
   // final lookupSnackbar = messenger.showSnackBar(
   //   SnackBar(content: Text("Looking up $handle...")),
   // );
-  final adapter = ref.read(adapterProvider);
-  user.resolve(adapter).then((user) async {
+  final future = resolveProvider(
+    ref.watch(currentAccountProvider)!.key,
+    user,
+  ).future;
+  ref.read(future).then((result) async {
     // lookupSnackbar.close();
-    if (user == null) throw Exception("User not found");
-    await context.showUser(user, ref);
+    switch (result) {
+      case null:
+        messenger.showSnackBar(
+          SnackBar(content: Text("Couldn't find $handle")),
+        );
+      case ResolvedInternalUser():
+        await context.showUser(result.user, ref);
+      case ResolvedExternalUser():
+        await launchUrl(result.url, mode: LaunchMode.externalApplication);
+    }
   }).catchError((e) {
     Logger("resolveAndOpenUser").warning("Failed to resolve handle $handle", e);
 

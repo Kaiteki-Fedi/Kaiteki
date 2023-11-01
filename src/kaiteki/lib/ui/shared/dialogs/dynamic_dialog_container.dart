@@ -68,7 +68,7 @@ class DynamicDialogContainer extends StatelessWidget {
     if (fullscreen) return constraints;
 
     const margin = 32 * 2;
-    return dialogConstraints.copyWith(
+    return kDialogConstraints.copyWith(
       maxHeight: constraints.maxHeight - margin,
     );
   }

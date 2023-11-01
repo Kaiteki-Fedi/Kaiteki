@@ -1,10 +1,9 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/shared/bottom_sheets/attachment.dart";
 import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
+import "package:kaiteki_core/social.dart";
 
 class AttachmentRow extends ConsumerStatefulWidget {
   final Post post;
@@ -52,7 +51,8 @@ class _AttachmentRowState extends ConsumerState<AttachmentRow> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        for (var attachment in widget.post.attachments!.take(4))
+                        for (final attachment
+                            in widget.post.attachments!.take(4))
                           Flexible(
                             child: InkWell(
                               onTap: () {},

@@ -1,20 +1,33 @@
-import "package:animations/animations.dart";
 import "package:collection/collection.dart";
-import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Notification;
+import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
+import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/notification_support.dart";
-import "package:kaiteki/fediverse/model/notification.dart";
+import "package:kaiteki/fediverse/services/announcements.dart";
+import "package:kaiteki/fediverse/services/follow_requests.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/kaiteki/colors.dart";
-import "package:kaiteki/ui/animation_functions.dart" as animations;
-import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/model/pagination_state.dart";
+import "package:kaiteki/ui/notification_widget.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
-import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
+import "package:sliver_tools/sliver_tools.dart";
+
+part "notifications.g.dart";
+
+@Riverpod(dependencies: [adapter])
+bool _announcementsSupported(_AnnouncementsSupportedRef ref) {
+  return ref.watch(adapterProvider) is AnnouncementsSupport;
+}
+
+@Riverpod(dependencies: [adapter])
+bool _followingSupported(_AnnouncementsSupportedRef ref) {
+  return ref.watch(adapterProvider) is FollowSupport;
+}
 
 class NotificationsPage extends ConsumerStatefulWidget {
   const NotificationsPage({super.key});
@@ -24,9 +37,48 @@ class NotificationsPage extends ConsumerStatefulWidget {
 }
 
 class _NotificationsPageState extends ConsumerState<NotificationsPage> {
+  late final _controller =
+      PagingController<String?, Notification>(firstPageKey: null);
+  ProviderSubscription<AsyncValue<PaginationState<Notification>>>?
+      _notifications;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addPageRequestListener((pageKey) async {
+      final key = ref.read(currentAccountProvider)!.key;
+      final provider = notificationServiceProvider(key);
+      await ref.read(provider.notifier).loadMore();
+    });
+
+    ref.listenManual(
+      currentAccountProvider,
+      (previous, next) {
+        final provider = NotificationServiceProvider(next!.key);
+
+        _notifications?.close();
+        _notifications = ref.listenManual(
+          provider,
+          (_, e) => _controller.value = e.getPagingState(
+            "",
+            intercept: (e) {
+              var notifications = e;
+              notifications = enhanceNotificationTypes(notifications);
+              notifications = groupNotifications(notifications);
+              return notifications;
+            },
+          ),
+          fireImmediately: true,
+        );
+      },
+      fireImmediately: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final account = ref.watch(accountProvider);
+    final account = ref.watch(currentAccountProvider);
 
     if (account == null) return IconLandingWidget.notSignedIn();
 
@@ -42,83 +94,69 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 
     final notifications = notificationServiceProvider(account.key);
 
-    return DefaultTabController(
-      length: 2,
-      initialIndex: _getInitialIndex(ref),
-      child: NestedScrollView(
-        floatHeaderSlivers: true,
-        dragStartBehavior: DragStartBehavior.down,
-        headerSliverBuilder: (context, _) => [
-          const SliverToBoxAdapter(
-            child: Column(
-              children: [
-                TabBar(
-                  isScrollable: true,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  // TODO(Craftplacer): Localize
-                  tabs: [
-                    Tab(text: "Unread"),
-                    Tab(text: "Read"),
-                  ],
+    return RefreshIndicator(
+      onRefresh: () async => await ref.refresh(notifications),
+      child: CustomScrollView(
+        slivers: [
+          SliverCrossAxisConstrained(
+            maxCrossAxisExtent: 600,
+            child: SliverMainAxisGroup(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                    child: _SecondaryNotificationBar(),
+                  ),
                 ),
-                Divider(height: 1),
+                SliverPadding(
+                  padding: const EdgeInsets.all(8.0),
+                  sliver: PagedSliverList<String?, Notification>.separated(
+                    pagingController: _controller,
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    builderDelegate: PagedChildBuilderDelegate(
+                      itemBuilder: (context, notification, i) {
+                        return Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: NotificationWidget(notification),
+                        );
+                      },
+                      firstPageErrorIndicatorBuilder: (_) {
+                        return Center(
+                          child: ErrorLandingWidget(
+                            _controller.error as TraceableError,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ],
-        body: RefreshIndicator(
-          onRefresh: () => ref.read(notifications.notifier).refresh(),
-          child: PageTransitionSwitcher(
-            transitionBuilder: animations.fadeThrough,
-            child: ref.watch(notifications).when(
-                  data: (data) => _buildBody(
-                    groupNotifications(data),
-                    ref.read(notifications.notifier),
-                  ),
-                  error: (e, s) => Center(child: ErrorLandingWidget((e, s))),
-                  loading: () => centeredCircularProgressIndicator,
-                ),
-          ),
-        ),
       ),
     );
   }
 
-  int _getInitialIndex(WidgetRef ref) {
-    if (ref.read(showReadNotifications).value) {
-      final account = ref.read(accountProvider);
-      if (account != null) {
-        final notifications =
-            ref.read(notificationServiceProvider(account.key)).valueOrNull;
-        if (notifications != null &&
-            !notifications.any((e) => e.unread ?? true)) {
-          return 1;
-        }
-      }
-    }
-
-    return 0;
-  }
-
   List<Notification> groupNotifications(List<Notification> ungrouped) {
     final groups = ungrouped.groupBy((e) {
-      String? followRequestValue;
-
-      if (e.type == NotificationType.followRequest) {
-        followRequestValue = e.user?.id;
+      switch (e.type) {
+        case NotificationType.incomingFollowRequest:
+        case NotificationType.outgoingFollowRequestAccepted:
+          return (e.type, e.user?.id);
+        case NotificationType.mentioned:
+        case NotificationType.replied:
+          return (e.type, e.post?.threadId ?? e.post?.id);
+        default:
+          return (e.type, e.post?.id);
       }
-
-      return (
-        e.type,
-        e.post?.id,
-        followRequestValue,
-      );
     });
+
     return groups.entries
         .map((kv) {
           final notifications = kv.value;
 
-          if (notifications.length <= 2) return kv.value.toList();
+          if (notifications.length < 2) return kv.value.toList();
 
           return [GroupedNotification(notifications.toList())];
         })
@@ -126,345 +164,172 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         .toList();
   }
 
-  Widget _buildBody(List<Notification> data, NotificationService service) {
-    final unread = data.where((n) => n.unread != false);
-    final unreadLength = unread.length;
-
-    final read = data.where((n) => n.unread == false);
-    final readLength = read.length;
-
-    return Column(
-      children: [
-        Expanded(
-          child: Material(
-            child: TabBarView(
-              children: [
-                if (unreadLength < 1)
-                  const Center(
-                    child: IconLandingWidget(
-                      icon: Icon(Icons.notifications_active_rounded),
-                      text: Text("New notifications will appear here"),
-                    ),
-                  )
-                else
-                  Stack(
-                    children: [
-                      _buildList(unread, true),
-                      Positioned(
-                        bottom: kFloatingActionButtonMargin,
-                        left: kFloatingActionButtonMargin,
-                        right: kFloatingActionButtonMargin,
-                        child: Align(
-                          child: FloatingActionButton.extended(
-                            onPressed: () {
-                              final messenger = ScaffoldMessenger.of(context);
-                              service
-                                  .markAllAsRead()
-                                  .onError<Object>((error, stackTrace) {
-                                messenger.showSnackBar(
-                                  SnackBar(
-                                    content: const Text(
-                                      "Failed to mark notification as read",
-                                    ),
-                                    action: SnackBarAction(
-                                      label: "Show details",
-                                      onPressed: () {
-                                        context.showExceptionDialog(
-                                          (error, stackTrace),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                );
-                              });
-                            },
-                            label: const Text("Mark all as read"),
-                            icon: const Icon(Icons.done_all_rounded),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                if (readLength < 1)
-                  const Center(
-                    child: IconLandingWidget(
-                      icon: Icon(Icons.notifications_none_rounded),
-                      text: Text("Read notifications will appear here"),
-                    ),
-                  )
-                else
-                  _buildList(read),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+  List<Notification> enhanceNotificationTypes(
+    List<Notification> notifications,
+  ) {
+    final ourId = ref.read(currentAccountProvider)!.user.id;
+    return notifications.map((e) {
+      if (e.type == NotificationType.mentioned &&
+          e.post?.replyToUser?.id == ourId) {
+        return e.copyWith(type: NotificationType.replied);
+      }
+      return e;
+    }).toList();
   }
+}
 
-  Widget _buildList(Iterable<Notification> data, [bool addFABPadding = false]) {
-    // TODO(Craftplacer): Make notifications infinitely scrollable
-    return ListView.separated(
-      itemBuilder: (context, i) => NotificationWidget(data.elementAt(i)),
-      separatorBuilder: (context, _) => const Divider(height: 2),
-      itemCount: data.length,
-      padding: addFABPadding
-          ? const EdgeInsets.only(bottom: kFloatingActionButtonMargin * 2 + 56)
-          : null,
+class _SecondaryNotificationBar extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
+
+    final isAnnouncementsSupported = ref.watch(_announcementsSupportedProvider);
+    final isFollowingSupported = ref.watch(_followingSupportedProvider);
+
+    final buttons = <Widget>[
+      if (isAnnouncementsSupported)
+        Expanded(
+          flex: isCompact ? 1 : 0,
+          child: _AnnouncementsButton(isCompact: isCompact),
+        ),
+      if (isFollowingSupported)
+        Expanded(
+          flex: isCompact ? 1 : 0,
+          child: _FollowRequestsButton(expand: isCompact),
+        ),
+    ];
+
+    if (buttons.isEmpty) return const SizedBox.shrink();
+
+    const divider = SizedBox(
+      height: 24,
+      child: VerticalDivider(width: 8 + 8 + 1),
+    );
+
+    return Row(
+      children: buttons.intersperse(divider).toList(),
     );
   }
 }
 
-class NotificationWidget extends ConsumerWidget {
-  final Notification notification;
+class _AnnouncementsButton extends ConsumerWidget {
+  const _AnnouncementsButton({required this.isCompact});
 
-  const NotificationWidget(this.notification, {super.key});
+  final bool isCompact;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final inheritedTextStyle = DefaultTextStyle.of(context).style;
-    final color = _getColor(context);
-    final icon = _getNotificationIcon(notification.type);
-    final post = notification.post;
-    final user = notification.user;
-    return InkWell(
-      onTap: () => _onTap(context, ref),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                if (user != null)
-                  AvatarWidget(user, size: 40)
-                else
-                  const SizedBox(width: 40),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.background,
-                        width: 2,
-                        strokeAlign: BorderSide.strokeAlignOutside,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Icon(
-                        icon ?? Icons.notifications_rounded,
-                        size: 12,
-                        color: ThemeData.estimateBrightnessForColor(color)
-                            .inverted
-                            .getColor(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text.rich(
-                          TextSpan(
-                            children: [
-                              if (user != null)
-                                TextSpan(
-                                  children: [
-                                    user.renderDisplayName(context, ref),
-                                    if (notification is GroupedNotification)
-                                      TextSpan(
-                                        text:
-                                            " and ${(notification as GroupedNotification).notifications.length - 1} others",
-                                      ),
-                                  ],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              TextSpan(
-                                text: _getTitle(context, notification.type),
-                              ),
-                            ],
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Tooltip(
-                        message: notification.createdAt.toString(),
-                        child: Text(
-                          DateTime.now()
-                              .difference(notification.createdAt)
-                              .toStringHuman(context: context),
-                          style: TextStyle(
-                            color: Theme.of(context).disabledColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 3),
-                  if (post != null && post.content != null)
-                    Text.rich(
-                      post.renderContent(context, ref),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: inheritedTextStyle.copyWith(
-                        color: inheritedTextStyle.color?.withOpacity(.5),
-                      ),
-                    ),
-                  // if (notification.type == NotificationType.followRequest)
-                  //   Row(
-                  //     children: [
-                  //       OutlinedButton.icon(
-                  //         onPressed: null,
-                  //         icon: const Icon(Icons.check_rounded),
-                  //         label: const Text("Accept"),
-                  //       ),
-                  //       const SizedBox(width: 6),
-                  //       TextButton.icon(
-                  //         onPressed: null,
-                  //         icon: const Icon(Icons.close_rounded),
-                  //         label: const Text("Reject"),
-                  //       ),
-                  //     ],
-                  //   ),
-                ],
-              ),
-            ),
+    final unreadCount = ref.watch(_unreadAnnouncementCountProvider).valueOrNull;
+    return TextButton(
+      onPressed: () {
+        context.pushNamed(
+          "announcements",
+          pathParameters: ref.accountRouterParams,
+        );
+      },
+      style: TextButton.styleFrom(
+        minimumSize: const Size(0, 48),
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
+        ),
+        visualDensity: VisualDensity.standard,
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.campaign_rounded),
+          const SizedBox(width: 8),
+          Expanded(
+            flex: isCompact ? 1 : 0,
+            child: const Text("Announcements"),
+          ),
+          if (unreadCount != null && unreadCount > 0) ...[
+            const SizedBox(width: 8),
+            Badge(label: Text(unreadCount.toString())),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+@Riverpod(
+  keepAlive: true,
+  dependencies: [currentAccount, FollowRequestsService],
+)
+Future<(int count, bool hasMore)?> _followRequestCount(
+  _FollowRequestCountRef ref,
+) async {
+  final key = ref.watch(currentAccountProvider)!.key;
+  final service = ref.watch(followRequestsServiceProvider(key));
+  final value = service.valueOrNull;
+  if (value == null) return null;
+  return (value.items.length, value.canPaginateFurther);
+}
+
+@Riverpod(
+  keepAlive: true,
+  dependencies: [currentAccount, AnnouncementsService],
+)
+Future<int> _unreadAnnouncementCount(
+  _UnreadAnnouncementCountRef ref,
+) async {
+  final key = ref.watch(currentAccountProvider)!.key;
+  final service = ref.watch(announcementsServiceProvider(key));
+  final value = service.valueOrNull;
+  if (value == null) return 0;
+  return value.where((e) => e.isUnread == true).length;
+}
+
+class _FollowRequestsButton extends ConsumerWidget {
+  // I'm kinda perplexed why there isn't a way to make one widget fill the
+  // available space only if the space is constrained.
+  final bool expand;
+
+  const _FollowRequestsButton({this.expand = false});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final badgeText = getText(ref);
+    return TextButton(
+      onPressed: () {
+        context.pushNamed(
+          "follow-requests",
+          pathParameters: ref.accountRouterParams,
+        );
+      },
+      style: TextButton.styleFrom(
+        minimumSize: const Size(0, 48),
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
         ),
+        visualDensity: VisualDensity.standard,
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.person_add_rounded),
+          const SizedBox(width: 8),
+          Expanded(
+            flex: expand ? 1 : 0,
+            child: const Text("Follow Requests"),
+          ),
+          if (badgeText != null) ...[
+            const SizedBox(width: 8),
+            Badge(label: Text(badgeText)),
+          ],
+        ],
       ),
     );
   }
 
-  IconData? _getNotificationIcon(NotificationType type) {
-    return switch (type) {
-      NotificationType.liked => Icons.star_rounded,
-      NotificationType.repeated => Icons.repeat_rounded,
-      NotificationType.mentioned => Icons.alternate_email_rounded,
-      NotificationType.followed => Icons.person_add_rounded,
-      NotificationType.followRequest => Icons.person_outline_rounded,
-      NotificationType.reacted => Icons.emoji_emotions_rounded,
-      NotificationType.groupInvite => Icons.group_add_rounded,
-      NotificationType.pollEnded => Icons.poll_rounded,
-      NotificationType.quoted => Icons.format_quote_rounded,
-      NotificationType.replied => Icons.reply_rounded,
-      NotificationType.updated => Icons.edit_rounded,
-      NotificationType.reported => Icons.report_rounded,
-      NotificationType.signedUp => Icons.person_add_rounded,
-      NotificationType.newPost => Icons.post_add_rounded,
-      NotificationType.userMigrated => Icons.swap_horiz_rounded,
-      NotificationType.unsupported => Icons.question_mark
-    };
-  }
-
-  Color _getColor(BuildContext context) {
-    final theme = Theme.of(context);
-    final ktkColors = theme.ktkColors;
-    final colorScheme = theme.colorScheme;
-
-    switch (notification.type) {
-      case NotificationType.liked:
-        return ktkColors!.favoriteColor;
-
-      case NotificationType.repeated:
-        return ktkColors!.repeatColor;
-
-      case NotificationType.reported:
-        return colorScheme.error;
-
-      case NotificationType.reacted:
-      case NotificationType.updated:
-      case NotificationType.newPost:
-        return colorScheme.secondary;
-
-      case NotificationType.quoted:
-      case NotificationType.replied:
-      case NotificationType.mentioned:
-      case NotificationType.pollEnded:
-        return colorScheme.primary;
-
-      case NotificationType.followed:
-      case NotificationType.followRequest:
-      case NotificationType.groupInvite:
-      case NotificationType.signedUp:
-      case NotificationType.userMigrated:
-        return colorScheme.tertiary;
-
-      case NotificationType.unsupported:
-        return colorScheme.outline;
-    }
-  }
-
-  String _getTitle(BuildContext context, NotificationType type) {
-    return switch (type) {
-      NotificationType.liked => " favorited your post",
-      NotificationType.repeated => " repeated your post",
-      NotificationType.reacted => " reacted to your post",
-      NotificationType.followed => " followed you",
-      NotificationType.mentioned => " mentioned you",
-      NotificationType.followRequest => " wants to follow you",
-      NotificationType.groupInvite => " invited you to a group",
-      NotificationType.pollEnded => "'s poll has ended",
-      NotificationType.quoted => " quoted you",
-      NotificationType.replied => " replied to you",
-      NotificationType.updated => " updated their post",
-      NotificationType.reported => "New report",
-      NotificationType.signedUp => " has joined the instance",
-      NotificationType.newPost => " made a new post",
-      NotificationType.userMigrated => " migrated to a new account",
-      NotificationType.unsupported => "Unsupported notification"
-    };
-  }
-
-  void _onTap(BuildContext context, WidgetRef ref) {
-    if (notification.post != null) {
-      final accountKey = ref.read(accountProvider)!.key;
-      context.pushNamed(
-        "post",
-        extra: notification.post,
-        pathParameters: {
-          ...accountKey.routerParams,
-          "id": notification.post!.id,
-        },
-      );
-      return;
-    }
-
-    if (notification.user != null) {
-      final accountKey = ref.read(accountProvider)!.key;
-      context.pushNamed(
-        "user",
-        extra: notification.user,
-        pathParameters: {
-          ...accountKey.routerParams,
-          "id": notification.user!.id,
-        },
-      );
-      return;
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          "This notification doesn't have a post or user attached to it.",
-        ),
-      ),
-    );
+  String? getText(WidgetRef ref) {
+    final state = ref.watch(_followRequestCountProvider).valueOrNull;
+    if (state == null || state.$1 <= 0) return null;
+    final buffer = StringBuffer(state.$1.toString());
+    if (state.$2) buffer.write("+");
+    return buffer.toString();
   }
 }

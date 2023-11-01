@@ -4,11 +4,11 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter/material.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/fediverse/services/mutes.dart";
 import "package:kaiteki/model/pagination_state.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class MutesScreen extends ConsumerStatefulWidget {
   const MutesScreen({super.key});
@@ -24,7 +24,7 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
   void initState() {
     super.initState();
 
-    final accountKey = ref.read(accountProvider)!.key;
+    final accountKey = ref.read(currentAccountProvider)!.key;
     final mutesService = mutesServiceProvider(accountKey);
 
     // FIXME(Craftplacer): MutesScreen isn't listening for changes
@@ -77,7 +77,7 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
               trailing: [
                 FilledButton.tonal(
                   onPressed: () async {
-                    final account = ref.read(accountProvider)!;
+                    final account = ref.read(currentAccountProvider)!;
                     final mutesProvider = mutesServiceProvider(account.key);
                     await ref.read(mutesProvider.notifier).unmute(item.id);
                   },
@@ -112,8 +112,8 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
     showDialog(
       context: context,
       builder: (_) {
-        return WillPopScope(
-          onWillPop: () async => false,
+        return PopScope(
+          canPop: false,
           child: Dialog(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -139,7 +139,7 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
       barrierDismissible: false,
     );
 
-    final account = ref.read(accountProvider)!;
+    final account = ref.read(currentAccountProvider)!;
     final mutesProvider = mutesServiceProvider(account.key);
 
     try {

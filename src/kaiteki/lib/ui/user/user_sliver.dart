@@ -1,13 +1,12 @@
 import "package:flutter/material.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/model/model.dart";
-import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
 import "package:kaiteki/ui/shared/users/user_card.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class UserSliver extends ConsumerStatefulWidget {
   final bool wide;
@@ -18,15 +17,13 @@ class UserSliver extends ConsumerStatefulWidget {
     super.key,
     this.wide = false,
     required this.userId,
-    this.showFollowing = false,
-  });
+  }) : showFollowing = false;
 
   const UserSliver.following({
     super.key,
     this.wide = false,
     required this.userId,
-    this.showFollowing = true,
-  });
+  }) : showFollowing = true;
 
   @override
   ConsumerState createState() => UserSliverState();
@@ -40,7 +37,7 @@ class UserSliverState extends ConsumerState<UserSliver> {
   late ProviderSubscription<BackendAdapter> _subscription;
 
   Future<PaginatedList<String?, User>> Function(String?) get _source {
-    final adapter = _subscription.read();
+    final adapter = _subscription.read() as FollowSupport;
 
     if (widget.showFollowing) {
       return (id) => adapter.getFollowing(widget.userId, untilId: id);

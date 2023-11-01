@@ -7,7 +7,7 @@ part of 'notifications.dart';
 // **************************************************************************
 
 String _$notificationServiceHash() =>
-    r'7c1059c06e5a9217672d2d31d3dcca09c884059a';
+    r'de2a2f7c2575a747f8446b1a7a38b587c391e1be';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$NotificationService
-    extends BuildlessAsyncNotifier<List<Notification>> {
+    extends BuildlessAsyncNotifier<PaginationState<Notification>> {
   late final AccountKey key;
 
-  FutureOr<List<Notification>> build(
+  FutureOr<PaginationState<Notification>> build(
     AccountKey key,
   );
 }
@@ -44,7 +44,8 @@ abstract class _$NotificationService
 const notificationServiceProvider = NotificationServiceFamily();
 
 /// See also [NotificationService].
-class NotificationServiceFamily extends Family<AsyncValue<List<Notification>>> {
+class NotificationServiceFamily
+    extends Family<AsyncValue<PaginationState<Notification>>> {
   /// See also [NotificationService].
   const NotificationServiceFamily();
 
@@ -82,12 +83,12 @@ class NotificationServiceFamily extends Family<AsyncValue<List<Notification>>> {
 }
 
 /// See also [NotificationService].
-class NotificationServiceProvider
-    extends AsyncNotifierProviderImpl<NotificationService, List<Notification>> {
+class NotificationServiceProvider extends AsyncNotifierProviderImpl<
+    NotificationService, PaginationState<Notification>> {
   /// See also [NotificationService].
   NotificationServiceProvider(
-    this.key,
-  ) : super.internal(
+    AccountKey key,
+  ) : this._internal(
           () => NotificationService()..key = key,
           from: notificationServiceProvider,
           name: r'notificationServiceProvider',
@@ -98,9 +99,51 @@ class NotificationServiceProvider
           dependencies: NotificationServiceFamily._dependencies,
           allTransitiveDependencies:
               NotificationServiceFamily._allTransitiveDependencies,
+          key: key,
         );
 
+  NotificationServiceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+  }) : super.internal();
+
   final AccountKey key;
+
+  @override
+  FutureOr<PaginationState<Notification>> runNotifierBuild(
+    covariant NotificationService notifier,
+  ) {
+    return notifier.build(
+      key,
+    );
+  }
+
+  @override
+  Override overrideWith(NotificationService Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: NotificationServiceProvider._internal(
+        () => create()..key = key,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+      ),
+    );
+  }
+
+  @override
+  AsyncNotifierProviderElement<NotificationService,
+      PaginationState<Notification>> createElement() {
+    return _NotificationServiceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -114,14 +157,21 @@ class NotificationServiceProvider
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin NotificationServiceRef
+    on AsyncNotifierProviderRef<PaginationState<Notification>> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+}
+
+class _NotificationServiceProviderElement extends AsyncNotifierProviderElement<
+    NotificationService,
+    PaginationState<Notification>> with NotificationServiceRef {
+  _NotificationServiceProviderElement(super.provider);
 
   @override
-  FutureOr<List<Notification>> runNotifierBuild(
-    covariant NotificationService notifier,
-  ) {
-    return notifier.build(
-      key,
-    );
-  }
+  AccountKey get key => (origin as NotificationServiceProvider).key;
 }
-// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

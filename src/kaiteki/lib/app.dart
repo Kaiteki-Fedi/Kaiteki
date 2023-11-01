@@ -1,13 +1,15 @@
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/theme_preferences.dart" as preferences;
 import "package:kaiteki/routing/router.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/theming/default/themes.dart";
+import "package:kaiteki/theming/themes.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
 
 class KaitekiApp extends ConsumerWidget {
@@ -24,90 +26,78 @@ class KaitekiApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(preferences.themeMode).value;
-    final router = ref.watch(routerProvider);
-    final locale = ref.watch(preferences.locale).value;
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         final darkTheme =
-            _buildTheme(context, ref, Brightness.dark, darkDynamic);
+            buildTheme(context, ref, Brightness.dark, darkDynamic);
         final lightTheme =
-            _buildTheme(context, ref, Brightness.light, lightDynamic);
+            buildTheme(context, ref, Brightness.light, lightDynamic);
 
-        return MaterialApp.router(
-          darkTheme: darkTheme,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          routerConfig: router,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: _createLocale(locale),
-          theme: lightTheme,
-          themeMode: themeMode,
-          title: consts.appName,
-          shortcuts: shortcuts,
+        return ProviderScope(
+          overrides: [
+            systemColorSchemeProvider.overrideWithValue(
+              darkDynamic == null || lightDynamic == null
+                  ? null
+                  : (dark: darkDynamic, light: lightDynamic),
+            ),
+          ],
+          child: MaterialApp.router(
+            darkTheme: darkTheme,
+            localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
+            routerConfig: ref.watch(routerProvider),
+            supportedLocales: KaitekiLocalizations.supportedLocales,
+            locale: ref.watch(preferences.locale).value,
+            theme: lightTheme,
+            themeMode: themeMode,
+            title: consts.kAppName,
+            shortcuts: shortcuts,
+          ),
         );
       },
     );
   }
 
-  ThemeData _buildTheme(
+  static ThemeData buildTheme(
     BuildContext context,
     WidgetRef ref,
     Brightness brightness,
     ColorScheme? systemColorScheme,
   ) {
-    ColorScheme? colorScheme;
     final useMaterial3 = ref.watch(preferences.useMaterial3).value;
-    final useSystemColorScheme =
-        ref.watch(preferences.useSystemColorScheme).value;
+    final appTheme = ref.watch(preferences.theme).value;
 
-    if (useSystemColorScheme) colorScheme = systemColorScheme;
+    ColorScheme colorScheme;
 
-    colorScheme ??= getColorScheme(brightness, useMaterial3);
-
-    final avatarCornerRadius = ref.watch(preferences.avatarCornerRadius).value;
-    ShapeBorder avatarShape;
-
-    if (avatarCornerRadius <= 0) {
-      avatarShape = const Border();
-    } else if (avatarCornerRadius >= double.infinity) {
-      avatarShape = const CircleBorder();
+    if (appTheme != null) {
+      colorScheme = appTheme.getColorScheme(brightness);
     } else {
-      avatarShape = RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(avatarCornerRadius),
+      colorScheme =
+          systemColorScheme ?? AppTheme.affection.getColorScheme(brightness);
+    }
+
+    if (!useMaterial3) {
+      // As per https://m1.material.io/style/color.html#color-themes
+      // and https://m2.material.io/design/color/dark-theme.html
+      const darkThemeSurfaceColor = Color(0xFF121212);
+      colorScheme = colorScheme.copyWith(
+        background: brightness == Brightness.light
+            ? Colors.grey.shade50
+            : darkThemeSurfaceColor,
+        surface: brightness == Brightness.light
+            ? Colors.white
+            : darkThemeSurfaceColor,
       );
     }
 
-    final theme =
-        ThemeData.from(colorScheme: colorScheme, useMaterial3: useMaterial3)
-            .applyDefaultTweaks(
-              useNaturalBadgeColors:
-                  ref.watch(preferences.useNaturalBadgeColors).value,
-            )
-            .addKaitekiExtensions(
-              squareEmoji: ref.watch(preferences.squareEmojis).value,
-              avatarShape: avatarShape,
-            )
-            .applyKaitekiTweaks();
-
-    // ignore: join_return_with_assignment
-    // theme = theme.copyWith(
-    //   snackBarTheme: MediaQuery.of(context).size.width >= 600
-    //       ? theme.snackBarTheme.copyWith(
-    //           width: 200,
-    //           behavior: SnackBarBehavior.floating,
-    //         )
-    //       : null,
-    // );
-
-    return theme;
-  }
-
-  Locale? _createLocale(String? locale) {
-    if (locale == null) return null;
-    final split = locale.split("-");
-    return Locale.fromSubtags(
-      languageCode: split[0],
-      scriptCode: split.length == 2 ? split[1] : null,
+    final theme = ThemeData.from(
+      colorScheme: colorScheme,
+      useMaterial3: useMaterial3,
     );
+
+    return theme
+        .applyDefaultTweaks()
+        .applyKaitekiTweaks()
+        .applyUserPreferences(ref);
   }
 }

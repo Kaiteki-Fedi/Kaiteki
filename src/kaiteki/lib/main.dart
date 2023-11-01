@@ -1,102 +1,121 @@
 import "dart:async";
-import "dart:io";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:hive_flutter/hive_flutter.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/app.dart";
-import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/hive.dart" as hive;
+import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/model/auth/account_key.dart";
-import "package:kaiteki/model/auth/secret.dart";
-import "package:kaiteki/repositories/hive_repository.dart";
+import "package:kaiteki/model/startup_state.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:kaiteki/ui/shared/crash_screen.dart";
+import "package:kaiteki/ui/splash_screen.dart";
+import "package:kaiteki_core/http.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:logging/logging.dart";
-import "package:path/path.dart" as p;
-import "package:path_provider/path_provider.dart";
 import "package:shared_preferences/shared_preferences.dart";
+
+late final ProviderSubscription? _accountManagerSubscription;
+late final ProviderContainer _container;
 
 /// Main entrypoint.
 Future<void> main() async {
-  Logger.root.level = kDebugMode ? Level.ALL : Level.INFO;
-
-  final Widget app;
+  Logger.root.level = kDebugMode ? Level.FINEST : Level.INFO;
+  if (kIsWeb) KaitekiClient.userAgent = null;
 
   try {
+    // initialize
     WidgetsFlutterBinding.ensureInitialized();
+    final sharedPreferences = await SharedPreferences.getInstance();
+    final startup = _startup(sharedPreferences).asBroadcastStream();
 
-    // initialize hive & account manager
-    await initializeHive();
-    final accountManager = await getAccountManager();
+    // show splash screen with startup state
+    runApp(
+      MaterialApp(
+        home: SplashScreen(stream: startup),
+        theme: makeDefaultTheme(Brightness.light, true),
+        darkTheme: makeDefaultTheme(Brightness.dark, true),
+      ),
+    );
 
-    // Initialize shared preferences
-    final sharedPrefs = await SharedPreferences.getInstance();
+    // wait for startup to finish
+    await startup.last;
+
+    // save last used account
+    _accountManagerSubscription = _container.listen(
+      accountManagerProvider,
+      (_, next) => _container.read(lastUsedAccount).value = next.current?.key,
+    );
 
     // construct app & run
-    app = ProviderScope(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(sharedPrefs),
-        accountManagerProvider.overrideWith((_) => accountManager),
-      ],
-      child: const KaitekiApp(),
+    runApp(
+      ProviderScope(
+        parent: _container,
+        child: const KaitekiApp(),
+      ),
     );
   } catch (e, s) {
     handleFatalError((e, s));
-    return;
+  }
+}
+
+Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
+  // initialize hive
+  yield const StartupLoadingDatabase();
+  hive.registerAdapters();
+  if (!kIsWeb) {
+    try {
+      await hive.migrateBoxes();
+    } catch (e, s) {
+      Logger.root.shout("Failed to migrate hive boxes", e, s);
+    }
+  }
+  await hive.initialize();
+
+  // load repositories
+  yield const StartupLoadingAccounts();
+  final accountRepository = await hive.getAccountRepository();
+  final clientRepository = await hive.getClientRepository();
+
+  _container = ProviderContainer(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      accountSecretRepositoryProvider.overrideWithValue(accountRepository),
+      clientSecretRepositoryProvider.overrideWithValue(clientRepository),
+    ],
+  );
+
+  AccountKey? lastAccount;
+  final priorityAccount = _container.read(lastUsedAccount).value;
+  final accountManager = _container.read(accountManagerProvider.notifier);
+
+  final sessions = accountManager
+      .restoreSessions(priorityAccount: priorityAccount)
+      .asBroadcastStream();
+
+  await for (final account in sessions) {
+    yield StartupSignIn(account);
+
+    if (priorityAccount == null || lastAccount == priorityAccount) break;
+
+    lastAccount = account;
   }
 
-  runApp(app);
+  sessions.last; // force sessions to continue restoring
+
+  yield const StartupStarting();
 }
 
 void handleFatalError(TraceableError error) {
   final crashScreen = MaterialApp(
-    theme: getDefaultTheme(Brightness.light, true),
-    darkTheme: getDefaultTheme(Brightness.dark, true),
+    theme: makeDefaultTheme(Brightness.light, true),
+    darkTheme: makeDefaultTheme(Brightness.dark, true),
+    localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
+    supportedLocales: KaitekiLocalizations.supportedLocales,
     home: CrashScreen(error),
   );
   runApp(crashScreen);
-}
-
-Future<void> initializeHive() async {
-  if (Platform.isLinux && Platform.environment["FLATPAK_ID"] != null) {
-    final directory = await getApplicationSupportDirectory();
-    final path = p.join(directory.path, "kaiteki");
-
-    Hive.init(path);
-  } else {
-    await Hive.initFlutter();
-  }
-
-  Hive
-    ..registerAdapter(AccountKeyAdapter())
-    ..registerAdapter(ClientSecretAdapter())
-    ..registerAdapter(AccountSecretAdapter());
-}
-
-/// Initializes the account manager.
-Future<AccountManager> getAccountManager() async {
-  AccountKey fromHive(dynamic k) => AccountKey.fromUri(k as String);
-  String toHive(AccountKey k) => k.toUri().toString();
-
-  final accountBox = await Hive.openBox<AccountSecret>("accountSecrets");
-  final accountRepository = HiveRepository<AccountSecret, AccountKey>(
-    accountBox,
-    fromHive,
-    toHive,
-    true,
-  );
-
-  final clientBox = await Hive.openBox<ClientSecret>("clientSecrets");
-  final clientRepository = HiveRepository<ClientSecret, AccountKey>(
-    clientBox,
-    fromHive,
-    toHive,
-    true,
-  );
-
-  final manager = AccountManager(accountRepository, clientRepository);
-  await manager.restoreSessions();
-  return manager;
 }

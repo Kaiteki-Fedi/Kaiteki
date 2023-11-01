@@ -1,19 +1,20 @@
 import "package:collection/collection.dart";
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart" hide Element;
+import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/fediverse/user_resolver.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/text/unblur_on_hover.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:url_launcher/url_launcher.dart";
 
 List<Element> parseText(
@@ -62,6 +63,7 @@ class TextRenderer {
   final KaitekiTextTheme? textTheme;
   final Function(UserReference reference)? onUserClick;
   final Function(Uri uri)? onLinkClick;
+  final Function(String hashtag)? onHashtagClick;
   final TextContext? context;
 
   const TextRenderer({
@@ -69,6 +71,7 @@ class TextRenderer {
     this.textTheme,
     this.onUserClick,
     this.onLinkClick,
+    this.onHashtagClick,
     this.context,
   });
 
@@ -77,12 +80,29 @@ class TextRenderer {
     WidgetRef ref, [
     TextContext? textContext,
   ]) {
+    final textTheme =
+        Theme.of(context).ktkTextTheme ?? DefaultKaitekiTextTheme(context);
     return TextRenderer(
       textStyle: DefaultTextStyle.of(context).style,
-      textTheme: Theme.of(context).ktkTextTheme,
+      textTheme: ref.watch(underlineLinks).value
+          ? textTheme.copyWith(
+              linkTextStyle: textTheme.linkTextStyle
+                  ?.copyWith(decoration: TextDecoration.underline),
+              mentionTextStyle: textTheme.mentionTextStyle
+                  ?.copyWith(decoration: TextDecoration.underline),
+              hashtagTextStyle: textTheme.hashtagTextStyle
+                  ?.copyWith(decoration: TextDecoration.underline),
+            )
+          : textTheme,
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       onLinkClick: (url) async {
         await launchUrl(url, mode: LaunchMode.externalApplication);
+      },
+      onHashtagClick: (hashtag) {
+        context.pushNamed(
+          "hashtag",
+          pathParameters: {...ref.accountRouterParams, "hashtag": hashtag},
+        );
       },
       context: textContext,
     );
@@ -130,24 +150,40 @@ class TextRenderer {
   }
 
   TextSpan renderHashtag(HashtagElement hashtag) {
+    final onClick = onHashtagClick;
+
+    if (onClick == null) return TextSpan(text: "#${hashtag.name}");
+
     final textStyle = textTheme?.linkTextStyle;
     final color = textStyle?.color?.withOpacity(.65);
+    final recognizer = TapGestureRecognizer()
+      ..onTap = () => onClick(hashtag.name);
     return TextSpan(
       children: [
-        TextSpan(text: "#", style: TextStyle(color: color)),
-        TextSpan(text: hashtag.name),
+        TextSpan(
+          text: "#",
+          style: TextStyle(color: color),
+          recognizer: recognizer,
+        ),
+        TextSpan(
+          text: hashtag.name,
+          recognizer: recognizer,
+        ),
       ],
       style: textStyle,
+      recognizer: recognizer,
     );
   }
 
   TextSpan renderLink(LinkElement link) {
+    final onClick = onLinkClick;
+
+    if (onClick == null) return TextSpan(text: link.allText);
+
     // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
     return TextSpan(
-      recognizer: onLinkClick.nullTransform(
-        (onClick) =>
-            TapGestureRecognizer()..onTap = () => onClick(link.destination),
-      ),
+      recognizer: TapGestureRecognizer()
+        ..onTap = () => onClick(link.destination),
       text: link.allText,
       style: textTheme?.linkTextStyle,
     );
@@ -163,6 +199,8 @@ class TextRenderer {
 
     const useUserChip = false;
 
+    final onClick = onUserClick;
+
     // ignore: dead_code
     if (useUserChip) {
       return WidgetSpan(
@@ -170,13 +208,13 @@ class TextRenderer {
         baseline: TextBaseline.alphabetic,
         alignment: PlaceholderAlignment.middle,
       );
+    } else if (onClick == null) {
+      return TextSpan(text: reference.toString());
     } else {
       return TextSpan(
-        recognizer: onUserClick.nullTransform(
-          (onTap) => TapGestureRecognizer()..onTap = () => onTap(reference),
-        ),
+        recognizer: TapGestureRecognizer()..onTap = () => onClick(reference),
         text: reference.toString(),
-        style: textTheme?.linkTextStyle,
+        style: textTheme?.mentionTextStyle,
       );
     }
   }
@@ -251,14 +289,18 @@ class UserChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final adapter = ref.watch(adapterProvider);
-    return FutureBuilder<User?>(
-      initialData: user,
-      future: reference.resolve(adapter),
+    return FutureBuilder<ResolveUserResult?>(
+      initialData: user.nullTransform(ResolvedInternalUser.new),
+      future: ref.watch(
+        resolveProvider(
+          ref.watch(currentAccountProvider)!.key,
+          reference,
+        ).future,
+      ),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final user = snapshot.data!;
-
+        final result = snapshot.data;
+        if (result is ResolvedInternalUser) {
+          final user = result.user;
           return Tooltip(
             message: user.handle.toString(),
             child: ActionChip(

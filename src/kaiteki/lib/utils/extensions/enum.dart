@@ -1,8 +1,6 @@
 import "package:flutter/material.dart" hide Visibility;
-import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:kaiteki/fediverse/model/formatting.dart";
-import "package:kaiteki/fediverse/model/timeline_kind.dart";
-import "package:kaiteki/fediverse/model/visibility.dart";
+import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki_core/model.dart";
 import "package:mdi/mdi.dart";
 
 extension VisibilityExtensions on Visibility {
@@ -18,7 +16,7 @@ extension VisibilityExtensions on Visibility {
     };
   }
 
-  String toDisplayString(AppLocalizations l10n) {
+  String toDisplayString(KaitekiLocalizations l10n) {
     return switch (this) {
       Visibility.direct => l10n.visibilityDirect,
       Visibility.followersOnly => l10n.visibilityFollowersOnly,
@@ -30,7 +28,7 @@ extension VisibilityExtensions on Visibility {
     };
   }
 
-  String toDescription(AppLocalizations l10n) {
+  String toDescription(KaitekiLocalizations l10n) {
     return switch (this) {
       Visibility.direct => l10n.visibilityDirectDescription,
       Visibility.followersOnly => l10n.visibilityFollowersOnlyDescription,
@@ -54,7 +52,7 @@ extension FormattingExtensions on Formatting {
     };
   }
 
-  String toDisplayString(AppLocalizations l10n) {
+  String toDisplayString(KaitekiLocalizations l10n) {
     return switch (this) {
       Formatting.plainText => l10n.formattingPlain,
       Formatting.markdown => "Markdown",
@@ -65,26 +63,39 @@ extension FormattingExtensions on Formatting {
   }
 }
 
-extension TimelindKindExtensions on TimelineKind {
+extension TimelindKindExtensions on TimelineType {
   IconData getIconData() {
     return switch (this) {
-      TimelineKind.home => Icons.home_rounded,
-      TimelineKind.local => Icons.people_rounded,
-      TimelineKind.bubble => Icons.workspaces_rounded,
-      TimelineKind.hybrid => Icons.handshake_rounded,
-      TimelineKind.federated => Icons.public_rounded,
-      TimelineKind.directMessages => Icons.mail_rounded
+      TimelineType.following => Icons.home_rounded,
+      TimelineType.local => Icons.people_rounded,
+      TimelineType.bubble => Icons.workspaces_rounded,
+      TimelineType.hybrid => Icons.handshake_rounded,
+      TimelineType.federated => Icons.public_rounded,
+      TimelineType.directMessages => Icons.mail_rounded,
+      TimelineType.recommended => Icons.auto_awesome_rounded,
     };
   }
 
-  String getDisplayName(AppLocalizations l10n) {
+  String getDisplayName(KaitekiLocalizations l10n) {
     return switch (this) {
-      TimelineKind.home => l10n.timelineHome,
-      TimelineKind.local => l10n.timelineLocal,
-      TimelineKind.bubble => l10n.timelineBubble,
-      TimelineKind.hybrid => l10n.timelineHybrid,
-      TimelineKind.federated => l10n.timelineFederated,
-      TimelineKind.directMessages => l10n.timelineDirectMessages
+      TimelineType.following => l10n.timelineFollowing,
+      TimelineType.local => l10n.timelineLocal,
+      TimelineType.bubble => l10n.timelineBubble,
+      TimelineType.hybrid => l10n.timelineHybrid,
+      TimelineType.federated => l10n.timelineFederated,
+      TimelineType.directMessages => l10n.timelineDirectMessages,
+      // TODO(Craftplacer): Translate
+      TimelineType.recommended => "Recommended",
+    };
+  }
+}
+
+extension ThemeModeExtensions on ThemeMode {
+  String getDisplayString(KaitekiLocalizations l10n) {
+    return switch (this) {
+      ThemeMode.system => l10n.themeSystem,
+      ThemeMode.light => l10n.themeLight,
+      ThemeMode.dark => l10n.themeDark,
     };
   }
 }

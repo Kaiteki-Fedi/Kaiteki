@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
 import "package:kaiteki/ui/shared/posts/attachment_row.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class EmbeddedPostWidget extends ConsumerWidget {
   final Post post;
@@ -16,6 +16,11 @@ class EmbeddedPostWidget extends ConsumerWidget {
     return Card(
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Theme.of(context).colorScheme.outline),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
       child: InkWell(
         onTap: () => context.showPost(post, ref),
         child: Padding(
@@ -33,8 +38,10 @@ class EmbeddedPostWidget extends ConsumerWidget {
                   Expanded(child: UserDisplayNameWidget(post.author)),
                 ],
               ),
-              const SizedBox(height: 8),
-              Text.rich(post.renderContent(context, ref)),
+              if (post.content != null) ...[
+                const SizedBox(height: 8),
+                Text.rich(post.renderContent(context, ref)),
+              ],
               if (post.attachments?.isNotEmpty == true)
                 AttachmentRow(post: post),
             ],

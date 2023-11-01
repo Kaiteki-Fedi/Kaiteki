@@ -1,9 +1,8 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/chat_target.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:mdi/mdi.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 typedef ChatSelectedCallback = void Function(ChatTarget chat);
 
@@ -59,12 +58,12 @@ class ChatTargetTile extends ConsumerWidget {
     if (attachments.isNotEmpty) {
       return Row(
         children: [
-          const Icon(Mdi.attachment, size: 12.0),
+          const Icon(Icons.attach_file_rounded, size: 12.0),
           const SizedBox(width: 6.0),
           Text(
-            "${attachments.length} attachment(s)",
+            context.l10n.chatPreviewAttachments(attachments.length),
             style: const TextStyle(fontStyle: FontStyle.italic),
-          )
+          ),
         ],
       );
     }
@@ -96,7 +95,7 @@ class ChatTargetTile extends ConsumerWidget {
     if (chat is DirectChat) {
       return AvatarWidget(chat.recipient, size: 40);
     } else if (chat is GroupChat) {
-      return const CircleAvatar(child: Icon(Mdi.accountMultiple));
+      return const CircleAvatar(child: Icon(Icons.people_rounded));
     } else {
       throw UnimplementedError();
     }

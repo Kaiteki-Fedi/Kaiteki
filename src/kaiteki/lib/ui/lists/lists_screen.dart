@@ -2,15 +2,16 @@ import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:fpdart/fpdart.dart" hide State;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/list_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
-import "package:kaiteki/ui/shared/timeline.dart";
+import "package:kaiteki/ui/shared/timeline/source.dart";
+import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ListsScreen extends ConsumerStatefulWidget {
   const ListsScreen({super.key});
@@ -149,7 +150,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
     } else if (listsAvailable) {
       body = TabBarView(
         children: [
-          for (final list in lists) Timeline.list(listId: list.id),
+          for (final list in lists) Timeline(ListTimelineSource(list.id)),
         ],
       );
     } else {
@@ -186,7 +187,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
                             );
                           },
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -247,7 +248,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
     } else if (listsAvailable) {
       body = TabBarView(
         children: [
-          for (final list in lists) Timeline.list(listId: list.id),
+          for (final list in lists) Timeline(ListTimelineSource(list.id)),
         ],
       );
     } else {
@@ -486,7 +487,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
               text: "Removed ",
               children: [
                 user.renderDisplayName(context, ref),
-                TextSpan(text: " from ${widget.list.name}")
+                TextSpan(text: " from ${widget.list.name}"),
               ],
             ),
           ),
@@ -501,12 +502,12 @@ class _ListCardState extends ConsumerState<_ListCard> {
               text: "There was a problem removing ",
               children: [
                 user.renderDisplayName(context, ref),
-                TextSpan(text: " from ${widget.list.name}")
+                TextSpan(text: " from ${widget.list.name}"),
               ],
             ),
           ),
           action: SnackBarAction(
-            label: context.l10n.whyButtonLabel,
+            label: context.l10n.showDetailsButtonLabel,
             onPressed: () => context.showExceptionDialog((e, s)),
           ),
         ),
@@ -522,16 +523,14 @@ class _ListCardState extends ConsumerState<_ListCard> {
       builder: (context) {
         return AlertDialog(
           title: const Text("Delete list?"),
-          content: const Text(
-            "The list will be deleted permanently",
-          ),
+          content: const Text("The list will be deleted permanently"),
           actions: [
             TextButton(
-              child: const Text("Cancel"),
+              child: Text(context.materialL10n.cancelButtonLabel),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: const Text("Delete"),
+              child: Text(context.l10n.deleteButtonLabel),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
@@ -560,7 +559,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
             "There was a problem removing ${widget.list.name}",
           ),
           action: SnackBarAction(
-            label: context.l10n.whyButtonLabel,
+            label: context.l10n.showDetailsButtonLabel,
             onPressed: () => context.showExceptionDialog((e, s)),
           ),
         ),
@@ -643,11 +642,13 @@ class _NameListDialogState extends State<NameListDialog> {
       actions: [
         TextButton(
           onPressed: _onCancel,
-          child: const Text("Cancel"),
+          child: Text(context.materialL10n.cancelButtonLabel),
         ),
         TextButton(
           onPressed: _onConfirm,
-          child: create ? const Text("Create") : const Text("Rename"),
+          child: create
+              ? Text(context.l10n.createButtonLabel)
+              : Text(context.l10n.renameButtonLabel),
         ),
       ],
     );

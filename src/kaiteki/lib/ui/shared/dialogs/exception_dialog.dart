@@ -1,13 +1,12 @@
-import "dart:io" show Platform;
+import "dart:convert";
 
-import "package:flutter/foundation.dart" show kIsWeb;
 import "package:flutter/material.dart";
-import "package:kaiteki/app.dart";
-import "package:kaiteki/common.dart";
+import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki/constants.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
-import "package:kaiteki/ui/stack_trace_screen.dart";
-import "package:url_launcher/url_launcher.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/theming/text_theme.dart";
+import "package:kaiteki/ui/plain_text_screen.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ExceptionDialog extends StatelessWidget {
   final TraceableError error;
@@ -37,39 +36,56 @@ class ExceptionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stackTrace = error.$2;
+    final json = error.$1.safeCast<CheckedFromJsonException>()?.map;
     return AlertDialog(
-      title: const Text("Exception details"),
+      title: Text(context.l10n.exceptionDialogTitle),
       content: ConstrainedBox(
-        constraints: dialogConstraints,
+        constraints: kDialogConstraints,
         child: Column(
           children: [
-            for (var detail in details.entries)
+            for (final detail in details.entries)
               ListTile(
+                leading: const SizedBox(),
                 title: Text(detail.key),
                 subtitle: SelectableText(detail.value),
                 contentPadding: EdgeInsets.zero,
               ),
             const Divider(height: 17),
             ListTile(
-              title: const Text("Show stack trace"),
+              title: Text(context.l10n.showStackTrace),
               leading: const Icon(Icons.segment_rounded),
               enabled: stackTrace != null,
               onTap: () {
                 if (stackTrace == null) return;
                 showDialog(
                   context: context,
-                  builder: (_) => StackTraceScreen(stackTrace: stackTrace),
+                  builder: (_) => PlainTextScreen(
+                    stackTrace.toString(),
+                    // ignore: l10n
+                    title: const Text("Stack Trace"),
+                  ),
                 );
               },
               contentPadding: EdgeInsets.zero,
             ),
-            ListTile(
-              title: const Text("Report on GitHub"),
-              leading: const Icon(Icons.error_rounded),
-              onTap: onReportIssue,
-              contentPadding: EdgeInsets.zero,
-            ),
-            for (var detail in longDetails.entries)
+            if (json != null)
+              ListTile(
+                title: Text(context.l10n.exceptionShowJson),
+                leading: const Icon(Icons.data_object_rounded),
+                enabled: stackTrace != null,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => PlainTextScreen(
+                      const JsonEncoder.withIndent("  ").convert(json),
+                      // ignore: l10n
+                      title: const Text("JSON"),
+                    ),
+                  );
+                },
+                contentPadding: EdgeInsets.zero,
+              ),
+            for (final detail in longDetails.entries)
               if (detail.value.$2)
                 ExpansionTile(
                   tilePadding: EdgeInsets.zero,
@@ -92,92 +108,10 @@ class ExceptionDialog extends StatelessWidget {
       scrollable: true,
       actions: [
         TextButton(
-          child: const Text("Close"),
+          child: Text(context.materialL10n.closeButtonLabel),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],
     );
-  }
-
-  Future<void> onReportIssue() async {
-    await launchUrl(generateIssueUrlForm());
-  }
-
-  Uri generateIssueUrlPlain() {
-    final detailsBody = details.entries
-        .map((kv) => "**${kv.key}:** `${kv.value}`") //
-        .join("\n");
-
-    final bodyBuffer = StringBuffer("$detailsBody\n\n");
-
-    for (final detail in longDetails.entries) {
-      bodyBuffer.write(
-        """
-
-## ${detail.key}
-```
-${detail.value}
-```
-""",
-      );
-    }
-
-    return Uri.https(
-      "github.com",
-      "/Kaiteki-Fedi/Kaiteki/issues/new",
-      {
-        "title": _tryGetTitle() ?? "Exception in Kaiteki",
-        "body": bodyBuffer.toString(),
-        "labels": "bug",
-      },
-    );
-  }
-
-  Uri generateIssueUrlForm() {
-    final bodyBuffer = StringBuffer() //
-      ..writeln(
-        "**Platform:** $_platform (`${Platform.operatingSystemVersion}`)",
-      );
-
-    if (KaitekiApp.versionName != null) {
-      bodyBuffer.writeln(
-        "**Version:** ${KaitekiApp.versionName} (${KaitekiApp.versionCode})",
-      );
-    }
-
-    bodyBuffer.writeln();
-
-    return Uri.https(
-      "github.com",
-      "/Kaiteki-Fedi/Kaiteki/issues/new",
-      {
-        "title": _tryGetTitle() ?? "Exception in Kaiteki",
-        "labels": "bug,needs-triage",
-        "template": "error_report.yml",
-        "message": error.$1.toString(),
-        "type": exceptionRuntimeType,
-        "stack": error.$2?.toString(),
-        "extra": bodyBuffer.toString(),
-      },
-    );
-  }
-
-  String get _platform {
-    if (kIsWeb) return "Web";
-    if (Platform.isAndroid) return "Android";
-    if (Platform.isIOS) return "iOS";
-    if (Platform.isMacOS) return "macOS";
-    if (Platform.isLinux) return "Linux";
-    if (Platform.isWindows) return "Windows";
-    if (Platform.isFuchsia) return "Fuchsia";
-    return "Unknown";
-  }
-
-  String? _tryGetTitle() {
-    try {
-      return (error.$1 as dynamic).message as String?;
-    } on NoSuchMethodError {
-      return null;
-    }
   }
 }

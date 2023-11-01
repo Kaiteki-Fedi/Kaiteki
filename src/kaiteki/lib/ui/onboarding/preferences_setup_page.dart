@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/api_type.dart";
 
 class PreferencesSetupPage extends StatefulWidget {
   const PreferencesSetupPage({super.key});
@@ -9,8 +8,6 @@ class PreferencesSetupPage extends StatefulWidget {
 }
 
 class _PreferencesSetupPageState extends State<PreferencesSetupPage> {
-  ApiType? selectedPreferencesSet;
-
   @override
   Widget build(BuildContext context) {
     return const Column(

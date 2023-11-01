@@ -6,6 +6,7 @@ class ThemePreview extends StatelessWidget {
   final String name;
   final ThemeData theme;
   final ThemeData? darkTheme;
+  final Widget icon;
 
   const ThemePreview(
     this.theme, {
@@ -14,104 +15,49 @@ class ThemePreview extends StatelessWidget {
     required this.onTap,
     required this.name,
     this.darkTheme,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     final useMaterial3 = Theme.of(context).useMaterial3;
-    final borderRadius =
-        useMaterial3 ? BorderRadius.circular(12.0) : BorderRadius.circular(4.0);
 
-    final selectedDecoration = BoxDecoration(
-      border: Border.all(
-        color: theme.colorScheme.primary,
-        width: 4.0,
-      ),
-      borderRadius: borderRadius,
-    );
+    final themeData = switch (Theme.of(context).brightness) {
+      Brightness.light => theme,
+      Brightness.dark => darkTheme ?? theme,
+    };
 
-    final themes = [
-      theme,
-      if (darkTheme != null) darkTheme!,
-    ];
-    return Tooltip(
-      message: name,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius),
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        elevation: useMaterial3 ? 0.0 : null,
-        color: useMaterial3
-            ? theme.colorScheme.surfaceVariant
-            : theme.colorScheme.surface,
-        child: InkWell(
-          onTap: onTap,
-          child: DecoratedBox(
-            decoration: selected ? selectedDecoration : const BoxDecoration(),
-            position: DecorationPosition.foreground,
-            child: Column(
-              children: [
-                for (final theme in themes)
-                  Theme(
-                    data: theme,
-                    child: SizedBox(
-                      width: 8 * 12,
-                      height: (8 * 12) / themes.length,
-                      child: _ThemePreview(theme: theme),
-                    ),
-                  ),
-              ],
-            ),
+    Color? color;
+
+    if (!useMaterial3) {
+      if (selected) {
+        color = Theme.of(context).colorScheme.primary;
+      } else {
+        final onSurface = Theme.of(context).colorScheme.onSurface;
+        color = switch (Theme.of(context).brightness) {
+          Brightness.dark => onSurface.withOpacity(.7),
+          Brightness.light => onSurface.withOpacity(.54),
+        };
+      }
+    }
+
+    return Column(
+      children: [
+        Theme(
+          data: themeData,
+          child: IconButton.filled(
+            isSelected: selected,
+            style: IconButton.styleFrom(),
+            onPressed: onTap,
+            icon: icon,
+            tooltip: name,
+            splashRadius: 24.0,
+            color: color,
+            selectedIcon: const Icon(Icons.check_rounded),
+            visualDensity: const VisualDensity(horizontal: 1.0, vertical: 1.0),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _ThemePreview extends StatelessWidget {
-  const _ThemePreview({
-    required this.theme,
-  });
-
-  final ThemeData theme;
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: theme.useMaterial3
-          ? theme.colorScheme.surfaceVariant
-          : theme.colorScheme.surface,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.end,
-          spacing: 4.0,
-          children: [
-            _ColorCircle(color: theme.colorScheme.primary),
-            _ColorCircle(color: theme.colorScheme.secondary),
-            if (theme.useMaterial3)
-              _ColorCircle(color: theme.colorScheme.tertiary),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ColorCircle extends StatelessWidget {
-  const _ColorCircle({required this.color});
-
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
-      child: const SizedBox.square(dimension: 16),
+      ],
     );
   }
 }

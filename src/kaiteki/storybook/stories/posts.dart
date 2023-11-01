@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/poll.dart";
 import "package:kaiteki/ui/shared/posts/poll_widget.dart";
+import "package:kaiteki_core/model.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
 
 final poll = Story(
@@ -12,7 +12,7 @@ final poll = Story(
         child: PollWidget(
           Poll(
             hasEnded: false,
-            endedAt: DateTime.now().add(const Duration(days: 1)),
+            endsAt: DateTime.now().add(const Duration(days: 1)),
             allowMultipleChoices: false,
             id: "0",
             voteCount: 15,

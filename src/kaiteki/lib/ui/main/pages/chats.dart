@@ -1,8 +1,5 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/chat_support.dart";
-import "package:kaiteki/fediverse/model/chat_message.dart";
-import "package:kaiteki/fediverse/model/chat_target.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/chats/chat_message.dart";
@@ -13,7 +10,8 @@ import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:mdi/mdi.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ChatsPage extends ConsumerStatefulWidget {
   const ChatsPage({super.key});
@@ -42,7 +40,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
                 final notifier = ref.read(preferences.experiments);
                 notifier.value = [...notifier.value, AppExperiment.chats];
               },
-              child: const Text("Enable Experiment"),
+              child: Text(context.l10n.proceedButtonLabel),
             ),
           ],
         ),
@@ -87,7 +85,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
                   );
                 },
                 tooltip: "Start a new chat",
-                child: const Icon(Mdi.plus),
+                child: const Icon(Icons.add_rounded),
               ),
             ),
           ],
@@ -98,7 +96,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
     final chatView = selectedChat == null
         ? const Center(
             child: IconLandingWidget(
-              icon: Icon(Mdi.forumOutline),
+              icon: Icon(Icons.forum_rounded),
               text: Text("Select a chat to begin"),
             ),
           )
@@ -140,7 +138,7 @@ class ChatView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final adapter = ref.watch(adapterProvider) as ChatSupport;
-    final currentUser = ref.watch(accountProvider)?.user;
+    final currentUser = ref.watch(currentAccountProvider)?.user;
 
     return Column(
       children: [
@@ -153,18 +151,6 @@ class ChatView extends ConsumerWidget {
               onPressed: callback,
             ),
           ),
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (context) {
-                return List.generate(5, (index) {
-                  return PopupMenuItem(
-                    value: index,
-                    child: Text("button no $index"),
-                  );
-                });
-              },
-            ),
-          ],
           title: InkWell(
             borderRadius: BorderRadius.circular(8),
             onTap: chat is DirectChat
@@ -196,7 +182,7 @@ class ChatView extends ConsumerWidget {
               if (messages.isEmpty) {
                 return const Center(
                   child: IconLandingWidget(
-                    icon: Icon(Mdi.messageOutline),
+                    icon: Icon(Icons.message_rounded),
                     text: Text("Looks empty here..."),
                   ),
                 );

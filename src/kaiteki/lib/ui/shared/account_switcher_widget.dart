@@ -18,7 +18,7 @@ class AccountSwitcherWidget extends ConsumerWidget {
   }
 
   Widget buildIcon(BuildContext context, WidgetRef ref) {
-    final account = ref.watch(accountProvider);
+    final account = ref.watch(currentAccountProvider);
 
     if (account == null) {
       return const Icon(Icons.account_circle_rounded);

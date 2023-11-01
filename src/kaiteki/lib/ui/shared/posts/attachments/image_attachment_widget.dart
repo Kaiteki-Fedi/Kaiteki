@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_blurhash/flutter_blurhash.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
 import "package:kaiteki/ui/shared/attachment_inspection_screen.dart";
+import "package:kaiteki_core/social.dart";
 
 class ImageAttachmentWidget extends StatelessWidget {
   final Attachment attachment;

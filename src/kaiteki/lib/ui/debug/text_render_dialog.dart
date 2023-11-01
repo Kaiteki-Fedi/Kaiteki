@@ -1,14 +1,18 @@
+// ignore_for_file: l10n
 import "package:flutter/material.dart" hide Element;
-import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:flutter_simple_treeview/flutter_simple_treeview.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/text/parsers/md_text_parser.dart";
+import "package:kaiteki/text/text_renderer.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/dialogs/dialog_close_button.dart";
 import "package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
+import "package:mdi/mdi.dart";
 
 class TextRenderDialog extends ConsumerStatefulWidget {
   final Post post;
@@ -20,6 +24,11 @@ class TextRenderDialog extends ConsumerStatefulWidget {
 }
 
 class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
+  static const _padding = EdgeInsets.symmetric(
+    horizontal: 24.0,
+    vertical: 12.0,
+  );
+
   @override
   Widget build(BuildContext context) {
     return DynamicDialogContainer(
@@ -28,7 +37,7 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
           tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
         );
         return DefaultTabController(
-          length: 3,
+          length: 4,
           child: SizedBox(
             width: 800,
             child: Column(
@@ -51,23 +60,20 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
                       Tab(text: "Raw"),
                       Tab(text: "Parsed"),
                       Tab(text: "Rendered"),
+                      Tab(text: "Parsers"),
                     ],
                   ),
                 ),
-                const Divider(height: 1),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0,
-                      vertical: 12.0,
-                    ),
-                    child: TabBarView(
-                      children: [
-                        _buildRaw(),
-                        _buildParsed(),
-                        _buildRendered(),
-                      ],
-                    ),
+                  child: TabBarView(
+                    children: [
+                      _buildRaw(),
+                      _buildParsed(),
+                      _buildRendered(),
+                      _ParsersTab(
+                        parsers: ref.watch(textParserProvider).toList(),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -79,51 +85,82 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
   }
 
   Widget _buildRaw() {
-    return SelectableText(
-      widget.post.content ?? "",
-      style: GoogleFonts.robotoMono(),
+    final content = widget.post.content;
+
+    if (content == null) return const SizedBox.expand();
+
+    return Padding(
+      padding: _padding,
+      child: SelectableText(
+        content,
+        style: GoogleFonts.robotoMono(),
+      ),
     );
   }
 
   Widget _buildParsed() {
-    final elements = const MastodonHtmlTextParser()
-        .parse(widget.post.content!)
-        .parseWith(const SocialTextParser())
-        .parseWith(const MfmTextParser());
-
-    return TreeView(
-      nodes: elements.map(_buildNode).toList(growable: false),
-      indent: 28,
+    final textParser = ref.watch(textParserProvider);
+    final elements = parseText(widget.post.content!, textParser);
+    return SingleChildScrollView(
+      child: TreeView(
+        nodes: elements.map(_buildNode).toList(growable: false),
+        indent: 28,
+      ),
     );
   }
 
   TreeNode _buildNode(Element element) {
+    InlineSpan inlineLineBreaks(String text) {
+      final textStyle = TextStyle(
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      );
+      final spans = <InlineSpan>[];
+
+      while (true) {
+        final index = text.indexOf("\n");
+
+        if (index == -1) {
+          spans.add(TextSpan(text: text));
+          break;
+        }
+
+        spans
+          ..add(TextSpan(text: text.substring(0, index)))
+          ..add(TextSpan(text: r"\n", style: textStyle));
+
+        text = text.substring(index + 1);
+      }
+
+      return TextSpan(children: spans);
+    }
+
     return TreeNode(
       children: element.children?.isNotEmpty == true
           ? element.children?.map(_buildNode).toList(growable: false)
           : null,
       content: Flexible(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Column(
-              children: [
-                Icon(
-                  color: Theme.of(context).colorScheme.primary,
-                  _getElementIcon(element),
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                color: Theme.of(context).colorScheme.primary,
+                _getElementIcon(element),
+              ),
+              if (element is TextElement &&
+                  element.style?.font == TextElementFont.monospace)
+                Text(
+                  "mono",
+                  style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
+                      DefaultKaitekiTextTheme(context).monospaceTextStyle,
                 ),
-                if (element is TextElement &&
-                    element.style?.font == TextElementFont.monospace)
-                  Text(
-                    "mono",
-                    style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
-                    textScaleFactor: 0.75,
-                  ),
-              ],
-            ),
-            const SizedBox(width: 8),
-            Flexible(child: Text(element.toString())),
-          ],
+            ],
+          ),
+          dense: true,
+          title: Text.rich(inlineLineBreaks(element.toString())),
+          titleAlignment: ListTileTitleAlignment.top,
         ),
       ),
     );
@@ -139,8 +176,54 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
   }
 
   Widget _buildRendered() {
-    return Text.rich(
-      widget.post.renderContent(context, ref),
+    return SingleChildScrollView(
+      padding: _padding,
+      child: Text.rich(
+        widget.post.renderContent(context, ref),
+      ),
+    );
+  }
+}
+
+class _ParsersTab extends StatelessWidget {
+  final List<TextParser> parsers;
+
+  const _ParsersTab({required this.parsers});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemBuilder: itemBuilder,
+      itemCount: parsers.length,
+      separatorBuilder: (_, __) {
+        return const ListTile(
+          enabled: false,
+          leading: Icon(Icons.arrow_downward_rounded),
+        );
+      },
+    );
+  }
+
+  Widget itemBuilder(BuildContext context, int index) {
+    final parser = parsers[index];
+    return ListTile(
+      leading: switch (parser) {
+        SocialTextParser() => const Icon(Icons.tag_rounded),
+        MfmTextParser() => Image.asset(
+            "assets/icons/misskey.png",
+            cacheWidth: 24,
+            cacheHeight: 24,
+          ),
+        MastodonHtmlTextParser() => Image.asset(
+            "assets/icons/mastodon.png",
+            cacheWidth: 24,
+            cacheHeight: 24,
+          ),
+        HtmlTextParser() => const Icon(Icons.code_rounded),
+        MarkdownTextParser() => const Icon(Mdi.languageMarkdown),
+        TextParser() => const SizedBox.square(dimension: 24),
+      },
+      title: Text(parser.runtimeType.toString()),
     );
   }
 }

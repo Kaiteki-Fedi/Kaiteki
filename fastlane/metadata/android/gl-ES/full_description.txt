@@ -1,0 +1,1 @@
+<p><i>Kaiteki</i> é un cliente multi-plataforma para a web social. Actualmente ten soporte para Mastodon, Pleroma, Misskey e Twitter. Esperamos poder engadir máis.</p>

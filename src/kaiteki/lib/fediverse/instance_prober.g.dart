@@ -6,7 +6,7 @@ part of 'instance_prober.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$probeInstanceHash() => r'7c97ef1a14aafb01ad4bd198dbdf53996cc378f0';
+String _$probeInstanceHash() => r'f01827bc259c3ab21ffe8f97f539d1f4ca97c705';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,14 +29,12 @@ class _SystemHash {
   }
 }
 
-typedef ProbeInstanceRef = AutoDisposeFutureProviderRef<InstanceProbeResult>;
-
 /// See also [probeInstance].
 @ProviderFor(probeInstance)
 const probeInstanceProvider = ProbeInstanceFamily();
 
 /// See also [probeInstance].
-class ProbeInstanceFamily extends Family<AsyncValue<InstanceProbeResult>> {
+class ProbeInstanceFamily extends Family<AsyncValue<core.InstanceProbeResult>> {
   /// See also [probeInstance].
   const ProbeInstanceFamily();
 
@@ -75,13 +73,13 @@ class ProbeInstanceFamily extends Family<AsyncValue<InstanceProbeResult>> {
 
 /// See also [probeInstance].
 class ProbeInstanceProvider
-    extends AutoDisposeFutureProvider<InstanceProbeResult> {
+    extends AutoDisposeFutureProvider<core.InstanceProbeResult> {
   /// See also [probeInstance].
   ProbeInstanceProvider(
-    this.host,
-  ) : super.internal(
+    String host,
+  ) : this._internal(
           (ref) => probeInstance(
-            ref,
+            ref as ProbeInstanceRef,
             host,
           ),
           from: probeInstanceProvider,
@@ -93,9 +91,44 @@ class ProbeInstanceProvider
           dependencies: ProbeInstanceFamily._dependencies,
           allTransitiveDependencies:
               ProbeInstanceFamily._allTransitiveDependencies,
+          host: host,
         );
 
+  ProbeInstanceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.host,
+  }) : super.internal();
+
   final String host;
+
+  @override
+  Override overrideWith(
+    FutureOr<core.InstanceProbeResult> Function(ProbeInstanceRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ProbeInstanceProvider._internal(
+        (ref) => create(ref as ProbeInstanceRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        host: host,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<core.InstanceProbeResult> createElement() {
+    return _ProbeInstanceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -110,4 +143,20 @@ class ProbeInstanceProvider
     return _SystemHash.finish(hash);
   }
 }
-// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
+
+mixin ProbeInstanceRef
+    on AutoDisposeFutureProviderRef<core.InstanceProbeResult> {
+  /// The parameter `host` of this provider.
+  String get host;
+}
+
+class _ProbeInstanceProviderElement
+    extends AutoDisposeFutureProviderElement<core.InstanceProbeResult>
+    with ProbeInstanceRef {
+  _ProbeInstanceProviderElement(super.provider);
+
+  @override
+  String get host => (origin as ProbeInstanceProvider).host;
+}
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

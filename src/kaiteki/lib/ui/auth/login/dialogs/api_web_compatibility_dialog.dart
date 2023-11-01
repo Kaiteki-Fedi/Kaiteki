@@ -1,10 +1,10 @@
 import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
-import "package:kaiteki/constants.dart" show dialogConstraints;
+import "package:kaiteki/constants.dart" show kDialogConstraints;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/link_constants.dart" show corsHelpArticleUrl;
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 class ApiWebCompatibilityDialog extends StatelessWidget {
   final ApiType type;
@@ -18,7 +18,7 @@ class ApiWebCompatibilityDialog extends StatelessWidget {
       icon: const Icon(Icons.error),
       title: Text(l10n.unsupportedInstanceTitle),
       content: SizedBox(
-        width: dialogConstraints.minWidth,
+        width: kDialogConstraints.minWidth,
         child: Text.rich(
           TextSpan(
             text: l10n.unsupportedInstanceDescriptionCORS(type.displayName),

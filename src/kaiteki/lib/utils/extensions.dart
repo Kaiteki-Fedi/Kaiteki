@@ -2,12 +2,9 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:html/dom.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/model/post/post.dart";
-import "package:kaiteki/fediverse/model/user/reference.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
 import "package:kaiteki/model/auth/account_key.dart";
-import "package:kaiteki/utils/utils.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
+import "package:material_color_utilities/material_color_utilities.dart";
 
 export "package:kaiteki/text/rendering_extensions.dart";
 export "package:kaiteki/utils/extensions/build_context.dart";
@@ -17,18 +14,6 @@ export "package:kaiteki/utils/extensions/iterable.dart";
 export "package:kaiteki/utils/extensions/string.dart";
 
 extension ObjectExtensions<T> on T? {
-  S? nullTransform<S>(S Function(T object) function) {
-    final value = this;
-    if (value == null) return null;
-    return function.call(value);
-  }
-
-  S? safeCast<S>() {
-    final value = this;
-    if (value is S) return value;
-    return null;
-  }
-
   T inlineBang(String description) {
     final value = this;
     if (value == null) throw Exception(description);
@@ -93,37 +78,21 @@ extension HtmlNodeExtensions on Node {
   }
 }
 
-extension UserReferenceExtensions on UserReference {
-  Future<User?> resolve(BackendAdapter adapter) async {
-    final id = this.id;
-    if (id != null) {
-      return adapter.getUserById(id);
-    }
-
-    final username = this.username;
-    if (username != null) {
-      return adapter.lookupUser(username, host);
-    }
-
-    return null;
-  }
-}
-
 extension WidgetRefExtensions on WidgetRef {
   String getCurrentAccountHandle() {
-    final accountKey = read(accountProvider)!.key;
+    final accountKey = read(currentAccountProvider)!.key;
     return "@${accountKey.username}@${accountKey.host}";
   }
 
   Map<String, String> get accountRouterParams {
-    final accountKey = read(accountProvider)!.key;
+    final accountKey = read(currentAccountProvider)!.key;
     return accountKey.routerParams;
   }
 }
 
 extension ProviderContainerExtensions on ProviderContainer {
   Map<String, String> get accountRouterParams {
-    final accountKey = read(accountProvider)!.key;
+    final accountKey = read(currentAccountProvider)!.key;
     return accountKey.routerParams;
   }
 }
@@ -148,20 +117,6 @@ extension QueryExtension on Map<String, String> {
   }
 }
 
-extension UriExtensions on Uri {
-  (String, String) get fediverseHandle {
-    var username = pathSegments.last;
-
-    // FIXME(Craftplacer): This is just a lazy fix for empty usernames
-    if (username.isEmpty) return (host, username);
-
-    if (username[0] == "@") {
-      username = username.substring(1);
-    }
-    return (host, username);
-  }
-}
-
 extension ListExtensions<T> on List<T> {
   List<T> joinWithValue(T separator) {
     if (length <= 1) return this;
@@ -173,24 +128,50 @@ extension ListExtensions<T> on List<T> {
   }
 }
 
-extension NullableObjectExtensions on Object? {}
-
-extension FunctionExtensions<T> on T Function(JsonMap) {
-  T Function(Object?) get generic {
-    return (obj) => this(obj! as JsonMap);
-  }
-
-  List<T>? Function(Object?) get genericList {
-    return (obj) {
-      if (obj == null) return null;
-      final list = obj as List<dynamic>;
-      final castedList = list.cast<JsonMap>();
-      return castedList.map(this).toList();
-    };
-  }
-}
-
 extension NullableTextStyleExtensions on TextStyle? {
   /// Provides an empty [TextStyle] if null. For use with [TextStyle.copyWith].
   TextStyle get fallback => this ?? const TextStyle();
+}
+
+extension KaitekiFileExtensions on KaitekiFile {
+  ImageProvider getImageProvider() {
+    final file = this;
+    if (file is KaitekiMemoryFile) return MemoryImage(file.bytes);
+    if (file is KaitekiLocalFile) return FileImage(file.toDartFile());
+    throw UnimplementedError();
+  }
+}
+
+extension SurfaceColorExtensions on ColorScheme {
+  Color _getNeutralColor(int lightTone, int darkTone) {
+    final value = switch (brightness) {
+      Brightness.light => corePalette.neutral.get(lightTone),
+      Brightness.dark => corePalette.neutral.get(darkTone),
+    };
+    return Color(value);
+  }
+
+  CorePalette get corePalette => CorePalette.of(primary.value);
+
+  Color get surfaceContainerHigh => _getNeutralColor(92, 17);
+
+  Color get surfaceContainerHighest => _getNeutralColor(90, 22);
+
+  Color get surfaceContainer => _getNeutralColor(94, 12);
+
+  Color get inverseOnSurface => _getNeutralColor(95, 20);
+}
+
+Locale parseLocale(String locale) {
+  final split = locale.split("-");
+  return switch (split.length) {
+    1 => Locale(split[0]),
+    2 => Locale(split[0], split[1]),
+    3 => Locale.fromSubtags(
+        languageCode: split[0],
+        scriptCode: split[1],
+        countryCode: split[2],
+      ),
+    _ => throw ArgumentError.value(locale, "locale", "Must be a valid locale"),
+  };
 }

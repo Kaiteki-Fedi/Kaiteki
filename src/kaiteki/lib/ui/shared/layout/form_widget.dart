@@ -16,8 +16,8 @@ class FormWidget extends StatelessWidget {
   const FormWidget({
     super.key,
     required this.builder,
-    this.contentWidth = consts.defaultFormWidth,
-    this.contentHeight = consts.defaultFormHeight,
+    this.contentWidth = consts.kFormWidth,
+    this.contentHeight = consts.kFormHeight,
     this.padding = const EdgeInsets.symmetric(
       horizontal: 24.0,
       vertical: 64.0,

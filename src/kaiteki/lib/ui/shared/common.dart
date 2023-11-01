@@ -1,8 +1,45 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki/l10n/localizations_en.dart";
+import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:material_color_utilities/material_color_utilities.dart";
 
 export "package:kaiteki/common.dart";
+export "package:kaiteki_ui/kaiteki_ui.dart";
+
+final systemColorSchemeProvider = Provider<ColorSchemeBundle?>((_) => null);
+
+final _mouseTrackerProvider = ChangeNotifierProvider((_) {
+  return WidgetsBinding.instance.mouseTracker;
+});
+
+final pointingDeviceProvider = Provider<PointingDevice>(
+  (ref) {
+    return ref.watch(
+      _mouseTrackerProvider.select(
+        (mouseTracker) {
+          return mouseTracker.mouseIsConnected
+              ? PointingDevice.mouse
+              : PointingDevice.touch;
+        },
+      ),
+    );
+  },
+  dependencies: [_mouseTrackerProvider],
+);
+
+enum PointingDevice { mouse, touch }
+
+const kBullet = "•";
+
+const kEmojiTextStyle = TextStyle(
+  fontFamily: "Noto Color Emoji",
+  fontFamilyFallback: ["Segoe UI Emoji"],
+);
+
+// Deprecate once https://github.com/flutter/flutter/issues/137274 is resolved.
+const kAppBarActionsSpacer = SizedBox(width: 8);
 
 typedef LocalizableStringBuilder = String Function(BuildContext context);
 
@@ -33,18 +70,6 @@ Future<void> showTextAlert(BuildContext context, String title, String body) {
     ),
     context: context,
   );
-}
-
-extension ColorKaitekiExtension on Color {
-  TextStyle get textStyle => TextStyle(color: this);
-}
-
-double getLocalFontSize(BuildContext context) {
-  return DefaultTextStyle.of(context).style.fontSize!;
-}
-
-Color getLocalTextColor(BuildContext context) {
-  return DefaultTextStyle.of(context).style.color!;
 }
 
 CustomColorPalette createCustomColorPalette(
@@ -88,4 +113,52 @@ class CustomColorPalette {
       Color(palette.get(90)),
     );
   }
+}
+
+enum EmphasisColor { high, medium, disabled }
+
+extension ThemeDataExtension on ThemeData {
+  Color getEmphasisColor(EmphasisColor emphasis) {
+    if (useMaterial3) {
+      return switch (emphasis) {
+        EmphasisColor.high => colorScheme.onSurface,
+        EmphasisColor.medium => colorScheme.onSurfaceVariant,
+        EmphasisColor.disabled => colorScheme.onSurface.withOpacity(.38),
+      };
+    }
+
+    return switch (emphasis) {
+      EmphasisColor.high => colorScheme.onSurface.withOpacity(.87),
+      EmphasisColor.medium => colorScheme.onSurface.withOpacity(.60),
+      EmphasisColor.disabled => colorScheme.onSurface.withOpacity(.38),
+    };
+  }
+}
+
+class ContentColor extends StatelessWidget {
+  final Widget child;
+  final Color color;
+
+  const ContentColor({super.key, required this.child, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconTheme.merge(
+      data: IconThemeData(color: color),
+      child: DefaultTextStyle.merge(
+        style: TextStyle(color: color),
+        child: child,
+      ),
+    );
+  }
+}
+
+String? getLocaleName(Locale locale) {
+  final languageName = lookupKaitekiLocalizations(locale).languageName;
+  final isEnglish = locale == const Locale("en");
+  final isDefaultLanguageName =
+      languageName == KaitekiLocalizationsEn().languageName;
+
+  if (isDefaultLanguageName && !isEnglish) return null;
+  return languageName;
 }

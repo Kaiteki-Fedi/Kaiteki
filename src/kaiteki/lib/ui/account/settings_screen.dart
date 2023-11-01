@@ -2,11 +2,11 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class AccountSettingsScreen extends ConsumerStatefulWidget {
   const AccountSettingsScreen({super.key});
@@ -36,7 +36,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SettingsSection(
-                title: const SectionHeader("Safety"),
+                title: const Text("Safety"),
                 children: [
                   ListTile(
                     leading: const Icon(Icons.volume_off),
@@ -54,7 +54,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 ],
               ),
               const SettingsSection(
-                title: SectionHeader("Privacy"),
+                title: Text("Privacy"),
                 children: [
                   SwitchListTile.adaptive(
                     secondary: Icon(Icons.person_add_disabled_rounded),
@@ -76,7 +76,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 ],
               ),
               const SettingsSection(
-                title: SectionHeader("Security"),
+                title: Text("Security"),
                 children: [
                   ListTile(
                     leading: Icon(Icons.email_rounded),
@@ -101,7 +101,7 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                 ],
               ),
               SettingsSection(
-                title: const SectionHeader("Account management"),
+                title: const Text("Account management"),
                 children: [
                   ListTile(
                     leading: Icon(
@@ -109,9 +109,10 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                       color: Theme.of(context).colorScheme.error,
                     ),
                     title: const Text("Delete Account"),
-                    onTap: () {
-                      _onDelete(ref.read(accountManagerProvider));
-                    },
+                    onTap: ref.watch(currentAccountProvider)?.adapter
+                            is AccountDeletionSupport
+                        ? () => _onDelete(ref)
+                        : null,
                   ),
                   const ListTile(
                     leading: Icon(
@@ -130,15 +131,17 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
     );
   }
 
-  Future<void> _onDelete(AccountManager accountManager) async {
-    final account = accountManager.current!;
+  Future<void> _onDelete(WidgetRef ref) async {
+    final account = ref.read(currentAccountProvider);
+    if (account == null) return;
     await showDialog(
       context: context,
       builder: (_) => AccountDeletionDialog(
         account: account,
         onDelete: (password) async {
-          await account.adapter.deleteAccount(password);
-          await accountManager.remove(account);
+          final deletionInterface = account.adapter as AccountDeletionSupport;
+          await deletionInterface.deleteAccount(password);
+          await ref.read(accountManagerProvider.notifier).remove(account);
 
           if (mounted) Navigator.of(context).pop();
         },

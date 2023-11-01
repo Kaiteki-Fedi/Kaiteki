@@ -1,11 +1,10 @@
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:kaiteki/app.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/platform_checks.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/settings/about/app_badge_kind.dart";
 import "package:kaiteki/ui/shared/layout/dfp.dart";
 import "package:kaiteki/utils/extensions/build_context.dart";
@@ -30,7 +29,7 @@ class AboutScreen extends StatelessWidget {
               constraints: constraints,
               child: Center(
                 child: SizedBox(
-                  width: defaultFormWidth,
+                  width: kFormWidth,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -43,11 +42,15 @@ class AboutScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            appName,
-                            textScaleFactor: 2,
-                            style: Theme.of(context)
-                                .ktkTextTheme
-                                ?.kaitekiTextStyle,
+                            kAppName,
+                            style:
+                                Theme.of(context).textTheme.titleLarge!.merge(
+                                      Theme.of(context)
+                                              .ktkTextTheme
+                                              ?.kaitekiTextStyle ??
+                                          DefaultKaitekiTextTheme(context)
+                                              .kaitekiTextStyle,
+                                    ),
                           ),
                           if (badge != null)
                             Padding(
@@ -60,33 +63,14 @@ class AboutScreen extends StatelessWidget {
                       if (version != null) ...[
                         const SizedBox(height: 8.0),
                         Text(
+                          // ignore: l10n
                           "Version $version",
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
                       ],
-                      Card(
-                        margin: const EdgeInsets.only(
-                          left: 4.0,
-                          right: 4.0,
-                          top: 24.0,
-                          bottom: 4.0,
-                        ),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: const Icon(Mdi.license),
-                              title: Text(l10n.creditsLicenses),
-                              trailing: const Icon(Icons.chevron_right_rounded),
-                              onTap: () => _onShowLicenses(context),
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.people_rounded),
-                              title: Text(l10n.creditsTitle),
-                              onTap: () => context.push("/credits"),
-                              trailing: const Icon(Icons.chevron_right_rounded),
-                            ),
-                          ],
-                        ),
+                      TextButton(
+                        child: Text(l10n.creditsLicenses),
+                        onPressed: () => _onShowLicenses(context),
                       ),
                       const SizedBox(height: 12.0),
                       IconTheme(
@@ -100,25 +84,25 @@ class AboutScreen extends StatelessWidget {
                               icon: const Icon(Icons.public_rounded),
                               tooltip: l10n.creditsWebsite,
                               onPressed: () {
-                                context.launchUrl(appWebsite);
+                                context.launchUrl(kAppWebsite);
                               },
-                              splashRadius: defaultSplashRadius,
+                              splashRadius: kSplashRadius,
                             ),
                             IconButton(
                               icon: const Icon(Mdi.github),
                               tooltip: l10n.creditsGithubRepo,
                               onPressed: () {
-                                context.launchUrl(githubRepository);
+                                context.launchUrl(kGithubRepository);
                               },
-                              splashRadius: defaultSplashRadius,
+                              splashRadius: kSplashRadius,
                             ),
                             IconButton(
                               icon: const Icon(Mdi.telegram),
                               tooltip: l10n.creditsTelegramChannel,
                               onPressed: () {
-                                context.launchUrl(telegramChannel);
+                                context.launchUrl(kTelegramChannel);
                               },
-                              splashRadius: defaultSplashRadius,
+                              splashRadius: kSplashRadius,
                             ),
                           ],
                         ),
@@ -137,10 +121,10 @@ class AboutScreen extends StatelessWidget {
   void _onShowLicenses(BuildContext context) {
     showLicensePage(
       context: context,
-      applicationName: appName,
+      applicationName: kAppName,
       // ignore: avoid_redundant_argument_values
       applicationVersion: KaitekiApp.versionName,
-      applicationLegalese: appLegalese,
+      applicationLegalese: kAppLegalese,
     );
   }
 

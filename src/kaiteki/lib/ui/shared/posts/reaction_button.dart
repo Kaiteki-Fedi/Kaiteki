@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/kaiteki/text_theme.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
+import "package:kaiteki_core/model.dart";
 
 class ReactionButton extends ConsumerWidget {
   final Reaction reaction;
@@ -30,8 +30,8 @@ class ReactionButton extends ConsumerWidget {
         ? Theme.of(context).colorScheme.onInverseSurface
         : Theme.of(context).colorScheme.onSurfaceVariant;
 
-    final textStyle =
-        Theme.of(context).ktkTextTheme?.countTextStyle ?? const TextStyle();
+    final textStyle = Theme.of(context).ktkTextTheme?.countTextStyle ??
+        DefaultKaitekiTextTheme(context).countTextStyle;
 
     var count = reaction.count;
 

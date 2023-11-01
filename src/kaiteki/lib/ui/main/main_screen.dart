@@ -1,66 +1,72 @@
+import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/interfaces/notification_support.dart";
-import "package:kaiteki/fediverse/interfaces/search_support.dart";
-import "package:kaiteki/fediverse/model/model.dart";
+import "package:kaiteki/fediverse/services/bookmarks.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
+import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
 import "package:kaiteki/ui/main/pages/chats.dart";
 import "package:kaiteki/ui/main/pages/explore.dart";
+import "package:kaiteki/ui/main/pages/home.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
-import "package:kaiteki/ui/main/pages/placeholder.dart";
-import "package:kaiteki/ui/main/pages/timeline.dart";
-import "package:kaiteki/ui/main/views/view.dart";
+import "package:kaiteki/ui/pride.dart";
+import "package:kaiteki/ui/shared/account_switcher_widget.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
-import "package:kaiteki/ui/shared/dialogs/options_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
+import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
+import "package:logging/logging.dart";
+
+import "drawer.dart";
+import "navigation/navigation_bar.dart";
+import "navigation/navigation_rail.dart";
+import "tabs/tab.dart";
 
 final notificationCountProvider = FutureProvider<int?>(
   (ref) {
-    final account = ref.watch(accountProvider);
+    final account = ref.watch(currentAccountProvider);
 
     if (account == null) return null;
     if (account.adapter is! NotificationSupport) return null;
 
     final notifications = ref.watch(notificationServiceProvider(account.key));
-    return notifications.valueOrNull?.where((n) => n.unread != false).length;
+    return notifications.valueOrNull?.items
+        .where((n) => n.unread != false)
+        .length;
   },
-  dependencies: [accountProvider, notificationServiceProvider],
+  dependencies: [currentAccountProvider, notificationServiceProvider],
 );
+
+Future<void> showKeyboardShortcuts(BuildContext context) async {
+  await showDialog(
+    context: context,
+    builder: (_) => const KeyboardShortcutsDialog(),
+  );
+}
 
 class MainScreen extends ConsumerStatefulWidget {
   @visibleForTesting
-  final TimelineKind? initialTimeline;
+  final TimelineType? initialTimeline;
 
   const MainScreen({super.key, this.initialTimeline});
 
   @override
-  ConsumerState<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => MainScreenState();
 }
 
-class _MainScreenState extends ConsumerState<MainScreen> {
-  // Why does this exist? In order to refresh the timeline
-  final _timelineKey = GlobalKey<TimelinePageState>();
-  TabKind _currentTab = TabKind.home;
-  MainScreenViewType _view = MainScreenViewType.stream;
+class MainScreenState extends ConsumerState<MainScreen> {
+  final _homePageKey = GlobalKey<HomePageState>();
+  MainScreenTabType _currentTab = MainScreenTabType.home;
 
-  VoidCallback? get _refresh {
-    switch (_currentTab) {
-      case TabKind.home:
-        return _timelineKey.currentState?.refresh;
-
-      case TabKind.notifications:
-        final account = ref.watch(accountProvider)!.key;
-        return ref.read(notificationServiceProvider(account).notifier).refresh;
-
-      default:
-        return null;
-    }
-  }
+  late List<MainScreenTabType> _tabs;
 
   VoidCallback? get _search {
     if (ref.watch(adapterProvider) is! SearchSupport) return null;
@@ -72,109 +78,301 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   Widget build(BuildContext context) {
     if (ref.read(AppExperiment.navigationBarTheming.provider)) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          systemNavigationBarColor: ElevationOverlay.applySurfaceTint(
-            Theme.of(context).colorScheme.surface,
-            Theme.of(context).colorScheme.surfaceTint,
-            3,
-          ),
-          systemNavigationBarDividerColor:
-              Theme.of(context).colorScheme.surfaceVariant,
-          systemNavigationBarIconBrightness:
-              Theme.of(context).colorScheme.brightness.inverted,
-        ),
-      );
+      _setSystemUIOverlayStyle(context);
     }
+
+    _tabs = getTabs();
+
+    final currentTab = _tabs.contains(_currentTab) ? _currentTab : _tabs.first;
+    final currentIndex = _tabs.indexOf(currentTab);
+
+    final windowClass = WindowClass.fromContext(context);
+    final isCompact = windowClass <= WindowClass.compact;
+
+    final prideEnabled = ref.watch(enablePrideFlag).value;
+    final prideFlagDesign = ref.watch(prideFlag).value;
+
+    final scaffold = Scaffold(
+      backgroundColor: prideEnabled || !isCompact ? Colors.transparent : null,
+      appBar: buildAppBar(context, !isCompact),
+      body: _BodyWrapper(
+        tabTypes: _tabs,
+        currentIndex: currentIndex,
+        onChangeIndex: (i) => _changeTab(_tabs[i]),
+        child: buildPage(context, currentTab),
+      ),
+      bottomNavigationBar: isCompact && _tabs.length >= 2
+          ? MainScreenNavigationBar(
+              tabTypes: _tabs,
+              currentIndex: currentIndex,
+              onChangeIndex: (i) => _changeTab(_tabs[i]),
+            )
+          : null,
+      floatingActionButton: currentTab.tab?.buildFab(context, ref),
+      floatingActionButtonLocation:
+          currentTab.tab?.fabLocation ?? FloatingActionButtonLocation.endFloat,
+      drawer: const MainScreenDrawer(),
+    );
 
     return FocusableActionDetector(
       autofocus: true,
-      actions: {
-        NewPostIntent: CallbackAction(
-          onInvoke: (_) => context.pushNamed(
-            "compose",
-            pathParameters: ref.accountRouterParams,
-          ),
-        ),
-        SearchIntent: CallbackAction(
-          onInvoke: (_) => _search?.call(),
-        ),
-        RefreshIntent: CallbackAction(onInvoke: (_) => _refresh?.call()),
-        GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
-          onInvoke: _changeLocation,
-        ),
-        ShortcutsHelpIntent: CallbackAction(
-          onInvoke: (_) => showKeyboardShortcuts(context),
-        ),
-      },
-      child: buildView(context),
+      actions: getActions(context),
+      child: ColoredBox(
+        color:
+            getOutsideColor(context) ?? Theme.of(context).colorScheme.surface,
+        child: prideEnabled && !isCompact
+            ? Stack(
+                children: [
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: PridePainter(prideFlagDesign, opacity: .35),
+                    ),
+                  ),
+                  scaffold,
+                ],
+              )
+            : scaffold,
+      ),
     );
   }
 
-  dynamic _changeLocation(GoToAppLocationIntent i) {
+  PreferredSizeWidget buildAppBar(BuildContext context, bool immerse) {
+    final theme = Theme.of(context);
+
+    Color? foregroundColor;
+
+    if (immerse) {
+      foregroundColor = theme.colorScheme.onSurface;
+    }
+
+    final kaitekiTextStyle = theme.ktkTextTheme?.kaitekiTextStyle ??
+        DefaultKaitekiTextTheme(context).kaitekiTextStyle;
+    return AppBar(
+      foregroundColor: foregroundColor,
+      forceMaterialTransparency: immerse && theme.useMaterial3,
+      title: Text(kAppName, style: kaitekiTextStyle),
+      actions: _buildAppBarActions(context),
+      scrolledUnderElevation: immerse ? 0.0 : null,
+    );
+  }
+
+  Widget buildPage(BuildContext context, MainScreenTabType tab) {
+    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
+    return switch (tab) {
+      MainScreenTabType.home => HomePage(
+          key: _homePageKey,
+          initialTimeline: widget.initialTimeline,
+          tabAlignment: isCompact ? null : TabAlignment.center,
+        ),
+      MainScreenTabType.notifications => const NotificationsPage(),
+      MainScreenTabType.chats => const ChatsPage(),
+      MainScreenTabType.bookmarks => const BookmarksPage(),
+      MainScreenTabType.explore => const ExplorePage(),
+    };
+  }
+
+  Map<Type, Action<Intent>> getActions(BuildContext context) {
+    return {
+      NewPostIntent: CallbackAction(
+        onInvoke: (_) => context.pushNamed(
+          "compose",
+          pathParameters: ref.accountRouterParams,
+        ),
+      ),
+      SearchIntent: CallbackAction(
+        onInvoke: (_) => _search?.call(),
+      ),
+      RefreshIntent: CallbackAction(onInvoke: (_) => onRefresh()),
+      GoToAppLocationIntent: CallbackAction<GoToAppLocationIntent>(
+        onInvoke: _changeLocation,
+      ),
+      ShortcutsHelpIntent: CallbackAction(
+        onInvoke: (_) => showKeyboardShortcuts(context),
+      ),
+    };
+  }
+
+  Color? getOutsideColor(BuildContext context) {
+    final theme = Theme.of(context);
+    if (theme.useMaterial3) return theme.colorScheme.surfaceContainer;
+    return null;
+  }
+
+  List<MainScreenTabType> getTabs() {
+    final adapter = ref.watch(adapterProvider);
+    final chatsEnabled = ref.watch(AppExperiment.chats.provider);
+
+    return MainScreenTabType.values
+        .where((e) => e.tab?.isAvailable(adapter) ?? true)
+        .where((e) => !(e == MainScreenTabType.chats && !chatsEnabled))
+        .toList();
+  }
+
+  Future<void> onRefresh() async {
+    final accountKey = ref.read(currentAccountProvider)!.key;
+
+    switch (_currentTab) {
+      case MainScreenTabType.notifications:
+        ref.invalidate(notificationServiceProvider(accountKey));
+        break;
+
+      case MainScreenTabType.home:
+        final timeline = _homePageKey.currentState?.timeline;
+
+        if (timeline == null) {
+          Logger("MainScreen").warning(
+            "I wanted to refresh the timeline, but I didn't get the timeline source back from the home page.",
+          );
+          return;
+        }
+
+        ref.invalidate(timelineServiceProvider(accountKey, timeline));
+        break;
+
+      case MainScreenTabType.bookmarks:
+        ref.invalidate(bookmarksServiceProvider(accountKey));
+        break;
+
+      case MainScreenTabType.chats:
+      case MainScreenTabType.explore:
+        break;
+    }
+  }
+
+  List<Widget> _buildAppBarActions(BuildContext context) {
+    final l10n = context.l10n;
+
+    return [
+      IconButton(
+        icon: const Icon(Icons.search_rounded),
+        onPressed: _search,
+        tooltip: l10n.searchButtonLabel,
+      ),
+      if (ref.watch(pointingDeviceProvider) == PointingDevice.mouse)
+        IconButton(
+          icon: const Icon(Icons.refresh_rounded),
+          onPressed: onRefresh,
+          tooltip: l10n.refreshTimelineButtonLabel,
+        ),
+      const AccountSwitcherWidget(size: 40),
+    ];
+  }
+
+  void _changeLocation(GoToAppLocationIntent i) {
     switch (i.location) {
       case AppLocation.home:
-        _changePage(TabKind.home);
+        _changeTab(MainScreenTabType.home);
         break;
       case AppLocation.notifications:
-        _changePage(TabKind.notifications);
+        _changeTab(MainScreenTabType.notifications);
         break;
       case AppLocation.bookmarks:
-        _changePage(TabKind.bookmarks);
+        _changeTab(MainScreenTabType.bookmarks);
         break;
       case AppLocation.settings:
         context.push("/settings");
         break;
       default:
-        return null;
+        break;
     }
   }
 
-  void _changePage(TabKind tab) => setState(() => _currentTab = tab);
+  void _changeTab(MainScreenTabType tab) {
+    if (_currentTab == tab) {
+      if (tab == MainScreenTabType.home) {
+        _homePageKey.currentState?.scrollToTop();
+      }
 
-  Widget buildView(BuildContext context) {
-    return _view.create(
-      getPage: (tab) => buildPage(context, tab),
-      onChangeTab: _changePage,
-      tab: _currentTab,
-      onChangeView: ([view]) async {
-        var layout = view;
+      return;
+    }
 
-        layout ??= await showDialog<MainScreenViewType>(
-          context: context,
-          builder: (_) => OptionsDialog(
-            groupValue: _view,
-            values: MainScreenViewType.values,
-            textBuilder: (context, e) => Text(e.getDisplayName(context.l10n)),
-            title: const Text("Switch layout"),
-          ),
-        );
-
-        if (layout == null) return;
-
-        setState(() => _view = layout!);
-      },
-    );
+    setState(() => _currentTab = tab);
   }
 
-  Widget buildPage(BuildContext context, TabKind tab) {
-    return switch (tab) {
-      TabKind.home => TimelinePage(
-          key: _timelineKey,
-          initialTimeline: widget.initialTimeline,
+  void _setSystemUIOverlayStyle(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: ElevationOverlay.applySurfaceTint(
+          Theme.of(context).colorScheme.surface,
+          Theme.of(context).colorScheme.surfaceTint,
+          3,
         ),
-      TabKind.notifications => const NotificationsPage(),
-      TabKind.chats => const ChatsPage(),
-      TabKind.bookmarks => const BookmarksPage(),
-      TabKind.explore => const ExplorePage(),
-      TabKind.directMessages => const PlaceholderPage(),
-    };
+        systemNavigationBarDividerColor:
+            Theme.of(context).colorScheme.surfaceVariant,
+        systemNavigationBarIconBrightness:
+            Theme.of(context).colorScheme.brightness.inverted,
+      ),
+    );
   }
 }
 
-Future<void> showKeyboardShortcuts(BuildContext context) async {
-  await showDialog(
-    context: context,
-    builder: (_) => const KeyboardShortcutsDialog(),
-  );
+class _BodyWrapper extends StatelessWidget {
+  final Widget child;
+  final List<MainScreenTabType>? tabTypes;
+  final int currentIndex;
+  final ValueChanged<int>? onChangeIndex;
+
+  const _BodyWrapper({
+    required this.child,
+    this.tabTypes,
+    required this.currentIndex,
+    required this.onChangeIndex,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var body = child;
+
+    final useMaterial3 = Theme.of(context).useMaterial3;
+
+    if (useMaterial3) {
+      body = Material(
+        color: Theme.of(context).colorScheme.surface,
+        child: body,
+      );
+    }
+
+    body = PageTransitionSwitcher(
+      transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+        return FadeThroughTransition(
+          animation: primaryAnimation,
+          secondaryAnimation: secondaryAnimation,
+          child: child,
+        );
+      },
+      child: child,
+    );
+
+    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
+    if (isCompact) return body;
+
+    if (useMaterial3) {
+      body = ClipRRect(
+        borderRadius: const BorderRadiusDirectional.only(
+          topStart: Radius.circular(16.0),
+        ),
+        child: body,
+      );
+    }
+
+    final tabTypes = this.tabTypes;
+    final canShowRail = !(tabTypes == null || tabTypes.length < 2);
+
+    if (canShowRail) {
+      body = Row(
+        children: [
+          MainScreenNavigationRail(
+            tabTypes: tabTypes,
+            currentIndex: currentIndex,
+            onChangeIndex: onChangeIndex,
+            backgroundColor: Colors.transparent,
+          ),
+          if (!useMaterial3) const VerticalDivider(thickness: 1, width: 1),
+          Expanded(child: body),
+        ],
+      );
+    }
+
+    return body;
+  }
 }

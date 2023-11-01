@@ -1,10 +1,11 @@
 import "package:collection/collection.dart";
 import "package:html/dom.dart" as dom;
 import "package:html/parser.dart" show parseFragment;
-import "package:kaiteki/fediverse/model/user/reference.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
 
 typedef HtmlElementConstructor = List<Element>? Function(
@@ -32,6 +33,7 @@ class HtmlTextParser implements TextParser {
     "pre": _renderCodeFont,
     "span": _renderNoop,
     "strong": _renderBold,
+    "li": _renderListItem,
   };
 
   const HtmlTextParser();
@@ -89,7 +91,7 @@ class HtmlTextParser implements TextParser {
         null,
         style: const TextElementStyle(font: TextElementFont.monospace),
         children: subElements,
-      )
+      ),
     ];
   }
 
@@ -102,7 +104,7 @@ class HtmlTextParser implements TextParser {
         null,
         style: const TextElementStyle(italic: true),
         children: subElements,
-      )
+      ),
     ];
   }
 
@@ -115,7 +117,7 @@ class HtmlTextParser implements TextParser {
         null,
         style: const TextElementStyle(bold: true),
         children: subElements,
-      )
+      ),
     ];
   }
 
@@ -130,6 +132,13 @@ class HtmlTextParser implements TextParser {
     }
 
     return [TextElement(text, children: subElements)];
+  }
+
+  static List<Element> _renderListItem(
+    dom.Element element,
+    List<Element> subElements,
+  ) {
+    return [TextElement("$kBullet ${element.text}\n")];
   }
 
   static List<Element> _renderNoop(dom.Element _, List<Element> subElements) {

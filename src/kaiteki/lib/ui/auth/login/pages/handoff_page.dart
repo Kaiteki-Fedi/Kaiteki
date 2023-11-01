@@ -2,6 +2,7 @@ import "dart:convert";
 
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
@@ -98,7 +99,8 @@ class _HandoffPageState extends State<HandoffPage> {
                         }
 
                         final transitAccount = TransitAccount.fromJson(json);
-                        final accountManager = ref.read(accountManagerProvider);
+                        final accountManager =
+                            ref.read(accountManagerProvider.notifier);
                         final accountKey = AccountKey(
                           transitAccount.apiType,
                           transitAccount.instance,

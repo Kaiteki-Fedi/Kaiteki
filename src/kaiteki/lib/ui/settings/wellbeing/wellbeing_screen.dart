@@ -4,7 +4,6 @@ import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/content_warning_behavior.dart";
 import "package:kaiteki/preferences/theme_preferences.dart" as preferences;
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
-import "package:kaiteki/ui/settings/section_header.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
@@ -35,7 +34,7 @@ class WellbeingScreen extends StatelessWidget {
                 ],
               ),
               SettingsSection(
-                title: const SectionHeader("Badges"),
+                title: const Text("Badges"),
                 children: [
                   PreferenceSwitchListTile(
                     secondary: const Icon(Icons.looks_one_rounded),

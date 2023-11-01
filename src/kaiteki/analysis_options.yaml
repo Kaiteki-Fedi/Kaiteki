@@ -5,6 +5,7 @@ analyzer:
     - custom_lint
   exclude:
     - '**.g.dart'
+    - 'lib/l10n/**'
   errors:
     missing_enum_constant_in_switch: ignore
     # Ignoring TODO comments since they're obnoxious

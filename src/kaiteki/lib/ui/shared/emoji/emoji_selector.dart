@@ -6,12 +6,12 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/emoji/category.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/emoji/unicode.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_button.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki_core/model.dart";
 
 const _emojiSize = 32.0;
 
@@ -121,7 +121,6 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
             ),
           ),
         ],
-        const Divider(height: 2),
         Expanded(
           child: Material(
             child: CustomScrollView(
@@ -129,19 +128,17 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
               slivers: [
                 if (!hasEmojis)
                   if (_searchTextController.text.isNotEmpty)
-                    const SliverFillRemaining(
+                    SliverFillRemaining(
                       child: IconLandingWidget(
-                        icon: Icon(Icons.search_off_rounded),
-                        // TODO(Craftplacer): Unlocalized string
-                        text: Text("No emojis found"),
+                        icon: const Icon(Icons.search_off_rounded),
+                        text: Text(context.l10n.searchEmojisNoResults),
                       ),
                     )
                   else
-                    const SliverFillRemaining(
+                    SliverFillRemaining(
                       child: IconLandingWidget(
-                        icon: Icon(Icons.sentiment_dissatisfied_rounded),
-                        // TODO(Craftplacer): Unlocalized string
-                        text: Text("No emojis here yet..."),
+                        icon: const Icon(Icons.sentiment_dissatisfied_rounded),
+                        text: Text(context.l10n.noRecentlyUsedEmojis),
                       ),
                     )
                 else
@@ -193,42 +190,24 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
   ) {
     final item = items[index];
     final tooltip = _getTooltip(item.emoji);
+
     Widget child = GestureDetector(
-      onLongPress: () async {
-        if (item.variants.isEmpty) return;
-        final variant = await selectVariant(item);
-        if (variant == null) return;
-        _onSelect(variant);
-      },
       child: EmojiButton(
         item.emoji,
         size: _emojiSize,
         onTap: () => _onSelect(item.emoji),
+        onLongTap: item.variants.isEmpty
+            ? null
+            : () async {
+                final variant = await selectVariant(item);
+                if (variant != null) _onSelect(variant);
+              },
       ),
     );
 
     // HACK(Craftplacer): We disable displaying `Tooltip`s on slivers when debugging because that fails an assert when hot-reloading.
     if (!kDebugMode && tooltip != null) {
-      return Tooltip(
-        message: tooltip,
-        child: child,
-      );
-    }
-
-    if (item.variants.isNotEmpty) {
-      child = Stack(
-        children: [
-          Positioned(
-            bottom: -8,
-            right: 0,
-            child: Icon(
-              Icons.more_horiz,
-              color: Theme.of(context).disabledColor,
-            ),
-          ),
-          Positioned.fill(child: child),
-        ],
-      );
+      child = Tooltip(message: tooltip, child: child);
     }
 
     return child;
@@ -251,14 +230,14 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
     final asString = toRecent(emoji);
     ref.read(recentlyUsedEmojis).value = [
       asString,
-      ...recents.where((e) => e != asString)
+      ...recents.where((e) => e != asString),
     ];
   }
 
   Future<Emoji?> selectVariant(EmojiCategoryItem item) async {
     return showModalBottomSheet<Emoji?>(
       context: context,
-      constraints: bottomSheetConstraints,
+      constraints: kBottomSheetConstraints,
       builder: (context) {
         return GridView.builder(
           shrinkWrap: true,

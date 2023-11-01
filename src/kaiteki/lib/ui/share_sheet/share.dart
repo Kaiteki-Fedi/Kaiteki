@@ -2,8 +2,8 @@ import "dart:io";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/ui/share_sheet/sheet.dart";
+import "package:kaiteki_core/model.dart";
 import "package:share_plus/share_plus.dart";
 
 Future<void> share(BuildContext context, Object content) async {

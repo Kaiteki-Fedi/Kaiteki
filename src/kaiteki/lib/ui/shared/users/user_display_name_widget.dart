@@ -1,16 +1,19 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/user/user.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 class UserDisplayNameWidget extends ConsumerWidget {
   final User user;
-  final Axis? orientation;
+  final Axis orientation;
+  final TextStyle? secondaryTextStyle;
 
   const UserDisplayNameWidget(
     this.user, {
     super.key,
-    this.orientation,
+    this.secondaryTextStyle,
+    this.orientation = Axis.horizontal,
   });
 
   @override
@@ -19,40 +22,60 @@ class UserDisplayNameWidget extends ConsumerWidget {
       user,
       orientation == Axis.vertical,
     );
-    const primaryTextStyle = TextStyle(fontWeight: FontWeight.bold);
+    final primaryTextStyle = Theme.of(context).textTheme.titleSmall;
     final textSpacing = !content.separate ? 0.0 : 6.0;
 
-    return buildFlowWidget([
-      Text.rich(
-        user.renderText(context, ref, content.primary),
-        style: primaryTextStyle,
-        maxLines: 1,
-        overflow: TextOverflow.fade,
-        softWrap: false,
-      ),
-      SizedBox(width: textSpacing),
-      if (content.secondary != null)
-        Text(
-          content.secondary!,
-          style: TextStyle(color: Theme.of(context).disabledColor),
-          overflow: TextOverflow.fade,
-          maxLines: 1,
-          softWrap: false,
-        ),
-    ]);
-  }
+    final secondaryText = content.secondary;
+    final secondaryColor =
+        Theme.of(context).getEmphasisColor(EmphasisColor.disabled);
+    final secondaryTextStyle =
+        this.secondaryTextStyle?.copyWith(color: secondaryColor) ??
+            secondaryColor.textStyle;
 
-  Widget buildFlowWidget(List<Widget> children) {
     switch (orientation) {
       case Axis.horizontal:
-        return Row(children: children);
+        return RepaintBoundary(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                user.renderText(context, ref, content.primary),
+                if (secondaryText != null) ...[
+                  WidgetSpan(child: SizedBox(width: textSpacing)),
+                  TextSpan(
+                    text: secondaryText,
+                    style: secondaryTextStyle,
+                  ),
+                ],
+              ],
+              style: primaryTextStyle,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+            softWrap: false,
+          ),
+        );
       case Axis.vertical:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
+          children: [
+            RepaintBoundary(
+              child: Text.rich(
+                user.renderText(context, ref, content.primary),
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
+            ),
+            if (secondaryText != null)
+              Text(
+                secondaryText,
+                style: secondaryTextStyle,
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
+          ],
         );
-      default:
-        return OverflowBar(children: children);
     }
   }
 }

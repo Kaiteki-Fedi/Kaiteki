@@ -6,7 +6,7 @@ part of 'users.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$usersServiceHash() => r'631460631420ad196db95a548ee5e2272b9cc151';
+String _$usersServiceHash() => r'03291de8674c3ae95ac80b3e062d7c9ab371dbd9';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,11 +29,11 @@ class _SystemHash {
   }
 }
 
-abstract class _$UsersService extends BuildlessAsyncNotifier<User<dynamic>> {
+abstract class _$UsersService extends BuildlessAsyncNotifier<User?> {
   late final AccountKey key;
   late final String id;
 
-  FutureOr<User<dynamic>> build(
+  FutureOr<User?> build(
     AccountKey key,
     String id,
   );
@@ -44,7 +44,7 @@ abstract class _$UsersService extends BuildlessAsyncNotifier<User<dynamic>> {
 const usersServiceProvider = UsersServiceFamily();
 
 /// See also [UsersService].
-class UsersServiceFamily extends Family<AsyncValue<User<dynamic>>> {
+class UsersServiceFamily extends Family<AsyncValue<User?>> {
   /// See also [UsersService].
   const UsersServiceFamily();
 
@@ -86,12 +86,12 @@ class UsersServiceFamily extends Family<AsyncValue<User<dynamic>>> {
 
 /// See also [UsersService].
 class UsersServiceProvider
-    extends AsyncNotifierProviderImpl<UsersService, User<dynamic>> {
+    extends AsyncNotifierProviderImpl<UsersService, User?> {
   /// See also [UsersService].
   UsersServiceProvider(
-    this.key,
-    this.id,
-  ) : super.internal(
+    AccountKey key,
+    String id,
+  ) : this._internal(
           () => UsersService()
             ..key = key
             ..id = id,
@@ -104,10 +104,57 @@ class UsersServiceProvider
           dependencies: UsersServiceFamily._dependencies,
           allTransitiveDependencies:
               UsersServiceFamily._allTransitiveDependencies,
+          key: key,
+          id: id,
         );
+
+  UsersServiceProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.key,
+    required this.id,
+  }) : super.internal();
 
   final AccountKey key;
   final String id;
+
+  @override
+  FutureOr<User?> runNotifierBuild(
+    covariant UsersService notifier,
+  ) {
+    return notifier.build(
+      key,
+      id,
+    );
+  }
+
+  @override
+  Override overrideWith(UsersService Function() create) {
+    return ProviderOverride(
+      origin: this,
+      override: UsersServiceProvider._internal(
+        () => create()
+          ..key = key
+          ..id = id,
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        key: key,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AsyncNotifierProviderElement<UsersService, User?> createElement() {
+    return _UsersServiceProviderElement(this);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -122,15 +169,25 @@ class UsersServiceProvider
 
     return _SystemHash.finish(hash);
   }
+}
+
+mixin UsersServiceRef on AsyncNotifierProviderRef<User?> {
+  /// The parameter `key` of this provider.
+  AccountKey get key;
+
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _UsersServiceProviderElement
+    extends AsyncNotifierProviderElement<UsersService, User?>
+    with UsersServiceRef {
+  _UsersServiceProviderElement(super.provider);
 
   @override
-  FutureOr<User<dynamic>> runNotifierBuild(
-    covariant UsersService notifier,
-  ) {
-    return notifier.build(
-      key,
-      id,
-    );
-  }
+  AccountKey get key => (origin as UsersServiceProvider).key;
+  @override
+  String get id => (origin as UsersServiceProvider).id;
 }
-// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

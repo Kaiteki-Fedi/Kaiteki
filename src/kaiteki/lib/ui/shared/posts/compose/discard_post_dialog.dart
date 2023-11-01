@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/constants.dart" show dialogConstraints;
+import "package:kaiteki/constants.dart" show kDialogConstraints;
 import "package:kaiteki/di.dart";
 
 class DiscardPostDialog extends StatelessWidget {
@@ -9,7 +9,7 @@ class DiscardPostDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return ConstrainedBox(
-      constraints: dialogConstraints,
+      constraints: kDialogConstraints,
       child: AlertDialog(
         icon: const Icon(Icons.delete),
         title: Text(l10n.discardDraftDialogTitle),

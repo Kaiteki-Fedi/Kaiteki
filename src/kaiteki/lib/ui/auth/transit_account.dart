@@ -1,6 +1,6 @@
 import "package:json_annotation/json_annotation.dart";
-import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki_core/social.dart";
 
 part "transit_account.g.dart";
 

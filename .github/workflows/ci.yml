@@ -39,8 +39,13 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Analyze
-        run: 'flutter analyze --no-pub --no-fatal-infos --no-congratulate --no-preamble'
+        uses: invertase/github-action-dart-analyzer@v2.0.0
+        with:
+          working-directory: ${{ env.SOURCE_PATH }}
 
       - name: Test
         run: 'flutter test --coverage -r expanded --no-pub'
@@ -84,6 +89,9 @@ jobs:
 
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
 
       - name: Build
         run: 'make build-linux ${{needs.test.outputs.make-args}}'
@@ -179,6 +187,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Build (unsigned)
         if: github.event_name == 'pull_request'
         run: 'make build-android ${{needs.test.outputs.make-args}}'
@@ -194,6 +205,8 @@ jobs:
       - name: Build (signed)
         if: github.event_name != 'pull_request'
         run: 'make build-android SIGNED=TRUE ${{needs.test.outputs.make-args}}'
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -226,6 +239,9 @@ jobs:
       - name: Get packages
         run: 'flutter pub get'
 
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
+
       - name: Build
         run: 'make build-windows'
         
@@ -233,7 +249,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows
-          path: '${{ env.SOURCE_PATH }}/build/windows/runner/Release/'
+          path: '${{ env.SOURCE_PATH }}/build/windows/x64/runner/Release/'
 
   build-web:
     name: Build for Web
@@ -258,6 +274,9 @@ jobs:
 
       - name: Get packages
         run: 'flutter pub get'
+
+      - name: Generate Localizations
+        run: 'flutter gen-l10n'
 
       - name: Build
         run: 'make build-web'

@@ -1,6 +1,6 @@
-import "package:kaiteki/fediverse/model/model.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
+import "package:kaiteki_core/model.dart";
 import "package:test/test.dart";
 
 void main() {
@@ -125,7 +125,9 @@ void main() {
       orderedEquals([
         const HashtagElement("Test"),
         const TextElement(" "),
-        MentionElement(const UserReference.url("https://floss.social/@Kaiteki"))
+        MentionElement(
+          const UserReference.url("https://floss.social/@Kaiteki"),
+        ),
       ]),
     );
   });

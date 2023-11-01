@@ -6,7 +6,7 @@ import "package:flutter/services.dart";
 import "package:http/http.dart" as http;
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
+import "package:kaiteki_core/model.dart";
 
 class AttachmentInspectionScreen extends StatefulWidget {
   final List<Attachment> attachments;
@@ -32,6 +32,7 @@ class _AttachmentInspectionScreenState
   Attachment get attachment => widget.attachments.elementAt(currentPage);
 
   bool get canNavigateBackwards => currentPage > 0;
+
   bool get canNavigateForwards => currentPage < (widget.attachments.length - 1);
 
   @override
@@ -53,7 +54,7 @@ class _AttachmentInspectionScreenState
     final pageView = PageView(
       controller: controller,
       children: [
-        for (var attachment in widget.attachments)
+        for (final attachment in widget.attachments)
           _getAttachmentWidget(attachment),
       ],
     );
@@ -292,14 +293,17 @@ class _AttachmentInspectionScreenState
     if (description == null) return;
     await showModalBottomSheet(
       context: context,
-      constraints: bottomSheetConstraints,
+      constraints: kBottomSheetConstraints,
       builder: (_) => Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Alt text", style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              context.l10n.altText,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             Text(description),
           ],

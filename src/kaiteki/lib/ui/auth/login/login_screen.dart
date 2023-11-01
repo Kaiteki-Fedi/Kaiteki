@@ -1,17 +1,18 @@
 import "dart:async";
+import "dart:convert";
+import "dart:io";
 
 import "package:animations/animations.dart";
 import "package:async/async.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
-import "package:kaiteki/auth/login_functions.dart";
-import "package:kaiteki/auth/login_typedefs.dart";
+import "package:kaiteki/account_manager.dart";
+import "package:kaiteki/auth/oauth.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/fediverse/adapter.dart";
-import "package:kaiteki/fediverse/api_type.dart";
 import "package:kaiteki/fediverse/instance_prober.dart";
-import "package:kaiteki/fediverse/model/instance.dart";
+import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/auth/login/dialogs/api_type_dialog.dart";
 import "package:kaiteki/ui/auth/login/pages/code_page.dart";
 import "package:kaiteki/ui/auth/login/pages/handoff_page.dart";
@@ -22,9 +23,14 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/authentication_unsuccessful_dialog.dart";
 import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki_material/kaiteki_material.dart";
+import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
+
+final kOAuthPage = Uri.https("kaiteki.app", "/oauth");
+
+T Function(T value) getDefaultSubmitCallback<T>() => (value) => value;
 
 class LoginScreen extends ConsumerStatefulWidget {
   // Whether the login screen only should pop with an account, instead of
@@ -83,9 +89,11 @@ class CallbackRequest<T, K extends Function> {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  static final _logger = Logger("LoginScreen");
+
   InstanceCompound? _instance;
-  CallbackRequest<void, CredentialsSubmitCallback>? _credentialRequest;
-  CallbackRequest<void, CodeSubmitCallback>? _codeRequest;
+  CallbackRequest<Credentials?, CredentialsSubmitCallback>? _credentialRequest;
+  CallbackRequest<String?, CodeSubmitCallback>? _codeRequest;
   CodePromptOptions? _codeOptions;
   VoidCallback? _oAuth;
 
@@ -113,7 +121,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   void dispose() {
-    // Avoid setting state when widget becomes unmounted
+    _credentialRequest?.completer.complete(null);
+    _codeRequest?.completer.complete(null);
     _fetchInstanceFuture?.cancel();
     super.dispose();
   }
@@ -138,6 +147,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   : Image.network(
                       instanceBackgroundUrl.toString(),
                       fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => const SizedBox(),
                     ),
             ),
           ),
@@ -163,8 +173,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   color: formWidgetColor,
                   child: SizedBox(
                     height: double.infinity,
-                    child: WillPopScope(
-                      onWillPop: _onBackButtonPressed,
+                    child: PopScope(
+                      canPop: false,
+                      onPopInvoked: _onPopInvoked,
                       child: PageTransitionSwitcher(
                         transitionBuilder: _buildTransition,
                         duration: const Duration(milliseconds: 750),
@@ -193,7 +204,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return l10n.authNoUrlAllowed;
     }
 
-    // var accounts = ref.read(accountProvider);
+    // var accounts = ref.read(currentAccountProvider);
     // if (accounts.accounts.any((compound) =>
     //     compound.instance == instance &&
     //     compound.accountSecret.username == username)) {
@@ -239,41 +250,49 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Future<bool> _onBackButtonPressed() async {
+  Future<void> _onPopInvoked(bool didPop) async {
+    if (didPop) return;
+
+    final navigator = Navigator.of(context);
+
     // Cancel ongoing requests for user input.
     final request = _credentialRequest ?? _codeRequest;
     if (request != null) {
       request.completer.complete(null);
-      return false;
+      return;
     }
 
     // Cancel ongoing OAuth requests.
     if (_oAuth != null) {
       _oAuth!();
-      return false;
+      return;
     }
 
     // Reset instance
     if (_instance != null) {
       setState(() => _instance = null);
-      return false;
+      return;
     }
 
-    return true;
+    navigator.pop();
   }
 
-  Future<Map<String, String>?> _handleOAuth(
-    GenerateOAuthUrlCallback generateUrl,
+  Future<LoginResult> _oauthLocalServer(
+    BackendAdapter adapter,
+    OAuthInitCallback generateUrl,
   ) async {
-    final successPage = await generateOAuthLandingPage(
-      Theme.of(context).colorScheme,
-    );
+    final successPage =
+        await generateLandingPage(Theme.of(context).colorScheme);
 
     try {
-      return await runOAuthServer(
+      Map<String, String>? extra;
+
+      final query = await runServer(
         (localUrl, cancel) async {
           // TODO(Craftplacer): Show WebView inside login screen when possible
-          final generatedUrl = await generateUrl(localUrl);
+          final Uri generatedUrl;
+
+          (generatedUrl, extra) = await generateUrl(localUrl);
 
           final canLaunch = await canLaunchUrl(generatedUrl);
           if (!canLaunch) throw Exception("Invalid URL");
@@ -283,9 +302,82 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         },
         successPage,
       );
+
+      if (query == null) return const LoginAborted();
+
+      final receiver = adapter as OAuthReceiver;
+      return receiver.handleOAuth(query, extra);
     } finally {
       setState(() => _oAuth = null);
     }
+  }
+
+  Future<LoginResult> _oauthQueryEncode(
+    BackendAdapter adapter,
+    OAuthInitCallback generateUrl,
+  ) async {
+    final (generatedUrl, extra) = await generateUrl(kOAuthPage);
+
+    await launchUrl(
+      generatedUrl,
+      mode: LaunchMode.externalApplication,
+    );
+
+    final code = await _askForCode(
+      const CodePromptOptions(),
+      (code) async => code,
+    );
+
+    if (code == null) return const LoginAborted();
+
+    try {
+      final json = utf8.decode(base64Decode(code));
+      final object = jsonDecode(json) as Map<String, dynamic>;
+      final query = object.cast<String, String>();
+
+      final receiver = adapter as OAuthReceiver;
+      return receiver.handleOAuth(query, extra);
+    } catch (e, s) {
+      _logger.warning("Malformed base64 input for OAuth", e, s);
+    }
+
+    return const LoginAborted();
+  }
+
+  Future<LoginResult> _oauthDeepLink(
+    BackendAdapter adapter,
+    OAuthInitCallback generateUrl,
+  ) async {
+    // If the adapter is not decentralized, then it won't matter what the host
+    // is, so we can just use a placeholder.
+    final host =
+        adapter.safeCast<DecentralizedBackendAdapter>()?.instance ?? "woozy";
+    final redirectUri = getRedirectUri(adapter.type, host);
+
+    if (redirectUri == null) {
+      return LoginFailure(
+        (UnsupportedError("Couldn't generate redirect URI"), null),
+      );
+    }
+
+    final (url, extra) = await generateUrl(redirectUri);
+
+    if (extra != null) {
+      await pushExtra(
+        ref.read(sharedPreferencesProvider),
+        adapter.type,
+        host,
+        extra,
+      );
+    }
+
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+      webOnlyWindowName: "_self",
+    );
+
+    return const LoginAborted();
   }
 
   Future<InstanceCompound?> _fetchInstance(String host) async {
@@ -309,13 +401,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       instance = await adapter.getInstance();
     }
 
-    // // Check for known issue with Misskey instances
-    // if (kIsWeb && type == ApiType.misskey) {
-    //   if (!await _showWebCompatibilityDialog()) {
-    //     return null;
-    //   }
-    // }
-
     return InstanceCompound(host, type, instance);
   }
 
@@ -327,17 +412,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Future<T?> _askForCredentials<T>(
-    CredentialsSubmitCallback<T> onSubmit,
-  ) async {
+  Future<Credentials?> _askForCredentials([
+    CredentialsSubmitCallback? onSubmit,
+  ]) async {
     assert(
       _credentialRequest == null,
       "Credentials are already being asked for",
     );
 
-    final completer = Completer<T?>();
+    final completer = Completer<Credentials?>();
 
-    setState(() => _credentialRequest = CallbackRequest(completer, onSubmit));
+    setState(
+      () => _credentialRequest = CallbackRequest(
+        completer,
+        onSubmit ?? (code) => code,
+      ),
+    );
 
     try {
       return await completer.future;
@@ -346,16 +436,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  Future<T?> _askForCode<T>(
-    CodePromptOptions options,
-    CodeSubmitCallback<T> onSubmit,
-  ) async {
+  Future<String?> _askForCode(
+    CodePromptOptions options, [
+    CodeSubmitCallback? onSubmit,
+  ]) async {
     assert(_codeRequest == null, "A code is already being requested");
 
-    final completer = Completer<T?>();
+    final completer = Completer<String?>();
 
     setState(() {
-      _codeRequest = CallbackRequest(completer, onSubmit);
+      _codeRequest = CallbackRequest(completer, onSubmit ?? (_) {});
       _codeOptions = options;
     });
 
@@ -370,43 +460,71 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login(InstanceCompound instance) async {
-    final accounts = ref.read(accountManagerProvider);
+    final router = GoRouter.of(context);
+
+    final accountManager = ref.read(accountManagerProvider.notifier);
     final adapter = await instance.createAdapter();
 
-    final result = await adapter.login(
-      await accounts.getClientSecret(instance.host),
-      _askForCredentials,
-      _askForCode,
-      _handleOAuth,
+    final loginInterface = adapter as LoginSupport;
+
+    final clientSecret = await accountManager.getClientSecret(instance.host);
+    final loginContext = LoginContext(
+      clientSecret:
+          clientSecret.nullTransform((e) => (e.clientId, e.clientSecret)),
+      requestCredentials: _askForCredentials,
+      requestCode: _askForCode,
+      requestOAuth: (generateUrl, [extra]) {
+        assert(adapter is OAuthReceiver);
+
+        if (kIsWeb && getBaseUri() == null) {
+          return _oauthQueryEncode(adapter, generateUrl);
+        }
+
+        if (kIsWeb || Platform.isAndroid) {
+          return _oauthDeepLink(adapter, generateUrl);
+        }
+
+        return _oauthLocalServer(adapter, generateUrl);
+      },
+      openUrl: (uri) async {
+        await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      },
+      application: kAppId,
     );
 
-    if (result.aborted) return;
+    final result = await loginInterface.login(loginContext);
 
-    if (!result.successful) {
-      _showError(result.error!);
+    if (result is! LoginSuccess) {
+      if (result is LoginFailure) _showError(result.error);
       return;
     }
 
-    final account = result.account!;
+    final account = Account.fromLoginResult(
+      result,
+      adapter,
+      instance.host,
+    );
+
     if (account.accountSecret == null) {
       await _showTemporaryAccountNotice();
     }
 
     if (!mounted) {
-      Logger("LoginScreen").warning(
+      _logger.warning(
         "Login screen was unmounted before login could be completed",
       );
       return;
     }
-
-    final router = GoRouter.of(context);
 
     if (widget.popOnly) {
       router.pop(account);
       return;
     }
 
-    await accounts.add(account);
+    await accountManager.add(account);
     router.goNamed("home", pathParameters: account.key.routerParams);
   }
 
@@ -420,23 +538,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Widget _buildPage() {
-    if (_oAuth != null) {
-      return OAuthPage(onCancel: _oAuth);
-    }
+    if (_oAuth != null) return OAuthPage(onCancel: _oAuth);
 
     final credentialRequest = _credentialRequest;
     if (credentialRequest != null) {
       return UserPage(
         image: _instance?.data.iconUrl.toString(),
-        onBack: _onBackButtonPressed,
         onSubmit: (username, password) async {
           final credentials = Credentials(username, password);
           // Technically we could directly pass the future to the Completer, but
           // this would move the place where the error is raised to the
           // askForCredentials method and not UserPage wanting to show the
           // error.
-          final result = await credentialRequest.callback(credentials);
-          credentialRequest.completer.complete(result);
+          await credentialRequest.callback(credentials);
+          credentialRequest.completer.complete();
         },
       );
     }
@@ -446,8 +561,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return CodePage(
         options: _codeOptions!,
         onSubmit: (code) async {
-          final result = await codeRequest.callback(code);
-          codeRequest.completer.complete(result);
+          await codeRequest.callback(code);
+          codeRequest.completer.complete(code);
         },
       );
     }
@@ -507,7 +622,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           icon: const Icon(Icons.vpn_key_off_rounded),
           title: const Text("Your session will be temporary"),
           content: ConstrainedBox(
-            constraints: dialogConstraints,
+            constraints: kDialogConstraints,
             child: const Text(
               "The backend implementation of this service did not provide login information when you signed in. This means that you'll be signed out next time you use Kaiteki.",
             ),

@@ -1,9 +1,7 @@
-import "dart:io";
-import "dart:typed_data";
-
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/attachment.dart";
-import "package:kaiteki/fediverse/model/post/draft.dart";
+import "package:kaiteki/di.dart";
+import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/model.dart";
 
 class AttachmentTrayItem extends StatelessWidget {
   final VoidCallback? onRemove;
@@ -24,45 +22,27 @@ class AttachmentTrayItem extends StatelessWidget {
   Widget build(BuildContext context) {
     const size = 72.0;
 
-    Widget widget = Center(
-      child: _buildFallbackIcon(AttachmentType.file),
-    );
-
     final opacity = attachment.isSensitive ? 0.25 : 1.0;
-
-    switch (AttachmentType.image) {
-      case AttachmentType.image:
-        final filePath = attachment.file?.path;
-        if (filePath != null) {
-          widget = Image.file(
-            File(filePath),
-            fit: BoxFit.cover,
-            opacity: AlwaysStoppedAnimation(opacity),
-          );
-          break;
-        }
-
-        final fileBytes = attachment.file?.bytes;
-        if (fileBytes != null) {
-          widget = Image.memory(
-            Uint8List.fromList(fileBytes),
-            fit: BoxFit.cover,
-            opacity: AlwaysStoppedAnimation(opacity),
-          );
-          break;
-        }
-      default:
-    }
+    final file = attachment.file;
+    final widget = switch (AttachmentType.image) {
+      AttachmentType.image when file != null => Image(
+          image: file.getImageProvider(),
+          fit: BoxFit.cover,
+          opacity: AlwaysStoppedAnimation(opacity),
+        ),
+      _ => Center(child: _buildFallbackIcon(AttachmentType.file)),
+    };
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Material(
+      child: Card(
         clipBehavior: Clip.antiAlias,
-        borderRadius: BorderRadius.circular(8.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
         color: Theme.of(context).colorScheme.surfaceVariant,
         elevation: 4.0,
         child: PopupMenuButton(
-          tooltip: "",
           color: Theme.of(context).colorScheme.surfaceVariant,
           itemBuilder: buildItemActions,
           child: SizedBox(
@@ -77,7 +57,7 @@ class AttachmentTrayItem extends StatelessWidget {
                       Icons.warning_rounded,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
-                  )
+                  ),
               ],
             ),
           ),
@@ -106,21 +86,19 @@ class AttachmentTrayItem extends StatelessWidget {
       ),
       PopupMenuItem(
         onTap: () => onChangeDescription?.call(),
-        child: const ListTile(
+        child: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Icon(
-            Icons.drive_file_rename_outline_rounded,
-          ),
-          title: Text("Change description"),
+          leading: const Icon(Icons.drive_file_rename_outline_rounded),
+          title: Text(context.l10n.changeAltText),
         ),
       ),
       PopupMenuItem(
         onTap: () => onRemove?.call(),
         enabled: onRemove != null,
-        child: const ListTile(
+        child: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Icon(Icons.close_rounded),
-          title: Text("Remove attachment"),
+          leading: const Icon(Icons.close_rounded),
+          title: Text(context.l10n.removeAttachmentButtonLabel),
         ),
       ),
     ];

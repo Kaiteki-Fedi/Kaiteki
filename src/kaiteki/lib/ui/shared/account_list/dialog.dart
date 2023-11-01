@@ -3,6 +3,7 @@ import "dart:convert";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
+import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
@@ -20,12 +21,12 @@ class AccountListDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DynamicDialogContainer(
       builder: (context, fullscreen) {
-        final manager = ref.watch(accountManagerProvider);
-        final currentAccount = ref.watch(accountProvider);
+        final accounts = ref.watch(accountManagerProvider).accounts;
+        final currentAccount = ref.watch(currentAccountProvider);
         final l10n = context.l10n;
 
         final unselectedAccounts =
-            manager.accounts.whereNot((e) => e.key == currentAccount?.key);
+            accounts.whereNot((e) => e.key == currentAccount?.key);
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -33,52 +34,86 @@ class AccountListDialog extends ConsumerWidget {
             AppBar(
               title: Text(l10n.manageAccountsTitle),
               forceMaterialTransparency: true,
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
             ),
             Flexible(
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (currentAccount != null) ...[
+                      SizedBox(
+                        height: 48,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Signed in as",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ),
+                        ),
+                      ),
                       AccountListTile(
                         account: currentAccount,
                         selected: true,
-                        onSelect: () =>
-                            context.showUser(currentAccount.user, ref),
-                        onSignOut: () =>
-                            _onSignOut(context, ref, currentAccount),
-                        onHandoff: () =>
-                            _onHandoff(context, ref, currentAccount),
-                        showInstanceIcon: true,
+                        onTap: () => context.showUser(currentAccount.user, ref),
+                        trailing: buildMenuAnchor(context, ref, currentAccount),
                       ),
-                      const Divider()
+                      if (unselectedAccounts.isNotEmpty) const Divider(),
                     ],
                     for (final account in unselectedAccounts)
                       AccountListTile(
                         account: account,
                         selected: currentAccount == account,
-                        onSelect: () => _switchAccount(context, account),
-                        onSignOut: () => _onSignOut(context, ref, account),
-                        onHandoff: () => _onHandoff(context, ref, account),
-                        showInstanceIcon: true,
+                        onTap: () => _switchAccount(context, account),
+                        trailing: buildMenuAnchor(context, ref, account),
                       ),
-                    ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.outlineVariant,
-                        foregroundColor:
-                            Theme.of(context).colorScheme.onSurface,
-                        radius: 22,
-                        child: const Icon(Icons.add_rounded),
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: FilledButton.icon(
+                        onPressed: () => onTapAdd(context),
+                        icon: const Icon(Icons.add_rounded),
+                        label: Text(l10n.addAccountButtonLabel),
+                        style: FilledButton.styleFrom(
+                          visualDensity: VisualDensity.comfortable,
+                        ),
                       ),
-                      title: Text(l10n.addAccountButtonLabel),
-                      onTap: () => onTapAdd(context),
                     ),
-                    const SizedBox(height: 8),
                   ],
                 ),
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  MenuAnchor buildMenuAnchor(
+    BuildContext context,
+    WidgetRef ref,
+    Account account,
+  ) {
+    return MenuAnchor(
+      menuChildren: [
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.devices_rounded),
+          child: const Text("Sign in on another device"),
+          onPressed: () => _onHandoff(context, ref, account),
+        ),
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.logout_rounded),
+          child: const Text("Sign out"),
+          onPressed: () => _onSignOut(context, ref, account),
+        ),
+      ],
+      builder: (context, controller, child) {
+        return IconButton(
+          icon: Icon(Icons.adaptive.more_rounded),
+          onPressed: controller.open,
         );
       },
     );
@@ -109,8 +144,7 @@ class AccountListDialog extends ConsumerWidget {
 
     if (result != true) return;
 
-    final manager = ref.read(accountManagerProvider);
-    await manager.remove(account);
+    await ref.read(accountManagerProvider.notifier).remove(account);
   }
 
   Future<void> _onHandoff(
@@ -140,6 +174,7 @@ class AccountListDialog extends ConsumerWidget {
                   AppBar(
                     title: const Text("Sign in another device"),
                     forceMaterialTransparency: true,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -154,8 +189,13 @@ class AccountListDialog extends ConsumerWidget {
                     data: jsonEncode(
                       TransitAccount.fromAccount(account).toJson(),
                     ),
+                    eyeStyle: QrEyeStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      eyeShape: QrEyeShape.square,
+                    ),
                     dataModuleStyle: QrDataModuleStyle(
                       color: Theme.of(context).colorScheme.onSurface,
+                      dataModuleShape: QrDataModuleShape.square,
                     ),
                   ),
                 ],

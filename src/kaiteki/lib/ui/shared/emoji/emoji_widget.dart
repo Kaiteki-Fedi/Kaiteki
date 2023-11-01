@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/fediverse/model/emoji/emoji.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
+import "package:kaiteki_core/model.dart";
 
 const _defaultEmojiSize = 24.0;
 
@@ -45,32 +46,26 @@ class EmojiWidget extends StatelessWidget {
       width: square ? size : null,
       height: size,
       fit: BoxFit.contain,
-      // cacheHeight: size.toInt(),
+      cacheHeight: (size * MediaQuery.devicePixelRatioOf(context)).toInt(),
       semanticLabel: "Emoji $emoji",
-      loadingBuilder: (_, widget, event) => event == null //
-          ? widget
-          : PlaceholderEmoji(size: size),
+      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded || frame != null) return child;
+        return PlaceholderEmoji(size: size);
+      },
       errorBuilder: (_, __, ___) => PlaceholderEmoji(size: size),
+      isAntiAlias: true,
     );
   }
 
   Widget buildUnicodeEmoji(BuildContext context, UnicodeEmoji unicodeEmoji) {
-    const textStyle = TextStyle(
-      fontFamily: "Noto Color Emoji",
-      fontFamilyFallback: ["Segoe UI Emoji"],
-    );
-
     final theme = Theme.of(context).extension<EmojiTheme>();
-    final size = this.size ?? theme!.size;
+    final size = this.size ?? theme?.size ?? _defaultEmojiSize;
 
     return SizedBox(
       width: size,
       height: size,
       child: FittedBox(
-        child: Text(
-          unicodeEmoji.short,
-          style: textStyle,
-        ),
+        child: Text(unicodeEmoji.short, style: kEmojiTextStyle),
       ),
     );
   }
