@@ -294,9 +294,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
           (generatedUrl, extra) = await generateUrl(localUrl);
 
-          final canLaunch = await canLaunchUrl(generatedUrl);
-          if (!canLaunch) throw Exception("Invalid URL");
-
           await launchUrl(generatedUrl, mode: LaunchMode.externalApplication);
           setState(() => _oAuth = cancel);
         },
