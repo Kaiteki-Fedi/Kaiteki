@@ -81,7 +81,7 @@ class _AnnouncementsDialogState extends ConsumerState<AnnouncementsDialog> {
               automaticallyImplyLeading: false,
               title: const Text("Announcements"),
               forceMaterialTransparency: true,
-              actions: [refreshButton, closeButton, const SizedBox(width: 8)],
+              actions: [refreshButton, closeButton, kAppBarActionsSpacer],
             ),
             Expanded(child: body),
           ],
