@@ -39,7 +39,9 @@ class UserPanel extends ConsumerWidget {
         // const FederationDisclaimer(),
         if (description != null && description.isNotEmpty) ...[
           const SizedBox(height: 8.0),
-          Text.rich(user.renderDescription(context, ref)),
+          SelectableText.rich(
+            TextSpan(children: [user.renderDescription(context, ref)]),
+          ),
         ],
         const SizedBox(height: 16.0),
         if (user.details.fields != null)
