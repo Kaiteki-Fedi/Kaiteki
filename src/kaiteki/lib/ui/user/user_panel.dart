@@ -119,30 +119,63 @@ class UserPanel extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8.0),
-        InkWell(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                if (followerCount != null && followerCount > 0)
-                  "$followerCount followers",
-                if (followingCount != null && followingCount > 0)
-                  "$followingCount following",
-              ]
-                  .map((e) => TextSpan(text: e))
-                  .intersperse(const TextSpan(text: " • "))
-                  .toList(),
-              style: Theme.of(context).colorScheme.outline.textStyle,
-            ),
-          ),
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (_) => PeopleDialog(userId: user.id),
-              useRootNavigator: false,
-            );
-          },
-        ),
+        _FollowerBar.fromUser(user: user),
       ],
+    );
+  }
+}
+
+class _FollowerBar extends StatelessWidget {
+  const _FollowerBar({
+    super.key,
+    required this.followingCount,
+    required this.followerCount,
+    required this.userId,
+  });
+
+  factory _FollowerBar.fromUser({
+    Key? key,
+    required User user,
+  }) {
+    return _FollowerBar(
+      key: key,
+      followingCount: user.metrics.followingCount,
+      followerCount: user.metrics.followerCount,
+      userId: user.id,
+    );
+  }
+
+  final int? followingCount;
+  final int? followerCount;
+  final String userId;
+
+  @override
+  Widget build(BuildContext context) {
+    final followingCount = this.followingCount;
+    final followerCount = this.followerCount;
+
+    return InkWell(
+      child: Text.rich(
+        TextSpan(
+          children: [
+            if (followingCount != null && followingCount > 0)
+              "$followingCount following",
+            if (followerCount != null && followerCount > 0)
+              "$followerCount followers",
+          ]
+              .map((e) => TextSpan(text: e))
+              .intersperse(const TextSpan(text: " • "))
+              .toList(),
+          style: Theme.of(context).colorScheme.outline.textStyle,
+        ),
+      ),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => PeopleDialog(userId: userId),
+          useRootNavigator: false,
+        );
+      },
     );
   }
 }
