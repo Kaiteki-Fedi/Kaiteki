@@ -44,10 +44,10 @@ class PeopleDialog extends StatelessWidget {
                       ),
                     ),
                     CustomScrollView(
-                      slivers: [UserSliver.followers(userId: userId)],
+                      slivers: [UserSliver.following(userId: userId)],
                     ),
                     CustomScrollView(
-                      slivers: [UserSliver.following(userId: userId)],
+                      slivers: [UserSliver.followers(userId: userId)],
                     ),
                   ],
                 ),
