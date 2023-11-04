@@ -15,11 +15,11 @@ import "package:kaiteki/ui/shared/dialogs/post_too_long_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/responsive_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/enum_icon_button.dart";
+import "package:kaiteki/ui/shared/post_scope_icon.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_tray.dart";
 import "package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/toggle_subject_button.dart";
 import "package:kaiteki/ui/shared/posts/poll_widget.dart";
-import "package:kaiteki/ui/shared/visibility_icon.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
@@ -44,7 +44,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   late final TextEditingController _bodyController;
   late final TextEditingController _subjectController;
   final List<AttachmentDraft> attachments = [];
-  var _visibility = Visibility.public;
+  var _visibility = PostScope.public;
   var _enableSubject = false;
   var _showPreview = false;
   Formatting? _formatting;
@@ -452,13 +452,13 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
         ),
       const SizedBox(height: 24, child: VerticalDivider(width: 16)),
       if (supportedScopes.length >= 2)
-        EnumIconButton<Visibility>(
+        EnumIconButton<PostScope>(
           tooltip: l10n.visibilityButtonTooltip,
           onChanged: (value) => setState(() => _visibility = value),
           value: _visibility,
           values: supportedScopes,
           splashRadius: 24,
-          iconBuilder: (_, value) => VisibilityIcon(value),
+          iconBuilder: (_, value) => PostScopeIcon(value),
           textBuilder: (_, value) => Text(value.toDisplayString(l10n)),
           subtitleBuilder: (_, value) => Text(value.toDescription(l10n)),
         ),

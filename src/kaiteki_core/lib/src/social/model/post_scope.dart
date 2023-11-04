@@ -1,4 +1,4 @@
-enum Visibility {
+enum PostScope {
   /// This [Post] federates to every instance.
   public,
 

@@ -54,7 +54,7 @@ class PollDraft {
 
 class PostDraft extends Equatable {
   final String content;
-  final Visibility visibility;
+  final PostScope visibility;
   final Formatting formatting;
   final PollDraft? poll;
   final String? subject;

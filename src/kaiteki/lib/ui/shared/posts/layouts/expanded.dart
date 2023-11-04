@@ -168,7 +168,7 @@ class ExpandedPostLayout extends ConsumerWidget {
 class _Visibility extends StatelessWidget {
   const _Visibility(this.visibility);
 
-  final Visibility visibility;
+  final PostScope visibility;
 
   @override
   Widget build(BuildContext context) {

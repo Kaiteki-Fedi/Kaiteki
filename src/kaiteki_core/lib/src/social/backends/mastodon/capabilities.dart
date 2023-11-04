@@ -8,12 +8,12 @@ class MastodonCapabilities extends AdapterCapabilities
   Set<Formatting> get supportedFormattings => const {Formatting.plainText};
 
   @override
-  Set<Visibility> get supportedScopes {
+  Set<PostScope> get supportedScopes {
     return const {
-      Visibility.public,
-      Visibility.followersOnly,
-      Visibility.unlisted,
-      Visibility.direct,
+      PostScope.public,
+      PostScope.followersOnly,
+      PostScope.unlisted,
+      PostScope.direct,
     };
   }
 

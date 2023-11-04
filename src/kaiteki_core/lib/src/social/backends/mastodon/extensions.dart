@@ -30,11 +30,11 @@ final mastodonNotificationTypeMap = const {
 };
 
 final mastodonVisibilityRosetta = Rosetta(const {
-  'public': Visibility.public,
-  'unlisted': Visibility.unlisted,
-  'private': Visibility.followersOnly,
-  'direct': Visibility.direct,
-  'local': Visibility.local,
+  'public': PostScope.public,
+  'unlisted': PostScope.unlisted,
+  'private': PostScope.followersOnly,
+  'direct': PostScope.direct,
+  'local': PostScope.local,
 });
 
 final pleromaFormattingRosetta = Rosetta(const {

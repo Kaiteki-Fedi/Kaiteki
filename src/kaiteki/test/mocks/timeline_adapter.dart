@@ -96,7 +96,7 @@ class TimelineAdapterCapabilities extends AdapterCapabilities {
   Set<Formatting> get supportedFormattings => {};
 
   @override
-  Set<Visibility> get supportedScopes => {};
+  Set<PostScope> get supportedScopes => {};
 
   @override
   final Set<TimelineType> supportedTimelines;

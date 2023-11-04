@@ -22,11 +22,11 @@ final misskeyNotificationTypeRosetta = {
   misskey.NotificationType.achievementEarned: NotificationType.unsupported,
 };
 
-final misskeyVisibilityRosetta = Rosetta<String, Visibility>(const {
-  'specified': Visibility.direct,
-  'followers': Visibility.followersOnly,
-  'home': Visibility.unlisted,
-  'public': Visibility.public,
+final misskeyVisibilityRosetta = Rosetta<String, PostScope>(const {
+  'specified': PostScope.direct,
+  'followers': PostScope.followersOnly,
+  'home': PostScope.unlisted,
+  'public': PostScope.public,
 });
 
 Uri buildEmojiUri(String localHost, EmojiHandle handle) {

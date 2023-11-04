@@ -3,40 +3,40 @@ import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki_core/model.dart";
 import "package:mdi/mdi.dart";
 
-extension VisibilityExtensions on Visibility {
+extension VisibilityExtensions on PostScope {
   IconData toIconData() {
     return switch (this) {
-      Visibility.direct => Icons.email_rounded,
-      Visibility.followersOnly => Icons.lock_rounded,
-      Visibility.unlisted => Icons.lock_open_rounded,
-      Visibility.public => Icons.public_rounded,
-      Visibility.circle => Icons.workspaces_rounded,
-      Visibility.local => Icons.groups_rounded,
-      Visibility.mutuals => Icons.people_rounded
+      PostScope.direct => Icons.email_rounded,
+      PostScope.followersOnly => Icons.lock_rounded,
+      PostScope.unlisted => Icons.lock_open_rounded,
+      PostScope.public => Icons.public_rounded,
+      PostScope.circle => Icons.workspaces_rounded,
+      PostScope.local => Icons.groups_rounded,
+      PostScope.mutuals => Icons.people_rounded
     };
   }
 
   String toDisplayString(KaitekiLocalizations l10n) {
     return switch (this) {
-      Visibility.direct => l10n.visibilityDirect,
-      Visibility.followersOnly => l10n.visibilityFollowersOnly,
-      Visibility.unlisted => l10n.visibilityUnlisted,
-      Visibility.public => l10n.visibilityPublic,
-      Visibility.circle => l10n.visibilityCircle,
-      Visibility.local => l10n.visibilityLocal,
-      Visibility.mutuals => l10n.visibilityMutuals,
+      PostScope.direct => l10n.visibilityDirect,
+      PostScope.followersOnly => l10n.visibilityFollowersOnly,
+      PostScope.unlisted => l10n.visibilityUnlisted,
+      PostScope.public => l10n.visibilityPublic,
+      PostScope.circle => l10n.visibilityCircle,
+      PostScope.local => l10n.visibilityLocal,
+      PostScope.mutuals => l10n.visibilityMutuals,
     };
   }
 
   String toDescription(KaitekiLocalizations l10n) {
     return switch (this) {
-      Visibility.direct => l10n.visibilityDirectDescription,
-      Visibility.followersOnly => l10n.visibilityFollowersOnlyDescription,
-      Visibility.unlisted => l10n.visibilityUnlistedDescription,
-      Visibility.public => l10n.visibilityPublicDescription,
-      Visibility.circle => l10n.visibilityCircleDescription,
-      Visibility.local => l10n.visibilityLocalDescription,
-      Visibility.mutuals => l10n.visibilityMutualsDescription,
+      PostScope.direct => l10n.visibilityDirectDescription,
+      PostScope.followersOnly => l10n.visibilityFollowersOnlyDescription,
+      PostScope.unlisted => l10n.visibilityUnlistedDescription,
+      PostScope.public => l10n.visibilityPublicDescription,
+      PostScope.circle => l10n.visibilityCircleDescription,
+      PostScope.local => l10n.visibilityLocalDescription,
+      PostScope.mutuals => l10n.visibilityMutualsDescription,
     };
   }
 }

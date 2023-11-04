@@ -1,10 +1,10 @@
 import 'model/formatting.dart';
+import 'model/post_scope.dart';
 import 'model/timeline_type.dart';
-import 'model/visibility.dart';
 
 abstract class AdapterCapabilities {
   /// Specifies what the adapter supports post scopes (i.e. visibilities).
-  Set<Visibility> get supportedScopes;
+  Set<PostScope> get supportedScopes;
 
   /// Specifies whether the adapter supports submitting posts with subjects
   /// (canonically known as content warnings).

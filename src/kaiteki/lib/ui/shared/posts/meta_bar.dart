@@ -3,11 +3,11 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/post_scope_icon.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 import "package:kaiteki/ui/shared/users/user_badge.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
-import "package:kaiteki/ui/shared/visibility_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 
@@ -143,7 +143,7 @@ class MetaBar extends ConsumerWidget {
           if (visibility != null && showVisibility)
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: VisibilityIcon(visibility, showTooltip: true),
+              child: PostScopeIcon(visibility, showTooltip: true),
             ),
           if (onOpen == null)
             const SizedBox(width: 8)

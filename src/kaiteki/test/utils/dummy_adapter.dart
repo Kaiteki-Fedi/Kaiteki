@@ -106,7 +106,7 @@ class DummyAdapterCapability extends AdapterCapabilities {
   Set<Formatting> get supportedFormattings => Formatting.values.toSet();
 
   @override
-  Set<Visibility> get supportedScopes => Visibility.values.toSet();
+  Set<PostScope> get supportedScopes => PostScope.values.toSet();
 
   @override
   Set<TimelineType> get supportedTimelines => TimelineType.values.toSet();

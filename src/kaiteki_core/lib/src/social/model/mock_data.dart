@@ -8,7 +8,7 @@ final examplePost = Post(
   postedAt: DateTime.now(),
   reactions: [],
   id: 'cool-post',
-  visibility: Visibility.public,
+  visibility: PostScope.public,
 );
 
 final exampleUser = User(

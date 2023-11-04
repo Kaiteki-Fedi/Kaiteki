@@ -8,11 +8,11 @@ import 'emoji.dart';
 import 'formatting.dart';
 import 'poll.dart';
 import 'post.dart';
+import 'post_scope.dart';
 import 'reaction.dart';
 import 'resolvable.dart';
 import 'user.dart';
 import 'user_reference.dart';
-import 'visibility.dart';
 
 export 'draft.dart';
 export 'post_metrics.dart';
@@ -25,7 +25,7 @@ class Post<T> {
   final DateTime postedAt;
   final User author;
   final bool nsfw;
-  final Visibility? visibility;
+  final PostScope? visibility;
   final PostMetrics metrics;
   final PostState state;
   final List<Reaction> reactions;
@@ -81,7 +81,7 @@ class Post<T> {
     DateTime? postedAt,
     User? author,
     bool? nsfw,
-    Visibility? visibility,
+    PostScope? visibility,
     PostMetrics? metrics,
     PostState? state,
     List<Reaction>? reactions,

@@ -6,12 +6,12 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 
-class VisibilityIcon extends ConsumerWidget {
-  final Visibility visibility;
+class PostScopeIcon extends ConsumerWidget {
+  final PostScope scope;
   final bool showTooltip;
 
-  const VisibilityIcon(
-    this.visibility, {
+  const PostScopeIcon(
+    this.scope, {
     super.key,
     this.showTooltip = false,
   });
@@ -21,14 +21,14 @@ class VisibilityIcon extends ConsumerWidget {
     Color? color;
 
     if (ref.watch(coloredPostVisibilities).value) {
-      color = getVisibilityColor(context, visibility);
+      color = getVisibilityColor(context, scope);
     }
 
-    Widget widget = Icon(visibility.toIconData(), color: color);
+    Widget widget = Icon(scope.toIconData(), color: color);
 
     if (showTooltip) {
       widget = Tooltip(
-        message: visibility.toDisplayString(context.l10n),
+        message: scope.toDisplayString(context.l10n),
         child: widget,
       );
     }
@@ -36,19 +36,19 @@ class VisibilityIcon extends ConsumerWidget {
     return widget;
   }
 
-  static Color getVisibilityBaseColor(Visibility value) {
+  static Color getVisibilityBaseColor(PostScope value) {
     return switch (value) {
-      Visibility.public => Colors.blue,
-      Visibility.unlisted => Colors.green,
-      Visibility.followersOnly => Colors.orange,
-      Visibility.direct => Colors.red,
-      Visibility.circle => Colors.cyan,
-      Visibility.mutuals => Colors.purple,
-      Visibility.local => Colors.blueGrey,
+      PostScope.public => Colors.blue,
+      PostScope.unlisted => Colors.green,
+      PostScope.followersOnly => Colors.orange,
+      PostScope.direct => Colors.red,
+      PostScope.circle => Colors.cyan,
+      PostScope.mutuals => Colors.purple,
+      PostScope.local => Colors.blueGrey,
     };
   }
 
-  static Color getVisibilityColor(BuildContext context, Visibility value) {
+  static Color getVisibilityColor(BuildContext context, PostScope value) {
     final baseColor = getVisibilityBaseColor(value);
 
     return createCustomColorPalette(
