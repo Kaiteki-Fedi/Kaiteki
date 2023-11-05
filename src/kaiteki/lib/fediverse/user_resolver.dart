@@ -31,9 +31,10 @@ extension UserReferenceExtensions on UserReference {
     }
 
     final username = this.username;
+    final host = this.host;
     if (username != null) {
       try {
-        final user = await adapter.lookupUser(username);
+        final user = await adapter.lookupUser(username, host);
         return ResolvedInternalUser(user);
       } catch (e, s) {
         _logger.warning("Failed to resolve user by username", e, s);

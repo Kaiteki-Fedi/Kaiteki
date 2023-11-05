@@ -1,7 +1,11 @@
 import "package:flutter/material.dart"
-    show DoNothingAndStopPropagationTextIntent;
-import "package:flutter/widgets.dart"
-    show Intent, ShortcutActivator, WidgetsApp;
+    show
+        DoNothingAndStopPropagationTextIntent,
+        Intent,
+        ShortcutActivator,
+        SingleActivator,
+        WidgetsApp;
+import "package:flutter/services.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 
@@ -18,6 +22,18 @@ final shortcuts = <ShortcutActivator, Intent>{
   newPost: const NewPostIntent(),
   openMenu: const OpenMenuIntent(),
   openLauncher: const OpenLauncherIntent(),
+  const SingleActivator(LogicalKeyboardKey.f1, shift: true):
+      const ToggleDebugFlagIntent(DebugFlag.debugShowMaterialGrid),
+  const SingleActivator(LogicalKeyboardKey.f2, shift: true):
+      const ToggleDebugFlagIntent(DebugFlag.showPerformanceOverlay),
+  const SingleActivator(LogicalKeyboardKey.f3, shift: true):
+      const ToggleDebugFlagIntent(DebugFlag.checkerboardRasterCacheImages),
+  const SingleActivator(LogicalKeyboardKey.f4, shift: true):
+      const ToggleDebugFlagIntent(DebugFlag.checkerboardOffscreenLayers),
+  const SingleActivator(LogicalKeyboardKey.f5, shift: true):
+      const ToggleDebugFlagIntent(DebugFlag.showSemanticsDebugger),
+  const SingleActivator(LogicalKeyboardKey.f6, shift: true):
+      const ToggleDebugFlagIntent(DebugFlag.debugShowCheckedModeBanner),
 };
 
 final propagatingTextFieldShortcuts = {

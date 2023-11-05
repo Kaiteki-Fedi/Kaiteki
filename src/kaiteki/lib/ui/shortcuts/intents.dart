@@ -55,3 +55,18 @@ class ShortcutsHelpIntent extends Intent {
 class SearchIntent extends Intent {
   const SearchIntent();
 }
+
+enum DebugFlag {
+  debugShowMaterialGrid,
+  showPerformanceOverlay,
+  checkerboardRasterCacheImages,
+  checkerboardOffscreenLayers,
+  showSemanticsDebugger,
+  debugShowCheckedModeBanner,
+}
+
+class ToggleDebugFlagIntent extends Intent {
+  final DebugFlag flag;
+
+  const ToggleDebugFlagIntent(this.flag);
+}
