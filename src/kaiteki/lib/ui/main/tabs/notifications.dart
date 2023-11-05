@@ -18,7 +18,6 @@ class _NotificationsMainScreenTab extends MainScreenTab {
     return FloatingActionButton.extended(
       icon: const Icon(Icons.clear_all_rounded),
       label: const Text("Mark all as read"),
-      heroTag: "aaa",
       onPressed: () {
         final accountKey = ref.read(currentAccountProvider)!.key;
         ref
