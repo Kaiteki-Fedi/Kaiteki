@@ -38,6 +38,7 @@ class MainScreenNavigationRail extends ConsumerWidget {
           "compose",
           pathParameters: ref.accountRouterParams,
         ),
+        tooltip: context.l10n.composeButtonLabel,
         heroTag: const ValueKey("navigation rail"),
         child: const Icon(Icons.edit_rounded),
       ),
