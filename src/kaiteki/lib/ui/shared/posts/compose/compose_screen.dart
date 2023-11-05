@@ -167,6 +167,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                         onChanged: _showPreview ? null : toggleSubject,
                       ),
                     if (!fullscreen && closeButton != null) closeButton,
+                    kAppBarActionsSpacer,
                   ],
                   automaticallyImplyLeading: false,
                   leading:
