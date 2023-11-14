@@ -125,16 +125,21 @@ class HomePageState extends ConsumerState<HomePage>
             tabs: timelines.map((e) => _TimelineTab(timeline: e)).toList(),
           ),
         Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: timelines
-                .map(
-                  (e) => _TimelineTabPage(
-                    timeline: e,
-                    scrollController: _scrollControllers[e],
-                  ),
-                )
-                .toList(),
+          child: Focus(
+            autofocus: true,
+            child: FocusTraversalGroup(
+              child: TabBarView(
+                controller: _tabController,
+                children: timelines
+                    .map(
+                      (e) => _TimelineTabPage(
+                        timeline: e,
+                        scrollController: _scrollControllers[e],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
           ),
         ),
       ],

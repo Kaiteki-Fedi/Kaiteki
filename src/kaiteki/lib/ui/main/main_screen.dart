@@ -114,8 +114,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
       drawer: const MainScreenDrawer(),
     );
 
-    return FocusableActionDetector(
-      autofocus: true,
+    return Actions(
       actions: getActions(context),
       child: ColoredBox(
         color:
@@ -332,15 +331,18 @@ class _BodyWrapper extends StatelessWidget {
       );
     }
 
-    body = PageTransitionSwitcher(
-      transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
-        return FadeThroughTransition(
-          animation: primaryAnimation,
-          secondaryAnimation: secondaryAnimation,
-          child: child,
-        );
-      },
-      child: child,
+    body = Focus(
+      autofocus: true,
+      child: PageTransitionSwitcher(
+        transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+          return FadeThroughTransition(
+            animation: primaryAnimation,
+            secondaryAnimation: secondaryAnimation,
+            child: child,
+          );
+        },
+        child: child,
+      ),
     );
 
     final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
@@ -361,11 +363,13 @@ class _BodyWrapper extends StatelessWidget {
     if (canShowRail) {
       body = Row(
         children: [
-          MainScreenNavigationRail(
-            tabTypes: tabTypes,
-            currentIndex: currentIndex,
-            onChangeIndex: onChangeIndex,
-            backgroundColor: Colors.transparent,
+          FocusTraversalGroup(
+            child: MainScreenNavigationRail(
+              tabTypes: tabTypes,
+              currentIndex: currentIndex,
+              onChangeIndex: onChangeIndex,
+              backgroundColor: Colors.transparent,
+            ),
           ),
           if (!useMaterial3) const VerticalDivider(thickness: 1, width: 1),
           Expanded(child: body),
