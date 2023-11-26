@@ -159,6 +159,22 @@ extension KaitekiMisskeyMetaExtension on misskey.Meta {
 }
 
 extension KaitekiMisskeyNoteExtension on misskey.Note {
+  // Since Misskey does not provide any URL to local notes, we have to figure
+  // out the URL on our own now.
+  Uri getUrl(String localHost) {
+    final url = this.url.nullTransform(Uri.tryParse);
+    if (url != null) return url;
+
+    final uri = this.uri.nullTransform(Uri.tryParse);
+    if (uri != null) return uri;
+
+    return Uri(
+      scheme: 'https',
+      host: localHost,
+      pathSegments: ['notes', id],
+    );
+  }
+
   Post toKaiteki(String localHost) {
     final mappedEmoji =
         emojis?.map<CustomEmoji>((e) => e.toKaiteki(localHost)).toList();
@@ -211,8 +227,7 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
       id: id,
       visibility: misskeyVisibilityRosetta.getRight(visibility),
       attachments: files?.map((f) => f.toKaiteki()).toList(),
-      // FIXME(Craftplacer): Change to Uri?
-      externalUrl: url.nullTransform(Uri.parse),
+      externalUrl: getUrl(localHost),
       metrics: PostMetrics(
         repeatCount: renoteCount,
         replyCount: repliesCount,
