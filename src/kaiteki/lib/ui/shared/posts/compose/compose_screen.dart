@@ -358,7 +358,12 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                         child: Row(children: _buildActions(context)),
                       ),
                     ),
-                    buildTogglePreviewButton(context),
+                    IconButton.outlined(
+                      isSelected: _showPreview,
+                      onPressed: togglePreview,
+                      icon: const Icon(Icons.preview_rounded),
+                      tooltip: "Toggle preview",
+                    ),
                     const SizedBox(width: 8),
                     FilledButton.icon(
                       style: FilledButton.styleFrom(
@@ -376,15 +381,6 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  IconButton buildTogglePreviewButton(BuildContext context) {
-    return IconButton.outlined(
-      isSelected: _showPreview,
-      onPressed: togglePreview,
-      icon: const Icon(Icons.preview_rounded),
-      tooltip: "Toggle preview",
     );
   }
 
