@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
@@ -48,6 +49,7 @@ class _InteractionBarState extends State<InteractionBar> {
           icon: const Icon(Icons.reply_rounded),
           onTap: callbacks.onReply.toNullable(),
           showNumber: widget.showLabels,
+          tooltip: context.l10n.replyButtonLabel,
         ),
       if (callbacks.onRepeat.isSome())
         if (true)
@@ -137,6 +139,7 @@ class _InteractionBarState extends State<InteractionBar> {
       onLongPress: widget.callbacks.onShowRepeatees,
       showNumber: widget.showLabels,
       enabled: onTap != null,
+      tooltip: context.l10n.repeatButtonLabel,
     );
   }
 }

@@ -54,16 +54,19 @@ class _AttachmentRowState extends ConsumerState<AttachmentRow> {
                         for (final attachment
                             in widget.post.attachments!.take(4))
                           Flexible(
-                            child: InkWell(
-                              onTap: () {},
-                              onLongPress: () =>
-                                  _showAttachmentActions(attachment),
-                              child: AttachmentWidget(
-                                attachment: attachment,
-                                reveal: revealed,
-                                boxFit: ref.watch(cropAttachments).value
-                                    ? BoxFit.cover
-                                    : BoxFit.contain,
+                            child: Semantics(
+                              image: true,
+                              button: false,
+                              child: InkWell(
+                                onLongPress: () =>
+                                    _showAttachmentActions(attachment),
+                                child: AttachmentWidget(
+                                  attachment: attachment,
+                                  reveal: revealed,
+                                  boxFit: ref.watch(cropAttachments).value
+                                      ? BoxFit.cover
+                                      : BoxFit.contain,
+                                ),
                               ),
                             ),
                           ),

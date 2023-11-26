@@ -24,6 +24,8 @@ class CountButton extends ConsumerWidget {
   final bool showNumber;
   final bool expanded;
 
+  final String? tooltip;
+
   const CountButton({
     super.key,
     required this.icon,
@@ -39,6 +41,7 @@ class CountButton extends ConsumerWidget {
     this.showNumber = true,
     this.expanded = true,
     this.animate,
+    this.tooltip,
   });
 
   @override
@@ -82,7 +85,7 @@ class CountButton extends ConsumerWidget {
       );
     }
 
-    return TextButton(
+    final button = TextButton(
       onPressed: enabled ? onTap : null,
       onLongPress: enabled ? onLongPress : null,
       focusNode: focusNode,
@@ -99,6 +102,15 @@ class CountButton extends ConsumerWidget {
       ),
       child: child,
     );
+
+    if (tooltip != null) {
+      return Tooltip(
+        message: tooltip,
+        child: button,
+      );
+    }
+
+    return button;
   }
 
   Widget _buildIcon(Color color) {

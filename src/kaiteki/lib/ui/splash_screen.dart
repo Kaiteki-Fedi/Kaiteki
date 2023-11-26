@@ -31,11 +31,15 @@ class SplashScreen extends StatelessWidget {
                   _ => "Loading...",
                 };
 
-                return Text(
-                  message,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
+                final textStyle = Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(color: Theme.of(context).colorScheme.outline);
+
+                return Focus(
+                  autofocus: true,
+                  canRequestFocus: true,
+                  child: Text(message, style: textStyle),
                 );
               },
             ),

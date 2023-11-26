@@ -10,7 +10,7 @@ import "package:kaiteki/ui/shared/posts/poll_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/posts/subject_bar.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki_core/model.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 
 class PostContent extends ConsumerStatefulWidget {
   final Post post;
@@ -43,6 +43,7 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
   Widget build(BuildContext context) {
     final post = widget.post;
     final subject = widget.post.subject;
+    final locale = post.language.nullTransform(Locale.new);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -57,7 +58,10 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
             Padding(
               padding: kPostPadding,
               child: SelectableText.rich(
-                TextSpan(children: [renderedContent!]),
+                TextSpan(
+                  children: [renderedContent!],
+                  locale: locale,
+                ),
                 // FIXME(Craftplacer): https://github.com/flutter/flutter/issues/53797
                 onTap: widget.onTap,
                 style: widget.style,

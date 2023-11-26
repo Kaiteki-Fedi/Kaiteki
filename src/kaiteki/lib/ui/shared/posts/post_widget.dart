@@ -88,6 +88,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   Post? _translatedPost;
   final _menuController = MenuController();
   late final FocusNode _menuButtonFocusNode;
+  late final FocusNode _focusNode;
   final _menuAnchorKey = GlobalKey();
 
   Map<Type, Action<Intent>> get _actions {
@@ -173,6 +174,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     };
 
     return FocusableActionDetector(
+      descendantsAreTraversable: false,
+      focusNode: _focusNode,
       shortcuts: const {
         reply: ReplyIntent(),
         repeat: RepeatIntent(),
@@ -182,30 +185,50 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         menu: OpenMenuIntent(),
       },
       actions: _actions,
-      child: InkWell(
-        onTap: _onTap,
-        child: MenuAnchor(
-          key: _menuAnchorKey,
-          consumeOutsideTap: true,
-          menuChildren: _buildMenuItems(context),
-          controller: _menuController,
-          childFocusNode: _menuButtonFocusNode,
-          crossAxisUnconstrained: false,
-          builder: (context, controller, _) {
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onSecondaryTapUp: (details) {
-                controller.open(position: details.localPosition);
+      child: Semantics(
+        customSemanticsActions: _getSemanticsActions(context, adapter),
+        child: MergeSemantics(
+          child: InkWell(
+            onTap: _onTap,
+            child: MenuAnchor(
+              key: _menuAnchorKey,
+              consumeOutsideTap: true,
+              menuChildren: _buildMenuItems(context),
+              controller: _menuController,
+              childFocusNode: _menuButtonFocusNode,
+              crossAxisUnconstrained: false,
+              builder: (context, controller, _) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onSecondaryTapUp: (details) {
+                    controller.open(position: details.localPosition);
+                  },
+                  onTertiaryTapUp: widget.onOpen.nullTransform(
+                    (callback) => (_) => callback(),
+                  ),
+                  child: ListenableBuilder(
+                    listenable: _focusNode,
+                    builder: (context, child) {
+                      return DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: _focusNode.hasPrimaryFocus
+                              ? Border.all(
+                                  strokeAlign: BorderSide.strokeAlignCenter,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                  width: 4,
+                                )
+                              : null,
+                        ),
+                        child: child,
+                      );
+                    },
+                    child: child,
+                  ),
+                );
               },
-              onTertiaryTapUp: widget.onOpen.nullTransform(
-                (callback) => (_) => callback(),
-              ),
-              child: Semantics(
-                customSemanticsActions: _getSemanticsActions(context, adapter),
-                child: child,
-              ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
@@ -228,12 +251,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   @override
   void dispose() {
     _menuButtonFocusNode.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    _focusNode = FocusNode();
     _menuButtonFocusNode = FocusNode();
     _post = widget.post;
   }
@@ -258,6 +283,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     MenuItemButton buildBookmarkMenuItem(BuildContext context) {
       final l10n = context.l10n;
       return MenuItemButton(
+        shortcut: bookmark,
         onPressed: _onBookmark,
         leadingIcon: Icon(
           _post.state.bookmarked
@@ -435,6 +461,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         CustomSemanticsAction(label: context.l10n.bookmarkButtonLabel);
     final reactAction =
         CustomSemanticsAction(label: context.l10n.reactButtonLabel);
+    final showOriginalAuthor =
+        CustomSemanticsAction(label: "Open author's profile");
 
     return {
       replyAction: _onReply,
@@ -442,6 +470,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       repeatAction: _onRepeat,
       bookmarkAction: _onBookmark,
       reactAction: _onReact,
+      showOriginalAuthor: () {
+        context.showUser(_post.author, ref);
+      },
     };
   }
 
