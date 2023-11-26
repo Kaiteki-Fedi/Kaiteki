@@ -424,7 +424,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
 
   @override
   Future<SearchResults> search(String query) async {
-    final results = await client.search(query);
+    final results = await client.search(query, resolve: true);
 
     return SearchResults(
       users: results.accounts.map((a) => a.toKaiteki(instance)).toList(),
