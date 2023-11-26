@@ -34,6 +34,9 @@ final class KaitekiApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(preferences.themeMode).value;
+    final locale = ref.watch(preferences.locale).value;
+
+    // debug flags
     final debugShowCheckedModeBanner =
         ref.watch(_debugShowCheckedModeBannerProvider);
     final debugShowMaterialGrid = ref.watch(_debugShowMaterialGridProvider);
@@ -64,7 +67,8 @@ final class KaitekiApp extends ConsumerWidget {
             localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
             routerConfig: ref.watch(routerProvider),
             supportedLocales: KaitekiLocalizations.supportedLocales,
-            locale: ref.watch(preferences.locale).value,
+            // FIXME(Craftplacer): `kab` results in no MaterialLocalizations
+            locale: locale != const Locale('kab') ? locale : null,
             theme: lightTheme,
             themeMode: themeMode,
             title: consts.kAppName,
