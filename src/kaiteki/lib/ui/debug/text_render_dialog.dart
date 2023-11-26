@@ -7,11 +7,11 @@ import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/text/parsers/md_text_parser.dart";
 import "package:kaiteki/text/text_renderer.dart";
-import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/dialogs/dialog_close_button.dart";
 import "package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
+import "package:kaiteki_core/utils.dart";
 import "package:mdi/mdi.dart";
 
 class TextRenderDialog extends ConsumerStatefulWidget {
@@ -135,9 +135,11 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
       return TextSpan(children: spans);
     }
 
+    final children = element.safeCast<WrapElement>()?.children;
+
     return TreeNode(
-      children: element.children?.isNotEmpty == true
-          ? element.children?.map(_buildNode).toList(growable: false)
+      children: children?.isNotEmpty == true
+          ? children!.map(_buildNode).toList(growable: false)
           : null,
       content: Flexible(
         child: ListTile(
@@ -149,13 +151,6 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
                 color: Theme.of(context).colorScheme.primary,
                 _getElementIcon(element),
               ),
-              if (element is TextElement &&
-                  element.style?.font == TextElementFont.monospace)
-                Text(
-                  "mono",
-                  style: Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
-                      DefaultKaitekiTextTheme(context).monospaceTextStyle,
-                ),
             ],
           ),
           dense: true,

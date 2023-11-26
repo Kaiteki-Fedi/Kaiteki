@@ -1,31 +1,20 @@
+import "package:collection/collection.dart";
 import "package:kaiteki/text/elements.dart";
-import "package:kaiteki/utils/extensions.dart";
 
 abstract class TextParser {
-  List<Element> parse(String text, [List<Element>? children]);
+  Iterable<Element> parse(String text);
 }
 
 extension TextParserExtensions on TextParser {
-  List<Element> parseElement(Element element) {
+  Iterable<Element> parseElement(Element element) sync* {
     if (element is TextElement) {
-      final children = element.children == null
-          ? <Element>[]
-          : element.children!
-              .map(parseElement)
-              .concat()
-              .toList(growable: false);
-
-      final elements = element.text == null //
-          ? children
-          : parse(element.text!, children);
-
-      if (element.style == null) {
-        return elements;
-      } else {
-        return [TextElement(null, children: elements, style: element.style)];
-      }
+      yield* parse(element.text);
+    } else if (element is WrapElement) {
+      final parsedChildren =
+          element.children?.map(parseElement).flattened.toList();
+      yield element.replaceChildren(parsedChildren);
     } else {
-      return [element];
+      yield element;
     }
   }
 }

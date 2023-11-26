@@ -1,74 +1,100 @@
+import "dart:ui";
+
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers/text_parser.dart";
-import "package:kaiteki/text/text_renderer.dart";
+import "package:logging/logging.dart";
+import "../mfm_parser.dart" as mfm;
 
 class MfmTextParser implements TextParser {
-  static final _mfmPattern = RegExp(r"\$\[(?:(\w+)(?:\.(.*?))?\s(.+?))\]");
+  static final _logger = Logger("MfmTextParser");
 
   const MfmTextParser();
 
   @override
-  List<Element> parse(String text, [List<Element>? children]) {
-    var elements = <Element>[TextElement(text)];
+  Iterable<Element> parse(String text) sync* {
+    var previousEnd = 0;
 
-    regex(elements, _mfmPattern, (match, _) {
-      final key = match.group(1);
-      // final args = match.group(2).split(",");
-      final content = match.group(3);
+    for (final region in mfm.parse(text)) {
+      if (region.start - previousEnd > 0) {
+        yield TextElement(text.substring(previousEnd, region.start));
+      }
 
-      return switch (key!) {
-        "x2" => TextElement(
-            content,
-            style: const TextElementStyle(scale: 2.0),
-            children: children,
-          ),
-        "x3" => TextElement(
-            content,
-            style: const TextElementStyle(scale: 3.0),
-            children: children,
-          ),
-        "x4" => TextElement(
-            content,
-            style: const TextElementStyle(scale: 4.0),
-            children: children,
-          ),
-        "blur" => TextElement(
-            content,
-            style: const TextElementStyle(blur: true),
-            children: children,
-          ),
-        _ => TextElement(content)
-      };
-    });
+      yield* _partToElement(region);
 
-    if (children != null) {
-      elements = elements.followedBy(children).toList(growable: false);
+      previousEnd = region.end;
     }
 
-    return elements;
+    if (text.length - previousEnd > 0) {
+      yield TextElement(text.substring(previousEnd, text.length));
+    }
   }
 
-  void regex(
-    List<Element> elements,
-    RegExp regex,
-    RegExpMatchElementBuilder builder,
-  ) {
-    while (true) {
-      final element = elements.last;
+  Iterable<Element> _partToElement(mfm.Region part) sync* {
+    // There should be a fast-path for avoiding parsing the content if the MFM
+    // tag itself is not supported.
+    final children = parse(part.content);
 
-      if (element is! TextElement) break;
+    Color? tryParseColor() {
+      var hex = part.args["color"];
+      if (hex == null || hex.length < 6) return null;
+      if (hex.length < 8) hex = "FF$hex";
+      return Color(int.parse(hex, radix: 16));
+    }
 
-      final match = regex.firstMatch(element.text!);
-      if (match == null) break;
+    const styleX2 = TextElementStyle(scale: 2.0);
+    const styleX3 = TextElementStyle(scale: 3.0);
+    const styleX4 = TextElementStyle(scale: 4.0);
+    const styleBlur = TextElementStyle(blur: true);
 
-      elements.removeLast();
-
-      final cut = element.cut(
-        match.start,
-        match.end - match.start,
-        (text) => builder(match, text),
-      );
-      elements.addAll(cut);
+    switch (part.tag) {
+      case "x2":
+        yield TextStyleElement(styleX2, children.toList());
+      case "x3":
+        yield TextStyleElement(styleX3, children.toList());
+      case "x4":
+        yield TextStyleElement(styleX4, children.toList());
+      case "blur":
+        yield TextStyleElement(styleBlur, children.toList());
+      case "fg" when part.args["color"] != null:
+        yield TextStyleElement(
+          TextElementStyle(foreground: tryParseColor()),
+          children.toList(),
+        );
+      case "bg" when part.args["color"] != null:
+        yield TextStyleElement(
+          TextElementStyle(background: tryParseColor()),
+          children.toList(),
+        );
+      case "font" when part.args.containsKey("monospace"):
+        yield TextStyleElement(
+          const TextElementStyle(font: TextElementFont.monospace),
+          children.toList(),
+        );
+      case "scale":
+        yield* children;
+      case "rotate":
+        yield* children;
+      case "jelly":
+        yield* children;
+      case "tada":
+        yield* children;
+      case "jump":
+        yield* children;
+      case "bounce":
+        yield* children;
+      case "spin":
+        yield* children;
+      case "shake":
+        yield* children;
+      case "twitch":
+        yield* children;
+      case "rainbow":
+        yield* children;
+      case "fade":
+        yield* children;
+      default:
+        _logger.warning("Unsupported MFM tag: ${part.tag}");
+        yield TextElement(part.content);
     }
   }
 }

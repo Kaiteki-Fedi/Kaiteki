@@ -33,15 +33,15 @@ void main() {
     final elements = const HtmlTextParser().parse(html);
 
     expect(
-      elements[0],
-      const TypeMatcher<TextElement>()
-          .having((e) => e.style!.italic, "italic", isTrue),
+      elements.elementAt(0),
+      const TypeMatcher<TextStyleElement>()
+          .having((e) => e.style.italic, "italic", isTrue),
     );
 
     expect(
-      elements[1],
-      const TypeMatcher<TextElement>()
-          .having((e) => e.style!.bold, "bold", isTrue),
+      elements.elementAt(1),
+      const TypeMatcher<TextStyleElement>()
+          .having((e) => e.style.bold, "bold", isTrue),
     );
   });
 
@@ -80,9 +80,9 @@ void main() {
           .parseWith(const SocialTextParser());
 
       expect(
-        elements[0],
-        const TypeMatcher<TextElement>()
-            .having((e) => e.style!.bold, "bold", isTrue)
+        elements.elementAt(0),
+        const TypeMatcher<TextStyleElement>()
+            .having((e) => e.style.bold, "bold", isTrue)
             .having(
               (e) => e.children![0],
               "child",
@@ -131,16 +131,31 @@ void main() {
       ]),
     );
   });
+
+  test("MFM scale", () {
+    const input = r"$[x2 test]";
+
+    final parsed = const MfmTextParser().parse(input);
+
+    expect(
+      parsed,
+      orderedEquals([
+        const TextStyleElement(
+          TextElementStyle(scale: 2.0),
+          [TextElement("test")],
+        ),
+      ]),
+    );
+  });
 }
 
 bool search(Element element, Matcher matcher, [bool recursive = false]) {
   if (matcher.matches(element, {})) {
     return true;
-  } else {
-    for (final child in element.children ?? const <Element>[]) {
-      if (search(child, matcher, true)) {
-        return true;
-      }
+  } else if (element is WrapElement) {
+    final children = element.children ?? const <Element>[];
+    for (final child in children) {
+      if (search(child, matcher, true)) return true;
     }
   }
 

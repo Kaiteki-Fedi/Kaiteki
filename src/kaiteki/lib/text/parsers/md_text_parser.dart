@@ -9,8 +9,8 @@ class MarkdownTextParser implements TextParser {
   const MarkdownTextParser([this.htmlTextParser = const HtmlTextParser()]);
 
   @override
-  List<Element> parse(String text, [List<Element>? children]) {
+  Iterable<Element> parse(String text) sync* {
     final html = markdownToHtml(text, inlineOnly: true);
-    return htmlTextParser.parse(html, children);
+    yield* htmlTextParser.parse(html);
   }
 }

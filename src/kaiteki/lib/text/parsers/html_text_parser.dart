@@ -8,7 +8,7 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
 
-typedef HtmlElementConstructor = List<Element>? Function(
+typedef HtmlElementConstructor = Iterable<Element> Function(
   dom.Element element,
   List<Element> subElements,
 );
@@ -17,9 +17,10 @@ class HtmlTextParser implements TextParser {
   static final _logger = Logger("HtmlTextParser");
 
   @override
-  List<Element> parse(String text, [List<Element>? children]) {
-    final fragment = parseFragment(text);
-    return fragment.nodes.map(renderNode).flattened.toList(growable: false);
+  Iterable<Element> parse(String text) sync* {
+    for (final node in parseFragment(text).nodes) {
+      yield* renderNode(node);
+    }
   }
 
   static const Map<String, HtmlElementConstructor> htmlConstructors = {
@@ -38,7 +39,7 @@ class HtmlTextParser implements TextParser {
 
   const HtmlTextParser();
 
-  List<Element> renderNode(dom.Node node) {
+  Iterable<Element> renderNode(dom.Node node) sync* {
     final renderedSubNodes = node.nodes //
         .map(renderNode)
         .flattened
@@ -46,103 +47,92 @@ class HtmlTextParser implements TextParser {
 
     if (node is dom.Element) {
       final override = renderNodeOverride(node);
-      if (override != null) return [override];
+      if (override != null) yield override;
 
       final tag = node.localName!.toLowerCase();
       final constructor = htmlConstructors[tag];
       if (constructor != null) {
-        final rendered = constructor.call(node, renderedSubNodes);
-        if (rendered != null) return rendered;
-        _logger.warning("Couldn't render HTML tag ($tag)");
+        yield* constructor.call(node, renderedSubNodes);
       } else {
         _logger.warning("Unhandled HTML tag ($tag)");
       }
     }
 
-    if (node is dom.Text) {
-      return [if (node.data.isNotEmpty) TextElement(node.text)];
+    if (node is dom.Text && node.data.isNotEmpty) {
+      yield TextElement(node.text);
     }
 
-    return renderedSubNodes;
+    yield* renderedSubNodes;
   }
 
   Element? renderNodeOverride(dom.Node node) => null;
 
-  static List<Element>? _renderLink(
+  static Iterable<Element> _renderLink(
     dom.Element element,
     List<Element> subElements,
-  ) {
+  ) sync* {
     final href = element.attributes["href"];
-    if (href == null) return null;
-    final uri = Uri.parse(href);
-    return [LinkElement(uri, children: subElements)];
+    if (href == null) {
+      yield* subElements;
+    } else {
+      final uri = Uri.parse(href);
+      yield LinkElement(uri, children: subElements);
+    }
   }
 
-  static List<Element> _renderBreakLine(dom.Element _, List<Element> __) {
-    return [const TextElement("\n")];
+  static Iterable<Element> _renderBreakLine(
+    dom.Element _,
+    List<Element> __,
+  ) sync* {
+    yield const TextElement("\n");
   }
 
-  static List<Element> _renderCodeFont(
+  static Iterable<Element> _renderCodeFont(
     dom.Element element,
-    List<Element> subElements,
-  ) {
-    return [
-      TextElement(
-        null,
-        style: const TextElementStyle(font: TextElementFont.monospace),
-        children: subElements,
-      ),
-    ];
+    List<Element> children,
+  ) sync* {
+    yield TextStyleElement(TextElementStyle.kMonospace, children);
   }
 
-  static List<Element> _renderItalic(
+  static Iterable<Element> _renderItalic(
     dom.Element element,
-    List<Element> subElements,
-  ) {
-    return [
-      TextElement(
-        null,
-        style: const TextElementStyle(italic: true),
-        children: subElements,
-      ),
-    ];
+    List<Element> children,
+  ) sync* {
+    yield TextStyleElement(TextElementStyle.kItalic, children);
   }
 
-  static List<Element> _renderBold(
+  static Iterable<Element> _renderBold(
     dom.Element element,
-    List<Element> subElements,
-  ) {
-    return [
-      TextElement(
-        null,
-        style: const TextElementStyle(bold: true),
-        children: subElements,
-      ),
-    ];
+    List<Element> children,
+  ) sync* {
+    yield TextStyleElement(TextElementStyle.kBold, children);
   }
 
-  static List<Element> _renderParagraph(
+  static Iterable<Element> _renderParagraph(
     dom.Element element,
-    List<Element> subElements,
-  ) {
+    List<Element> children,
+  ) sync* {
     var text = "";
 
     if (element.previousElementSibling?.localName?.toLowerCase() == "p") {
       text = "\n\n$text";
     }
 
-    return [TextElement(text, children: subElements)];
+    yield TextElement(text);
   }
 
-  static List<Element> _renderListItem(
+  static Iterable<Element> _renderListItem(
     dom.Element element,
     List<Element> subElements,
-  ) {
-    return [TextElement("$kBullet ${element.text}\n")];
+  ) sync* {
+    yield TextElement("$kBullet ${element.text}\n");
   }
 
-  static List<Element> _renderNoop(dom.Element _, List<Element> subElements) {
-    return subElements;
+  static Iterable<Element> _renderNoop(
+    dom.Element _,
+    List<Element> children,
+  ) sync* {
+    yield* children;
   }
 }
 
