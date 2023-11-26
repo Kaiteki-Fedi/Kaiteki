@@ -51,13 +51,9 @@ String? _getHost(String acct) {
   return null;
 }
 
-Map<String, String>? _parseFields(Iterable<mastodon.Field>? fields) {
-  if (fields == null) {
-    return null;
-  } else {
-    final entries = fields.map((f) => MapEntry(f.name, f.value));
-    return Map<String, String>.fromEntries(entries);
-  }
+List<MapEntry<String, String>>? _parseFields(Iterable<mastodon.Field>? fields) {
+  if (fields == null) return null;
+  return fields.map((f) => MapEntry(f.name, f.value)).toList();
 }
 
 extension KaitekiMastodonAccountExtension on mastodon.Account {

@@ -129,7 +129,7 @@ class UserDetails {
   final String? location;
 
   /// The fields defined by the user.
-  final Map<String, String>? fields;
+  final List<MapEntry<String, String>>? fields;
 
   const UserDetails({this.birthday, this.website, this.location, this.fields});
 }

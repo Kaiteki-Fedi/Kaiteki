@@ -77,17 +77,12 @@ DateTime? _parseBirthday(String? birthday) {
   return dateFormat.parseStrict(birthday);
 }
 
-Map<String, String>? _parseFields(Iterable<JsonMap>? fields) {
+List<MapEntry<String, String>>? _parseFields(Iterable<JsonMap>? fields) {
   if (fields == null) return null;
 
-  return Map<String, String>.fromEntries(
-    fields.map(
-      (e) => MapEntry(
-        e['name'] as String,
-        e['value'] as String,
-      ),
-    ),
-  );
+  return fields
+      .map((e) => MapEntry(e['name'] as String, e['value'] as String))
+      .toList();
 }
 
 EmojiHandle _splitEmoji(String key) {
