@@ -45,21 +45,23 @@ class HtmlTextParser implements TextParser {
         .flattened
         .toList(growable: false);
 
+    if (node is dom.Text && node.data.isNotEmpty) {
+      yield TextElement(node.text);
+      return;
+    }
+
     if (node is dom.Element) {
       final override = renderNodeOverride(node);
       if (override != null) yield override;
 
       final tag = node.localName!.toLowerCase();
       final constructor = htmlConstructors[tag];
-      if (constructor != null) {
-        yield* constructor.call(node, renderedSubNodes);
-      } else {
+      if (constructor == null) {
         _logger.warning("Unhandled HTML tag ($tag)");
+      } else {
+        yield* constructor.call(node, renderedSubNodes);
+        return;
       }
-    }
-
-    if (node is dom.Text && node.data.isNotEmpty) {
-      yield TextElement(node.text);
     }
 
     yield* renderedSubNodes;
