@@ -169,19 +169,34 @@ class TextRenderer {
   TextSpan renderLink(LinkElement link) {
     final onClick = onLinkClick;
 
-    if (onClick == null) {
-      return TextSpan(
-        children: renderChildren(link.children).toList(),
-      );
-    }
+    final children = renderChildren(link.children).toList();
+
+    if (onClick == null) return TextSpan(children: children);
 
     // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
+    final recognizer = TapGestureRecognizer()
+      ..onTap = () => onClick(link.destination);
     return TextSpan(
-      recognizer: TapGestureRecognizer()
-        ..onTap = () => onClick(link.destination),
+      recognizer: recognizer,
       style: textTheme?.linkTextStyle,
-      children: renderChildren(link.children).toList(),
+      children:
+          children.map((e) => _overrideGestureDetector(e, recognizer)).toList(),
     );
+  }
+
+  InlineSpan _overrideGestureDetector(
+      InlineSpan span, TapGestureRecognizer recognizer) {
+    if (span is TextSpan) {
+      return TextSpan(
+        recognizer: recognizer,
+        style: span.style,
+        children: span.children
+            ?.map((e) => _overrideGestureDetector(e, recognizer))
+            .toList(),
+      );
+    } else {
+      return span;
+    }
   }
 
   InlineSpan? renderMention(MentionElement element) {
