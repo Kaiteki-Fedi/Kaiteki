@@ -77,7 +77,7 @@ dev_dependencies:
   build_runner: ^2.1.4
   build_verify: ^3.1.0
   copy_with_extension_gen: ^5.0.0
-  custom_lint: ^0.5.2
+  custom_lint: ^0.5.7
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
