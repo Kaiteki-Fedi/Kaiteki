@@ -68,8 +68,8 @@ Set<TextParser> textParser(TextParserRef ref) {
 
   return switch (adapter) {
     MisskeyAdapter() => const {
-        MarkdownTextParser(),
         MfmTextParser(),
+        MarkdownTextParser(),
         socialTextParser,
       },
     SharedMastodonAdapter() => const {
