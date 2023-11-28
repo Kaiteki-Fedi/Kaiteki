@@ -42,7 +42,7 @@ class AvatarWidget extends StatelessWidget {
         icon: switch (type) {
           UserType.bot => const Icon(Icons.smart_toy_rounded),
           UserType.group => const Icon(Icons.groups_rounded),
-          UserType.organization => const Icon(Icons.business_rounded),
+          UserType.organization => const Icon(Icons.pages_rounded),
           UserType.person => const Icon(Icons.person_rounded),
         },
       ),
