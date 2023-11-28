@@ -5,7 +5,7 @@ import "package:kaiteki_core/model.dart";
 class AvatarWidget extends StatelessWidget {
   final Uri? url;
   final String? blurHash;
-  final double? size;
+  final double size;
   final VoidCallback? onTap;
   final ShapeBorder? shape;
   final FocusNode? focusNode;
@@ -64,7 +64,31 @@ class AvatarWidget extends StatelessWidget {
       avatar = InkWell(onTap: onTap, focusNode: focusNode, child: avatar);
     }
 
-    return AvatarSurface(shape: shape, child: avatar);
+    avatar = AvatarSurface(shape: shape, child: avatar);
+
+    // only show the decoration if the avatar is big enough, otherwise it's
+    // too small to be distinguishable
+    // ignore: dead_code
+    if (false && size > 24) {
+      final decorationOffset = (size / 2) * -1;
+      avatar = Stack(
+        clipBehavior: Clip.none,
+        children: [
+          avatar,
+          Positioned.fill(
+            top: decorationOffset,
+            left: decorationOffset,
+            right: decorationOffset,
+            bottom: decorationOffset,
+            child: Image.network(
+              "https://cdn.transfem.social/files/4137f030-0a75-4dd7-80dd-693a8b8cce34.webp",
+            ),
+          )
+        ],
+      );
+    }
+
+    return avatar;
   }
 
   ImageFrameBuilder _getFrameBuilder(Widget? fallback) {
