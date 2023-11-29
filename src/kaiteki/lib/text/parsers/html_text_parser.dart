@@ -52,7 +52,10 @@ class HtmlTextParser implements TextParser {
 
     if (node is dom.Element) {
       final override = renderNodeOverride(node);
-      if (override != null) yield override;
+      if (override != null) {
+        yield override;
+        return;
+      }
 
       final tag = node.localName!.toLowerCase();
       final constructor = htmlConstructors[tag];

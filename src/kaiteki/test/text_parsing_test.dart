@@ -116,17 +116,19 @@ void main() {
 
   test("Mastodon mention & hashtag", () {
     const input =
-        '<a href="https://floss.social/tags/Test" class="mention hashtag" rel="tag">#<span>Test</span></a> <span class="h-card"><a href="https://floss.social/@Kaiteki" class="u-url mention">@<span>Kaiteki</span></a></span>';
+        '<a href="https://floss.social/tags/Test" class="mention hashtag" rel="tag">#<span>Test</span></a>'
+        " "
+        '<span class="h-card"><a href="https://floss.social/@Kaiteki" class="u-url mention">@<span>Kaiteki</span></a></span>';
 
     final parsed = const MastodonHtmlTextParser().parse(input);
 
     expect(
       parsed,
-      orderedEquals([
-        const HashtagElement("Test"),
-        const TextElement(" "),
+      orderedEquals(const [
+        HashtagElement("Test"),
+        TextElement(" "),
         MentionElement(
-          const UserReference.url("https://floss.social/@Kaiteki"),
+          UserReference.url("https://floss.social/@Kaiteki"),
         ),
       ]),
     );
