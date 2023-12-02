@@ -71,26 +71,17 @@ class MfmTextParser implements TextParser {
           children.toList(),
         );
       case "scale":
-        yield* children;
       case "rotate":
-        yield* children;
       case "jelly":
-        yield* children;
       case "tada":
-        yield* children;
       case "jump":
-        yield* children;
       case "bounce":
-        yield* children;
       case "spin":
-        yield* children;
       case "shake":
-        yield* children;
       case "twitch":
-        yield* children;
       case "rainbow":
-        yield* children;
       case "fade":
+      case "position":
         yield* children;
       default:
         _logger.warning("Unsupported MFM tag: ${part.tag}");
