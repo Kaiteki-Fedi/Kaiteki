@@ -135,6 +135,30 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
       return TextSpan(children: spans);
     }
 
+    InlineSpan getSpan(Element element) {
+      switch (element) {
+        case TextElement():
+          return inlineLineBreaks(element.text);
+        case TextStyleElement():
+          final scale = element.style.scale;
+          return TextSpan(
+            text: [
+              if (element.style.blur == true) "blur",
+              if (scale != null && scale != 1.0) "scale: $scale",
+              if (element.style.bold == true) "bold",
+              if (element.style.italic == true) "italic",
+              if (element.style.foreground != null)
+                "foreground: ${element.style.foreground}",
+              if (element.style.background != null)
+                "background: ${element.style.background}",
+              if (element.style.font != null) element.style.font?.name,
+            ].join(", "),
+          );
+        default:
+          return inlineLineBreaks(element.toString());
+      }
+    }
+
     final children = element.safeCast<WrapElement>()?.children;
 
     return TreeNode(
@@ -144,17 +168,12 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
       content: Flexible(
         child: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                color: Theme.of(context).colorScheme.primary,
-                _getElementIcon(element),
-              ),
-            ],
+          leading: Icon(
+            color: Theme.of(context).colorScheme.primary,
+            _getElementIcon(element),
           ),
           dense: true,
-          title: Text.rich(inlineLineBreaks(element.toString())),
+          title: Text.rich(getSpan(element)),
           titleAlignment: ListTileTitleAlignment.top,
         ),
       ),
@@ -167,6 +186,7 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
     if (element is TextElement) return Icons.short_text_rounded;
     if (element is EmojiElement) return Icons.insert_emoticon_rounded;
     if (element is HashtagElement) return Icons.tag_rounded;
+    if (element is TextStyleElement) return Icons.format_paint_rounded;
     return Icons.square_rounded;
   }
 
@@ -222,5 +242,3 @@ class _ParsersTab extends StatelessWidget {
     );
   }
 }
-
-enum TextRenderDialogView { raw, parsed, rendered }
