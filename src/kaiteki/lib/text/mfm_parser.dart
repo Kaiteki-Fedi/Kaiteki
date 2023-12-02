@@ -137,7 +137,7 @@ Iterable<Region> parse(String input) sync* {
 
       case _ParserState.tag when isAlphaNumeric:
       case _ParserState.key when isAlphaNumeric:
-      case _ParserState.value when isAlphaNumeric:
+      case _ParserState.value when isAlphaNumeric || isDot:
         buffer.write(char);
         break;
 
