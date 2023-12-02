@@ -149,6 +149,16 @@ void main() {
       ]),
     );
   });
+
+  test("non-empty element on html parse", () {
+    const text =
+        "follow our account for passionate rants about misskey and flutter";
+
+    expect(
+      const HtmlTextParser().parse("<p><span>$text</span></p>"),
+      orderedEquals([const TextElement(text)]),
+    );
+  });
 }
 
 bool search(Element element, Matcher matcher, [bool recursive = false]) {

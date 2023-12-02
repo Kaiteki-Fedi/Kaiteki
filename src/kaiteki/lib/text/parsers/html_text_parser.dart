@@ -117,13 +117,12 @@ class HtmlTextParser implements TextParser {
     dom.Element element,
     List<Element> children,
   ) sync* {
-    var text = "";
-
+    // fake margin
     if (element.previousElementSibling?.localName?.toLowerCase() == "p") {
-      text = "\n\n$text";
+      yield const TextElement("\n\n");
     }
 
-    yield TextElement(text);
+    yield* children;
   }
 
   static Iterable<Element> _renderListItem(
