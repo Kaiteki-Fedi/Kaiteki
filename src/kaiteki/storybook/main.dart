@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/theming/default/themes.dart";
-import "package:kaiteki/ui/shared/users/user_badge.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
 
 import "stories/avatars.dart";
@@ -34,7 +33,6 @@ class KaitekiStorybook extends StatelessWidget {
         discardPost,
         apiWebCompatibility,
         keyboardShortcuts,
-        userBadges,
         poll,
         avatars,
         countButtons,
@@ -42,20 +40,6 @@ class KaitekiStorybook extends StatelessWidget {
     );
   }
 }
-
-final userBadges = Story(
-  name: "User badges",
-  builder: (_) => const Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      BotUserBadge(),
-      SizedBox(width: 8),
-      ModeratorUserBadge(),
-      SizedBox(width: 8),
-      AdministratorUserBadge(),
-    ],
-  ),
-);
 
 final countButtons = Story(
   name: "Count buttons",
