@@ -29,6 +29,7 @@ import "package:kaiteki/ui/settings/debug_screen.dart";
 import "package:kaiteki/ui/settings/experiments.dart";
 import "package:kaiteki/ui/settings/manage_languages.dart";
 import "package:kaiteki/ui/settings/settings_screen.dart";
+import "package:kaiteki/ui/settings/smart_features_screen.dart";
 import "package:kaiteki/ui/settings/tweaks_screen.dart";
 import "package:kaiteki/ui/settings/wellbeing/wellbeing_screen.dart";
 import "package:kaiteki/ui/shared/account_list/dialog.dart";
@@ -145,6 +146,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: "accessibility",
             builder: (_, __) => const AccessibilityScreen(),
+          ),
+          GoRoute(
+            path: "smart-features",
+            builder: (_, __) => const SmartFeaturesScreen(),
           ),
           GoRoute(
             path: "visible-languages",

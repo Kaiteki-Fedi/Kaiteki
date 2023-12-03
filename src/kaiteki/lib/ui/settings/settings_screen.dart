@@ -27,6 +27,11 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () => context.push("/settings/customization"),
                   ),
                   ListTile(
+                    leading: const Icon(Icons.auto_awesome_rounded),
+                    title: Text("Smart features"),
+                    onTap: () => context.push("/settings/smart-features"),
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.tab_rounded),
                     title: Text(l10n.settingsTabs),
                     enabled: false,
