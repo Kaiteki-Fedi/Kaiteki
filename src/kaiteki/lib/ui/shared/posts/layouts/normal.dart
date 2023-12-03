@@ -15,7 +15,6 @@ import "package:kaiteki/ui/shared/posts/reply_bar.dart";
 import "package:kaiteki/ui/shared/posts/signature.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
-import "package:kaiteki_ui/kaiteki_ui.dart";
 
 class NormalPostLayout extends ConsumerWidget {
   final Post post;
