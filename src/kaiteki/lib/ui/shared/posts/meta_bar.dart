@@ -6,7 +6,7 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/post_scope_icon.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
-import "package:kaiteki/ui/shared/users/user_badge.dart";
+import "package:kaiteki/ui/shared/posts/user_badge.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
@@ -41,7 +41,14 @@ class MetaBar extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            ...buildLeft(context, ref),
+            Expanded(
+              child: ClipRect(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: buildLeft(context, ref).toList(),
+                ),
+              ),
+            ),
             const SizedBox(width: 8),
             buildRight(context),
           ],
@@ -50,46 +57,38 @@ class MetaBar extends ConsumerWidget {
     );
   }
 
-  List<Widget> buildLeft(BuildContext context, WidgetRef ref) {
+  Iterable<Widget> buildLeft(BuildContext context, WidgetRef ref) sync* {
     final isAdministrator = _post.author.flags?.isAdministrator ?? false;
     final isModerator = _post.author.flags?.isModerator ?? false;
     final isBot = _post.author.type == UserType.bot;
 
     final postTheme = PostWidgetTheme.of(context);
+    if (showAvatar ?? postTheme?.showAvatar ?? true) {
+      yield Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: AvatarWidget(_post.author, size: 40),
+      );
+    }
 
-    return [
-      if (showAvatar ?? postTheme?.showAvatar ?? true)
-        Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: AvatarWidget(_post.author, size: 40),
-        ),
-      Expanded(
-        child: Row(
-          children: [
-            Expanded(
-              child: UserDisplayNameWidget(
-                _post.author,
-                orientation: twolineAuthor ? Axis.vertical : Axis.horizontal,
-              ),
-            ),
-            if (ref.watch(showUserBadges).value) ...[
-              if (isAdministrator) ...[
-                const SizedBox(width: 8),
-                const AdministratorUserBadge(),
-              ],
-              if (isModerator) ...[
-                const SizedBox(width: 8),
-                const ModeratorUserBadge(),
-              ],
-              if (isBot) ...[
-                const SizedBox(width: 8),
-                const BotUserBadge(),
-              ],
-            ],
-          ],
-        ),
-      ),
-    ];
+    yield UserDisplayNameWidget(
+      _post.author,
+      orientation: twolineAuthor ? Axis.vertical : Axis.horizontal,
+    );
+
+    if (ref.watch(showUserBadges).value) {
+      if (isAdministrator) {
+        yield const SizedBox(width: 8);
+        yield const UserBadge(type: UserBadgeType.administrator);
+      } else if (isModerator) {
+        yield const SizedBox(width: 8);
+        yield const UserBadge(type: UserBadgeType.moderator);
+      }
+
+      if (isBot) {
+        yield const SizedBox(width: 8);
+        yield const UserBadge(type: UserBadgeType.bot);
+      }
+    }
   }
 
   Widget buildRight(BuildContext context) {
