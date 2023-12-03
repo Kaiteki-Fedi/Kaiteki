@@ -480,6 +480,10 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 
   Widget? buildPrimaryButton(User? user, [bool small = false]) {
+    final comfortableFilledButtonStyle = FilledButton.styleFrom(
+      visualDensity: VisualDensity.comfortable,
+    );
+
     if (user?.id == ref.watch(currentAccountProvider)?.user.id) {
       if (small) {
         return IconButton.filled(
@@ -491,20 +495,12 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 
       return FilledButton(
         onPressed: null,
-        style: FilledButton.styleFrom(
-          visualDensity: VisualDensity.comfortable,
-        ),
+        style: comfortableFilledButtonStyle,
         child: Text(context.l10n.editProfileButtonLabel),
       );
     }
 
     final followState = user?.state.follow;
-
-    if (followState == null) return null;
-
-    final buttonStyle = FilledButton.styleFrom(
-      visualDensity: VisualDensity.comfortable,
-    );
 
     Future<void> onPressed() => _onFollow(context, user!);
 
@@ -517,7 +513,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             )
           : FilledButton.tonal(
               onPressed: onPressed,
-              style: buttonStyle,
+              style: comfortableFilledButtonStyle,
               child: Text(context.l10n.unfollowButtonLabel),
             ),
       UserFollowState.notFollowing => small
@@ -528,7 +524,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             )
           : FilledButton(
               onPressed: onPressed,
-              style: buttonStyle,
+              style: comfortableFilledButtonStyle,
               child: Text(context.l10n.followButtonLabel),
             ),
       UserFollowState.pending => small
@@ -539,9 +535,10 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             )
           : FilledButton.tonal(
               onPressed: onPressed,
-              style: buttonStyle,
+              style: comfortableFilledButtonStyle,
               child: Text(context.l10n.pendingFollowRequestButtonLabel),
             ),
+      null => null,
     };
   }
 }
