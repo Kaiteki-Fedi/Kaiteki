@@ -80,8 +80,10 @@ class AvatarWidget extends StatelessWidget {
             left: decorationOffset,
             right: decorationOffset,
             bottom: decorationOffset,
-            child: Image.network(
-              "https://cdn.transfem.social/files/4137f030-0a75-4dd7-80dd-693a8b8cce34.webp",
+            child: IgnorePointer(
+              child: Image.network(
+                "https://cdn.transfem.social/files/4137f030-0a75-4dd7-80dd-693a8b8cce34.webp",
+              ),
             ),
           )
         ],
