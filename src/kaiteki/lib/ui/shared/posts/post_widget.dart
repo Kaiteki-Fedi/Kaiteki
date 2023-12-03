@@ -10,6 +10,8 @@ import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/colors.dart";
+import "package:kaiteki/translation/language_identificator.dart";
+import "package:kaiteki/translation/translator.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
 import "package:kaiteki/ui/features/article_view/screen.dart";
 import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
@@ -69,12 +71,19 @@ class PostWidget extends ConsumerStatefulWidget {
 
   final VoidCallback? onOpen;
 
+  // I at first thought, "why not copy Flutter with their named constructors?"
+  // but then I remembered, the mess that are the different Button widgets,
+  // alongside their different constructors.
+  // btw, this is a feature, not a bug: https://github.com/flutter/flutter/issues/125508
+  final bool useCard;
+
   const PostWidget(
     this.post, {
     super.key,
     this.layout = PostWidgetLayout.normal,
     this.onTap,
     this.onOpen,
+    this.useCard = true,
   });
 
   @override
@@ -146,7 +155,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       onShowMenu: _onShowMenu,
     );
 
-    final child = switch (widget.layout) {
+    final body = switch (widget.layout) {
       PostWidgetLayout.normal => NormalPostLayout(
           _post,
           callbacks: callbacks,
@@ -173,6 +182,32 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         ),
     };
 
+    Widget child = InkWell(
+      onTap: _onTap,
+      child: MenuAnchor(
+        key: _menuAnchorKey,
+        consumeOutsideTap: true,
+        menuChildren: _buildMenuItems(context),
+        controller: _menuController,
+        childFocusNode: _menuButtonFocusNode,
+        crossAxisUnconstrained: false,
+        builder: (context, controller, _) {
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onSecondaryTapUp: (details) {
+              controller.open(position: details.localPosition);
+            },
+            onTertiaryTapUp: widget.onOpen.nullTransform(
+              (callback) => (_) => callback(),
+            ),
+            child: _PostFocusRing(focusNode: _focusNode, child: body),
+          );
+        },
+      ),
+    );
+
+    if (widget.useCard) child = Card(child: child);
+
     return FocusableActionDetector(
       descendantsAreTraversable: false,
       focusNode: _focusNode,
@@ -187,49 +222,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       actions: _actions,
       child: Semantics(
         customSemanticsActions: _getSemanticsActions(context, adapter),
-        child: MergeSemantics(
-          child: InkWell(
-            onTap: _onTap,
-            child: MenuAnchor(
-              key: _menuAnchorKey,
-              consumeOutsideTap: true,
-              menuChildren: _buildMenuItems(context),
-              controller: _menuController,
-              childFocusNode: _menuButtonFocusNode,
-              crossAxisUnconstrained: false,
-              builder: (context, controller, _) {
-                return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onSecondaryTapUp: (details) {
-                    controller.open(position: details.localPosition);
-                  },
-                  onTertiaryTapUp: widget.onOpen.nullTransform(
-                    (callback) => (_) => callback(),
-                  ),
-                  child: ListenableBuilder(
-                    listenable: _focusNode,
-                    builder: (context, child) {
-                      return DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          border: _focusNode.hasPrimaryFocus
-                              ? Border.all(
-                                  strokeAlign: BorderSide.strokeAlignCenter,
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                  width: 4,
-                                )
-                              : null,
-                        ),
-                        child: child,
-                      );
-                    },
-                    child: child,
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
+        child: MergeSemantics(child: child),
       ),
     );
   }
@@ -648,53 +641,98 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     );
   }
 
+  Future<void> _translateViaBackend() async {
+    final displayLang = Localizations.localeOf(context).languageCode;
+    final translationAdapter = adapter as PostTranslationSupport;
+
+    final translatedPost = await translationAdapter.translatePost(
+      _post,
+      displayLang,
+    );
+
+    setState(() => _translatedPost = translatedPost);
+  }
+
+  Future<void> _translateViaExternalService(
+    Translator translator,
+    LanguageIdentificator languageId,
+  ) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final displayLang = Localizations.localeOf(context).languageCode;
+    final sourceLang = await languageId.identifyLanguage(_post.content!);
+
+    if (sourceLang == null &&
+        !translator.supportsLanguageDetection &&
+        mounted) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text("Could not determine source language."),
+        ),
+      );
+      return;
+    }
+
+    final translatedContent = await translator.translate(
+      _post.content!,
+      displayLang,
+      sourceLang,
+    );
+
+    setState(
+      () => _translatedPost = _post.copyWith(
+        content: translatedContent,
+      ),
+    );
+  }
+
   Future<void> _onTranslate() async {
     final content = _post.content;
     if (content == null) return;
 
     final adapter = ref.read(adapterProvider);
     if (adapter is PostTranslationSupport) {
-      final displayLang = Localizations.localeOf(context).languageCode;
-      final translationAdapter = adapter as PostTranslationSupport;
-
-      final translatedPost = await translationAdapter.translatePost(
-        _post,
-        displayLang,
-      );
-
-      setState(() => _translatedPost = translatedPost);
+      await _translateViaBackend();
       return;
     }
 
     final translator = ref.read(translatorProvider);
-    final langId = ref.read(languageIdentificatorProvider);
-    if (translator != null && langId != null) {
-      final displayLang = Localizations.localeOf(context).languageCode;
-      final sourceLang = await langId.identifyLanguage(content);
-
-      if (sourceLang == null &&
-          !translator.supportsLanguageDetection &&
-          mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Could not determine source language."),
-          ),
-        );
-        return;
-      }
-
-      final translatedContent = await translator.translate(
-        _post.content!,
-        displayLang,
-        sourceLang,
-      );
-
-      setState(
-        () => _translatedPost = _post.copyWith(
-          content: translatedContent,
-        ),
-      );
+    final languageId = ref.read(languageIdentificatorProvider);
+    if (translator != null && languageId != null) {
+      await _translateViaExternalService(translator, languageId);
       return;
     }
+  }
+}
+
+class _PostFocusRing extends StatelessWidget {
+  const _PostFocusRing({
+    required this.focusNode,
+    required this.child,
+  });
+
+  final FocusNode focusNode;
+  final ConsumerWidget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final border = Border.all(
+      strokeAlign: BorderSide.strokeAlignCenter,
+      color: Theme.of(context).colorScheme.tertiary,
+      width: 4,
+    );
+
+    return ListenableBuilder(
+      listenable: focusNode,
+      builder: (context, child) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            border: focusNode.hasPrimaryFocus ? border : null,
+          ),
+          child: child,
+        );
+      },
+      child: child,
+    );
   }
 }
