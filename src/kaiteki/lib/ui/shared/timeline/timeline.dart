@@ -63,7 +63,9 @@ class TimelineSliverState extends ConsumerState<TimelineSliver> {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: useCards ? const EdgeInsets.all(8) : EdgeInsets.zero,
+      padding: ref.watch(usePostCards).value
+          ? const EdgeInsets.all(8)
+          : EdgeInsets.zero,
       sliver: PagedSliverList<String?, Post>.separated(
         pagingController: _controller,
         builderDelegate: PagedChildBuilderDelegate<Post>(
@@ -96,23 +98,18 @@ class TimelineSliverState extends ConsumerState<TimelineSliver> {
     );
   }
 
-  bool get useCards => ref.watch(usePostCards).value;
-
   Widget _buildPost(BuildContext context, Post post) {
-    Widget widget = PostWidget(
+    return PostWidget(
       post,
-      layout: this.widget.postLayout ?? PostWidgetLayout.normal,
+      layout: widget.postLayout ?? PostWidgetLayout.normal,
       onOpen: () => context.showPost(post, ref),
+      useCard: ref.watch(usePostCards).value,
     );
-
-    if (useCards) {
-      widget = Card(clipBehavior: Clip.antiAlias, child: widget);
-    }
-
-    return widget;
   }
 
   Widget _buildSeparator(BuildContext context, int index) {
-    return useCards ? const SizedBox(height: 8) : const Divider(height: 1);
+    return ref.watch(usePostCards).value
+        ? const SizedBox(height: 8)
+        : const Divider(height: 1);
   }
 }
