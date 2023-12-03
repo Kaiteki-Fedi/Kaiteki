@@ -72,7 +72,10 @@ final class KaitekiApp extends ConsumerWidget {
             theme: lightTheme,
             themeMode: themeMode,
             title: consts.kAppName,
-            shortcuts: shortcuts,
+            shortcuts: {
+              ...WidgetsApp.defaultShortcuts,
+              ...shortcuts,
+            },
             debugShowMaterialGrid: debugShowMaterialGrid,
             debugShowCheckedModeBanner: debugShowCheckedModeBanner,
             showPerformanceOverlay: showPerformanceOverlay,
