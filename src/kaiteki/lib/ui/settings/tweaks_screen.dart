@@ -15,65 +15,69 @@ class TweaksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settingsTweaks)),
-      body: SettingsContainer(
-        child: Column(
-          children: [
-            SettingsSection(
-              title: Text(context.l10n.settingsEmojisHeader),
-              children: [
-                PreferenceSliderListTile.values(
-                  provider: emojiScale,
-                  title: const Text("Emoji size"),
-                  values: const [0.5, 1, 1.5, 2, 2.5, 3],
-                  labelBuilder: (value) => "${value}x",
-                ),
-                PreferenceSwitchListTile(
-                  provider: squareEmojis,
-                  title: const Text("Square emojis"),
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: const Text("Avatars"),
-              children: [
-                PreferenceSliderListTile.values(
-                  provider: avatarCornerRadius,
-                  title: const Text("Avatar roundness"),
-                  values: const [
-                    0,
-                    2,
-                    4,
-                    6,
-                    8,
-                    12,
-                    16,
-                    24,
-                    32,
-                    double.infinity,
-                  ],
-                  labelBuilder: (value) {
-                    if (value >= double.infinity) return "Circle";
-                    if (value <= 0) return "Square";
-                    return "${value}dp";
-                  },
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: Text(context.l10n.prideSettingsHeader),
-              children: [
-                PreferenceSwitchListTile(
-                  provider: enablePrideFlag,
-                  title: Text(context.l10n.enablePrideFlag),
-                ),
-                PreferenceValuesListTile(
-                  provider: prideFlag,
-                  values: PrideFlag.values,
-                  title: Text(context.l10n.prideFlag),
-                ),
-              ],
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: SettingsContainer(
+          child: Column(
+            children: [
+              SettingsSection(
+                title: Text(context.l10n.settingsEmojisHeader),
+                children: [
+                  PreferenceSliderListTile.values(
+                    provider: emojiScale,
+                    title: const Text("Emoji size"),
+                    values: const [0.5, 1, 1.5, 2, 2.5, 3],
+                    labelBuilder: (value) => "${value}x",
+                  ),
+                  PreferenceSwitchListTile(
+                    provider: squareEmojis,
+                    title: const Text("Square emojis"),
+                    subtitle: Text(
+                        "Forces emojis to be square. Might make long emojis appear squished."),
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: const Text("Avatars"),
+                children: [
+                  PreferenceSliderListTile.values(
+                    provider: avatarCornerRadius,
+                    title: const Text("Avatar roundness"),
+                    values: const [
+                      0,
+                      2,
+                      4,
+                      6,
+                      8,
+                      12,
+                      16,
+                      24,
+                      32,
+                      double.infinity,
+                    ],
+                    labelBuilder: (value) {
+                      if (value >= double.infinity) return "Circle";
+                      if (value <= 0) return "Square";
+                      return "${value}dp";
+                    },
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: Text(context.l10n.prideSettingsHeader),
+                children: [
+                  PreferenceSwitchListTile(
+                    provider: enablePrideFlag,
+                    title: Text(context.l10n.enablePrideFlag),
+                  ),
+                  PreferenceValuesListTile(
+                    provider: prideFlag,
+                    values: PrideFlag.values,
+                    title: Text(context.l10n.prideFlag),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
