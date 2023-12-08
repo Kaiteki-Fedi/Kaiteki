@@ -40,10 +40,7 @@ class AccessibilityScreen extends StatelessWidget {
                   PreferenceSwitchListTile(
                     secondary: const Icon(Icons.open_in_full_rounded),
                     title: const Text(
-                      "Show dedicated post open button",
-                    ),
-                    subtitle: const Text(
-                      "Adds a button for opening the conversation of a post without having to click on the post itself.",
+                      "Show dedicated Open Post button",
                     ),
                     provider: showDedicatedPostOpenButton,
                   ),
@@ -55,18 +52,18 @@ class AccessibilityScreen extends StatelessWidget {
                   PreferenceSwitchListTile(
                     secondary: const Icon(Icons.colorize_rounded),
                     title: const Text(
-                      "Colorize post scopes",
+                      "Show post scopes in color",
                     ),
                     subtitle: const Text(
-                      "Gives the scope icon a distinct color for each scope.",
+                      "Shows a distinct color for each scope.",
                     ),
                     provider: coloredPostVisibilities,
                   ),
-                  PreferenceSwitchListTile(
-                    secondary: const Icon(Icons.format_underline_rounded),
-                    title: const Text("Underline links"),
-                    provider: underlineLinks,
-                  ),
+                ],
+              ),
+              SettingsSection(
+                title: const Text("Text"),
+                children: [
                   PreferenceValuesListTile(
                     leading: const Icon(Icons.font_download_rounded),
                     title: const Text("Interface font"),
@@ -84,6 +81,11 @@ class AccessibilityScreen extends StatelessWidget {
                         },
                       );
                     },
+                  ),
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.format_underline_rounded),
+                    title: const Text("Underline links"),
+                    provider: underlineLinks,
                   ),
                 ],
               ),
