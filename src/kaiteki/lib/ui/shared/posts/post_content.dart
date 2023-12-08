@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
 import "package:kaiteki/ui/shared/posts/attachment_row.dart";
 import "package:kaiteki/ui/shared/posts/embed_widget.dart";
@@ -65,6 +66,7 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
                 // FIXME(Craftplacer): https://github.com/flutter/flutter/issues/53797
                 onTap: widget.onTap,
                 style: widget.style,
+                textScaler: TextScaler.linear(ref.watch(postTextSize).value),
               ),
             ),
           if (post.poll != null) ...[

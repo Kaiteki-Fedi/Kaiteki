@@ -149,3 +149,9 @@ final interfaceFont = createEnumSettingProvider<InterfaceFont>(
   values: InterfaceFont.values,
   provider: sharedPreferencesProvider,
 );
+
+final postTextSize = createSettingProvider<double>(
+  key: "postTextSize",
+  initialValue: 1.0,
+  provider: sharedPreferencesProvider,
+);

@@ -8,6 +8,7 @@ String _defaultLabelBuilder(double value) => value.toString();
 class PreferenceSliderListTile extends ConsumerWidget {
   final ChangeNotifierProvider<PreferenceNotifier<double>> provider;
   final Widget title;
+  final Widget? leading;
   final String Function(double value) labelBuilder;
   final double min;
   final double max;
@@ -22,6 +23,7 @@ class PreferenceSliderListTile extends ConsumerWidget {
     this.min = 0.0,
     this.max = 1.0,
     this.divisions,
+    this.leading,
   }) : values = null;
 
   const PreferenceSliderListTile.values({
@@ -29,6 +31,7 @@ class PreferenceSliderListTile extends ConsumerWidget {
     required this.provider,
     required this.title,
     required List<double> this.values,
+    this.leading,
     this.labelBuilder = _defaultLabelBuilder,
   })  : divisions = values.length - 1,
         min = 0,
@@ -48,6 +51,7 @@ class PreferenceSliderListTile extends ConsumerWidget {
       max: max,
       label: labelBuilder(value),
       divisions: divisions,
+      leading: leading,
     );
   }
 

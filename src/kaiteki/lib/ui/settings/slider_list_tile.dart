@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
 
-/// A [ListTile]-like [Widget] that wraps a [Slider] widget.
+/// A [ListTile] that contains a [Slider] widget.
 ///
 /// Inspired from Lawnchair.
 class SliderListTile extends StatelessWidget {
   final Widget title;
+  final Widget? leading;
   final double value;
   final double min;
   final double max;
@@ -16,6 +17,7 @@ class SliderListTile extends StatelessWidget {
     super.key,
     required this.title,
     required this.value,
+    this.leading,
     this.min = 0.0,
     this.max = 1.0,
     this.label,
@@ -25,47 +27,35 @@ class SliderListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final headlineTextStyle = Theme.of(context).textTheme.bodyLarge;
-    final trailingSupportingTextStyle = Theme.of(context)
-        .textTheme
-        .bodyLarge
-        ?.copyWith(color: Theme.of(context).colorScheme.outline);
-
+    final leading = this.leading;
     final label = this.label;
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                DefaultTextStyle.merge(
-                  style: headlineTextStyle,
-                  child: title,
-                ),
-                const Spacer(),
-                if (label != null)
-                  Text(
-                    label,
-                    style: trailingSupportingTextStyle,
-                  ),
-              ],
+
+    // Sliders and ListTiles combined have fucky-wucky margin/padding.
+    return ListTile(
+      leading: leading == null
+          ? null
+          : Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: leading,
             ),
-          ),
-          SliderTheme(
-            data: const SliderThemeData(
-              overlayShape: RoundSliderOverlayShape(overlayRadius: 16),
-            ),
-            child: Slider.adaptive(
-              min: min,
-              max: max,
-              value: value,
-              divisions: divisions,
-              onChanged: onChanged,
-            ),
-          ),
-        ],
+      horizontalTitleGap: 0,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: title,
+      ),
+      contentPadding: EdgeInsets.zero,
+      subtitle: SliderTheme(
+        data: const SliderThemeData(
+          overlayShape: RoundSliderOverlayShape(overlayRadius: 20),
+        ),
+        child: Slider.adaptive(
+          min: min,
+          max: max,
+          value: value,
+          divisions: divisions,
+          onChanged: onChanged,
+          label: label,
+        ),
       ),
     );
   }

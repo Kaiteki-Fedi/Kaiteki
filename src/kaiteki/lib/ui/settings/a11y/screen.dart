@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/ui/settings/preference_slider_list_tile.dart";
 import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/preference_values_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
@@ -81,6 +82,14 @@ class AccessibilityScreen extends StatelessWidget {
                         },
                       );
                     },
+                  ),
+                  PreferenceSliderListTile(
+                    leading: const Icon(Icons.text_fields_rounded),
+                    min: 1.0,
+                    max: 3.0,
+                    title: Text("Post text size"),
+                    provider: postTextSize,
+                    divisions: 8,
                   ),
                   PreferenceSwitchListTile(
                     secondary: const Icon(Icons.format_underline_rounded),
