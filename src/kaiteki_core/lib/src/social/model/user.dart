@@ -27,6 +27,12 @@ class User<T> {
   /// The blur hash of the user's banner.
   final String? bannerBlurHash;
 
+  /// The URL of the user's background.
+  final Uri? backgroundUrl;
+
+  /// The blur hash of the user's background.
+  final String? backgroundBlurHash;
+
   /// The decorations on the user's avatar.
   final List<AvatarDecoration> avatarDecorations;
 
@@ -64,6 +70,8 @@ class User<T> {
     this.avatarUrl,
     this.bannerBlurHash,
     this.bannerUrl,
+    this.backgroundBlurHash,
+    this.backgroundUrl,
     this.description,
     this.details = const UserDetails(),
     this.emojis,
