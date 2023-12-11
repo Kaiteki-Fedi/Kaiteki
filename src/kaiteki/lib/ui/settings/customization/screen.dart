@@ -8,6 +8,8 @@ import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/utils/extensions.dart";
 
+import "density_list_tile.dart";
+
 class CustomizationSettingsScreen extends ConsumerWidget {
   const CustomizationSettingsScreen({super.key});
 
@@ -58,6 +60,7 @@ class CustomizationSettingsScreen extends ConsumerWidget {
                     ),
                     onTap: onChangeTheme,
                   ),
+                  const DensityListTile(),
                   ListTile(
                     title: const Text("Post appearance"),
                     onTap: () =>

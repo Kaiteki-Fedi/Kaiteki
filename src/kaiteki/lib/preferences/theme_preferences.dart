@@ -37,6 +37,30 @@ final themeMode = createEnumSettingProvider<ThemeMode>(
   provider: sharedPreferencesProvider,
 );
 
+final visualDensity = createSettingProvider<VisualDensity?>(
+  key: "visualDensity",
+  initialValue: null,
+  provider: sharedPreferencesProvider,
+  read: (prefs, key) {
+    final value = prefs.getString(key)?.split(",").map(double.parse);
+    if (value == null) return null;
+    return VisualDensity(
+      horizontal: value.first,
+      vertical: value.last,
+    );
+  },
+  write: (prefs, key, value) async {
+    if (value == null) {
+      await prefs.remove(key);
+    } else {
+      await prefs.setString(
+        key,
+        "${value.horizontal},${value.vertical}",
+      );
+    }
+  },
+);
+
 final useNaturalBadgeColors = createSettingProvider<bool>(
   key: "useNaturalBadgeColors",
   initialValue: false,
