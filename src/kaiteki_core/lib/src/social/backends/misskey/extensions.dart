@@ -77,14 +77,6 @@ DateTime? _parseBirthday(String? birthday) {
   return dateFormat.parseStrict(birthday);
 }
 
-List<MapEntry<String, String>>? _parseFields(Iterable<JsonMap>? fields) {
-  if (fields == null) return null;
-
-  return fields
-      .map((e) => MapEntry(e['name'] as String, e['value'] as String))
-      .toList();
-}
-
 EmojiHandle _splitEmoji(String key) {
   if (key.startsWith(':') && key.endsWith(':')) {
     key = key.substring(1, key.length - 1);
@@ -162,10 +154,10 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
   // Since Misskey does not provide any URL to local notes, we have to figure
   // out the URL on our own now.
   Uri getUrl(String localHost) {
-    final url = this.url.nullTransform(Uri.tryParse);
+    final url = this.url;
     if (url != null) return url;
 
-    final uri = this.uri.nullTransform(Uri.tryParse);
+    final uri = this.uri;
     if (uri != null) return uri;
 
     return Uri(
@@ -264,15 +256,13 @@ extension KaitekiMisskeyNotificationExtension on misskey.Notification {
   }
 }
 
-extension KaitekiMisskeyUserExtension on misskey.UserLite {
+extension KaitekiMisskeyUserExtension on misskey.User {
   User toKaiteki(String localHost) {
-    final detailed = safeCast<misskey.User>();
-
     UserFollowState getFollowState() {
-      if (detailed?.isFollowing == true) return UserFollowState.following;
+      if (isFollowing == true) return UserFollowState.following;
 
-      if (detailed?.hasPendingFollowRequestFromYou == true ||
-          detailed?.hasPendingReceivedFollowRequest == true) {
+      if (hasPendingFollowRequestFromYou == true ||
+          hasPendingReceivedFollowRequest == true) {
         return UserFollowState.pending;
       }
 
@@ -280,39 +270,50 @@ extension KaitekiMisskeyUserExtension on misskey.UserLite {
     }
 
     return User(
-      avatarUrl: avatarUrl.nullTransform(Uri.parse),
-      avatarBlurHash: detailed?.avatarBlurhash,
-      bannerUrl: detailed?.bannerUrl.nullTransform(Uri.parse),
-      bannerBlurHash: detailed?.bannerBlurhash as String?,
-      description: detailed?.description,
+      avatarUrl: avatarUrl,
+      avatarBlurHash: avatarBlurhash,
+      bannerUrl: bannerUrl,
+      bannerBlurHash: bannerBlurhash,
+      description: description,
       displayName: name,
       emojis: emojis?.map((e) => e.toKaiteki(localHost)).toList(),
       host: host ?? localHost,
       id: id,
-      joinDate: detailed?.createdAt,
+      joinDate: createdAt,
       source: this,
       username: username,
       details: UserDetails(
-        location: detailed?.location,
-        birthday: _parseBirthday(detailed?.birthday),
-        fields: _parseFields(detailed?.fields),
+        location: location,
+        birthday: _parseBirthday(birthday),
+        fields: fields?.map((e) => MapEntry(e.name, e.value)).toList(),
       ),
       state: UserState(
-        isBlocked: detailed?.isBlocked,
-        isMuted: detailed?.isMuted,
+        isBlocked: isBlocked,
+        isMuted: isMuted,
         follow: getFollowState(),
       ),
       metrics: UserMetrics(
-        followerCount: detailed?.followersCount,
-        followingCount: detailed?.followingCount,
-        postCount: detailed?.notesCount,
+        followerCount: followersCount,
+        followingCount: followingCount,
+        postCount: notesCount,
       ),
       flags: UserFlags(
         isAdministrator: isAdmin,
         isModerator: isModerator,
-        isApprovingFollowers: detailed?.isLocked,
+        isApprovingFollowers: isLocked,
       ),
       type: isBot == true ? UserType.bot : UserType.person,
+      avatarDecorations: [
+        if (isCat == true) AnimalEarAvatarDecoration.cat(),
+        ...?avatarDecorations?.map(
+          (e) => OverlayAvatarDecoration(
+            url: e.url,
+            id: e.id,
+            flipHorizontally: e.flipH ?? false,
+            angle: e.angle ?? 0,
+          ),
+        ),
+      ],
     );
   }
 }

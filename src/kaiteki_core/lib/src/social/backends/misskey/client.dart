@@ -476,7 +476,7 @@ class MisskeyClient {
         .then(misskey.Notification.fromJson.fromResponseList);
   }
 
-  Future<List<misskey.UserLite>> searchUsers(
+  Future<List<misskey.User>> searchUsers(
     String query, {
     int? offset,
     int? limit,
@@ -495,7 +495,7 @@ class MisskeyClient {
             if (detail != null) 'detail': detail,
           }.jsonBody,
         )
-        .then(misskey.UserLite.fromJson.fromResponseList);
+        .then(misskey.User.fromJson.fromResponseList);
   }
 
   Future<List<misskey.Note>> searchNotes(
@@ -666,7 +666,7 @@ class MisskeyClient {
       .sendRequest(HttpMethod.post, 'api/emojis')
       .then(EmojisResponse.fromJson.fromResponse);
 
-  Future<List<misskey.UserLite>> searchUsersByUsernameAndHost(
+  Future<List<misskey.User>> searchUsersByUsernameAndHost(
     String username,
     String? host, {
     bool detail = true,
@@ -681,10 +681,7 @@ class MisskeyClient {
             'detail': detail,
           }.jsonBody,
         )
-        .then(
-          (detail ? misskey.User.fromJson : misskey.UserLite.fromJson)
-              .fromResponseList,
-        );
+        .then(misskey.User.fromJson.fromResponseList);
   }
 
   Future<List<Mute>> getMutedAccounts(
