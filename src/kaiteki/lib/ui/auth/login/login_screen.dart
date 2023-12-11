@@ -522,7 +522,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     await accountManager.add(account);
-    router.goNamed("home", pathParameters: account.key.routerParams);
+    accountManager.change(account);
+
+    router.go("/");
   }
 
   Future<void> _showError(TraceableError error) async {
