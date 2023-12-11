@@ -1,3 +1,4 @@
+import 'avatar_decoration.dart';
 import 'emoji.dart';
 import 'user_flags.dart';
 import 'user_handle.dart';
@@ -25,6 +26,9 @@ class User<T> {
 
   /// The blur hash of the user's banner.
   final String? bannerBlurHash;
+
+  /// The decorations on the user's avatar.
+  final List<AvatarDecoration> avatarDecorations;
 
   /// The ID of the user.
   final String id;
@@ -69,6 +73,7 @@ class User<T> {
     this.url,
     this.state = const UserState(),
     this.type = UserType.person,
+    this.avatarDecorations = const [],
   });
 
   UserHandle get handle => UserHandle.fromUser(this);
