@@ -10,6 +10,7 @@ class AvatarWidget extends StatelessWidget {
   final ShapeBorder? shape;
   final FocusNode? focusNode;
   final UserType type;
+  final List<AvatarDecoration> decorations;
 
   AvatarWidget(
     User user, {
@@ -20,7 +21,8 @@ class AvatarWidget extends StatelessWidget {
     this.focusNode,
   })  : url = user.avatarUrl,
         blurHash = user.avatarBlurHash,
-        type = user.type;
+        type = user.type,
+        decorations = user.avatarDecorations;
 
   const AvatarWidget.url(
     this.url, {
@@ -31,6 +33,7 @@ class AvatarWidget extends StatelessWidget {
     this.shape,
     this.focusNode,
     this.type = UserType.person,
+    this.decorations = const [],
   });
 
   @override
@@ -68,29 +71,41 @@ class AvatarWidget extends StatelessWidget {
 
     // only show the decoration if the avatar is big enough, otherwise it's
     // too small to be distinguishable
-    // ignore: dead_code
-    if (false && size > 24) {
+    if (decorations.isNotEmpty && size > 24) {
       final decorationOffset = (size / 2) * -1;
       avatar = Stack(
         clipBehavior: Clip.none,
         children: [
           avatar,
-          Positioned.fill(
-            top: decorationOffset,
-            left: decorationOffset,
-            right: decorationOffset,
-            bottom: decorationOffset,
-            child: IgnorePointer(
-              child: Image.network(
-                "https://cdn.transfem.social/files/4137f030-0a75-4dd7-80dd-693a8b8cce34.webp",
+          for (final decoration in decorations)
+            Positioned.fill(
+              top: decorationOffset,
+              left: decorationOffset,
+              right: decorationOffset,
+              bottom: decorationOffset,
+              child: IgnorePointer(
+                child: _buildDecoration(decoration),
               ),
-            ),
-          )
+            )
         ],
       );
     }
 
     return avatar;
+  }
+
+  Widget? _buildDecoration(AvatarDecoration decoration) {
+    return switch (decoration) {
+      OverlayAvatarDecoration() => IgnorePointer(
+          child: Transform.rotate(
+            angle: decoration.angle,
+            child: Image.network(
+              decoration.url.toString(),
+            ),
+          ),
+        ),
+      AnimalEarAvatarDecoration() => null,
+    };
   }
 
   ImageFrameBuilder _getFrameBuilder(Widget? fallback) {

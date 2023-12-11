@@ -13,8 +13,8 @@ final class OverlayAvatarDecoration extends AvatarDecoration {
   const OverlayAvatarDecoration({
     required this.id,
     required this.url,
-    required this.angle,
-    required this.flipHorizontally,
+    this.angle = 0,
+    this.flipHorizontally = false,
   });
 }
 
@@ -22,6 +22,9 @@ final class AnimalEarAvatarDecoration extends AvatarDecoration {
   final AnimalEarAvatarDecorationType type;
 
   const AnimalEarAvatarDecoration(this.type);
+
+  const AnimalEarAvatarDecoration.cat()
+      : this(AnimalEarAvatarDecorationType.cat);
 }
 
 enum AnimalEarAvatarDecorationType { cat }
