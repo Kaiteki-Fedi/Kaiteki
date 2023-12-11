@@ -52,6 +52,7 @@ extension ThemeDataExtensions on ThemeData {
             )
           : null,
       textTheme: getTextTheme(textTheme),
+      visualDensity: ref.watch(preferences.visualDensity).value,
     );
   }
 
