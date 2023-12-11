@@ -1,3 +1,4 @@
+import "package:animations/animations.dart";
 import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
@@ -6,10 +7,10 @@ import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/auth/oauth.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/routing/notifier.dart";
 import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
-import "package:kaiteki/ui/account_required_screen.dart";
 import "package:kaiteki/ui/announcements/dialog.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/auth/oauth_finalization_screen.dart";
@@ -19,6 +20,11 @@ import "package:kaiteki/ui/hashtag/screen.dart";
 import "package:kaiteki/ui/launcher/dialog.dart";
 import "package:kaiteki/ui/lists/lists_screen.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
+import "package:kaiteki/ui/onboarding/pages/account_setup.dart";
+import "package:kaiteki/ui/onboarding/pages/introduction.dart";
+import "package:kaiteki/ui/onboarding/pages/preferences_presets.dart";
+import "package:kaiteki/ui/onboarding/pages/theme.dart";
+import "package:kaiteki/ui/onboarding/screen.dart";
 import "package:kaiteki/ui/search/screen.dart";
 import "package:kaiteki/ui/settings/a11y/screen.dart";
 import "package:kaiteki/ui/settings/about/about_screen.dart";
@@ -42,8 +48,13 @@ import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
 import "package:logging/logging.dart";
 
+import "shared_axis_transition_page.dart";
+
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "root");
+
+final GlobalKey<NavigatorState> _onboardingNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: "onboarding");
 
 const authenticatedPath = "/@:accountUsername@:accountHost";
 
@@ -60,9 +71,13 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: "/",
-        redirect: (context, state) {
+        redirect: (_, __) {
           final account = ref.read(routerNotifierProvider);
-          if (account == null) return "/welcome";
+          final finishedOnboarding = ref.read(hasFinishedOnboarding).value;
+
+          if (account == null) return "/onboarding";
+          if (!finishedOnboarding) return "/onboarding/preferences";
+
           return "/${account.handle}/home";
         },
       ),
@@ -78,14 +93,49 @@ final routerProvider = Provider<GoRouter>((ref) {
           return Uri(path: url.path, query: url.query).toString();
         },
       ),
-      GoRoute(
-        path: "/welcome",
-        builder: (_, __) => const AccountRequiredScreen(),
-        redirect: (context, state) {
-          final account = ref.read(routerNotifierProvider);
-          if (account != null) return "/${account.handle}/home";
-          return null;
+      ShellRoute(
+        navigatorKey: _onboardingNavigatorKey,
+        builder: (_, state, child) {
+          return OnboardingScreen(child: child);
         },
+        routes: [
+          GoRoute(
+            path: "/onboarding",
+            parentNavigatorKey: _onboardingNavigatorKey,
+            pageBuilder: (_, __) => const SharedAxisTransitionPage(
+              transitionType: SharedAxisTransitionType.horizontal,
+              child: IntroductionPage(),
+              fillColor: Colors.transparent,
+            ),
+          ),
+          GoRoute(
+            path: "/onboarding/account-setup",
+            parentNavigatorKey: _onboardingNavigatorKey,
+            pageBuilder: (_, __) => const SharedAxisTransitionPage(
+              child: AccountSetupPage(),
+              transitionType: SharedAxisTransitionType.horizontal,
+              fillColor: Colors.transparent,
+            ),
+          ),
+          GoRoute(
+            path: "/onboarding/preferences",
+            parentNavigatorKey: _onboardingNavigatorKey,
+            pageBuilder: (_, __) => const SharedAxisTransitionPage(
+              child: PreferencesSetupPage(),
+              transitionType: SharedAxisTransitionType.horizontal,
+              fillColor: Colors.transparent,
+            ),
+          ),
+          GoRoute(
+            path: "/onboarding/theme",
+            parentNavigatorKey: _onboardingNavigatorKey,
+            pageBuilder: (_, __) => const SharedAxisTransitionPage(
+              child: ThemePage(),
+              transitionType: SharedAxisTransitionType.horizontal,
+              fillColor: Colors.transparent,
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: "/about",

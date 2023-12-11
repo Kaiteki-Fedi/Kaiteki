@@ -155,3 +155,9 @@ final postTextSize = createSettingProvider<double>(
   initialValue: 1.0,
   provider: sharedPreferencesProvider,
 );
+
+final hasFinishedOnboarding = createSettingProvider<bool>(
+  key: "hasFinishedOnboarding",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);

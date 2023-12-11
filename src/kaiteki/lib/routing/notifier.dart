@@ -24,7 +24,7 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
 
     if (!isAuthenticatedPath) return null;
 
-    if (this.state == null) return "/welcome";
+    if (this.state == null) return "/";
 
     final username = state.pathParameters["accountUsername"];
     final host = state.pathParameters["accountHost"];
@@ -34,8 +34,9 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
     final accounts = ref.read(accountManagerProvider.select((e) => e.accounts));
     final accountExists =
         accounts.any((e) => e.key.username == username && e.key.host == host);
+    if (!accountExists) return "/";
 
-    return accountExists ? null : "/";
+    return null;
   }
 
   @override

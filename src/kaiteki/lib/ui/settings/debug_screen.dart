@@ -5,7 +5,6 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/auth/oauth.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
-import "package:kaiteki/ui/onboarding/onboarding_screen.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -68,11 +67,11 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
                       ListTile(
                         leading: const Icon(Icons.waving_hand_rounded),
                         title: const Text("Open onboarding"),
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const OnboardingScreen(),
-                          ),
-                        ),
+                        onTap: () {
+                          ref.read(preferences.hasFinishedOnboarding).value =
+                              false;
+                          context.go("/onboarding");
+                        },
                         enabled: developerMode,
                       ),
                       ListTile(
