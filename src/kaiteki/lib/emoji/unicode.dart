@@ -1,16 +1,6 @@
+import "package:kaiteki/generated/unicode_emoji.g.dart";
 import "package:kaiteki/l10n/localizations.dart";
-
 import "package:kaiteki_core/kaiteki_core.dart";
-
-import "lists/activities.g.dart";
-import "lists/animals_nature.g.dart";
-import "lists/flags.g.dart";
-import "lists/food_drink.g.dart";
-import "lists/objects.g.dart";
-import "lists/people_body.g.dart";
-import "lists/smileys_emotion.g.dart";
-import "lists/symbols.g.dart";
-import "lists/travel_places.g.dart";
 
 class UnicodeEmojiCategory implements EmojiCategory {
   @override
@@ -24,13 +14,13 @@ class UnicodeEmojiCategory implements EmojiCategory {
   @override
   List<EmojiCategoryItem<UnicodeEmoji>> get items {
     return switch (type) {
-      UnicodeEmojiGroup.activities => activities,
+      UnicodeEmojiGroup.activities => activitiesEvents,
       UnicodeEmojiGroup.animalsNature => animalsNature,
       UnicodeEmojiGroup.flags => flags,
       UnicodeEmojiGroup.foodDrink => foodDrink,
       UnicodeEmojiGroup.objects => objects,
-      UnicodeEmojiGroup.peopleBody => peopleBody,
-      UnicodeEmojiGroup.smileysEmotion => smileysEmotion,
+      UnicodeEmojiGroup.peopleBody => people,
+      UnicodeEmojiGroup.smileysEmotion => smileysEmotions,
       UnicodeEmojiGroup.symbols => symbols,
       UnicodeEmojiGroup.travelPlaces => travelPlaces
     };

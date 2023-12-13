@@ -1,0 +1,6 @@
+targets:
+  $default:
+    builders:
+      kaiteki_unicode_generator:
+        options:
+          emoji_list_url: "https://raw.githubusercontent.com/googlefonts/emoji-metadata/main/emoji_15_1_ordering.json"

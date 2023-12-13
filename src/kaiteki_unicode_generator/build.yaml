@@ -1,0 +1,7 @@
+builders:
+  kaiteki_unicode_generator:
+    import: "package:kaiteki_unicode_generator/builder.dart"
+    builder_factories: [ "emojiBuilder" ]
+    build_extensions: { "$package$": [ "lib/generated/unicode_emojis.dart" ] }
+    auto_apply: root_package
+    build_to: source
