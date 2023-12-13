@@ -6,6 +6,7 @@ import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/bookmarks.dart";
+import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -380,31 +381,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             MenuItemButton(
               leadingIcon: AvatarWidget(account.user, size: 24),
               child: Text(account.user.handle.toString()),
-              onPressed: () async {
-                final scaffoldMessenger = ScaffoldMessenger.of(context);
-                final router = GoRouter.of(context);
-
-                final adapter = account.adapter;
-                final post = await adapter.resolveUrl(url);
-                if (post is! Post) {
-                  scaffoldMessenger.showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "Couldn't find post on ${account.key.host}",
-                      ),
-                    ),
-                  );
-                  return;
-                }
-
-                router.pushNamed(
-                  "post",
-                  pathParameters: {
-                    ...account.key.routerParams,
-                    "id": post.id,
-                  },
-                );
-              },
+              onPressed: () => _onOpenRemote(account),
             ),
         ],
         child: const Text("Open in..."),
@@ -651,6 +628,33 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     );
 
     setState(() => _translatedPost = translatedPost);
+  }
+
+  Future<void> _onOpenRemote(Account account) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+
+    final adapter = account.adapter;
+    final post = await adapter.resolveUrl(_post.externalUrl!);
+
+    if (post is! Post) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            "Couldn't find post on ${account.key.host}",
+          ),
+        ),
+      );
+      return;
+    }
+
+    router.pushNamed(
+      "post",
+      pathParameters: {
+        ...account.key.routerParams,
+        "id": post.id,
+      },
+    );
   }
 
   Future<void> _translateViaExternalService(
