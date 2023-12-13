@@ -178,6 +178,7 @@ final currentAccountProvider = Provider<Account?>.internal(
 );
 
 typedef CurrentAccountRef = ProviderRef<Account?>;
+
 String _$adapterHash() => r'3a7624e3a59ce66597fe9a517264dad933d16a06';
 
 /// See also [adapter].
@@ -195,6 +196,7 @@ final adapterProvider = Provider<BackendAdapter>.internal(
 );
 
 typedef AdapterRef = ProviderRef<BackendAdapter>;
+
 String _$translatorHash() => r'9df641e03c09009524470d24d553f89d7d580a34';
 
 /// See also [translator].
@@ -209,6 +211,7 @@ final translatorProvider = AutoDisposeProvider<Translator?>.internal(
 );
 
 typedef TranslatorRef = AutoDisposeProviderRef<Translator?>;
+
 String _$languageIdentificatorHash() =>
     r'50116f7b5d56f12c52c6dc1c826703d6054d2a8f';
 
@@ -227,7 +230,8 @@ final languageIdentificatorProvider =
 
 typedef LanguageIdentificatorRef
     = AutoDisposeProviderRef<LanguageIdentificator?>;
-String _$textParserHash() => r'4c424236a063be641500d3ccc00827f6d0bc1f58';
+
+String _$textParserHash() => r'e76393f90b7a8e807b92bb5fa170552b4f7d366f';
 
 /// See also [textParser].
 @ProviderFor(textParser)
@@ -244,6 +248,7 @@ final textParserProvider = Provider<Set<TextParser>>.internal(
 );
 
 typedef TextParserRef = ProviderRef<Set<TextParser>>;
+
 String _$languageListHash() => r'47585c70705158bdd9b5e9b6347637b2f1e3558d';
 
 /// See also [languageList].

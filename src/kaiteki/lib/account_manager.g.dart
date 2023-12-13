@@ -24,7 +24,6 @@ final accountSecretRepositoryProvider =
 
 typedef AccountSecretRepositoryRef
     = AutoDisposeProviderRef<Repository<AccountSecret, AccountKey>>;
-
 String _$clientSecretRepositoryHash() =>
     r'aed3e9014f61ee4cbc6de2836eb5f3e92d8dc635';
 
@@ -43,7 +42,6 @@ final clientSecretRepositoryProvider =
 
 typedef ClientSecretRepositoryRef
     = AutoDisposeProviderRef<Repository<ClientSecret, AccountKey>>;
-
 String _$accountManagerHash() => r'9c6b9033c0eaad1b39e270df2164eff86233edb7';
 
 /// See also [AccountManager].

@@ -34,7 +34,7 @@ abstract class _$AnnouncementsService
     extends BuildlessAsyncNotifier<List<Announcement>> {
   late final AccountKey key;
 
-  Future<List<Announcement>> build(
+  FutureOr<List<Announcement>> build(
     AccountKey key,
   );
 }
@@ -115,7 +115,7 @@ class AnnouncementsServiceProvider extends AsyncNotifierProviderImpl<
   final AccountKey key;
 
   @override
-  Future<List<Announcement>> runNotifierBuild(
+  FutureOr<List<Announcement>> runNotifierBuild(
     covariant AnnouncementsService notifier,
   ) {
     return notifier.build(
