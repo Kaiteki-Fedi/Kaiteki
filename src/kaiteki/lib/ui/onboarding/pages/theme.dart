@@ -4,7 +4,6 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/onboarding/widgets/back_button.dart";
-import "package:kaiteki/utils/extensions.dart";
 
 class ThemePage extends ConsumerWidget {
   const ThemePage({super.key});
