@@ -11,6 +11,7 @@ import "package:kaiteki/ui/shared/posts/layouts/layout.dart";
 import "package:kaiteki/ui/shared/posts/meta_bar.dart";
 import "package:kaiteki/ui/shared/posts/post_content.dart";
 import "package:kaiteki/ui/shared/posts/post_metrics_bar.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 import "package:kaiteki/ui/shared/posts/reaction_row.dart";
 import "package:kaiteki/ui/shared/posts/reply_bar.dart";
@@ -55,13 +56,11 @@ class ExpandedPostLayout extends ConsumerWidget {
               user: post.author,
             ),
           ),
-          ExpandedPostLayout(
+          PostWidget(
             repeatOf,
-            callbacks: callbacks,
-            onReact: onReact,
+            layout: PostWidgetLayout.expanded,
             onOpen: onOpen,
             onTap: onTap,
-            menuFocusNode: menuFocusNode,
           ),
         ],
       );
