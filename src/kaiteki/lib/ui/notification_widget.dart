@@ -228,7 +228,9 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       NotificationType.signedUp => Icons.person_add_rounded,
       NotificationType.newPost => Icons.post_add_rounded,
       NotificationType.userMigrated => Icons.swap_horiz_rounded,
-      NotificationType.unsupported => Icons.question_mark
+      NotificationType.unsupported => Icons.question_mark,
+      NotificationType.achievementGet => Icons.emoji_events_rounded,
+      NotificationType.test => Icons.bug_report_rounded
     };
   }
 
@@ -264,9 +266,11 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       case NotificationType.signedUp:
       case NotificationType.userMigrated:
       case NotificationType.pollEnded:
-        return colorScheme.secondary;
+        return colorScheme.tertiary;
 
       case NotificationType.unsupported:
+      case NotificationType.test:
+      case NotificationType.achievementGet:
         return colorScheme.outline;
     }
   }
@@ -290,7 +294,9 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       NotificationType.signedUp => " has joined the instance",
       NotificationType.newPost => " made a new post",
       NotificationType.userMigrated => " migrated to a new account",
-      NotificationType.unsupported => "Unsupported notification"
+      NotificationType.unsupported => "Unsupported notification",
+      NotificationType.achievementGet => "You got an achievement",
+      NotificationType.test => "Test notification",
     };
   }
 

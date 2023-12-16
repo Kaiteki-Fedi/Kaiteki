@@ -19,7 +19,8 @@ final misskeyNotificationTypeRosetta = {
   misskey.NotificationType.followRequestAccepted:
       NotificationType.outgoingFollowRequestAccepted,
   misskey.NotificationType.groupInvited: NotificationType.groupInvite,
-  misskey.NotificationType.achievementEarned: NotificationType.unsupported,
+  misskey.NotificationType.test: NotificationType.test,
+  misskey.NotificationType.achievementEarned: NotificationType.achievementGet,
 };
 
 final misskeyVisibilityRosetta = Rosetta<String, PostScope>(const {
@@ -248,7 +249,8 @@ extension KaitekiMisskeyNotificationExtension on misskey.Notification {
     return Notification(
       id: id,
       createdAt: createdAt,
-      type: misskeyNotificationTypeRosetta[type]!,
+      type:
+          misskeyNotificationTypeRosetta[type] ?? NotificationType.unsupported,
       user: user?.toKaiteki(localHost),
       post: note?.toKaiteki(localHost),
       unread: !(isRead ?? true),

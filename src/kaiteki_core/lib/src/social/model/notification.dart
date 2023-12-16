@@ -126,4 +126,10 @@ enum NotificationType {
 
   /// Someone has moved to a new account.
   userMigrated,
+
+  /// The user has earned an achievement.
+  achievementGet,
+
+  /// Test notification.
+  test,
 }
