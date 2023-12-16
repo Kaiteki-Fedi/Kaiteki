@@ -91,7 +91,8 @@ class ExpandedPostLayout extends ConsumerWidget {
               ReplyBar(post: post),
             PostContent(post: post, onTap: onTap),
             if (showSignature) PostSignature(post),
-            if (post.reactions.isNotEmpty) ...[
+            if (post.reactions.isNotEmpty &&
+                ref.watch(showReactions).value) ...[
               const SizedBox(height: 8),
               ReactionRow(post.reactions, (r) => onReact(r.emoji)),
             ],

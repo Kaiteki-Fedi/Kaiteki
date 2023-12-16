@@ -7,6 +7,7 @@ class PreferenceSwitchListTile extends ConsumerWidget {
   final Widget? title;
   final Widget? subtitle;
   final Widget? secondary;
+  final bool enabled;
 
   const PreferenceSwitchListTile({
     super.key,
@@ -14,6 +15,7 @@ class PreferenceSwitchListTile extends ConsumerWidget {
     this.title,
     this.subtitle,
     this.secondary,
+    this.enabled = true,
   });
 
   @override
@@ -22,7 +24,7 @@ class PreferenceSwitchListTile extends ConsumerWidget {
       secondary: secondary,
       title: title,
       subtitle: subtitle,
-      onChanged: (value) => ref.read(provider).value = value,
+      onChanged: enabled ? (value) => ref.read(provider).value = value : null,
       value: ref.watch(provider).value,
     );
   }

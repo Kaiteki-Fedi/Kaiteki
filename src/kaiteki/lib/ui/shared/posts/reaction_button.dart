@@ -81,7 +81,7 @@ class ReactionButton extends ConsumerWidget {
                 size: emojiSize,
               ),
             ),
-            if (!ref.watch(hidePostMetrics).value) ...[
+            if (ref.watch(showReactionCounts).value) ...[
               const SizedBox(width: 6),
               Text(
                 reaction.count.toString(),

@@ -67,6 +67,12 @@ final useNaturalBadgeColors = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
+final showBadgeNumbers = createSettingProvider<bool>(
+  key: "showBadgeNumbers",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
 final squareEmojis = createSettingProvider<bool>(
   key: "squareEmojis",
   initialValue: true,

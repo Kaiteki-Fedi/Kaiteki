@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
@@ -38,31 +39,29 @@ class _InteractionBarState extends State<InteractionBar> {
     final theme = Theme.of(context);
     final callbacks = widget.callbacks;
 
-    // ignore: omit_local_variable_types
-    final favoriteColor = Theme.of(context).ktkColors?.favoriteColor ??
-        DefaultKaitekiColors(context).favoriteColor;
     var buttons = <Widget>[
       if (callbacks.onReply.isSome())
-        CountButton(
-          count: widget.metrics.replyCount,
-          focusNode: FocusNode(skipTraversal: true),
-          icon: const Icon(Icons.reply_rounded),
-          onTap: callbacks.onReply.toNullable(),
-          showNumber: widget.showLabels,
-          tooltip: context.l10n.replyButtonLabel,
+        _ReplyButton.infer(
+          callbacks: callbacks,
+          metrics: widget.metrics,
+          showLabel: widget.showLabels,
         ),
       if (callbacks.onRepeat.isSome())
         if (true)
-          _buildRepeatButton(
-            context,
-            callbacks.onRepeat.toNullable(),
+          _RepeatButton(
+            onTap: callbacks.onRepeat.toNullable(),
+            showLabel: widget.showLabels,
+            count: widget.metrics.repeatCount,
           )
         else
-          // Ja ich weiß
           // ignore: dead_code
           MenuAnchor(
             builder: (context, controller, _) {
-              return _buildRepeatButton(context, controller.open);
+              return _RepeatButton(
+                onTap: controller.open,
+                showLabel: widget.showLabels,
+                count: widget.metrics.repeatCount,
+              );
             },
             menuChildren: [
               PopupMenuItem(
@@ -76,23 +75,17 @@ class _InteractionBarState extends State<InteractionBar> {
             ],
           ),
       if (callbacks.onFavorite.isSome())
-        CountButton(
-          active: widget.favorited ?? false,
-          activeColor: favoriteColor,
-          activeIcon: const Icon(Icons.star_rounded),
-          count: widget.metrics.favoriteCount,
-          focusNode: FocusNode(skipTraversal: true),
-          icon: const Icon(Icons.star_border_rounded),
-          onTap: callbacks.onFavorite.toNullable(),
-          onLongPress: callbacks.onShowFavoritees,
-          showNumber: widget.showLabels,
+        _FavoriteButton.infer(
+          callbacks: callbacks,
+          isFavorited: widget.favorited ?? false,
+          metrics: widget.metrics,
+          showLabel: widget.showLabels,
         ),
       if (callbacks.onReact.isSome())
-        CountButton(
-          focusNode: FocusNode(skipTraversal: true),
-          icon: const Icon(Icons.mood_rounded),
-          onTap: callbacks.onReact.toNullable(),
-          showNumber: widget.showLabels,
+        _ReactButton.infer(
+          callbacks: callbacks,
+          metrics: widget.metrics,
+          showLabel: widget.showLabels,
         ),
     ];
 
@@ -125,21 +118,164 @@ class _InteractionBarState extends State<InteractionBar> {
             child: Row(children: buttons),
           );
   }
+}
 
-  CountButton _buildRepeatButton(BuildContext context, VoidCallback? onTap) {
+class _ReplyButton extends ConsumerWidget {
+  final VoidCallback? onTap;
+  final bool showLabel;
+  final int? count;
+
+  const _ReplyButton({
+    this.showLabel = true,
+    required this.onTap,
+    required this.count,
+  });
+
+  factory _ReplyButton.infer({
+    required InteractionCallbacks callbacks,
+    required PostMetrics metrics,
+    bool showLabel = true,
+  }) {
+    return _ReplyButton(
+      onTap: callbacks.onReply.toNullable(),
+      showLabel: showLabel,
+      count: metrics.replyCount,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CountButton(
+      count: count,
+      focusNode: FocusNode(skipTraversal: true),
+      icon: const Icon(Icons.reply_rounded),
+      onTap: onTap,
+      labelStyle: _getLabelStyle(showLabel, ref.watch(showReplyCounts).value),
+      label: context.l10n.replyButtonLabel,
+    );
+  }
+}
+
+class _FavoriteButton extends ConsumerWidget {
+  final VoidCallback? onTap;
+  final VoidCallback? onSecondary;
+  final bool showLabel;
+  final bool value;
+  final int? count;
+
+  const _FavoriteButton(
+    this.value, {
+    this.showLabel = true,
+    required this.onTap,
+    required this.onSecondary,
+    required this.count,
+  });
+
+  factory _FavoriteButton.infer({
+    required InteractionCallbacks callbacks,
+    required bool isFavorited,
+    required PostMetrics metrics,
+    bool showLabel = true,
+  }) {
+    return _FavoriteButton(
+      isFavorited,
+      onTap: callbacks.onFavorite.toNullable(),
+      onSecondary: callbacks.onShowFavoritees,
+      showLabel: showLabel,
+      count: metrics.favoriteCount,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteColor = Theme.of(context).ktkColors?.favoriteColor ??
+        DefaultKaitekiColors(context).favoriteColor;
+    return CountButton(
+      active: value,
+      activeColor: favoriteColor,
+      count: count,
+      focusNode: FocusNode(skipTraversal: true),
+      icon: const Icon(Icons.star_border_rounded),
+      onTap: onTap,
+      onLongPress: onSecondary,
+      label: context.l10n.favoriteButtonLabel,
+      labelStyle: _getLabelStyle(showLabel, ref.watch(showReplyCounts).value),
+    );
+  }
+}
+
+class _ReactButton extends ConsumerWidget {
+  final VoidCallback? onTap;
+  final bool showLabel;
+
+  const _ReactButton({
+    this.showLabel = true,
+    required this.onTap,
+  });
+
+  factory _ReactButton.infer({
+    required InteractionCallbacks callbacks,
+    required PostMetrics metrics,
+    bool showLabel = true,
+  }) {
+    return _ReactButton(
+      onTap: callbacks.onReact.toNullable(),
+      showLabel: showLabel,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CountButton(
+      focusNode: FocusNode(skipTraversal: true),
+      icon: const Icon(Icons.mood_rounded),
+      onTap: onTap,
+      labelStyle: _getLabelStyle(showLabel, ref.watch(showReplyCounts).value),
+      label: context.l10n.reactButtonLabel,
+    );
+  }
+}
+
+class _RepeatButton extends ConsumerWidget {
+  final VoidCallback? onTap;
+  final bool showLabel;
+  final int? count;
+
+  const _RepeatButton({
+    this.showLabel = true,
+    required this.onTap,
+    required this.count,
+  });
+
+  factory _RepeatButton.infer({
+    required InteractionCallbacks callbacks,
+    required PostMetrics metrics,
+    bool showLabel = true,
+  }) {
+    return _RepeatButton(
+      onTap: callbacks.onRepeat.toNullable(),
+      showLabel: showLabel,
+      count: metrics.repeatCount,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final repeatColor = Theme.of(context).ktkColors?.repeatColor ??
         DefaultKaitekiColors(context).repeatColor;
     return CountButton(
-      active: widget.repeated ?? false,
       activeColor: repeatColor,
-      count: widget.metrics.repeatCount,
+      count: count,
       focusNode: FocusNode(skipTraversal: true),
       icon: const Icon(Icons.repeat_rounded),
       onTap: onTap,
-      onLongPress: widget.callbacks.onShowRepeatees,
-      showNumber: widget.showLabels,
-      enabled: onTap != null,
-      tooltip: context.l10n.repeatButtonLabel,
+      labelStyle: _getLabelStyle(showLabel, ref.watch(showReplyCounts).value),
+      label: context.l10n.repeatButtonLabel,
     );
   }
+}
+
+CountButtonLabelStyle _getLabelStyle(bool showLabels, bool showCounts) {
+  if (showLabels == false) return CountButtonLabelStyle.none;
+  return showCounts ? CountButtonLabelStyle.count : CountButtonLabelStyle.label;
 }

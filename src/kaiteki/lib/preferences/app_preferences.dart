@@ -75,9 +75,33 @@ final cwBehavior = createEnumSettingProvider<ContentWarningBehavior>(
   provider: sharedPreferencesProvider,
 );
 
-final hidePostMetrics = createSettingProvider<bool>(
-  key: "hidePostMetrics",
-  initialValue: false,
+final showFavoriteCounts = createSettingProvider<bool>(
+  key: "showFavoriteCounts",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final showReplyCounts = createSettingProvider<bool>(
+  key: "showReplyCounts",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final showRepeatCounts = createSettingProvider<bool>(
+  key: "showRepeatCounts",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final showReactions = createSettingProvider<bool>(
+  key: "showReactions",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final showReactionCounts = createSettingProvider<bool>(
+  key: "showReactionCounts",
+  initialValue: true,
   provider: sharedPreferencesProvider,
 );
 

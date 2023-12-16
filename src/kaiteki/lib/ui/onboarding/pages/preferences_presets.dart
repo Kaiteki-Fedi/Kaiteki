@@ -85,7 +85,9 @@ class _PreferencesSetupPageState extends State<PreferencesSetupPage> {
 
                     if (_wellbeingPreset) {
                       container.read(useNaturalBadgeColors).value = true;
-                      container.read(hidePostMetrics).value = true;
+                      container.read(showReplyCounts).value = false;
+                      container.read(showFavoriteCounts).value = false;
+                      container.read(showRepeatCounts).value = false;
                     }
 
                     context.push("/onboarding/theme");

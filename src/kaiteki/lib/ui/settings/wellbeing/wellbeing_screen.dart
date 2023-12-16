@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/content_warning_behavior.dart";
@@ -22,13 +23,11 @@ class WellbeingScreen extends StatelessWidget {
             children: [
               SettingsSection(
                 children: [
-                  PreferenceSwitchListTile(
-                    secondary: const Icon(Icons.pin_outlined),
-                    title: const Text("Hide post metrics"),
-                    subtitle: const Text(
-                      "Hides the amount of replies, favorites, repeats a post has",
-                    ),
-                    provider: preferences.hidePostMetrics,
+                  ListTile(
+                    leading: const Icon(Icons.pin_rounded),
+                    title: const Text("Interactions"),
+                    onTap: () =>
+                        context.push("/settings/wellbeing/interactions"),
                   ),
                   const ContentWarningBehaviorListTile(),
                 ],
@@ -40,6 +39,11 @@ class WellbeingScreen extends StatelessWidget {
                     secondary: const Icon(Icons.looks_one_rounded),
                     title: const Text("Use neutral badge colors"),
                     provider: preferences.useNaturalBadgeColors,
+                  ),
+                  PreferenceSwitchListTile(
+                    secondary: const SizedBox(),
+                    title: const Text("Show badge numbers"),
+                    provider: preferences.showBadgeNumbers,
                   ),
                 ],
               ),

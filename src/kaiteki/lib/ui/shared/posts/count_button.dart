@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:intl/intl.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/social_icon_animation.dart";
@@ -21,10 +20,10 @@ class CountButton extends ConsumerWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final FocusNode? focusNode;
-  final bool showNumber;
   final bool expanded;
 
-  final String? tooltip;
+  final String? label;
+  final CountButtonLabelStyle? labelStyle;
 
   const CountButton({
     super.key,
@@ -32,16 +31,16 @@ class CountButton extends ConsumerWidget {
     this.activeColor,
     this.activeIcon,
     this.color,
-    this.count = 0,
+    this.count,
     this.enabled = true,
     this.active = false,
     this.focusNode,
     this.onLongPress,
     this.onTap,
-    this.showNumber = true,
     this.expanded = true,
     this.animate,
-    this.tooltip,
+    this.label,
+    this.labelStyle = CountButtonLabelStyle.count,
   });
 
   @override
@@ -49,17 +48,16 @@ class CountButton extends ConsumerWidget {
     final color = _getColor(context);
     final count = this.count;
 
-    final hasNumber = count != null && count >= 1;
-    final shortenedCount = NumberFormat.compact() //
-        .format(count ?? 0)
-        .toLowerCase();
-
-    final showCount =
-        showNumber && hasNumber && !ref.watch(hidePostMetrics).value;
-
     final textStyle = (Theme.of(context).ktkTextTheme?.countTextStyle ??
             DefaultKaitekiTextTheme(context).countTextStyle)
         .copyWith(color: color);
+
+    final label = switch (labelStyle) {
+      CountButtonLabelStyle.none => null,
+      CountButtonLabelStyle.count when count != null =>
+        NumberFormat.compact().format(count).toLowerCase(),
+      _ => this.label
+    };
 
     var child = _buildIcon(color);
 
@@ -67,13 +65,13 @@ class CountButton extends ConsumerWidget {
       child = Row(
         children: [
           child,
-          if (showCount) ...[
+          if (label != null) ...[
             const SizedBox(width: 8),
             Expanded(
               child: DefaultTextStyle.merge(
                 style: textStyle,
                 child: Text(
-                  shortenedCount,
+                  label,
                   maxLines: 1,
                   overflow: TextOverflow.fade,
                   softWrap: false,
@@ -95,7 +93,7 @@ class CountButton extends ConsumerWidget {
         shape: const StadiumBorder(),
         enableFeedback: enabled,
         minimumSize: Size(
-          (expanded && showCount) ? 88.0 : 0.0,
+          (expanded && labelStyle != CountButtonLabelStyle.none) ? 88.0 : 0.0,
           40.0,
         ),
         visualDensity: VisualDensity.comfortable,
@@ -103,9 +101,9 @@ class CountButton extends ConsumerWidget {
       child: child,
     );
 
-    if (tooltip != null) {
+    if (this.label != null) {
       return Tooltip(
-        message: tooltip,
+        message: this.label,
         child: button,
       );
     }
@@ -145,4 +143,15 @@ class CountButton extends ConsumerWidget {
 
     return inactiveColor;
   }
+}
+
+enum CountButtonLabelStyle {
+  /// Show no label at all (icon only)
+  none,
+
+  /// Show count as label
+  count,
+
+  /// Show associated label/tooltip as label
+  label,
 }
