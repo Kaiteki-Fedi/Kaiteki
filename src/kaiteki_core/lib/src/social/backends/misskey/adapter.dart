@@ -258,12 +258,15 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   Future<List<Post>> getTimeline(
     TimelineType type, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) async {
     Iterable<misskey.Note> notes;
 
     final request = MisskeyTimelineRequest(
       sinceId: query?.sinceId,
       untilId: query?.untilId,
+      withFiles: filter?.onlyMedia == true,
+      excludeNsfw: filter?.includeSensitive == false,
     );
 
     notes = switch (type) {
@@ -288,20 +291,14 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<List<Post>> getStatusesOfUserById(
+  Future<List<Post>> getPostsOfUserById(
     String id, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) async {
     final notes = await client.showUserNotes(
       id,
-      excludeNsfw: false,
-      fileTypes: [
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-        'image/apng',
-        'image/vnd.mozilla.apng'
-      ],
+      excludeNsfw: filter?.includeSensitive == false,
       sinceId: query?.sinceId,
       untilId: query?.untilId,
     );
@@ -337,7 +334,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     try {
       await client.deleteReaction(post.id);
     } on MisskeyException catch (e) {
-      if (e.code != 'NOT_REACTED') rethrow;
+      if (e.error.code != 'NOT_REACTED') rethrow;
     }
   }
 

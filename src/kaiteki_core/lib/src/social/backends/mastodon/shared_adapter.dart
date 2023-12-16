@@ -229,6 +229,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   Future<List<Post>> getTimeline(
     TimelineType type, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) async {
     final Iterable<mastodon.Status> posts;
 
@@ -236,18 +237,18 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
       TimelineType.following => await client.getHomeTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
-          onlyMedia: query?.onlyMedia,
+          onlyMedia: filter?.onlyMedia,
         ),
       TimelineType.local => await client.getPublicTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
-          onlyMedia: query?.onlyMedia,
+          onlyMedia: filter?.onlyMedia,
           local: true,
         ),
       TimelineType.federated => await client.getPublicTimeline(
           minId: query?.sinceId,
           maxId: query?.untilId,
-          onlyMedia: query?.onlyMedia,
+          onlyMedia: filter?.onlyMedia,
         ),
       _ => throw UnimplementedError()
     };
@@ -372,16 +373,17 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<List<Post>> getStatusesOfUserById(
+  Future<List<Post>> getPostsOfUserById(
     String id, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) async {
     final statuses = await client.getAccountStatuses(
       id,
       minId: query?.sinceId,
       maxId: query?.untilId,
-      onlyMedia: query?.onlyMedia,
-      excludeReplies: query?.includeReplies == false,
+      onlyMedia: filter?.onlyMedia,
+      excludeReplies: filter?.includeReplies == false,
     );
     return statuses.map((p) => p.toKaiteki(instance)).toList();
   }

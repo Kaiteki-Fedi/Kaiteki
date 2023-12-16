@@ -17,7 +17,7 @@ class UserTimelineSource implements TimelineSource {
     BackendAdapter adapter,
     TimelineQuery<String>? query,
   ) {
-    return adapter.getStatusesOfUserById(userId, query: query);
+    return adapter.getPostsOfUserById(userId, query: query);
   }
 
   @override

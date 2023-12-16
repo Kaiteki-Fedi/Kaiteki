@@ -22,6 +22,7 @@ class DemoAdapter extends MisskeyAdapter {
   Future<List<Post>> getTimeline(
     TimelineType type, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) async =>
-      getStatusesOfUserById(kKaiteki);
+      getPostsOfUserById(kKaiteki);
 }

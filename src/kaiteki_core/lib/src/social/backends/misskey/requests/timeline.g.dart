@@ -8,9 +8,7 @@ part of 'timeline.dart';
 
 Map<String, dynamic> _$MisskeyTimelineRequestToJson(
     MisskeyTimelineRequest instance) {
-  final val = <String, dynamic>{
-    'limit': instance.limit,
-  };
+  final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -18,14 +16,14 @@ Map<String, dynamic> _$MisskeyTimelineRequestToJson(
     }
   }
 
+  writeNotNull('limit', instance.limit);
   writeNotNull('sinceId', instance.sinceId);
   writeNotNull('untilId', instance.untilId);
   writeNotNull('sinceDate', instance.sinceDate);
   writeNotNull('untilDate', instance.untilDate);
-  val['includeMyRenotes'] = instance.includeMyRenotes;
-  val['includeLocalRenotes'] = instance.includeLocalRenotes;
+  writeNotNull('includeMyRenotes', instance.includeMyRenotes);
+  writeNotNull('includeLocalRenotes', instance.includeLocalRenotes);
   writeNotNull('withFiles', instance.withFiles);
   writeNotNull('excludeNsfw', instance.excludeNsfw);
-  writeNotNull('fileType', instance.fileType?.toList());
   return val;
 }

@@ -25,9 +25,10 @@ class TimelineAdapter extends BackendAdapter {
   Future<List<User>> getRepeatees(String id) => throw UnimplementedError();
 
   @override
-  Future<List<Post>> getStatusesOfUserById(
+  Future<List<Post>> getPostsOfUserById(
     String id, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) {
     throw UnimplementedError();
   }
@@ -39,6 +40,7 @@ class TimelineAdapter extends BackendAdapter {
   Future<List<Post>> getTimeline(
     TimelineType type, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) async {
     if (brokenTimelines.contains(type)) throw UnimplementedError();
     return [

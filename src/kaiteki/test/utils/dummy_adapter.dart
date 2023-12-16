@@ -32,9 +32,10 @@ class DummyAdapter extends BackendAdapter {
   Future<List<User>> getRepeatees(String id) => throw UnimplementedError();
 
   @override
-  Future<List<Post>> getStatusesOfUserById(
+  Future<List<Post>> getPostsOfUserById(
     String id, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) async {
     final posts = this.posts.where((p) => p.author.id == id);
 
@@ -54,6 +55,7 @@ class DummyAdapter extends BackendAdapter {
   Future<List<Post>> getTimeline(
     TimelineType type, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   }) async {
     final untilId = query?.untilId;
     if (untilId != null) {

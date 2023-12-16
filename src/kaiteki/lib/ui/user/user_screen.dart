@@ -9,7 +9,9 @@ import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
+import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/ui/shared/timeline/media_timeline_sliver.dart";
 import "package:kaiteki/ui/shared/timeline/source.dart";
 import "package:kaiteki/ui/shared/timeline/timeline.dart";
 import "package:kaiteki/ui/user/user_panel.dart";
@@ -415,11 +417,23 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             ),
           ],
         ),
-        const Center(
-          child: IconLandingWidget(
-            icon: Icon(Icons.image_outlined),
-            text: Text("Media is not implemented yet."),
-          ),
+        CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(4),
+              sliver: MediaTimelineSliver(
+                UserTimelineSource(widget.id),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 256,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
+                ),
+                tileBuilder: (context, item) {
+                  return AttachmentWidget(attachment: item.$2);
+                },
+              ),
+            ),
+          ],
         ),
         const Center(
           child: IconLandingWidget(

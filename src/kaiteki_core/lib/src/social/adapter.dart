@@ -59,11 +59,13 @@ abstract class BackendAdapter {
   Future<List<Post>> getTimeline(
     TimelineType type, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   });
 
-  Future<List<Post>> getStatusesOfUserById(
+  Future<List<Post>> getPostsOfUserById(
     String id, {
     TimelineQuery<String>? query,
+    PostFilter? filter,
   });
 
   FutureOr<Instance> getInstance();

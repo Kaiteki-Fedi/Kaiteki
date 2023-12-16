@@ -188,12 +188,19 @@ class MisskeyClient {
         .then(misskey.User.fromJson.fromResponse);
   }
 
+  /// Gets the notes of the specified user.
+  ///
+  ///
   Future<List<misskey.Note>> showUserNotes(
     String userId, {
-    required bool excludeNsfw,
-    required Iterable<String> fileTypes,
+    bool? excludeNsfw,
     String? sinceId,
     String? untilId,
+    bool? withFiles,
+    bool? withReplies,
+    bool? withRenotes,
+    bool? withChannelNotes,
+    int? limit,
   }) async {
     return client
         .sendRequest(
@@ -201,10 +208,13 @@ class MisskeyClient {
           'api/users/notes',
           body: {
             'userId': userId,
-            'fileType': fileTypes,
             if (sinceId != null) 'sinceId': sinceId,
             if (untilId != null) 'untilId': untilId,
             'excludeNsfw': excludeNsfw,
+            'withFiles': withFiles,
+            'withReplies': withReplies,
+            'withRenotes': withRenotes,
+            'withChannelNotes': withChannelNotes,
           }.jsonBody,
         )
         .then(misskey.Note.fromJson.fromResponseList);
@@ -298,7 +308,7 @@ class MisskeyClient {
     if (error is JsonMap) {
       throw MisskeyException(
         response.statusCode,
-        error,
+        misskey.Error.fromJson(error),
       );
     }
 
