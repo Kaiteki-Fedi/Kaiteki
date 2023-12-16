@@ -23,9 +23,12 @@ extension BuildContextExtensions on BuildContext {
   }
 
   Future<void> showPost(Post post, WidgetRef ref) async {
-    push(
-      "/${ref.getCurrentAccountHandle()}/posts/${post.id}",
-      extra: post,
+    pushNamed(
+      "post",
+      pathParameters: {
+        ...ref.accountRouterParams,
+        "id": post.id,
+      },
     );
   }
 
