@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/main/tabs/tab.dart";
-import "package:kaiteki_ui/kaiteki_ui.dart";
+import "package:kaiteki/ui/shared/badge.dart";
 
 class MainScreenNavigationBar extends ConsumerWidget {
   final List<MainScreenTabType> tabTypes;
@@ -40,8 +40,14 @@ class MainScreenNavigationBar extends ConsumerWidget {
     return tabTypes.map((type) {
       final unreadCount = type.tab?.fetchUnreadCount.call(ref);
       return NavigationDestination(
-        icon: type.icon.wrapWithBadge(unreadCount),
-        selectedIcon: type.selectedIcon.wrapWithBadge(unreadCount),
+        icon: KtkBadge(
+          count: unreadCount,
+          child: type.icon,
+        ),
+        selectedIcon: KtkBadge(
+          count: unreadCount,
+          child: type.selectedIcon,
+        ),
         label: type.getLabel(context.l10n),
       );
     });
@@ -54,8 +60,14 @@ class MainScreenNavigationBar extends ConsumerWidget {
     return tabTypes.map((type) {
       final unreadCount = type.tab?.fetchUnreadCount.call(ref);
       return BottomNavigationBarItem(
-        icon: type.icon.wrapWithBadge(unreadCount),
-        activeIcon: type.selectedIcon.wrapWithBadge(unreadCount),
+        icon: KtkBadge(
+          count: unreadCount,
+          child: type.icon,
+        ),
+        activeIcon: KtkBadge(
+          count: unreadCount,
+          child: type.selectedIcon,
+        ),
         label: type.getLabel(context.l10n),
       );
     });

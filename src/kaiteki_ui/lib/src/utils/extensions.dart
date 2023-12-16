@@ -11,17 +11,6 @@ extension DeflateExtensions on Rect {
   }
 }
 
-extension BadgingExtension on Widget {
-  Widget wrapWithBadge(int? count) {
-    if (count == null || count <= 0) return this;
-
-    return Badge(
-      label: Text(count.toString()),
-      child: this,
-    );
-  }
-}
-
 extension ColorTextStyleExtension on Color {
   TextStyle get textStyle => TextStyle(color: this);
 }

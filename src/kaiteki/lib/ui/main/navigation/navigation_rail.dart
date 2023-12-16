@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/main/tabs/tab.dart";
+import "package:kaiteki/ui/shared/badge.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:kaiteki_ui/kaiteki_ui.dart";
 
 class MainScreenNavigationRail extends ConsumerWidget {
   final List<MainScreenTabType> tabTypes;
@@ -54,8 +54,14 @@ class MainScreenNavigationRail extends ConsumerWidget {
       final unreadCount = type.tab?.fetchUnreadCount.call(ref) ?? 0;
 
       return NavigationRailDestination(
-        icon: type.icon.wrapWithBadge(unreadCount),
-        selectedIcon: type.selectedIcon.wrapWithBadge(unreadCount),
+        icon: KtkBadge(
+          count: unreadCount,
+          child: type.icon,
+        ),
+        selectedIcon: KtkBadge(
+          count: unreadCount,
+          child: type.selectedIcon,
+        ),
         label: Text(type.getLabel(context.l10n)),
       );
     });

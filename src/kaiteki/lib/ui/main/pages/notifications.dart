@@ -9,6 +9,7 @@ import "package:kaiteki/fediverse/services/follow_requests.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/model/pagination_state.dart";
 import "package:kaiteki/ui/notification_widget.dart";
+import "package:kaiteki/ui/shared/badge.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/window_class.dart";
@@ -246,7 +247,7 @@ class _AnnouncementsButton extends ConsumerWidget {
           ),
           if (unreadCount != null && unreadCount > 0) ...[
             const SizedBox(width: 8),
-            Badge(label: Text(unreadCount.toString())),
+            KtkBadge(count: unreadCount),
           ],
         ],
       ),
@@ -291,7 +292,7 @@ class _FollowRequestsButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final badgeText = getText(ref);
+    final count = ref.watch(_followRequestCountProvider).valueOrNull?.$1;
     return TextButton(
       onPressed: () {
         context.pushNamed(
@@ -316,20 +317,12 @@ class _FollowRequestsButton extends ConsumerWidget {
             flex: expand ? 1 : 0,
             child: const Text("Follow Requests"),
           ),
-          if (badgeText != null) ...[
+          if (count != null && count > 0) ...[
             const SizedBox(width: 8),
-            Badge(label: Text(badgeText)),
+            KtkBadge(count: count),
           ],
         ],
       ),
     );
-  }
-
-  String? getText(WidgetRef ref) {
-    final state = ref.watch(_followRequestCountProvider).valueOrNull;
-    if (state == null || state.$1 <= 0) return null;
-    final buffer = StringBuffer(state.$1.toString());
-    if (state.$2) buffer.write("+");
-    return buffer.toString();
   }
 }
