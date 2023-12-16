@@ -1,14 +1,11 @@
 import 'package:kaiteki_core/http.dart';
-import 'package:kaiteki_core/utils.dart';
+import 'package:fediverse_objects/misskey.dart' as misskey show Error;
 
 class MisskeyException extends HttpException {
-  final JsonMap _error;
+  final misskey.Error error;
 
-  String get code => _error['code'] as String;
-  String get message => _error['message'] as String;
-
-  MisskeyException(super.statusCode, this._error);
+  MisskeyException(super.statusCode, this.error);
 
   @override
-  String toString() => '$code: $message';
+  String toString() => '${error.code}: ${error.message}';
 }
