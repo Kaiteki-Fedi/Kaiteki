@@ -168,11 +168,16 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
     if (post.content == null) {
       renderedContent = null;
     } else {
-      renderedContent = post.renderContent(
-        context,
-        ref,
-        showReplyees: widget.showReplyee ?? true,
-      );
+      try {
+        renderedContent = post.renderContent(
+          context,
+          ref,
+          showReplyees: widget.showReplyee ?? true,
+        );
+      } catch (e, s) {
+        debugPrintStack(stackTrace: s, label: e.toString());
+        renderedContent = TextSpan(text: post.content);
+      }
     }
   }
 }
