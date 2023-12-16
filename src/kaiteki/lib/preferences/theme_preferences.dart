@@ -89,6 +89,17 @@ final avatarCornerRadius = createSettingProvider<double>(
   key: "avatarCornerRadius",
   initialValue: double.infinity,
   provider: sharedPreferencesProvider,
+  write: (prefs, key, value) async {
+    if (value == double.infinity) {
+      await prefs.setDouble(key, -1);
+    } else {
+      await prefs.setDouble(key, value);
+    }
+  },
+  read: (prefs, key) {
+    final value = prefs.getDouble(key);
+    return value == -1 ? double.infinity : value;
+  },
 );
 
 final showUserBadges = createSettingProvider<bool>(
