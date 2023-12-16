@@ -14,7 +14,7 @@ class SocialTextParser implements TextParser {
   const SocialTextParser();
 
   @override
-  List<Element> parse(String text, [List<Element>? children]) {
+  List<Element> parse(String text) {
     final elements = <Element>[TextElement(text)];
 
     regex(elements, _urlPattern, (match, _) {
