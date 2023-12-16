@@ -51,9 +51,10 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
         .sum;
 
     _searchTextController.addListener(() {
-      _categories = applySearch(widget.categories);
-      _updateTabController(_categories.length);
-      setState(() {});
+      setState(() {
+        _categories = applySearch(widget.categories);
+        _updateTabController(_categories.length);
+      });
     });
 
     _updateTabController(_categories.length);
