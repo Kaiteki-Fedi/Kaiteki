@@ -1,4 +1,3 @@
-import "package:collection/collection.dart";
 import "package:kaiteki/text/elements.dart";
 
 abstract class TextParser {
@@ -7,14 +6,15 @@ abstract class TextParser {
 
 extension TextParserExtensions on TextParser {
   Iterable<Element> parseElement(Element element) sync* {
-    if (element is TextElement) {
-      yield* parse(element.text);
-    } else if (element is WrapElement) {
-      final parsedChildren =
-          element.children?.map(parseElement).flattened.toList();
-      yield element.replaceChildren(parsedChildren);
-    } else {
-      yield element;
+    switch (element) {
+      case TextElement():
+        yield* parse(element.text);
+      case WrapElement():
+        yield element.replaceChildren(
+          element.children?.expand(parseElement).toList(),
+        );
+      default:
+        yield element;
     }
   }
 }
