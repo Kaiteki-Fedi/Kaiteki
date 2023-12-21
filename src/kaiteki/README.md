@@ -1,4 +1,4 @@
-# ![Kaiteki](/assets/readme-banner.svg)
+# Kaiteki
 
 [![Build status](https://img.shields.io/github/actions/workflow/status/Kaiteki-Fedi/Kaiteki/ci.yml?branch=master)](https://github.com/Kaiteki-Fedi/Kaiteki/actions/workflows/ci.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki/badge)](https://www.codefactor.io/repository/github/kaiteki-fedi/kaiteki)
