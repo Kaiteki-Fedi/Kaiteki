@@ -48,11 +48,6 @@ class MainScreenDrawer extends ConsumerWidget {
                   ),
                 ),
               ListTile(
-                leading: const Icon(Icons.trending_up_rounded),
-                title: Text(l10n.trendsTitle),
-                enabled: false,
-              ),
-              ListTile(
                 leading: const Icon(Icons.flag_rounded),
                 title: Text(l10n.reportsTitle),
                 enabled: false,
