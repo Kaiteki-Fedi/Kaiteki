@@ -136,18 +136,15 @@ class _LauncherDialogState extends ConsumerState<LauncherDialog> {
         return true;
       }
 
-      final beginsWithAt = query[0] == "@";
-      final atInput = beginsWithAt ? query.substring(1) : query;
-      final atSplit = atInput.split("@");
-      if (atSplit.length == 2 || (beginsWithAt && atSplit.length == 1)) {
+      final handle = _parseUserHandle(query);
+      if (handle != null) {
         final currentHost = ref.read(currentAccountProvider)!.key.host;
 
-        final username = atSplit[0];
-        final host = atSplit.elementAtOrNull(1) ?? currentHost;
-
-        await lookUpUser(fetchContext, UserHandle(username, host)).catchError(
-          (e, s) => _logger.warning("Failed to lookup user $atSplit", e, s),
+        final userHandle = UserHandle(handle.$1, handle.$2 ?? currentHost);
+        await lookUpUser(fetchContext, userHandle).catchError(
+          (e, s) => _logger.warning("Failed to lookup user $userHandle", e, s),
         );
+
         return true;
       }
 
@@ -252,4 +249,16 @@ class _LauncherDialogState extends ConsumerState<LauncherDialog> {
         throw UnimplementedError(object.toString());
     }
   }
+}
+
+(String username, String? host)? _parseUserHandle(String input) {
+  final beginsWithAt = input[0] == "@";
+  final atInput = beginsWithAt ? input.substring(1) : input;
+  final atSplit = atInput.split("@");
+
+  if (atSplit.length == 2 || (beginsWithAt && atSplit.length == 1)) {
+    return (atSplit[0], atSplit.elementAtOrNull(1));
+  }
+
+  return null;
 }
