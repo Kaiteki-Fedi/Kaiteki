@@ -51,6 +51,12 @@ class AccessibilityScreen extends StatelessWidget {
                 title: const Text("Visuals"),
                 children: [
                   PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.contrast_rounded),
+                    title: const Text("Use high contrast mode"),
+                    provider: useHighContrast,
+                    enabled: false,
+                  ),
+                  PreferenceSwitchListTile(
                     secondary: const Icon(Icons.colorize_rounded),
                     title: const Text(
                       "Show post scopes in color",

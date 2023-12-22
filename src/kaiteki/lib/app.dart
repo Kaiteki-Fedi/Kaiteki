@@ -119,16 +119,23 @@ final class KaitekiApp extends ConsumerWidget {
     ColorScheme? systemColorScheme,
   ) {
     final useMaterial3 = ref.watch(preferences.useMaterial3).value;
-    final appTheme = ref.watch(preferences.theme).value;
 
-    ColorScheme colorScheme;
+    ColorScheme getColorScheme() {
+      final useHighContrast = ref.watch(preferences.useHighContrast).value;
 
-    if (appTheme != null) {
-      colorScheme = appTheme.getColorScheme(brightness);
-    } else {
-      colorScheme =
-          systemColorScheme ?? AppTheme.affection.getColorScheme(brightness);
+      if (useHighContrast) {
+        // TODO(Craftplacer): Implement high contrast themes
+      }
+
+      final appTheme = ref.watch(preferences.theme).value;
+      if (appTheme != null) {
+        return appTheme.getColorScheme(brightness);
+      }
+
+      return systemColorScheme ?? AppTheme.affection.getColorScheme(brightness);
     }
+
+    var colorScheme = getColorScheme();
 
     if (!useMaterial3) {
       // As per https://m1.material.io/style/color.html#color-themes

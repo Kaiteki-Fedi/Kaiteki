@@ -161,6 +161,12 @@ final coloredPostVisibilities = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
+final useHighContrast = createSettingProvider<bool>(
+  key: "useHighContrast",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
 final underlineLinks = createSettingProvider<bool>(
   key: "underlineLinks",
   initialValue: false,
