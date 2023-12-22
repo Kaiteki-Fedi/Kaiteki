@@ -8,12 +8,12 @@ import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
 import "package:kaiteki/text/unblur_on_hover.dart";
 import "package:kaiteki/theming/text_theme.dart";
-import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
-import "package:kaiteki/ui/shared/emoji/emoji_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:url_launcher/url_launcher.dart";
+
+import "emoji_span.dart";
 
 Iterable<Element> parseText(
   String text, [
@@ -54,6 +54,8 @@ class TextContext {
 }
 
 class TextRenderer {
+  static final _logger = Logger("TextRenderer");
+
   final TextStyle? textStyle;
   final KaitekiTextTheme? textTheme;
   final Function(UserReference reference)? onUserClick;
@@ -122,10 +124,8 @@ class TextRenderer {
 
     if (emoji == null) return TextSpan(text: ":$name:");
 
-    // FIXME(Craftplacer): Change this piece widget into an EmojiSpan. Added Builder to fix scaling with inherited font size.
-    return WidgetSpan(
-      child: TextInheritedEmojiTheme(child: EmojiWidget(emoji)),
-      baseline: TextBaseline.alphabetic,
+    return EmojiSpan(
+      emoji,
       alignment: PlaceholderAlignment.middle,
     );
   }
@@ -172,6 +172,8 @@ class TextRenderer {
     final children = renderChildren(link.children).toList();
 
     if (onClick == null) return TextSpan(children: children);
+
+    if (children.isEmpty) _logger.warning("Link has no children");
 
     // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
     final recognizer = TapGestureRecognizer()
