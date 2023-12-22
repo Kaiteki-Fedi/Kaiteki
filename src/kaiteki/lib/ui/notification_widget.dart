@@ -230,7 +230,8 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       NotificationType.userMigrated => Icons.swap_horiz_rounded,
       NotificationType.unsupported => Icons.question_mark,
       NotificationType.achievementGet => Icons.emoji_events_rounded,
-      NotificationType.test => Icons.bug_report_rounded
+      NotificationType.test => Icons.bug_report_rounded,
+      NotificationType.voteSubmitted => Icons.how_to_vote_rounded,
     };
   }
 
@@ -271,6 +272,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       case NotificationType.unsupported:
       case NotificationType.test:
       case NotificationType.achievementGet:
+      case NotificationType.voteSubmitted:
         return colorScheme.outline;
     }
   }
@@ -297,6 +299,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       NotificationType.unsupported => "Unsupported notification",
       NotificationType.achievementGet => "You got an achievement",
       NotificationType.test => "Test notification",
+      NotificationType.voteSubmitted => " voted on your poll",
     };
   }
 
@@ -305,7 +308,6 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
       final accountKey = ref.read(currentAccountProvider)!.key;
       context.pushNamed(
         "post",
-        extra: widget.notification.post,
         pathParameters: {
           ...accountKey.routerParams,
           "id": widget.notification.post!.id,

@@ -132,4 +132,7 @@ enum NotificationType {
 
   /// Test notification.
   test,
+
+  /// Someone has voted on your poll.
+  voteSubmitted,
 }
