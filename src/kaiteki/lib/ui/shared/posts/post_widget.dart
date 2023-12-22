@@ -17,6 +17,7 @@ import "package:kaiteki/ui/debug/text_render_dialog.dart";
 import "package:kaiteki/ui/features/article_view/screen.dart";
 import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
+import "package:kaiteki/ui/shared/dialogs/content_not_public_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/layouts/expanded.dart";
@@ -371,10 +372,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         menuChildren: [
           MenuItemButton(
             leadingIcon: const Icon(Icons.web_asset_rounded),
-            onPressed: () async => launchUrl(
-              url,
-              mode: LaunchMode.externalApplication,
-            ),
+            onPressed: _openInBrowser,
             child: const Text("Browser"),
           ),
           for (final account in federatedAccounts)
@@ -432,7 +430,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final reactAction =
         CustomSemanticsAction(label: context.l10n.reactButtonLabel);
     final showOriginalAuthor =
-        CustomSemanticsAction(label: "Open author's profile");
+        const CustomSemanticsAction(label: "Open author's profile");
 
     return {
       replyAction: _onReply,
@@ -705,6 +703,24 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       await _translateViaExternalService(translator, languageId);
       return;
     }
+  }
+
+  Future<void> _openInBrowser() async {
+    final isPublic = _post.visibility == PostScope.public ||
+        _post.visibility == PostScope.unlisted;
+    if (!isPublic) {
+      final result = await showDialog<bool>(
+        context: context,
+        builder: (context) => const ContentNotPublicDialog(),
+      );
+
+      if (result != true) return;
+    }
+
+    await launchUrl(
+      _post.externalUrl!,
+      mode: LaunchMode.externalApplication,
+    );
   }
 }
 
