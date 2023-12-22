@@ -72,25 +72,6 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     );
   }
 
-  Widget _buildBanner(User? user) {
-    final placeholder = ColoredBox(
-      color: Theme.of(context).colorScheme.surfaceVariant,
-      child: const SizedBox.expand(),
-    );
-
-    if (user == null) return placeholder;
-
-    final bannerUrl = user.bannerUrl;
-    if (bannerUrl == null) return placeholder;
-
-    return Image.network(
-      bannerUrl.toString(),
-      fit: BoxFit.cover,
-      isAntiAlias: true,
-      errorBuilder: (_, __, ___) => placeholder,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
@@ -181,7 +162,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                             ),
                             child: AspectRatio(
                               aspectRatio: 16 / 9,
-                              child: _buildBanner(user),
+                              child: _Banner.fromUser(user),
                             ),
                           ),
                         ),
@@ -340,7 +321,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                       padding: !innerBoxIsScrolled
                           ? const EdgeInsets.only(bottom: avatarSize / 2)
                           : EdgeInsets.zero,
-                      child: _buildBanner(user),
+                      child: _Banner.fromUser(user),
                     ),
                     if (user != null && !innerBoxIsScrolled)
                       Positioned(
@@ -574,4 +555,30 @@ class _RenderCustomSliverPersistentHeader
   @override
   double get minExtent =>
       child!.getMaxIntrinsicHeight(constraints.crossAxisExtent);
+}
+
+class _Banner extends StatelessWidget {
+  final String? url;
+
+  const _Banner(this.url);
+
+  factory _Banner.fromUser(User? user) => _Banner(user?.bannerUrl?.toString());
+
+  @override
+  Widget build(BuildContext context) {
+    final placeholder = ColoredBox(
+      color: Theme.of(context).colorScheme.surfaceVariant,
+      child: const SizedBox.expand(),
+    );
+
+    final url = this.url;
+    if (url == null) return placeholder;
+
+    return Image.network(
+      url,
+      fit: BoxFit.cover,
+      isAntiAlias: true,
+      errorBuilder: (_, __, ___) => placeholder,
+    );
+  }
 }
