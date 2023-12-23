@@ -15,7 +15,6 @@ import "package:kaiteki/fediverse/instance_prober.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/auth/login/dialogs/api_type_dialog.dart";
 import "package:kaiteki/ui/auth/login/pages/code_page.dart";
-import "package:kaiteki/ui/auth/login/pages/handoff_page.dart";
 import "package:kaiteki/ui/auth/login/pages/instance_page.dart";
 import "package:kaiteki/ui/auth/login/pages/oauth_page.dart";
 import "package:kaiteki/ui/auth/login/pages/user_page.dart";
@@ -576,7 +575,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           secondChild: centeredCircularProgressIndicator,
           child: InstancePage(
             enabled: !isBusy,
-            onHandoff: onHandoff,
             onNext: _onNextInstance,
           ),
         );
@@ -634,12 +632,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ],
         );
       },
-    );
-  }
-
-  Future<void> onHandoff() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const HandoffPage()),
     );
   }
 }

@@ -58,8 +58,6 @@ dependencies:
   page_view_dot_indicator: ^2.3.0
   path: ^1.8.3
   path_provider: ^2.0.15
-  qr_bar_code_scanner_dialog: ^0.0.5
-  qr_flutter: ^4.0.0
   riverpod_annotation: ^2.0.4
   share_plus: ^7.1.0
   shared_preferences: ^2.0.5

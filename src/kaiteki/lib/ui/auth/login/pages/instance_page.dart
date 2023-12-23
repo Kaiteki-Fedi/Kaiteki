@@ -8,7 +8,6 @@ import "package:kaiteki/utils/lower_case_text_formatter.dart";
 
 class InstancePage extends StatefulWidget {
   final FutureOr<void> Function(String instance) onNext;
-  final VoidCallback? onHandoff;
 
   final bool enabled;
 
@@ -16,7 +15,6 @@ class InstancePage extends StatefulWidget {
     required this.onNext,
     this.enabled = true,
     super.key,
-    this.onHandoff,
   });
 
   @override
@@ -84,15 +82,6 @@ class _InstancePageState extends State<InstancePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (widget.onHandoff != null)
-                      TextButton(
-                        onPressed: widget.onHandoff,
-                        style: TextButton.styleFrom(
-                          visualDensity: VisualDensity.comfortable,
-                        ),
-                        child: const Text("Sign in from other device"),
-                      ),
-                    const Spacer(),
                     FilledButton(
                       onPressed: widget.enabled ? _onNext : null,
                       style: FilledButton.styleFrom(

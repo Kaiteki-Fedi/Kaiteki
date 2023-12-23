@@ -1,18 +1,13 @@
-import "dart:convert";
-
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
-import "package:kaiteki/ui/auth/login/login_screen.dart";
-import "package:kaiteki/ui/auth/transit_account.dart";
 import "package:kaiteki/ui/shared/account_list/list_tile.dart";
 import "package:kaiteki/ui/shared/dialogs/account_removal_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart";
 import "package:kaiteki/utils/extensions.dart";
-import "package:qr_flutter/qr_flutter.dart";
 
 class AccountListDialog extends ConsumerWidget {
   const AccountListDialog({super.key});
@@ -100,11 +95,6 @@ class AccountListDialog extends ConsumerWidget {
     return MenuAnchor(
       menuChildren: [
         MenuItemButton(
-          leadingIcon: const Icon(Icons.devices_rounded),
-          child: const Text("Sign in on another device"),
-          onPressed: () => _onHandoff(context, ref, account),
-        ),
-        MenuItemButton(
           leadingIcon: const Icon(Icons.logout_rounded),
           child: const Text("Sign out"),
           onPressed: () => _onSignOut(context, ref, account),
@@ -145,65 +135,5 @@ class AccountListDialog extends ConsumerWidget {
     if (result != true) return;
 
     await ref.read(accountManagerProvider.notifier).remove(account);
-  }
-
-  Future<void> _onHandoff(
-    BuildContext context,
-    WidgetRef ref,
-    Account account,
-  ) async {
-    await Navigator.of(context).push<Account?>(
-      MaterialPageRoute(
-        builder: (context) => LoginScreen(
-          popOnly: true,
-          prefillCredentials: PrefillCredentials(instance: account.key.host),
-        ),
-      ),
-    );
-
-    // ignore: use_build_context_synchronously
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog.fullscreen(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Column(
-                children: [
-                  AppBar(
-                    title: const Text("Sign in another device"),
-                    forceMaterialTransparency: true,
-                    foregroundColor: Theme.of(context).colorScheme.onSurface,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      "Scan this QR code with the other device",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  QrImageView(
-                    data: jsonEncode(
-                      TransitAccount.fromAccount(account).toJson(),
-                    ),
-                    eyeStyle: QrEyeStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      eyeShape: QrEyeShape.square,
-                    ),
-                    dataModuleStyle: QrDataModuleStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      dataModuleShape: QrDataModuleShape.square,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }
