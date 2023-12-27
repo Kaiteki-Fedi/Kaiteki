@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
@@ -92,23 +93,15 @@ class MetaBar extends ConsumerWidget {
   }
 
   Widget buildRight(BuildContext context) {
-    final visibility = _post.visibility;
+    final scope = _post.visibility;
     final l10n = context.l10n;
     final postTheme = PostWidgetTheme.of(context);
 
-    final relativeTime =
-        DateTime.now().difference(_post.postedAt).toStringHuman(
-              context: context,
-            );
     final language = _post.language;
-
-    final textTheme =
-        Theme.of(context).ktkTextTheme ?? DefaultKaitekiTextTheme(context);
 
     final showLanguage = this.showLanguage ?? postTheme?.showLanguage ?? true;
     final showTime = this.showTime ?? postTheme?.showTime ?? true;
-    final showVisibility =
-        this.showVisibility ?? postTheme?.showVisibility ?? true;
+    final showScope = this.showVisibility ?? postTheme?.showVisibility ?? true;
 
     return ContentColor(
       color: Theme.of(context).getEmphasisColor(EmphasisColor.medium),
@@ -126,23 +119,21 @@ class MetaBar extends ConsumerWidget {
           if (language != null && showLanguage)
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                language,
-                style: textTheme.monospaceTextStyle,
-              ),
+              child: _Language(language: language),
             ),
           if (showTime)
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Tooltip(
-                message: _post.postedAt.toString(),
-                child: Text(relativeTime),
-              ),
+              child: _Timestamp(_post.postedAt),
             ),
-          if (visibility != null && showVisibility)
+          if (scope != null && showScope)
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: PostScopeIcon(visibility, showTooltip: true),
+              child: Semantics(
+                label: scope.toDisplayString(context.l10n),
+                excludeSemantics: true,
+                child: PostScopeIcon(scope, showTooltip: true),
+              ),
             ),
           if (onOpen == null)
             const SizedBox(width: 8)
@@ -156,6 +147,60 @@ class MetaBar extends ConsumerWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class _Timestamp extends StatelessWidget {
+  const _Timestamp(this.dateTime, {super.key});
+
+  final DateTime dateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    final relativeTime = DateTime.now().difference(dateTime);
+    return Semantics(
+      label: relativeTime.toLongString(),
+      excludeSemantics: true,
+      child: Tooltip(
+        message: dateTime.toString(),
+        child: Text(relativeTime.toStringHuman(context: context)),
+      ),
+    );
+  }
+}
+
+class _Language extends ConsumerWidget {
+  const _Language({
+    super.key,
+    required this.language,
+  });
+
+  final String language;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme =
+        Theme.of(context).ktkTextTheme ?? DefaultKaitekiTextTheme(context);
+
+    final widget = Text(
+      language,
+      style: textTheme.monospaceTextStyle,
+    );
+
+    final languageList = ref.watch(languageListProvider);
+    return languageList.map(
+      data: (data) {
+        final languageName =
+            data.value.firstWhereOrNull((e) => e.code == language)?.englishName;
+        return Semantics(
+          excludeSemantics: true,
+          label: languageName,
+          child: widget,
+        );
+      },
+      loading: (_) => widget,
+      error: (_) => widget,
     );
   }
 }

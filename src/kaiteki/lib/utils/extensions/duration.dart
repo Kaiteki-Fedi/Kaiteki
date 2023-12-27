@@ -15,4 +15,17 @@ extension DurationExtension on Duration {
       return l10n?.timeDifferenceSeconds(inSeconds) ?? "${inSeconds}s";
     }
   }
+
+  String toLongString() {
+    // TODO(Craftplacer): Localize
+    if (inDays != 0) {
+      return "$inDays days ago";
+    } else if (inHours != 0) {
+      return "$inHours hours ago";
+    } else if (inMinutes != 0) {
+      return "$inMinutes minutes ago";
+    } else {
+      return "$inSeconds seconds ago";
+    }
+  }
 }
