@@ -178,11 +178,12 @@ class TextRenderer {
     // FIXME(Craftplacer): We should be passing down the "click-ability" to the children.
     final recognizer = TapGestureRecognizer()
       ..onTap = () => onClick(link.destination);
+    final childrenWithRecognizers =
+        children.map((e) => _overrideGestureDetector(e, recognizer)).toList();
     return TextSpan(
       recognizer: recognizer,
       style: textTheme?.linkTextStyle,
-      children:
-          children.map((e) => _overrideGestureDetector(e, recognizer)).toList(),
+      children: childrenWithRecognizers,
     );
   }
 
@@ -195,6 +196,7 @@ class TextRenderer {
         children: span.children
             ?.map((e) => _overrideGestureDetector(e, recognizer))
             .toList(),
+        text: span.text,
       );
     } else {
       return span;
