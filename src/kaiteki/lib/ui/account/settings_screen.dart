@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/ui/migration/dialog.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/dialog.dart";
@@ -114,13 +116,15 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                         ? () => _onDelete(ref)
                         : null,
                   ),
-                  const ListTile(
+                  ListTile(
                     leading: Icon(
                       Icons.arrow_forward_rounded,
                       // color: Theme.of(context).colorScheme.secondary,
                     ),
                     title: Text("Move Account"),
-                    enabled: false,
+                    onTap: ref.watch(developerMode).value
+                        ? () => _onMigrate(ref)
+                        : null,
                   ),
                 ],
               ),
@@ -146,6 +150,13 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
           if (mounted) Navigator.of(context).pop();
         },
       ),
+    );
+  }
+
+  Future<void> _onMigrate(WidgetRef ref) async {
+    showDialog(
+      context: context,
+      builder: (_) => const MigrationDialog(),
     );
   }
 }
