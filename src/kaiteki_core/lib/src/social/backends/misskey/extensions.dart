@@ -13,7 +13,6 @@ final misskeyNotificationTypeRosetta = {
   misskey.NotificationType.quote: NotificationType.quoted,
   misskey.NotificationType.reaction: NotificationType.reacted,
   misskey.NotificationType.pollEnded: NotificationType.pollEnded,
-  misskey.NotificationType.pollVote: NotificationType.unsupported,
   misskey.NotificationType.receiveFollowRequest:
       NotificationType.incomingFollowRequest,
   misskey.NotificationType.followRequestAccepted:
@@ -21,6 +20,7 @@ final misskeyNotificationTypeRosetta = {
   misskey.NotificationType.groupInvited: NotificationType.groupInvite,
   misskey.NotificationType.test: NotificationType.test,
   misskey.NotificationType.achievementEarned: NotificationType.achievementGet,
+  misskey.NotificationType.pollVote: NotificationType.voteSubmitted,
 };
 
 final misskeyVisibilityRosetta = Rosetta<String, PostScope>(const {
