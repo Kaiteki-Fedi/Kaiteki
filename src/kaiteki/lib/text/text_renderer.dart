@@ -62,6 +62,7 @@ class TextRenderer {
   final Function(Uri uri)? onLinkClick;
   final Function(String hashtag)? onHashtagClick;
   final TextContext? context;
+  final bool screenReaderQuirk;
 
   const TextRenderer({
     this.textStyle,
@@ -70,6 +71,7 @@ class TextRenderer {
     this.onLinkClick,
     this.onHashtagClick,
     this.context,
+    this.screenReaderQuirk = false,
   });
 
   factory TextRenderer.fromContext(
@@ -102,6 +104,7 @@ class TextRenderer {
         );
       },
       context: textContext,
+      screenReaderQuirk: MediaQuery.accessibleNavigationOf(context),
     );
   }
 
@@ -143,12 +146,16 @@ class TextRenderer {
   TextSpan renderHashtag(HashtagElement hashtag) {
     final onClick = onHashtagClick;
 
-    if (onClick == null) return TextSpan(text: "#${hashtag.name}");
+    // TalkBack will break apart the text if there's inline hashtags/recognizers.
+    if (onClick == null || screenReaderQuirk) {
+      return TextSpan(text: "#${hashtag.name}");
+    }
 
     final textStyle = textTheme?.linkTextStyle;
     final color = textStyle?.color?.withOpacity(.65);
     final recognizer = TapGestureRecognizer()
       ..onTap = () => onClick(hashtag.name);
+
     return TextSpan(
       children: [
         TextSpan(
