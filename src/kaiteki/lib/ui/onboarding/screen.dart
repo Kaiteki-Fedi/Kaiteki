@@ -38,17 +38,21 @@ class _OnboardingContainer extends StatelessWidget {
   }
 
   Widget _buildPortrait(BuildContext context) {
+    final topPadding = MediaQuery.maybeViewPaddingOf(context)?.top ?? 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(
-          height: 256,
+        SizedBox(
+          height: 256 + topPadding,
           child: Stack(
             children: [
-              Positioned.fill(
-                child: _LavaLamp(),
+              const Positioned.fill(child: _LavaLamp()),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: topPadding),
+                  child: const _AppTitle(),
+                ),
               ),
-              Center(child: _AppTitle()),
             ],
           ),
         ),
