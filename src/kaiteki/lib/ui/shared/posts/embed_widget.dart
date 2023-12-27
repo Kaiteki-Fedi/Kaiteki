@@ -11,7 +11,7 @@ class EmbedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final description = embed.description;
-    return Card(
+    return Card.outlined(
       child: InkWell(
         onTap: () => launchUrl(embed.uri),
         child: SizedBox(
