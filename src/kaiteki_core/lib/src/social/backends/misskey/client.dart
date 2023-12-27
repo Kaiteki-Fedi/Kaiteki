@@ -116,7 +116,11 @@ class MisskeyClient {
 
   Future<misskey.Note> showNote(String noteId) async {
     return client
-        .sendRequest(HttpMethod.get, 'api/notes/show/$noteId')
+        .sendRequest(
+          HttpMethod.post,
+          'api/notes/show',
+          body: {'noteId': noteId}.jsonBody,
+        )
         .then(misskey.Note.fromJson.fromResponse);
   }
 
