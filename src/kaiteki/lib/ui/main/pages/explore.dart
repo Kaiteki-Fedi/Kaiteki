@@ -3,6 +3,7 @@ import "dart:math";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/explore/news_list_tile.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -58,23 +59,25 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
   Widget build(BuildContext context) {
     final explore = ref.watch(adapterProvider).safeCast<ExploreSupport>();
 
-    return CustomScrollView(
-      primary: true,
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-          sliver: SliverCrossAxisConstrained(
-            maxCrossAxisExtent: 600,
-            child: SliverMainAxisGroup(
-              slivers: [
-                ...buildTrendingPosts(context),
-                if (explore?.capabilities.supportsTrendingLinks ?? false)
-                  ...buildNews(context),
-              ],
+    return Material(
+      child: CustomScrollView(
+        primary: true,
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            sliver: SliverCrossAxisConstrained(
+              maxCrossAxisExtent: 600,
+              child: SliverMainAxisGroup(
+                slivers: [
+                  ...buildTrendingPosts(context),
+                  if (explore?.capabilities.supportsTrendingLinks ?? false)
+                    ...buildNews(context),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -82,7 +85,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
     yield const SliverToBoxAdapter(child: SizedBox(height: 16));
 
     yield SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverToBoxAdapter(
         child: Text(
           "News",
@@ -97,8 +100,8 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
     yield trendingLinks.map(
       data: (data) {
         return SliverList.separated(
-          itemBuilder: (_, i) => NewsCard(embed: data.value![i]),
-          separatorBuilder: (_, __) => const SizedBox(height: 8),
+          itemBuilder: (_, i) => NewsListTile(embed: data.value![i]),
+          separatorBuilder: (_, __) => const Divider(),
           itemCount: data.value?.length ?? 0,
         );
       },
