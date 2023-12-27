@@ -111,6 +111,12 @@ final showAttachmentDescriptionWarning = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
+final readDisplayNameOnly = createSettingProvider<bool>(
+  key: "readDisplayNameOnly",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
 final showDedicatedPostOpenButton = createSettingProvider<bool>(
   key: "showDedicatedPostOpenButton",
   initialValue: false,

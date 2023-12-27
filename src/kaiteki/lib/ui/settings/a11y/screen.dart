@@ -104,6 +104,16 @@ class AccessibilityScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              SettingsSection(
+                title: const Text("Screen reader"),
+                children: [
+                  PreferenceSwitchListTile(
+                    secondary: const SizedBox(),
+                    title: const Text("Read display name only"),
+                    provider: readDisplayNameOnly,
+                  ),
+                ],
+              ),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
@@ -32,9 +33,8 @@ class UserDisplayNameWidget extends ConsumerWidget {
         this.secondaryTextStyle?.copyWith(color: secondaryColor) ??
             secondaryColor.textStyle;
 
-    switch (orientation) {
-      case Axis.horizontal:
-        return RepaintBoundary(
+    Widget widget = switch (orientation) {
+      Axis.horizontal => RepaintBoundary(
           child: Text.rich(
             TextSpan(
               children: [
@@ -53,9 +53,8 @@ class UserDisplayNameWidget extends ConsumerWidget {
             overflow: TextOverflow.fade,
             softWrap: false,
           ),
-        );
-      case Axis.vertical:
-        return Column(
+        ),
+      Axis.vertical => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RepaintBoundary(
@@ -75,8 +74,23 @@ class UserDisplayNameWidget extends ConsumerWidget {
                 softWrap: false,
               ),
           ],
-        );
+        )
+    };
+
+    String getSemanticsLabel() {
+      if (ref.watch(readDisplayNameOnly).value) {
+        return user.displayName ?? user.username;
+      }
+
+      final tuple = DisplayNameTuple.fromUser(user);
+      return [tuple.primary, tuple.secondary].join("\n");
     }
+
+    return Semantics(
+      label: getSemanticsLabel(),
+      excludeSemantics: true,
+      child: widget,
+    );
   }
 }
 
