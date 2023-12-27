@@ -100,9 +100,11 @@ class _InteractionBarState extends State<InteractionBar> {
         IconButton(
           focusNode: widget.menuFocusNode,
           onPressed: onShowMenu,
+          tooltip: context.materialL10n.moreButtonTooltip,
           icon: Icon(
             Icons.more_horiz,
             color: theme.getEmphasisColor(EmphasisColor.medium),
+            size: 20,
           ),
           splashRadius: 24,
         ),
