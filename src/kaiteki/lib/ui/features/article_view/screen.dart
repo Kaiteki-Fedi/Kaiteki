@@ -32,7 +32,7 @@ class _ArticleViewScreenState extends ConsumerState<ArticleViewScreen> {
 
     final adapter = ref.read(adapterProvider);
     _threadFuture = adapter
-        .getThread(widget.post)
+        .getThread(widget.post.id)
         .then((posts) => compute(toThread, posts.toList(growable: false)))
         .then(getPostString);
   }

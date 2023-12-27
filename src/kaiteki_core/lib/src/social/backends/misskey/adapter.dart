@@ -360,19 +360,23 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Iterable<Post>> getThread(Post reply) async {
+  Future<Iterable<Post>> getThread(String postId) async {
+    final reply = await client.showNote(postId);
+
     List<misskey.Note> notes;
 
     try {
-      notes = await client.getConversation(reply.id);
+      notes = await client.getConversation(postId);
     } catch (e, s) {
       _logger.fine('Failed to fetch thread using notes/conversation', e, s);
 
       // FIXME(Craftplacer): Fetch (entire thread), or implement incomplete threads (will be a nightmare to do)
-      notes = await client.getNoteChildren(reply.id);
+      notes = await client.getNoteChildren(postId);
     }
 
-    return notes.map((n) => n.toKaiteki(instance)).followedBy([reply]);
+    return notes
+        .map((n) => n.toKaiteki(instance))
+        .followedBy([reply.toKaiteki(instance)]);
   }
 
   @override

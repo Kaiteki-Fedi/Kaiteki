@@ -53,8 +53,8 @@ abstract class BackendAdapter {
   /// Posts a status, optionally in reply to another post.
   Future<Post> postStatus(PostDraft draft, {Post? parentPost});
 
-  /// Retrieves a thread from a reply
-  Future<Iterable<Post>> getThread(Post reply);
+  /// Retrieves the thread of a post.
+  Future<Iterable<Post>> getThread(String postId);
 
   Future<List<Post>> getTimeline(
     TimelineType type, {

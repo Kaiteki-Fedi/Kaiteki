@@ -49,7 +49,7 @@ class DummyAdapter extends BackendAdapter {
   }
 
   @override
-  Future<Iterable<Post>> getThread(Post reply) => throw UnimplementedError();
+  Future<Iterable<Post>> getThread(String postId) => throw UnimplementedError();
 
   @override
   Future<List<Post>> getTimeline(

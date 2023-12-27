@@ -347,16 +347,9 @@ final routerProvider = Provider<GoRouter>((ref) {
                 name: "post",
                 // parentNavigatorKey: _authNavigatorKey,
                 path: "posts/:id",
-                builder: (context, state) {
-                  final post = state.extra.safeCast<Post>();
-
-                  if (post == null) {
-                    context.pop();
-                    return const SizedBox();
-                  } else {
-                    return ConversationScreen(post);
-                  }
-                },
+                builder: (_, state) => ConversationScreen(
+                  state.pathParameters["id"]!,
+                ),
                 routes: [
                   GoRoute(
                     path: "repeats",

@@ -282,12 +282,13 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   }
 
   @override
-  Future<Iterable<Post>> getThread(Post reply) async {
-    final status = reply.source as mastodon.Status;
-    final context = await client.getStatusContext(status.id);
+  Future<Iterable<Post>> getThread(String postId) async {
+    final reply = await client.getStatus(postId);
+    final context = await client.getStatusContext(postId);
+
     return <Post>[
       ...context.ancestors.map((s) => s.toKaiteki(instance)),
-      reply,
+      reply.toKaiteki(instance),
       ...context.descendants.map((s) => s.toKaiteki(instance)),
     ];
   }
