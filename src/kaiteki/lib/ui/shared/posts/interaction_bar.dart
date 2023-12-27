@@ -5,6 +5,7 @@ import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
 import "package:kaiteki/ui/shared/posts/layouts/layout.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:kaiteki_core/model.dart";
 
 class InteractionBar extends StatefulWidget {
@@ -152,6 +153,7 @@ class _ReplyButton extends ConsumerWidget {
       onTap: onTap,
       labelStyle: _getLabelStyle(showLabel, ref.watch(showReplyCounts).value),
       label: context.l10n.replyButtonLabel,
+      semanticsLabel: count.nullTransform(context.l10n.replyCount),
     );
   }
 }
@@ -200,6 +202,7 @@ class _FavoriteButton extends ConsumerWidget {
       onLongPress: onSecondary,
       label: context.l10n.favoriteButtonLabel,
       labelStyle: _getLabelStyle(showLabel, ref.watch(showReplyCounts).value),
+      semanticsLabel: count.nullTransform(context.l10n.favoriteCount),
     );
   }
 }
@@ -271,6 +274,7 @@ class _RepeatButton extends ConsumerWidget {
       onTap: onTap,
       labelStyle: _getLabelStyle(showLabel, ref.watch(showReplyCounts).value),
       label: context.l10n.repeatButtonLabel,
+      semanticsLabel: count.nullTransform(context.l10n.repeatCount),
     );
   }
 }

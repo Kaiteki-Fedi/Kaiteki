@@ -25,6 +25,8 @@ class CountButton extends ConsumerWidget {
   final String? label;
   final CountButtonLabelStyle? labelStyle;
 
+  final String? semanticsLabel;
+
   const CountButton({
     super.key,
     required this.icon,
@@ -41,6 +43,7 @@ class CountButton extends ConsumerWidget {
     this.animate,
     this.label,
     this.labelStyle = CountButtonLabelStyle.count,
+    this.semanticsLabel,
   });
 
   @override
@@ -83,7 +86,7 @@ class CountButton extends ConsumerWidget {
       );
     }
 
-    final button = TextButton(
+    Widget widget = TextButton(
       onPressed: enabled ? onTap : null,
       onLongPress: enabled ? onLongPress : null,
       focusNode: focusNode,
@@ -102,13 +105,22 @@ class CountButton extends ConsumerWidget {
     );
 
     if (this.label != null) {
-      return Tooltip(
+      widget = Tooltip(
         message: this.label,
-        child: button,
+        child: widget,
       );
     }
 
-    return button;
+    if (semanticsLabel != null) {
+      widget = Semantics(
+        label: semanticsLabel,
+        button: true,
+        excludeSemantics: true,
+        child: widget,
+      );
+    }
+
+    return widget;
   }
 
   Widget _buildIcon(Color color) {
@@ -126,7 +138,7 @@ class CountButton extends ConsumerWidget {
     }
 
     return IconTheme(
-      data: IconThemeData(color: color),
+      data: IconThemeData(color: color, size: 20.0),
       child: icon,
     );
   }
