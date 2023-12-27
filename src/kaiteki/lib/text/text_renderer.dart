@@ -6,14 +6,16 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
-import "package:kaiteki/text/unblur_on_hover.dart";
+import "package:kaiteki/ui/text/unblur_on_hover.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
-import "emoji_span.dart";
+import "../ui/text/emoji_span.dart";
+import "text_context.dart";
 
 Iterable<Element> parseText(
   String text, [
@@ -34,24 +36,10 @@ Iterable<Element> parseText(
   return elements!;
 }
 
-typedef EmojiResolver = Emoji? Function(String name);
-
 typedef RegExpMatchElementBuilder = List<Element> Function(
   RegExpMatch match,
   String text,
 );
-
-class TextContext {
-  final List<UserReference> users;
-  final List<UserReference> excludedUsers;
-  final EmojiResolver? emojiResolver;
-
-  const TextContext({
-    this.users = const [],
-    this.emojiResolver,
-    this.excludedUsers = const [],
-  });
-}
 
 class TextRenderer {
   static final _logger = Logger("TextRenderer");

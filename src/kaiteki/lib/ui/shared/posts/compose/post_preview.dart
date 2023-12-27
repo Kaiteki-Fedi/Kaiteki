@@ -5,6 +5,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/emoji.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers/social_text_parser.dart";
+import "package:kaiteki/text/text_context.dart";
 import "package:kaiteki/text/text_renderer.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";

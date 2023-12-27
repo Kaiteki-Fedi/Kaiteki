@@ -6,6 +6,8 @@ import "package:kaiteki_core/backends/misskey.dart";
 import "package:kaiteki_core/model.dart";
 import "package:logging/logging.dart";
 
+import "text_context.dart";
+
 InlineSpan renderText(
   BuildContext context,
   WidgetRef ref,
