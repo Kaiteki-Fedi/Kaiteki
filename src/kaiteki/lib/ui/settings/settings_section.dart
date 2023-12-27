@@ -38,11 +38,14 @@ class SettingsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (title != null)
-          Padding(
-            padding: kSectionSubheaderMargin,
-            child: DefaultTextStyle.merge(
-              style: getSubheaderTextStyle(Theme.of(context)),
-              child: title,
+          Semantics(
+            header: true,
+            child: Padding(
+              padding: kSectionSubheaderMargin,
+              child: DefaultTextStyle.merge(
+                style: getSubheaderTextStyle(Theme.of(context)),
+                child: title,
+              ),
             ),
           ),
         if (useCard)
