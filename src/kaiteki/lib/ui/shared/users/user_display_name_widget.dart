@@ -40,7 +40,7 @@ class UserDisplayNameWidget extends ConsumerWidget {
               children: [
                 user.renderText(context, ref, content.primary),
                 if (secondaryText != null) ...[
-                  WidgetSpan(child: SizedBox(width: textSpacing)),
+                  TextSpan(text: " "),
                   TextSpan(
                     text: secondaryText,
                     style: secondaryTextStyle,
