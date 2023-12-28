@@ -4,8 +4,8 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki_core/model.dart";
 import "package:video_player/video_player.dart";
 
-class VideoAttachmentWidget extends StatefulWidget {
-  const VideoAttachmentWidget({
+class VideoAttachment extends StatefulWidget {
+  const VideoAttachment({
     required this.attachment,
     super.key,
   });
@@ -13,10 +13,10 @@ class VideoAttachmentWidget extends StatefulWidget {
   final Attachment attachment;
 
   @override
-  State<VideoAttachmentWidget> createState() => _VideoAttachmentWidgetState();
+  State<VideoAttachment> createState() => _VideoAttachmentState();
 }
 
-class _VideoAttachmentWidgetState extends State<VideoAttachmentWidget> {
+class _VideoAttachmentState extends State<VideoAttachment> {
   late VideoPlayerController _videoController;
   late Future<ChewieController> _chewieControllerFuture;
   ChewieController? _chewieController;

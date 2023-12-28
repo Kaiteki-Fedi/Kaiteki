@@ -4,6 +4,8 @@ import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/default/extensions.dart";
+import "package:kaiteki/ui/media_inspection/media.dart";
+import "package:kaiteki/ui/media_inspection/screen.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
@@ -167,7 +169,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                         if (user != null)
                           Positioned(
                             left: 16.0,
-                            child: AvatarWidget(user, size: avatarSize),
+                            child: AvatarWidget(
+                              user,
+                              size: avatarSize,
+                              onTap: () => _onViewAvatar(user),
+                            ),
                           ),
                         Positioned(
                           left: 16.0 + avatarSize,
@@ -314,7 +320,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                       Positioned(
                         left: 16.0,
                         bottom: 0,
-                        child: AvatarWidget(user, size: avatarSize),
+                        child: AvatarWidget(
+                          user,
+                          size: avatarSize,
+                          onTap: () => _onViewAvatar(user),
+                        ),
                       ),
                     if (primaryButton != null)
                       Positioned(
@@ -522,6 +532,42 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             ),
       null => null,
     };
+  }
+
+  Future<void> _onViewAvatar(User user) async {
+    final avatarUrl = user.avatarUrl!;
+
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return MediaInspectionScreen(
+          media: [
+            RemoteMedia(
+              avatarUrl,
+              type: MediaType.image,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _onViewBanner(User user) async {
+    final bannerUrl = user.bannerUrl!;
+
+    await showDialog(
+      context: context,
+      builder: (_) {
+        return MediaInspectionScreen(
+          media: [
+            RemoteMedia(
+              bannerUrl,
+              type: MediaType.image,
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

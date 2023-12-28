@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/ui/media_inspection/screen.dart";
 import "package:kaiteki/ui/shared/bottom_sheets/attachment.dart";
 import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
 import "package:kaiteki_core/social.dart";
@@ -63,6 +64,18 @@ class _AttachmentRowState extends ConsumerState<AttachmentRow> {
                                 child: AttachmentWidget(
                                   attachment: attachment,
                                   reveal: revealed,
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return MediaInspectionScreen.fromPost(
+                                          widget.post,
+                                          initialIndex: widget.post.attachments!
+                                              .indexOf(attachment),
+                                        );
+                                      },
+                                    );
+                                  },
                                   boxFit: ref.watch(cropAttachments).value
                                       ? BoxFit.cover
                                       : BoxFit.contain,

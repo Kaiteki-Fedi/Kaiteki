@@ -4,6 +4,14 @@ class NewPostIntent extends Intent {
   const NewPostIntent();
 }
 
+class NextPageIntent extends Intent {
+  const NextPageIntent();
+}
+
+class PreviousPageIntent extends Intent {
+  const PreviousPageIntent();
+}
+
 class ReplyIntent extends Intent {
   const ReplyIntent();
 }

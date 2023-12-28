@@ -1,28 +1,28 @@
 import "package:flutter/material.dart";
 import "package:flutter_blurhash/flutter_blurhash.dart";
-import "package:kaiteki/ui/shared/attachment_inspection_screen.dart";
-import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core/model.dart";
 
-class ImageAttachmentWidget extends StatelessWidget {
+class ImageAttachment extends StatelessWidget {
   final Attachment attachment;
   final BoxFit? boxFit;
 
-  const ImageAttachmentWidget({
+  const ImageAttachment({
     required this.attachment,
-    super.key,
     this.boxFit,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => enlargeImage(context),
+    final url = attachment.previewUrl ?? attachment.url;
+    final label = attachment.description ?? attachment.fileName;
+    // final locale = attachment.descriptionLanguage.nullTransform(Locale.new);
+    return Semantics(
+      image: true,
+      label: label,
       child: Image.network(
-        (attachment.previewUrl ?? attachment.url).toString(),
+        url.toString(),
         loadingBuilder: (context, widget, loadingProgress) {
-          if (loadingProgress == null) {
-            return widget;
-          }
+          if (loadingProgress == null) return widget;
 
           double? progress;
 
@@ -31,6 +31,7 @@ class ImageAttachmentWidget extends StatelessWidget {
             progress =
                 loadingProgress.cumulativeBytesLoaded / expectedTotalBytes;
           }
+
           final blurHash = attachment.blurHash;
           return Stack(
             children: [
@@ -58,18 +59,6 @@ class ImageAttachmentWidget extends StatelessWidget {
         filterQuality: FilterQuality.medium,
         isAntiAlias: true,
       ),
-    );
-  }
-
-  void enlargeImage(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AttachmentInspectionScreen(
-          attachments: [attachment],
-          index: 0,
-        );
-      },
     );
   }
 }
