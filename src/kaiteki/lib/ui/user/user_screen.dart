@@ -227,6 +227,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         return IconButton.filledTonal(
           onPressed: user == null ? null : controller.open,
           icon: Icon(Icons.adaptive.more_rounded),
+          tooltip: context.materialL10n.moreButtonTooltip,
         );
       },
       menuChildren: user == null ? [] : getMenuItems(user),
