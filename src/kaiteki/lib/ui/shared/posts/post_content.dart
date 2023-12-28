@@ -58,6 +58,7 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
           if (hasContent)
             Padding(
               padding: kPostPadding,
+              // TODO(Craftplacer): Extract links and hashtags into actions, for TalkBack
               child: SelectableText.rich(
                 TextSpan(
                   children: [renderedContent!],
