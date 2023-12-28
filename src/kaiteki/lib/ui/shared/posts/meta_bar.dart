@@ -73,9 +73,11 @@ class MetaBar extends ConsumerWidget {
       );
     }
 
-    yield UserDisplayNameWidget(
-      _post.author,
-      orientation: twolineAuthor ? Axis.vertical : Axis.horizontal,
+    yield Flexible(
+      child: UserDisplayNameWidget(
+        _post.author,
+        orientation: twolineAuthor ? Axis.vertical : Axis.horizontal,
+      ),
     );
 
     if (ref.watch(showUserBadges).value) {
