@@ -91,10 +91,6 @@ dev_dependencies:
   riverpod_generator: ^2.1.6
   test: ^1.17.10
 
-dependency_overrides:
-  dynamic_color: ^1.6.7
-  material_color_utilities: ^0.8.0
-
 flutter:
   uses-material-design: true
   assets:
