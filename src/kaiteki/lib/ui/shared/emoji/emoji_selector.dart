@@ -2,7 +2,6 @@ import "dart:math" as math;
 
 import "package:anchor_scroll_controller/anchor_scroll_controller.dart";
 import "package:collection/collection.dart";
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
@@ -86,9 +85,6 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).useMaterial3
-        ? Theme.of(context).colorScheme.onSurface
-        : Theme.of(context).colorScheme.onSurfaceVariant;
     final hasEmojis = _categories.any((e) => e.items.isNotEmpty);
     return Column(
       children: [
@@ -96,25 +92,21 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
           padding: const EdgeInsets.all(8.0),
           child: SearchBar(
             controller: _searchTextController,
-            // onSubmitted: (_) {
-            //   final emoji = _categories.firstOrNull?.emojis.firstOrNull;
-            //
-            //   if (emoji != null) widget.onEmojiSelected(emoji);
-            // },
             hintText: "Search for emojis",
-            shadowColor: const MaterialStatePropertyAll(Colors.transparent),
+            elevation: const MaterialStatePropertyAll(0),
           ),
         ),
         if (hasEmojis && _categories.length >= 2) ...[
-          TabBar(
+          TabBar.secondary(
+            tabAlignment: TabAlignment.center,
             key: ValueKey(_categories.length),
             indicatorColor: Theme.of(context).colorScheme.primary,
             labelColor: Theme.of(context).colorScheme.primary,
-            unselectedLabelColor: color,
+            unselectedLabelColor: Theme.of(context).useMaterial3
+                ? Theme.of(context).colorScheme.onSurface
+                : Theme.of(context).colorScheme.onSurfaceVariant,
             isScrollable: true,
-            tabs: _categories
-                .map((e) => Tab(icon: _buildCategoryIcon(context, e)))
-                .toList(),
+            tabs: _categories.map((e) => Tab(icon: _EmojiTabIcon(e))).toList(),
             controller: _tabController,
             onTap: (i) => _scrollController.scrollToIndex(
               index: i,
@@ -157,9 +149,15 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
     final widgets = <Widget>[
       if (category.name?.isNotEmpty == true)
         SliverToBoxAdapter(
-          child: ListTile(
-            title: Text(category.name!),
-            enabled: false,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+            child: Text(
+              category.name!,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
           ),
         ),
       SliverGrid(
@@ -206,10 +204,7 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
       ),
     );
 
-    // HACK(Craftplacer): We disable displaying `Tooltip`s on slivers when debugging because that fails an assert when hot-reloading.
-    if (!kDebugMode && tooltip != null) {
-      child = Tooltip(message: tooltip, child: child);
-    }
+    if (tooltip != null) child = Tooltip(message: tooltip, child: child);
 
     return child;
   }
@@ -262,37 +257,8 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
   String? _getTooltip(Emoji emoji) =>
       emoji is CustomEmoji ? ":${emoji.short}:" : null;
 
-  Widget _buildCategoryIcon(BuildContext context, EmojiCategory category) {
-    const iconMap = {
-      UnicodeEmojiGroup.animalsNature: Icons.emoji_nature_rounded,
-      UnicodeEmojiGroup.symbols: Icons.emoji_symbols_rounded,
-      UnicodeEmojiGroup.flags: Icons.emoji_flags_rounded,
-      UnicodeEmojiGroup.smileysEmotion: Icons.emoji_emotions_rounded,
-      UnicodeEmojiGroup.objects: Icons.emoji_objects_rounded,
-      UnicodeEmojiGroup.travelPlaces: Icons.emoji_transportation_rounded,
-      UnicodeEmojiGroup.activities: Icons.emoji_events_rounded,
-      UnicodeEmojiGroup.foodDrink: Icons.emoji_food_beverage_rounded,
-      UnicodeEmojiGroup.peopleBody: Icons.emoji_people_rounded,
-    };
-
-    if (category is UnicodeEmojiCategory) {
-      return Icon(
-        iconMap[category.type] ?? Icons.circle_rounded,
-        size: 24,
-      );
-    }
-
-    assert(category.items.isNotEmpty, "Cannot display empty emoji category");
-
-    return EmojiWidget(
-      category.items[0].emoji,
-      size: 24,
-      square: true,
-    );
-  }
-
   Iterable<EmojiCategory> applySearch(List<EmojiCategory> categories) {
-    final query = _searchTextController.text.toLowerCase();
+    final query = _searchTextController.text.toLowerCase().trim().split(" ");
     if (query.isEmpty) return categories;
 
     EmojiCategory filterCategory(EmojiCategory category) {
@@ -303,7 +269,7 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
               (i) => i.emojis //
                   .expand(_getEmojiKeywords)
                   .map((e) => e.toLowerCase())
-                  .any((w) => w.contains(query)),
+                  .any((w) => query.every((q) => w.contains(q))),
             )
             .toList(growable: false),
       );
@@ -338,4 +304,40 @@ Iterable<Emoji> getRecentEmojis(WidgetRef ref, Iterable<Emoji> remoteEmojis) {
 
     return remoteEmojis.firstWhereOrNull((e) => e.short == emoji);
   }).whereNotNull();
+}
+
+class _EmojiTabIcon extends StatelessWidget {
+  final EmojiCategory category;
+
+  const _EmojiTabIcon(this.category);
+
+  @override
+  Widget build(BuildContext context) {
+    final category = this.category;
+
+    if (category is UnicodeEmojiCategory) {
+      return Icon(
+        switch (category.type) {
+          UnicodeEmojiGroup.animalsNature => Icons.emoji_nature_rounded,
+          UnicodeEmojiGroup.symbols => Icons.emoji_symbols_rounded,
+          UnicodeEmojiGroup.flags => Icons.emoji_flags_rounded,
+          UnicodeEmojiGroup.smileysEmotion => Icons.emoji_emotions_rounded,
+          UnicodeEmojiGroup.objects => Icons.emoji_objects_rounded,
+          UnicodeEmojiGroup.travelPlaces => Icons.emoji_transportation_rounded,
+          UnicodeEmojiGroup.activities => Icons.emoji_events_rounded,
+          UnicodeEmojiGroup.foodDrink => Icons.emoji_food_beverage_rounded,
+          UnicodeEmojiGroup.peopleBody => Icons.emoji_people_rounded,
+        },
+        size: 24,
+      );
+    }
+
+    assert(category.items.isNotEmpty, "Cannot display empty emoji category");
+
+    return EmojiWidget(
+      category.items[0].emoji,
+      size: 24,
+      square: true,
+    );
+  }
 }
