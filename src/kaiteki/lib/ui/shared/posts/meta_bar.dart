@@ -67,7 +67,9 @@ class MetaBar extends ConsumerWidget {
     if (showAvatar ?? postTheme?.showAvatar ?? true) {
       yield Padding(
         padding: const EdgeInsets.only(right: 8.0),
-        child: AvatarWidget(_post.author, size: 40),
+        child: ExcludeSemantics(
+          child: AvatarWidget(_post.author, size: 40),
+        ),
       );
     }
 
