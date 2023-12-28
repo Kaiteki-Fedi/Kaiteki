@@ -1,18 +1,8 @@
-import "dart:io";
-
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/share_sheet/sheet.dart";
 import "package:kaiteki_core/model.dart";
-import "package:share_plus/share_plus.dart";
 
 Future<void> share(BuildContext context, Object content) async {
-  if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
-    final text = getShareText(content);
-    await Share.share(text);
-    return;
-  }
-
   await showModalBottomSheet(
     context: context,
     useRootNavigator: true,
@@ -20,7 +10,7 @@ Future<void> share(BuildContext context, Object content) async {
   );
 }
 
-Uri? getShareUrl(Object content) {
+Uri? getShareUrl(Object content, {bool preferRemote = true}) {
   if (content is Uri) return content;
   if (content is User) return content.url;
   if (content is Post) return content.externalUrl;
