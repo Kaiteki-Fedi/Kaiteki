@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/utils.dart";
 import "package:kaiteki_core/social.dart";
 import "package:logging/logging.dart";
 
@@ -136,7 +137,7 @@ class _LauncherDialogState extends ConsumerState<LauncherDialog> {
         return true;
       }
 
-      final handle = _parseUserHandle(query);
+      final handle = parseUserHandle(query);
       if (handle != null) {
         final currentHost = ref.read(currentAccountProvider)!.key.host;
 
@@ -249,16 +250,4 @@ class _LauncherDialogState extends ConsumerState<LauncherDialog> {
         throw UnimplementedError(object.toString());
     }
   }
-}
-
-(String username, String? host)? _parseUserHandle(String input) {
-  final beginsWithAt = input[0] == "@";
-  final atInput = beginsWithAt ? input.substring(1) : input;
-  final atSplit = atInput.split("@");
-
-  if (atSplit.length == 2 || (beginsWithAt && atSplit.length == 1)) {
-    return (atSplit[0], atSplit.elementAtOrNull(1));
-  }
-
-  return null;
 }
