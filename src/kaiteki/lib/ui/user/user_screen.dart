@@ -2,10 +2,8 @@ import "dart:math";
 
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
-import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/default/extensions.dart";
-import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
@@ -243,18 +241,6 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         ),
         leadingIcon: Icon(Icons.adaptive.share_rounded),
         child: const Text("Share"),
-      ),
-      MenuItemButton(
-        onPressed: () async => showModalBottomSheet(
-          context: context,
-          useRootNavigator: true,
-          isScrollControlled: true,
-          constraints: kBottomSheetConstraints,
-          showDragHandle: true,
-          builder: (_) => InstanceVettingBottomSheet(instance: user.host),
-        ),
-        leadingIcon: const Icon(Icons.shield_rounded),
-        child: const Text("Vet instance"),
       ),
     ];
   }

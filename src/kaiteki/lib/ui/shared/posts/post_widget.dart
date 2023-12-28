@@ -15,7 +15,6 @@ import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
 import "package:kaiteki/ui/features/article_view/screen.dart";
-import "package:kaiteki/ui/features/instance_vetting/bottom_sheet.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/dialogs/content_not_public_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
@@ -322,23 +321,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       );
     }
 
-    MenuItemButton buildVetInstanceMenuItem(BuildContext context) {
-      return MenuItemButton(
-        leadingIcon: const Icon(Icons.shield_rounded),
-        onPressed: () async => showModalBottomSheet(
-          context: context,
-          useRootNavigator: true,
-          isScrollControlled: true,
-          constraints: kBottomSheetConstraints,
-          showDragHandle: true,
-          builder: (_) => InstanceVettingBottomSheet(
-            instance: _post.author.host,
-          ),
-        ),
-        child: const Text("Vet instance"),
-      );
-    }
-
     Widget buildOpenInMenuItem(BuildContext context) {
       final currentAccount = ref.read(currentAccountProvider);
       final federatedAccounts = ref.read(accountManagerProvider).accounts.where(
@@ -402,8 +384,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           child: const Text("View as article"),
         ),
       ],
-      if (ref.watch(AppExperiment.instanceVetting.provider))
-        buildVetInstanceMenuItem(context),
       const Divider(),
       buildShareMenuItem(context),
       buildOpenInMenuItem(context),
