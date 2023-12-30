@@ -182,21 +182,17 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 class _SecondaryNotificationBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
-
     final isAnnouncementsSupported = ref.watch(_announcementsSupportedProvider);
     final isFollowingSupported = ref.watch(_followingSupportedProvider);
 
     final buttons = <Widget>[
       if (isAnnouncementsSupported)
-        Expanded(
-          flex: isCompact ? 1 : 0,
-          child: _AnnouncementsButton(isCompact: isCompact),
+        const Expanded(
+          child: _AnnouncementsButton(),
         ),
       if (isFollowingSupported)
-        Expanded(
-          flex: isCompact ? 1 : 0,
-          child: _FollowRequestsButton(expand: isCompact),
+        const Expanded(
+          child: _FollowRequestsButton(),
         ),
     ];
 
@@ -214,9 +210,7 @@ class _SecondaryNotificationBar extends ConsumerWidget {
 }
 
 class _AnnouncementsButton extends ConsumerWidget {
-  const _AnnouncementsButton({required this.isCompact});
-
-  final bool isCompact;
+  const _AnnouncementsButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -242,7 +236,6 @@ class _AnnouncementsButton extends ConsumerWidget {
           const Icon(Icons.campaign_rounded),
           const SizedBox(width: 8),
           Expanded(
-            flex: isCompact ? 1 : 0,
             child: const Text("Announcements"),
           ),
           if (unreadCount != null && unreadCount > 0) ...[
@@ -284,11 +277,7 @@ Future<int> _unreadAnnouncementCount(
 }
 
 class _FollowRequestsButton extends ConsumerWidget {
-  // I'm kinda perplexed why there isn't a way to make one widget fill the
-  // available space only if the space is constrained.
-  final bool expand;
-
-  const _FollowRequestsButton({this.expand = false});
+  const _FollowRequestsButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -310,11 +299,11 @@ class _FollowRequestsButton extends ConsumerWidget {
         visualDensity: VisualDensity.standard,
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Icon(Icons.person_add_rounded),
           const SizedBox(width: 8),
           Expanded(
-            flex: expand ? 1 : 0,
             child: const Text("Follow Requests"),
           ),
           if (count != null && count > 0) ...[
