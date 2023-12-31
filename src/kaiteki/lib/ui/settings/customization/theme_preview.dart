@@ -20,26 +20,12 @@ class ThemePreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final useMaterial3 = Theme.of(context).useMaterial3;
-
     final themeData = switch (Theme.of(context).brightness) {
       Brightness.light => theme,
       Brightness.dark => darkTheme ?? theme,
     };
 
     Color? color;
-
-    if (!useMaterial3) {
-      if (selected) {
-        color = Theme.of(context).colorScheme.primary;
-      } else {
-        final onSurface = Theme.of(context).colorScheme.onSurface;
-        color = switch (Theme.of(context).brightness) {
-          Brightness.dark => onSurface.withOpacity(.7),
-          Brightness.light => onSurface.withOpacity(.54),
-        };
-      }
-    }
 
     return Column(
       children: [

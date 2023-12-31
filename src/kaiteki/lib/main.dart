@@ -36,8 +36,8 @@ Future<void> main() async {
     runApp(
       MaterialApp(
         home: SplashScreen(stream: startup),
-        theme: makeDefaultTheme(Brightness.light, true),
-        darkTheme: makeDefaultTheme(Brightness.dark, true),
+        theme: makeDefaultTheme(Brightness.light),
+        darkTheme: makeDefaultTheme(Brightness.dark),
       ),
     );
 
@@ -111,8 +111,8 @@ Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
 
 void handleFatalError(TraceableError error) {
   final crashScreen = MaterialApp(
-    theme: makeDefaultTheme(Brightness.light, true),
-    darkTheme: makeDefaultTheme(Brightness.dark, true),
+    theme: makeDefaultTheme(Brightness.light),
+    darkTheme: makeDefaultTheme(Brightness.dark),
     localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
     supportedLocales: KaitekiLocalizations.supportedLocales,
     home: CrashScreen(error),

@@ -69,16 +69,6 @@ extension ThemeDataExtensions on ThemeData {
         extendedTextStyle: textTheme.labelLarge ?? const TextStyle(),
       ),
       dividerTheme: dividerTheme.copyWith(space: 1, thickness: 1),
-      tabBarTheme: tabBarTheme.copyWith(
-        // Flutter themes the TabBar to be readable against the primary color,
-        // since we don't live in Material Design 1 times where everything is
-        // eye-soring colorful, we'll use the primary color.
-        labelColor: useMaterial3 ? null : colorScheme.primary,
-        indicatorColor: useMaterial3 ? null : colorScheme.primary,
-        unselectedLabelColor: useMaterial3
-            ? null
-            : colorScheme.onSurface.withOpacity(.6) /* medium emphasis */,
-      ),
       bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
         backgroundColor: colorScheme.brightness == Brightness.dark
             ? colorScheme.surface

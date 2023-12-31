@@ -368,7 +368,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                     FilledButton.icon(
                       style: FilledButton.styleFrom(
                         visualDensity: VisualDensity.standard,
-                        elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
+                        elevation: 0.0,
                       ),
                       onPressed: () => _post(context),
                       label: Text(l10n.submitButtonTooltip),

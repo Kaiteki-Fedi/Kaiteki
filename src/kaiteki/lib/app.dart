@@ -118,8 +118,6 @@ final class KaitekiApp extends ConsumerWidget {
     Brightness brightness,
     ColorScheme? systemColorScheme,
   ) {
-    final useMaterial3 = ref.watch(preferences.useMaterial3).value;
-
     ColorScheme getColorScheme() {
       final useHighContrast = ref.watch(preferences.useHighContrast).value;
 
@@ -135,28 +133,7 @@ final class KaitekiApp extends ConsumerWidget {
       return systemColorScheme ?? AppTheme.affection.getColorScheme(brightness);
     }
 
-    var colorScheme = getColorScheme();
-
-    if (!useMaterial3) {
-      // As per https://m1.material.io/style/color.html#color-themes
-      // and https://m2.material.io/design/color/dark-theme.html
-      const darkThemeSurfaceColor = Color(0xFF121212);
-      colorScheme = colorScheme.copyWith(
-        background: brightness == Brightness.light
-            ? Colors.grey.shade50
-            : darkThemeSurfaceColor,
-        surface: brightness == Brightness.light
-            ? Colors.white
-            : darkThemeSurfaceColor,
-      );
-    }
-
-    final theme = ThemeData.from(
-      colorScheme: colorScheme,
-      useMaterial3: useMaterial3,
-    );
-
-    return theme
+    return ThemeData.from(colorScheme: getColorScheme())
         .applyDefaultTweaks()
         .applyKaitekiTweaks()
         .applyUserPreferences(ref);

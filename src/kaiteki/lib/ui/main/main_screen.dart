@@ -116,8 +116,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
     return Actions(
       actions: getActions(context),
       child: ColoredBox(
-        color:
-            getOutsideColor(context) ?? Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         child: prideEnabled && !isCompact
             ? Stack(
                 children: [
@@ -147,7 +146,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
         DefaultKaitekiTextTheme(context).kaitekiTextStyle;
     return AppBar(
       foregroundColor: foregroundColor,
-      forceMaterialTransparency: immerse && theme.useMaterial3,
+      forceMaterialTransparency: immerse,
       title: Text(kAppName, style: kaitekiTextStyle),
       actions: _buildAppBarActions(context),
       scrolledUnderElevation: immerse ? 0.0 : null,
@@ -189,12 +188,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
         onInvoke: (_) => showKeyboardShortcuts(context),
       ),
     };
-  }
-
-  Color? getOutsideColor(BuildContext context) {
-    final theme = Theme.of(context);
-    if (theme.useMaterial3) return theme.colorScheme.surfaceContainer;
-    return null;
   }
 
   List<MainScreenTabType> getTabs() {
@@ -320,18 +313,7 @@ class _BodyWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var body = child;
-
-    final useMaterial3 = Theme.of(context).useMaterial3;
-
-    if (useMaterial3) {
-      body = Material(
-        color: Theme.of(context).colorScheme.surface,
-        child: body,
-      );
-    }
-
-    body = Focus(
+    Widget body = Focus(
       autofocus: true,
       child: PageTransitionSwitcher(
         transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
@@ -341,7 +323,10 @@ class _BodyWrapper extends StatelessWidget {
             child: child,
           );
         },
-        child: child,
+        child: Material(
+          color: Theme.of(context).colorScheme.surface,
+          child: child,
+        ),
       ),
     );
 
@@ -349,14 +334,12 @@ class _BodyWrapper extends StatelessWidget {
         WindowWidthSizeClass.compact;
     if (isCompact) return body;
 
-    if (useMaterial3) {
-      body = ClipRRect(
-        borderRadius: const BorderRadiusDirectional.only(
-          topStart: Radius.circular(16.0),
-        ),
-        child: body,
-      );
-    }
+    body = ClipRRect(
+      borderRadius: const BorderRadiusDirectional.only(
+        topStart: Radius.circular(16.0),
+      ),
+      child: body,
+    );
 
     final tabTypes = this.tabTypes;
     final canShowRail = !(tabTypes == null || tabTypes.length < 2);
@@ -372,7 +355,6 @@ class _BodyWrapper extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
           ),
-          if (!useMaterial3) const VerticalDivider(thickness: 1, width: 1),
           Expanded(child: body),
         ],
       );

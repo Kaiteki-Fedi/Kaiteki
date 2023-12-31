@@ -2,7 +2,6 @@ import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:fpdart/fpdart.dart" hide State;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/ui/shared/app_bar_tab_bar_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/find_user_dialog.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
@@ -67,13 +66,11 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
           //       : _buildView(snapshot, adapter);
           // }
 
-          return AppBarTabBarTheme(
-            child: DefaultTabController(
-              length: snapshot.data?.length ?? 0,
-              child: _editMode
-                  ? _buildEdit(snapshot)
-                  : _buildView(snapshot, adapter),
-            ),
+          return DefaultTabController(
+            length: snapshot.data?.length ?? 0,
+            child: _editMode
+                ? _buildEdit(snapshot)
+                : _buildView(snapshot, adapter),
           );
         },
       ),
@@ -264,7 +261,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
           : appBar,
       body: Column(
         children: [
-          if (Theme.of(context).useMaterial3 && listsAvailable) const Divider(),
+          if (listsAvailable) const Divider(),
           Expanded(
             child: PageTransitionSwitcher(
               transitionBuilder: (
@@ -358,18 +355,8 @@ class _ListCardState extends ConsumerState<_ListCard> {
       clipBehavior: Clip.antiAlias,
       elevation: 0.0,
       borderOnForeground: false,
-      shape: Theme.of(context).useMaterial3
-          ? null
-          : RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4.0),
-              side: BorderSide(
-                color: Theme.of(context).dividerColor,
-              ),
-            ),
       margin: const EdgeInsets.all(8.0),
-      color: Theme.of(context).useMaterial3
-          ? Theme.of(context).colorScheme.surfaceVariant
-          : null,
+      color: Theme.of(context).colorScheme.surfaceVariant,
       child: ExpansionTile(
         title: Text(widget.list.name),
         trailing: Row(

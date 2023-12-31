@@ -24,7 +24,6 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
     final l10n = context.l10n;
 
     final developerMode = ref.watch(preferences.developerMode).value;
-    final m3 = Theme.of(context).useMaterial3;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsDebugMaintenance)),
@@ -35,19 +34,16 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
               child: Column(
                 children: [
                   Padding(
-                    padding: m3 ? const EdgeInsets.all(16.0) : EdgeInsets.zero,
+                    padding: const EdgeInsets.all(16.0),
                     child: MainSwitchListTile(
                       title: const Text("Enable developer mode"),
                       onChanged: (value) =>
                           ref.read(preferences.developerMode).value = value,
                       value: developerMode,
-                      contentPadding:
-                          m3 ? const EdgeInsets.symmetric(vertical: 4.0) : null,
-                      shape: m3
-                          ? RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            )
-                          : null,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
                     ),
                   ),
                   SettingsSection(

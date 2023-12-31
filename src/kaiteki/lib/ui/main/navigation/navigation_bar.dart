@@ -17,22 +17,11 @@ class MainScreenNavigationBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-
-    if (theme.useMaterial3) {
-      return NavigationBar(
-        onDestinationSelected: onChangeIndex,
-        selectedIndex: currentIndex,
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        destinations: _buildDestinations(context, ref).toList(),
-      );
-    }
-
-    return BottomNavigationBar(
-      selectedFontSize: 12,
-      onTap: onChangeIndex,
-      currentIndex: currentIndex,
-      items: _buildItems(context, ref).toList(),
+    return NavigationBar(
+      onDestinationSelected: onChangeIndex,
+      selectedIndex: currentIndex,
+      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+      destinations: _buildDestinations(context, ref).toList(),
     );
   }
 
@@ -45,26 +34,6 @@ class MainScreenNavigationBar extends ConsumerWidget {
           child: type.icon,
         ),
         selectedIcon: KtkBadge(
-          count: unreadCount,
-          child: type.selectedIcon,
-        ),
-        label: type.getLabel(context.l10n),
-      );
-    });
-  }
-
-  Iterable<BottomNavigationBarItem> _buildItems(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    return tabTypes.map((type) {
-      final unreadCount = type.tab?.fetchUnreadCount.call(ref);
-      return BottomNavigationBarItem(
-        icon: KtkBadge(
-          count: unreadCount,
-          child: type.icon,
-        ),
-        activeIcon: KtkBadge(
           count: unreadCount,
           child: type.selectedIcon,
         ),

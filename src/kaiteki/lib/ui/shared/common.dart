@@ -118,17 +118,9 @@ enum EmphasisColor { high, medium, disabled }
 
 extension ThemeDataExtension on ThemeData {
   Color getEmphasisColor(EmphasisColor emphasis) {
-    if (useMaterial3) {
-      return switch (emphasis) {
-        EmphasisColor.high => colorScheme.onSurface,
-        EmphasisColor.medium => colorScheme.onSurfaceVariant,
-        EmphasisColor.disabled => colorScheme.onSurface.withOpacity(.38),
-      };
-    }
-
     return switch (emphasis) {
-      EmphasisColor.high => colorScheme.onSurface.withOpacity(.87),
-      EmphasisColor.medium => colorScheme.onSurface.withOpacity(.60),
+      EmphasisColor.high => colorScheme.onSurface,
+      EmphasisColor.medium => colorScheme.onSurfaceVariant,
       EmphasisColor.disabled => colorScheme.onSurface.withOpacity(.38),
     };
   }

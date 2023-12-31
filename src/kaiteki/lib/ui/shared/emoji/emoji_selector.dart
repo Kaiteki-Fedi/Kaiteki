@@ -102,9 +102,7 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
             key: ValueKey(_categories.length),
             indicatorColor: Theme.of(context).colorScheme.primary,
             labelColor: Theme.of(context).colorScheme.primary,
-            unselectedLabelColor: Theme.of(context).useMaterial3
-                ? Theme.of(context).colorScheme.onSurface
-                : Theme.of(context).colorScheme.onSurfaceVariant,
+            unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
             isScrollable: true,
             tabs: _categories.map((e) => Tab(icon: _EmojiTabIcon(e))).toList(),
             controller: _tabController,

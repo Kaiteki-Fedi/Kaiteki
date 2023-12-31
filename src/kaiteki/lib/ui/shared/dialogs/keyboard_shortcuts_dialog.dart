@@ -20,9 +20,7 @@ class KeyboardShortcutsDialog extends StatelessWidget {
       icon: const Icon(Icons.keyboard_rounded),
       title: Text(l10n.keyboardShortcuts),
       scrollable: true,
-      actionsPadding: Theme.of(context).useMaterial3
-          ? const EdgeInsets.fromLTRB(24, 24, 16, 24)
-          : null,
+      actionsPadding: const EdgeInsets.fromLTRB(24, 24, 16, 24),
       content: ConstrainedBox(
         constraints: kDialogConstraints,
         child: Column(

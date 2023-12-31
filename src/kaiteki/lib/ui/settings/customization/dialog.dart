@@ -2,12 +2,10 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/utils/extensions.dart";
 
-typedef ThemeDialogOptions = ({ThemeMode themeMode, bool useMaterial3});
-
 class ThemeDialog extends StatefulWidget {
-  final ThemeDialogOptions options;
+  final ThemeMode themeMode;
 
-  const ThemeDialog(this.options, {super.key});
+  const ThemeDialog(this.themeMode, {super.key});
 
   @override
   State<ThemeDialog> createState() => _ThemeDialogState();
@@ -15,13 +13,11 @@ class ThemeDialog extends StatefulWidget {
 
 class _ThemeDialogState extends State<ThemeDialog> {
   late ThemeMode _themeMode;
-  late bool _useMaterial3;
 
   @override
   void initState() {
     super.initState();
-    _themeMode = widget.options.themeMode;
-    _useMaterial3 = widget.options.useMaterial3;
+    _themeMode = widget.themeMode;
   }
 
   @override
@@ -40,13 +36,6 @@ class _ThemeDialogState extends State<ThemeDialog> {
               onChanged: (value) => setState(() => _themeMode = value!),
               contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
             ),
-          const Divider(height: 1 + 8 * 2),
-          SwitchListTile(
-            value: _useMaterial3,
-            onChanged: (value) => setState(() => _useMaterial3 = value),
-            title: Text(context.l10n.useMaterialYou),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 24.0),
-          ),
         ],
       ),
       actions: [
@@ -55,12 +44,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
           child: Text(context.materialL10n.cancelButtonLabel),
         ),
         TextButton(
-          onPressed: () => Navigator.of(context).pop(
-            (
-              themeMode: _themeMode,
-              useMaterial3: _useMaterial3,
-            ),
-          ),
+          onPressed: () => Navigator.of(context).pop(_themeMode),
           child: Text(context.l10n.applyButtonLabel),
         ),
       ],

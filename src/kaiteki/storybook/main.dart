@@ -17,8 +17,8 @@ class KaitekiStorybook extends StatelessWidget {
   Widget build(BuildContext context) {
     return Storybook(
       wrapperBuilder: (context, child) => MaterialApp(
-        theme: makeDefaultTheme(Brightness.light, true),
-        darkTheme: makeDefaultTheme(Brightness.dark, true),
+        theme: makeDefaultTheme(Brightness.light),
+        darkTheme: makeDefaultTheme(Brightness.dark),
         debugShowCheckedModeBanner: false,
         home: Builder(
           builder: (context) => Scaffold(

@@ -21,48 +21,32 @@ class ThemeSelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final app = context.findAncestorWidgetOfExactType<MaterialApp>();
     final systemColorSchemes = ref.watch(systemColorSchemeProvider);
-    final useMaterial3 = Theme.of(context).useMaterial3;
 
     // In Material 3, we apply a background color to the icon buttons.
-    final spacing = useMaterial3 ? 8.0 : 0.0;
     return Wrap(
-      runSpacing: spacing,
-      spacing: spacing,
+      runSpacing: 8.0,
+      spacing: 8.0,
       alignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (systemColorSchemes != null) ...[
           ThemePreview(
-            ThemeData.from(
-              colorScheme: systemColorSchemes.light,
-              useMaterial3: useMaterial3,
-            ),
-            darkTheme: ThemeData.from(
-              colorScheme: systemColorSchemes.dark,
-              useMaterial3: useMaterial3,
-            ),
+            ThemeData.from(colorScheme: systemColorSchemes.light),
+            darkTheme: ThemeData.from(colorScheme: systemColorSchemes.dark),
             name: "System Default",
             icon: const Icon(Icons.auto_awesome_rounded),
             selected: selected == null,
             onTap: () => onSelected(null),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
-            child: VerticalDivider(
-              width: useMaterial3 ? 1 : 8 * 2 + 1,
-            ),
+            child: VerticalDivider(width: 1),
           ),
         ],
         for (final theme in AppTheme.values)
           ThemePreview(
-            makeTheme(
-              theme.getColorScheme(Brightness.light),
-              useMaterial3,
-            ),
-            darkTheme: makeTheme(
-              theme.getColorScheme(Brightness.dark),
-              useMaterial3,
-            ),
+            makeTheme(theme.getColorScheme(Brightness.light)),
+            darkTheme: makeTheme(theme.getColorScheme(Brightness.dark)),
             name: _getThemeName(theme, context.l10n),
             icon: _buildThemeIcon(theme),
             selected: selected == theme,

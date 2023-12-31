@@ -37,9 +37,7 @@ class ReactionButton extends ConsumerWidget {
 
     if (reacted) count--;
 
-    final outlineColor = Theme.of(context).useMaterial3
-        ? Theme.of(context).colorScheme.outline
-        : Theme.of(context).colorScheme.onSurface.withOpacity(.12);
+    final outlineColor = Theme.of(context).colorScheme.outline;
     return Tooltip(
       richMessage: TextSpan(
         children: [

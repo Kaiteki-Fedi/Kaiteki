@@ -106,7 +106,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                 constraints: const BoxConstraints(maxWidth: 600),
                 child: MergeableMaterial(
                   hasDividers: true,
-                  elevation: Theme.of(context).useMaterial3 ? 0.0 : 2.0,
+                  elevation: 0.0,
                   children: posts
                       .mapIndexed((i, e) {
                         final preGapValue =
@@ -121,13 +121,11 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                           MaterialSlice(
                             key: ValueKey(e.id),
                             child: buildPost(i, e),
-                            color: Theme.of(context).useMaterial3
-                                ? ElevationOverlay.applySurfaceTint(
-                                    Theme.of(context).colorScheme.surface,
-                                    Theme.of(context).colorScheme.surfaceTint,
-                                    2.0,
-                                  )
-                                : null,
+                            color: ElevationOverlay.applySurfaceTint(
+                              Theme.of(context).colorScheme.surface,
+                              Theme.of(context).colorScheme.surfaceTint,
+                              2.0,
+                            ),
                           ),
                           if (isSelected && i != (posts.length - 1))
                             MaterialGap(key: ValueKey(afterGapValue)),

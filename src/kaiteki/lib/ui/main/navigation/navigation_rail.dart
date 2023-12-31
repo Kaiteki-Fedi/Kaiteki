@@ -25,10 +25,8 @@ class MainScreenNavigationRail extends ConsumerWidget {
 
     return NavigationRail(
       backgroundColor: backgroundColor,
-      useIndicator: theme.useMaterial3,
       selectedIndex: currentIndex,
       onDestinationSelected: onChangeIndex,
-      minWidth: theme.useMaterial3 ? null : 56,
       labelType: NavigationRailLabelType.all,
       leading: FloatingActionButton(
         backgroundColor: theme.colorScheme.tertiaryContainer,

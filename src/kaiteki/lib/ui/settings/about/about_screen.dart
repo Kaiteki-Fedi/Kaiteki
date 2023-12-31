@@ -10,6 +10,8 @@ import "package:kaiteki/ui/shared/layout/dfp.dart";
 import "package:kaiteki/utils/extensions/build_context.dart";
 import "package:mdi/mdi.dart";
 
+import "app_name_badge.dart";
+
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
@@ -55,7 +57,7 @@ class AboutScreen extends StatelessWidget {
                           if (badge != null)
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: badge.build(),
+                              child: AppNameBadge(badge),
                             ),
                         ],
                         // kDebugMode

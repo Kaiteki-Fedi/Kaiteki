@@ -61,7 +61,7 @@ class Bootstrapper {
       localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
       supportedLocales: KaitekiLocalizations.supportedLocales,
       locale: locale != null ? Locale(locale) : const Locale("en"),
-      theme: makeDefaultTheme(Brightness.light, true),
+      theme: makeDefaultTheme(Brightness.light),
     );
 
     if (mediaQueryData != null) {

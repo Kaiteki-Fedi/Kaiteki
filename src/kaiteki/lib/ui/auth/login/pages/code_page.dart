@@ -85,16 +85,14 @@ class _CodePageState extends State<CodePage> {
                         child: large
                             ? FloatingActionButton(
                                 onPressed: () => _submit(_textController.text),
-                                elevation:
-                                    Theme.of(context).useMaterial3 ? 0.0 : null,
+                                elevation: 0.0,
                                 tooltip: l10n.submitButtonTooltip,
                                 heroTag: null,
                                 child: const Icon(Icons.arrow_forward_rounded),
                               )
                             : FloatingActionButton.small(
                                 onPressed: () => _submit(_textController.text),
-                                elevation:
-                                    Theme.of(context).useMaterial3 ? 0.0 : null,
+                                elevation: 0.0,
                                 tooltip: l10n.submitButtonTooltip,
                                 heroTag: null,
                                 child: const Icon(Icons.arrow_forward_rounded),

@@ -4,22 +4,11 @@ import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/theming/themes.dart";
 import "package:kaiteki_ui/kaiteki_ui.dart";
 
-ThemeData makeDefaultTheme(Brightness brightness, bool useMaterial3) {
-  return makeTheme(
-    AppTheme.affection.getColorScheme(brightness),
-    useMaterial3,
-  );
-}
+ThemeData makeDefaultTheme(Brightness brightness) =>
+    makeTheme(AppTheme.affection.getColorScheme(brightness));
 
-ThemeData makeTheme(
-  ColorScheme colorScheme,
-  bool useMaterial3,
-) {
-  final themeData = ThemeData.from(
-    colorScheme: colorScheme,
-    useMaterial3: useMaterial3,
-  );
-  return themeData //
+ThemeData makeTheme(ColorScheme colorScheme) {
+  return ThemeData.from(colorScheme: colorScheme)
       .addKaitekiTheme()
       .applyDefaultTweaks()
       .applyKaitekiTweaks();
@@ -32,7 +21,7 @@ extension ThemeDataExtensions on ThemeData {
         extendedTextStyle: textTheme.labelLarge,
       ),
       cardTheme: cardTheme.copyWith(
-        shadowColor: useMaterial3 ? Colors.transparent : null,
+        shadowColor: Colors.transparent,
         margin: EdgeInsets.zero,
       ),
       appBarTheme: appBarTheme.copyWith(),
@@ -40,8 +29,7 @@ extension ThemeDataExtensions on ThemeData {
         shape: const RoundedRectangleBorder(borderRadius: borderRadius),
         behavior: SnackBarBehavior.floating,
       ),
-      dialogTheme:
-          useMaterial3 ? dialogTheme.copyWith(shape: Shapes.large) : null,
+      dialogTheme: dialogTheme.copyWith(shape: Shapes.large),
       bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
         showSelectedLabels: true,
         showUnselectedLabels: true,

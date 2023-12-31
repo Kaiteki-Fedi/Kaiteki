@@ -36,10 +36,7 @@ class _OptionsDialogState<T> extends State<OptionsDialog<T>> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: widget.title,
-      contentPadding: EdgeInsets.only(
-        top: Theme.of(context).useMaterial3 ? 16 : 20,
-        bottom: 24,
-      ),
+      contentPadding: const EdgeInsets.only(top: 16, bottom: 24),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

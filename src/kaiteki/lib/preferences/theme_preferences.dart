@@ -5,12 +5,6 @@ import "package:kaiteki/theming/themes.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
-final useMaterial3 = createSettingProvider<bool>(
-  key: "useMaterial3",
-  initialValue: true,
-  provider: sharedPreferencesProvider,
-);
-
 final theme = createSettingProvider<AppTheme?>(
   key: "theme",
   initialValue: AppTheme.affection,

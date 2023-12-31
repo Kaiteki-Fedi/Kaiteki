@@ -7,13 +7,13 @@ import "package:kaiteki/ui/shared/common.dart";
 class UserBadge extends StatelessWidget {
   final UserBadgeType type;
 
-  const UserBadge({required this.type});
+  const UserBadge({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
     var color = type.color;
 
-    if (type.color != null && Theme.of(context).useMaterial3) {
+    if (type.color != null) {
       final palette = createCustomColorPalette(
         color!.harmonizeWith(Theme.of(context).colorScheme.primary),
         Theme.of(context).colorScheme.brightness,
