@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/shared/common.dart";
-import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki_core/utils.dart";
 
 class AdaptiveMenu extends StatelessWidget {
@@ -33,7 +32,8 @@ class AdaptiveMenu extends StatelessWidget {
   }
 
   Future<void> _onTap(BuildContext context, MenuController controller) async {
-    if (WindowClass.fromContext(context) > WindowClass.compact) {
+    if (WindowWidthSizeClass.fromContext(context) >
+        WindowWidthSizeClass.compact) {
       controller.open();
       return;
     }

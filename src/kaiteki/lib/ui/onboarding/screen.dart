@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/onboarding/widgets/lava_lamp.dart";
-import "package:kaiteki/ui/window_class.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 import "widgets/alpha_disclaimer.dart";
 
@@ -25,16 +25,14 @@ class _OnboardingContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.sizeOf(context).height < 600) {
+    final windowSizeClass = WindowSizeClass.fromContext(context);
+    if (windowSizeClass.height <= WindowHeightSizeClass.compact) {
       return _buildNarrow(context);
-    }
-
-    final windowClass = WindowClass.fromContext(context);
-    if (windowClass >= WindowClass.medium) {
+    } else if (windowSizeClass.width <= WindowWidthSizeClass.compact) {
+      return _buildPortrait(context);
+    } else {
       return _buildLandscape(context);
     }
-
-    return _buildPortrait(context);
   }
 
   Widget _buildPortrait(BuildContext context) {

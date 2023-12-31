@@ -8,7 +8,6 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/user_list_dialog.dart";
-import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki_core/model.dart";
 import "package:kaiteki_core/utils.dart";
 
@@ -117,7 +116,8 @@ class _FollowRequestsDialogState extends ConsumerState<FollowRequestsDialog> {
       onPressed: () => Navigator.of(context).pop(),
     );
 
-    if (WindowClass.fromContext(context) <= WindowClass.compact) {
+    if (WindowWidthSizeClass.fromContext(context) <=
+        WindowWidthSizeClass.compact) {
       return Dialog.fullscreen(
         child: Column(
           children: [

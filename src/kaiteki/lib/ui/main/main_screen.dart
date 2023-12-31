@@ -20,7 +20,6 @@ import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
-import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:logging/logging.dart";
@@ -86,8 +85,8 @@ class MainScreenState extends ConsumerState<MainScreen> {
     final currentTab = _tabs.contains(_currentTab) ? _currentTab : _tabs.first;
     final currentIndex = _tabs.indexOf(currentTab);
 
-    final windowClass = WindowClass.fromContext(context);
-    final isCompact = windowClass <= WindowClass.compact;
+    final isCompact = WindowWidthSizeClass.fromContext(context) <=
+        WindowWidthSizeClass.compact;
 
     final prideEnabled = ref.watch(enablePrideFlag).value;
     final prideFlagDesign = ref.watch(prideFlag).value;
@@ -156,7 +155,8 @@ class MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget buildPage(BuildContext context, MainScreenTabType tab) {
-    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
+    final isCompact = WindowWidthSizeClass.fromContext(context) <=
+        WindowWidthSizeClass.compact;
     return switch (tab) {
       MainScreenTabType.home => HomePage(
           key: _homePageKey,
@@ -345,7 +345,8 @@ class _BodyWrapper extends StatelessWidget {
       ),
     );
 
-    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
+    final isCompact = WindowWidthSizeClass.fromContext(context) <=
+        WindowWidthSizeClass.compact;
     if (isCompact) return body;
 
     if (useMaterial3) {

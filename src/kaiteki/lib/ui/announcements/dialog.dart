@@ -6,7 +6,6 @@ import "package:kaiteki/ui/announcements/card.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
-import "package:kaiteki/ui/window_class.dart";
 
 class AnnouncementsDialog extends ConsumerStatefulWidget {
   const AnnouncementsDialog({super.key});
@@ -54,7 +53,8 @@ class _AnnouncementsDialogState extends ConsumerState<AnnouncementsDialog> {
       onPressed: () => ref.refresh(provider),
     );
 
-    if (WindowClass.fromContext(context) <= WindowClass.compact) {
+    if (WindowWidthSizeClass.fromContext(context) <=
+        WindowWidthSizeClass.compact) {
       return Dialog.fullscreen(
         child: Column(
           children: [

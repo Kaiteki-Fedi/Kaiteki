@@ -7,6 +7,7 @@ export 'src/material/border_radii.dart';
 export 'src/material/main_switch_list_tile.dart';
 export 'src/material/shapes.dart';
 export 'src/material/side_sheet_manager.dart';
+export 'src/material/window_size_class.dart';
 export 'src/utils/extensions.dart';
 export 'src/utils/margined_rounded_rectangle_border.dart';
 export 'src/utils/margined_stadium_border.dart';

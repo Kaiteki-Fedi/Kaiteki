@@ -5,7 +5,8 @@ class _HomeMainScreenTab extends MainScreenTab {
 
   @override
   Widget? buildFab(BuildContext context, WidgetRef ref) {
-    if (WindowClass.fromContext(context) > WindowClass.compact) return null;
+    if (WindowWidthSizeClass.fromContext(context) >
+        WindowWidthSizeClass.compact) return null;
 
     final l10n = context.l10n;
     return FloatingActionButton.extended(

@@ -12,7 +12,6 @@ import "package:kaiteki/ui/notification_widget.dart";
 import "package:kaiteki/ui/shared/badge.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
-import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";

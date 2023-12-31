@@ -3,7 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/l10n/localizations.dart";
-import "package:kaiteki/ui/window_class.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 

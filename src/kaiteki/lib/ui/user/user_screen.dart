@@ -15,7 +15,6 @@ import "package:kaiteki/ui/shared/timeline/media_timeline_sliver.dart";
 import "package:kaiteki/ui/shared/timeline/source.dart";
 import "package:kaiteki/ui/shared/timeline/timeline.dart";
 import "package:kaiteki/ui/user/user_panel.dart";
-import "package:kaiteki/ui/window_class.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 
@@ -74,7 +73,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isCompact = WindowClass.fromContext(context) <= WindowClass.compact;
+    final isCompact = WindowWidthSizeClass.fromContext(context) <=
+        WindowWidthSizeClass.compact;
 
     return FutureBuilder<User?>(
       future: _future,
