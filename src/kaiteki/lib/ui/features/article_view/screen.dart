@@ -63,7 +63,7 @@ class _ArticleViewScreenState extends ConsumerState<ArticleViewScreen> {
             headerSliverBuilder: (_, innerBoxIsScrolled) => [
               SliverAppBar(
                 title: innerBoxIsScrolled //
-                    ? title.nullTransform(Text.new)
+                    ? title.andThen(Text.new)
                     : null,
                 pinned: true,
               ),

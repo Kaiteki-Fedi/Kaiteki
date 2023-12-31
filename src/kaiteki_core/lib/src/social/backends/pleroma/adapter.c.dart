@@ -28,7 +28,7 @@ extension KaitekiPleromaChatExtension on pleroma.Chat {
     return DirectChat(
       source: this,
       id: id,
-      lastMessage: lastMessage.nullTransform((msg) {
+      lastMessage: lastMessage.andThen((msg) {
         return msg.toKaiteki(this, currentUser);
       }),
       recipient: account.toKaiteki(localHost),

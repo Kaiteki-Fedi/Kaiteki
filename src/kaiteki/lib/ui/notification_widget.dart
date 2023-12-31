@@ -116,7 +116,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
                             expanded: _expanded,
                             text: notification
                                 .safeCast<GroupedNotification>()
-                                .nullTransform(
+                                .andThen(
                                   (e) =>
                                       Text(e.notifications.length.toString()),
                                 ),

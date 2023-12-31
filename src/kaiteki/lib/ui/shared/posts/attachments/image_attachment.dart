@@ -6,7 +6,8 @@ class ImageAttachment extends StatelessWidget {
   final Attachment attachment;
   final BoxFit? boxFit;
 
-  const ImageAttachment({super.key, 
+  const ImageAttachment({
+    super.key,
     required this.attachment,
     this.boxFit,
   });
@@ -15,7 +16,7 @@ class ImageAttachment extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = attachment.previewUrl ?? attachment.url;
     final label = attachment.description ?? attachment.fileName;
-    // final locale = attachment.descriptionLanguage.nullTransform(Locale.new);
+    // final locale = attachment.descriptionLanguage.andThen(Locale.new);
     return Semantics(
       image: true,
       label: label,

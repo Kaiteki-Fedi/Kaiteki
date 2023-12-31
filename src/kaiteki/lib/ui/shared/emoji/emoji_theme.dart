@@ -43,7 +43,7 @@ class TextInheritedEmojiTheme extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final emojiTheme = theme.extension<EmojiTheme>() ?? const EmojiTheme();
-    final size = DefaultTextStyle.of(context).style.fontSize.nullTransform(
+    final size = DefaultTextStyle.of(context).style.fontSize.andThen(
           (fontSize) => ref.watch(emojiScale).value * fontSize,
         );
 

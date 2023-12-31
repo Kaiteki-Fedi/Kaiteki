@@ -251,7 +251,7 @@ class NewsCard extends StatelessWidget {
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: embed?.uri.nullTransform(
+        onTap: embed?.uri.andThen(
           (url) => () async {
             await launchUrl(
               url,
@@ -272,7 +272,7 @@ class NewsCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                     child: ColoredBox(
                       color: theme.colorScheme.inverseSurface,
-                      child: embed?.imageUrl.nullTransform(
+                      child: embed?.imageUrl.andThen(
                             (url) => Image.network(
                               url.toString(),
                               fit: BoxFit.cover,

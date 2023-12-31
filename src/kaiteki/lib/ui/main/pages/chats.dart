@@ -145,7 +145,7 @@ class ChatView extends ConsumerWidget {
         AppBar(
           automaticallyImplyLeading: false,
           elevation: 0,
-          leading: onBack.nullTransform(
+          leading: onBack.andThen(
             (callback) => IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: callback,

@@ -47,7 +47,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     super.initState();
 
     try {
-      _future = widget.user.nullTransform(Future.value) ??
+      _future = widget.user.andThen(Future.value) ??
           ref.read(adapterProvider).getUserById(widget.id);
     } catch (e, s) {
       _future = Future.error(e, s);
@@ -65,10 +65,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       ),
       subtitle: Text(
         user.handle.toString(),
-        style: Theme
-            .of(context)
-            .textTheme
-            .labelSmall,
+        style: Theme.of(context).textTheme.labelSmall,
       ),
       contentPadding: EdgeInsets.zero,
     );
@@ -86,12 +83,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         final includeReplies = ref.watch(_showReplies);
         final theme = Theme.of(context);
         return FutureBuilder(
-          future: (user?.bannerUrl ?? user?.avatarUrl)?.nullTransform(
-                (url) =>
-                ColorScheme.fromImageProvider(
-                  provider: NetworkImage(url.toString()),
-                  brightness: theme.brightness,
-                ),
+          future: (user?.bannerUrl ?? user?.avatarUrl)?.andThen(
+            (url) => ColorScheme.fromImageProvider(
+              provider: NetworkImage(url.toString()),
+              brightness: theme.brightness,
+            ),
           ),
           builder: (context, snapshot) {
             return Theme(
@@ -117,14 +113,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 
   Color _getBackgroundColor(BuildContext context) {
     return ElevationOverlay.applySurfaceTint(
-      Theme
-          .of(context)
-          .colorScheme
-          .surface,
-      Theme
-          .of(context)
-          .colorScheme
-          .surfaceTint,
+      Theme.of(context).colorScheme.surface,
+      Theme.of(context).colorScheme.surfaceTint,
       2,
     );
   }
@@ -133,9 +123,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     const a = avatarSize * 0.5;
     final primaryButton = buildPrimaryButton(
       user,
-      MediaQuery
-          .sizeOf(context)
-          .width < 840,
+      MediaQuery.sizeOf(context).width < 840,
     );
     return Scaffold(
       backgroundColor: _getBackgroundColor(context),
@@ -146,13 +134,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton.filledTonal(
-                onPressed: Navigator
-                    .of(context)
-                    .maybePop,
+                onPressed: Navigator.of(context).maybePop,
                 icon: Icon(Icons.adaptive.arrow_back),
-                tooltip: MaterialLocalizations
-                    .of(context)
-                    .backButtonTooltip,
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
               ),
             ),
             // https://m3.material.io/foundations/layout/canonical-layouts/supporting-pane#13c3c489-9cc7-4830-b44a-fe6c2d431c1f
@@ -162,9 +146,10 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               // recommended side pane width is 360dp, we use what is lower of
               // width and a third of the screen, so the content pane doesn't get
               // too squished.
-              width: min(MediaQuery
-                  .sizeOf(context)
-                  .width / 3, 360,),
+              width: min(
+                MediaQuery.sizeOf(context).width / 3,
+                360,
+              ),
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Column(
@@ -223,10 +208,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
                   child: ColoredBox(
-                    color: Theme
-                        .of(context)
-                        .colorScheme
-                        .surface,
+                    color: Theme.of(context).colorScheme.surface,
                     child: Column(
                       children: [
                         Material(child: buildTabBar()),
@@ -264,8 +246,8 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   List<Widget> getMenuItems(User<dynamic> user) {
     return [
       MenuItemButton(
-        onPressed: user.url.nullTransform(
-              (url) => () async => share(context, url),
+        onPressed: user.url.andThen(
+          (url) => () async => share(context, url),
         ),
         leadingIcon: Icon(Icons.adaptive.share_rounded),
         child: const Text("Share"),
@@ -273,9 +255,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     ];
   }
 
-  Widget buildBodyCompact(BuildContext context,
-      User? user,
-      bool includeReplies,) {
+  Widget buildBodyCompact(
+    BuildContext context,
+    User? user,
+    bool includeReplies,
+  ) {
     final primaryButton = buildPrimaryButton(
       user,
     );
@@ -290,17 +274,17 @@ class _UserScreenState extends ConsumerState<UserScreen> {
           }) {
             return innerBoxIsScrolled
                 ? IconButton(
-              icon: icon,
-              onPressed: onPressed,
-              tooltip: tooltip,
-              visualDensity: VisualDensity.standard,
-            )
+                    icon: icon,
+                    onPressed: onPressed,
+                    tooltip: tooltip,
+                    visualDensity: VisualDensity.standard,
+                  )
                 : IconButton.filledTonal(
-              icon: icon,
-              onPressed: onPressed,
-              tooltip: tooltip,
-              visualDensity: VisualDensity.standard,
-            );
+                    icon: icon,
+                    onPressed: onPressed,
+                    tooltip: tooltip,
+                    visualDensity: VisualDensity.standard,
+                  );
           }
 
           final moreButton = buildMenuButton(user);
@@ -310,9 +294,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               leading: adaptiveIconButton(
                 icon: Icon(Icons.adaptive.arrow_back),
                 onPressed: () => Navigator.of(context).maybePop(),
-                tooltip: MaterialLocalizations
-                    .of(context)
-                    .backButtonTooltip,
+                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
               ),
               backgroundColor: _getBackgroundColor(context),
               scrolledUnderElevation: 0,
@@ -321,7 +303,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 duration: const Duration(milliseconds: 150),
                 child: !innerBoxIsScrolled
                     ? null
-                    : user.nullTransform(_buildAppBarUserName),
+                    : user.andThen(_buildAppBarUserName),
               ),
               pinned: true,
               forceElevated: innerBoxIsScrolled,
@@ -403,9 +385,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                     FilterChip(
                       selected: includeReplies,
                       onSelected: (value) =>
-                      ref
-                          .read(_showReplies.notifier)
-                          .state = value,
+                          ref.read(_showReplies.notifier).state = value,
                       label: const Text("Replies"),
                     ),
                   ],
@@ -485,7 +465,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         break;
 
       case UserFollowState.pending:
-      // TODO(Craftplacer): Prompt to cancel follow request
+        // TODO(Craftplacer): Prompt to cancel follow request
         break;
     }
 
@@ -499,10 +479,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       visualDensity: VisualDensity.comfortable,
     );
 
-    if (user?.id == ref
-        .watch(currentAccountProvider)
-        ?.user
-        .id) {
+    if (user?.id == ref.watch(currentAccountProvider)?.user.id) {
       if (small) {
         return IconButton.filled(
           onPressed: () {},
@@ -523,42 +500,39 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     Future<void> onPressed() => _onFollow(context, user!);
 
     return switch (followState) {
-      UserFollowState.following =>
-      small
+      UserFollowState.following => small
           ? IconButton.filledTonal(
-        onPressed: onPressed,
-        icon: const Icon(Icons.person_remove_rounded),
-        tooltip: context.l10n.unfollowButtonLabel,
-      )
+              onPressed: onPressed,
+              icon: const Icon(Icons.person_remove_rounded),
+              tooltip: context.l10n.unfollowButtonLabel,
+            )
           : FilledButton.tonal(
-        onPressed: onPressed,
-        style: comfortableFilledButtonStyle,
-        child: Text(context.l10n.unfollowButtonLabel),
-      ),
-      UserFollowState.notFollowing =>
-      small
+              onPressed: onPressed,
+              style: comfortableFilledButtonStyle,
+              child: Text(context.l10n.unfollowButtonLabel),
+            ),
+      UserFollowState.notFollowing => small
           ? IconButton.filled(
-        onPressed: onPressed,
-        icon: const Icon(Icons.person_add_rounded),
-        tooltip: context.l10n.followButtonLabel,
-      )
+              onPressed: onPressed,
+              icon: const Icon(Icons.person_add_rounded),
+              tooltip: context.l10n.followButtonLabel,
+            )
           : FilledButton(
-        onPressed: onPressed,
-        style: comfortableFilledButtonStyle,
-        child: Text(context.l10n.followButtonLabel),
-      ),
-      UserFollowState.pending =>
-      small
+              onPressed: onPressed,
+              style: comfortableFilledButtonStyle,
+              child: Text(context.l10n.followButtonLabel),
+            ),
+      UserFollowState.pending => small
           ? IconButton.filled(
-        onPressed: onPressed,
-        icon: const Icon(Icons.lock_clock_rounded),
-        tooltip: context.l10n.pendingFollowRequestButtonLabel,
-      )
+              onPressed: onPressed,
+              icon: const Icon(Icons.lock_clock_rounded),
+              tooltip: context.l10n.pendingFollowRequestButtonLabel,
+            )
           : FilledButton.tonal(
-        onPressed: onPressed,
-        style: comfortableFilledButtonStyle,
-        child: Text(context.l10n.pendingFollowRequestButtonLabel),
-      ),
+              onPressed: onPressed,
+              style: comfortableFilledButtonStyle,
+              child: Text(context.l10n.pendingFollowRequestButtonLabel),
+            ),
       null => null,
     };
   }
@@ -629,10 +603,7 @@ class _Banner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final placeholder = ColoredBox(
-      color: Theme
-          .of(context)
-          .colorScheme
-          .surfaceVariant,
+      color: Theme.of(context).colorScheme.surfaceVariant,
       child: const SizedBox.expand(),
     );
 

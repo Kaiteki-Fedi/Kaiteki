@@ -43,7 +43,7 @@ class NewsListTile extends StatelessWidget {
 
     return ListTile(
       contentPadding: const EdgeInsets.only(right: 16.0),
-      leading: embed?.imageUrl.nullTransform(
+      leading: embed?.imageUrl.andThen(
             (url) => AspectRatio(
               aspectRatio: 16 / 9,
               child: Image.network(
@@ -57,7 +57,7 @@ class NewsListTile extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       trailing: trailing,
-      onTap: embed?.uri.nullTransform(
+      onTap: embed?.uri.andThen(
         (url) => () async {
           await launchUrl(
             url,

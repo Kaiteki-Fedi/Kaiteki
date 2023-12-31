@@ -27,10 +27,9 @@ class EmojiSpan extends WidgetSpan {
               final theme = Theme.of(context);
               final emojiTheme =
                   theme.extension<EmojiTheme>() ?? const EmojiTheme();
-              final size =
-                  DefaultTextStyle.of(context).style.fontSize.nullTransform(
-                        (fontSize) => ref.watch(emojiScale).value * fontSize,
-                      );
+              final size = DefaultTextStyle.of(context).style.fontSize.andThen(
+                    (fontSize) => ref.watch(emojiScale).value * fontSize,
+                  );
 
               return Theme(
                 data: theme.copyWith(

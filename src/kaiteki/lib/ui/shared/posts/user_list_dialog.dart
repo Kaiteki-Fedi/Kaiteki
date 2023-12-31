@@ -127,7 +127,7 @@ class UserListTile extends ConsumerWidget {
               children: subtitle,
             )
           : null,
-      trailing: trailing.nullTransform(
+      trailing: trailing.andThen(
         (e) => Row(
           mainAxisSize: MainAxisSize.min,
           children: e,

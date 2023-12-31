@@ -198,7 +198,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             onSecondaryTapUp: (details) {
               controller.open(position: details.localPosition);
             },
-            onTertiaryTapUp: widget.onOpen.nullTransform(
+            onTertiaryTapUp: widget.onOpen.andThen(
               (callback) => (_) => callback(),
             ),
             child: _PostFocusRing(focusNode: _focusNode, child: body),

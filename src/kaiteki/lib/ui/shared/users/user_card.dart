@@ -29,7 +29,7 @@ class UserCard extends ConsumerWidget {
             borderRadius: BorderRadius.circular(12.0),
             child: AspectRatio(
               aspectRatio: 16 / 9,
-              child: user?.bannerUrl.nullTransform(
+              child: user?.bannerUrl.andThen(
                 (url) => Image.network(
                   url.toString(),
                   fit: BoxFit.cover,

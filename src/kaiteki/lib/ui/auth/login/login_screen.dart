@@ -465,8 +465,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     final clientSecret = await accountManager.getClientSecret(instance.host);
     final loginContext = LoginContext(
-      clientSecret:
-          clientSecret.nullTransform((e) => (e.clientId, e.clientSecret)),
+      clientSecret: clientSecret.andThen((e) => (e.clientId, e.clientSecret)),
       requestCredentials: _askForCredentials,
       requestCode: _askForCode,
       requestOAuth: (generateUrl, [extra]) {

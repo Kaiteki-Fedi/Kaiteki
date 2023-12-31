@@ -84,8 +84,8 @@ extension KaitekiMastodonAccountExtension on mastodon.Account {
       source: this,
       displayName: displayName,
       username: username,
-      bannerUrl: header.nullTransform(Uri.parse),
-      avatarUrl: avatar.nullTransform(Uri.parse),
+      bannerUrl: header.andThen(Uri.parse),
+      avatarUrl: avatar.andThen(Uri.parse),
       joinDate: createdAt,
       id: id,
       description: note,
@@ -102,7 +102,7 @@ extension KaitekiMastodonAccountExtension on mastodon.Account {
       ),
       host: _getHost(acct) ?? localHost,
       details: UserDetails(fields: _parseFields(fields)),
-      url: url.nullTransform(Uri.parse),
+      url: url.andThen(Uri.parse),
       flags: UserFlags(
         isModerator: pleroma?.isModerator,
         isAdministrator: pleroma?.isAdmin,
@@ -120,7 +120,7 @@ extension KaitekiMastodonAttachmentExtension on mastodon.MediaAttachment {
       source: this,
       description: description,
       url: url,
-      previewUrl: previewUrl.nullTransform(Uri.parse) ?? url,
+      previewUrl: previewUrl.andThen(Uri.parse) ?? url,
       type: mastodonAttachmentTypeRosetta.getRight(type),
       isSensitive: status?.sensitive ?? false,
     );
@@ -158,7 +158,7 @@ extension KaitekiMastodonInstanceExtension on mastodon.Instance {
       name: title,
       description: description,
       backgroundUrl: thumbnail.url,
-      administrators: contact.account.nullTransform((e) => [e.toKaiteki(host)]),
+      administrators: contact.account.andThen((e) => [e.toKaiteki(host)]),
       rules: rules.map((e) => e.text).toList(),
     );
   }
@@ -170,10 +170,10 @@ extension KaitekiMastodonInstanceV1Extension on mastodon_v1.Instance {
       source: this,
       name: title,
       description: description,
-      backgroundUrl: thumbnail.nullTransform(Uri.parse),
+      backgroundUrl: thumbnail.andThen(Uri.parse),
       postCount: stats.statusCount,
       userCount: stats.userCount,
-      // administrator: instance.contact.nullTransform(
+      // administrator: instance.contact.andThen(
       //   (e) => toUser(e, host),
       // ),
     );
@@ -207,8 +207,8 @@ extension KaitekiMastodonNotificationExtension on mastodon.Notification {
       id: id,
       createdAt: createdAt,
       type: mastodonNotificationTypeMap[type]!,
-      user: account.nullTransform((e) => e.toKaiteki(localHost)),
-      post: status.nullTransform((e) => e.toKaiteki(localHost)),
+      user: account.andThen((e) => e.toKaiteki(localHost)),
+      post: status.andThen((e) => e.toKaiteki(localHost)),
       unread: unread,
     );
   }
@@ -279,18 +279,18 @@ extension KaitekiMastodonStatusExtension on mastodon.Status {
       nsfw: sensitive,
       subject: spoilerText,
       author: account.toKaiteki(localHost),
-      repeatOf: reblog.nullTransform((e) => e.toKaiteki(localHost)),
+      repeatOf: reblog.andThen((e) => e.toKaiteki(localHost)),
       emojis: emojis.map((e) => e.toKaiteki(localHost)).toList(),
       attachments:
           mediaAttachments.map((e) => e.toKaiteki(status: this)).toList(),
       visibility: mastodonVisibilityRosetta.getRight(visibility),
-      replyTo: inReplyToId.nullTransform(ResolvablePost.fromId),
+      replyTo: inReplyToId.andThen(ResolvablePost.fromId),
       replyToUser: repliedUser == null
-          ? inReplyToAccountId.nullTransform(ResolvableUser.fromId)
+          ? inReplyToAccountId.andThen(ResolvableUser.fromId)
           : ResolvableUser.fromData(repliedUser),
       id: id,
       // FIXME(Craftplacer): url should be Uri?, not String?
-      externalUrl: url.nullTransform(Uri.parse),
+      externalUrl: url.andThen(Uri.parse),
       client: application?.name,
       reactions: getReactions().toList(),
       language: language,
@@ -314,9 +314,9 @@ extension KaitekiMastodonStatusExtension on mastodon.Status {
         bookmarked: bookmarked ?? false,
         pinned: pinned ?? false,
       ),
-      poll: poll.nullTransform((e) => e.toKaiteki()),
-      embeds: card.nullTransform((e) => [e.toKaiteki()]) ?? const [],
-      quotedPost: quote.nullTransform((e) => e.toKaiteki(localHost)),
+      poll: poll.andThen((e) => e.toKaiteki()),
+      embeds: card.andThen((e) => [e.toKaiteki()]) ?? const [],
+      quotedPost: quote.andThen((e) => e.toKaiteki(localHost)),
       threadId: pleroma?.context,
     );
   }
@@ -330,7 +330,7 @@ extension KaitekiMastodonAnnouncementExtension on mastodon.Announcement {
       createdAt: createdAt,
       updatedAt: updatedAt,
       important: null,
-      isUnread: read.nullTransform((e) => !e),
+      isUnread: read.andThen((e) => !e),
     );
   }
 }

@@ -178,7 +178,7 @@ class AccountManager extends _$AccountManager {
 
     try {
       await adapter.applySecrets(
-        clientSecret.nullTransform((e) => (e.clientId, e.clientSecret)),
+        clientSecret.andThen((e) => (e.clientId, e.clientSecret)),
         (
           accessToken: accountSecret.accessToken,
           refreshToken: accountSecret.refreshToken,

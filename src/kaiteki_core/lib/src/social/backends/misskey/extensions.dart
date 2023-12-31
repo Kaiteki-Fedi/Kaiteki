@@ -144,9 +144,9 @@ extension KaitekiMisskeyMetaExtension on misskey.Meta {
       source: this,
       name: name,
       description: description,
-      iconUrl: iconUrl.nullTransform(instanceUri.resolve),
-      mascotUrl: mascotImageUrl.nullTransform(instanceUri.resolve),
-      backgroundUrl: bannerUrl.nullTransform(Uri.parse),
+      iconUrl: iconUrl.andThen(instanceUri.resolve),
+      mascotUrl: mascotImageUrl.andThen(instanceUri.resolve),
+      backgroundUrl: bannerUrl.andThen(Uri.parse),
     );
   }
 }
@@ -203,7 +203,7 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
       );
     }
 
-    final renote = this.renote.nullTransform((n) => n.toKaiteki(localHost));
+    final renote = this.renote.andThen((n) => n.toKaiteki(localHost));
     final isQuote = text != null || fileIds?.isNotEmpty == true || poll != null;
 
     return Post(

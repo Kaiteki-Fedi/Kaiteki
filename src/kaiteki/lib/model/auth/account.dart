@@ -34,8 +34,8 @@ class Account extends Equatable {
       ),
       adapter: adapter,
       user: result.user,
-      clientSecret: result.clientSecret.nullTransform(ClientSecret.fromCore),
-      accountSecret: result.userSecret.nullTransform(AccountSecret.fromCore),
+      clientSecret: result.clientSecret.andThen(ClientSecret.fromCore),
+      accountSecret: result.userSecret.andThen(AccountSecret.fromCore),
     );
   }
 

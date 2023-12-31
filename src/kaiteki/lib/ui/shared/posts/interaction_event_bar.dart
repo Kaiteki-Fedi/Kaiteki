@@ -46,7 +46,7 @@ class InteractionEventBar extends ConsumerWidget {
                     size: DefaultTextStyle.of(context)
                         .style
                         .fontSize
-                        .nullTransform((size) => size * 1.25),
+                        .andThen((size) => size * 1.25),
                     color: color,
                   ),
                 ),

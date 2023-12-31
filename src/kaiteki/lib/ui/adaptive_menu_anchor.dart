@@ -18,7 +18,7 @@ class AdaptiveMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
-      builder: builder.nullTransform(
+      builder: builder.andThen(
         (builder) => (context, controller, _) {
           return builder(
             context,

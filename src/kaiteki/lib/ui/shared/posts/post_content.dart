@@ -44,7 +44,7 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
   Widget build(BuildContext context) {
     final post = widget.post;
     final subject = widget.post.subject;
-    final locale = post.language.nullTransform(Locale.new);
+    final locale = post.language.andThen(Locale.new);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -25,7 +25,7 @@ final locale = createSettingProvider<Locale?>(
   provider: sharedPreferencesProvider,
   read: (prefs, key) {
     try {
-      return prefs.getString(key).nullTransform(parseLocale);
+      return prefs.getString(key).andThen(parseLocale);
     } catch (e, s) {
       Logger("locale").warning(
         "Failed to parse locale, is this using a deprecated format?",

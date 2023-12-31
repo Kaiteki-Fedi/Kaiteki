@@ -100,7 +100,7 @@ class _ListsScreenState extends ConsumerState<ListsScreen> {
         tooltip: "Create list",
         child: const Icon(Icons.add_rounded),
       ),
-      body: snapshot.data.nullTransform(
+      body: snapshot.data.andThen(
         (lists) => lists.isEmpty
             ? _buildEmptyState()
             : ListView.builder(

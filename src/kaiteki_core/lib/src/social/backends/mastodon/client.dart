@@ -574,7 +574,7 @@ class MastodonClient {
     List<T> data,
     String? linkHeader,
   ) {
-    final links = linkHeader.nullTransform(parseLinkHeader);
+    final links = linkHeader.andThen(parseLinkHeader);
 
     final previousParams = links
         ?.firstWhereOrNull((element) => element.parameters['rel'] == '"prev"')
