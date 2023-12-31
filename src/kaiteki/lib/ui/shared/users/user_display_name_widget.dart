@@ -24,7 +24,6 @@ class UserDisplayNameWidget extends ConsumerWidget {
       orientation == Axis.vertical,
     );
     final primaryTextStyle = Theme.of(context).textTheme.titleSmall;
-    final textSpacing = !content.separate ? 0.0 : 6.0;
 
     final secondaryText = content.secondary;
     final secondaryColor =
