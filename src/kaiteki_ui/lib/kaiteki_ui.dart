@@ -13,14 +13,6 @@ export 'src/utils/margined_rounded_rectangle_border.dart';
 export 'src/utils/margined_stadium_border.dart';
 export 'src/utils/text_inherited_icon_theme.dart';
 
-double getLocalFontSize(BuildContext context) {
-  return DefaultTextStyle.of(context).style.fontSize!;
-}
-
-Color getLocalTextColor(BuildContext context) {
-  return DefaultTextStyle.of(context).style.color!;
-}
-
 TextStyle getSubheaderTextStyle(ThemeData theme) {
   final labelLarge = theme.textTheme.labelLarge;
   final primary = theme.colorScheme.primary;

@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/user_resolver.dart";
 import "package:kaiteki/theming/text_theme.dart";
-import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
+import "package:kaiteki_core/utils.dart";
 
 class ReplyBar extends ConsumerWidget {
   const ReplyBar({
@@ -56,7 +56,10 @@ class ReplyBar extends ConsumerWidget {
                       textDirection: Directionality.of(context).inverted,
                       child: Icon(
                         Icons.reply_rounded,
-                        size: getLocalFontSize(context) * 1.25,
+                        size: DefaultTextStyle.of(context)
+                            .style
+                            .fontSize
+                            .nullTransform((size) => size * 1.25),
                         color: disabledColor,
                       ),
                     ),
