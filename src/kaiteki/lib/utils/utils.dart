@@ -28,18 +28,6 @@ List<(Type, StackTrace)> collectStackTraces(dynamic error) {
   return list;
 }
 
-(String username, String? host)? _parseUserHandle(String input) {
-  final beginsWithAt = input[0] == "@";
-  final atInput = beginsWithAt ? input.substring(1) : input;
-  final atSplit = atInput.split("@");
-
-  if (atSplit.length == 2 || (beginsWithAt && atSplit.length == 1)) {
-    return (atSplit[0], atSplit.elementAtOrNull(1));
-  }
-
-  return null;
-}
-
 /// Parses a user handle from a string.
 ///
 /// Providing [String] as the type parameter will require the host to be present for the result to be non-null.
