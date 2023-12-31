@@ -86,6 +86,7 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
   @override
   Widget build(BuildContext context) {
     final hasEmojis = _categories.any((e) => e.items.isNotEmpty);
+    final theme = Theme.of(context);
     return Column(
       children: [
         Padding(
@@ -100,9 +101,9 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
           TabBar.secondary(
             tabAlignment: TabAlignment.center,
             key: ValueKey(_categories.length),
-            indicatorColor: Theme.of(context).colorScheme.primary,
-            labelColor: Theme.of(context).colorScheme.primary,
-            unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
+            indicatorColor: theme.colorScheme.primary,
+            labelColor: theme.colorScheme.primary,
+            unselectedLabelColor: theme.colorScheme.onSurface,
             isScrollable: true,
             tabs: _categories.map((e) => Tab(icon: _EmojiTabIcon(e))).toList(),
             controller: _tabController,

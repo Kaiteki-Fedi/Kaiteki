@@ -85,6 +85,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
   Widget buildFlat(BuildContext context) {
     final useCards = ref.watch(usePostCards).value;
+    final theme = Theme.of(context);
     return FutureBuilder<Iterable<Post>>(
       future: _threadFetchFuture,
       builder: (_, snapshot) {
@@ -122,8 +123,8 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                             key: ValueKey(e.id),
                             child: buildPost(i, e),
                             color: ElevationOverlay.applySurfaceTint(
-                              Theme.of(context).colorScheme.surface,
-                              Theme.of(context).colorScheme.surfaceTint,
+                              theme.colorScheme.surface,
+                              theme.colorScheme.surfaceTint,
                               2.0,
                             ),
                           ),

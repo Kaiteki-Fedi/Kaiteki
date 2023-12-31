@@ -22,22 +22,21 @@ class ReactionButton extends ConsumerWidget {
     final emojiSize = dense ? 16.0 : 24.0;
 
     final reacted = reaction.includesMe;
-    final backgroundColor = reacted //
-        ? Theme.of(context).colorScheme.inverseSurface
-        : null;
+    final theme = Theme.of(context);
+    final backgroundColor = reacted ? theme.colorScheme.inverseSurface : null;
 
     final foregroundColor = reacted
-        ? Theme.of(context).colorScheme.onInverseSurface
-        : Theme.of(context).colorScheme.onSurfaceVariant;
+        ? theme.colorScheme.onInverseSurface
+        : theme.colorScheme.onSurfaceVariant;
 
-    final textStyle = Theme.of(context).ktkTextTheme?.countTextStyle ??
+    final textStyle = theme.ktkTextTheme?.countTextStyle ??
         DefaultKaitekiTextTheme(context).countTextStyle;
 
     var count = reaction.count;
 
     if (reacted) count--;
 
-    final outlineColor = Theme.of(context).colorScheme.outline;
+    final outlineColor = theme.colorScheme.outline;
     return Tooltip(
       richMessage: TextSpan(
         children: [

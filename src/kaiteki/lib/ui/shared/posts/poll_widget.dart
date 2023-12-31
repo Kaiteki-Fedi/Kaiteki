@@ -187,9 +187,7 @@ class PollOptionWidget extends ConsumerWidget {
     return DecoratedBox(
       decoration: ShapeDecoration(
         shape: shape.copyWith(
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-          ),
+          side: BorderSide(color: theme.colorScheme.outline),
         ),
       ),
       child: Stack(

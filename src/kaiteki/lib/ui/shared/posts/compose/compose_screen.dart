@@ -274,10 +274,10 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     final l10n = context.l10n;
     const minimal = false;
 
-    final backgroundColor = switch (Theme.of(context).colorScheme.brightness) {
-      Brightness.light =>
-        Color(Theme.of(context).colorScheme.corePalette.neutral.get(98)),
-      Brightness.dark => Theme.of(context).colorScheme.background,
+    final theme = Theme.of(context);
+    final backgroundColor = switch (theme.colorScheme.brightness) {
+      Brightness.light => Color(theme.colorScheme.corePalette.neutral.get(98)),
+      Brightness.dark => theme.colorScheme.background,
     };
     return Shortcuts(
       shortcuts: propagatingTextFieldShortcuts,

@@ -7,11 +7,11 @@ class AltTextBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final background = Theme.of(context).colorScheme.inverseSurface;
-    final foreground = Theme.of(context).colorScheme.onInverseSurface;
-    final monospaceTextStyle =
-        Theme.of(context).ktkTextTheme?.monospaceTextStyle ??
-            DefaultKaitekiTextTheme(context).monospaceTextStyle;
+    final theme = Theme.of(context);
+    final background = theme.colorScheme.inverseSurface;
+    final foreground = theme.colorScheme.onInverseSurface;
+    final monospaceTextStyle = theme.ktkTextTheme?.monospaceTextStyle ??
+        DefaultKaitekiTextTheme(context).monospaceTextStyle;
 
     return IgnorePointer(
       child: ExcludeSemantics(

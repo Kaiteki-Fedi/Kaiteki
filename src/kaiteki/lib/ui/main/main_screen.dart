@@ -282,17 +282,17 @@ class MainScreenState extends ConsumerState<MainScreen> {
   }
 
   void _setSystemUIOverlayStyle(BuildContext context) {
+    final theme = Theme.of(context);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         systemNavigationBarColor: ElevationOverlay.applySurfaceTint(
-          Theme.of(context).colorScheme.surface,
-          Theme.of(context).colorScheme.surfaceTint,
+          theme.colorScheme.surface,
+          theme.colorScheme.surfaceTint,
           3,
         ),
-        systemNavigationBarDividerColor:
-            Theme.of(context).colorScheme.surfaceVariant,
+        systemNavigationBarDividerColor: theme.colorScheme.surfaceVariant,
         systemNavigationBarIconBrightness:
-            Theme.of(context).colorScheme.brightness.inverted,
+            theme.colorScheme.brightness.inverted,
       ),
     );
   }

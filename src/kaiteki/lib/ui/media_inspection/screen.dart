@@ -310,16 +310,16 @@ class _PaginationFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fabBackgroundColor =
-        switch (Theme.of(context).colorScheme.brightness) {
-      Brightness.dark => Theme.of(context).colorScheme.inverseSurface,
-      Brightness.light => Theme.of(context).colorScheme.surface,
+    final theme = Theme.of(context);
+
+    final fabBackgroundColor = switch (theme.colorScheme.brightness) {
+      Brightness.dark => theme.colorScheme.inverseSurface,
+      Brightness.light => theme.colorScheme.surface,
     };
 
-    final fabForegroundColor =
-        switch (Theme.of(context).colorScheme.brightness) {
-      Brightness.dark => Theme.of(context).colorScheme.inverseOnSurface,
-      Brightness.light => Theme.of(context).colorScheme.onSurface,
+    final fabForegroundColor = switch (theme.colorScheme.brightness) {
+      Brightness.dark => theme.colorScheme.inverseOnSurface,
+      Brightness.light => theme.colorScheme.onSurface,
     };
 
     return Focus(

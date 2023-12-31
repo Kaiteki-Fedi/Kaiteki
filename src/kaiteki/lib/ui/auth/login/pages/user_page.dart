@@ -190,11 +190,12 @@ class _UserPageState extends State<UserPage> {
   }
 
   Widget _buildPlaceholder(bool isLoading) {
+    final theme = Theme.of(context);
     return Container(
       width: _instanceIconSize,
       height: _instanceIconSize,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
+        color: theme.colorScheme.background,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: isLoading
@@ -202,7 +203,7 @@ class _UserPageState extends State<UserPage> {
           : Icon(
               Icons.public,
               size: 64.0,
-              color: Theme.of(context).colorScheme.onSurface,
+              color: theme.colorScheme.onSurface,
             ),
     );
   }

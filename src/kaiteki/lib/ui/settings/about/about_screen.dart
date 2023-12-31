@@ -17,6 +17,7 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = context.l10n;
     final badge = getBadgeKind();
     const version = KaitekiApp.versionName;
@@ -45,14 +46,11 @@ class AboutScreen extends StatelessWidget {
                         children: [
                           Text(
                             kAppName,
-                            style:
-                                Theme.of(context).textTheme.titleLarge!.merge(
-                                      Theme.of(context)
-                                              .ktkTextTheme
-                                              ?.kaitekiTextStyle ??
-                                          DefaultKaitekiTextTheme(context)
-                                              .kaitekiTextStyle,
-                                    ),
+                            style: theme.textTheme.titleLarge!.merge(
+                              theme.ktkTextTheme?.kaitekiTextStyle ??
+                                  DefaultKaitekiTextTheme(context)
+                                      .kaitekiTextStyle,
+                            ),
                           ),
                           if (badge != null)
                             Padding(
@@ -67,7 +65,7 @@ class AboutScreen extends StatelessWidget {
                         Text(
                           // ignore: l10n
                           "Version $version",
-                          style: Theme.of(context).textTheme.labelMedium,
+                          style: theme.textTheme.labelMedium,
                         ),
                       ],
                       TextButton(
@@ -77,7 +75,7 @@ class AboutScreen extends StatelessWidget {
                       const SizedBox(height: 12.0),
                       IconTheme(
                         data: IconThemeData(
-                          color: Theme.of(context).disabledColor,
+                          color: theme.disabledColor,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

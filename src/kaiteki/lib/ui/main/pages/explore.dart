@@ -236,10 +236,11 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final placeholder = Center(
       child: Icon(
         Icons.newspaper_rounded,
-        color: Theme.of(context).colorScheme.onInverseSurface,
+        color: theme.colorScheme.onInverseSurface,
       ),
     );
 
@@ -270,7 +271,7 @@ class NewsCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
                     child: ColoredBox(
-                      color: Theme.of(context).colorScheme.inverseSurface,
+                      color: theme.colorScheme.inverseSurface,
                       child: embed?.imageUrl.nullTransform(
                             (url) => Image.network(
                               url.toString(),
@@ -296,14 +297,14 @@ class NewsCard extends StatelessWidget {
                         siteName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).colorScheme.outline.textStyle,
+                        style: theme.colorScheme.outline.textStyle,
                       ),
                       const SizedBox(height: 8),
                     ],
                     if (title != null)
                       Text(
                         title,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: theme.textTheme.titleMedium,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

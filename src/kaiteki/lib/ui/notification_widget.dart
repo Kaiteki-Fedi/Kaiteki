@@ -180,9 +180,10 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
         .difference(notification.createdAt)
         .toStringHuman(context: context);
 
-    final onSurfaceVariant = Theme.of(context).colorScheme.onSurfaceVariant;
-    final bodySmall = Theme.of(context).textTheme.bodySmall;
-    final titleSmall = Theme.of(context).textTheme.titleSmall;
+    final theme = Theme.of(context);
+    final onSurfaceVariant = theme.colorScheme.onSurfaceVariant;
+    final bodySmall = theme.textTheme.bodySmall;
+    final titleSmall = theme.textTheme.titleSmall;
 
     final userCount = notification is GroupedNotification
         ? notification.notifications.groupBy((e) => e.user?.id).length

@@ -12,6 +12,7 @@ class FeedbackScreen extends StatefulWidget {
 class _FeedbackScreenState extends State<FeedbackScreen> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Send Feedback"),
@@ -50,15 +51,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 TextSpan(
                   text:
                       "Additional information like app version, system information and internal errors will be sent alongside your message. ",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                  style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
                   children: [
                     TextSpan(
                       text: "Learn More",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                      style: TextStyle(color: theme.colorScheme.primary),
                       recognizer: TapGestureRecognizer()..onTap = _onDetailsTap,
                     ),
                   ],

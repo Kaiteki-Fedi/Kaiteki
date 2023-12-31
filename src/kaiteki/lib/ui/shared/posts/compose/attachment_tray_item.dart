@@ -33,6 +33,7 @@ class AttachmentTrayItem extends StatelessWidget {
       _ => Center(child: _buildFallbackIcon(AttachmentType.file)),
     };
 
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -40,10 +41,10 @@ class AttachmentTrayItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: theme.colorScheme.surfaceVariant,
         elevation: 4.0,
         child: PopupMenuButton(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: theme.colorScheme.surfaceVariant,
           itemBuilder: buildItemActions,
           child: SizedBox(
             width: size,
@@ -55,7 +56,7 @@ class AttachmentTrayItem extends StatelessWidget {
                   Center(
                     child: Icon(
                       Icons.warning_rounded,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
               ],
