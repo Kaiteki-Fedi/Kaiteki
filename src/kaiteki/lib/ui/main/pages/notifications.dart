@@ -234,8 +234,8 @@ class _AnnouncementsButton extends ConsumerWidget {
         children: [
           const Icon(Icons.campaign_rounded),
           const SizedBox(width: 8),
-          Expanded(
-            child: const Text("Announcements"),
+          const Expanded(
+            child: Text("Announcements"),
           ),
           if (unreadCount != null && unreadCount > 0) ...[
             const SizedBox(width: 8),
@@ -302,8 +302,8 @@ class _FollowRequestsButton extends ConsumerWidget {
         children: [
           const Icon(Icons.person_add_rounded),
           const SizedBox(width: 8),
-          Expanded(
-            child: const Text("Follow Requests"),
+          const Expanded(
+            child: Text("Follow Requests"),
           ),
           if (count != null && count > 0) ...[
             const SizedBox(width: 8),

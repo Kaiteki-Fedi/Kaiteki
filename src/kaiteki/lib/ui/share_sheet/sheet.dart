@@ -1,6 +1,5 @@
 import "dart:io";
 
-import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -222,7 +221,6 @@ class _ShareTile extends StatelessWidget {
   final VoidCallback? onTap;
 
   const _ShareTile({
-    super.key,
     required this.icon,
     required this.text,
     this.onTap,

@@ -21,13 +21,13 @@ class _MigrationDialogState extends ConsumerState<MigrationDialog> {
     final accounts = ref.watch(accountManagerProvider).accounts;
 
     return AlertDialog(
-      title: const Text('Migrate accounts'),
+      title: const Text("Migrate accounts"),
       content: ConstrainedBox(
         constraints: kDialogConstraints,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               "Select the accounts you want to migrate below and click the Migrate button. Keep the following things in mind:"
               "\n\n"
               "• Your old account will display a migration message pointing to your new account.\n"
@@ -42,8 +42,8 @@ class _MigrationDialogState extends ConsumerState<MigrationDialog> {
                     user: accounts.first.user,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Icon(
                     Icons.keyboard_double_arrow_right_rounded,
                     size: 48,
@@ -63,7 +63,7 @@ class _MigrationDialogState extends ConsumerState<MigrationDialog> {
             const SizedBox(height: 16),
             CheckboxListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text("I have read and understood the above"),
+              title: const Text("I have read and understood the above"),
               value: false,
               onChanged: (value) => setState(() => _hasRead = value ?? false),
               controlAffinity: ListTileControlAffinity.leading,
@@ -78,7 +78,7 @@ class _MigrationDialogState extends ConsumerState<MigrationDialog> {
         ),
         TextButton(
           onPressed: _hasRead ? () => Navigator.of(context).pop(true) : null,
-          child: Text('Migrate'),
+          child: const Text("Migrate"),
         ),
       ],
     );
@@ -88,7 +88,7 @@ class _MigrationDialogState extends ConsumerState<MigrationDialog> {
 class _AccountPreview extends StatelessWidget {
   final User user;
 
-  const _AccountPreview({super.key, required this.user});
+  const _AccountPreview({required this.user});
 
   @override
   Widget build(BuildContext context) {

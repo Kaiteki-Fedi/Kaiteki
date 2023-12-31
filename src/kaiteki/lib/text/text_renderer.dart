@@ -6,8 +6,8 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/text/elements.dart";
 import "package:kaiteki/text/parsers.dart";
-import "package:kaiteki/ui/text/unblur_on_hover.dart";
 import "package:kaiteki/theming/text_theme.dart";
+import "package:kaiteki/ui/text/unblur_on_hover.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/helpers.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
@@ -183,7 +183,7 @@ class TextRenderer {
   }
 
   InlineSpan _overrideGestureDetector(
-      InlineSpan span, TapGestureRecognizer recognizer) {
+      InlineSpan span, TapGestureRecognizer recognizer,) {
     if (span is TextSpan) {
       return TextSpan(
         recognizer: recognizer,

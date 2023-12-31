@@ -68,7 +68,7 @@ final class KaitekiApp extends ConsumerWidget {
             routerConfig: ref.watch(routerProvider),
             supportedLocales: KaitekiLocalizations.supportedLocales,
             // FIXME(Craftplacer): `kab` results in no MaterialLocalizations
-            locale: locale != const Locale('kab') ? locale : null,
+            locale: locale != const Locale("kab") ? locale : null,
             theme: lightTheme,
             themeMode: themeMode,
             title: consts.kAppName,

@@ -86,7 +86,7 @@ class AvatarWidget extends StatelessWidget {
               child: IgnorePointer(
                 child: _buildDecoration(decoration),
               ),
-            )
+            ),
         ],
       );
     }

@@ -164,7 +164,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               // too squished.
               width: min(MediaQuery
                   .sizeOf(context)
-                  .width / 3, 360),
+                  .width / 3, 360,),
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Column(

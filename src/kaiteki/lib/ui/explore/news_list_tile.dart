@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
-import "package:kaiteki_core/model.dart";
 import "package:url_launcher/url_launcher.dart";
 
 class NewsListTile extends StatelessWidget {

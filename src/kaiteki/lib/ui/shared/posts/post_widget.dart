@@ -409,8 +409,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         CustomSemanticsAction(label: context.l10n.bookmarkButtonLabel);
     final reactAction =
         CustomSemanticsAction(label: context.l10n.reactButtonLabel);
-    final showOriginalAuthor =
-        const CustomSemanticsAction(label: "Open author's profile");
+    const showOriginalAuthor =
+        CustomSemanticsAction(label: "Open author's profile");
 
     return {
       replyAction: _onReply,

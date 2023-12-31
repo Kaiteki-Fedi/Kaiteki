@@ -192,7 +192,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
               child: TextButton(
                 onPressed: () => setState(() => _expandPosts = !_expandPosts),
                 child: _expandPosts
-                    ? Text("Show fewer posts")
+                    ? const Text("Show fewer posts")
                     : Text("Show ${postCount - _kPostLimit} more"),
               ),
             ),
@@ -204,7 +204,7 @@ class _ExplorePageState extends ConsumerState<ExplorePage> {
 }
 
 class _HashtagChip extends ConsumerWidget {
-  const _HashtagChip(this.hashtag, {super.key});
+  const _HashtagChip(this.hashtag);
 
   final String hashtag;
 

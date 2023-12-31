@@ -55,8 +55,8 @@ class _PreferencesSetupPageState extends State<PreferencesSetupPage> {
                   Card.outlined(
                     clipBehavior: Clip.antiAlias,
                     child: CheckboxListTile(
-                      title: Text("Settings useful for wellbeing"),
-                      subtitle: Text(
+                      title: const Text("Settings useful for wellbeing"),
+                      subtitle: const Text(
                         "Use less attention-grabbing colors, hide numbers",
                       ),
                       value: _wellbeingPreset,
@@ -100,7 +100,7 @@ class _PreferencesSetupPageState extends State<PreferencesSetupPage> {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

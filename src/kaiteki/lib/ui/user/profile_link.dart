@@ -112,7 +112,7 @@ ProfileLink? determineLink(String key, String value) {
 }
 
 (IconData, Uri)? _parseTelegram(String key, String value) {
-  if (key != "telegram" || key != 'tg') return null;
+  if (key != "telegram" || key != "tg") return null;
 
   final match = _telegramRegex.firstMatch(value);
 

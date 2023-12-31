@@ -23,7 +23,7 @@ class SocialTextParser implements TextParser {
         LinkElement(
           Uri.parse(url!),
           children: [TextElement(url)],
-        )
+        ),
       ];
     });
 

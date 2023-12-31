@@ -79,7 +79,7 @@ class ThemePage extends ConsumerWidget {
                 child: Text(context.l10n.finishButtonLabel),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

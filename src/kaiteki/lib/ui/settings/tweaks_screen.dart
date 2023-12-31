@@ -31,8 +31,8 @@ class TweaksScreen extends StatelessWidget {
                   PreferenceSwitchListTile(
                     provider: squareEmojis,
                     title: const Text("Square emojis"),
-                    subtitle: Text(
-                        "Forces emojis to be square. Might make long emojis appear squished."),
+                    subtitle: const Text(
+                        "Forces emojis to be square. Might make long emojis appear squished.",),
                   ),
                 ],
               ),

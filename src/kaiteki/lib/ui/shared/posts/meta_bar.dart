@@ -105,7 +105,7 @@ class MetaBar extends ConsumerWidget {
 
     final showLanguage = this.showLanguage ?? postTheme?.showLanguage ?? true;
     final showTime = this.showTime ?? postTheme?.showTime ?? true;
-    final showScope = this.showVisibility ?? postTheme?.showVisibility ?? true;
+    final showScope = showVisibility ?? postTheme?.showVisibility ?? true;
 
     return ContentColor(
       color: Theme.of(context).getEmphasisColor(EmphasisColor.medium),
@@ -156,7 +156,7 @@ class MetaBar extends ConsumerWidget {
 }
 
 class _Timestamp extends StatelessWidget {
-  const _Timestamp(this.dateTime, {super.key});
+  const _Timestamp(this.dateTime);
 
   final DateTime dateTime;
 
@@ -176,7 +176,6 @@ class _Timestamp extends StatelessWidget {
 
 class _Language extends ConsumerWidget {
   const _Language({
-    super.key,
     required this.language,
   });
 

@@ -93,7 +93,7 @@ class AccessibilityScreen extends StatelessWidget {
                     leading: const Icon(Icons.text_fields_rounded),
                     min: 1.0,
                     max: 3.0,
-                    title: Text("Post text size"),
+                    title: const Text("Post text size"),
                     provider: postTextSize,
                     divisions: 8,
                   ),

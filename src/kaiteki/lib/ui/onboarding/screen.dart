@@ -80,7 +80,7 @@ class _OnboardingContainer extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: AlphaDisclaimer(),
                 ),
-              )
+              ),
             ],
           ),
         ),

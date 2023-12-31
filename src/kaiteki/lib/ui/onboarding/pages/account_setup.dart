@@ -47,8 +47,8 @@ class AccountSetupPage extends ConsumerWidget {
                       child: Center(
                         child: ListTile(
                           leading: Image.asset("assets/icons/fediverse.png"),
-                          title: Text("Fediverse"),
-                          subtitle: Text("Mastodon, Pleroma, Misskey, etc."),
+                          title: const Text("Fediverse"),
+                          subtitle: const Text("Mastodon, Pleroma, Misskey, etc."),
                         ),
                       ),
                     ),
@@ -62,8 +62,8 @@ class AccountSetupPage extends ConsumerWidget {
                         Brightness.dark =>
                           Image.asset("assets/icons/tumblr_white.png"),
                       },
-                      title: Text("Tumblr"),
-                      subtitle: Text("Coming soon™"),
+                      title: const Text("Tumblr"),
+                      subtitle: const Text("Coming soon™"),
                       enabled: false,
                     ),
                   ),
@@ -71,8 +71,8 @@ class AccountSetupPage extends ConsumerWidget {
                   Card.outlined(
                     child: ListTile(
                       leading: Image.asset("assets/icons/bluesky.png"),
-                      title: Text("Bluesky"),
-                      subtitle: Text("Coming soon™"),
+                      title: const Text("Bluesky"),
+                      subtitle: const Text("Coming soon™"),
                       enabled: false,
                     ),
                   ),
@@ -100,7 +100,7 @@ class AccountSetupPage extends ConsumerWidget {
                   ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

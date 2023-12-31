@@ -117,11 +117,11 @@ class _AccountSettingsScreenState extends ConsumerState<AccountSettingsScreen> {
                         : null,
                   ),
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.arrow_forward_rounded,
                       // color: Theme.of(context).colorScheme.secondary,
                     ),
-                    title: Text("Move Account"),
+                    title: const Text("Move Account"),
                     onTap: ref.watch(developerMode).value
                         ? () => _onMigrate(ref)
                         : null,

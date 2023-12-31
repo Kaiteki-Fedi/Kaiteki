@@ -140,7 +140,7 @@ class _MediaInspectionScreenState extends State<MediaInspectionScreen> {
                     onInvoke: (_) => _onPreviousPage(),
                   ),
                   NextPageIntent: CallbackAction<NextPageIntent>(
-                      onInvoke: (_) => _onNextPage()),
+                      onInvoke: (_) => _onNextPage(),),
                 },
                 child: Consumer(
                   child: Focus(
@@ -302,7 +302,6 @@ class _PaginationFab extends StatelessWidget {
   final Widget child;
 
   const _PaginationFab({
-    super.key,
     this.onPressed,
     this.tooltip,
     required this.child,

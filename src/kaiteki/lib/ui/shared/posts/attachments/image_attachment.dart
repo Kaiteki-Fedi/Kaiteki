@@ -6,7 +6,7 @@ class ImageAttachment extends StatelessWidget {
   final Attachment attachment;
   final BoxFit? boxFit;
 
-  const ImageAttachment({
+  const ImageAttachment({super.key, 
     required this.attachment,
     this.boxFit,
   });

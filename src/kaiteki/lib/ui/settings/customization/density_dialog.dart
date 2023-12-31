@@ -30,13 +30,13 @@ class _DensityDialogState extends State<DensityDialog> {
     ];
 
     return AlertDialog(
-      title: Text("Density"),
+      title: const Text("Density"),
       contentPadding: const EdgeInsets.only(top: 16.0, bottom: 24.0),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           RadioListTile(
-            title: Text("System"),
+            title: const Text("System"),
             subtitle: Text(
               getNameForDensity(VisualDensity.adaptivePlatformDensity) ??
                   VisualDensity.adaptivePlatformDensity.toString(),

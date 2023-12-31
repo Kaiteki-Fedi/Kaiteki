@@ -32,14 +32,14 @@ class UserDisplayNameWidget extends ConsumerWidget {
         this.secondaryTextStyle?.copyWith(color: secondaryColor) ??
             secondaryColor.textStyle;
 
-    Widget widget = switch (orientation) {
+    final Widget widget = switch (orientation) {
       Axis.horizontal => RepaintBoundary(
           child: Text.rich(
             TextSpan(
               children: [
                 user.renderText(context, ref, content.primary),
                 if (secondaryText != null) ...[
-                  TextSpan(text: " "),
+                  const TextSpan(text: " "),
                   TextSpan(
                     text: secondaryText,
                     style: secondaryTextStyle,
