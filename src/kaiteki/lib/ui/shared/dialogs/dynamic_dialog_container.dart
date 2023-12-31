@@ -34,7 +34,7 @@ class DynamicDialogContainer extends StatelessWidget {
               curve: Curves.easeOutQuad,
               child: Padding(
                 padding: fullscreen
-                    ? MediaQuery.of(context).viewInsets
+                    ? MediaQuery.viewInsetsOf(context)
                     : EdgeInsets.zero,
                 child: Material(
                   borderRadius: borderRadius,

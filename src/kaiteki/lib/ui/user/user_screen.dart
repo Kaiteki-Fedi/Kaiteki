@@ -123,7 +123,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     const a = avatarSize * 0.5;
     final primaryButton = buildPrimaryButton(
       user,
-      MediaQuery.of(context).size.width < 840,
+      MediaQuery
+          .sizeOf(context)
+          .width < 840,
     );
     return Scaffold(
       backgroundColor: _getBackgroundColor(context),
@@ -146,7 +148,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               // recommended side pane width is 360dp, we use what is lower of
               // width and a third of the screen, so the content pane doesn't get
               // too squished.
-              width: min(MediaQuery.of(context).size.width / 3, 360),
+              width: min(MediaQuery
+                  .sizeOf(context)
+                  .width / 3, 360),
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Column(
