@@ -24,12 +24,10 @@ class InstancePage extends StatefulWidget {
 class _InstancePageState extends State<InstancePage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _instanceController;
-  final _instanceFieldKey = UniqueKey();
 
   @override
   void initState() {
     super.initState();
-
     _instanceController = TextEditingController();
   }
 
@@ -51,23 +49,10 @@ class _InstancePageState extends State<InstancePage> {
           children: [
             Padding(
               padding: fieldMargin,
-              child: TextFormField(
-                key: _instanceFieldKey,
+              child: _InstanceField(
                 enabled: widget.enabled,
-                autofillHints: const [AutofillHints.impp, AutofillHints.url],
                 controller: _instanceController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  contentPadding: fieldPadding,
-                  hintText: l10n.instanceFieldHint,
-                  prefixIcon: const Icon(Icons.public_rounded),
-                  prefixIconConstraints: iconConstraint,
-                ),
-                inputFormatters: [LowerCaseTextFormatter()],
-                keyboardType: TextInputType.url,
-                validator: _validateInstance,
-                onFieldSubmitted: _submit,
+                onSubmit: _onSubmit,
               ),
             ),
             Column(
@@ -101,10 +86,10 @@ class _InstancePageState extends State<InstancePage> {
 
   void _onNext() {
     if (_formKey.currentState?.validate() != true) return;
-    _submit(_instanceController.text);
+    _onSubmit(_instanceController.text);
   }
 
-  void _submit(String instance) {
+  void _onSubmit(String instance) {
     if (_formKey.currentState!.validate()) {
       var host = instance;
 
@@ -117,12 +102,47 @@ class _InstancePageState extends State<InstancePage> {
       widget.onNext.call(host);
     }
   }
+}
 
-  String? _validateInstance(String? value) {
-    if (value == null || value.isEmpty || !value.contains(".")) {
-      return context.l10n.authNoInstance;
-    }
+class _InstanceField extends StatelessWidget {
+  final TextEditingController controller;
+  final bool enabled;
+  final Function(String host) onSubmit;
 
-    return null;
+  const _InstanceField({
+    required this.controller,
+    required this.onSubmit,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Padding(
+      padding: fieldMargin,
+      child: TextFormField(
+        enabled: enabled,
+        autofillHints: const [AutofillHints.impp, AutofillHints.url],
+        controller: controller,
+        autofocus: true,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          contentPadding: fieldPadding,
+          hintText: l10n.instanceFieldHint,
+          prefixIcon: const Icon(Icons.public_rounded),
+          prefixIconConstraints: iconConstraint,
+        ),
+        inputFormatters: [LowerCaseTextFormatter()],
+        keyboardType: TextInputType.url,
+        validator: (value) {
+          if (value == null || value.isEmpty || !value.contains(".")) {
+            return context.l10n.authNoInstance;
+          }
+
+          return null;
+        },
+        onFieldSubmitted: onSubmit.call,
+      ),
+    );
   }
 }
