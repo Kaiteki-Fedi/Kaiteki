@@ -9,6 +9,7 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_message.dart";
 import "package:kaiteki_core/social.dart";
 
+// TODO(Craftplacer): Revamp CodePage, to reflect various code inputs & refresh UI.
 class CodePage extends StatefulWidget {
   final CodePromptOptions options;
   final FutureOr<void> Function(String code) onSubmit;
@@ -50,32 +51,9 @@ class _CodePageState extends State<CodePage> {
                       Flexible(
                         child: ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 300),
-                          child: TextFormField(
-                            autofillHints: const [AutofillHints.oneTimeCode],
+                          child: _CodeField(
                             controller: _textController,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              border: OutlineInputBorder(),
-                            ),
-                            textAlign: TextAlign.center,
-                            keyboardType: TextInputType.visiblePassword,
-                            maxLength: widget.options.length,
-                            style: GoogleFonts.robotoMono(
-                              fontSize: large ? 24 : null,
-                            ),
-                            textInputAction: TextInputAction.done,
-                            inputFormatters: [
-                              if (widget.options.numericOnly)
-                                FilteringTextInputFormatter.digitsOnly,
-                            ],
-                            autofocus: true,
-                            autocorrect: false,
-                            onFieldSubmitted: _submit,
-                            validator: (code) {
-                              return code?.isEmpty == false
-                                  ? null
-                                  : l10n.mfaNoCode;
-                            },
+                            onSubmit: _submit,
                           ),
                         ),
                       ),
@@ -118,5 +96,39 @@ class _CodePageState extends State<CodePage> {
     setState(() {
       _future = Future.sync(() => widget.onSubmit(code));
     });
+  }
+}
+
+class _CodeField extends StatelessWidget {
+  final TextEditingController controller;
+  final void Function(String code) onSubmit;
+
+  const _CodeField({
+    required this.controller,
+    required this.onSubmit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return TextFormField(
+      autofillHints: const [AutofillHints.oneTimeCode],
+      controller: controller,
+      decoration: const InputDecoration(
+        isDense: true,
+        border: OutlineInputBorder(),
+      ),
+      textAlign: TextAlign.center,
+      keyboardType: TextInputType.visiblePassword,
+      maxLength: 6,
+      style: GoogleFonts.robotoMono(fontSize: 24),
+      textInputAction: TextInputAction.done,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      autofocus: true,
+      autocorrect: false,
+      validator: (code) {
+        return code?.isEmpty == false ? null : l10n.mfaNoCode;
+      },
+    );
   }
 }
