@@ -3,7 +3,6 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/ui/auth/login/constants.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/shared/common.dart";
@@ -52,16 +51,16 @@ class _UserPageState extends State<UserPage> {
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8),
-                      child: _buildInstanceIcon(),
+                      child: _InstanceIcon(url: widget.image),
                     ),
                   ),
                   Padding(
                     padding: fieldMargin,
-                    child: _buildUsernameField(l10n),
+                    child: _UsernameField(controller: _usernameController),
                   ),
                   Padding(
                     padding: fieldMargin,
-                    child: _buildPasswordField(l10n),
+                    child: _PasswordField(controller: _passwordController),
                   ),
                   if (snapshot.hasError)
                     Padding(
@@ -97,55 +96,6 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  TextFormField _buildPasswordField(KaitekiLocalizations l10n) {
-    return TextFormField(
-      controller: _passwordController,
-      decoration: InputDecoration(
-        fillColor: Theme.of(context).colorScheme.surface.withOpacity(.75),
-        filled: true,
-        hintText: l10n.passwordFieldHint,
-        prefixIcon: const Icon(Icons.vpn_key_rounded),
-        prefixIconConstraints: iconConstraint,
-        border: const OutlineInputBorder(),
-        contentPadding: fieldPadding,
-      ),
-      // validator: widget.passwordValidator,
-      keyboardType: TextInputType.text,
-      autofillHints: const [AutofillHints.password],
-      obscureText: true,
-      validator: _validatePassword,
-    );
-  }
-
-  TextFormField _buildUsernameField(KaitekiLocalizations l10n) {
-    return TextFormField(
-      autofocus: true,
-      controller: _usernameController,
-      decoration: InputDecoration(
-        fillColor: Theme.of(context).colorScheme.surface.withOpacity(.75),
-        filled: true,
-        hintText: l10n.usernameFieldHint,
-        prefixIcon: const Icon(Icons.person_rounded),
-        prefixIconConstraints: iconConstraint,
-        border: const OutlineInputBorder(),
-        contentPadding: fieldPadding,
-      ),
-      autofillHints: const [AutofillHints.username],
-      keyboardType: TextInputType.text,
-      validator: _validateUsername,
-    );
-  }
-
-  String? _validatePassword(String? value) {
-    if (value?.trim().isNotEmpty == true) return null;
-    return context.l10n.authNoPassword;
-  }
-
-  String? _validateUsername(String? value) {
-    if (value?.trim().isNotEmpty == true) return null;
-    return context.l10n.authNoUsername;
-  }
-
   Future<void> _onLogin() async {
     if (_formKey.currentState?.validate() != true) return;
 
@@ -161,50 +111,120 @@ class _UserPageState extends State<UserPage> {
       );
     });
   }
+}
 
-  Widget _buildInstanceIcon() {
-    final url = widget.image;
-    if (url != null) {
-      final placeholder = _buildPlaceholder(true);
-      final isSvg = url.toLowerCase().endsWith(".svg");
-      if (isSvg) {
-        return SvgPicture.network(
-          url,
-          width: _instanceIconSize,
-          placeholderBuilder: (_) => placeholder,
-        );
-      }
+class _UsernameField extends StatelessWidget {
+  final TextEditingController controller;
 
-      return Image.network(
+  const _UsernameField({
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      autofocus: true,
+      controller: controller,
+      decoration: InputDecoration(
+        fillColor: Theme.of(context).colorScheme.surface.withOpacity(.75),
+        filled: true,
+        hintText: context.l10n.usernameFieldHint,
+        prefixIcon: const Icon(Icons.person_rounded),
+        prefixIconConstraints: iconConstraint,
+        border: const OutlineInputBorder(),
+        contentPadding: fieldPadding,
+      ),
+      autofillHints: const [AutofillHints.username],
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value?.trim().isNotEmpty == true) return null;
+        return context.l10n.authNoUsername;
+      },
+    );
+  }
+}
+
+class _PasswordField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const _PasswordField({
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        fillColor: Theme.of(context).colorScheme.surface.withOpacity(.75),
+        filled: true,
+        hintText: context.l10n.passwordFieldHint,
+        prefixIcon: const Icon(Icons.vpn_key_rounded),
+        prefixIconConstraints: iconConstraint,
+        border: const OutlineInputBorder(),
+        contentPadding: fieldPadding,
+      ),
+      // validator: widget.passwordValidator,
+      keyboardType: TextInputType.text,
+      autofillHints: const [AutofillHints.password],
+      obscureText: true,
+      validator: (value) {
+        if (value?.trim().isNotEmpty == true) return null;
+        return context.l10n.authNoPassword;
+      },
+    );
+  }
+}
+
+class _InstanceIcon extends StatelessWidget {
+  final String? url;
+
+  const _InstanceIcon({this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    final url = this.url;
+    if (url == null) return const _IconPlaceholder();
+
+    final isSvg = url.toLowerCase().endsWith(".svg");
+    if (isSvg) {
+      return SvgPicture.network(
         url,
         width: _instanceIconSize,
-        cacheWidth: _instanceIconSize.toInt(),
-        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-          return frame != null ? child : placeholder;
-        },
-        errorBuilder: (_, __, ___) => placeholder,
+        placeholderBuilder: (_) => const _IconPlaceholder(),
       );
     }
 
-    return _buildPlaceholder(false);
-  }
-
-  Widget _buildPlaceholder(bool isLoading) {
-    final theme = Theme.of(context);
-    return Container(
+    return Image.network(
+      url,
       width: _instanceIconSize,
-      height: _instanceIconSize,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.background,
-        borderRadius: BorderRadius.circular(8.0),
+      cacheWidth: _instanceIconSize.toInt(),
+      frameBuilder: (_, child, frame, __) =>
+          frame != null ? child : const _IconPlaceholder(),
+      errorBuilder: (_, __, ___) => const _IconPlaceholder(),
+    );
+  }
+}
+
+class _IconPlaceholder extends StatelessWidget {
+  const _IconPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return SizedBox.square(
+      dimension: _instanceIconSize,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.background,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Icon(
+          Icons.public,
+          size: 64.0,
+          color: theme.colorScheme.onSurface,
+        ),
       ),
-      child: isLoading
-          ? null
-          : Icon(
-              Icons.public,
-              size: 64.0,
-              color: theme.colorScheme.onSurface,
-            ),
     );
   }
 }
