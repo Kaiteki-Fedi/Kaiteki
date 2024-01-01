@@ -214,11 +214,11 @@ class MisskeyClient {
             'userId': userId,
             if (sinceId != null) 'sinceId': sinceId,
             if (untilId != null) 'untilId': untilId,
-            'excludeNsfw': excludeNsfw,
-            'withFiles': withFiles,
-            'withReplies': withReplies,
-            'withRenotes': withRenotes,
-            'withChannelNotes': withChannelNotes,
+            if (excludeNsfw != null) 'excludeNsfw': excludeNsfw,
+            if (withFiles != null) 'withFiles': withFiles,
+            if (withReplies != null) 'withReplies': withReplies,
+            if (withRenotes != null) 'withRenotes': withRenotes,
+            if (withChannelNotes != null) 'withChannelNotes': withChannelNotes,
           }.jsonBody,
         )
         .then(misskey.Note.fromJson.fromResponseList);
