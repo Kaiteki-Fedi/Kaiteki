@@ -24,9 +24,6 @@ const kFormHeight = 592.0;
 /// https://m3.material.io/components/dialogs/specs#6771d107-624e-47cc-b6d8-2b7b620ba2f1
 const kDialogConstraints = BoxConstraints(minWidth: 280, maxWidth: 560);
 
-/// https://m3.material.io/components/bottom-sheets/specs#e69f3dfb-e443-46ba-b4a8-aabc718cf335
-const kBottomSheetConstraints = BoxConstraints(maxWidth: 640);
-
 /// Whether to use frontend login endpoints or oauth ones.
 bool get useOAuth => !kIsWeb;
 

@@ -232,7 +232,6 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
   Future<Emoji?> selectVariant(EmojiCategoryItem item) async {
     return showModalBottomSheet<Emoji?>(
       context: context,
-      constraints: kBottomSheetConstraints,
       builder: (context) {
         return GridView.builder(
           shrinkWrap: true,

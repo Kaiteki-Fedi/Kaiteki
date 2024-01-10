@@ -76,7 +76,7 @@ class PostWidget extends ConsumerStatefulWidget {
   // but then I remembered, the mess that are the different Button widgets,
   // alongside their different constructors.
   // btw, this is a feature, not a bug: https://github.com/flutter/flutter/issues/125508
-  final bool useCard;
+  final bool? useCard;
 
   const PostWidget(
     this.post, {
@@ -84,7 +84,7 @@ class PostWidget extends ConsumerStatefulWidget {
     this.layout = PostWidgetLayout.normal,
     this.onTap,
     this.onOpen,
-    this.useCard = true,
+    this.useCard,
   });
 
   @override
@@ -207,7 +207,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       ),
     );
 
-    if (widget.useCard) child = Card(child: child);
+    final useCards =
+        widget.useCard ?? PostWidgetTheme.of(context)?.useCards ?? true;
+    if (useCards) child = Card(child: child);
 
     return FocusableActionDetector(
       descendantsAreTraversable: false,
@@ -543,7 +545,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final adapter = ref.read(adapterProvider) as ReactionSupport;
     final emoji = await showModalBottomSheet<Emoji?>(
       context: context,
-      constraints: kBottomSheetConstraints,
       builder: (_) => EmojiSelectorBottomSheet(
         showCustomEmojis: adapter.capabilities.supportsCustomEmojiReactions,
         showUnicodeEmojis: adapter.capabilities.supportsUnicodeEmojiReactions,

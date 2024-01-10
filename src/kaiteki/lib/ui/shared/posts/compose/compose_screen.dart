@@ -610,7 +610,6 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
 
   void _openAttachDrawer() {
     showModalBottomSheet(
-      constraints: kBottomSheetConstraints,
       context: context,
       isScrollControlled: false,
       showDragHandle: false,
@@ -629,7 +628,6 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   Future<void> _openEmojiPicker() async {
     final emoji = await showModalBottomSheet<Emoji?>(
       context: context,
-      constraints: kBottomSheetConstraints,
       builder: (_) => const EmojiSelectorBottomSheet(),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
