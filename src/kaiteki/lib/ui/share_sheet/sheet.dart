@@ -47,68 +47,63 @@ class _ShareSheetState extends State<ShareSheet> {
   @override
   Widget build(BuildContext context) {
     final hasNativeShareDialog = kIsWeb || Platform.isAndroid || Platform.isIOS;
-    return BottomSheet(
-      builder: (context) {
-        const margin = EdgeInsets.symmetric(horizontal: 16.0);
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            dragHandleInset,
-            Padding(
-              padding: margin,
-              child: Text(
-                "Share",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+    const margin = EdgeInsets.symmetric(horizontal: 16.0);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: margin,
+          child: Text(
+            "Share",
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
+        const SizedBox(height: 8),
+        SingleChildScrollView(
+          padding: margin,
+          scrollDirection: Axis.horizontal,
+          child: _FormatSelector(
+            selectedFormat: _format,
+            formats: _formats,
+            onChanged: (value) => setState(() => _format = value),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Card.outlined(
+          margin: margin,
+          elevation: 2.0,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: AnimatedSize(
+              clipBehavior: Clip.none,
+              duration: Durations.short4,
+              child: buildPreviewBody(context),
             ),
-            const SizedBox(height: 8),
-            SingleChildScrollView(
-              padding: margin,
-              scrollDirection: Axis.horizontal,
-              child: _FormatSelector(
-                selectedFormat: _format,
-                formats: _formats,
-                onChanged: (value) => setState(() => _format = value),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Card.outlined(
-              margin: margin,
-              elevation: 2.0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 16.0,
-                ),
-                child: buildPreviewBody(context),
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Divider(),
-            _ShareTargetOptions(
-              onCompose: () {
-                context.replaceNamed(
-                  "compose",
-                  pathParameters:
-                      ProviderScope.containerOf(context).accountRouterParams,
-                  queryParameters: {"body": getShareText(widget.content)},
-                );
-              },
-              // I don't know who over at flutter_community, thought people
-              // would want to share stuff over their damn email client.
-              onShare: hasNativeShareDialog
-                  ? () async {
-                      final text = getShareText(widget.content);
-                      await Share.share(text);
-                    }
-                  : null,
-              onCopy: () => _copyToClipboard(context),
-            ),
-          ],
-        );
-      },
-      onClosing: () {},
+          ),
+        ),
+        const SizedBox(height: 16),
+        const Divider(),
+        _ShareTargetOptions(
+          onCompose: () {
+            context.replaceNamed(
+              "compose",
+              pathParameters:
+                  ProviderScope.containerOf(context).accountRouterParams,
+              queryParameters: {"body": getShareText(widget.content)},
+            );
+          },
+          // I don't know who over at flutter_community, thought people
+          // would want to share stuff over their damn email client.
+          onShare: hasNativeShareDialog
+              ? () async {
+                  final text = getShareText(widget.content);
+                  await Share.share(text);
+                }
+              : null,
+          onCopy: () => _copyToClipboard(context),
+        ),
+      ],
     );
   }
 
