@@ -1,13 +1,14 @@
 import "package:flutter/material.dart";
 import "package:flutter_blurhash/flutter_blurhash.dart";
 import "package:kaiteki/platform_checks.dart";
+import "package:kaiteki/ui/media/video_player.dart";
 import "package:kaiteki_core/model.dart";
 import "package:kaiteki_core/social.dart";
+import "package:video_player/video_player.dart" show VideoPlayerController;
 
 import "alt_text_badge.dart";
 import "fallback_attachment_widget.dart";
 import "image_attachment.dart";
-import "video_attachment_widget.dart";
 
 class AttachmentWidget extends StatelessWidget {
   final Attachment attachment;
@@ -40,8 +41,9 @@ class AttachmentWidget extends StatelessWidget {
     }
 
     final attachmentWidget = switch (attachment.type) {
-      AttachmentType.video when supportsVideoPlayer =>
-        VideoAttachment(attachment: attachment),
+      AttachmentType.video when supportsVideoPlayer => VideoPlayer(
+          controller: VideoPlayerController.networkUrl(attachment.url),
+        ),
       AttachmentType.image => InkWell(
           onTap: onTap,
           child: ImageAttachment(

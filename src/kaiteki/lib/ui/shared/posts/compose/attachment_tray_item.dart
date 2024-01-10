@@ -1,9 +1,9 @@
+import "package:cross_file_image/cross_file_image.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 
-class AttachmentTrayItem extends StatelessWidget {
+class AttachmentTrayItem extends StatefulWidget {
   final VoidCallback? onRemove;
   final VoidCallback? onChangeDescription;
   final VoidCallback? onToggleSensitive;
@@ -19,23 +19,37 @@ class AttachmentTrayItem extends StatelessWidget {
   final AttachmentDraft attachment;
 
   @override
+  State<AttachmentTrayItem> createState() => _AttachmentTrayItemState();
+}
+
+class _AttachmentTrayItemState extends State<AttachmentTrayItem> {
+  bool isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
     const size = 72.0;
 
-    final opacity = attachment.isSensitive ? 0.25 : 1.0;
-    final file = attachment.file;
+    final isSensitive = this.widget.attachment.isSensitive;
+    final opacity = isSensitive || isHovered ? 0.25 : 1.0;
+    final file = this.widget.attachment.file;
+
     final widget = switch (AttachmentType.image) {
       AttachmentType.image when file != null => Image(
-          image: file.getImageProvider(),
+          image: XFileImage(file),
           fit: BoxFit.cover,
           opacity: AlwaysStoppedAnimation(opacity),
+          errorBuilder: (context, _, __) => Icon(
+            Icons.broken_image_rounded,
+            color: IconTheme.of(context).color?.withOpacity(opacity),
+          ),
         ),
       _ => Center(child: _buildFallbackIcon(AttachmentType.file)),
     };
 
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return MouseRegion(
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
       child: Card(
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
@@ -46,13 +60,21 @@ class AttachmentTrayItem extends StatelessWidget {
         child: PopupMenuButton(
           color: theme.colorScheme.surfaceVariant,
           itemBuilder: buildItemActions,
+          tooltip: "",
           child: SizedBox(
             width: size,
             height: size,
             child: Stack(
               children: [
                 Positioned.fill(child: widget),
-                if (attachment.isSensitive)
+                if (isHovered)
+                  Center(
+                    child: Icon(
+                      Icons.adaptive.more_rounded,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  )
+                else if (isSensitive)
                   Center(
                     child: Icon(
                       Icons.warning_rounded,
@@ -70,23 +92,23 @@ class AttachmentTrayItem extends StatelessWidget {
   List<PopupMenuEntry> buildItemActions(BuildContext context) {
     return [
       PopupMenuItem(
-        onTap: () => onToggleSensitive?.call(),
+        onTap: () => widget.onToggleSensitive?.call(),
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           leading: Icon(
-            attachment.isSensitive
+            widget.attachment.isSensitive
                 ? Icons.warning_amber_rounded
                 : Icons.warning_rounded,
           ),
           title: Text(
-            attachment.isSensitive //
+            widget.attachment.isSensitive //
                 ? "Mark as safe"
                 : "Mark as sensitive",
           ),
         ),
       ),
       PopupMenuItem(
-        onTap: () => onChangeDescription?.call(),
+        onTap: () => widget.onChangeDescription?.call(),
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           leading: const Icon(Icons.drive_file_rename_outline_rounded),
@@ -94,8 +116,8 @@ class AttachmentTrayItem extends StatelessWidget {
         ),
       ),
       PopupMenuItem(
-        onTap: () => onRemove?.call(),
-        enabled: onRemove != null,
+        onTap: () => widget.onRemove?.call(),
+        enabled: widget.onRemove != null,
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           leading: const Icon(Icons.close_rounded),

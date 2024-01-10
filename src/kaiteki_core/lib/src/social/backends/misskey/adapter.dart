@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
+import 'package:http/http.dart';
 import 'package:kaiteki_core/kaiteki_core.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -405,7 +406,12 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<Attachment> uploadAttachment(AttachmentDraft draft) async {
     final driveFile = await client.createDriveFile(
-      await draft.file!.toMultipartFile('file'),
+      await MultipartFile(
+        'file',
+        draft.file!.openRead(),
+        await draft.file!.length(),
+        filename: draft.file!.name,
+      ),
       comment: draft.description,
       isSensitive: draft.isSensitive,
     );

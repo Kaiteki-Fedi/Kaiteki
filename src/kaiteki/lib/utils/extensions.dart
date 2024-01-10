@@ -133,15 +133,6 @@ extension NullableTextStyleExtensions on TextStyle? {
   TextStyle get fallback => this ?? const TextStyle();
 }
 
-extension KaitekiFileExtensions on KaitekiFile {
-  ImageProvider getImageProvider() {
-    final file = this;
-    if (file is KaitekiMemoryFile) return MemoryImage(file.bytes);
-    if (file is KaitekiLocalFile) return FileImage(file.toDartFile());
-    throw UnimplementedError();
-  }
-}
-
 extension SurfaceColorExtensions on ColorScheme {
   Color _getNeutralColor(int lightTone, int darkTone) {
     final value = switch (brightness) {

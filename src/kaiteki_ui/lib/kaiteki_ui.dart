@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 export 'src/async/async_block_widget.dart';
 export 'src/material/border_radii.dart';
+export 'src/material/dialog_button_bar.dart';
 export 'src/material/main_switch_list_tile.dart';
 export 'src/material/shapes.dart';
 export 'src/material/side_sheet_manager.dart';

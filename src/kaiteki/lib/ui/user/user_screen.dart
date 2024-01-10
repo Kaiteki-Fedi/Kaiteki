@@ -4,7 +4,7 @@ import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/default/extensions.dart";
-import "package:kaiteki/ui/media_inspection/media.dart";
+import "package:kaiteki/ui/media/media.dart";
 import "package:kaiteki/ui/media_inspection/screen.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";

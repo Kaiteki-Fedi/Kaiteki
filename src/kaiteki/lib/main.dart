@@ -2,6 +2,8 @@ import "dart:async";
 
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import 'package:image_picker_android/image_picker_android.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/app.dart";
 import "package:kaiteki/di.dart";
@@ -29,6 +31,9 @@ Future<void> main() async {
   try {
     // initialize
     WidgetsFlutterBinding.ensureInitialized();
+
+    _preferAndroidPhotoPicker();
+
     final sharedPreferences = await SharedPreferences.getInstance();
     final startup = _startup(sharedPreferences).asBroadcastStream();
 
@@ -60,6 +65,11 @@ Future<void> main() async {
   } catch (e, s) {
     handleFatalError((e, s));
   }
+}
+
+void _preferAndroidPhotoPicker() {
+  final impl = ImagePickerPlatform.instance;
+  if (impl is ImagePickerAndroid) impl.useAndroidPhotoPicker = true;
 }
 
 Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {

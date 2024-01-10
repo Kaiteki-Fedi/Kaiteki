@@ -1,22 +1,36 @@
+import "dart:io";
+
 import "package:chewie/chewie.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/ui/shared/common.dart";
-import "package:kaiteki_core/model.dart";
 import "package:video_player/video_player.dart";
 
-class VideoAttachment extends StatefulWidget {
-  const VideoAttachment({
-    required this.attachment,
+import "media.dart";
+
+class VideoPlayer extends StatefulWidget {
+  const VideoPlayer({
+    required this.controller,
+    this.looping = false,
     super.key,
   });
 
-  final Attachment attachment;
+  factory VideoPlayer.fromMedia(Media media) {
+    return VideoPlayer(
+      controller: switch (media) {
+        RemoteMedia() => VideoPlayerController.networkUrl(media.url),
+        LocalMedia() => VideoPlayerController.file(File(media.file.path)),
+      },
+    );
+  }
+
+  final bool looping;
+  final VideoPlayerController controller;
 
   @override
-  State<VideoAttachment> createState() => _VideoAttachmentState();
+  State<VideoPlayer> createState() => _VideoPlayerState();
 }
 
-class _VideoAttachmentState extends State<VideoAttachment> {
+class _VideoPlayerState extends State<VideoPlayer> {
   late VideoPlayerController _videoController;
   late Future<ChewieController> _chewieControllerFuture;
   ChewieController? _chewieController;
@@ -24,7 +38,8 @@ class _VideoAttachmentState extends State<VideoAttachment> {
   @override
   void initState() {
     super.initState();
-    _videoController = VideoPlayerController.networkUrl(widget.attachment.url);
+    // FIXME(Craftplacer): Reinit controllers on change
+    _videoController = widget.controller;
     _chewieControllerFuture = _prepareChewie();
   }
 
@@ -41,8 +56,13 @@ class _VideoAttachmentState extends State<VideoAttachment> {
       future: _chewieControllerFuture,
       builder: (_, snapshot) {
         if (snapshot.hasError) {
-          return const Center(
-            child: Text("Couldn't load video"),
+          if (snapshot.error is UnimplementedError) {
+            return Center(
+              child: Text("Video playback is not supported on this platform."),
+            );
+          }
+          return Center(
+            child: Text(snapshot.error.toString()),
           );
         } else if (!snapshot.hasData) {
           return centeredCircularProgressIndicator;
@@ -58,6 +78,7 @@ class _VideoAttachmentState extends State<VideoAttachment> {
 
     return _chewieController = ChewieController(
       videoPlayerController: _videoController,
+      autoInitialize: true,
       looping: true,
     );
   }

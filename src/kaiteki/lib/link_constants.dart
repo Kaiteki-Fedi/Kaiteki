@@ -4,3 +4,6 @@ const corsHelpArticleUrl =
 
 const requestBackendUrl =
     "https://github.com/Kaiteki-Fedi/Kaiteki/issues/new?assignees=&labels=enhancement%2Capi%3Amissing&template=backend_request.yml&title=Backend+request";
+
+final altTextGuide =
+    Uri.https("m3.material.io", "foundations/content-design/alt-text");

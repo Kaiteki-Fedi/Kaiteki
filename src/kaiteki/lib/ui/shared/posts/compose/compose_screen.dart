@@ -1,11 +1,11 @@
-import "dart:math";
-
-import "package:file_picker/file_picker.dart";
+import "package:file_selector/file_selector.dart";
 import "package:flutter/material.dart" hide Visibility;
 import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
+import "package:image_picker/image_picker.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/dialog_close_button.dart";
@@ -26,6 +26,7 @@ import "package:kaiteki/ui/shortcuts/shortcuts.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 
+import "attach_bottom_sheet.dart";
 import "attachment_text_dialog.dart";
 import "language_switcher.dart";
 import "poll_dialog.dart";
@@ -47,23 +48,10 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   var _visibility = PostScope.public;
   var _enableSubject = false;
   var _showPreview = false;
+  late final ImagePicker _imagePicker;
   Formatting? _formatting;
   PollDraft? _poll;
   late String _language;
-
-  // FIXME(Craftplacer): Strings for PostForm's attach menu are not localized.
-  late final _attachMenuItems = [
-    (
-      label: "Attach files",
-      icon: Icons.insert_drive_file_rounded,
-      onPressed: _onAttachFile,
-    ),
-    (
-      label: "Create poll",
-      icon: Icons.poll_rounded,
-      onPressed: _onChangePoll,
-    ),
-  ];
 
   String? get initialBody {
     final op = widget.replyTo;
@@ -405,6 +393,8 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
       ..addListener(() => setState(() {}));
     _subjectController = TextEditingController()
       ..addListener(() => setState(() {}));
+
+    _imagePicker = ImagePicker();
   }
 
   void reset() {
@@ -517,20 +507,28 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   }
 
   Future<void> _onAttachFile() async {
-    Navigator.pop(context);
+    final files = await openFiles();
 
-    final result = await FilePicker.platform.pickFiles(
-      dialogTitle: "Select file to upload as attachment",
-      lockParentWindow: true,
-      allowMultiple: true,
-    );
-
-    if (result == null) return;
+    if (files.isEmpty) return;
 
     setState(() {
       attachments.addAll(
-        result.files.map(
-          (e) => AttachmentDraft(file: KaitekiLocalFile(e.path!)),
+        files.map(
+          (e) => AttachmentDraft(file: e),
+        ),
+      );
+    });
+  }
+
+  Future<void> _onAttachMedia() async {
+    final media = await _imagePicker.pickMultipleMedia();
+
+    if (media.isEmpty) return;
+
+    setState(() {
+      attachments.addAll(
+        media.map(
+          (e) => AttachmentDraft(file: e),
         ),
       );
     });
@@ -555,7 +553,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
 
     if (value.hasData) {
       draft = AttachmentDraft(
-        file: KaitekiMemoryFile(value.data!),
+        file: XFile.fromData(value.data!),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -614,39 +612,14 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     showModalBottomSheet(
       constraints: kBottomSheetConstraints,
       context: context,
+      isScrollControlled: false,
+      showDragHandle: false,
       builder: (context) {
-        return LayoutBuilder(
-          builder: (context, data) {
-            final columns = max((data.maxWidth ~/ 300) * 2, 2);
-            final itemWidth = data.maxWidth / columns;
-            final itemAspectRatio = itemWidth / 96;
-
-            return GridView.count(
-              crossAxisCount: columns,
-              shrinkWrap: true,
-              childAspectRatio: itemAspectRatio,
-              padding: const EdgeInsets.all(8.0),
-              children: [
-                for (final item in _attachMenuItems)
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.all(16.0),
-                    ),
-                    onPressed: item.onPressed,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(item.icon, size: 32),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Text(item.label),
-                        ),
-                      ],
-                    ),
-                  ),
-              ],
-            );
-          },
+        return AttachBottomSheet(
+          onPickFile: _onAttachFile,
+          // We don't want to a slightly different file picker, if the OS does not provide a dedicated media picker.
+          onPickMedia: hasDedicatedMediaPicker ? _onAttachMedia : null,
+          onAddPoll: _onChangePoll,
         );
       },
       elevation: 24,

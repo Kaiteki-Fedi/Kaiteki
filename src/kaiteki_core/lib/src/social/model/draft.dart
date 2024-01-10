@@ -1,10 +1,12 @@
+import 'package:cross_file/cross_file.dart';
 import 'package:equatable/equatable.dart';
 import 'package:kaiteki_core/model.dart';
-import 'package:kaiteki_core/src/file.dart';
 
 class AttachmentDraft {
-  final KaitekiFile? file;
+  final XFile? file;
   final String? remoteId;
+
+  final AttachmentType? type;
 
   /// The description of the attachment.
   final String? description;
@@ -15,16 +17,18 @@ class AttachmentDraft {
     required this.file,
     this.description,
     this.isSensitive = false,
+    this.type,
   }) : remoteId = null;
 
   const AttachmentDraft.remote({
     required this.remoteId,
     this.description,
     this.isSensitive = false,
+    this.type,
   }) : file = null;
 
   AttachmentDraft copyWith({
-    KaitekiFile? file,
+    XFile? file,
     String? description,
     bool? isSensitive,
   }) {

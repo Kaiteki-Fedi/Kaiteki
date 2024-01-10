@@ -7,7 +7,8 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 import "package:url_launcher/url_launcher.dart";
 
-import "media.dart";
+import "../media/media.dart";
+import "../media/media_preview.dart";
 
 class MediaInspectionScreen extends StatefulWidget {
   final List<Media> media;
@@ -140,7 +141,8 @@ class _MediaInspectionScreenState extends State<MediaInspectionScreen> {
                     onInvoke: (_) => _onPreviousPage(),
                   ),
                   NextPageIntent: CallbackAction<NextPageIntent>(
-                      onInvoke: (_) => _onNextPage(),),
+                    onInvoke: (_) => _onNextPage(),
+                  ),
                 },
                 child: Consumer(
                   child: Focus(
@@ -151,7 +153,12 @@ class _MediaInspectionScreenState extends State<MediaInspectionScreen> {
                           setState(() => _currentPage = page),
                       children: [
                         for (final media in widget.media)
-                          _getMediaWidget(media),
+                          MediaPreview(
+                            media,
+                            onTapImage: () {
+                              setState(() => _immerse = !_immerse);
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -248,37 +255,6 @@ class _MediaInspectionScreenState extends State<MediaInspectionScreen> {
         ],
       ),
     );
-  }
-
-  Widget _getMediaWidget(Media media) {
-    switch (media.type) {
-      case MediaType.image:
-        return InteractiveViewer(
-          child: GestureDetector(
-            excludeFromSemantics: true,
-            onTap: () => setState(() => _immerse = !_immerse),
-            child: Center(
-              child: Semantics(
-                label: media.description,
-                image: true,
-                focusable: true,
-                child: Image(
-                  image: switch (media) {
-                    RemoteMedia() => NetworkImage(media.url.toString()),
-                  },
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-          ),
-        );
-      case MediaType.video:
-        return const Center(
-          child: Text("Video"),
-        );
-      default:
-        return const Text("Woah can't handle this one");
-    }
   }
 
   void _onNextPage() {

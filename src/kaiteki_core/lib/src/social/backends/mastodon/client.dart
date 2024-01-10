@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:fediverse_objects/mastodon.dart' as mastodon show List;
 import 'package:fediverse_objects/mastodon.dart' hide List;
 import 'package:fediverse_objects/mastodon_v1.dart' as v1;
-import 'package:http/http.dart' show Response;
+import 'package:http/http.dart' show MultipartFile, Response;
+import 'package:http_parser/http_parser.dart';
 import 'package:kaiteki_core/http.dart';
 import 'package:kaiteki_core/src/link_header_parser.dart';
 import 'package:kaiteki_core/src/social/backends/mastodon/models/pagination.dart';
@@ -356,14 +358,22 @@ class MastodonClient {
   }
 
   Future<MediaAttachment> uploadMedia(
-    KaitekiFile file,
+    XFile file,
     String? description,
   ) async {
+    final multipartFile = MultipartFile(
+      'file',
+      file.openRead(),
+      await file.length(),
+      filename: file.name,
+      contentType: file.mimeType.andThen(MediaType.parse),
+    );
+
     return client.sendMultipartRequest(
       HttpMethod.post,
       'api/v1/media',
       fields: {if (description != null) 'description': description},
-      files: [await file.toMultipartFile('file')],
+      files: [multipartFile],
     ).then(MediaAttachment.fromJson.fromResponse);
   }
 
