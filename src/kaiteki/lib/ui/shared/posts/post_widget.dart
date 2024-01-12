@@ -289,9 +289,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       }
 
       if (url == null) {
-        return const MenuItemButton(
+        return MenuItemButton(
           leadingIcon: Icon(Icons.open_in_new),
-          child: Text("Open in..."),
+          child: Text(context.l10n.openInMenuItemLabel),
         );
       }
 
@@ -310,7 +310,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
               onPressed: () => _onOpenRemote(account),
             ),
         ],
-        child: const Text("Open in..."),
+        child: Text(context.l10n.openInMenuItemLabel),
       );
     }
 
