@@ -378,7 +378,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.only(left: 8, top: 8.0, right: 8.0),
               sliver: SliverToBoxAdapter(
                 child: Row(
                   children: [
@@ -427,11 +427,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 
   Widget buildTabBar() {
-    return const TabBar(
+    return TabBar(
       tabs: [
-        Tab(text: "Posts"),
-        Tab(text: "Media"),
-        Tab(text: "Favorites"),
+        Tab(text: context.l10n.postsTab),
+        Tab(text: context.l10n.mediaTab),
+        Tab(text: context.l10n.favoritesTab),
       ],
     );
   }

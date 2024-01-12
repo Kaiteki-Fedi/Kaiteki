@@ -50,18 +50,24 @@ class _FollowerBar extends StatelessWidget {
     final followingCount = this.followingCount;
     final followerCount = this.followerCount;
 
+    final hasFollowing = followingCount != null && followingCount > 0;
+    final hasFollowers = followerCount != null && followerCount > 0;
+
+    final text = [
+      if (hasFollowing) "$followingCount following",
+      if (hasFollowers) "$followerCount followers",
+    ];
+
     return InkWell(
       child: Text.rich(
         TextSpan(
-          children: [
-            if (followingCount != null && followingCount > 0)
-              "$followingCount following",
-            if (followerCount != null && followerCount > 0)
-              "$followerCount followers",
-          ]
-              .map((e) => TextSpan(text: e))
-              .intersperse(const TextSpan(text: " • "))
-              .toList(),
+          text: text.isEmpty ? context.l10n.peopleDialogButtonLabel : null,
+          children: text.isEmpty
+              ? null
+              : text
+                  .map((e) => TextSpan(text: e))
+                  .intersperse(const TextSpan(text: " • "))
+                  .toList(),
           style: Theme.of(context).colorScheme.outline.textStyle,
         ),
       ),
