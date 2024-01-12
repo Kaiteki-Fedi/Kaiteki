@@ -52,6 +52,7 @@ class _InteractionBarState extends State<InteractionBar> {
             onTap: callbacks.onRepeat.toNullable(),
             showLabel: widget.showLabels,
             count: widget.metrics.repeatCount,
+            onSecondary: callbacks.onShowRepeatees,
           )
         else
           // ignore: dead_code
@@ -242,12 +243,14 @@ class _ReactButton extends ConsumerWidget {
 
 class _RepeatButton extends ConsumerWidget {
   final VoidCallback? onTap;
+  final VoidCallback? onSecondary;
   final bool showLabel;
   final int? count;
 
   const _RepeatButton({
     this.showLabel = true,
     required this.onTap,
+    this.onSecondary,
     required this.count,
   });
 
@@ -273,6 +276,7 @@ class _RepeatButton extends ConsumerWidget {
       focusNode: FocusNode(skipTraversal: true),
       icon: const Icon(Icons.repeat_rounded),
       onTap: onTap,
+      onLongPress: onSecondary,
       labelStyle: _getLabelStyle(showLabel, ref.watch(showReplyCounts).value),
       label: context.l10n.repeatButtonLabel,
       semanticsLabel: count.andThen(context.l10n.repeatCount),
