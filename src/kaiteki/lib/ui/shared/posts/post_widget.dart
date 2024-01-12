@@ -15,6 +15,7 @@ import "package:kaiteki/translation/translator.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
 import "package:kaiteki/ui/features/article_view/screen.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/content_not_public_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
@@ -202,7 +203,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
             onTertiaryTapUp: widget.onOpen.andThen(
               (callback) => (_) => callback(),
             ),
-            child: _PostFocusRing(focusNode: _focusNode, child: body),
+            child: FocusRing(focusNode: _focusNode, child: body),
           );
         },
       ),
@@ -661,39 +662,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     await launchUrl(
       _post.externalUrl!,
       mode: LaunchMode.externalApplication,
-    );
-  }
-}
-
-class _PostFocusRing extends StatelessWidget {
-  const _PostFocusRing({
-    required this.focusNode,
-    required this.child,
-  });
-
-  final FocusNode focusNode;
-  final ConsumerWidget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final border = Border.all(
-      strokeAlign: BorderSide.strokeAlignCenter,
-      color: Theme.of(context).colorScheme.tertiary,
-      width: 4,
-    );
-
-    return ListenableBuilder(
-      listenable: focusNode,
-      builder: (context, child) {
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            border: focusNode.hasPrimaryFocus ? border : null,
-          ),
-          child: child,
-        );
-      },
-      child: child,
     );
   }
 }
