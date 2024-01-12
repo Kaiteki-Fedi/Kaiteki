@@ -33,6 +33,7 @@ class PostWidgetThemeData extends ThemeExtension<PostWidgetThemeData> {
   final bool? showTime;
   final bool? showVisibility;
   final bool? showLanguage;
+  final bool? useCards;
 
   const PostWidgetThemeData({
     this.showParentPost,
@@ -42,6 +43,7 @@ class PostWidgetThemeData extends ThemeExtension<PostWidgetThemeData> {
     this.showTime,
     this.showVisibility,
     this.showLanguage,
+    this.useCards,
   });
 
   @override
@@ -53,6 +55,7 @@ class PostWidgetThemeData extends ThemeExtension<PostWidgetThemeData> {
     bool? showTime,
     bool? showVisibility,
     bool? showLanguage,
+    bool? useCards,
   }) {
     return PostWidgetThemeData(
       showParentPost: showParentPost ?? this.showParentPost,
@@ -62,6 +65,7 @@ class PostWidgetThemeData extends ThemeExtension<PostWidgetThemeData> {
       showTime: showTime ?? this.showTime,
       showVisibility: showVisibility ?? this.showVisibility,
       showLanguage: showLanguage ?? this.showLanguage,
+      useCards: useCards ?? this.useCards,
     );
   }
 
@@ -74,6 +78,7 @@ class PostWidgetThemeData extends ThemeExtension<PostWidgetThemeData> {
       showTime: other.showTime,
       showVisibility: other.showVisibility,
       showLanguage: other.showLanguage,
+      useCards: other.useCards,
     );
   }
 
@@ -87,6 +92,7 @@ class PostWidgetThemeData extends ThemeExtension<PostWidgetThemeData> {
       showTime: t < 0.5 ? showTime : other.showTime,
       showVisibility: t < 0.5 ? showVisibility : other.showVisibility,
       showLanguage: t < 0.5 ? showLanguage : other.showLanguage,
+      useCards: t < 0.5 ? useCards : other.useCards,
     );
   }
 }

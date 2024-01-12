@@ -56,16 +56,24 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
         SliverCrossAxisConstrained(
           maxCrossAxisExtent: 600,
           child: SliverPadding(
-            padding: useCards ? const EdgeInsets.all(8) : EdgeInsets.zero,
+            padding: ref.watch(usePostCards).value
+                ? const EdgeInsets.all(8)
+                : EdgeInsets.zero,
             sliver: PagedSliverList<String?, Post>.separated(
               pagingController: _controller,
               builderDelegate: PagedChildBuilderDelegate<Post>(
-                itemBuilder: (context, post, _) => _buildPost(context, post),
+                itemBuilder: (context, post, _) {
+                  return PostWidget(
+                    post,
+                    onOpen: () => context.showPost(post, ref),
+                  );
+                },
                 animateTransitions: true,
                 firstPageErrorIndicatorBuilder: (context) {
                   return Center(
-                    child:
-                        ErrorLandingWidget(_controller.error as TraceableError),
+                    child: ErrorLandingWidget(
+                      _controller.error as TraceableError,
+                    ),
                   );
                 },
                 firstPageProgressIndicatorBuilder: (context) => const Padding(
@@ -94,22 +102,9 @@ class _BookmarkPageState extends ConsumerState<BookmarksPage> {
     );
   }
 
-  bool get useCards => ref.watch(usePostCards).value;
-
-  Widget _buildPost(BuildContext context, Post post) {
-    Widget widget = PostWidget(
-      post,
-      onOpen: () => context.showPost(post, ref),
-    );
-
-    if (useCards) {
-      widget = Card(clipBehavior: Clip.antiAlias, child: widget);
-    }
-
-    return widget;
-  }
-
   Widget _buildSeparator(BuildContext context, int index) {
-    return useCards ? const SizedBox(height: 8) : const Divider(height: 1);
+    return ref.watch(usePostCards).value
+        ? const SizedBox(height: 8)
+        : const Divider(height: 1);
   }
 }

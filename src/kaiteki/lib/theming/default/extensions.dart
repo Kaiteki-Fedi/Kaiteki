@@ -8,6 +8,7 @@ import "package:kaiteki/theming/default/text_themes.dart" as kaiteki;
 import "package:kaiteki/theming/theme.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_theme.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
+import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 
 extension ThemeDataExtensions on ThemeData {
   ThemeData applyUserPreferences(WidgetRef ref) {
@@ -44,6 +45,9 @@ extension ThemeDataExtensions on ThemeData {
         ...extensions.values,
         EmojiTheme(square: ref.watch(preferences.squareEmojis).value),
         AvatarTheme(shape: getAvatarShape(avatarCornerRadius)),
+        PostWidgetThemeData(
+          useCards: ref.watch(preferences.usePostCards).value,
+        ),
       ],
       badgeTheme: useNaturalBadgeColors
           ? badgeTheme.copyWith(

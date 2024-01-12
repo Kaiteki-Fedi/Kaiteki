@@ -69,7 +69,13 @@ class TimelineSliverState extends ConsumerState<TimelineSliver> {
       sliver: PagedSliverList<String?, Post>.separated(
         pagingController: _controller,
         builderDelegate: PagedChildBuilderDelegate<Post>(
-          itemBuilder: (context, post, _) => _buildPost(context, post),
+          itemBuilder: (context, post, _) {
+            return PostWidget(
+              post,
+              layout: widget.postLayout ?? PostWidgetLayout.normal,
+              onOpen: () => context.showPost(post, ref),
+            );
+          },
           animateTransitions: true,
           firstPageErrorIndicatorBuilder: (context) {
             return Center(
@@ -93,23 +99,12 @@ class TimelineSliverState extends ConsumerState<TimelineSliver> {
             );
           },
         ),
-        separatorBuilder: _buildSeparator,
+        separatorBuilder: (_, __) {
+          return ref.watch(usePostCards).value
+              ? const SizedBox(height: 8)
+              : const Divider(height: 1);
+        },
       ),
     );
-  }
-
-  Widget _buildPost(BuildContext context, Post post) {
-    return PostWidget(
-      post,
-      layout: widget.postLayout ?? PostWidgetLayout.normal,
-      onOpen: () => context.showPost(post, ref),
-      useCard: ref.watch(usePostCards).value,
-    );
-  }
-
-  Widget _buildSeparator(BuildContext context, int index) {
-    return ref.watch(usePostCards).value
-        ? const SizedBox(height: 8)
-        : const Divider(height: 1);
   }
 }

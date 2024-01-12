@@ -22,6 +22,7 @@ import "package:kaiteki/ui/shared/posts/layouts/expanded.dart";
 import "package:kaiteki/ui/shared/posts/layouts/layout.dart";
 import "package:kaiteki/ui/shared/posts/layouts/normal.dart";
 import "package:kaiteki/ui/shared/posts/layouts/wide.dart";
+import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/utils/extensions.dart";
