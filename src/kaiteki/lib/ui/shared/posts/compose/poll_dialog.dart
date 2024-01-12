@@ -187,50 +187,18 @@ class _PollDialogState extends ConsumerState<PollDialog> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: TextFormField(
-                                      controller: TextEditingController(
-                                        text: DateFormat.yMd(
-                                          Localizations.localeOf(context)
-                                              .toString(),
-                                        ).format(_date),
-                                      ),
-                                      decoration: InputDecoration(
-                                        labelText: "Date",
-                                        border: const OutlineInputBorder(),
-                                        suffixIcon: IconButton(
-                                          icon:
-                                              const Icon(Icons.calendar_today),
-                                          tooltip: "Select date",
-                                          onPressed: _selectDate,
-                                        ),
-                                      ),
-                                      style: Theme.of(context)
-                                          .ktkTextTheme
-                                          ?.monospaceTextStyle,
-                                      readOnly: true,
+                                    child: _DateField(
+                                      date: _date,
+                                      onChanged: (value) =>
+                                          setState(() => _date = value),
                                     ),
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
-                                    child: TextFormField(
-                                      controller: TextEditingController(
-                                        text: _time.format(context),
-                                      ),
-                                      decoration: InputDecoration(
-                                        labelText: "Time",
-                                        border: const OutlineInputBorder(),
-                                        suffixIcon: IconButton(
-                                          icon: const Icon(
-                                            Icons.watch_later_outlined,
-                                          ),
-                                          tooltip: "Select time",
-                                          onPressed: _selectTime,
-                                        ),
-                                      ),
-                                      style: Theme.of(context)
-                                          .ktkTextTheme
-                                          ?.monospaceTextStyle,
-                                      readOnly: true,
+                                    child: _TimeField(
+                                      time: _time,
+                                      onChanged: (value) =>
+                                          setState(() => _time = value),
                                     ),
                                   ),
                                 ],
@@ -355,26 +323,6 @@ class _PollDialogState extends ConsumerState<PollDialog> {
         return null;
       },
     );
-  }
-
-  Future<void> _selectDate() async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: _date,
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(kFiveYears),
-    );
-    if (date == null) return;
-    setState(() => _date = date);
-  }
-
-  Future<void> _selectTime() async {
-    final time = await showTimePicker(
-      context: context,
-      initialTime: _time,
-    );
-    if (time == null) return;
-    setState(() => _time = time);
   }
 }
 
@@ -530,6 +478,122 @@ class _TimeOptionSelector extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class _DateField extends StatefulWidget {
+  final DateTime date;
+  final ValueChanged<DateTime>? onChanged;
+
+  const _DateField({super.key, required this.date, this.onChanged});
+
+  @override
+  State<_DateField> createState() => _DateFieldState();
+}
+
+class _DateFieldState extends State<_DateField> {
+  late DateTime _date;
+
+  @override
+  void initState() {
+    super.initState();
+    _date = widget.date;
+  }
+
+  @override
+  void didUpdateWidget(covariant _DateField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _date = widget.date;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: TextEditingController(
+        text: DateFormat.yMd(
+          Localizations.localeOf(context).toString(),
+        ).format(_date),
+      ),
+      decoration: InputDecoration(
+        labelText: "Date",
+        border: const OutlineInputBorder(),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.calendar_today),
+          tooltip: "Select date",
+          onPressed: () {
+            showDatePicker(
+              context: context,
+              initialDate: _date,
+              firstDate: DateTime.now(),
+              lastDate: DateTime.now().add(
+                const Duration(days: 365 * 5),
+              ),
+            ).then((date) {
+              if (date != null) widget.onChanged?.call(date);
+            });
+          },
+        ),
+      ),
+      style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
+      readOnly: true,
+    );
+  }
+}
+
+class _TimeField extends StatefulWidget {
+  final TimeOfDay time;
+  final ValueChanged<TimeOfDay>? onChanged;
+
+  const _TimeField({super.key, required this.time, this.onChanged});
+
+  @override
+  State<_TimeField> createState() => _TimeFieldState();
+}
+
+class _TimeFieldState extends State<_TimeField> {
+  late TimeOfDay _time;
+
+  @override
+  void initState() {
+    super.initState();
+    _time = widget.time;
+  }
+
+  @override
+  void didUpdateWidget(covariant _TimeField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _time = widget.time;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: TextEditingController(
+        text: _time.format(context),
+      ),
+      decoration: InputDecoration(
+        labelText: "Time",
+        border: const OutlineInputBorder(),
+        suffixIcon: IconButton(
+          icon: const Icon(
+            Icons.watch_later_outlined,
+          ),
+          tooltip: "Select time",
+          onPressed: () async {
+            await showTimePicker(
+              context: context,
+              initialTime: _time,
+            ).then(
+              (time) {
+                if (time != null) widget.onChanged?.call(time);
+              },
+            );
+          },
+        ),
+      ),
+      style: Theme.of(context).ktkTextTheme?.monospaceTextStyle,
+      readOnly: true,
     );
   }
 }
