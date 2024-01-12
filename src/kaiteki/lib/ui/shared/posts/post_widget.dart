@@ -9,7 +9,6 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
