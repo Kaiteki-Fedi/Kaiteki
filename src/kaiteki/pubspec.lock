@@ -125,10 +125,10 @@ packages:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: "67d591d602906ef9201caf93452495ad1812bea2074f04e25dbd7c133785821b"
+      sha256: "581bacf68f89ec8792f5e5a0b2c4decd1c948e97ce659dc783688c8a88fbec21"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.7"
+    version: "2.4.8"
   build_runner_core:
     dependency: transitive
     description:
@@ -398,7 +398,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: fee32f1c23525d8460e0c01ba8daea1bf551feb0
+      resolved-ref: c32b3f833158bedc715f6c8cea1b1e53a393cfe7
       url: "https://github.com/Kaiteki-Fedi/fediverse_objects.git"
     source: git
     version: "1.0.0+1"
@@ -438,10 +438,10 @@ packages:
     dependency: transitive
     description:
       name: file_selector_android
-      sha256: "4c9301e823824ba19236e050bb3324cee942f52ade8810ea68adfa98431aa618"
+      sha256: "1cd66575f063b689e041aec836905ba7be18d76c9f0634d0d75daec825f67095"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0+6"
+    version: "0.5.0+7"
   file_selector_ios:
     dependency: transitive
     description:
@@ -765,10 +765,10 @@ packages:
     dependency: "direct main"
     description:
       name: image_picker_android
-      sha256: "1a27bf4cc0330389cebe465bab08fe6dec97e44015b4899637344bb7297759ec"
+      sha256: "39f2bfe497e495450c81abcd44b62f56c2a36a37a175da7d137b4454977b51b1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.9+2"
+    version: "0.8.9+3"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -1748,10 +1748,10 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: edc8a9573dd8c5a83a183dae1af2b6fd4131377404706ca4e5420474784906fa
+      sha256: "4188706108906f002b3a293509234588823c8c979dc83304e229ff400c996b05"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.2"
   web_socket_channel:
     dependency: transitive
     description:

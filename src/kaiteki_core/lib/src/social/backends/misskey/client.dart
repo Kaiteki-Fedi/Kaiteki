@@ -808,4 +808,38 @@ class MisskeyClient {
         )
         .then(misskey.Note.fromJson.fromResponseList);
   }
+
+  Future<void> createFavorite(String noteId) {
+    return client.sendRequest(
+      HttpMethod.post,
+      'api/notes/favorites/create',
+      body: {'noteId': noteId}.jsonBody,
+    );
+  }
+
+  Future<void> deleteFavorite(String noteId) {
+    return client.sendRequest(
+      HttpMethod.post,
+      'api/notes/favorites/delete',
+      body: {'noteId': noteId}.jsonBody,
+    );
+  }
+
+  Future<List<misskey.Favorite>> getFavorites({
+    String? sinceId,
+    String? untilId,
+    int? limit,
+  }) {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          'api/i/favorites',
+          body: {
+            if (sinceId != null) 'sinceId': sinceId,
+            if (untilId != null) 'untilId': untilId,
+            if (limit != null) 'limit': limit,
+          }.jsonBody,
+        )
+        .then(misskey.Favorite.fromJson.fromResponseList);
+  }
 }

@@ -50,6 +50,7 @@ const List<String> permissions = [
 class MisskeyAdapter extends DecentralizedBackendAdapter
     implements
         AnnouncementsSupport,
+        BookmarkSupport,
         ChatSupport,
         CustomEmojiSupport,
         FollowSupport,
@@ -735,4 +736,25 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
   @override
   Hashtag getHashtag(String hashtag) => Hashtag(hashtag);
+
+  @override
+  Future<void> bookmarkPost(String id) => client.createFavorite(id);
+
+  @override
+  Future<List<Post>> getBookmarks({
+    String? maxId,
+    String? sinceId,
+    String? minId,
+  }) {
+    return client //
+        .getFavorites(sinceId: sinceId, untilId: maxId)
+        .then(
+          (favorites) => favorites //
+              .map((e) => e.note.toKaiteki(instance))
+              .toList(),
+        );
+  }
+
+  @override
+  Future<void> unbookmarkPost(String id) => client.deleteFavorite(id);
 }
