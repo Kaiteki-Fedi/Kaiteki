@@ -6,6 +6,7 @@ import "package:intl/intl.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/text_theme.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki_core/model.dart";
 
 const _kSecondsPerYear = Duration.secondsPerDay * 365;
@@ -98,152 +99,180 @@ class _PollDialogState extends ConsumerState<PollDialog> {
   Widget build(BuildContext context) {
     const horizontalPadding = EdgeInsets.symmetric(horizontal: 20);
 
-    return AlertDialog(
-      title: Text(widget.poll == null ? "Add poll" : "Edit poll"),
-      scrollable: true,
-      contentPadding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
-      content: ConstrainedBox(
-        constraints: kDialogConstraints.copyWith(
-          minWidth: kDialogConstraints.maxWidth,
-        ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: horizontalPadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // TextFormField(
-                    //   decoration: InputDecoration(
-                    //     labelText: "Question",
-                    //     border: const OutlineInputBorder(),
-                    //   ),
-                    //   validator: (value) {
-                    //     if (value == null || value.isEmpty) {
-                    //       return "Please enter a question";
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
-                    // const SizedBox(height: 16),
-                    ..._controllers.map<Widget>(
-                      (e) {
-                        if (e == _controllers.last) {
-                          return _buildPlaceholderOptionTextField(e);
-                        }
-
-                        return _buildOptionTextField(e);
-                      },
-                    ).intersperse(const SizedBox(height: 8)),
-                    if (_controllers.length >= 2) ...[
-                      const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          context.l10n.pollOptionCount(_controllers.length - 1),
-                        ),
-                      ),
-                    ],
-                    const Divider(height: 32 + 1),
-                    _TimeOptionSelector(
-                      value: _timeOption,
-                      onChanged: (value) => setState(() => _timeOption = value),
-                      showIndefinite: ref
-                          .read(adapterProvider)
-                          .capabilities
-                          .supportsIndefinitePolls,
-                    ),
-                  ],
-                ),
-              ),
-              AnimatedCrossFade(
-                duration: const Duration(milliseconds: 200),
-                firstChild: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 16),
-                    PageTransitionSwitcher(
-                      reverse: _timeOption == _TimeOption.endAfter,
-                      duration: const Duration(milliseconds: 200),
-                      transitionBuilder: _buildTransition,
-                      child: _timeOption == _TimeOption.endAfter
-                          ? Padding(
-                              key: const ValueKey(_TimeOption.endAfter),
-                              padding: horizontalPadding,
-                              child: _DurationSelector(
-                                controller: _durationController,
-                                timeUnit: _timeUnit,
-                                onTimeUnitChanged: (value) =>
-                                    setState(() => _timeUnit = value),
-                              ),
-                            )
-                          : Padding(
-                              key: const ValueKey(_TimeOption.endAt),
-                              padding: horizontalPadding,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _DateField(
-                                      date: _date,
-                                      onChanged: (value) =>
-                                          setState(() => _date = value),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: _TimeField(
-                                      time: _time,
-                                      onChanged: (value) =>
-                                          setState(() => _time = value),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                    ),
-                  ],
-                ),
-                secondChild: const SizedBox(),
-                crossFadeState: _timeOption == _TimeOption.indefinite
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-              ),
-              Divider(
-                height: 32 + 1,
-                indent: horizontalPadding.left,
-                endIndent: horizontalPadding.right,
-              ),
-              SwitchListTile(
-                contentPadding: horizontalPadding,
-                value: _allowMultipleVotes,
-                onChanged: (value) =>
-                    setState(() => _allowMultipleVotes = value),
-                title: const Text("Allow multiple votes"),
-                subtitle: const Text("Users can choose multiple options"),
-              ),
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.materialL10n.cancelButtonLabel),
-        ),
-        TextButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              Navigator.of(context).pop(draft);
-            }
-          },
-          child: Text(context.materialL10n.saveButtonLabel),
-        ),
-      ],
+    final saveButton = TextButton(
+      onPressed: () {
+        if (_formKey.currentState!.validate()) {
+          Navigator.of(context).pop(draft);
+        }
+      },
+      child: Text(context.materialL10n.saveButtonLabel),
     );
+
+    final form = Form(
+      key: _formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: horizontalPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // TextFormField(
+                //   decoration: InputDecoration(
+                //     labelText: "Question",
+                //     border: const OutlineInputBorder(),
+                //   ),
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return "Please enter a question";
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // const SizedBox(height: 16),
+                ..._controllers.map<Widget>(
+                  (e) {
+                    if (e == _controllers.last) {
+                      return _buildPlaceholderOptionTextField(e);
+                    }
+
+                    return _buildOptionTextField(e);
+                  },
+                ).intersperse(const SizedBox(height: 8)),
+                if (_controllers.length >= 2) ...[
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      context.l10n.pollOptionCount(_controllers.length - 1),
+                    ),
+                  ),
+                ],
+                const Divider(height: 32 + 1),
+                _TimeOptionSelector(
+                  value: _timeOption,
+                  onChanged: (value) => setState(() => _timeOption = value),
+                  showIndefinite: ref
+                      .read(adapterProvider)
+                      .capabilities
+                      .supportsIndefinitePolls,
+                ),
+              ],
+            ),
+          ),
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 200),
+            firstChild: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 16),
+                PageTransitionSwitcher(
+                  reverse: _timeOption == _TimeOption.endAfter,
+                  duration: const Duration(milliseconds: 200),
+                  transitionBuilder: _buildTransition,
+                  child: _timeOption == _TimeOption.endAfter
+                      ? Padding(
+                          key: const ValueKey(_TimeOption.endAfter),
+                          padding: horizontalPadding,
+                          child: _DurationSelector(
+                            controller: _durationController,
+                            timeUnit: _timeUnit,
+                            onTimeUnitChanged: (value) =>
+                                setState(() => _timeUnit = value),
+                          ),
+                        )
+                      : Padding(
+                          key: const ValueKey(_TimeOption.endAt),
+                          padding: horizontalPadding,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _DateField(
+                                  date: _date,
+                                  onChanged: (value) =>
+                                      setState(() => _date = value),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: _TimeField(
+                                  time: _time,
+                                  onChanged: (value) =>
+                                      setState(() => _time = value),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+              ],
+            ),
+            secondChild: const SizedBox(),
+            crossFadeState: _timeOption == _TimeOption.indefinite
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+          ),
+          Divider(
+            height: 32 + 1,
+            indent: horizontalPadding.left,
+            endIndent: horizontalPadding.right,
+          ),
+          SwitchListTile(
+            contentPadding: horizontalPadding,
+            value: _allowMultipleVotes,
+            onChanged: (value) => setState(() => _allowMultipleVotes = value),
+            title: const Text("Allow multiple votes"),
+            subtitle: const Text("Users can choose multiple options"),
+          ),
+        ],
+      ),
+    );
+
+    final title = Text(widget.poll == null ? "Add poll" : "Edit poll");
+
+    if (WindowWidthSizeClass.fromContext(context) <=
+        WindowWidthSizeClass.compact) {
+      return Dialog.fullscreen(
+        child: Column(
+          children: [
+            AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.close_rounded),
+                onPressed: () => Navigator.of(context).pop(),
+                tooltip: context.materialL10n.closeButtonTooltip,
+              ),
+              title: title,
+              actions: [saveButton, kAppBarActionsSpacer],
+            ),
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: form,
+            ),
+          ],
+        ),
+      );
+    } else {
+      return AlertDialog(
+        title: title,
+        scrollable: true,
+        contentPadding: const EdgeInsets.fromLTRB(0, 20, 0, 24),
+        content: ConstrainedBox(
+          constraints: kDialogConstraints.copyWith(
+            minWidth: kDialogConstraints.maxWidth,
+          ),
+          child: form,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.materialL10n.cancelButtonLabel),
+          ),
+          saveButton,
+        ],
+      );
+    }
   }
 
   Widget _buildTransition(
