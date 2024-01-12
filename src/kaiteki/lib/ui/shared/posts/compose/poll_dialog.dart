@@ -363,6 +363,9 @@ class _DurationSelector extends StatelessWidget {
               if (value == null || value.isEmpty) {
                 return "Please enter a duration";
               }
+              if (int.tryParse(value) == null) {
+                return "Please enter a valid number";
+              }
               return null;
             },
           ),
