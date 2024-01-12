@@ -406,7 +406,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   Future<Attachment> uploadAttachment(AttachmentDraft draft) async {
     final driveFile = await client.createDriveFile(
-      await MultipartFile(
+      MultipartFile(
         'file',
         draft.file!.openRead(),
         await draft.file!.length(),
