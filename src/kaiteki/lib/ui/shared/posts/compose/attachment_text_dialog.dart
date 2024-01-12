@@ -1,5 +1,4 @@
 import "package:async/async.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
@@ -93,7 +92,7 @@ class _AttachmentTextDialogState extends State<AttachmentTextDialog> {
         future: _mediaFuture,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text("Failure loading media");
+            return const Text("Failure loading media");
           } else if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           } else {

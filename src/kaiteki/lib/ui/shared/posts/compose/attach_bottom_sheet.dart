@@ -55,7 +55,7 @@ class AttachBottomSheet extends StatelessWidget {
                       onPickFile();
                     },
                     icon: const Icon(Icons.insert_drive_file),
-                    label: Text("File"),
+                    label: const Text("File"),
                   ),
                 ),
               if (onAddPoll != null)
@@ -79,7 +79,6 @@ class AttachBottomSheet extends StatelessWidget {
 
 class _AttachButton extends StatelessWidget {
   const _AttachButton({
-    super.key,
     required this.onPressed,
     required this.icon,
     required this.label,

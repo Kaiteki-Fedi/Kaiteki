@@ -57,7 +57,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
       builder: (_, snapshot) {
         if (snapshot.hasError) {
           if (snapshot.error is UnimplementedError) {
-            return Center(
+            return const Center(
               child: Text("Video playback is not supported on this platform."),
             );
           }

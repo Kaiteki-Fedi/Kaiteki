@@ -3,7 +3,6 @@ import "dart:math" as math;
 import "package:anchor_scroll_controller/anchor_scroll_controller.dart";
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
-import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/emoji/unicode.dart";
 import "package:kaiteki/preferences/app_preferences.dart";

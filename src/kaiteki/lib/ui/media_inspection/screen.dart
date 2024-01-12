@@ -174,8 +174,6 @@ class _MediaInspectionScreenState extends State<MediaInspectionScreen> {
                       label += ". ${currentMedia.description}";
                     }
 
-                    print(label);
-
                     final needsPaginationButtons =
                         ref.watch(pointingDeviceProvider) ==
                             PointingDevice.mouse;

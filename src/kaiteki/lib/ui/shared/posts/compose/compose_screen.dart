@@ -3,7 +3,6 @@ import "package:flutter/material.dart" hide Visibility;
 import "package:flutter/services.dart";
 import "package:go_router/go_router.dart";
 import "package:image_picker/image_picker.dart";
-import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/preferences/app_preferences.dart";

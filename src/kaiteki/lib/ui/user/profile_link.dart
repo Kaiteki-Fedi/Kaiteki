@@ -136,9 +136,7 @@ _KnownService? _detectService(Uri url) {
   if (service != null) return service;
 
   final normalizedHost = url.host.toLowerCase();
-  service = _knownServices.entries
+  return _knownServices.entries
       .firstWhereOrNull((entry) => entry.key.contains(normalizedHost))
       ?.value;
-
-  return service;
 }

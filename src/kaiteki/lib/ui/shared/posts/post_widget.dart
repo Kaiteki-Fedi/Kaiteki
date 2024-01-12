@@ -3,7 +3,6 @@ import "package:flutter/semantics.dart";
 import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
-import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/bookmarks.dart";
 import "package:kaiteki/model/auth/account.dart";
