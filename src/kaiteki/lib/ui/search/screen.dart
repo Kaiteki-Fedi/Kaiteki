@@ -149,9 +149,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     itemCount: results.users.length,
                   ),
                 if (results.hashtags.isEmpty)
-                  const IconLandingWidget(
-                    icon: Icon(Icons.tag_rounded),
-                    text: Text("No results"),
+                  IconLandingWidget(
+                    icon: const Icon(Icons.tag_rounded),
+                    text: Text(context.l10n.searchHashtagsNoResults),
                   )
                 else
                   ListView.separated(
