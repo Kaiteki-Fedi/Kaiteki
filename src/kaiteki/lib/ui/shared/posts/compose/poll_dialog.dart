@@ -143,7 +143,9 @@ class _PollDialogState extends ConsumerState<PollDialog> {
                       const SizedBox(height: 8),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text("${_controllers.length - 1} options"),
+                        child: Text(
+                          context.l10n.pollOptionCount(_controllers.length - 1),
+                        ),
                       ),
                     ],
                     const Divider(height: 32 + 1),
