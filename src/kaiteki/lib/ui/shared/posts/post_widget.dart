@@ -29,6 +29,8 @@ import "package:kaiteki_core/kaiteki_core.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
+import "post_widget_menu_items.dart";
+
 const kArticleViewThreshold = 300;
 const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 
@@ -267,61 +269,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   List<Widget> _buildMenuItems(BuildContext context) {
     final adapter = ref.read(adapterProvider);
 
-    MenuItemButton buildShareMenuItem(BuildContext context) {
-      return MenuItemButton(
-        leadingIcon: const Icon(Icons.share_rounded),
-        onPressed: () => share(context, _post),
-        child: Text(context.l10n.shareButtonLabel),
-      );
-    }
-
-    MenuItemButton buildBookmarkMenuItem(BuildContext context) {
-      final l10n = context.l10n;
-      return MenuItemButton(
-        shortcut: bookmark,
-        onPressed: _onBookmark,
-        leadingIcon: Icon(
-          _post.state.bookmarked
-              ? Icons.bookmark_rounded
-              : Icons.bookmark_border_rounded,
-          color: Theme.of(context).ktkColors?.bookmarkColor,
-        ),
-        child: Text(
-          _post.state.bookmarked
-              ? l10n.postRemoveFromBookmarks
-              : l10n.postAddToBookmarks,
-        ),
-      );
-    }
-
-    MenuItemButton buildDebugTextRenderingMenuItem(BuildContext context) {
-      return MenuItemButton(
-        leadingIcon: const Icon(Icons.bug_report_rounded),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => TextRenderDialog(_post),
-        ),
-        child: const Text("Debug text rendering"),
-      );
-    }
-
-    MenuItemButton buildTranslateMenuItem(BuildContext context) {
-      final translationAvailable = _isTranslationAvailable(ref);
-      if (_translatedPost != null) {
-        return MenuItemButton(
-          leadingIcon: const Icon(Icons.undo_rounded),
-          onPressed: () => setState(() => _translatedPost = null),
-          child: Text(context.l10n.undoTranslateButton),
-        );
-      }
-
-      return MenuItemButton(
-        onPressed: translationAvailable ? _onTranslate : null,
-        leadingIcon: const Icon(Icons.translate_rounded),
-        child: Text(context.l10n.translateButton),
-      );
-    }
-
     Widget buildOpenInMenuItem(BuildContext context) {
       final currentAccount = ref.read(currentAccountProvider);
       final federatedAccounts = ref.read(accountManagerProvider).accounts.where(
@@ -333,13 +280,11 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
       // It's just nonsensical to show a submenu for 1 item
       if (federatedAccounts.length < 2) {
-        return MenuItemButton(
-          leadingIcon: const Icon(Icons.open_in_browser_rounded),
-          onPressed: url == null
-              ? null
-              : () async =>
-                  launchUrl(url, mode: LaunchMode.externalApplication),
-          child: Text(context.l10n.openInBrowserLabel),
+        return OpenInBrowserMenuItem(
+          onPressed: url.andThen(
+            (url) => () async =>
+                launchUrl(url, mode: LaunchMode.externalApplication),
+          ),
         );
       }
 
@@ -370,8 +315,19 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     }
 
     return [
-      if (adapter is BookmarkSupport) buildBookmarkMenuItem(context),
-      buildTranslateMenuItem(context),
+      if (adapter is BookmarkSupport)
+        BookmarkMenuItem(
+          bookmarked: _post.state.bookmarked,
+          onPressed: _onBookmark,
+        ),
+      if (_translatedPost == null)
+        TranslateMenuItem(
+          onPressed: _isTranslationAvailable(ref) ? _onTranslate : null,
+        )
+      else
+        UndoTranslationMenuItem(
+          onPressed: () => setState(() => _translatedPost = null),
+        ),
       if (ref.watch(AppExperiment.articleView.provider)) ...[
         MenuItemButton(
           leadingIcon: const Icon(Icons.article_rounded),
@@ -386,12 +342,17 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         ),
       ],
       const Divider(),
-      buildShareMenuItem(context),
+      ShareMenuItem(onPressed: () => share(context, _post)),
       buildOpenInMenuItem(context),
       if (_post.content != null &&
           ref.watch(preferences.developerMode).value) ...[
         const Divider(),
-        buildDebugTextRenderingMenuItem(context),
+        DebugTextRenderingMenuItem(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => TextRenderDialog(_post),
+          ),
+        ),
       ],
     ];
   }
