@@ -8,6 +8,7 @@ typedef DynamicDialogContainerBuilder = Widget Function(
   bool fullscreen,
 );
 
+@Deprecated("Compose the dialog directly instead")
 class DynamicDialogContainer extends StatelessWidget {
   const DynamicDialogContainer({
     super.key,
