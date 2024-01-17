@@ -76,6 +76,7 @@ Iterable<Region> parse(String input) sync* {
     final char = input[i];
 
     final isDot = char == ".";
+    final isDash = char == "-";
     final isComma = char == ",";
     final isSpace = char == " ";
     final isOpeningBracket = char == "[";
@@ -137,7 +138,7 @@ Iterable<Region> parse(String input) sync* {
 
       case _ParserState.tag when isAlphaNumeric:
       case _ParserState.key when isAlphaNumeric:
-      case _ParserState.value when isAlphaNumeric || isDot:
+      case _ParserState.value when isAlphaNumeric || isDot || isDash:
         buffer.write(char);
         break;
 
