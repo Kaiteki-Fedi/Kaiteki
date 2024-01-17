@@ -18,14 +18,14 @@ class CustomizationSettingsScreen extends ConsumerWidget {
     final l10n = context.l10n;
 
     Future<void> onChangeTheme() async {
-      final result = await showDialog(
+      final result = await showDialog<ThemeMode>(
         context: context,
         builder: (_) => ThemeDialog(ref.read(themeMode).value),
       );
 
       if (result == null) return;
 
-      ref.read(themeMode).value = result.themeMode;
+      ref.read(themeMode).value = result;
     }
 
     return Scaffold(
