@@ -497,10 +497,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
+    // TODO(Craftplacer): rename
+    final instanceModel = await adapter.getInstance();
+
     final account = Account.fromLoginResult(
       result,
       adapter,
       instance.host,
+      instance: instanceModel,
     );
 
     if (account.accountSecret == null) {

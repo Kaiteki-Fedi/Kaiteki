@@ -79,10 +79,13 @@ class _OAuthFinalizationScreenState
       return false;
     }
 
+    final instance = await adapter.getInstance();
+
     final account = Account.fromLoginResult(
       result,
       adapter,
       widget.host,
+      instance: instance,
     );
 
     await accountManager.add(account);

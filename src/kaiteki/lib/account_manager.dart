@@ -203,10 +203,24 @@ class AccountManager extends _$AccountManager {
       return null;
     }
 
+    Instance instance;
+
+    try {
+      instance = await adapter.getInstance();
+    } catch (e, s) {
+      _logger.warning(
+        "Failed to fetch instance information",
+        e,
+        s,
+      );
+      return null;
+    }
+
     return Account(
       key: key,
       adapter: adapter,
       user: user,
+      instance: instance,
       clientSecret: clientSecret,
       accountSecret: accountSecret,
     );

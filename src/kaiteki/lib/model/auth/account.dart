@@ -11,6 +11,7 @@ class Account extends Equatable {
   final AccountSecret? accountSecret;
   final ClientSecret? clientSecret;
   final BackendAdapter adapter;
+  final Instance? instance;
   final User user;
 
   const Account({
@@ -19,13 +20,15 @@ class Account extends Equatable {
     required this.user,
     required this.clientSecret,
     required this.accountSecret,
+    this.instance,
   });
 
   factory Account.fromLoginResult(
     LoginSuccess result,
     BackendAdapter adapter,
-    String host,
-  ) {
+    String host, {
+    Instance? instance,
+  }) {
     return Account(
       key: AccountKey(
         adapter.type,
@@ -33,6 +36,7 @@ class Account extends Equatable {
         result.user.username,
       ),
       adapter: adapter,
+      instance: instance,
       user: result.user,
       clientSecret: result.clientSecret.andThen(ClientSecret.fromCore),
       accountSecret: result.userSecret.andThen(AccountSecret.fromCore),
@@ -40,5 +44,12 @@ class Account extends Equatable {
   }
 
   @override
-  List<Object?> get props => [key, accountSecret, clientSecret, adapter, user];
+  List<Object?> get props => [
+        key,
+        accountSecret,
+        clientSecret,
+        adapter,
+        user,
+        instance,
+      ];
 }
