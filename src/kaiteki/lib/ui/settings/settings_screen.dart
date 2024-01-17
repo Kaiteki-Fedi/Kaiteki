@@ -20,7 +20,11 @@ class SettingsScreen extends StatelessWidget {
             children: [
               SettingsSection(
                 children: [
-                  const LocaleListTile(),
+                  ListTile(
+                    leading: const Icon(Icons.pending_rounded),
+                    title: Text("General"),
+                    onTap: () => context.push("/settings/general"),
+                  ),
                   ListTile(
                     leading: const Icon(Icons.palette_rounded),
                     title: Text(l10n.settingsCustomization),
@@ -45,6 +49,11 @@ class SettingsScreen extends StatelessWidget {
                     leading: const Icon(Icons.accessibility_new_rounded),
                     title: Text(context.l10n.settingsAccessibility),
                     onTap: () => context.push("/settings/accessibility"),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.shield_rounded),
+                    title: Text("Privacy and security"),
+                    onTap: () => context.push("/settings/privacy-security"),
                   ),
                 ],
               ),

@@ -33,7 +33,9 @@ import "package:kaiteki/ui/settings/customization/screen.dart";
 import "package:kaiteki/ui/settings/debug/theme_screen.dart";
 import "package:kaiteki/ui/settings/debug_screen.dart";
 import "package:kaiteki/ui/settings/experiments.dart";
+import "package:kaiteki/ui/settings/general/screen.dart";
 import "package:kaiteki/ui/settings/manage_languages.dart";
+import "package:kaiteki/ui/settings/privacy_security/screen.dart";
 import "package:kaiteki/ui/settings/settings_screen.dart";
 import "package:kaiteki/ui/settings/smart_features_screen.dart";
 import "package:kaiteki/ui/settings/tweaks_screen.dart";
@@ -213,6 +215,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: "visible-languages",
             name: "visibleLanguageSettings",
             builder: (_, __) => const ManageLanaguagesScreen(),
+          ),
+          GoRoute(
+            name: "privacy-security",
+            path: "privacy-security",
+            builder: (_, __) => const PrivacySecurityScreen(),
+          ),
+          GoRoute(
+            name: "general",
+            path: "general",
+            builder: (_, __) => const GeneralSettingsScreen(),
           ),
         ],
       ),

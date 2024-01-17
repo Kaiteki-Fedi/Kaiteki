@@ -147,6 +147,16 @@ extension KaitekiMisskeyMetaExtension on misskey.Meta {
       iconUrl: iconUrl.andThen(instanceUri.resolve),
       mascotUrl: mascotImageUrl.andThen(instanceUri.resolve),
       backgroundUrl: bannerUrl.andThen(Uri.parse),
+      ads: ads?.map((e) => e.toKaiteki()).toList(),
+    );
+  }
+}
+
+extension KaitekiMisskeyAdExtension on misskey.Ad {
+  Ad toKaiteki() {
+    return Ad(
+      imageUrl: Uri.parse(imageUrl),
+      linkUrl: Uri.parse(url),
     );
   }
 }

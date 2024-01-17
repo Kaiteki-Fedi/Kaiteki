@@ -1,3 +1,4 @@
+export 'src/social/model/ad.dart';
 export 'src/social/model/announcement.dart';
 export 'src/social/model/attachment.dart';
 export 'src/social/model/avatar_decoration.dart';

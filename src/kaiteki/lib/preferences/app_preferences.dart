@@ -197,3 +197,18 @@ final hasFinishedOnboarding = createSettingProvider<bool>(
   initialValue: false,
   provider: sharedPreferencesProvider,
 );
+
+final showAds = createSettingProvider<bool>(
+  key: "showAds",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final linkWarningPolicy = createEnumSettingProvider<LinkWarningPolicy>(
+  key: "linkWarningPolicy",
+  initialValue: LinkWarningPolicy.onAds,
+  values: LinkWarningPolicy.values,
+  provider: sharedPreferencesProvider,
+);
+
+enum LinkWarningPolicy { always, onAds, never }

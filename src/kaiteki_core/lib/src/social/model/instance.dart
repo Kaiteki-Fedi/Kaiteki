@@ -1,3 +1,4 @@
+import 'ad.dart';
 import 'user.dart';
 
 class Instance<T> {
@@ -21,6 +22,12 @@ class Instance<T> {
   final List<String>? rules;
   final Uri? tosUrl;
 
+  /// A list of ads that are displayed on the instance.
+  ///
+  /// Null, if the instance does not support ads. Empty, if the instance
+  /// supports ads, but does not have any ads.
+  final List<Ad>? ads;
+
   const Instance({
     this.source,
     required this.name,
@@ -34,5 +41,6 @@ class Instance<T> {
     this.moderators,
     this.rules,
     this.tosUrl,
+    this.ads,
   });
 }

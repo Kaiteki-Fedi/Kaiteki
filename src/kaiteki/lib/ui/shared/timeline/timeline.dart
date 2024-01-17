@@ -3,7 +3,9 @@ import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/model/pagination_state.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
+import "package:kaiteki/ui/ad.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/error_landing_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
@@ -99,10 +101,23 @@ class TimelineSliverState extends ConsumerState<TimelineSliver> {
             );
           },
         ),
-        separatorBuilder: (_, __) {
-          return ref.watch(usePostCards).value
+        separatorBuilder: (_, i) {
+          final canShowAds =
+              ref.watch(adsProvider.select((e) => e?.isNotEmpty == true));
+          final showAd = ref.watch(showAds).value && i % 5 == 0 && canShowAds;
+          final separator = ref.watch(usePostCards).value
               ? const SizedBox(height: 8)
               : const Divider(height: 1);
+
+          if (!showAd) return separator;
+
+          return Column(
+            children: [
+              separator,
+              const AdWidget(),
+              separator,
+            ],
+          );
         },
       ),
     );
