@@ -211,4 +211,11 @@ final linkWarningPolicy = createEnumSettingProvider<LinkWarningPolicy>(
   provider: sharedPreferencesProvider,
 );
 
+/// Whether to merge reactions with the same name into one.
+final mergeHomonymousReactions = createSettingProvider<bool>(
+  key: "mergeHomonymousReactions",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
 enum LinkWarningPolicy { always, onAds, never }

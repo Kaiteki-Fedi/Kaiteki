@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/settings/preference_slider_list_tile.dart";
@@ -32,7 +33,8 @@ class TweaksScreen extends StatelessWidget {
                     provider: squareEmojis,
                     title: const Text("Square emojis"),
                     subtitle: const Text(
-                        "Forces emojis to be square. Might make long emojis appear squished.",),
+                      "Forces emojis to be square. Might make long emojis appear squished.",
+                    ),
                   ),
                 ],
               ),
@@ -59,6 +61,16 @@ class TweaksScreen extends StatelessWidget {
                       if (value <= 0) return "Square";
                       return "${value}dp";
                     },
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: Text("Reactions"),
+                children: [
+                  PreferenceSwitchListTile(
+                    provider: mergeHomonymousReactions,
+                    title: Text("Merge reactions with the same name"),
+                    subtitle: Text("Emoji variations might be lost"),
                   ),
                 ],
               ),
