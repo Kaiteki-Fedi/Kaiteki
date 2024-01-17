@@ -5,23 +5,11 @@ import "package:kaiteki/theming/themes.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
-final theme = createSettingProvider<AppTheme?>(
+final theme = createEnumSettingProvider<AppTheme>(
   key: "theme",
-  initialValue: AppTheme.affection,
-  read: (prefs, key) {
-    final value = prefs.getString(key);
-    if (value == null) return null;
-    return AppTheme.values.firstWhereOrNull((theme) => theme.name == value);
-  },
-  write: (prefs, key, value) async {
-    final name = value?.name;
-    if (name == null) {
-      await prefs.remove(key);
-    } else {
-      await prefs.setString(key, name);
-    }
-  },
+  initialValue: AppTheme.system,
   provider: sharedPreferencesProvider,
+  values: AppTheme.values,
 );
 
 final themeMode = createEnumSettingProvider<ThemeMode>(

@@ -5,7 +5,7 @@ import "package:kaiteki/theming/themes.dart";
 import "package:kaiteki_ui/kaiteki_ui.dart";
 
 ThemeData makeDefaultTheme(Brightness brightness) =>
-    makeTheme(AppTheme.affection.getColorScheme(brightness));
+    makeTheme(AppTheme.affection.getColorScheme(brightness)!);
 
 ThemeData makeTheme(ColorScheme colorScheme) {
   return ThemeData.from(colorScheme: colorScheme)

@@ -126,11 +126,10 @@ final class KaitekiApp extends ConsumerWidget {
       }
 
       final appTheme = ref.watch(preferences.theme).value;
-      if (appTheme != null) {
-        return appTheme.getColorScheme(brightness);
-      }
 
-      return systemColorScheme ?? AppTheme.affection.getColorScheme(brightness);
+      return appTheme.getColorScheme(brightness) ??
+          systemColorScheme ??
+          AppTheme.affection.getColorScheme(brightness)!;
     }
 
     return ThemeData.from(colorScheme: getColorScheme())
