@@ -59,6 +59,9 @@ final GlobalKey<NavigatorState> _rootNavigatorKey =
 final GlobalKey<NavigatorState> _onboardingNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: "onboarding");
 
+final GlobalKey<NavigatorState> _settingsNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: "settings");
+
 const authenticatedPath = "/@:accountUsername@:accountHost";
 
 final _logger = Logger("Router");
@@ -157,12 +160,19 @@ final routerProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
-      GoRoute(
-        path: "/settings",
-        builder: (_, __) => const SettingsScreen(),
+      ShellRoute(
+        builder: (_, __, child) {
+          return SettingsScreen(child: child);
+        },
+        navigatorKey: _settingsNavigatorKey,
         routes: [
+          // TODO(Craftplacer): use better transitions 🏳️‍⚧️
           GoRoute(
-            path: "customization",
+            path: "/settings",
+            builder: (_, __) => const SizedBox(),
+          ),
+          GoRoute(
+            path: "/settings/customization",
             builder: (_, __) => const CustomizationSettingsScreen(),
             routes: [
               GoRoute(
@@ -173,12 +183,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             name: "experiments",
-            path: "experiments",
+            path: "/settings/experiments",
             builder: (_, __) => const ExperimentsScreen(),
           ),
           GoRoute(
             name: "wellbeing",
-            path: "wellbeing",
+            path: "/settings/wellbeing",
             builder: (_, __) => const WellbeingScreen(),
             routes: [
               GoRoute(
@@ -190,11 +200,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             name: "tweaks",
-            path: "tweaks",
+            path: "/settings/tweaks",
             builder: (_, __) => const TweaksScreen(),
           ),
           GoRoute(
-            path: "debug",
+            path: "/settings/debug",
             builder: (_, __) => const DebugScreen(),
             routes: [
               GoRoute(
@@ -204,26 +214,26 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
-            path: "accessibility",
+            path: "/settings/accessibility",
             builder: (_, __) => const AccessibilityScreen(),
           ),
           GoRoute(
-            path: "smart-features",
+            path: "/settings/smart-features",
             builder: (_, __) => const SmartFeaturesScreen(),
           ),
           GoRoute(
-            path: "visible-languages",
+            path: "/settings/visible-languages",
             name: "visibleLanguageSettings",
             builder: (_, __) => const ManageLanaguagesScreen(),
           ),
           GoRoute(
             name: "privacy-security",
-            path: "privacy-security",
+            path: "/settings/privacy-security",
             builder: (_, __) => const PrivacySecurityScreen(),
           ),
           GoRoute(
             name: "general",
-            path: "general",
+            path: "/settings/general",
             builder: (_, __) => const GeneralSettingsScreen(),
           ),
         ],
