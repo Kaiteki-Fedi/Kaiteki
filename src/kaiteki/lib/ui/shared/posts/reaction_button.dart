@@ -36,49 +36,57 @@ class ReactionButton extends ConsumerWidget {
 
     if (reacted) count--;
 
-    final emojiTitle = switch (reaction.emoji) {
-      UnicodeEmoji() => reaction.emoji.short,
-      _ => reaction.emoji.short,
+    final emoji = reaction.emoji;
+    final emojiTitle = switch (emoji) {
+      UnicodeEmoji() => emoji.short,
+      _ => emoji.short,
     };
     final outlineColor = theme.colorScheme.outline;
+
+    Widget widget = MaterialButton(
+      color: backgroundColor,
+      onPressed: onPressed,
+      visualDensity: VisualDensity.compact,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+        side: reacted ? BorderSide.none : BorderSide(color: outlineColor),
+      ),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      minWidth: emojiSize + 40,
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DefaultTextStyle.merge(
+            style: TextStyle(color: foregroundColor),
+            child: EmojiWidget(
+              emoji,
+              size: emojiSize,
+            ),
+          ),
+          if (ref.watch(showReactionCounts).value) ...[
+            const SizedBox(width: 6),
+            Text(
+              reaction.count.toString(),
+              style: textStyle.copyWith(color: foregroundColor),
+            ),
+          ],
+        ],
+      ),
+    );
+
+    if (emoji is CustomEmoji) {
+      widget = Tooltip(
+        message: emoji.short,
+        child: widget,
+      );
+    }
+
     return Semantics(
       label: count >= 1 ? "$count $emojiTitle reactions" : null,
       excludeSemantics: true,
-      child: Tooltip(
-        message: "$count people reacted with $emojiTitle",
-        child: MaterialButton(
-          color: backgroundColor,
-          onPressed: onPressed,
-          visualDensity: VisualDensity.compact,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-            side: reacted ? BorderSide.none : BorderSide(color: outlineColor),
-          ),
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          minWidth: emojiSize + 40,
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DefaultTextStyle.merge(
-                style: TextStyle(color: foregroundColor),
-                child: EmojiWidget(
-                  reaction.emoji,
-                  size: emojiSize,
-                ),
-              ),
-              if (ref.watch(showReactionCounts).value) ...[
-                const SizedBox(width: 6),
-                Text(
-                  reaction.count.toString(),
-                  style: textStyle.copyWith(color: foregroundColor),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
+      child: widget,
     );
   }
 
