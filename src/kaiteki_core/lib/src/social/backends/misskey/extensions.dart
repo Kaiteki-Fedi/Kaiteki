@@ -5,6 +5,8 @@ import 'package:kaiteki_core/social.dart';
 import 'package:kaiteki_core/src/social/backends/misskey/model/list.dart';
 import 'package:kaiteki_core/utils.dart';
 
+final _birthdayDateFormat = DateFormat('yyyy-MM-dd');
+
 final misskeyNotificationTypeRosetta = {
   misskey.NotificationType.follow: NotificationType.followed,
   misskey.NotificationType.mention: NotificationType.mentioned,
@@ -67,15 +69,6 @@ PostList toList(MisskeyList list) {
     createdAt: list.createdAt,
     source: list.createdAt,
   );
-}
-
-DateTime? _parseBirthday(String? birthday) {
-  if (birthday == null) {
-    return null;
-  }
-
-  final dateFormat = DateFormat('yyyy-MM-dd');
-  return dateFormat.parseStrict(birthday);
 }
 
 EmojiHandle _splitEmoji(String key) {
@@ -296,7 +289,7 @@ extension KaitekiMisskeyUserExtension on misskey.User {
       username: username,
       details: UserDetails(
         location: location,
-        birthday: _parseBirthday(birthday),
+        birthday: birthday.andThen(_birthdayDateFormat.parseStrict),
         fields: fields?.map((e) => MapEntry(e.name, e.value)).toList(),
       ),
       state: UserState(
