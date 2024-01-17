@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/media_inspection/screen.dart";
+import "package:kaiteki/ui/shared/attachment_flex.dart";
 import "package:kaiteki/ui/shared/bottom_sheets/attachment.dart";
 import "package:kaiteki/ui/shared/posts/attachments/attachment_widget.dart";
 import "package:kaiteki_core/social.dart";
@@ -32,6 +33,7 @@ class _AttachmentRowState extends ConsumerState<AttachmentRow> {
     final border = Theme.of(context).dividerColor;
     final borderRadius = BorderRadius.circular(8);
 
+    final attachments = widget.post.attachments!;
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: borderRadius,
@@ -42,59 +44,62 @@ class _AttachmentRowState extends ConsumerState<AttachmentRow> {
         child: Material(
           borderRadius: BorderRadius.circular(8.0),
           clipBehavior: Clip.antiAlias,
-          child: SizedBox(
-            height: 320,
-            child: AspectRatio(
-              aspectRatio: 1.5,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        for (final attachment
-                            in widget.post.attachments!.take(4))
-                          Flexible(
-                            child: Semantics(
-                              image: true,
-                              button: false,
-                              child: InkWell(
-                                onLongPress: () =>
-                                    _showAttachmentActions(attachment),
-                                child: AttachmentWidget(
-                                  attachment: attachment,
-                                  reveal: revealed,
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return MediaInspectionScreen.fromPost(
-                                          widget.post,
-                                          initialIndex: widget.post.attachments!
-                                              .indexOf(attachment),
-                                        );
-                                      },
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxHeight: 320,
+            ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: AttachmentFlex(
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                    children: [
+                      for (final attachment in attachments.take(4))
+                        Semantics(
+                          image: true,
+                          button: false,
+                          child: InkWell(
+                            onLongPress: () =>
+                                _showAttachmentActions(attachment),
+                            child: AttachmentWidget(
+                              attachment: attachment,
+                              reveal: revealed,
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return MediaInspectionScreen.fromPost(
+                                      widget.post,
+                                      initialIndex:
+                                          attachments.indexOf(attachment),
                                     );
                                   },
-                                  boxFit: ref.watch(cropAttachments).value
-                                      ? BoxFit.cover
-                                      : BoxFit.contain,
-                                ),
-                              ),
+                                );
+                              },
+                              boxFit: ref.watch(cropAttachments).value
+                                  ? BoxFit.cover
+                                  : BoxFit.contain,
                             ),
                           ),
-                      ],
+                        ),
+                    ],
+                  ),
+                ),
+                if (!revealed)
+                  Center(
+                    child: FilledButton.tonal(
+                      onPressed: reveal,
+                      child: const Text("Show sensitive content"),
                     ),
                   ),
-                  if (!revealed)
-                    Center(
-                      child: FilledButton.tonal(
-                        onPressed: reveal,
-                        child: const Text("Show sensitive content"),
-                      ),
-                    ),
-                ],
-              ),
+                if (attachments.length > 4)
+                  Positioned(
+                    right: 8,
+                    bottom: 8,
+                    child: Text("+${attachments.length - 4}"),
+                  ),
+              ],
             ),
           ),
         ),
