@@ -17,82 +17,121 @@ class MainScreenDrawer extends ConsumerWidget {
     final adapter = ref.watch(adapterProvider);
     final feedbackEnabled = ref.watch(AppExperiment.feedback.provider);
 
-    return Drawer(
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18.0,
-                  vertical: 16.0,
-                ),
-                child: Text(
-                  kAppName,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.mail_rounded),
-                title: Text(l10n.directMessagesTitle),
-                enabled: false,
-              ),
-              if (adapter is ListSupport)
-                ListTile(
-                  leading: const Icon(Icons.article_rounded),
-                  title: Text(l10n.listsTitle),
-                  onTap: () => context.pushNamed(
-                    "lists",
-                    pathParameters: ref.accountRouterParams,
-                  ),
-                ),
-              ListTile(
-                leading: const Icon(Icons.flag_rounded),
-                title: Text(l10n.reportsTitle),
-                enabled: false,
-              ),
-              const Divider(),
-              ListTile(
-                title: Text(
-                  account.key.handle.toString(),
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                ),
-                enabled: false,
-              ),
-              ListTile(
-                leading: const Icon(Icons.manage_accounts_rounded),
-                title: Text(l10n.accountSettingsTitle),
-                onTap: () => context.pushNamed(
-                  "accountSettings",
-                  pathParameters: ref.accountRouterParams,
-                ),
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.settings_rounded),
-                title: Text(l10n.settings),
-                onTap: () => context.push("/settings"),
-              ),
-              if (feedbackEnabled)
-                ListTile(
-                  leading: const Icon(Icons.feedback_rounded),
-                  title: const Text("Send Feedback"),
-                  onTap: () => context.push("/send-feedback"),
-                ),
-              ListTile(
-                leading: const Icon(Icons.keyboard_rounded),
-                onTap: () => showKeyboardShortcuts(context),
-                title: Text(l10n.keyboardShortcuts),
-              ),
-              ListTile(
-                leading: const Icon(Icons.info_rounded),
-                title: Text(l10n.settingsAbout),
-                onTap: () => context.push("/about"),
-              ),
-            ],
+    const divider = Divider(
+      indent: 28,
+      endIndent: 28,
+    );
+
+    return NavigationDrawer(
+      selectedIndex: null,
+      onDestinationSelected: (i) {
+        if (i >= 5 && !feedbackEnabled) i++;
+
+        switch (i) {
+          case 1:
+            context.pushNamed(
+              "lists",
+              pathParameters: ref.accountRouterParams,
+            );
+            break;
+          case 3:
+            context.pushNamed(
+              "accountSettings",
+              pathParameters: ref.accountRouterParams,
+            );
+            break;
+
+          case 4:
+            context.push("/settings");
+            break;
+
+          case 5:
+            context.push("/send-feedback");
+            break;
+
+          case 6:
+            showKeyboardShortcuts(context);
+            break;
+
+          case 7:
+            context.push("/about");
+            break;
+
+          default:
+            assert(false, "Unhandled drawer destination");
+        }
+      },
+      children: [
+        const _Headline(
+          text: Text(kAppName),
+        ),
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.mail_rounded),
+          label: Text(l10n.directMessagesTitle),
+          enabled: false,
+        ),
+        if (adapter is ListSupport)
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.article_rounded),
+            label: Text(l10n.listsTitle),
+          ),
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.flag_rounded),
+          label: Text(l10n.reportsTitle),
+          enabled: false,
+        ),
+        divider,
+        _Headline(
+          text: Text(account.key.handle.toString()),
+        ),
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.manage_accounts_rounded),
+          label: Text(l10n.accountSettingsTitle),
+        ),
+        divider,
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.settings_rounded),
+          label: Text(l10n.settings),
+        ),
+        if (feedbackEnabled)
+          const NavigationDrawerDestination(
+            icon: Icon(Icons.feedback_rounded),
+            label: Text("Send Feedback"),
+          ),
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.keyboard_rounded),
+          label: Text(l10n.keyboardShortcuts),
+        ),
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.info_rounded),
+          label: Text(l10n.settingsAbout),
+        ),
+      ],
+    );
+  }
+}
+
+class _Headline extends StatelessWidget {
+  final Text text;
+
+  const _Headline({
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+      child: SizedBox(
+        height: 56,
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: DefaultTextStyle.merge(
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: theme.colorScheme.onSurface,
+            ),
+            child: text,
           ),
         ),
       ),
