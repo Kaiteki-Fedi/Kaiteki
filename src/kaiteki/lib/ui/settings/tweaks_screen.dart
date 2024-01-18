@@ -1,3 +1,6 @@
+import "dart:io";
+
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -20,6 +23,16 @@ class TweaksScreen extends StatelessWidget {
         child: SettingsContainer(
           child: Column(
             children: [
+              // Custom Tabs are only available on Android and iOS
+              if (!kIsWeb && (Platform.isAndroid || Platform.isIOS))
+                SettingsSection(
+                  children: [
+                    PreferenceSwitchListTile(
+                      provider: useCustomTabs,
+                      title: const Text("Use Custom Tabs"),
+                    ),
+                  ],
+                ),
               SettingsSection(
                 title: Text(context.l10n.settingsEmojisHeader),
                 children: [
@@ -65,12 +78,12 @@ class TweaksScreen extends StatelessWidget {
                 ],
               ),
               SettingsSection(
-                title: Text("Reactions"),
+                title: const Text("Reactions"),
                 children: [
                   PreferenceSwitchListTile(
                     provider: mergeHomonymousReactions,
-                    title: Text("Merge reactions with the same name"),
-                    subtitle: Text("Emoji variations might be lost"),
+                    title: const Text("Merge reactions with the same name"),
+                    subtitle: const Text("Emoji variations might be lost"),
                   ),
                 ],
               ),

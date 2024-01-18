@@ -10,6 +10,7 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/utils.dart";
 import "package:logging/logging.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
+import "package:url_launcher/url_launcher.dart";
 
 enum InterfaceFont {
   system,
@@ -219,3 +220,16 @@ final mergeHomonymousReactions = createSettingProvider<bool>(
 );
 
 enum LinkWarningPolicy { always, onAds, never }
+
+final useCustomTabs = createSettingProvider<bool>(
+  key: "useCustomTabs",
+  initialValue: true,
+  provider: sharedPreferencesProvider,
+);
+
+final preferredUrlLaunchMode = Provider(
+  (ref) => ref.watch(useCustomTabs).value
+      ? LaunchMode.inAppBrowserView
+      : LaunchMode.externalApplication,
+  dependencies: [useCustomTabs],
+);

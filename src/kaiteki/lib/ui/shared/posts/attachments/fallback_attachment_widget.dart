@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/utils/extensions/build_context.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki_core/model.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class FallbackAttachmentWidget extends StatelessWidget {
   const FallbackAttachmentWidget({
@@ -25,7 +26,10 @@ class FallbackAttachmentWidget extends StatelessWidget {
           size: 48,
           color: Theme.of(context).disabledColor,
         ),
-        onTap: () => context.launchUrl(attachment.url.toString()),
+        onTap: () => launchUrl(
+          attachment.url,
+          mode: ProviderScope.containerOf(context).read(preferredUrlLaunchMode),
+        ),
       ),
     );
   }

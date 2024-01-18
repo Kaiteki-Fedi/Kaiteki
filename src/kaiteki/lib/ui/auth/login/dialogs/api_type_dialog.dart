@@ -3,8 +3,8 @@ import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/api_theme.dart";
 import "package:kaiteki/link_constants.dart";
-import "package:kaiteki/utils/extensions/build_context.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:url_launcher/url_launcher_string.dart";
 
 class ApiTypeDialog extends StatefulWidget {
   const ApiTypeDialog({super.key});
@@ -37,7 +37,7 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
               child: Text(l10n.apiTypeDialog_missing),
               onPressed: () async {
                 final navigator = Navigator.of(context);
-                await context.launchUrl(requestBackendUrl).then(navigator.pop);
+                await launchUrlString(requestBackendUrl).then(navigator.pop);
               },
             ),
           ],

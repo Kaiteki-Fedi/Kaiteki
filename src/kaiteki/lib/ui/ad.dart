@@ -91,6 +91,6 @@ class _AdWidgetState extends ConsumerState<AdWidget> {
       if (result != true) return;
     }
 
-    await launchUrl(url);
+    await launchUrl(url, mode: ref.read(preferredUrlLaunchMode));
   }
 }

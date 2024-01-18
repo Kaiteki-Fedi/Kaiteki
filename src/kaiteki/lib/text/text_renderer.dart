@@ -83,7 +83,10 @@ class TextRenderer {
           : textTheme,
       onUserClick: (reference) => resolveAndOpenUser(reference, context, ref),
       onLinkClick: (url) async {
-        await launchUrl(url, mode: LaunchMode.externalApplication);
+        await launchUrl(
+          url,
+          mode: ref.read(preferredUrlLaunchMode),
+        );
       },
       onHashtagClick: (hashtag) {
         context.pushNamed(
@@ -183,7 +186,9 @@ class TextRenderer {
   }
 
   InlineSpan _overrideGestureDetector(
-      InlineSpan span, TapGestureRecognizer recognizer,) {
+    InlineSpan span,
+    TapGestureRecognizer recognizer,
+  ) {
     if (span is TextSpan) {
       return TextSpan(
         recognizer: recognizer,

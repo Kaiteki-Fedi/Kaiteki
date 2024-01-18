@@ -7,8 +7,8 @@ import "package:kaiteki/platform_checks.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/settings/about/app_badge_kind.dart";
 import "package:kaiteki/ui/shared/layout/dfp.dart";
-import "package:kaiteki/utils/extensions/build_context.dart";
 import "package:mdi/mdi.dart";
+import "package:url_launcher/url_launcher_string.dart";
 
 import "app_name_badge.dart";
 
@@ -83,25 +83,21 @@ class AboutScreen extends StatelessWidget {
                             IconButton(
                               icon: const Icon(Icons.public_rounded),
                               tooltip: l10n.creditsWebsite,
-                              onPressed: () {
-                                context.launchUrl(kAppWebsite);
-                              },
+                              onPressed: () => launchUrlString(kAppWebsite),
                               splashRadius: kSplashRadius,
                             ),
                             IconButton(
                               icon: const Icon(Mdi.github),
                               tooltip: l10n.creditsGithubRepo,
-                              onPressed: () {
-                                context.launchUrl(kGithubRepository);
-                              },
+                              onPressed: () =>
+                                  launchUrlString(kGithubRepository),
                               splashRadius: kSplashRadius,
                             ),
                             IconButton(
                               icon: const Icon(Mdi.telegram),
                               tooltip: l10n.creditsTelegramChannel,
-                              onPressed: () {
-                                context.launchUrl(kTelegramChannel);
-                              },
+                              onPressed: () =>
+                                  launchUrlString(kTelegramChannel),
                               splashRadius: kSplashRadius,
                             ),
                           ],

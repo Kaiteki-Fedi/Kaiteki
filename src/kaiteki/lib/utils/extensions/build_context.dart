@@ -6,7 +6,6 @@ import "package:kaiteki/ui/shared/dialogs/exception_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
-import "package:url_launcher/url_launcher.dart" as url_launcher;
 
 extension BuildContextExtensions on BuildContext {
   Future<bool> showWebCompatibilityDialog(ApiType type) async {
@@ -31,15 +30,7 @@ extension BuildContextExtensions on BuildContext {
       },
     );
   }
-
-  Future<void> launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    await url_launcher.launchUrl(
-      uri,
-      mode: url_launcher.LaunchMode.externalApplication,
-    );
-  }
-
+  
   void showErrorSnackbar({
     required Widget text,
     required TraceableError error,

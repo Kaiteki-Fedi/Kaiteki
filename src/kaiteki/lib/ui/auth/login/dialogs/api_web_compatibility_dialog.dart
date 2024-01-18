@@ -3,8 +3,8 @@ import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart" show kDialogConstraints;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/link_constants.dart" show corsHelpArticleUrl;
-import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
+import "package:url_launcher/url_launcher_string.dart";
 
 class ApiWebCompatibilityDialog extends StatelessWidget {
   final ApiType type;
@@ -30,7 +30,7 @@ class ApiWebCompatibilityDialog extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    await context.launchUrl(corsHelpArticleUrl);
+                    await launchUrlString(corsHelpArticleUrl);
                   },
               ),
             ],
