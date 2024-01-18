@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/text/text_context.dart";
 import "package:kaiteki/text/text_renderer.dart";
@@ -86,61 +85,6 @@ class PollWidget extends StatelessWidget {
               ],
             ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class DraftPollWidget extends StatelessWidget {
-  final PollDraft poll;
-  final List<CustomEmoji> emojis;
-  final EdgeInsets padding;
-
-  const DraftPollWidget(
-    this.poll, {
-    super.key,
-    this.padding = EdgeInsets.zero,
-    this.emojis = const [],
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final deadline = poll.deadline;
-    return Padding(
-      padding: padding,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            "Poll",
-            style: theme.textTheme.titleLarge,
-          ),
-          const SizedBox(height: 8),
-          for (final option in poll.options) ...[
-            const SizedBox(height: 8),
-            PollOptionWidget(
-              text: option,
-              emojis: emojis,
-            ),
-          ],
-          const SizedBox(height: 16),
-          if (deadline != null)
-            Row(
-              children: [
-                Text(
-                  switch (deadline) {
-                    RelativeDeadline() =>
-                      "Ends in ${deadline.duration.toStringHuman(context: context)}",
-                    AbsoluteDeadline() =>
-                      "Ends at ${DateFormat().format(deadline.endsAt)}",
-                  },
-                  style: theme.textTheme.labelSmall,
-                ),
-              ],
-            ),
         ],
       ),
     );

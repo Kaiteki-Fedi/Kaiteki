@@ -18,7 +18,6 @@ import "package:kaiteki/ui/shared/post_scope_icon.dart";
 import "package:kaiteki/ui/shared/posts/compose/attachment_tray.dart";
 import "package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/toggle_subject_button.dart";
-import "package:kaiteki/ui/shared/posts/poll_widget.dart";
 import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
@@ -220,38 +219,6 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
               maxLengthEnforcement: MaxLengthEnforcement.none,
             ),
           ),
-          if (_poll != null) ...[
-            const Divider(height: 16 + 1),
-            MenuAnchor(
-              menuChildren: [
-                MenuItemButton(
-                  leadingIcon: const Icon(Icons.edit_rounded),
-                  onPressed: _onChangePoll,
-                  child: const Text("Edit poll"),
-                ),
-                MenuItemButton(
-                  leadingIcon: const Icon(Icons.delete_rounded),
-                  onPressed: () => setState(() => _poll = null),
-                  child: const Text("Remove poll"),
-                ),
-              ],
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DraftPollWidget(_poll!),
-              ),
-              builder: (context, controller, child) {
-                return Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: InkWell(
-                    onTapUp: (details) {
-                      controller.open(position: details.localPosition);
-                    },
-                    child: child,
-                  ),
-                );
-              },
-            ),
-          ],
         ],
       ),
     );
@@ -266,6 +233,9 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
       Brightness.light => Color(theme.colorScheme.corePalette.neutral.get(98)),
       Brightness.dark => theme.colorScheme.background,
     };
+
+    final hasPoll = _poll != null;
+
     return Shortcuts(
       shortcuts: propagatingTextFieldShortcuts,
       child: FocusableActionDetector(
@@ -318,15 +288,37 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                                   ? PostPreview(draft: postDraft)
                                   : buildEdit(context, expands),
                             ),
-                            if (attachments.isNotEmpty) ...[
+                            if (attachments.isNotEmpty || hasPoll) ...[
                               const Divider(height: 1, indent: 8, endIndent: 8),
-                              AttachmentTray(
-                                attachments: attachments,
-                                onRemoveAttachment: (index) {
-                                  setState(() => attachments.removeAt(index));
+                              MenuAnchor(
+                                menuChildren: [
+                                  MenuItemButton(
+                                    leadingIcon: const Icon(Icons.edit_rounded),
+                                    onPressed: _onChangePoll,
+                                    child: const Text("Edit poll"),
+                                  ),
+                                  MenuItemButton(
+                                    leadingIcon:
+                                        const Icon(Icons.delete_rounded),
+                                    onPressed: () =>
+                                        setState(() => _poll = null),
+                                    child: const Text("Remove poll"),
+                                  ),
+                                ],
+                                builder: (context, controller, child) {
+                                  return AttachmentTray(
+                                    attachments: attachments,
+                                    onRemoveAttachment: (index) {
+                                      setState(
+                                          () => attachments.removeAt(index));
+                                    },
+                                    onToggleSensitive: _onToggleSensitive,
+                                    onChangeDescription: _onChangeDescription,
+                                    onChangePoll: hasPoll
+                                        ? () => controller.open()
+                                        : null,
+                                  );
                                 },
-                                onToggleSensitive: _onToggleSensitive,
-                                onChangeDescription: _onChangeDescription,
                               ),
                             ],
                           ],
