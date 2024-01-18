@@ -3,15 +3,16 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
-class SmartFeaturesScreen extends ConsumerStatefulWidget {
-  const SmartFeaturesScreen({super.key});
+class SmartFeaturesSettingsScreen extends ConsumerStatefulWidget {
+  const SmartFeaturesSettingsScreen({super.key});
 
   @override
-  ConsumerState<SmartFeaturesScreen> createState() =>
+  ConsumerState<SmartFeaturesSettingsScreen> createState() =>
       _SmartFeaturesScreenState();
 }
 
-class _SmartFeaturesScreenState extends ConsumerState<SmartFeaturesScreen> {
+class _SmartFeaturesScreenState
+    extends ConsumerState<SmartFeaturesSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

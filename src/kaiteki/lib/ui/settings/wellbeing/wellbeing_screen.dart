@@ -8,8 +8,8 @@ import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
-class WellbeingScreen extends StatelessWidget {
-  const WellbeingScreen({super.key});
+class WellbeingSettingsScreen extends StatelessWidget {
+  const WellbeingSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

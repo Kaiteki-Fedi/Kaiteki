@@ -184,24 +184,24 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             name: "experiments",
             path: "/settings/experiments",
-            builder: (_, __) => const ExperimentsScreen(),
+            builder: (_, __) => const ExperimentalSettingsScreen(),
           ),
           GoRoute(
             name: "wellbeing",
             path: "/settings/wellbeing",
-            builder: (_, __) => const WellbeingScreen(),
+            builder: (_, __) => const WellbeingSettingsScreen(),
             routes: [
               GoRoute(
                 name: "interactions",
                 path: "interactions",
-                builder: (_, __) => const InteractionScreen(),
+                builder: (_, __) => const InteractionSettingsScreen(),
               ),
             ],
           ),
           GoRoute(
             name: "tweaks",
             path: "/settings/tweaks",
-            builder: (_, __) => const TweaksScreen(),
+            builder: (_, __) => const TweaksSettingsScreen(),
           ),
           GoRoute(
             path: "/settings/debug",
@@ -215,11 +215,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: "/settings/accessibility",
-            builder: (_, __) => const AccessibilityScreen(),
+            builder: (_, __) => const AccessibilitySettingsScreen(),
           ),
           GoRoute(
             path: "/settings/smart-features",
-            builder: (_, __) => const SmartFeaturesScreen(),
+            builder: (_, __) => const SmartFeaturesSettingsScreen(),
           ),
           GoRoute(
             path: "/settings/visible-languages",
@@ -229,7 +229,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             name: "privacy-security",
             path: "/settings/privacy-security",
-            builder: (_, __) => const PrivacySecurityScreen(),
+            builder: (_, __) => const PrivacySecuritySettingsScreen(),
           ),
           GoRoute(
             name: "general",

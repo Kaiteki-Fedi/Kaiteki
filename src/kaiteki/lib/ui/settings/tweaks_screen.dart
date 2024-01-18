@@ -12,8 +12,8 @@ import "package:kaiteki/ui/settings/preference_values_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
-class TweaksScreen extends StatelessWidget {
-  const TweaksScreen({super.key});
+class TweaksSettingsScreen extends StatelessWidget {
+  const TweaksSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

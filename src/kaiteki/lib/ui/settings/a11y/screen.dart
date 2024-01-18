@@ -7,8 +7,8 @@ import "package:kaiteki/ui/settings/preference_values_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
-class AccessibilityScreen extends StatelessWidget {
-  const AccessibilityScreen({super.key});
+class AccessibilitySettingsScreen extends StatelessWidget {
+  const AccessibilitySettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

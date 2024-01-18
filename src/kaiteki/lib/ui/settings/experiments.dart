@@ -5,8 +5,8 @@ import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
-class ExperimentsScreen extends ConsumerWidget {
-  const ExperimentsScreen({super.key});
+class ExperimentalSettingsScreen extends ConsumerWidget {
+  const ExperimentalSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

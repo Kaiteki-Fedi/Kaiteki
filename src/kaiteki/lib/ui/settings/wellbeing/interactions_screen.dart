@@ -5,14 +5,15 @@ import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
-class InteractionScreen extends ConsumerStatefulWidget {
-  const InteractionScreen({super.key});
+class InteractionSettingsScreen extends ConsumerStatefulWidget {
+  const InteractionSettingsScreen({super.key});
 
   @override
-  ConsumerState<InteractionScreen> createState() => _InteractionScreenState();
+  ConsumerState<InteractionSettingsScreen> createState() =>
+      _InteractionScreenState();
 }
 
-class _InteractionScreenState extends ConsumerState<InteractionScreen> {
+class _InteractionScreenState extends ConsumerState<InteractionSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

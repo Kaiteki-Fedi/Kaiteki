@@ -1,12 +1,11 @@
-
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
-class PrivacySecurityScreen extends ConsumerWidget {
-  const PrivacySecurityScreen({super.key});
+class PrivacySecuritySettingsScreen extends ConsumerWidget {
+  const PrivacySecuritySettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
