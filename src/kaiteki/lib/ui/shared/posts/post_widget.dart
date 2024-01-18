@@ -291,7 +291,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
       if (url == null) {
         return MenuItemButton(
-          leadingIcon: Icon(Icons.open_in_new),
+          leadingIcon: const Icon(Icons.open_in_new),
           child: Text(context.l10n.openInMenuItemLabel),
         );
       }

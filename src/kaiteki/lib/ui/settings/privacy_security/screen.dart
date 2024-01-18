@@ -1,11 +1,7 @@
-import "dart:ffi";
 
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
-import "package:kaiteki/preferences/content_warning_behavior.dart";
-import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
@@ -25,7 +21,7 @@ class PrivacySecurityScreen extends ConsumerWidget {
               SettingsSection(
                 children: [
                   SwitchListTile(
-                    secondary: Icon(Icons.open_in_new_off_rounded),
+                    secondary: const Icon(Icons.open_in_new_off_rounded),
                     title: const Text("Warn when leaving Kaiteki"),
                     subtitle: const Text(
                       "Show a warning when opening links to external websites. Only works for ads at the moment.",

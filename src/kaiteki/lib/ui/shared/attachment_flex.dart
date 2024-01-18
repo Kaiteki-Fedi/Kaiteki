@@ -1,5 +1,3 @@
-import "dart:math";
-
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 
@@ -30,7 +28,9 @@ class AttachmentFlex extends MultiChildRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, RenderAttachmentFlex renderObject) {
+    BuildContext context,
+    RenderAttachmentFlex renderObject,
+  ) {
     renderObject
       ..mainAxisCount = mainAxisCount
       ..mainAxisSpacing = mainAxisSpacing

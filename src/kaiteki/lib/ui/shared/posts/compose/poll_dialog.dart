@@ -518,7 +518,7 @@ class _DateField extends StatefulWidget {
   final DateTime date;
   final ValueChanged<DateTime>? onChanged;
 
-  const _DateField({super.key, required this.date, this.onChanged});
+  const _DateField({required this.date, this.onChanged});
 
   @override
   State<_DateField> createState() => _DateFieldState();
@@ -577,7 +577,7 @@ class _TimeField extends StatefulWidget {
   final TimeOfDay time;
   final ValueChanged<TimeOfDay>? onChanged;
 
-  const _TimeField({super.key, required this.time, this.onChanged});
+  const _TimeField({required this.time, this.onChanged});
 
   @override
   State<_TimeField> createState() => _TimeFieldState();

@@ -3,9 +3,6 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/l10n/localizations.dart";
-import "package:kaiteki/ui/settings/locale_list_tile.dart";
-import "package:kaiteki/ui/settings/settings_container.dart";
-import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki_core/utils.dart";
 
@@ -87,7 +84,7 @@ class SettingsScreen extends StatelessWidget {
 }
 
 class _SettingsSidebar extends StatelessWidget {
-  const _SettingsSidebar({super.key});
+  const _SettingsSidebar();
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +127,7 @@ class _SettingsSidebar extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget {
-  const _AppBar({super.key});
+  const _AppBar();
 
   @override
   Widget build(BuildContext context) {

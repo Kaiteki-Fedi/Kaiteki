@@ -6,7 +6,6 @@ import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/shared/dialogs/link_warning_dialog.dart";
 import "package:kaiteki_core/model.dart";
-import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
 
 final adsProvider = Provider(
@@ -62,7 +61,7 @@ class _AdWidgetState extends ConsumerState<AdWidget> {
                 ref.read(showAds).value = false;
               },
               tooltip: "Disable ads",
-              icon: Icon(Icons.close_rounded),
+              icon: const Icon(Icons.close_rounded),
             ),
           ),
         ],
