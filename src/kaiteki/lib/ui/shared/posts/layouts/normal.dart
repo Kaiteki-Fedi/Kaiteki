@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
@@ -13,7 +12,6 @@ import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 import "package:kaiteki/ui/shared/posts/reaction_row.dart";
 import "package:kaiteki/ui/shared/posts/reply_bar.dart";
-import "package:kaiteki/ui/shared/posts/signature.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 
@@ -67,8 +65,6 @@ class NormalPostLayout extends ConsumerWidget {
     }
 
     final adapter = ref.watch(adapterProvider);
-    final showSignature = ref.watch(AppExperiment.userSignatures.provider) &&
-        post.author.description?.isNotEmpty == true;
 
     const padding = EdgeInsetsDirectional.all(8);
 
@@ -87,7 +83,6 @@ class NormalPostLayout extends ConsumerWidget {
             if (showParentPost && post.replyToUser != null)
               ReplyBar(post: post),
             PostContent(post: post, onTap: onTap),
-            if (showSignature) PostSignature(post),
             if (post.reactions.isNotEmpty &&
                 ref.watch(showReactions).value) ...[
               const SizedBox(height: 8),

@@ -6,13 +6,11 @@ import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/bookmarks.dart";
 import "package:kaiteki/model/auth/account.dart";
-import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
-import "package:kaiteki/ui/features/article_view/screen.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/content_not_public_dialog.dart";
@@ -329,19 +327,6 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         UndoTranslationMenuItem(
           onPressed: () => setState(() => _translatedPost = null),
         ),
-      if (ref.watch(AppExperiment.articleView.provider)) ...[
-        MenuItemButton(
-          leadingIcon: const Icon(Icons.article_rounded),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ArticleViewScreen(post: _post),
-              ),
-            );
-          },
-          child: const Text("View as article"),
-        ),
-      ],
       const Divider(),
       ShareMenuItem(onPressed: () => share(context, _post)),
       buildOpenInMenuItem(context),

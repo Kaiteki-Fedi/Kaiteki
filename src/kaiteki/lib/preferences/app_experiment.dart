@@ -2,10 +2,6 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 
 enum AppExperiment {
-  remoteUserFetching(
-    "Fetch users from remote instances",
-    "Allows querying the remote instance for user details",
-  ),
   denseReactions(
     "Denser reactions",
     "Reduces the spacing between reactions in order to show more of them",
@@ -15,17 +11,9 @@ enum AppExperiment {
     "Enable the feedback screen; currently unfunctional",
   ),
   chats("Chats"),
-  userSignatures(
-    "User signatures",
-    "Show the user's bio under their posts",
-  ),
   navigationBarTheming(
     "Navigation bar theming",
     "Adjust the Android navigation bar to the current theme",
-  ),
-  articleView(
-    "Article view",
-    "Read posts like articles",
   );
 
   final String displayName;
