@@ -233,3 +233,9 @@ final preferredUrlLaunchMode = Provider(
       : LaunchMode.externalApplication,
   dependencies: [useCustomTabs],
 );
+
+final highlightPronouns = createSettingProvider<bool>(
+  key: "highlightPronouns",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);

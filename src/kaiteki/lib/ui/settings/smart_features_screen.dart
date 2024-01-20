@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/ui/settings/preference_switch_list_tile.dart";
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 
@@ -17,23 +19,22 @@ class _SmartFeaturesScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Smart features")),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: SettingsContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SettingsSection(
                 children: [
-                  SwitchListTile(
-                    title: Text("Show pronouns"),
-                    subtitle: Text(
+                  PreferenceSwitchListTile(
+                    provider: highlightPronouns,
+                    title: const Text("Show pronouns"),
+                    subtitle: const Text(
                       "Extracts pronouns from profile fields and displays them next to the user's name",
                     ),
-                    secondary: Icon(Icons.loyalty_rounded),
-                    value: false,
-                    onChanged: null,
+                    secondary: const Icon(Icons.loyalty_rounded),
                   ),
-                  SwitchListTile(
+                  const SwitchListTile(
                     title: Text("Web links"),
                     subtitle: Text(
                       "Extracts links from profile fields and displays them in a row",
@@ -42,7 +43,7 @@ class _SmartFeaturesScreenState
                     value: true,
                     onChanged: null,
                   ),
-                  SwitchListTile(
+                  const SwitchListTile(
                     title: Text("Warn about NSFW profiles"),
                     subtitle: Text(
                       "Warns when visiting a profile that seems to be NSFW",

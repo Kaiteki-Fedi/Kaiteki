@@ -1,6 +1,8 @@
 import "package:collection/collection.dart";
+import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
@@ -10,6 +12,8 @@ import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 import "package:kaiteki/ui/shared/posts/user_badge.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/pronouns.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:kaiteki_core/model.dart";
 
 class MetaBar extends ConsumerWidget {
@@ -59,26 +63,53 @@ class MetaBar extends ConsumerWidget {
   }
 
   Iterable<Widget> buildLeft(BuildContext context, WidgetRef ref) sync* {
-    final isAdministrator = _post.author.flags?.isAdministrator ?? false;
-    final isModerator = _post.author.flags?.isModerator ?? false;
-    final isBot = _post.author.type == UserType.bot;
+    final theme = Theme.of(context);
+    final author = _post.author;
+    final isAdministrator = author.flags?.isAdministrator ?? false;
+    final isModerator = author.flags?.isModerator ?? false;
+    final isBot = author.type == UserType.bot;
 
     final postTheme = PostWidgetTheme.of(context);
     if (showAvatar ?? postTheme?.showAvatar ?? true) {
       yield Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: ExcludeSemantics(
-          child: AvatarWidget(_post.author, size: 40),
+          child: AvatarWidget(author, size: 40),
         ),
       );
     }
 
     yield Flexible(
       child: UserDisplayNameWidget(
-        _post.author,
+        author,
         orientation: twolineAuthor ? Axis.vertical : Axis.horizontal,
       ),
     );
+
+    if (ref.watch(highlightPronouns).value) {
+      final pronouns = author.details.fields
+          ?.firstWhereOrNull((e) => e.key.trim().toLowerCase() == "pronouns")
+          ?.value
+          .andThen(parsePronouns);
+      if (pronouns != null && pronouns.isNotEmpty) {
+        yield const SizedBox(width: 8);
+        var colors = switch (pronouns[0][0]) {
+          "he" => [Colors.lightBlue.shade400, Colors.lightBlue.shade600],
+          "she" => [Colors.pink.shade400, Colors.pink.shade600],
+          "they" => [Colors.green.shade400, Colors.green.shade600],
+          "it" => [Colors.blueGrey.shade400, Colors.blueGrey.shade600],
+          _ => null,
+        };
+
+        colors = colors
+            ?.map((e) => e.harmonizeWith(theme.colorScheme.primary))
+            .toList();
+        yield PronounBadge(
+          pronouns: pronouns,
+          colors: colors,
+        );
+      }
+    }
 
     if (ref.watch(showUserBadges).value) {
       if (isAdministrator) {
@@ -150,6 +181,59 @@ class MetaBar extends ConsumerWidget {
               splashRadius: 16,
             ),
         ],
+      ),
+    );
+  }
+}
+
+class PronounBadge extends StatelessWidget {
+  final List<Color>? colors;
+  final List<List<String>> pronouns;
+
+  const PronounBadge({
+    super.key,
+    this.colors,
+    required this.pronouns,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = this.colors;
+    final hasColors = colors != null && colors.isNotEmpty;
+    final textStyle = theme.textTheme.labelMedium;
+    final color = hasColors ? Colors.white : textStyle?.color;
+
+    var text = pronouns[0][0];
+    if (pronouns.length > 1) text += "+";
+
+    return Tooltip(
+      message: "Pronouns: ${pronouns.map((e) => e.join("/")).join(", ")}",
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: hasColors
+              ? LinearGradient(
+                  colors: colors,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : null,
+          color: hasColors ? null : theme.colorScheme.secondaryContainer,
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+          child: Row(
+            children: [
+              Icon(Icons.loyalty_rounded, size: 18, color: color),
+              const SizedBox(width: 4),
+              DefaultTextStyle.merge(
+                child: Text(text),
+                style: textStyle?.copyWith(color: color),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
