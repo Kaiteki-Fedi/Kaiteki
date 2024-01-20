@@ -5,7 +5,7 @@ import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/interaction_bar.dart";
 import "package:kaiteki/ui/shared/posts/interaction_event_bar.dart";
-import "package:kaiteki/ui/shared/posts/layouts/layout.dart";
+import "package:kaiteki/ui/shared/posts/layouts/callbacks.dart";
 import "package:kaiteki/ui/shared/posts/meta_bar.dart";
 import "package:kaiteki/ui/shared/posts/post_content.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
