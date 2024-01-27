@@ -6,6 +6,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/content_warning_behavior.dart";
+import "package:kaiteki/ui/main/tabs/tab.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/utils.dart";
 import "package:logging/logging.dart";
@@ -232,6 +233,62 @@ final preferredUrlLaunchMode = Provider(
       ? LaunchMode.inAppBrowserView
       : LaunchMode.externalApplication,
   dependencies: [useCustomTabs],
+);
+
+final mainScreenTabOrder = createSettingProvider<List<MainScreenTabType>>(
+  key: "mainScreenTabOrder",
+  initialValue: MainScreenTabType.values,
+  provider: sharedPreferencesProvider,
+  read: (prefs, key) {
+    final list = prefs.getStringList(key);
+    if (list == null) return null;
+    final values = list
+        .map((e) =>
+            MainScreenTabType.values.firstWhereOrNull((f) => f.name == e))
+        .whereNotNull()
+        .toList();
+
+    // Ensure that all tabs are present
+    final missing = MainScreenTabType.values.where((e) => !values.contains(e));
+    values.addAll(missing);
+
+    return values;
+  },
+  write: (prefs, key, value) async {
+    await prefs.setStringList(
+      key,
+      value.map((e) => e.name).toList(),
+    );
+  },
+);
+
+final disabledMainScreenTabs = createSettingProvider<Set<MainScreenTabType>>(
+  key: "disabledMainScreenTabs",
+  initialValue: const {},
+  provider: sharedPreferencesProvider,
+  read: (prefs, key) {
+    final list = prefs.getStringList(key);
+    if (list == null) return null;
+
+    final set = list
+        .map((e) =>
+            MainScreenTabType.values.firstWhereOrNull((f) => f.name == e))
+        .whereNotNull()
+        .toSet();
+
+    // We cannot show less than 2 tabs
+    if (set.length >= MainScreenTabType.values.length - 2) {
+      return const {};
+    }
+
+    return set;
+  },
+  write: (prefs, key, value) async {
+    await prefs.setStringList(
+      key,
+      value.map((e) => e.name).toList(),
+    );
+  },
 );
 
 final highlightPronouns = createSettingProvider<bool>(

@@ -38,6 +38,7 @@ import "package:kaiteki/ui/settings/manage_languages.dart";
 import "package:kaiteki/ui/settings/privacy_security/screen.dart";
 import "package:kaiteki/ui/settings/settings_screen.dart";
 import "package:kaiteki/ui/settings/smart_features_screen.dart";
+import "package:kaiteki/ui/settings/tabs/screen.dart";
 import "package:kaiteki/ui/settings/tweaks_screen.dart";
 import "package:kaiteki/ui/settings/wellbeing/interactions_screen.dart";
 import "package:kaiteki/ui/settings/wellbeing/wellbeing_screen.dart";
@@ -185,6 +186,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             name: "experiments",
             path: "/settings/experiments",
             builder: (_, __) => const ExperimentalSettingsScreen(),
+          ),
+          GoRoute(
+            name: "tabs-settings",
+            path: "/settings/tabs",
+            builder: (_, __) => const TabsSettingsScreen(),
           ),
           GoRoute(
             name: "wellbeing",

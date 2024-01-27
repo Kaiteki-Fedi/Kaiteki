@@ -8,6 +8,7 @@ import "package:kaiteki/fediverse/services/bookmarks.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
+import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
@@ -193,10 +194,13 @@ class MainScreenState extends ConsumerState<MainScreen> {
   List<MainScreenTabType> getTabs() {
     final adapter = ref.watch(adapterProvider);
     final chatsEnabled = ref.watch(AppExperiment.chats.provider);
+    final tabOrder = ref.watch(preferences.mainScreenTabOrder).value;
+    final disabledTabs = ref.watch(preferences.disabledMainScreenTabs).value;
 
-    return MainScreenTabType.values
+    return tabOrder
         .where((e) => e.tab?.isAvailable(adapter) ?? true)
         .where((e) => !(e == MainScreenTabType.chats && !chatsEnabled))
+        .where((e) => !disabledTabs.contains(e))
         .toList();
   }
 

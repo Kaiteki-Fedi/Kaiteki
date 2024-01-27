@@ -18,7 +18,7 @@ final _items = <(
     Icons.palette_rounded
   ),
   ("smart-features", (_) => "Smart features", Icons.auto_awesome_rounded),
-  (null, (l10n) => l10n.settingsTabs, Icons.tab_rounded),
+  ("tabs", (l10n) => l10n.settingsTabs, Icons.tab_rounded),
   ("wellbeing", (l10n) => l10n.settingsWellbeing, Icons.favorite_rounded),
   (
     "accessibility",

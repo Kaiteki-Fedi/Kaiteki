@@ -7,6 +7,13 @@ sealed class TimelineSource {
   );
 }
 
+enum TimelineSourceType {
+  user,
+  standard,
+  list,
+  hashtag,
+}
+
 class UserTimelineSource implements TimelineSource {
   final String userId;
 
