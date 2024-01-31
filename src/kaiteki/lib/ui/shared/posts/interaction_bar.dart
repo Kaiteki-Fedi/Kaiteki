@@ -4,7 +4,7 @@ import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/posts/count_button.dart";
-import "package:kaiteki/ui/shared/posts/layouts/layout.dart";
+import "package:kaiteki/ui/shared/posts/layouts/callbacks.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 
 class InteractionBar extends StatefulWidget {

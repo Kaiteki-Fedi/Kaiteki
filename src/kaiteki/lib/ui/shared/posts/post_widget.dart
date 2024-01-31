@@ -17,7 +17,7 @@ import "package:kaiteki/ui/shared/dialogs/content_not_public_dialog.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/layouts/expanded.dart";
-import "package:kaiteki/ui/shared/posts/layouts/layout.dart";
+import "package:kaiteki/ui/shared/posts/layouts/callbacks.dart";
 import "package:kaiteki/ui/shared/posts/layouts/normal.dart";
 import "package:kaiteki/ui/shared/posts/layouts/wide.dart";
 import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
