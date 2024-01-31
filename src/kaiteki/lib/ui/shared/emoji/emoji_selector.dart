@@ -88,14 +88,15 @@ class _EmojiSelectorState extends ConsumerState<EmojiSelector>
     final theme = Theme.of(context);
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SearchBar(
-            controller: _searchTextController,
-            hintText: "Search for emojis",
-            elevation: const MaterialStatePropertyAll(0),
+        if (widget.showSearch)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SearchBar(
+              controller: _searchTextController,
+              hintText: "Search for emojis",
+              elevation: const MaterialStatePropertyAll(0),
+            ),
           ),
-        ),
         if (hasEmojis && _categories.length >= 2) ...[
           TabBar.secondary(
             tabAlignment: TabAlignment.center,

@@ -133,6 +133,7 @@ class _EmojiSelectorBottomSheetState
                 return _buildSelector(
                   context,
                   [EmojiCategory(null, recentEmojis)],
+                  false,
                 );
               },
               // TODO(Craftplacer): Add ability to see error details for failure on fetching custom emojis
