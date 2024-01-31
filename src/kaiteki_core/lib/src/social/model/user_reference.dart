@@ -61,7 +61,7 @@ class UserReference extends Equatable {
       final parsedUrl = Uri.tryParse(remoteUrl!);
       if (parsedUrl == null) return remoteUrl!;
       final handle = parsedUrl.fediverseHandle;
-      return '@${handle.$2}@${handle.$1}';
+      if (handle != null) return '@${handle.$2}@${handle.$1}';
     }
 
     return null;
@@ -72,7 +72,9 @@ class UserReference extends Equatable {
 }
 
 extension UriExtensions on Uri {
-  (String, String) get fediverseHandle {
+  (String, String)? get fediverseHandle {
+    if (pathSegments.isEmpty) return null;
+
     var username = pathSegments.last;
 
     // FIXME(Craftplacer): This is just a lazy fix for empty usernames
