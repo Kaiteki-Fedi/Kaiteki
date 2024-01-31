@@ -200,6 +200,7 @@ class _FavoriteButton extends ConsumerWidget {
       count: count,
       focusNode: FocusNode(skipTraversal: true),
       icon: const Icon(Icons.star_border_rounded),
+      activeIcon: const Icon(Icons.star_rounded),
       onTap: onTap,
       onLongPress: onSecondary,
       label: context.l10n.favoriteButtonLabel,
