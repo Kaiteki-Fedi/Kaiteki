@@ -124,7 +124,7 @@ class ExpandedPostLayout extends ConsumerWidget {
                     Text(
                       DateFormat.yMMMMd(
                         Localizations.localeOf(context).toString(),
-                      ).add_jm().format(post.postedAt),
+                      ).add_jm().format(post.postedAt.toLocal()),
                     ),
                     if (post.visibility != null) _Visibility(post.visibility!),
                     if (client != null) Text(client),
