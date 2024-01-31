@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/semantics.dart";
 import "package:fpdart/fpdart.dart";
+import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/people/dialog.dart";
 import "package:kaiteki/ui/shared/common.dart";
@@ -53,31 +54,45 @@ class _FollowerBar extends StatelessWidget {
     final hasFollowing = followingCount != null && followingCount > 0;
     final hasFollowers = followerCount != null && followerCount > 0;
 
+    void onTap() {
+      showDialog(
+        context: context,
+        builder: (_) => PeopleDialog(userId: userId),
+        useRootNavigator: false,
+      );
+    }
+
+    final l10n = context.l10n;
+    if (!(hasFollowers && hasFollowing)) {
+      return InkWell(
+        onTap: onTap,
+        child: Text.rich(
+          TextSpan(
+            text: l10n.peopleDialogButtonLabel,
+            style: Theme.of(context).colorScheme.outline.textStyle,
+          ),
+        ),
+      );
+    }
+
     final text = [
-      if (hasFollowing) "$followingCount following",
-      if (hasFollowers) "$followerCount followers",
+      if (hasFollowing) l10n.followingCount(followingCount),
+      if (hasFollowers) l10n.followerCount(followerCount),
     ];
 
+    assert(text.isNotEmpty);
+
     return InkWell(
+      onTap: onTap,
       child: Text.rich(
         TextSpan(
-          text: text.isEmpty ? context.l10n.peopleDialogButtonLabel : null,
-          children: text.isEmpty
-              ? null
-              : text
-                  .map((e) => TextSpan(text: e))
-                  .intersperse(const TextSpan(text: " • "))
-                  .toList(),
+          children: text
+              .map((e) => TextSpan(text: e))
+              .intersperse(const TextSpan(text: " • "))
+              .toList(),
           style: Theme.of(context).colorScheme.outline.textStyle,
         ),
       ),
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (_) => PeopleDialog(userId: userId),
-          useRootNavigator: false,
-        );
-      },
     );
   }
 }
