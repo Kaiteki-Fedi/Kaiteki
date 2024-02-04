@@ -76,13 +76,6 @@ Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
   // initialize hive
   yield const StartupLoadingDatabase();
   hive.registerAdapters();
-  if (!kIsWeb) {
-    try {
-      await hive.migrateBoxes();
-    } catch (e, s) {
-      Logger.root.shout("Failed to migrate hive boxes", e, s);
-    }
-  }
   await hive.initialize();
 
   // load repositories
