@@ -1,7 +1,7 @@
 name: Build
 
 env:
-  SOURCE_PATH: './src/kaiteki'
+  SOURCE_PATH: './packages/kaiteki'
 
 on:
   push:
@@ -157,7 +157,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: linux
-          path: './src/kaiteki/build/linux/x64/release/bundle/'
+          path: './packages/kaiteki/build/linux/x64/release/bundle/'
 
       - name: Build Flatpak
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6.1
