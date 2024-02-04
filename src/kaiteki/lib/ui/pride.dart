@@ -1,3 +1,4 @@
+import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 
 enum PrideFlag {
@@ -58,6 +59,11 @@ class PridePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final paint = Paint()..color = Color.fromRGBO(255, 255, 255, opacity);
+
+    canvas.saveLayer(rect, paint);
+
     final stripes = flag.colors;
     final height = size.height / stripes.length;
     for (var i = 0; i < stripes.length; i++) {
@@ -69,9 +75,11 @@ class PridePainter extends CustomPainter {
           size.width,
           (y + height).ceilToDouble(),
         ),
-        Paint()..color = stripes[i].withOpacity(opacity),
+        Paint()..color = stripes[i],
       );
     }
+
+    canvas.restore();
   }
 
   @override
