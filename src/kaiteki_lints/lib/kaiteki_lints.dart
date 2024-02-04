@@ -11,6 +11,7 @@ class _KaitekiLinter extends PluginBase {
   List<LintRule> getLintRules(CustomLintConfigs configs) {
     return [
       const LocalizationRule(),
+      const PreferWidgetClassesRule(),
       const PreferMediaQueryAspectsRule(),
     ];
   }

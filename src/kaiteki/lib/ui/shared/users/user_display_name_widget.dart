@@ -1,132 +1,139 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/name_merging.dart";
 import "package:kaiteki_core/social.dart";
 
-class UserDisplayNameWidget extends ConsumerWidget {
+class UserDisplayNameWidget extends ConsumerStatefulWidget {
   final User user;
+  final List<Widget> trailing;
   final Axis orientation;
-  final TextStyle? secondaryTextStyle;
 
   const UserDisplayNameWidget(
     this.user, {
     super.key,
-    this.secondaryTextStyle,
     this.orientation = Axis.horizontal,
+    this.trailing = const [],
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final content = DisplayNameTuple.fromUser(
-      user,
-      orientation == Axis.vertical,
-    );
-    final primaryTextStyle = Theme.of(context).textTheme.titleSmall;
+  ConsumerState<UserDisplayNameWidget> createState() =>
+      _UserDisplayNameWidgetState();
+}
 
-    final secondaryText = content.secondary;
-    final secondaryColor =
-        Theme.of(context).getEmphasisColor(EmphasisColor.disabled);
-    final secondaryTextStyle =
-        this.secondaryTextStyle?.copyWith(color: secondaryColor) ??
-            secondaryColor.textStyle;
+class _UserDisplayNameWidgetState extends ConsumerState<UserDisplayNameWidget> {
+  late String _semanticsLabel;
+  late String _primaryText;
+  late String _secondaryText;
 
-    final Widget widget = switch (orientation) {
-      Axis.horizontal => RepaintBoundary(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                user.renderText(context, ref, content.primary),
-                if (secondaryText != null) ...[
-                  const TextSpan(text: " "),
-                  TextSpan(
-                    text: secondaryText,
-                    style: secondaryTextStyle,
-                  ),
-                ],
-              ],
-              style: primaryTextStyle,
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    updateText();
+  }
+
+  @override
+  void didUpdateWidget(UserDisplayNameWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.user != widget.user ||
+        oldWidget.orientation != widget.orientation) {
+      updateText();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryTextStyle = theme.textTheme.titleSmall;
+    final secondaryTextStyle = theme.textTheme.bodyMedium;
+
+    final user = this.widget.user;
+    final trailing = this.widget.trailing;
+
+    const trailingSeparator = SizedBox(width: 4.0);
+    final Widget widget = switch (this.widget.orientation) {
+      Axis.horizontal => Row(
+          children: [
+            RepaintBoundary(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    user.renderText(context, ref, _primaryText),
+                    const TextSpan(text: " "),
+                    TextSpan(
+                      text: _secondaryText,
+                      style: secondaryTextStyle,
+                    ),
+                  ],
+                  style: primaryTextStyle,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: false,
+              ),
             ),
-            maxLines: 1,
-            overflow: TextOverflow.fade,
-            softWrap: false,
-          ),
+            if (trailing.isNotEmpty) ...[
+              trailingSeparator,
+              ...trailing,
+            ],
+          ],
         ),
       Axis.vertical => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            RepaintBoundary(
-              child: Text.rich(
-                user.renderText(context, ref, content.primary),
-                maxLines: 1,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-              ),
+            Row(
+              children: [
+                RepaintBoundary(
+                  child: Text.rich(
+                    user.renderText(context, ref, _primaryText),
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: primaryTextStyle,
+                  ),
+                ),
+                if (trailing.isNotEmpty) ...[
+                  trailingSeparator,
+                  ...trailing,
+                ],
+              ],
             ),
-            if (secondaryText != null)
-              Text(
-                secondaryText,
-                style: secondaryTextStyle,
-                maxLines: 1,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-              ),
+            Text(
+              _secondaryText,
+              style: secondaryTextStyle,
+              maxLines: 1,
+              overflow: TextOverflow.fade,
+              softWrap: false,
+            ),
           ],
         )
     };
 
-    String getSemanticsLabel() {
-      if (ref.watch(readDisplayNameOnly).value) {
-        return user.displayName ?? user.username;
-      }
-
-      final tuple = DisplayNameTuple.fromUser(user);
-      return [tuple.primary, tuple.secondary].join("\n");
-    }
-
     return Semantics(
-      label: getSemanticsLabel(),
+      label: _semanticsLabel,
       excludeSemantics: true,
       child: widget,
     );
   }
-}
 
-class DisplayNameTuple {
-  final String primary;
-  final String? secondary;
-  final bool separate;
+  void updateText() {
+    MergedName? text;
 
-  const DisplayNameTuple(this.primary, this.secondary, this.separate);
-
-  factory DisplayNameTuple.fromUser(
-    User user, [
-    bool forceShowUsername = false,
-  ]) {
-    final username = user.username;
-    final display = user.displayName ?? username;
-    final host = user.host;
-    final handle = user.handle;
-
-    if (!forceShowUsername) {
-      final normalizedDisplay = display.toLowerCase().trim();
-
-      final similarToHandle = [
-        handle.toString().toLowerCase(),
-        handle.toString(false).toLowerCase(),
-        username.toLowerCase(),
-      ];
-
-      if (similarToHandle.contains(normalizedDisplay)) {
-        return DisplayNameTuple(username, "@$host", false);
-      }
+    if (widget.orientation == Axis.horizontal) {
+      text = mergeNameOfUser(widget.user);
     }
 
-    return DisplayNameTuple(
-      display,
-      handle.toString(),
-      true,
-    );
+    final displayName = widget.user.displayName;
+    final isDisplayEmpty = displayName?.trim().isNotEmpty != true;
+
+    _primaryText =
+        text?.$1 ?? (isDisplayEmpty ? widget.user.username : displayName!);
+    _secondaryText = text?.$2 ?? widget.user.handle.toString();
+
+    _semanticsLabel = ref.watch(readDisplayNameOnly).value
+        ? _primaryText
+        : [_primaryText, _secondaryText].join("\n");
   }
 }

@@ -35,6 +35,9 @@ extension ThemeDataExtensions on ThemeData {
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
       ),
+      bottomSheetTheme: bottomSheetTheme.copyWith(
+        showDragHandle: true,
+      ),
     );
   }
 }

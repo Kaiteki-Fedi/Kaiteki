@@ -1,20 +1,24 @@
 import "package:collection/collection.dart";
-import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
+import "package:fpdart/fpdart.dart";
+import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/post_scope_icon.dart";
-import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/post_widget_theme.dart";
 import "package:kaiteki/ui/shared/posts/user_badge.dart";
 import "package:kaiteki/ui/shared/users/user_display_name_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/pronouns.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
-import "package:kaiteki_core/model.dart";
+
+const _kPronounsFieldKeys = [
+  "pronouns",
+  "pronomen",
+];
 
 class MetaBar extends ConsumerWidget {
   const MetaBar({
@@ -25,19 +29,19 @@ class MetaBar extends ConsumerWidget {
     this.showTime,
     this.showVisibility,
     this.showLanguage,
-    this.showAvatar,
   }) : _post = post;
 
   final Post _post;
   final bool twolineAuthor;
   final bool? showTime;
-  final bool? showAvatar;
   final bool? showVisibility;
   final bool? showLanguage;
   final VoidCallback? onOpen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final author = _post.author;
+
     return IconTheme.merge(
       data: const IconThemeData(size: 18),
       child: ConstrainedBox(
@@ -48,9 +52,12 @@ class MetaBar extends ConsumerWidget {
           children: [
             Expanded(
               child: ClipRect(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: buildLeft(context, ref).toList(),
+                child: UserDisplayNameWidget(
+                  author,
+                  orientation: twolineAuthor ? Axis.vertical : Axis.horizontal,
+                  trailing: buildLeft(context, ref)
+                      .intersperse(const SizedBox(width: 8))
+                      .toList(),
                 ),
               ),
             ),
@@ -69,38 +76,14 @@ class MetaBar extends ConsumerWidget {
     final isModerator = author.flags?.isModerator ?? false;
     final isBot = author.type == UserType.bot;
 
-    final postTheme = PostWidgetTheme.of(context);
-    if (showAvatar ?? postTheme?.showAvatar ?? true) {
-      yield Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: ExcludeSemantics(
-          child: AvatarWidget(author, size: 40),
-        ),
-      );
-    }
-
-    yield Flexible(
-      child: UserDisplayNameWidget(
-        author,
-        orientation: twolineAuthor ? Axis.vertical : Axis.horizontal,
-      ),
-    );
-
     if (ref.watch(highlightPronouns).value) {
       final pronouns = author.details.fields
-          ?.firstWhereOrNull((e) => e.key.trim().toLowerCase() == "pronouns")
+          ?.firstWhereOrNull(
+              (e) => _kPronounsFieldKeys.contains(e.key.trim().toLowerCase()))
           ?.value
           .andThen(parsePronouns);
       if (pronouns != null && pronouns.isNotEmpty) {
-        yield const SizedBox(width: 8);
-        var colors = switch (pronouns[0][0]) {
-          "he" => [Colors.lightBlue.shade400, Colors.lightBlue.shade600],
-          "she" => [Colors.pink.shade400, Colors.pink.shade600],
-          "they" => [Colors.green.shade400, Colors.green.shade600],
-          "it" => [Colors.blueGrey.shade400, Colors.blueGrey.shade600],
-          _ => null,
-        };
-
+        var colors = null; //_getColorsForPronoun(pronouns[0][0]);
         colors = colors
             ?.map((e) => e.harmonizeWith(theme.colorScheme.primary))
             .toList();
@@ -113,15 +96,12 @@ class MetaBar extends ConsumerWidget {
 
     if (ref.watch(showUserBadges).value) {
       if (isAdministrator) {
-        yield const SizedBox(width: 8);
         yield const UserBadge(type: UserBadgeType.administrator);
       } else if (isModerator) {
-        yield const SizedBox(width: 8);
         yield const UserBadge(type: UserBadgeType.moderator);
       }
 
       if (isBot) {
-        yield const SizedBox(width: 8);
         yield const UserBadge(type: UserBadgeType.bot);
       }
     }
@@ -130,6 +110,8 @@ class MetaBar extends ConsumerWidget {
   Widget buildRight(BuildContext context) {
     final scope = _post.visibility;
     final l10n = context.l10n;
+
+    final theme = Theme.of(context);
     final postTheme = PostWidgetTheme.of(context);
 
     final language = _post.language;
@@ -138,49 +120,52 @@ class MetaBar extends ConsumerWidget {
     final showTime = this.showTime ?? postTheme?.showTime ?? true;
     final showScope = showVisibility ?? postTheme?.showVisibility ?? true;
 
-    return ContentColor(
-      color: Theme.of(context).getEmphasisColor(EmphasisColor.medium),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (_post.state.pinned)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Tooltip(
-                message: l10n.postPinned,
-                child: const Icon(Icons.push_pin_rounded),
+    return DefaultTextStyle.merge(
+      style: theme.textTheme.labelMedium,
+      child: ContentColor(
+        color: theme.colorScheme.onSurfaceVariant,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (_post.state.pinned)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Tooltip(
+                  message: l10n.postPinned,
+                  child: const Icon(Icons.push_pin_rounded),
+                ),
               ),
-            ),
-          if (language != null && showLanguage)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: _Language(language: language),
-            ),
-          if (showTime)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: _Timestamp(_post.postedAt),
-            ),
-          if (scope != null && showScope)
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Semantics(
-                label: scope.toDisplayString(context.l10n),
-                excludeSemantics: true,
-                child: PostScopeIcon(scope, showTooltip: true),
+            if (language != null && showLanguage)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: _Language(language: language),
               ),
-            ),
-          if (onOpen == null)
-            const SizedBox(width: 8)
-          else
-            IconButton(
-              icon: const Icon(Icons.open_in_full_rounded),
-              visualDensity: VisualDensity.compact,
-              onPressed: onOpen,
-              tooltip: "Open post",
-              splashRadius: 16,
-            ),
-        ],
+            if (showTime)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: PostTimestamp(_post.postedAt.toLocal()),
+              ),
+            if (scope != null && showScope)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Semantics(
+                  label: scope.toDisplayString(context.l10n),
+                  excludeSemantics: true,
+                  child: PostScopeIcon(scope, showTooltip: true),
+                ),
+              ),
+            if (onOpen == null)
+              const SizedBox(width: 8)
+            else
+              IconButton(
+                icon: const Icon(Icons.open_in_full_rounded),
+                visualDensity: VisualDensity.compact,
+                onPressed: onOpen,
+                tooltip: "Open post",
+                splashRadius: 16,
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -201,7 +186,7 @@ class PronounBadge extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = this.colors;
     final hasColors = colors != null && colors.isNotEmpty;
-    final textStyle = theme.textTheme.labelMedium;
+    final textStyle = theme.textTheme.labelSmall;
     final color = hasColors ? Colors.white : textStyle?.color;
 
     var text = pronouns[0][0];
@@ -219,13 +204,13 @@ class PronounBadge extends StatelessWidget {
                 )
               : null,
           color: hasColors ? null : theme.colorScheme.secondaryContainer,
-          borderRadius: BorderRadius.circular(4.0),
+          borderRadius: BorderRadii.extraSmall,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+          padding: const EdgeInsets.fromLTRB(2.0, 2.0, 4.0, 2.0),
           child: Row(
             children: [
-              Icon(Icons.loyalty_rounded, size: 18, color: color),
+              Icon(Icons.loyalty_rounded, size: 16, color: color),
               const SizedBox(width: 4),
               DefaultTextStyle.merge(
                 child: Text(text),
@@ -239,19 +224,23 @@ class PronounBadge extends StatelessWidget {
   }
 }
 
-class _Timestamp extends StatelessWidget {
-  const _Timestamp(this.dateTime);
+class PostTimestamp extends StatelessWidget {
+  const PostTimestamp(this.dateTime, {super.key});
 
   final DateTime dateTime;
 
   @override
   Widget build(BuildContext context) {
+    final text = DateFormat.yMMMMd(
+      Localizations.localeOf(context).toString(),
+    ).add_jm().format(dateTime);
+
     final relativeTime = DateTime.now().difference(dateTime);
     return Semantics(
       label: relativeTime.toLongString(),
       excludeSemantics: true,
       child: Tooltip(
-        message: dateTime.toString(),
+        message: text,
         child: Text(relativeTime.toStringHuman(context: context)),
       ),
     );

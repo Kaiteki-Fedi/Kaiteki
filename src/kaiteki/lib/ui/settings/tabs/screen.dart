@@ -100,7 +100,6 @@ class _TimelinesPage extends ConsumerWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
         child: ReorderableListView(
-          buildDefaultDragHandles: true,
           children: [
             for (final timeline in TimelineType.values)
               ListTile(

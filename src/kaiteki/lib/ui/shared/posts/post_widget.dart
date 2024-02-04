@@ -31,7 +31,6 @@ import "package:url_launcher/url_launcher.dart";
 import "post_widget_menu_items.dart";
 
 const kArticleViewThreshold = 300;
-const kPostPadding = EdgeInsets.symmetric(vertical: 4.0);
 
 const spacer = SizedBox(height: 8);
 

@@ -4,6 +4,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/theming/colors.dart";
 import "package:kaiteki/ui/shared/common.dart";
+import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/interaction_bar.dart";
 import "package:kaiteki/ui/shared/posts/interaction_event_bar.dart";
 import "package:kaiteki/ui/shared/posts/layouts/callbacks.dart";
@@ -70,14 +71,26 @@ class ExpandedPostLayout extends ConsumerWidget {
 
     final children = [
       InkWell(
+        customBorder: const StadiumBorder(),
         onTap: () => context.showUser(post.author, ref),
-        child: MetaBar(
-          post: post,
-          showVisibility: false,
-          twolineAuthor: true,
-          onOpen: ref.watch(showDedicatedPostOpenButton).value ? onOpen : null,
+        child: Row(
+          children: [
+            AvatarWidget(post.author, size: 40.0),
+            const SizedBox(width: 8),
+            Expanded(
+              child: MetaBar(
+                post: post,
+                showVisibility: false,
+                twolineAuthor: true,
+                onOpen: ref.watch(showDedicatedPostOpenButton).value
+                    ? onOpen
+                    : null,
+              ),
+            ),
+          ],
         ),
       ),
+      const SizedBox(height: 8),
       Padding(
         padding: EdgeInsets.only(right: padding.right),
         child: Column(

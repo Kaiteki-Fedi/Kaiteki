@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/semantics.dart";
 import "package:fpdart/fpdart.dart";
-import "package:intl/intl.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/people/dialog.dart";
 import "package:kaiteki/ui/shared/common.dart";

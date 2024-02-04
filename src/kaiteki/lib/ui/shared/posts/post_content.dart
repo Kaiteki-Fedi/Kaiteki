@@ -37,7 +37,10 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
 
   bool get hasContent {
     return renderedContent != null &&
-        renderedContent!.toPlainText().trim().isNotEmpty;
+        renderedContent!
+            .toPlainText()
+            .trim()
+            .isNotEmpty;
   }
 
   @override
@@ -56,26 +59,28 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
           ),
         if (!collapsed) ...[
           if (hasContent)
-            Padding(
-              padding: kPostPadding,
-              // TODO(Craftplacer): Extract links and hashtags into actions, for TalkBack
-              child: SelectableText.rich(
-                TextSpan(
-                  children: [renderedContent!],
-                  locale: locale,
-                ),
-                // FIXME(Craftplacer): https://github.com/flutter/flutter/issues/53797
-                onTap: widget.onTap,
-                style: widget.style,
-                textScaler: TextScaler.linear(ref.watch(postTextSize).value),
+          // TODO(Craftplacer): Extract links and hashtags into actions, for TalkBack
+            SelectableText.rich(
+              TextSpan(
+                children: [renderedContent!],
+                locale: locale,
               ),
+              // FIXME(Craftplacer): https://github.com/flutter/flutter/issues/53797
+              onTap: widget.onTap,
+              style: widget.style,
+              textScaler: TextScaler.linear(ref
+                  .watch(postTextSize)
+                  .value),
             ),
           if (post.poll != null) ...[
             const SizedBox(height: 8),
             DecoratedBox(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.outline,
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .outline,
                 ),
                 borderRadius: BorderRadius.circular(16.0),
               ),
@@ -128,7 +133,9 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
   }
 
   void _updateCollapsed() {
-    final cwBehavior = ref.watch(preferences.cwBehavior).value;
+    final cwBehavior = ref
+        .watch(preferences.cwBehavior)
+        .value;
 
     final subject = widget.post.subject;
     final hasSubject = subject != null && subject.isNotEmpty;

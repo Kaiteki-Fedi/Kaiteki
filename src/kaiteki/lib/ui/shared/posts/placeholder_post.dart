@@ -97,10 +97,7 @@ class PlaceholderPostWidget extends StatelessWidget {
           if (true) ...[
             if (isExpanded)
               Padding(
-                padding: EdgeInsets.only(
-                  top: 12.0,
-                  bottom: kPostPadding.bottom,
-                ),
+                padding: EdgeInsets.only(top: 12.0, bottom: 4.0),
                 child: const Divider(height: 1),
               ),
             Padding(

@@ -45,6 +45,11 @@ class AccessibilitySettingsScreen extends StatelessWidget {
                     ),
                     provider: showDedicatedPostOpenButton,
                   ),
+                  PreferenceSwitchListTile(
+                    secondary: const Icon(Icons.refresh_rounded),
+                    title: const Text("Show refresh button"),
+                    provider: showRefreshButton,
+                  ),
                 ],
               ),
               SettingsSection(

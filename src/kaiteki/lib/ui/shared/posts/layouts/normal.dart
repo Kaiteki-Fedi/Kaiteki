@@ -70,18 +70,16 @@ class NormalPostLayout extends ConsumerWidget {
 
     final showParentPost = postTheme?.showParentPost ?? true;
     final children = [
-      MetaBar(
-        post: post,
-        showAvatar: false,
-        onOpen: ref.watch(showDedicatedPostOpenButton).value ? onOpen : null,
-      ),
       Padding(
         padding: EdgeInsetsDirectional.only(end: padding.end),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (showParentPost && post.replyToUser != null)
+            if (showParentPost &&
+                (post.replyToUser != null || post.replyTo != null)) ...[
               ReplyBar(post: post),
+              const SizedBox(height: 8),
+            ],
             PostContent(post: post, onTap: onTap),
             if (post.reactions.isNotEmpty &&
                 ref.watch(showReactions).value) ...[
@@ -95,6 +93,29 @@ class NormalPostLayout extends ConsumerWidget {
 
     const leftPostContentInset = 8 + 48;
 
+    final metaArea = Padding(
+      padding: EdgeInsets.only(top: padding.top),
+      child: Row(
+        children: [
+          if (postTheme?.showAvatar ?? true) ...[
+            AvatarWidget(
+              post.author,
+              onTap: showAuthor,
+              focusNode: FocusNode(skipTraversal: true),
+            ),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: MetaBar(
+              post: post,
+              twolineAuthor: true,
+              onOpen:
+                  ref.watch(showDedicatedPostOpenButton).value ? onOpen : null,
+            ),
+          ),
+        ],
+      ),
+    );
     return Padding(
       padding: padding.copyWith(
         bottom: 0.0,
@@ -104,28 +125,15 @@ class NormalPostLayout extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (postTheme?.showAvatar ?? true) ...[
-                Padding(
-                  padding: EdgeInsets.only(top: padding.top),
-                  child: AvatarWidget(
-                    post.author,
-                    onTap: showAuthor,
-                    focusNode: FocusNode(skipTraversal: true),
-                  ),
-                ),
-                const SizedBox(width: 8),
-              ],
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: children,
-                ),
-              ),
-            ],
+          metaArea,
+          const SizedBox(height: 8),
+          Padding(
+            padding: EdgeInsets.only(left: leftPostContentInset.toDouble()),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
+            ),
           ),
           if (postTheme?.showActions ?? true) ...[
             Semantics(

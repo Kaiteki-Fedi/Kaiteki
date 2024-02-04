@@ -1,7 +1,9 @@
+import "dart:io";
 import "dart:ui" show Locale;
 
 import "package:collection/collection.dart";
 import "package:fast_immutable_collections/fast_immutable_collections.dart";
+import "package:flutter/foundation.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
@@ -122,6 +124,12 @@ final readDisplayNameOnly = createSettingProvider<bool>(
 final showDedicatedPostOpenButton = createSettingProvider<bool>(
   key: "showDedicatedPostOpenButton",
   initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
+final showRefreshButton = createSettingProvider<bool>(
+  key: "showRefreshButton",
+  initialValue: kIsWeb || !(Platform.isAndroid || Platform.isIOS),
   provider: sharedPreferencesProvider,
 );
 

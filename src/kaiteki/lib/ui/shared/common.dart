@@ -117,6 +117,7 @@ class CustomColorPalette {
 enum EmphasisColor { high, medium, disabled }
 
 extension ThemeDataExtension on ThemeData {
+  @Deprecated("This method is not based on any proper Material guideline.")
   Color getEmphasisColor(EmphasisColor emphasis) {
     return switch (emphasis) {
       EmphasisColor.high => colorScheme.onSurface,

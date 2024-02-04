@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:animations/animations.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -9,6 +11,7 @@ import "package:kaiteki/fediverse/services/notifications.dart";
 import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/theming/text_theme.dart";
 import "package:kaiteki/ui/main/pages/bookmarks.dart";
@@ -17,10 +20,14 @@ import "package:kaiteki/ui/main/pages/explore.dart";
 import "package:kaiteki/ui/main/pages/home.dart";
 import "package:kaiteki/ui/main/pages/notifications.dart";
 import "package:kaiteki/ui/pride.dart";
+import "package:kaiteki/ui/search/suggestion_list_tiles/header.dart";
+import "package:kaiteki/ui/search/suggestion_list_tiles/post.dart";
+import "package:kaiteki/ui/search/suggestion_list_tiles/user.dart";
 import "package:kaiteki/ui/shared/account_switcher_widget.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
+import "package:kaiteki/utils/debounce.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:logging/logging.dart";
@@ -67,6 +74,27 @@ class MainScreenState extends ConsumerState<MainScreen> {
   MainScreenTabType _currentTab = MainScreenTabType.home;
 
   late List<MainScreenTabType> _tabs;
+  late final SearchController _searchController;
+  late final Debounceable<SearchResults, String> _searchDebounce;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _searchController = SearchController();
+
+    _searchDebounce = debounce(
+      (query) async {
+        final adapter = ref.read(adapterProvider);
+        if (adapter is SearchSupport) {
+          return (adapter as SearchSupport).search(query);
+        } else {
+          throw UnsupportedError("$adapter does not support search");
+        }
+      },
+      const Duration(milliseconds: 300),
+    );
+  }
 
   VoidCallback? get _search {
     if (ref.watch(adapterProvider) is! SearchSupport) return null;
@@ -92,13 +120,28 @@ class MainScreenState extends ConsumerState<MainScreen> {
     final prideEnabled = ref.watch(enablePrideFlag).value;
     final prideFlagDesign = ref.watch(prideFlag).value;
 
+    final appBar = isCompact
+        ? _AppBarCompact(
+            onSearch: _search,
+            onRefresh: onRefresh,
+            transparent: !isCompact,
+          ) as PreferredSizeWidget
+        : _AppBar(
+            onSearch: _search,
+            onRefresh: onRefresh,
+            controller: _searchController,
+            suggestionsBuilder: _suggestionsBuilder,
+          ) as PreferredSizeWidget;
+
     final scaffold = Scaffold(
       backgroundColor: prideEnabled || !isCompact ? Colors.transparent : null,
-      appBar: buildAppBar(context, !isCompact),
+      appBar: appBar,
       body: _BodyWrapper(
         tabTypes: _tabs,
         currentIndex: currentIndex,
         onChangeIndex: (i) => _changeTab(_tabs[i]),
+        searchController: _searchController,
+        suggestionsBuilder: _suggestionsBuilder,
         child: buildPage(context, currentTab),
       ),
       bottomNavigationBar: isCompact && _tabs.length >= 2
@@ -131,26 +174,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
               )
             : scaffold,
       ),
-    );
-  }
-
-  PreferredSizeWidget buildAppBar(BuildContext context, bool immerse) {
-    final theme = Theme.of(context);
-
-    Color? foregroundColor;
-
-    if (immerse) {
-      foregroundColor = theme.colorScheme.onSurface;
-    }
-
-    final kaitekiTextStyle = theme.ktkTextTheme?.kaitekiTextStyle ??
-        DefaultKaitekiTextTheme(context).kaitekiTextStyle;
-    return AppBar(
-      foregroundColor: foregroundColor,
-      forceMaterialTransparency: immerse,
-      title: Text(kAppName, style: kaitekiTextStyle),
-      actions: _buildAppBarActions(context),
-      scrolledUnderElevation: immerse ? 0.0 : null,
     );
   }
 
@@ -235,25 +258,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
-  List<Widget> _buildAppBarActions(BuildContext context) {
-    final l10n = context.l10n;
-
-    return [
-      IconButton(
-        icon: const Icon(Icons.search_rounded),
-        onPressed: _search,
-        tooltip: l10n.searchButtonLabel,
-      ),
-      if (ref.watch(pointingDeviceProvider) == PointingDevice.mouse)
-        IconButton(
-          icon: const Icon(Icons.refresh_rounded),
-          onPressed: onRefresh,
-          tooltip: l10n.refreshTimelineButtonLabel,
-        ),
-      const AccountSwitcherWidget(size: 40),
-    ];
-  }
-
   void _changeLocation(GoToAppLocationIntent i) {
     switch (i.location) {
       case AppLocation.home:
@@ -300,6 +304,82 @@ class MainScreenState extends ConsumerState<MainScreen> {
       ),
     );
   }
+
+  FutureOr<Iterable<Widget>> _suggestionsBuilder(
+    BuildContext context,
+    SearchController controller,
+  ) async {
+    final l10n = context.l10n;
+    final adapter = ref.watch(adapterProvider) as SearchSupport;
+
+    if (controller.text.trim().isEmpty) return [];
+
+    final results = await _searchDebounce(controller.text);
+
+    if (results == null) return [];
+
+    if (results.users.isEmpty &&
+        results.posts.isEmpty &&
+        results.hashtags.isEmpty) {
+      return [
+        ListTile(
+          title: Text(l10n.empty),
+          leading: const Icon(Icons.search_off_rounded),
+        ),
+      ];
+    }
+
+    return [
+      if (results.posts.isNotEmpty) ...[
+        HeaderSuggestionListTile(Text(l10n.postsTab)),
+        ...results.posts.take(3).map((e) {
+          return PostSuggestionListTile(
+            e,
+            onTap: () => context.pushNamed(
+              "post",
+              pathParameters: {...ref.accountRouterParams, "id": e.id},
+            ),
+          );
+        }),
+      ],
+      if (results.users.isNotEmpty) ...[
+        HeaderSuggestionListTile(Text(l10n.usersTab)),
+        ...results.users.take(3).map((e) {
+          return UserSuggestionListTile(
+            e,
+            onTap: () => context.pushNamed(
+              "user",
+              pathParameters: {...ref.accountRouterParams, "id": e.id},
+            ),
+          );
+        }),
+      ],
+      if (results.hashtags.isNotEmpty) ...[
+        const HeaderSuggestionListTile(Text("Hashtags")),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Wrap(
+            spacing: 8.0,
+            runSpacing: 8.0,
+            children: [
+              for (final hashtag in results.hashtags.take(3))
+                ActionChip(
+                  // ignore: l10n
+                  label: Text("#$hashtag"),
+                  onPressed: () => context.pushNamed(
+                    "hashtag",
+                    pathParameters: {
+                      ...ref.accountRouterParams,
+                      "hashtag": hashtag
+                    },
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    ];
+  }
 }
 
 class _BodyWrapper extends StatelessWidget {
@@ -307,12 +387,16 @@ class _BodyWrapper extends StatelessWidget {
   final List<MainScreenTabType>? tabTypes;
   final int currentIndex;
   final ValueChanged<int>? onChangeIndex;
+  final SearchController? searchController;
+  final SuggestionsBuilder suggestionsBuilder;
 
   const _BodyWrapper({
     required this.child,
     this.tabTypes,
     required this.currentIndex,
     required this.onChangeIndex,
+    this.searchController,
+    required this.suggestionsBuilder,
   });
 
   @override
@@ -338,11 +422,14 @@ class _BodyWrapper extends StatelessWidget {
         WindowWidthSizeClass.compact;
     if (isCompact) return body;
 
-    body = ClipRRect(
-      borderRadius: const BorderRadiusDirectional.only(
-        topStart: Radius.circular(16.0),
+    body = Padding(
+      padding: const EdgeInsets.only(right: 24.0),
+      child: ClipRRect(
+        borderRadius: const BorderRadiusDirectional.vertical(
+          top: Radius.circular(16.0),
+        ),
+        child: body,
       ),
-      child: body,
     );
 
     final tabTypes = this.tabTypes;
@@ -366,4 +453,163 @@ class _BodyWrapper extends StatelessWidget {
 
     return body;
   }
+}
+
+class _SearchBar extends ConsumerWidget {
+  final SearchController? controller;
+  final SuggestionsBuilder suggestionsBuilder;
+
+  const _SearchBar({
+    this.controller,
+    required this.suggestionsBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final host = ref.watch(currentAccountProvider)!.key.host;
+    return SearchAnchor(
+      searchController: controller,
+      builder: (context, controller) => SearchBar(
+        controller: controller,
+        padding: const MaterialStatePropertyAll(
+          EdgeInsets.only(left: 16.0, right: 8.0),
+        ),
+        trailing: const [AccountSwitcherWidget(size: 30)],
+        leading: const Icon(Icons.search_rounded),
+        elevation: const MaterialStatePropertyAll(0),
+        hintText: "Search $host",
+        onChanged: (_) => controller.openView(),
+        onSubmitted: (query) {
+          controller.closeView(null);
+          context.pushNamed(
+            "search",
+            pathParameters: {...ref.accountRouterParams},
+            queryParameters: {"q": query},
+          );
+        },
+      ),
+      suggestionsBuilder: suggestionsBuilder,
+    );
+  }
+}
+
+class _AppBar extends ConsumerWidget implements PreferredSizeWidget {
+  final VoidCallback? onSearch;
+  final VoidCallback onRefresh;
+  final SearchController? controller;
+  final SuggestionsBuilder suggestionsBuilder;
+
+  const _AppBar({
+    super.key,
+    this.onSearch,
+    required this.onRefresh,
+    this.controller,
+    required this.suggestionsBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = context.l10n;
+    final materialL10n = context.materialL10n;
+
+    return AppBar(
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 12.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: IconButton(
+            icon: const Icon(Icons.menu_rounded),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            tooltip: materialL10n.openAppDrawerTooltip,
+            padding: const EdgeInsets.all(16.0),
+          ),
+        ),
+      ),
+      leadingWidth: 56.0 + 16.0,
+      foregroundColor: theme.colorScheme.onSurface,
+      forceMaterialTransparency: true,
+      title: Padding(
+        padding: const EdgeInsets.only(left: 24.0),
+        child: _SearchBar(
+          controller: controller,
+          suggestionsBuilder: suggestionsBuilder,
+        ),
+      ),
+      toolbarHeight: 56.0 + 8.0 * 2,
+      centerTitle: true,
+      actions: [
+        if (ref.watch(showRefreshButton).value)
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
+            onPressed: onRefresh,
+            tooltip: l10n.refreshTimelineButtonLabel,
+          ),
+        PopupMenuButton(
+          itemBuilder: (context) {
+            return [
+              // if (_currentTab == MainScreenTabType.home)
+              PopupMenuItem(
+                child: const Text("Edit timelines"),
+                enabled: false,
+                onTap: () => context.pushNamed("tabs-settings"),
+              ),
+            ];
+          },
+        ),
+        const SizedBox(width: 16.0),
+      ],
+      scrolledUnderElevation: 0.0,
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(56.0 + 8.0 * 2);
+}
+
+class _AppBarCompact extends ConsumerWidget implements PreferredSizeWidget {
+  final VoidCallback? onSearch;
+  final VoidCallback onRefresh;
+  final bool transparent;
+
+  const _AppBarCompact({
+    super.key,
+    this.onSearch,
+    required this.onRefresh,
+    this.transparent = false,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = context.l10n;
+
+    final kaitekiTextStyle = theme.ktkTextTheme?.kaitekiTextStyle ??
+        DefaultKaitekiTextTheme(context).kaitekiTextStyle;
+
+    return AppBar(
+      foregroundColor: transparent ? theme.colorScheme.onSurface : null,
+      forceMaterialTransparency: transparent,
+      title: Text(kAppName, style: kaitekiTextStyle),
+      actions: [
+        if (onSearch != null)
+          IconButton(
+            icon: const Icon(Icons.search_rounded),
+            onPressed: onSearch,
+            tooltip: l10n.searchButtonLabel,
+          ),
+        if (ref.watch(showRefreshButton).value)
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
+            onPressed: onRefresh,
+            tooltip: l10n.refreshTimelineButtonLabel,
+          ),
+        const AccountSwitcherWidget(size: 40),
+      ],
+      scrolledUnderElevation: transparent ? 0.0 : null,
+    );
+  }
+
+  @override
+  Size get preferredSize => AppBar().preferredSize;
 }
