@@ -20,7 +20,6 @@ class MainScreenNavigationBar extends ConsumerWidget {
     return NavigationBar(
       onDestinationSelected: onChangeIndex,
       selectedIndex: currentIndex,
-      labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       destinations: _buildDestinations(context, ref).toList(),
     );
   }
