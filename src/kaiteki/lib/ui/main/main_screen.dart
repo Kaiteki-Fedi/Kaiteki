@@ -309,15 +309,13 @@ class MainScreenState extends ConsumerState<MainScreen> {
     BuildContext context,
     SearchController controller,
   ) async {
-    final l10n = context.l10n;
-    final adapter = ref.watch(adapterProvider) as SearchSupport;
+    final query = controller.text.trim();
+    if (query.isEmpty) return [];
 
-    if (controller.text.trim().isEmpty) return [];
-
-    final results = await _searchDebounce(controller.text);
-
+    final results = await _searchDebounce(query);
     if (results == null) return [];
 
+    final l10n = context.l10n;
     if (results.users.isEmpty &&
         results.posts.isEmpty &&
         results.hashtags.isEmpty) {
