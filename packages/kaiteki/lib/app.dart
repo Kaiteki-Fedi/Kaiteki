@@ -2,7 +2,6 @@ import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
-import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/theme_preferences.dart" as preferences;
 import "package:kaiteki/routing/router.dart";
@@ -12,6 +11,7 @@ import "package:kaiteki/theming/themes.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 
 final _debugShowCheckedModeBannerProvider = StateProvider((_) => true);
 final _debugShowMaterialGridProvider = StateProvider((_) => false);

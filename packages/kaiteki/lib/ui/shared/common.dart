@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/l10n/localizations.dart";
-import "package:kaiteki/l10n/localizations_en.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
+import "package:kaiteki_l10n/src/localizations_en.dart";
 import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:material_color_utilities/material_color_utilities.dart";
 

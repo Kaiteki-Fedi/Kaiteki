@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki/theming/default/themes.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
 

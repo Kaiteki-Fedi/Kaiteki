@@ -1,5 +1,5 @@
 import "package:flutter/material.dart" hide Visibility;
-import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki_core/model.dart";
 import "package:mdi/mdi.dart";
 

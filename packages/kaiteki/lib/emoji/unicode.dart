@@ -1,5 +1,5 @@
 import "package:kaiteki/generated/unicode_emoji.g.dart";
-import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 
 class UnicodeEmojiCategory implements EmojiCategory {

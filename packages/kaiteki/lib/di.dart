@@ -4,7 +4,6 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:kaiteki/account_manager.dart";
-import "package:kaiteki/l10n/localizations.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/language.dart";
@@ -18,6 +17,7 @@ import "package:kaiteki/translation/translator.dart";
 import "package:kaiteki_core/backends/mastodon.dart";
 import "package:kaiteki_core/backends/misskey.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 import "package:shared_preferences/shared_preferences.dart";
 

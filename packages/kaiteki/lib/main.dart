@@ -8,7 +8,7 @@ import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/app.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/hive.dart" as hive;
-import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/startup_state.dart";
 import "package:kaiteki/preferences/app_preferences.dart";

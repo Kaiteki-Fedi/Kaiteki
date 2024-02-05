@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki/ui/chats/chat_target_tile.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki_core/kaiteki_core.dart";

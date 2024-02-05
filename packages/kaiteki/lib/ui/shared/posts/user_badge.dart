@@ -1,7 +1,7 @@
 import "package:dynamic_color/dynamic_color.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/l10n/localizations.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki/ui/shared/common.dart";
 
 class UserBadge extends StatelessWidget {
