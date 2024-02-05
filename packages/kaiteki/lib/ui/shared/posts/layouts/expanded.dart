@@ -41,8 +41,10 @@ class ExpandedPostLayout extends ConsumerWidget {
     final l10n = context.l10n;
 
     final repeatOf = post.repeatOf;
+    final theme = Theme.of(context);
+
     if (repeatOf != null) {
-      final repeatColor = Theme.of(context).ktkColors?.repeatColor ??
+      final repeatColor = theme.ktkColors?.repeatColor ??
           DefaultKaitekiColors(context).repeatColor;
       return Column(
         children: [
@@ -111,9 +113,6 @@ class ExpandedPostLayout extends ConsumerWidget {
 
     final client = post.client;
 
-    final mediumEmphasis =
-        Theme.of(context).getEmphasisColor(EmphasisColor.medium);
-
     return Padding(
       padding: padding.copyWith(bottom: 0.0, right: 0.0),
       child: Column(
@@ -125,7 +124,7 @@ class ExpandedPostLayout extends ConsumerWidget {
             children: children,
           ),
           ContentColor(
-            color: mediumEmphasis,
+            color: theme.colorScheme.onSurfaceVariant,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
