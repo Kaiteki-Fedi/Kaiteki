@@ -79,18 +79,12 @@ class MetaBar extends ConsumerWidget {
     if (ref.watch(highlightPronouns).value) {
       final pronouns = author.details.fields
           ?.firstWhereOrNull(
-              (e) => _kPronounsFieldKeys.contains(e.key.trim().toLowerCase()),)
+            (e) => _kPronounsFieldKeys.contains(e.key.trim().toLowerCase()),
+          )
           ?.value
           .andThen(parsePronouns);
       if (pronouns != null && pronouns.isNotEmpty) {
-        var colors; //_getColorsForPronoun(pronouns[0][0]);
-        colors = colors
-            ?.map((e) => e.harmonizeWith(theme.colorScheme.primary))
-            .toList();
-        yield PronounBadge(
-          pronouns: pronouns,
-          colors: colors,
-        );
+        yield PronounBadge(pronouns: pronouns);
       }
     }
 
@@ -231,17 +225,18 @@ class PostTimestamp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final text = DateFormat.yMMMMd(
       Localizations.localeOf(context).toString(),
     ).add_jm().format(dateTime);
 
     final relativeTime = DateTime.now().difference(dateTime);
     return Semantics(
-      label: relativeTime.toLongString(),
+      label: relativeTime.toLongString(l10n),
       excludeSemantics: true,
       child: Tooltip(
         message: text,
-        child: Text(relativeTime.toStringHuman(context: context)),
+        child: Text(relativeTime.toStringHuman(l10n)),
       ),
     );
   }
@@ -271,7 +266,6 @@ class _Language extends ConsumerWidget {
             data.value.firstWhereOrNull((e) => e.code == language)?.englishName;
 
         if (languageName != null) {
-
           return Tooltip(
             message: languageName,
             child: widget,
