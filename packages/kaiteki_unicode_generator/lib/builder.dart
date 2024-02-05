@@ -8,7 +8,7 @@ Builder emojiBuilder(BuilderOptions options) {
   emojiListUrl ??=
       "https://raw.githubusercontent.com/googlefonts/emoji-metadata/main/emoji_15_1_ordering.json";
 
-  if (emojiListUrl == null) throw ArgumentError('emoji_list_url is required');
+  // if (emojiListUrl == null) throw ArgumentError('emoji_list_url is required');
 
   return EmojiBuilder(
     emojiListUrl: Uri.parse(emojiListUrl),
