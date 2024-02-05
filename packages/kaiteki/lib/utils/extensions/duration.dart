@@ -11,7 +11,10 @@ extension DurationExtension on Duration {
       return l10n?.timeDifferenceHours(inHours) ?? "${inHours}h";
     } else if (inMinutes != 0) {
       return l10n?.timeDifferenceMinutes(inMinutes) ?? "${inMinutes}m";
-    } else {
+    } else if (inSeconds <= 5) {
+      return "now";
+    }
+      else {
       return l10n?.timeDifferenceSeconds(inSeconds) ?? "${inSeconds}s";
     }
   }
