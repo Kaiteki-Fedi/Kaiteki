@@ -384,11 +384,6 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }
 
   @override
-  Future<Instance> probeInstance() async {
-    return getInstance();
-  }
-
-  @override
   Future<User?> followUser(String id) async {
     await client.followUser(id);
     return null;

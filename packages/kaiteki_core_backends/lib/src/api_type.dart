@@ -12,7 +12,6 @@ enum BackendType<T extends BackendAdapter> {
   foundkey(MisskeyAdapter.create, probingPriority: null),
   calckey(MisskeyAdapter.create, probingPriority: null);
 
-  final String? _displayName;
   final Future<T> Function(String instance) _createAdapter;
   final List<String>? hosts;
 
@@ -27,8 +26,7 @@ enum BackendType<T extends BackendAdapter> {
 
   const BackendType(
     this._createAdapter, {
-    String? displayName,
     this.hosts,
     this.probingPriority = 0,
-  }) : _displayName = displayName;
+  });
 }

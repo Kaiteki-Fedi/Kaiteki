@@ -16,12 +16,6 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
   MastodonAdapter.custom(this.instance, super.client);
 
   @override
-  Future<Instance?> probeInstance() async {
-    final instance = await client.getInstance();
-    return instance.toKaiteki(this.instance);
-  }
-
-  @override
   Future<Instance> getInstance() async {
     var instance = await client.getInstance();
     return instance.toKaiteki(this.instance);

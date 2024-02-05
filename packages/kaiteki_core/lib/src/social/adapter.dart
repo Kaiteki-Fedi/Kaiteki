@@ -20,8 +20,6 @@ abstract class CentralizedBackendAdapter extends BackendAdapter {
 
 abstract class DecentralizedBackendAdapter extends BackendAdapter {
   String get instance;
-
-  Future<Instance?> probeInstance();
 }
 
 abstract class BackendAdapter {

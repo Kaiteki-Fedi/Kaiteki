@@ -84,13 +84,6 @@ class PleromaAdapter //
   }
 
   @override
-  Future<Instance?> probeInstance() async {
-    final instance = await client.getInstanceV1();
-    if (!instance.version.contains('Pleroma')) return null;
-    return _injectFE(instance.toKaiteki(this.instance));
-  }
-
-  @override
   Future<Instance> getInstance() async {
     final instance = await client.getInstanceV1();
     return _injectFE(instance.toKaiteki(this.instance));

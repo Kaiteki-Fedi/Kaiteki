@@ -10,7 +10,6 @@ import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/telemetry/customize_report_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/http.dart";
-import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
 import "package:url_launcher/url_launcher.dart";
 

@@ -146,15 +146,13 @@ Future<InstanceProbe?> _probeEndpoints(String host) async {
 
       _logger.fine('Probing for ${apiType.name} on $host...');
 
-      final result = await adapter.probeInstance();
+      final result = await adapter.getInstance();
 
-      if (result != null) {
-        return InstanceProbe(
-          apiType,
-          result,
-          InstanceProbeMethod.endpoint,
-        );
-      }
+      return InstanceProbe(
+        apiType,
+        result,
+        InstanceProbeMethod.endpoint,
+      );
     } catch (e, s) {
       _logger.warning('Probe for ${apiType.name} on $host failed', e, s);
       continue;

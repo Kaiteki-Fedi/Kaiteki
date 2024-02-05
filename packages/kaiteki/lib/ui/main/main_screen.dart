@@ -184,8 +184,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget buildPage(BuildContext context, MainScreenTabType tab) {
-    final isCompact = WindowWidthSizeClass.fromContext(context) <=
-        WindowWidthSizeClass.compact;
     return switch (tab) {
       MainScreenTabType.home => HomePage(
           key: _homePageKey,

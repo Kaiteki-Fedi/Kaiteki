@@ -34,12 +34,6 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
   }
 
   @override
-  Future<Instance?> probeInstance() async {
-    if (!instanceInfo.version.contains('+glitch')) return null;
-    return instanceInfo.toKaiteki(instance);
-  }
-
-  @override
   Future<Instance> getInstance() async {
     return instanceInfo.toKaiteki(instance);
   }
