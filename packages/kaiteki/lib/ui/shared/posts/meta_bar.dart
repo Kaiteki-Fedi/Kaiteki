@@ -269,11 +269,16 @@ class _Language extends ConsumerWidget {
       data: (data) {
         final languageName =
             data.value.firstWhereOrNull((e) => e.code == language)?.englishName;
-        return Semantics(
-          excludeSemantics: true,
-          label: languageName,
-          child: widget,
-        );
+
+        if (languageName != null) {
+
+          return Tooltip(
+            message: languageName,
+            child: widget,
+          );
+        }
+
+        return widget;
       },
       loading: (_) => widget,
       error: (_) => widget,
