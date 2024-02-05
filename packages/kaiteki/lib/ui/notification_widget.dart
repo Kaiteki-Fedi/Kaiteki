@@ -3,6 +3,7 @@ import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/colors.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/corner_painter.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -177,8 +178,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
   TextSpan buildTitle(BuildContext context, Notification notification) {
     final user = notification.user;
     final relativeTime = DateTime.now()
-        .difference(notification.createdAt)
-        .toStringHuman(context: context);
+        .difference(notification.createdAt);
 
     final theme = Theme.of(context);
     final onSurfaceVariant = theme.colorScheme.onSurfaceVariant;
@@ -203,8 +203,13 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
         TextSpan(
           text: _getTitle(context, notification.type),
         ),
+        const TextSpan(
+          text: " $kBullet ",
+          semanticsLabel: "",
+        ),
         TextSpan(
-          text: " • $relativeTime",
+          text: relativeTime.toStringHuman(context: context),
+          semanticsLabel: relativeTime.toLongString(),
           style: bodySmall?.copyWith(color: onSurfaceVariant),
         ),
       ],
