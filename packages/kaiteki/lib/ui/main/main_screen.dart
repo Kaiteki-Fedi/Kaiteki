@@ -21,7 +21,7 @@ import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/search/suggestion_list_tiles/header.dart";
 import "package:kaiteki/ui/search/suggestion_list_tiles/post.dart";
 import "package:kaiteki/ui/search/suggestion_list_tiles/user.dart";
-import "package:kaiteki/ui/shared/account_switcher_widget.dart";
+import "package:kaiteki/ui/shared/account_switcher.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
@@ -477,7 +477,7 @@ class _SearchBar extends ConsumerWidget {
         padding: const MaterialStatePropertyAll(
           EdgeInsets.only(left: 16.0, right: 8.0),
         ),
-        trailing: const [AccountSwitcherWidget(size: 30)],
+        trailing: const [AccountSwitcher(size: 30)],
         leading: const Icon(Icons.search_rounded),
         elevation: const MaterialStatePropertyAll(0),
         hintText: "Search $host",
@@ -631,7 +631,7 @@ class _CompactSearchBar extends ConsumerWidget {
               ];
             },
           ),
-          const AccountSwitcherWidget(size: 30),
+          const AccountSwitcher(size: 30),
         ],
         leading: const DrawerButton(),
         hintText: "Search $host",
