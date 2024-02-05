@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:kaiteki_core/src/social/interfaces/login_support.dart';
 import 'package:meta/meta.dart';
 
-import 'api_type.dart';
 import 'capabilities.dart';
 import 'model/attachment.dart';
 import 'model/instance.dart';
@@ -27,8 +26,6 @@ abstract class DecentralizedBackendAdapter extends BackendAdapter {
 
 abstract class BackendAdapter {
   AdapterCapabilities get capabilities;
-
-  ApiType get type;
 
   /// Whether any secret is set.
   bool authenticated = false;

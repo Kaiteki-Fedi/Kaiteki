@@ -77,7 +77,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen>
               icon: Icon(Icons.assignment_late_rounded),
               text: Text("Not implemented yet"),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -85,9 +85,7 @@ class _TabsSettingsScreenState extends State<TabsSettingsScreen>
 }
 
 class _TimelinesPage extends ConsumerWidget {
-  const _TimelinesPage({
-    super.key,
-  });
+  const _TimelinesPage();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -120,9 +118,7 @@ class _TimelinesPage extends ConsumerWidget {
 }
 
 class _AppDestinationsPage extends ConsumerWidget {
-  const _AppDestinationsPage({
-    super.key,
-  });
+  const _AppDestinationsPage();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -132,7 +128,6 @@ class _AppDestinationsPage extends ConsumerWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
         child: ReorderableListView(
-          buildDefaultDragHandles: true,
           children: [
             for (final tab in order)
               _DestinationSwitchListTile(

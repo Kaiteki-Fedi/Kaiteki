@@ -1,7 +1,7 @@
 import "package:kaiteki/ui/auth/login/dialogs/api_web_compatibility_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/keyboard_shortcuts_dialog.dart";
 import "package:kaiteki/ui/shared/posts/compose/discard_post_dialog.dart";
-import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
 
 import "../constants.dart";
@@ -16,7 +16,7 @@ final apiWebCompatibility = Story(
   builder: (context) => ApiWebCompatibilityDialog(
     type: context.knobs.options(
       label: "API Type",
-      initial: ApiType.mastodon,
+      initial: BackendType.mastodon,
       options: apiTypeOptions,
     ),
   ),

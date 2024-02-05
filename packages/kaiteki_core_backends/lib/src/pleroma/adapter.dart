@@ -1,11 +1,11 @@
-import 'package:collection/collection.dart';
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
 import 'package:kaiteki_core/social.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/shared_adapter.dart';
-import 'package:kaiteki_core/src/social/backends/pleroma/adapter.c.dart';
-import 'package:kaiteki_core/src/social/backends/pleroma/capabilities.dart';
-import 'package:kaiteki_core/src/social/backends/pleroma/client.dart';
+import 'package:kaiteki_core_backends/src/mastodon/extensions.dart';
+import 'package:kaiteki_core_backends/src/mastodon/shared_adapter.dart';
+
+import 'extensions.dart';
+import 'capabilities.dart';
+import 'client.dart';
 
 class PleromaAdapter //
     extends SharedMastodonAdapter<PleromaClient>
@@ -17,17 +17,16 @@ class PleromaAdapter //
   @override
   final PleromaCapabilities capabilities;
 
-  static Future<PleromaAdapter> create(ApiType type, String instance) async {
+  static Future<PleromaAdapter> create(String instance) async {
     final client = PleromaClient(instance);
     final instanceInfo = await client.getInstanceV1();
     return PleromaAdapter._(
-      type,
       client,
       PleromaCapabilities.fromInstance(instanceInfo),
     );
   }
 
-  PleromaAdapter._(super.type, super.client, this.capabilities);
+  PleromaAdapter._(super.client, this.capabilities);
 
   @override
   Future<ChatMessage> postChatMessage(

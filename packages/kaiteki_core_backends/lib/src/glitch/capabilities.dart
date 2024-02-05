@@ -1,6 +1,5 @@
-import 'package:kaiteki_core/src/social/backends/mastodon/capabilities.dart';
-import 'package:kaiteki_core/src/social/interfaces/reaction_support.dart';
-import 'package:kaiteki_core/src/social/model/formatting.dart';
+import 'package:kaiteki_core/social.dart';
+import 'package:kaiteki_core_backends/src/mastodon/capabilities.dart';
 
 class GlitchCapabilities extends MastodonCapabilities
     implements ReactionSupportCapabilities {

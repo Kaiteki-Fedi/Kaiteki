@@ -52,6 +52,8 @@ dependencies:
   json_annotation: any
   kaiteki_core:
     path: ../kaiteki_core
+  kaiteki_core_backends:
+    path: ../kaiteki_core_backends
   kaiteki_l10n:
     path: ../kaiteki_l10n
   kaiteki_ui:

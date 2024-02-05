@@ -1,6 +1,6 @@
-import 'package:fediverse_objects/mastodon_v1.dart';
-import 'package:kaiteki_core/backends/mastodon.dart';
+import 'package:fediverse_objects/mastodon_v1.dart' show Instance;
 import 'package:kaiteki_core/social.dart' hide Instance;
+import 'package:kaiteki_core_backends/mastodon.dart';
 
 class PleromaCapabilities extends MastodonCapabilities
     implements ReactionSupportCapabilities, ChatSupportCapabilities {

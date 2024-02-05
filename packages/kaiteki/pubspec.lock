@@ -861,6 +861,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  kaiteki_core_backends:
+    dependency: "direct main"
+    description:
+      path: "../kaiteki_core_backends"
+      relative: true
+    source: path
+    version: "1.0.0"
   kaiteki_l10n:
     dependency: "direct main"
     description:

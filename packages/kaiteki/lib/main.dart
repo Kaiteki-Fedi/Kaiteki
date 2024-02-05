@@ -8,7 +8,6 @@ import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/app.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/hive.dart" as hive;
-import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/startup_state.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -17,6 +16,7 @@ import "package:kaiteki/ui/shared/crash_screen.dart";
 import "package:kaiteki/ui/splash_screen.dart";
 import "package:kaiteki_core/http.dart";
 import "package:kaiteki_core/utils.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:logging/logging.dart";
 import "package:shared_preferences/shared_preferences.dart";
 

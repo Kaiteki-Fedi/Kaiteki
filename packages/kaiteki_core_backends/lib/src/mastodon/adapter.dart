@@ -9,11 +9,11 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
   @override
   final String instance;
 
-  static Future<MastodonAdapter> create(ApiType type, String instance) async {
-    return MastodonAdapter.custom(type, instance, MastodonClient(instance));
+  static Future<MastodonAdapter> create(String instance) async {
+    return MastodonAdapter.custom(instance, MastodonClient(instance));
   }
 
-  MastodonAdapter.custom(super.type, this.instance, super.client);
+  MastodonAdapter.custom(this.instance, super.client);
 
   @override
   Future<Instance?> probeInstance() async {

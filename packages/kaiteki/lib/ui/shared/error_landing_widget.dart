@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki/common.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/telemetry/report.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
 import "package:kaiteki/ui/telemetry/customize_report_dialog.dart";
@@ -128,18 +129,18 @@ class _ErrorLandingWidgetState extends State<ErrorLandingWidget> {
   }
 
   Future<void> _onReport() async {
-    late final BackendAdapter? adapter;
+    late final Account? account;
 
     try {
-      adapter = ProviderScope.containerOf(context).read(adapterProvider);
+      account = ProviderScope.containerOf(context).read(currentAccountProvider);
     } catch (_) {
-      adapter = null;
+      account = null;
     }
 
     final report = ExceptionReport.fromException(
       widget.error.$1,
       stackTrace: widget.error.$2,
-      backend: adapter == null ? null : retrieveBackendInformation(adapter),
+      backend: account == null ? null : retrieveBackendInformation(account.adapter, account.type),
     );
 
     final result = await showDialog<ExceptionReport>(

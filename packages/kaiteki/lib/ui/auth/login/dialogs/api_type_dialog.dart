@@ -3,7 +3,7 @@ import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/api_theme.dart";
 import "package:kaiteki/link_constants.dart";
-import "package:kaiteki_core/kaiteki_core.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 import "package:url_launcher/url_launcher_string.dart";
 
 class ApiTypeDialog extends StatefulWidget {
@@ -14,7 +14,7 @@ class ApiTypeDialog extends StatefulWidget {
 }
 
 class _ApiTypeDialogState extends State<ApiTypeDialog> {
-  ApiType _api = ApiType.mastodon;
+  BackendType _api = BackendType.mastodon;
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +58,8 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
 }
 
 class ApiTypeDropDownButton extends StatelessWidget {
-  final ApiType type;
-  final void Function(ApiType? type)? onChanged;
+  final BackendType type;
+  final void Function(BackendType? type)? onChanged;
 
   const ApiTypeDropDownButton({
     super.key,
@@ -75,10 +75,10 @@ class ApiTypeDropDownButton extends StatelessWidget {
         border: OutlineInputBorder(),
       ),
       child: DropdownButtonHideUnderline(
-        child: DropdownButton<ApiType>(
+        child: DropdownButton<BackendType>(
           isExpanded: true,
-          items: ApiType.values.map((type) {
-            return DropdownMenuItem<ApiType>(
+          items: BackendType.values.map((type) {
+            return DropdownMenuItem<BackendType>(
               value: type,
               child: Padding(
                 padding: const EdgeInsets.only(left: 12.0),
@@ -88,7 +88,7 @@ class ApiTypeDropDownButton extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: _buildIcon(type),
                     ),
-                    Text(type.displayName),
+                    Text(type.name),
                   ],
                 ),
               ),
@@ -101,7 +101,7 @@ class ApiTypeDropDownButton extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon(ApiType type) {
+  Widget _buildIcon(BackendType type) {
     final iconLocation = type.theme.iconAssetLocation;
 
     if (iconLocation != null) {

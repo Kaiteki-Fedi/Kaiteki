@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:fediverse_objects/mastodon.dart' show Notification;
 import 'package:fediverse_objects/pleroma.dart';
 import 'package:http/http.dart' show Response;
-import 'package:kaiteki_core/backends/mastodon.dart';
 import 'package:kaiteki_core/http.dart';
 import 'package:kaiteki_core/utils.dart';
+import 'package:kaiteki_core_backends/mastodon.dart';
 
 import 'exceptions/mfa_required.dart';
 import 'responses/emoji_packs_response.dart';

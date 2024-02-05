@@ -2,19 +2,15 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/notifications.dart";
-import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 
 part "bookmarks.dart";
-
 part "chats.dart";
-
 part "explore.dart";
-
 part "home.dart";
-
 part "notifications.dart";
 
 enum MainScreenTabType<T extends MainScreenTab> {

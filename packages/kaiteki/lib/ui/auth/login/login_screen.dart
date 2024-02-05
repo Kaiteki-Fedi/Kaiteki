@@ -24,6 +24,7 @@ import "package:kaiteki/ui/shared/layout/form_widget.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -62,7 +63,7 @@ const fieldPadding = EdgeInsets.all(8.0);
 
 class InstanceCompound {
   final String host;
-  final ApiType type;
+  final BackendType type;
   final Instance data;
 
   const InstanceCompound(this.host, this.type, this.data);
@@ -342,13 +343,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<LoginResult> _oauthDeepLink(
     BackendAdapter adapter,
+    BackendType type,
     OAuthInitCallback generateUrl,
   ) async {
     // If the adapter is not decentralized, then it won't matter what the host
     // is, so we can just use a placeholder.
     final host =
         adapter.safeCast<DecentralizedBackendAdapter>()?.instance ?? "woozy";
-    final redirectUri = getRedirectUri(adapter.type, host);
+    final redirectUri = getRedirectUri(type, host);
 
     if (redirectUri == null) {
       return LoginFailure(
@@ -361,7 +363,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (extra != null) {
       await pushExtra(
         ref.read(sharedPreferencesProvider),
-        adapter.type,
+        type,
         host,
         extra,
       );
@@ -379,29 +381,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<InstanceCompound?> _fetchInstance(String host) async {
     final result = await ref.read(probeInstanceProvider(host).future);
 
-    final ApiType type;
-    final Instance instance;
+    final BackendType type;
+    Instance? instance;
 
-    if (result.successful) {
+    if (result != null) {
       // ignore: unnecessary_null_checks
-      type = result.type!;
-      instance = result.instance!;
+      type = result.type;
+      instance = result.instance;
     } else {
       if (!mounted) return null;
 
       final selectedType = await showInstanceDialog(context);
       if (selectedType == null) return null;
       type = selectedType;
-
-      final adapter = await type.createAdapter(host);
-      instance = await adapter.getInstance();
     }
+
+    final adapter = await type.createAdapter(host);
+    instance ??= await adapter.getInstance();
 
     return InstanceCompound(host, type, instance);
   }
 
-  Future<ApiType?> showInstanceDialog(BuildContext context) async {
-    return showDialog<ApiType?>(
+  Future<BackendType?> showInstanceDialog(BuildContext context) async {
+    return showDialog<BackendType?>(
       barrierDismissible: false,
       context: context,
       builder: (context) => const Center(child: ApiTypeDialog()),
@@ -476,7 +478,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         }
 
         if (kIsWeb || Platform.isAndroid) {
-          return _oauthDeepLink(adapter, generateUrl);
+          return _oauthDeepLink(adapter, instance.type, generateUrl);
         }
 
         return _oauthLocalServer(adapter, generateUrl);
@@ -503,6 +505,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final account = Account.fromLoginResult(
       result,
       adapter,
+      instance.type,
       instance.host,
       instance: instanceModel,
     );

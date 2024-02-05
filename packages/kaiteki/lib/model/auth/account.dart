@@ -4,6 +4,7 @@ import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki_core/social.dart" hide UserSecret, ClientSecret;
 import "package:kaiteki_core/utils.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 
 @immutable
 class Account extends Equatable {
@@ -11,6 +12,7 @@ class Account extends Equatable {
   final AccountSecret? accountSecret;
   final ClientSecret? clientSecret;
   final BackendAdapter adapter;
+  BackendType get type => key.type!;
   final Instance? instance;
   final User user;
 
@@ -26,12 +28,13 @@ class Account extends Equatable {
   factory Account.fromLoginResult(
     LoginSuccess result,
     BackendAdapter adapter,
+    BackendType type,
     String host, {
     Instance? instance,
   }) {
     return Account(
       key: AccountKey(
-        adapter.type,
+        type,
         host,
         result.user.username,
       ),

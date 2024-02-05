@@ -1,10 +1,9 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:kaiteki_core/model.dart';
-import 'package:kaiteki_core/src/social/api_type.dart';
-import 'package:kaiteki_core/src/social/backends/glitch/capabilities.dart';
-import 'package:kaiteki_core/src/social/backends/glitch/client.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/shared_adapter.dart';
+import 'package:kaiteki_core_backends/src/glitch/capabilities.dart';
+import 'package:kaiteki_core_backends/src/glitch/client.dart';
+import 'package:kaiteki_core_backends/src/mastodon/extensions.dart';
+import 'package:kaiteki_core_backends/src/mastodon/shared_adapter.dart';
 import 'package:kaiteki_core/src/social/interfaces/reaction_support.dart';
 
 class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
@@ -13,17 +12,16 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
   final String instance;
   final mastodon.Instance instanceInfo;
 
-  static Future<GlitchAdapter> create(ApiType type, String instance) async {
+  static Future<GlitchAdapter> create(String instance) async {
     final cli = GlitchClient(instance);
     final instanceInfo = await cli.getInstance();
-    return GlitchAdapter.custom(type, instance, instanceInfo, cli);
+    return GlitchAdapter._(instance, instanceInfo, cli);
   }
 
-  GlitchAdapter.custom(
-    super.type,
+  GlitchAdapter._(
     this.instance,
     this.instanceInfo,
-    super.client,
+    super.client
   );
 
   @override

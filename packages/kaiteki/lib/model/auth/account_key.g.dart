@@ -17,7 +17,7 @@ class AccountKeyAdapter extends TypeAdapter<AccountKey> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AccountKey(
-      fields[0] as ApiType<BackendAdapter>?,
+      fields[0] as BackendType<BackendAdapter>?,
       fields[1] as String,
       fields[2] as String,
     );
@@ -51,7 +51,7 @@ class AccountKeyAdapter extends TypeAdapter<AccountKey> {
 // **************************************************************************
 
 AccountKey _$AccountKeyFromJson(Map<String, dynamic> json) => AccountKey(
-      $enumDecodeNullable(_$ApiTypeEnumMap, json['type'],
+      $enumDecodeNullable(_$BackendTypeEnumMap, json['type'],
           unknownValue: JsonKey.nullForUndefinedEnumValue),
       json['host'] as String,
       json['username'] as String,
@@ -61,15 +61,15 @@ Map<String, dynamic> _$AccountKeyToJson(AccountKey instance) =>
     <String, dynamic>{
       'username': instance.username,
       'host': instance.host,
-      'type': _$ApiTypeEnumMap[instance.type],
+      'type': _$BackendTypeEnumMap[instance.type],
     };
 
-const _$ApiTypeEnumMap = {
-  ApiType.mastodon: 'mastodon',
-  ApiType.glitch: 'glitch',
-  ApiType.pleroma: 'pleroma',
-  ApiType.misskey: 'misskey',
-  ApiType.akkoma: 'akkoma',
-  ApiType.foundkey: 'foundkey',
-  ApiType.calckey: 'calckey',
+const _$BackendTypeEnumMap = {
+  BackendType.mastodon: 'mastodon',
+  BackendType.glitch: 'glitch',
+  BackendType.pleroma: 'pleroma',
+  BackendType.misskey: 'misskey',
+  BackendType.akkoma: 'akkoma',
+  BackendType.foundkey: 'foundkey',
+  BackendType.calckey: 'calckey',
 };

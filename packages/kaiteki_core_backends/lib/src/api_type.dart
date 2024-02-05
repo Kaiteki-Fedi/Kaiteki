@@ -1,12 +1,9 @@
-import 'package:kaiteki_core/src/social/adapter.dart';
-import 'package:recase/recase.dart';
+import 'package:kaiteki_core/social.dart';
+import 'package:kaiteki_core_backends/pleroma.dart';
+import 'package:kaiteki_core_backends/misskey.dart';
+import 'package:kaiteki_core_backends/glitch.dart';
 
-import 'backends/glitch/adapter.dart';
-import 'backends/mastodon/adapter.dart';
-import 'backends/misskey/adapter.dart';
-import 'backends/pleroma/adapter.dart';
-
-enum ApiType<T extends BackendAdapter> {
+enum BackendType<T extends BackendAdapter> {
   mastodon(MastodonAdapter.create),
   glitch(GlitchAdapter.create, probingPriority: 5),
   pleroma(PleromaAdapter.create, probingPriority: 5),
@@ -14,24 +11,21 @@ enum ApiType<T extends BackendAdapter> {
   akkoma(PleromaAdapter.create, probingPriority: null),
   foundkey(MisskeyAdapter.create, probingPriority: null),
   calckey(MisskeyAdapter.create, probingPriority: null);
-  // TODO(Craftplacer): I'm too lazy, sowwy
-  // goToSocial(MastodonAdapter.create, theme: goToSocialTheme),
 
   final String? _displayName;
-  final Future<T> Function(ApiType type, String instance) _createAdapter;
+  final Future<T> Function(String instance) _createAdapter;
   final List<String>? hosts;
 
   /// Which priority each API type has when probing the instance.
   ///
   /// If set to `null`, the probing is disabled.
   final int? probingPriority;
+  
   Type get adapterType => T;
 
-  Future<T> createAdapter(String instance) => _createAdapter(this, instance);
+  Future<T> createAdapter(String instance) => _createAdapter(instance);
 
-  String get displayName => _displayName ?? name.titleCase;
-
-  const ApiType(
+  const BackendType(
     this._createAdapter, {
     String? displayName,
     this.hosts,

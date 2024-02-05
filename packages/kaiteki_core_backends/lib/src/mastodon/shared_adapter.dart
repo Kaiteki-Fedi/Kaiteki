@@ -35,10 +35,7 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   @override
   String get instance => client.instance;
 
-  @override
-  final ApiType type;
-
-  SharedMastodonAdapter(this.type, this.client);
+  SharedMastodonAdapter(this.client);
 
   @override
   Future<User> getUserById(String id) async {

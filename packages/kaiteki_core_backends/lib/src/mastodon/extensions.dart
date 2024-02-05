@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:fediverse_objects/mastodon_v1.dart' as mastodon_v1;
 import 'package:kaiteki_core/model.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/responses/marker.dart';
+import 'package:kaiteki_core_backends/src/mastodon/responses/marker.dart';
 import 'package:kaiteki_core/utils.dart';
 
 final mastodonAttachmentTypeRosetta = Rosetta(const {

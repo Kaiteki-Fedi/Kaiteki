@@ -1,5 +1,5 @@
 import 'package:fediverse_objects/pleroma.dart' as pleroma;
-import 'package:kaiteki_core/src/social/backends/mastodon/extensions.dart';
+import 'package:kaiteki_core_backends/src/mastodon/extensions.dart';
 import 'package:kaiteki_core/utils.dart';
 import 'package:kaiteki_core/social.dart';
 

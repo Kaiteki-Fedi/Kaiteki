@@ -85,9 +85,6 @@ class TimelineAdapter extends BackendAdapter {
       throw UnimplementedError();
 
   @override
-  ApiType get type => ApiType.mastodon;
-
-  @override
   Future<Object?> resolveUrl(Uri url) => throw UnimplementedError();
 }
 

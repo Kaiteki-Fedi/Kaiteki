@@ -50,6 +50,7 @@ import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 import "package:logging/logging.dart";
 
 import "shared_axis_transition_page.dart";
@@ -254,7 +255,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: "oauth",
         path: "/oauth/:type/:host",
         builder: (_, state) {
-          final type = ApiType.values
+          final type = BackendType.values
               .firstWhere((e) => e.name == state.pathParameters["type"]!);
           final host = state.pathParameters["host"]!;
 

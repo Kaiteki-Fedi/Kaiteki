@@ -52,7 +52,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            "Fetching threads with ${adapter.type.displayName} is not implemented.",
+            "Fetching threads with $adapter is not implemented.",
           ),
         ),
       );

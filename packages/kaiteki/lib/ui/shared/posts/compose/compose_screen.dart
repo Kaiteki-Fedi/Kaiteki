@@ -310,7 +310,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                                     attachments: attachments,
                                     onRemoveAttachment: (index) {
                                       setState(
-                                          () => attachments.removeAt(index));
+                                          () => attachments.removeAt(index),);
                                     },
                                     onToggleSensitive: _onToggleSensitive,
                                     onChangeDescription: _onChangeDescription,

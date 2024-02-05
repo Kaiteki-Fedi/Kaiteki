@@ -6,6 +6,7 @@ import "dart:ui_web" as ui_web show urlStrategy, HashUrlStrategy;
 
 import "package:kaiteki/auth/oauth.dart" as common;
 import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 
 bool? get isProtocolHandlerRegistered {
   final value = js.context["isProtocolHandlerRegistered"];
@@ -42,7 +43,7 @@ Uri? getBaseUri() {
 bool get _isUsingHashUrlStrategy =>
     ui_web.urlStrategy is ui_web.HashUrlStrategy;
 
-Uri? getRedirectUri(ApiType type, String host) {
+Uri? getRedirectUri(BackendType type, String host) {
   final baseUri = getBaseUri();
 
   if (baseUri == null) return null;

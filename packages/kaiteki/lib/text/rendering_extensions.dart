@@ -2,8 +2,8 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/text/text_renderer.dart";
-import "package:kaiteki_core/backends/misskey.dart";
 import "package:kaiteki_core/model.dart";
+import "package:kaiteki_core_backends/misskey.dart";
 import "package:logging/logging.dart";
 
 import "text_context.dart";

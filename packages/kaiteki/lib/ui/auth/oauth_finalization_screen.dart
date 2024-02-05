@@ -6,9 +6,10 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 
 class OAuthFinalizationScreen extends ConsumerStatefulWidget {
-  final ApiType type;
+  final BackendType type;
   final String host;
   final Map<String, String>? extra;
   final Map<String, String> query;
@@ -84,6 +85,7 @@ class _OAuthFinalizationScreenState
     final account = Account.fromLoginResult(
       result,
       adapter,
+      widget.type,
       widget.host,
       instance: instance,
     );

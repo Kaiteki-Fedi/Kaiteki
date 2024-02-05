@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/auth/secret.dart";
 import "package:kaiteki/theming/default/themes.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:shared_preferences/shared_preferences.dart";
 
 import "dummy_repository.dart";

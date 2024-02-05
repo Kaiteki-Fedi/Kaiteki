@@ -9,11 +9,11 @@ import 'package:http/http.dart' show MultipartFile, Response;
 import 'package:http_parser/http_parser.dart';
 import 'package:kaiteki_core/http.dart';
 import 'package:kaiteki_core/src/link_header_parser.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/models/pagination.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/models/search.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/responses/context.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/responses/login.dart';
-import 'package:kaiteki_core/src/social/backends/mastodon/responses/marker.dart';
+import 'package:kaiteki_core_backends/src/mastodon/models/pagination.dart';
+import 'package:kaiteki_core_backends/src/mastodon/models/search.dart';
+import 'package:kaiteki_core_backends/src/mastodon/responses/context.dart';
+import 'package:kaiteki_core_backends/src/mastodon/responses/login.dart';
+import 'package:kaiteki_core_backends/src/mastodon/responses/marker.dart';
 import 'package:kaiteki_core/utils.dart';
 
 class MastodonClient {

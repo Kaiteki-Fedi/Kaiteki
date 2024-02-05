@@ -70,7 +70,7 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
               style: widget.style,
               textScaler: TextScaler.linear(ref
                   .watch(postTextSize)
-                  .value),
+                  .value,),
             ),
           if (post.poll != null) ...[
             const SizedBox(height: 8),

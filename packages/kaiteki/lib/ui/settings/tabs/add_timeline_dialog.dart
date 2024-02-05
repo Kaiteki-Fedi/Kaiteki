@@ -1,4 +1,3 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:kaiteki/di.dart";
@@ -51,18 +50,18 @@ class _AddTimelineDialogState extends State<AddTimelineDialog> {
                 onSelected: (value) {
                   setState(() => _type = value!);
                 },
-                dropdownMenuEntries: [
-                  const DropdownMenuEntry(
+                dropdownMenuEntries: const [
+                  DropdownMenuEntry(
                     value: TimelineSourceType.user,
                     label: "User",
                     leadingIcon: Icon(Icons.person_rounded),
                   ),
-                  const DropdownMenuEntry(
+                  DropdownMenuEntry(
                     value: TimelineSourceType.list,
                     label: "List",
                     leadingIcon: Icon(Icons.article_rounded),
                   ),
-                  const DropdownMenuEntry(
+                  DropdownMenuEntry(
                     value: TimelineSourceType.hashtag,
                     label: "Hashtag",
                     leadingIcon: Icon(Icons.tag_rounded),
@@ -74,8 +73,8 @@ class _AddTimelineDialogState extends State<AddTimelineDialog> {
             switch (_type) {
               TimelineSourceType.user => throw UnimplementedError(),
               TimelineSourceType.standard => throw AssertionError(
-                  "Standard timelines shouldn't be selectable"),
-              TimelineSourceType.list => ListSelection(),
+                  "Standard timelines shouldn't be selectable",),
+              TimelineSourceType.list => const ListSelection(),
               TimelineSourceType.hashtag => TextFormField(
                   decoration: const InputDecoration(
                     prefixText: "#",
@@ -85,7 +84,7 @@ class _AddTimelineDialogState extends State<AddTimelineDialog> {
                   ),
                   inputFormatters: [_noHashtags],
                 ),
-            }
+            },
           ],
         ),
       ),
@@ -116,15 +115,15 @@ class ListSelection extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        return DropdownMenu(
-          label: const Text("List"),
+        return const DropdownMenu(
+          label: Text("List"),
           dropdownMenuEntries: [],
           enabled: false,
         );
       },
       loading: () {
-        return DropdownMenu(
-          label: const Text("List"),
+        return const DropdownMenu(
+          label: Text("List"),
           dropdownMenuEntries: [],
           enabled: false,
         );

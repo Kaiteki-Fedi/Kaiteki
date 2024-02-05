@@ -163,7 +163,7 @@ class AccountManager extends _$AccountManager {
     final (key, accountSecret, clientSecret) = credentials;
     final type = key.type!;
 
-    _logger.fine("Trying to recover a ${type.displayName} account");
+    _logger.fine("Trying to recover a ${type.name} account");
 
     if (kDebugMode) await Future.delayed(const Duration(seconds: 2));
 

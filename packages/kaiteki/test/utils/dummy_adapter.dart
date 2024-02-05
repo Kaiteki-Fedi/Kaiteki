@@ -17,9 +17,6 @@ class DummyAdapter extends BackendAdapter {
   AdapterCapabilities get capabilities => DummyAdapterCapability();
 
   @override
-  ApiType get type => ApiType.mastodon;
-
-  @override
   Future<Instance> getInstance() async => instance;
 
   @override

@@ -2,9 +2,9 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki_core/utils.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 
 final _items = <(
   String?,

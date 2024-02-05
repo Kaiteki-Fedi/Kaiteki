@@ -13,6 +13,7 @@ import "package:kaiteki/ui/main/main_screen.dart";
 import "package:kaiteki/ui/shared/posts/compose/compose_screen.dart";
 import "package:kaiteki/ui/user/user_screen.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 import "package:path/path.dart" as path;
 
 import "../test/utils/bootstrap.dart";
@@ -83,12 +84,12 @@ Future<void> main() async {
 }
 
 Future<List<Account>> getDemoAccounts() async {
-  final adapter = await DemoAdapter.create(ApiType.misskey, "fedi.software");
+  final adapter = await DemoAdapter.create(BackendType.misskey, "fedi.software");
   final user = await adapter.getUserById(kKaiteki);
   return [
     Account(
       adapter: adapter,
-      key: const AccountKey(ApiType.misskey, "fedi.software", "Kaiteki"),
+      key: const AccountKey(BackendType.misskey, "fedi.software", "Kaiteki"),
       user: user,
       clientSecret: null,
       accountSecret: null,

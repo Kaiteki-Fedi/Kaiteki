@@ -53,7 +53,7 @@ class _ChatsPageState extends ConsumerState<ChatsPage> {
       return Center(
         child: IconLandingWidget(
           icon: const Icon(Icons.forum_outlined),
-          text: Text("Chats are not supported by ${adapter.type.displayName}"),
+          text: Text("Chats are not supported by $adapter"),
         ),
       );
     }

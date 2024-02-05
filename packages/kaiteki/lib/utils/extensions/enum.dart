@@ -1,6 +1,6 @@
 import "package:flutter/material.dart" hide Visibility;
-import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:kaiteki_core/model.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:mdi/mdi.dart";
 
 extension VisibilityExtensions on PostScope {

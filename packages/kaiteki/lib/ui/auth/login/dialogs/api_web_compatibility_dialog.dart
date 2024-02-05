@@ -3,11 +3,11 @@ import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart" show kDialogConstraints;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/link_constants.dart" show corsHelpArticleUrl;
-import "package:kaiteki_core/social.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 import "package:url_launcher/url_launcher_string.dart";
 
 class ApiWebCompatibilityDialog extends StatelessWidget {
-  final ApiType type;
+  final BackendType type;
 
   const ApiWebCompatibilityDialog({super.key, required this.type});
 
@@ -21,7 +21,7 @@ class ApiWebCompatibilityDialog extends StatelessWidget {
         width: kDialogConstraints.minWidth,
         child: Text.rich(
           TextSpan(
-            text: l10n.unsupportedInstanceDescriptionCORS(type.displayName),
+            text: l10n.unsupportedInstanceDescriptionCORS(type.name),
             children: [
               TextSpan(
                 text: corsHelpArticleUrl,

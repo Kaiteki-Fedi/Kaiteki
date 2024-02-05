@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:kaiteki_core/backends/misskey.dart';
+import 'package:kaiteki_core_backends/src/misskey/client.dart';
 import 'package:test/test.dart';
 
 void main() {

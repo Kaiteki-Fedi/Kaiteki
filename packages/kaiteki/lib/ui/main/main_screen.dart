@@ -375,7 +375,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
                     "hashtag",
                     pathParameters: {
                       ...ref.accountRouterParams,
-                      "hashtag": hashtag
+                      "hashtag": hashtag,
                     },
                   ),
                 ),
@@ -505,7 +505,6 @@ class _AppBar extends ConsumerWidget implements PreferredSizeWidget {
   final SuggestionsBuilder suggestionsBuilder;
 
   const _AppBar({
-    super.key,
     this.onSearch,
     required this.onRefresh,
     this.controller,
@@ -580,7 +579,6 @@ class _AppBarCompact extends StatelessWidget implements PreferredSizeWidget {
   final SuggestionsBuilder suggestionsBuilder;
 
   const _AppBarCompact({
-    super.key,
     this.onSearch,
     required this.onRefresh,
     this.transparent = false,
@@ -605,7 +603,6 @@ class _AppBarCompact extends StatelessWidget implements PreferredSizeWidget {
 
 class _CompactSearchBar extends ConsumerWidget {
   const _CompactSearchBar({
-    super.key,
     required this.controller,
     required this.suggestionsBuilder,
   });
@@ -636,7 +633,7 @@ class _CompactSearchBar extends ConsumerWidget {
               ];
             },
           ),
-          const AccountSwitcherWidget(size: 30)
+          const AccountSwitcherWidget(size: 30),
         ],
         leading: const DrawerButton(),
         hintText: "Search $host",

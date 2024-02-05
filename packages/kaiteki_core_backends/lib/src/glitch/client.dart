@@ -1,5 +1,5 @@
 import 'package:kaiteki_core/http.dart';
-import 'package:kaiteki_core/backends/mastodon.dart';
+import 'package:kaiteki_core_backends/mastodon.dart';
 
 class GlitchClient extends MastodonClient {
   GlitchClient(super.instance);

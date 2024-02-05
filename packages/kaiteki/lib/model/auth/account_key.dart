@@ -4,6 +4,7 @@ import "package:hive/hive.dart";
 import "package:json_annotation/json_annotation.dart";
 import "package:kaiteki_core/social.dart";
 import "package:kaiteki_core/utils.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 
 part "account_key.g.dart";
 
@@ -20,7 +21,7 @@ class AccountKey extends Equatable {
 
   @HiveField(0)
   @JsonKey(name: "type", unknownEnumValue: JsonKey.nullForUndefinedEnumValue)
-  final ApiType? type;
+  final BackendType? type;
 
   UserHandle get handle => UserHandle(username, host);
 
@@ -30,7 +31,7 @@ class AccountKey extends Equatable {
     final parsedUri = Uri.parse(uri);
     assert(parsedUri.userInfo.isNotEmpty);
     return AccountKey(
-      ApiType.values.firstWhere(
+      BackendType.values.firstWhere(
         (t) => parsedUri.scheme == t.name,
       ),
       parsedUri.host,

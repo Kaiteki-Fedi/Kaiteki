@@ -1,29 +1,27 @@
 import 'dart:developer';
 
-import 'package:kaiteki_core/backends/pleroma.dart';
+import 'package:kaiteki_core_backends/mastodon.dart';
 import 'package:test/test.dart';
 
 void main() {
-  late PleromaClient client;
-  setUpAll(() => client = PleromaClient('lain.com'));
+  late MastodonClient client;
+  setUpAll(() => client = MastodonClient('mastodon.social'));
   test('fetch instance', () async {
-    final instance = await client.getInstanceV1();
+    final instance = await client.getInstance();
     log(
-      'We are testing on ${instance.uri} (${instance.title}), running Pleroma '
+      'We are testing on ${instance.domain} (${instance.title}), an instance '
+      'run by ${instance.contact.account?.displayName} '
+      '(@${instance.contact.account?.acct}), running Mastodon '
       '${instance.version}.',
     );
   });
   test('fetch user profile', () async {
-    final user = await client.getAccount('lain');
+    final user = await client.getAccount('1');
     log('${user.displayName} (@${user.username}) - ${_multiLineTrim(user.note)}');
   });
   test('fetch emojis', () async {
     final emoji = await client.getCustomEmojis();
     log('This instance has ${emoji.length} emojis');
-  });
-  test('fetch emoji packs', () async {
-    final packs = await client.getEmojiPacks();
-    log('This instance has ${packs.count} emoji packs');
   });
   test('fetch federated timeline', () async {
     final statuses = await client.getPublicTimeline();

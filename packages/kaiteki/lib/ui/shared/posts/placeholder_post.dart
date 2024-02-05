@@ -96,9 +96,9 @@ class PlaceholderPostWidget extends StatelessWidget {
           // if (isExpanded) PostMetricBar(_post.metrics),
           if (true) ...[
             if (isExpanded)
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(top: 12.0, bottom: 4.0),
-                child: const Divider(height: 1),
+                child: Divider(height: 1),
               ),
             Padding(
               padding: isExpanded || isWide

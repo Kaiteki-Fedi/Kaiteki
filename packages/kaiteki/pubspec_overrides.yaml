@@ -1,7 +1,10 @@
+# melos_managed_dependency_overrides: kaiteki_core_backends
 # melos_managed_dependency_overrides: kaiteki_core,kaiteki_ui,kaiteki_l10n
 dependency_overrides:
   kaiteki_core:
     path: ../kaiteki_core
+  kaiteki_core_backends:
+    path: ../kaiteki_core_backends
   kaiteki_l10n:
     path: ../kaiteki_l10n
   kaiteki_ui:

@@ -6,7 +6,7 @@ part of 'instance_prober.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$probeInstanceHash() => r'f01827bc259c3ab21ffe8f97f539d1f4ca97c705';
+String _$probeInstanceHash() => r'8a0227ff2ecf0a1127928704cec520def300e645';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const probeInstanceProvider = ProbeInstanceFamily();
 
 /// See also [probeInstance].
-class ProbeInstanceFamily extends Family<AsyncValue<core.InstanceProbeResult>> {
+class ProbeInstanceFamily extends Family<AsyncValue<probing.InstanceProbe?>> {
   /// See also [probeInstance].
   const ProbeInstanceFamily();
 
@@ -73,7 +73,7 @@ class ProbeInstanceFamily extends Family<AsyncValue<core.InstanceProbeResult>> {
 
 /// See also [probeInstance].
 class ProbeInstanceProvider
-    extends AutoDisposeFutureProvider<core.InstanceProbeResult> {
+    extends AutoDisposeFutureProvider<probing.InstanceProbe?> {
   /// See also [probeInstance].
   ProbeInstanceProvider(
     String host,
@@ -108,8 +108,7 @@ class ProbeInstanceProvider
 
   @override
   Override overrideWith(
-    FutureOr<core.InstanceProbeResult> Function(ProbeInstanceRef provider)
-        create,
+    FutureOr<probing.InstanceProbe?> Function(ProbeInstanceRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -126,7 +125,7 @@ class ProbeInstanceProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<core.InstanceProbeResult> createElement() {
+  AutoDisposeFutureProviderElement<probing.InstanceProbe?> createElement() {
     return _ProbeInstanceProviderElement(this);
   }
 
@@ -144,14 +143,13 @@ class ProbeInstanceProvider
   }
 }
 
-mixin ProbeInstanceRef
-    on AutoDisposeFutureProviderRef<core.InstanceProbeResult> {
+mixin ProbeInstanceRef on AutoDisposeFutureProviderRef<probing.InstanceProbe?> {
   /// The parameter `host` of this provider.
   String get host;
 }
 
 class _ProbeInstanceProviderElement
-    extends AutoDisposeFutureProviderElement<core.InstanceProbeResult>
+    extends AutoDisposeFutureProviderElement<probing.InstanceProbe?>
     with ProbeInstanceRef {
   _ProbeInstanceProviderElement(super.provider);
 

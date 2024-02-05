@@ -15,7 +15,7 @@ class InstanceIcon extends ConsumerWidget {
 
     return value.when(
       data: (result) {
-        final iconUrl = result.instance?.iconUrl;
+        final iconUrl = result?.instance?.iconUrl;
         if (iconUrl == null) return _buildFallback();
         return Image.network(
           iconUrl.toString(),

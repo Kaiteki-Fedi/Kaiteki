@@ -4,6 +4,7 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 
 import "utils/bootstrap.dart";
 import "utils/dummy_adapter.dart";
@@ -13,7 +14,7 @@ void main() {
     final boot = await Bootstrapper.getInstance(
       initialAccounts: [
         Account(
-          key: const AccountKey(ApiType.mastodon, "example.com", "alice"),
+          key: const AccountKey(BackendType.mastodon, "example.com", "alice"),
           adapter: DummyAdapter(),
           accountSecret: null,
           clientSecret: null,

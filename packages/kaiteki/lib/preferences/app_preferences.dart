@@ -252,7 +252,7 @@ final mainScreenTabOrder = createSettingProvider<List<MainScreenTabType>>(
     if (list == null) return null;
     final values = list
         .map((e) =>
-            MainScreenTabType.values.firstWhereOrNull((f) => f.name == e))
+            MainScreenTabType.values.firstWhereOrNull((f) => f.name == e),)
         .whereNotNull()
         .toList();
 
@@ -280,7 +280,7 @@ final disabledMainScreenTabs = createSettingProvider<Set<MainScreenTabType>>(
 
     final set = list
         .map((e) =>
-            MainScreenTabType.values.firstWhereOrNull((f) => f.name == e))
+            MainScreenTabType.values.firstWhereOrNull((f) => f.name == e),)
         .whereNotNull()
         .toSet();
 

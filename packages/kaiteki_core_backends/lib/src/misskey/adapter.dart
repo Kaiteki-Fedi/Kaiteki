@@ -70,21 +70,17 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   @override
   String get instance => client.instance;
 
-  @override
-  final ApiType type;
-
-  static Future<MisskeyAdapter> create(ApiType type, String instance) async {
+  static Future<MisskeyAdapter> create(String instance) async {
     final client = MisskeyClient(instance);
     final meta = await client.getMeta();
     return MisskeyAdapter(
-      type,
       client,
       MisskeyCapabilities.fromMeta(meta),
     );
   }
 
   @protected
-  MisskeyAdapter(this.type, this.client, this.capabilities);
+  MisskeyAdapter(this.client, this.capabilities);
 
   @override
   Future<User> getUser(String username, [String? instance]) async {

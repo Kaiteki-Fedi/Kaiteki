@@ -79,11 +79,11 @@ class MetaBar extends ConsumerWidget {
     if (ref.watch(highlightPronouns).value) {
       final pronouns = author.details.fields
           ?.firstWhereOrNull(
-              (e) => _kPronounsFieldKeys.contains(e.key.trim().toLowerCase()))
+              (e) => _kPronounsFieldKeys.contains(e.key.trim().toLowerCase()),)
           ?.value
           .andThen(parsePronouns);
       if (pronouns != null && pronouns.isNotEmpty) {
-        var colors = null; //_getColorsForPronoun(pronouns[0][0]);
+        var colors; //_getColorsForPronoun(pronouns[0][0]);
         colors = colors
             ?.map((e) => e.harmonizeWith(theme.colorScheme.primary))
             .toList();

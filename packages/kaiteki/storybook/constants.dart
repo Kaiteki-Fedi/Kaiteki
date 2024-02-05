@@ -1,9 +1,9 @@
-import "package:kaiteki_core/kaiteki_core.dart";
+import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
 
-final apiTypeOptions = ApiType.values.map((e) {
+final apiTypeOptions = BackendType.values.map((e) {
   return Option(
-    label: e.displayName,
+    label: e.name,
     value: e,
   );
 }).toList();

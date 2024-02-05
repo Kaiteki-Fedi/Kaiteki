@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:intl/intl.dart';
 import 'package:kaiteki_core/social.dart';
-import 'package:kaiteki_core/src/social/backends/misskey/model/list.dart';
+import 'package:kaiteki_core_backends/src/misskey/model/list.dart';
 import 'package:kaiteki_core/utils.dart';
 
 final _birthdayDateFormat = DateFormat('yyyy-MM-dd');
