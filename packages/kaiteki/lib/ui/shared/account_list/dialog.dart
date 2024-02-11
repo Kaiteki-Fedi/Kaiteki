@@ -1,10 +1,12 @@
 import "package:collection/collection.dart";
 import "package:flutter/material.dart";
+import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/shared/account_list/list_tile.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/account_removal_dialog.dart";
 import "package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -14,78 +16,110 @@ class AccountListDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return DynamicDialogContainer(
-      builder: (context, fullscreen) {
-        final accounts = ref.watch(accountManagerProvider).accounts;
-        final currentAccount = ref.watch(currentAccountProvider);
-        final l10n = context.l10n;
+    if (WindowWidthSizeClass.fromContext(context) <=
+        WindowWidthSizeClass.compact) {
+      return BottomSheet(
+        builder: (_) => const _AccountListBody(),
+        onClosing: () {},
+      );
+    }
 
-        final unselectedAccounts =
-            accounts.whereNot((e) => e.key == currentAccount?.key);
+    final l10n = context.l10n;
+    return Dialog(
+      child: Column(
+        children: [
+          AppBar(
+            title: Text(l10n.manageAccountsTitle),
+          ),
+          const _AccountListBody(),
+        ],
+      ),
+    );
+  }
+}
 
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AppBar(
-              title: Text(l10n.manageAccountsTitle),
-              forceMaterialTransparency: true,
-              foregroundColor: Theme.of(context).colorScheme.onSurface,
+class _AccountListBody extends ConsumerWidget {
+  const _AccountListBody();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accounts = ref.watch(accountManagerProvider).accounts;
+    final currentAccount = ref.watch(currentAccountProvider);
+    final l10n = context.l10n;
+
+    final unselectedAccounts =
+        accounts.whereNot((e) => e.key == currentAccount?.key);
+
+    final theme = Theme.of(context);
+    const divider = Divider(height: 1.0 + 8.0 * 2);
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              l10n.manageAccountsTitle,
+              style: theme.textTheme.titleLarge,
             ),
-            Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (currentAccount != null) ...[
-                      SizedBox(
-                        height: 48,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Signed in as",
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                          ),
-                        ),
-                      ),
-                      AccountListTile(
-                        account: currentAccount,
-                        selected: true,
-                        onTap: () => context.showUser(currentAccount.user, ref),
-                        trailing: buildMenuAnchor(context, ref, currentAccount),
-                      ),
-                      if (unselectedAccounts.isNotEmpty) const Divider(),
-                    ],
-                    for (final account in unselectedAccounts)
-                      AccountListTile(
-                        account: account,
-                        selected: currentAccount == account,
-                        onTap: () => _switchAccount(context, account),
-                        trailing: buildMenuAnchor(context, ref, account),
-                      ),
-                    const Divider(),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: FilledButton.icon(
-                        onPressed: () => onTapAdd(context),
-                        icon: const Icon(Icons.add_rounded),
-                        label: Text(l10n.addAccountButtonLabel),
-                        style: FilledButton.styleFrom(
-                          visualDensity: VisualDensity.comfortable,
-                        ),
-                      ),
-                    ),
-                  ],
+          ),
+          const SizedBox(height: 8),
+          if (currentAccount != null) ...[
+            SizedBox(
+              height: 48,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Signed in as",
+                    style: theme.textTheme.labelLarge,
+                  ),
                 ),
               ),
             ),
+            AccountListTile(
+              account: currentAccount,
+              // selected: true,
+              onTap: () => context.showUser(currentAccount.user, ref),
+              trailing: buildMenuAnchor(context, ref, currentAccount),
+            ),
+            if (unselectedAccounts.isNotEmpty) divider,
           ],
-        );
+          ...unselectedAccounts.map<Widget>((e) {
+            return AccountListTile(
+              account: e,
+              // selected: currentAccount == e,
+              onTap: () => _switchAccount(context, e),
+              trailing: buildMenuAnchor(context, ref, e),
+            );
+          }).intersperse(const SizedBox(height: 8)),
+          ListTile(
+            leading: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Icon(Icons.person_add_alt_1_rounded),
+            ),
+            title: Text(l10n.addAccountButtonLabel),
+            onTap: () => onTapAdd(context),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+
+  void _switchAccount(BuildContext context, Account account) {
+    Navigator.of(context).pop();
+    context.goNamed(
+      "home",
+      pathParameters: {
+        "accountUsername": account.key.username,
+        "accountHost": account.key.host,
       },
     );
   }
+
+  void onTapAdd(BuildContext context) => context.pushReplacementNamed("login");
 
   MenuAnchor buildMenuAnchor(
     BuildContext context,
@@ -108,19 +142,6 @@ class AccountListDialog extends ConsumerWidget {
       },
     );
   }
-
-  void _switchAccount(BuildContext context, Account account) {
-    Navigator.of(context).pop();
-    context.goNamed(
-      "home",
-      pathParameters: {
-        "accountUsername": account.key.username,
-        "accountHost": account.key.host,
-      },
-    );
-  }
-
-  void onTapAdd(BuildContext context) => context.pushReplacementNamed("login");
 
   Future<void> _onSignOut(
     BuildContext context,
