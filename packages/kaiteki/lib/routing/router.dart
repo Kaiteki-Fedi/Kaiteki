@@ -8,6 +8,7 @@ import "package:kaiteki/auth/oauth.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
+import "package:kaiteki/routing/dialog_page.dart";
 import "package:kaiteki/routing/notifier.dart";
 import "package:kaiteki/ui/account/mute_screen.dart";
 import "package:kaiteki/ui/account/settings_screen.dart";
@@ -157,7 +158,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: "accounts",
         path: "/accounts",
         pageBuilder: (context, state) {
-          return _DialogPage(
+          return DialogPage(
             builder: (context) => const AccountListDialog(),
           );
         },
@@ -320,7 +321,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 name: "compose",
                 path: "compose",
                 pageBuilder: (context, state) {
-                  return _DialogPage(
+                  return DialogPage(
                     builder: (context) {
                       return ComposeScreen(
                         replyTo: state.extra?.safeCast<Post>(),
@@ -362,7 +363,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: "hashtags/:hashtag",
                 pageBuilder: (context, state) {
                   final hashtag = state.pathParameters["hashtag"]!;
-                  return _DialogPage(
+                  return DialogPage(
                     builder: (_) => HashtagScreen(hashtag),
                   );
                 },
@@ -384,7 +385,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: "repeats",
                     name: "postRepeats",
                     pageBuilder: (context, state) {
-                      return _DialogPage(
+                      return DialogPage(
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
                             final postId = state.pathParameters["id"]!;
@@ -410,7 +411,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: "favorites",
                     name: "postFavorites",
                     pageBuilder: (context, state) {
-                      return _DialogPage(
+                      return DialogPage(
                         builder: (context) => Consumer(
                           builder: (context, ref, __) {
                             final postId = state.pathParameters["id"]!;
@@ -449,7 +450,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: "announcements",
                 name: "announcements",
                 pageBuilder: (context, state) {
-                  return _DialogPage(
+                  return DialogPage(
                     builder: (_) => const AnnouncementsDialog(),
                   );
                 },
@@ -458,7 +459,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: "follow-requests",
                 name: "follow-requests",
                 pageBuilder: (context, state) {
-                  return _DialogPage(
+                  return DialogPage(
                     builder: (_) => const FollowRequestsDialog(),
                   );
                 },
@@ -524,21 +525,4 @@ Widget _authenticatedBuilder(
       },
     ),
   );
-}
-
-class _DialogPage extends Page {
-  final WidgetBuilder builder;
-
-  const _DialogPage({
-    required this.builder,
-  });
-
-  @override
-  Route createRoute(BuildContext context) {
-    return DialogRoute(
-      builder: builder,
-      context: context,
-      settings: this,
-    );
-  }
 }
