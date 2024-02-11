@@ -121,7 +121,7 @@ class HomePageState extends ConsumerState<HomePage>
             controller: _tabController,
             isScrollable: true,
             onTap: _onTabTap,
-            tabAlignment: widget.tabAlignment,
+            tabAlignment: widget.tabAlignment ?? TabAlignment.center,
             tabs: timelines.map((e) => _TimelineTab(timeline: e)).toList(),
           ),
         Expanded(
