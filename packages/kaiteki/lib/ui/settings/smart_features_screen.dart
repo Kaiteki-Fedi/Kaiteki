@@ -35,15 +35,6 @@ class _SmartFeaturesScreenState
                     secondary: const Icon(Icons.loyalty_rounded),
                   ),
                   const SwitchListTile(
-                    title: Text("Web links"),
-                    subtitle: Text(
-                      "Extracts links from profile fields and displays them in a row",
-                    ),
-                    secondary: Icon(Icons.link_rounded),
-                    value: true,
-                    onChanged: null,
-                  ),
-                  const SwitchListTile(
                     title: Text("Warn about NSFW profiles"),
                     subtitle: Text(
                       "Warns when visiting a profile that seems to be NSFW",

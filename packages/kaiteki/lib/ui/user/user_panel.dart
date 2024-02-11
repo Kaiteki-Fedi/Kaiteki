@@ -4,11 +4,9 @@ import "package:fpdart/fpdart.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/people/dialog.dart";
 import "package:kaiteki/ui/shared/common.dart";
-import "package:kaiteki/ui/user/profile_link.dart";
 import "package:kaiteki/ui/user/text_with_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
-import "package:url_launcher/url_launcher.dart";
 
 class UserPanel extends ConsumerStatefulWidget {
   final User user;
@@ -208,7 +206,6 @@ class _ProfileFields extends StatelessWidget {
 
 class _UserPanelState extends ConsumerState<UserPanel> {
   List<MapEntry<String, String>>? _fields;
-  List<ProfileLink>? _links;
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +214,7 @@ class _UserPanelState extends ConsumerState<UserPanel> {
     final displayName = widget.user.displayName;
     final description = widget.user.description;
     final fields = _fields;
-    final links = _links;
+    // final links = _links;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -246,18 +243,6 @@ class _UserPanelState extends ConsumerState<UserPanel> {
         const SizedBox(height: 16.0),
         if (fields != null && fields.isNotEmpty)
           _ProfileFields(fields: fields, user: widget.user),
-        if (links != null && links.isNotEmpty) ...[
-          Wrap(
-            children: [
-              for (final link in links)
-                IconButton(
-                  icon: Icon(link.$1),
-                  tooltip: link.$2,
-                  onPressed: () => launchUrl(link.$3),
-                ),
-            ],
-          ),
-        ],
         const SizedBox(height: 8.0),
         _ProfileAttributes.fromUser(user: widget.user),
         const SizedBox(height: 8.0),
@@ -271,10 +256,6 @@ class _UserPanelState extends ConsumerState<UserPanel> {
     super.initState();
 
     final fields = widget.user.details.fields;
-    if (fields != null) {
-      final result = extractLinksFromFields(fields);
-      _fields = result.$1;
-      _links = result.$2;
-    }
+    _fields = fields;
   }
 }
