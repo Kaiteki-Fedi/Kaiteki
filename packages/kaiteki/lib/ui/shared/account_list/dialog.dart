@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
+import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/shared/account_list/list_tile.dart";
@@ -16,30 +17,48 @@ class AccountListDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+
     if (WindowWidthSizeClass.fromContext(context) <=
         WindowWidthSizeClass.compact) {
       return BottomSheet(
-        builder: (_) => const _AccountListBody(),
+        builder: (_) => _AccountListBody(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                l10n.manageAccountsTitle,
+                style: theme.textTheme.titleLarge,
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
         onClosing: () {},
       );
     }
 
-    final l10n = context.l10n;
     return Dialog(
-      child: Column(
-        children: [
-          AppBar(
-            title: Text(l10n.manageAccountsTitle),
-          ),
-          const _AccountListBody(),
-        ],
+      child: ConstrainedBox(
+        constraints: kDialogConstraints,
+        child: _AccountListBody(
+          children: [
+            AppBar(
+              title: Text(l10n.manageAccountsTitle),
+              forceMaterialTransparency: true,
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class _AccountListBody extends ConsumerWidget {
-  const _AccountListBody();
+  final List<Widget> children;
+
+  const _AccountListBody({this.children = const []});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,14 +75,7 @@ class _AccountListBody extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              l10n.manageAccountsTitle,
-              style: theme.textTheme.titleLarge,
-            ),
-          ),
-          const SizedBox(height: 8),
+          ...children,
           if (currentAccount != null) ...[
             SizedBox(
               height: 48,
