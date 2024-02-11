@@ -180,6 +180,8 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
     final relativeTime = DateTime.now()
         .difference(notification.createdAt);
 
+    final l10n = context.l10n;
+
     final theme = Theme.of(context);
     final onSurfaceVariant = theme.colorScheme.onSurfaceVariant;
     final bodySmall = theme.textTheme.bodySmall;
@@ -208,8 +210,8 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
           semanticsLabel: "",
         ),
         TextSpan(
-          text: relativeTime.toStringHuman(context: context),
-          semanticsLabel: relativeTime.toLongString(),
+          text: relativeTime.toStringHuman(l10n),
+          semanticsLabel: relativeTime.toLongString(l10n),
           style: bodySmall?.copyWith(color: onSurfaceVariant),
         ),
       ],

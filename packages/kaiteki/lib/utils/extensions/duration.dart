@@ -1,34 +1,31 @@
-import "package:flutter/widgets.dart";
-import "package:kaiteki/di.dart";
+import "package:kaiteki_l10n/kaiteki_l10n.dart";
 
 extension DurationExtension on Duration {
-  String toStringHuman({BuildContext? context}) {
-    final l10n = context?.l10n;
-
+  String toStringHuman(KaitekiLocalizations l10n) {
     if (inDays != 0) {
-      return l10n?.timeDifferenceDays(inDays) ?? "${inDays}d";
+      return l10n.timeDifferenceDays(inDays);
     } else if (inHours != 0) {
-      return l10n?.timeDifferenceHours(inHours) ?? "${inHours}h";
+      return l10n.timeDifferenceHours(inHours);
     } else if (inMinutes != 0) {
-      return l10n?.timeDifferenceMinutes(inMinutes) ?? "${inMinutes}m";
+      return l10n.timeDifferenceMinutes(inMinutes);
     } else if (inSeconds <= 5) {
-      return "now";
-    }
-      else {
-      return l10n?.timeDifferenceSeconds(inSeconds) ?? "${inSeconds}s";
+      return l10n.timeDifferenceNow;
+    } else {
+      return l10n.timeDifferenceSeconds(inSeconds);
     }
   }
 
-  String toLongString() {
-    // TODO(Craftplacer): Localize
+  String toLongString(KaitekiLocalizations l10n) {
     if (inDays != 0) {
-      return "$inDays days ago";
+      return l10n.timeDifferenceDaysLong(inDays);
     } else if (inHours != 0) {
-      return "$inHours hours ago";
+      return l10n.timeDifferenceHoursLong(inDays);
     } else if (inMinutes != 0) {
-      return "$inMinutes minutes ago";
+      return l10n.timeDifferenceMinutesLong(inDays);
+    } else if (inSeconds <= 5) {
+      return l10n.timeDifferenceNow;
     } else {
-      return "$inSeconds seconds ago";
+      return l10n.timeDifferenceSecondsLong(inDays);
     }
   }
 }

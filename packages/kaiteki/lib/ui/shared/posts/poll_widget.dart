@@ -38,6 +38,7 @@ class PollWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
     final endsAt = poll.endsAt;
     return Padding(
       padding: padding,
@@ -78,8 +79,8 @@ class PollWidget extends StatelessWidget {
                 ),
                 Text(
                   poll.hasEnded
-                      ? "Ended ${DateTime.now().difference(endsAt).toStringHuman(context: context)} ago"
-                      : "Ends in ${endsAt.difference(DateTime.now()).toStringHuman(context: context)}",
+                      ? "Ended ${DateTime.now().difference(endsAt).toStringHuman(l10n)} ago"
+                      : "Ends in ${endsAt.difference(DateTime.now()).toStringHuman(l10n)}",
                   style: theme.textTheme.labelSmall,
                 ),
               ],
