@@ -19,8 +19,7 @@ export 'post_metrics.dart';
 export 'post_state.dart';
 
 /// A class representing a post.
-class Post<T> {
-  final T? source;
+class Post {
   final String id;
   final DateTime postedAt;
   final User author;
@@ -49,7 +48,6 @@ class Post<T> {
   final String? threadId;
 
   const Post({
-    this.source,
     required this.postedAt,
     required this.author,
     required this.id,
@@ -76,7 +74,7 @@ class Post<T> {
     this.threadId,
   });
 
-  Post<T> copyWith({
+  Post copyWith({
     String? id,
     DateTime? postedAt,
     User? author,

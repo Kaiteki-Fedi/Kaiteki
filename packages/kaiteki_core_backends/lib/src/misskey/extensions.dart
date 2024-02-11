@@ -210,7 +210,6 @@ extension KaitekiMisskeyNoteExtension on misskey.Note {
     final isQuote = text != null || fileIds?.isNotEmpty == true || poll != null;
 
     return Post(
-      source: this,
       postedAt: createdAt,
       author: user.toKaiteki(localHost),
       subject: cw,

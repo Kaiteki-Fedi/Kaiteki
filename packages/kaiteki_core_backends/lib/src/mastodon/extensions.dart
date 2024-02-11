@@ -273,7 +273,6 @@ extension KaitekiMastodonStatusExtension on mastodon.Status {
 
     final repliedUser = getRepliedUser();
     return Post(
-      source: this,
       content: content,
       postedAt: createdAt,
       nsfw: sensitive,
