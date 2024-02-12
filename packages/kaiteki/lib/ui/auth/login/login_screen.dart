@@ -78,7 +78,7 @@ class InstanceCompound {
   @override
   int get hashCode => host.hashCode ^ type.hashCode ^ data.hashCode;
 
-  Future<BackendAdapter> createAdapter() => type.createAdapter(host);
+  FutureOr<BackendAdapter> createAdapter() => type.createAdapter(host);
 }
 
 class CallbackRequest<T, K extends Function> {

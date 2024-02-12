@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:kaiteki_core/social.dart';
 import 'package:kaiteki_core_backends/pleroma.dart';
 import 'package:kaiteki_core_backends/misskey.dart';
@@ -12,7 +14,7 @@ enum BackendType<T extends BackendAdapter> {
   foundkey(MisskeyAdapter.create, probingPriority: null),
   calckey(MisskeyAdapter.create, probingPriority: null);
 
-  final Future<T> Function(String instance) _createAdapter;
+  final FutureOr<T> Function(String instance) _createAdapter;
   final List<String>? hosts;
 
   /// Which priority each API type has when probing the instance.
@@ -22,7 +24,7 @@ enum BackendType<T extends BackendAdapter> {
   
   Type get adapterType => T;
 
-  Future<T> createAdapter(String instance) => _createAdapter(instance);
+  FutureOr<T> createAdapter(String instance) => _createAdapter(instance);
 
   const BackendType(
     this._createAdapter, {
