@@ -72,4 +72,5 @@ const _$BackendTypeEnumMap = {
   BackendType.akkoma: 'akkoma',
   BackendType.foundkey: 'foundkey',
   BackendType.calckey: 'calckey',
+  BackendType.tumblr: 'tumblr',
 };

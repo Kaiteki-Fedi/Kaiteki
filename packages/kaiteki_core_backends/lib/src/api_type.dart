@@ -4,6 +4,9 @@ import 'package:kaiteki_core/social.dart';
 import 'package:kaiteki_core_backends/pleroma.dart';
 import 'package:kaiteki_core_backends/misskey.dart';
 import 'package:kaiteki_core_backends/glitch.dart';
+import 'package:kaiteki_core_backends/tumblr.dart';
+
+FutureOr<TumblrAdapter> _instantiateTumblr(String _) => TumblrAdapter();
 
 enum BackendType<T extends BackendAdapter> {
   mastodon(MastodonAdapter.create),
@@ -12,7 +15,8 @@ enum BackendType<T extends BackendAdapter> {
   misskey(MisskeyAdapter.create),
   akkoma(PleromaAdapter.create, probingPriority: null),
   foundkey(MisskeyAdapter.create, probingPriority: null),
-  calckey(MisskeyAdapter.create, probingPriority: null);
+  calckey(MisskeyAdapter.create, probingPriority: null),
+  tumblr(_instantiateTumblr, hosts: ["tumblr.com"]);
 
   final FutureOr<T> Function(String instance) _createAdapter;
   final List<String>? hosts;

@@ -18,7 +18,10 @@ dependencies:
   collection: ^1.17.1
   crypto: ^3.0.3
   meta: ^1.9.1
+  html: ^0.15.4
 
 dev_dependencies:
+  build_runner: ^2.1.4
+  json_serializable: ^6.0.1
   lints: ^3.0.0
   test: ^1.24.0

@@ -41,6 +41,11 @@ const calckeyTheme = ApiTheme(
   "assets/icons/calckey.png",
 );
 
+const tumblrTheme = ApiTheme(
+  Color(0xFF001935),
+  "assets/icons/tumblr_blue.png",
+);
+
 extension ApiThemeExtension on BackendType {
   ApiTheme get theme {
     return switch (this) {
@@ -50,7 +55,8 @@ extension ApiThemeExtension on BackendType {
       BackendType.pleroma => pleromaTheme,
       BackendType.akkoma => akkomaTheme,
       BackendType.foundkey => foundKeyTheme,
-      BackendType.calckey => calckeyTheme
+      BackendType.calckey => calckeyTheme,
+      BackendType.tumblr => tumblrTheme,
     };
   }
 }
