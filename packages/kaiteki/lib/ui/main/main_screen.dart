@@ -586,11 +586,13 @@ class _AppBarCompact extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: _CompactSearchBar(
-        controller: controller,
-        suggestionsBuilder: suggestionsBuilder,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: _CompactSearchBar(
+          controller: controller,
+          suggestionsBuilder: suggestionsBuilder,
+        ),
       ),
     );
   }
