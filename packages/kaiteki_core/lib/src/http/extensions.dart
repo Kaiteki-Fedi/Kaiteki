@@ -31,10 +31,14 @@ Encoding _getEncodingFromHeaders(Map<String, String> headers) {
 extension KaitekiResponseExtensions on Response {
   bool get isSuccessful => !(400 <= statusCode && statusCode < 600);
 
-  T fromJson<T>(DeserializeFromJson<T> deserialize) {
+  // FIXME(Craftplacer): https://github.com/dart-lang/http/issues/175
+  String get bodyFixed {
     final encoding = _getEncodingFromHeaders(headers);
-    final body = encoding.decode(bodyBytes);
-    final json = jsonDecode(body) as JsonMap;
+    return encoding.decode(bodyBytes);
+  }
+
+  T fromJson<T>(DeserializeFromJson<T> deserialize) {
+    final json = jsonDecode(bodyFixed) as JsonMap;
     return deserialize(json);
   }
 
