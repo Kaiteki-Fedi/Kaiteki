@@ -76,6 +76,7 @@ class User {
   final bool? isBlocked;
   final bool? isMuted;
   final List<AvatarDecoration>? avatarDecorations;
+  final String? listenbrainz;
 
   const User({
     required this.id,
@@ -139,6 +140,7 @@ class User {
     this.uri,
     this.url,
     this.usePasswordLessLogin,
+    this.listenbrainz,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

@@ -125,6 +125,7 @@ User _$UserFromJson(Map<String, dynamic> json) => $checkedCreate(
               'url', (v) => v == null ? null : Uri.parse(v as String)),
           usePasswordLessLogin:
               $checkedConvert('usePasswordLessLogin', (v) => v as bool?),
+          listenbrainz: $checkedConvert('listenbrainz', (v) => v as String?),
         );
         return val;
       },
@@ -193,6 +194,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'isBlocked': instance.isBlocked,
       'isMuted': instance.isMuted,
       'avatarDecorations': instance.avatarDecorations,
+      'listenbrainz': instance.listenbrainz,
     };
 
 const _$UserOnlineStatusEnumMap = {

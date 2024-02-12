@@ -290,6 +290,7 @@ extension KaitekiMisskeyUserExtension on misskey.User {
         location: location,
         birthday: birthday.andThen(_birthdayDateFormat.parseStrict),
         fields: fields?.map((e) => MapEntry(e.name, e.value)).toList(),
+        listenbrainz: listenbrainz,
       ),
       state: UserState(
         isBlocked: isBlocked,

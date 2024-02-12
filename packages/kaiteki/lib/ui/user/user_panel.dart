@@ -1,12 +1,20 @@
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/semantics.dart";
 import "package:fpdart/fpdart.dart";
+import "package:kaiteki/api/listenbrainz.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/people/dialog.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/user/text_with_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/kaiteki_core.dart";
 import "package:kaiteki_core/social.dart";
+import "package:logging/logging.dart";
+import "package:url_launcher/url_launcher.dart";
+
+import "now_playing.dart";
 
 class UserPanel extends ConsumerStatefulWidget {
   final User user;
@@ -206,6 +214,44 @@ class _ProfileFields extends StatelessWidget {
 
 class _UserPanelState extends ConsumerState<UserPanel> {
   List<MapEntry<String, String>>? _fields;
+  Future<(TrackMetadata, Uri?)?>? _trackFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future<(TrackMetadata, Uri?)?> fetchNowPlaying(String username) async {
+      final payload = await getNowPlaying(username);
+      if (payload.playingNow != true) return null;
+
+      final listen =
+          payload.listens.firstWhereOrNull((e) => e.playingNow == true);
+      final trackMetadata = listen?.trackMetadata;
+
+      if (trackMetadata == null) return null;
+
+      final lookup = await lookupMetadata(
+        artistName: trackMetadata.artistName,
+        recordingName: trackMetadata.trackName,
+        include: const ["release"],
+      );
+      final release = lookup.metadata?.release;
+      final caaReleaseMbid = release?.caaReleaseMbid;
+      final caaId = release?.caaId;
+      final coverArtUrl = caaReleaseMbid != null && caaId != null
+          ? Uri.parse(
+              "https://archive.org/download/mbid-$caaReleaseMbid/mbid-$caaReleaseMbid-${caaId}_thumb250.jpg",
+            )
+          : null;
+
+      return (trackMetadata, coverArtUrl);
+    }
+
+    _trackFuture = widget.user.details.listenbrainz.andThen(fetchNowPlaying);
+
+    final fields = widget.user.details.fields;
+    _fields = fields;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -241,6 +287,30 @@ class _UserPanelState extends ConsumerState<UserPanel> {
           ),
         ],
         const SizedBox(height: 16.0),
+        if (_trackFuture != null)
+          FutureBuilder(
+            future: _trackFuture,
+            builder: (context, snapshot) {
+              final data = snapshot.data;
+              if (data != null) {
+                return Column(
+                  children: [
+                    NowPlayingCard(
+                      title: data.$1.trackName,
+                      artist: data.$1.artistName,
+                      album: data.$1.releaseName,
+                      coverArtUrl: data.$2,
+                      trackUrl: data.$1.additionalInfo?.originUrl,
+                    ),
+
+                    const SizedBox(height: 8.0),
+                  ],
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
+          ),
         if (fields != null && fields.isNotEmpty)
           _ProfileFields(fields: fields, user: widget.user),
         const SizedBox(height: 8.0),
@@ -249,13 +319,5 @@ class _UserPanelState extends ConsumerState<UserPanel> {
         _FollowerBar.fromUser(user: widget.user),
       ],
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    final fields = widget.user.details.fields;
-    _fields = fields;
   }
 }

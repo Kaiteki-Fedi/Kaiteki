@@ -144,7 +144,16 @@ class UserDetails {
   /// The fields defined by the user.
   final List<MapEntry<String, String>>? fields;
 
-  const UserDetails({this.birthday, this.website, this.location, this.fields});
+  /// The user's ListenBrainz username.
+  final String? listenbrainz;
+
+  const UserDetails({
+    this.birthday,
+    this.website,
+    this.location,
+    this.fields,
+    this.listenbrainz,
+  });
 }
 
 /// The follow state of an [User].
