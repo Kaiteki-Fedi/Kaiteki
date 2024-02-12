@@ -2,3 +2,17 @@ name: kaiteki
 
 packages:
   - packages/*
+
+
+scripts:
+  build_runner:
+    run: melos exec -c 1 -- "dart run build_runner build --delete-conflicting-outputs"
+    description: Runs build_runner
+    packageFilters:
+      dependsOn: 'build_runner'
+
+  build_runner_watch:
+    run: melos exec -- "dart run build_runner watch --delete-conflicting-outputs"
+    description: Runs build_runner
+    packageFilters:
+      dependsOn: 'build_runner'
