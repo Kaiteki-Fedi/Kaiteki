@@ -52,7 +52,6 @@ class NowPlayingCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -64,30 +63,45 @@ class NowPlayingCard extends StatelessWidget {
                         style: theme.textTheme.labelSmall,
                       )
                     else ...[
-                      Text(
-                        "Now Playing",
-                        style: theme.textTheme.labelSmall,
+                      Row(
+                        children: [
+                          const SizedBox(width: 3.0),
+                          const Icon(Icons.play_arrow_rounded, size: 18),
+                          Text(
+                            "Now Playing",
+                            style: theme.textTheme.labelSmall,
+                          ),
+                        ],
                       ),
-                      Text(
-                        title,
-                        style: theme.textTheme.titleSmall,
-                        maxLines: 1,
-                        softWrap: false,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      if (artist != null)
-                        Text(
-                          artist,
-                          style: theme.textTheme.bodyMedium,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          title,
+                          style: theme.textTheme.titleSmall,
+                          maxLines: 1,
                           softWrap: false,
                           overflow: TextOverflow.ellipsis,
                         ),
+                      ),
+                      if (artist != null)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            artist,
+                            style: theme.textTheme.bodyMedium,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       if (album != null)
-                        Text(
-                          album,
-                          style: theme.textTheme.labelMedium,
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            album,
+                            style: theme.textTheme.labelMedium,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),],
                   ],
                 ),
