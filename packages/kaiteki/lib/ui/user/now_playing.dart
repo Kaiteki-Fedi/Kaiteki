@@ -105,7 +105,7 @@ class NowPlayingCard extends StatelessWidget {
                         ),],
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

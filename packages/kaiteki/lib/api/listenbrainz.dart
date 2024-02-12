@@ -1,4 +1,4 @@
- // Incomplete implementation of MusicBrainz' API.
+// Incomplete implementation of MusicBrainz' API.
 
 import "dart:convert";
 
@@ -26,16 +26,17 @@ Future<LookupResponse> lookupMetadata({
   required List<String> include,
   bool metadata = true,
 }) async {
-  final url = Uri(scheme: "https", host: "api.listenbrainz.org", pathSegments: [
-    "1",
-    "metadata",
-    "lookup"
-  ], queryParameters: {
-    "recording_name": recordingName,
-    "artist_name": artistName,
-    "metadata": metadata.toString(),
-    "inc": include.join(" "),
-  });
+  final url = Uri(
+    scheme: "https",
+    host: "api.listenbrainz.org",
+    pathSegments: ["1", "metadata", "lookup"],
+    queryParameters: {
+      "recording_name": recordingName,
+      "artist_name": artistName,
+      "metadata": metadata.toString(),
+      "inc": include.join(" "),
+    },
+  );
   final response = await get(url);
   final body = utf8.decode(response.bodyBytes);
   final object = json.decode(body);
@@ -113,14 +114,15 @@ class TrackMetadata {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, createToJson: false)
-class AdditionalTrackMetadata{
+class AdditionalTrackMetadata {
   final Uri? originUrl;
 
   const AdditionalTrackMetadata({
     this.originUrl,
   });
 
-  factory AdditionalTrackMetadata.fromJson(JsonMap json) => _$AdditionalTrackMetadataFromJson(json);
+  factory AdditionalTrackMetadata.fromJson(JsonMap json) =>
+      _$AdditionalTrackMetadataFromJson(json);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, createToJson: false)

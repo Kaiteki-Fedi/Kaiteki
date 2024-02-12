@@ -4,15 +4,11 @@ import "package:flutter/semantics.dart";
 import "package:fpdart/fpdart.dart";
 import "package:kaiteki/api/listenbrainz.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/ui/people/dialog.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/user/text_with_icon.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
-import "package:kaiteki_core/social.dart";
-import "package:logging/logging.dart";
-import "package:url_launcher/url_launcher.dart";
 
 import "now_playing.dart";
 
