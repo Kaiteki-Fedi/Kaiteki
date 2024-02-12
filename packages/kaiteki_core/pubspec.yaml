@@ -9,8 +9,7 @@ environment:
 
 dependencies:
   equatable: ^2.0.5
-  fediverse_objects:
-    git: https://github.com/Kaiteki-Fedi/fediverse_objects.git
+  fediverse_objects: ^0.0.1
   http: ^1.0.0
   intl: ^0.18.1
   json_annotation: ^4.8.1

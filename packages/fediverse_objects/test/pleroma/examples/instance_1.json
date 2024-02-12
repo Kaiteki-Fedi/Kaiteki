@@ -1,0 +1,31 @@
+{
+    "avatar_upload_limit": 2000000,
+    "background_upload_limit": 4000000,
+    "banner_upload_limit": 4000000,
+    "description": "A Pleroma instance, an alternative fediverse server",
+    "email": "pleroma@shunderdo.me",
+    "languages": [
+        "en"
+    ],
+    "max_toot_chars": 5000,
+    "poll_limits": {
+        "max_expiration": 31536000,
+        "max_option_chars": 200,
+        "max_options": 20,
+        "min_expiration": 0
+    },
+    "registrations": false,
+    "stats": {
+        "domain_count": 9302,
+        "status_count": 464,
+        "user_count": 1
+    },
+    "thumbnail": "https://pleroma.shunderdo.me/instance/thumbnail.jpeg",
+    "title": "Pleroma/Shunderdome",
+    "upload_limit": 55000000,
+    "uri": "https://pleroma.shunderdo.me",
+    "urls": {
+        "streaming_api": "wss://pleroma.shunderdo.me"
+    },
+    "version": "2.7.2 (compatible; Pleroma 2.0.7-stable)"
+}

@@ -8,8 +8,7 @@ dependencies:
   cross_file: any
   http: any
   kaiteki_core: ^0.0.1
-  fediverse_objects:
-    git: https://github.com/Kaiteki-Fedi/fediverse_objects.git
+  fediverse_objects: ^0.0.1
   intl: ^0.18.1
   json_annotation: ^4.8.1
   uuid: ^3.0.7

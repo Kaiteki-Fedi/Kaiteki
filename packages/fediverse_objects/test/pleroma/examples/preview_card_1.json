@@ -1,0 +1,41 @@
+{
+    "description": "DOWNLOAD: https://sewerslvt.bandcamp.com/album/the-world-is-fvckedhttps://sewerslvt.bandcamp.com/https://soundcloud.com/sewerslvthttps://www.patreon.com/sewe...",
+    "image": "https://akkoma.0x68756773.moe/proxy/qmmgaYwfPrfVFqirI3_fa-MrzY8/aHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9xcU14Y3lkUW14SS9tYXhyZXNkZWZhdWx0LmpwZw/maxresdefault.jpg",
+    "pleroma": {
+        "opengraph": {
+            "app:id:googleplay": "com.google.android.youtube",
+            "app:id:ipad": "544007664",
+            "app:id:iphone": "544007664",
+            "app:name:googleplay": "YouTube",
+            "app:name:ipad": "YouTube",
+            "app:name:iphone": "YouTube",
+            "app:url:googleplay": "https://www.youtube.com/watch?v=qqMxcydQmxI",
+            "app:url:ipad": "vnd.youtube://www.youtube.com/watch?v=qqMxcydQmxI&feature=youtu.be&feature=applinks",
+            "app:url:iphone": "vnd.youtube://www.youtube.com/watch?v=qqMxcydQmxI&feature=youtu.be&feature=applinks",
+            "card": "player",
+            "description": "DOWNLOAD: https://sewerslvt.bandcamp.com/album/the-world-is-fvckedhttps://sewerslvt.bandcamp.com/https://soundcloud.com/sewerslvthttps://www.patreon.com/sewe...",
+            "image": "https://i.ytimg.com/vi/qqMxcydQmxI/maxresdefault.jpg",
+            "image:height": "720",
+            "image:width": "1280",
+            "player": "https://www.youtube.com/embed/qqMxcydQmxI",
+            "player:height": "720",
+            "player:width": "1280",
+            "site": "@youtube",
+            "site_name": "YouTube",
+            "title": "Sewerslvt - MAKE ME SAD",
+            "type": "video.other",
+            "url": "https://youtu.be/qqMxcydQmxI",
+            "video:height": "720",
+            "video:secure_url": "https://www.youtube.com/embed/qqMxcydQmxI",
+            "video:tag": "irly",
+            "video:type": "text/html",
+            "video:url": "https://www.youtube.com/embed/qqMxcydQmxI",
+            "video:width": "1280"
+        }
+    },
+    "provider_name": "youtu.be",
+    "provider_url": "https://youtu.be",
+    "title": "Sewerslvt - MAKE ME SAD",
+    "type": "link",
+    "url": "https://youtu.be/qqMxcydQmxI"
+}

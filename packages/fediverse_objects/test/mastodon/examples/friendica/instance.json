@@ -1,0 +1,109 @@
+{
+  "domain": "loma.ml",
+  "title": "[ˈloma]",
+  "version": "2.8.0 (compatible; Friendica 2023.05)",
+  "source_url": null,
+  "description": "loma.ml ist eine Friendica Community im Fediverse auf der vorwiegend DE 🇩🇪 gesprochen wird. \r\nServer in Germany/EU 🇩🇪 🇪🇺. Open to all with fun in new. \r\nServer in Deutschland. Offen für alle mit Spaß an Neuen.",
+  "usage": {
+    "users": {
+      "active_month": 117
+    }
+  },
+  "thumbnail": {
+    "url": "https://loma.ml/images/friendica-banner.jpg"
+  },
+  "languages": [
+    "de"
+  ],
+  "configuration": {
+    "statuses": {
+      "max_characters": 200000
+    },
+    "media_attachments": {
+      "supported_mime_types": {
+        "image/jpeg": "jpg",
+        "image/jpg": "jpg",
+        "image/png": "png",
+        "image/gif": "gif"
+      },
+      "image_size_limit": 10485760
+    }
+  },
+  "registrations": {
+    "enabled": true,
+    "approval_required": false
+  },
+  "contact": {
+    "email": "matthias@to-tell.de",
+    "account": {
+      "id": "9632",
+      "username": "webm",
+      "acct": "webm",
+      "display_name": "web m 🇪🇺",
+      "locked": false,
+      "bot": false,
+      "discoverable": true,
+      "group": false,
+      "created_at": "2018-05-21T11:24:55.000Z",
+      "note": "🇩🇪 Über diesen Account werden Änderungen oder geplante Beeinträchtigungen angekündigt. Wenn du einen Account auf Loma.ml besitzt, dann solltest du dich mit mir verbinden.🇪🇺 Changes or planned impairments are announced via this account. If you have an account on Loma.ml, you should connect to me.🆘 Fallbackaccount @webm@joinfriendica.de",
+      "url": "https://loma.ml/profile/webm",
+      "avatar": "https://loma.ml/photo/contact/300/373ebf56355ac895a09cb99264485383?ts=1686417730",
+      "avatar_static": "https://loma.ml/photo/contact/300/373ebf56355ac895a09cb99264485383?ts=1686417730&static=1",
+      "header": "https://loma.ml/photo/header/373ebf56355ac895a09cb99264485383?ts=1686417730",
+      "header_static": "https://loma.ml/photo/header/373ebf56355ac895a09cb99264485383?ts=1686417730&static=1",
+      "followers_count": 21,
+      "following_count": 23,
+      "statuses_count": 16,
+      "last_status_at": "2023-09-19T00:00:00.000Z",
+      "emojis": [],
+      "fields": []
+    }
+  },
+  "rules": [
+    {
+      "id": "1",
+      "text": "Rassismus, Sexismus, Homophobie, Transphobie, Fremdenfeindlichkeit dulden wir nicht."
+    },
+    {
+      "id": "2",
+      "text": "Teilen sie keine Inhalte, die in Deutschland illegal sind."
+    },
+    {
+      "id": "3",
+      "text": "Teilen sie keine Inhalte, die falsche oder irreführenden Informationen enthalten."
+    },
+    {
+      "id": "4",
+      "text": "Belästigen Sie keine anderen Teilnehmer."
+    },
+    {
+      "id": "5",
+      "text": "Befördern sie keine Gewalt."
+    },
+    {
+      "id": "6",
+      "text": "Gehen sie sparsam mit den Systemressourcen um."
+    },
+    {
+      "id": "7",
+      "text": "Kennzeichne Inhalte bitte mit \"NSFW\", wenn erotische Inhalte dargestellt werden."
+    },
+    {
+      "id": "8",
+      "text": "Der Versandt von pornografischen Material führt unmittelbar zu einer Löschung des Account."
+    },
+    {
+      "id": "9",
+      "text": "Nutzen sie ihren Account nicht kommerziell. Rein kommerziell genutzte Accounts werden ohne Ankündigung gelöscht."
+    },
+    {
+      "id": "10",
+      "text": "Sei freundlich."
+    }
+  ],
+  "friendica": {
+    "version": "2023.05",
+    "codename": "Giant Rhubarb",
+    "db_version": 1518
+  }
+}

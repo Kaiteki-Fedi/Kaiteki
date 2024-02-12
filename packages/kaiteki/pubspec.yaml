@@ -21,8 +21,7 @@ dependencies:
   dynamic_color: ^1.0.0
   equatable: ^2.0.5
   fast_immutable_collections: ^9.0.0
-  fediverse_objects:
-    git: https://github.com/Kaiteki-Fedi/fediverse_objects.git
+  fediverse_objects: ^0.0.1
   file_picker: ^6.1.1
   file_selector: ^1.0.1
   flutter:
@@ -50,14 +49,10 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   intl: ^0.18.0
   json_annotation: any
-  kaiteki_core:
-    path: ../kaiteki_core
-  kaiteki_core_backends:
-    path: ../kaiteki_core_backends
-  kaiteki_l10n:
-    path: ../kaiteki_l10n
-  kaiteki_ui:
-    path: ../kaiteki_ui
+  kaiteki_core: ^0.0.1
+  kaiteki_core_backends: ^0.0.1
+  kaiteki_l10n: ^0.0.1
+  kaiteki_ui: ^0.0.1
   logging: ^1.2.0
   markdown: ^7.0.1
   material_color_utilities: ^0.8.0

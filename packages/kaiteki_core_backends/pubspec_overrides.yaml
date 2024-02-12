@@ -1,4 +1,6 @@
-# melos_managed_dependency_overrides: kaiteki_core
+# melos_managed_dependency_overrides: kaiteki_core,fediverse_objects
 dependency_overrides:
+  fediverse_objects:
+    path: ../fediverse_objects
   kaiteki_core:
     path: ../kaiteki_core

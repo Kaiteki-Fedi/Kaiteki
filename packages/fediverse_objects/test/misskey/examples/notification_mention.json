@@ -1,0 +1,75 @@
+{
+    "id": "9epf87chzz",
+    "createdAt": "2023-05-13T10:41:00.977Z",
+    "type": "mention",
+    "userId": "9awbq05ud4",
+    "user": {
+        "id": "9awbq05ud4",
+        "name": "[HUGS] crafti :verified_neko:",
+        "username": "crafti",
+        "host": "akkoma.0x68756773.moe",
+        "avatarUrl": "https://nos3.arkjp.net/avatar.webp?url=https%3A%2F%2Fakkoma.0x68756773.moe%2Fmedia%2F19183f33d5e8b0181d0ed73ccea35f3237fe348470f976940bc55b57d785a221.jpg&avatar=1",
+        "avatarBlurhash": "eZK^pSxuIVof-ov|WB-PRjIo~9t7-:ofWV^hf6E2WBbI$yjt%2j[R-",
+        "isBot": false,
+        "isCat": false,
+        "instance": {
+            "name": "hugs",
+            "softwareName": "akkoma",
+            "softwareVersion": "3.7.1",
+            "iconUrl": "https://akkoma.0x68756773.moe/static/logo.svg",
+            "faviconUrl": "https://akkoma.0x68756773.moe/favicon.png",
+            "themeColor": "#593196"
+        },
+        "emojis": {
+            "pansexual": "https://akkoma.0x68756773.moe/emoji/pride/pansexual.png",
+            "verified_neko": "https://akkoma.0x68756773.moe/emoji/crafti/verified_neko.png"
+        },
+        "onlineStatus": "unknown"
+    },
+    "note": {
+        "id": "9epf86qlzv",
+        "createdAt": "2023-05-13T10:41:00.189Z",
+        "userId": "9awbq05ud4",
+        "user": {
+            "id": "9awbq05ud4",
+            "name": "[HUGS] crafti :verified_neko:",
+            "username": "crafti",
+            "host": "akkoma.0x68756773.moe",
+            "avatarUrl": "https://nos3.arkjp.net/avatar.webp?url=https%3A%2F%2Fakkoma.0x68756773.moe%2Fmedia%2F19183f33d5e8b0181d0ed73ccea35f3237fe348470f976940bc55b57d785a221.jpg&avatar=1",
+            "avatarBlurhash": "eZK^pSxuIVof-ov|WB-PRjIo~9t7-:ofWV^hf6E2WBbI$yjt%2j[R-",
+            "isBot": false,
+            "isCat": false,
+            "instance": {
+                "name": "hugs",
+                "softwareName": "akkoma",
+                "softwareVersion": "3.7.1",
+                "iconUrl": "https://akkoma.0x68756773.moe/static/logo.svg",
+                "faviconUrl": "https://akkoma.0x68756773.moe/favicon.png",
+                "themeColor": "#593196"
+            },
+            "emojis": {
+                "pansexual": "https://akkoma.0x68756773.moe/emoji/pride/pansexual.png",
+                "verified_neko": "https://akkoma.0x68756773.moe/emoji/crafti/verified_neko.png"
+            },
+            "onlineStatus": "unknown"
+        },
+        "text": "@Craftplacer@misskey.io I hate misskey api",
+        "cw": null,
+        "visibility": "followers",
+        "localOnly": false,
+        "reactionAcceptance": null,
+        "renoteCount": 0,
+        "repliesCount": 0,
+        "reactions": {},
+        "reactionEmojis": {},
+        "emojis": {},
+        "fileIds": [],
+        "files": [],
+        "replyId": null,
+        "renoteId": null,
+        "mentions": [
+            "8at0iiweoa"
+        ],
+        "uri": "https://akkoma.0x68756773.moe/objects/466a87ce-6a75-47d1-8659-cda49e2f2ccf"
+    }
+}

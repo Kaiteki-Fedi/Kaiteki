@@ -1,0 +1,9 @@
+include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    - prefer_relative_imports
+
+analyzer:
+#   exclude:
+#     - path/to/excluded/files/**

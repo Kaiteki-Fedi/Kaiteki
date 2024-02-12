@@ -1,0 +1,40 @@
+{
+  "id": "7rkrarq81i",
+  "name": ":peroro_sama:しゅいろ:peroro_sama:",
+  "username": "syuilo",
+  "host": null,
+  "avatarUrl": "https://proxy.misskeyusercontent.com/avatar.webp?url=https%3A%2F%2Fs3.arkjp.net%2Fmisskey%2Fwebpublic-b2dc591e-58b6-4df7-b7c9-1cba199f6619.png&avatar=1",
+  "avatarBlurhash": "yFF5Kq0L00?a^*IBNG01^j-pV@D*o|xt58WB}@9at7s.Ip~AWB57%Laes:xaOEoLnis:ofIpoJr?NHtRV@oLoeNHNI%1M{kCWCjuxZ",
+  "avatarDecorations": [
+    {
+      "id": "9mh8lazxzayu08lc",
+      "url": "https://media.misskeyusercontent.com/io/52d82af0-d2d2-4b0e-b324-759a91d10249.png"
+    }
+  ],
+  "isBot": false,
+  "isCat": true,
+  "emojis": {},
+  "onlineStatus": "active",
+  "badgeRoles": [
+    {
+      "name": "Verified",
+      "iconUrl": "https://s3.arkjp.net/misskey/8df80984-86f9-4cc5-a289-1f6ab59c74b8.png",
+      "displayOrder": 1000
+    },
+    {
+      "name": "Patreon Supporter",
+      "iconUrl": "https://s3.arkjp.net/misskey/c501ecfd-2bc3-4c44-a6da-fddb57e12126.png",
+      "displayOrder": 10
+    },
+    {
+      "name": "Misskey Supporter",
+      "iconUrl": "https://s3.arkjp.net/misskey/dab4e89c-4ed1-4c06-918d-441db61dabaf.png",
+      "displayOrder": 10
+    },
+    {
+      "name": "FANBOX ミス廃",
+      "iconUrl": "https://s3.arkjp.net/misskey/2e3993ac-1651-4277-80fc-28b36888ec31.png",
+      "displayOrder": 0
+    }
+  ]
+}

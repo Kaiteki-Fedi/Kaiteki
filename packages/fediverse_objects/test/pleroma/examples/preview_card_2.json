@@ -1,0 +1,20 @@
+{
+    "description": "bruh",
+    "image": "https://akkoma.0x68756773.moe/proxy/Z6aAkAJVpKRskdTShMWdKqLP1lk/aHR0cHM6Ly90ZWxlZ3JhLnBoL2JydWgtMDUtMTM/bruh-05-13",
+    "pleroma": {
+        "opengraph": {
+            "card": "summary",
+            "description": "bruh",
+            "image": "",
+            "site_name": "Telegraph",
+            "title": "bruh",
+            "type": "article",
+            "url": "https://telegra.ph/bruh-05-13#"
+        }
+    },
+    "provider_name": "telegra.ph",
+    "provider_url": "https://telegra.ph",
+    "title": "bruh",
+    "type": "link",
+    "url": "https://telegra.ph/bruh-05-13#"
+}

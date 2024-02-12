@@ -1,0 +1,19 @@
+{
+    "id": "9diy1ujbh0",
+    "createdAt": "2023-04-13T17:13:51.575Z",
+    "type": "follow",
+    "userId": "9diy0r5kiv",
+    "user": {
+        "id": "9diy0r5kiv",
+        "name": null,
+        "username": "tamaina2",
+        "host": null,
+        "avatarUrl": "https://misskey.io/identicon/tamaina2@misskey.io",
+        "avatarBlurhash": null,
+        "isBot": false,
+        "isCat": false,
+        "emojis": {},
+        "onlineStatus": "offline",
+        "badgeRoles": []
+    }
+}
