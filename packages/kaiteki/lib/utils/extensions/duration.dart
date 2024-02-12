@@ -19,13 +19,13 @@ extension DurationExtension on Duration {
     if (inDays != 0) {
       return l10n.timeDifferenceDaysLong(inDays);
     } else if (inHours != 0) {
-      return l10n.timeDifferenceHoursLong(inDays);
+      return l10n.timeDifferenceHoursLong(inHours);
     } else if (inMinutes != 0) {
-      return l10n.timeDifferenceMinutesLong(inDays);
+      return l10n.timeDifferenceMinutesLong(inMinutes);
     } else if (inSeconds <= 5) {
       return l10n.timeDifferenceNow;
     } else {
-      return l10n.timeDifferenceSecondsLong(inDays);
+      return l10n.timeDifferenceSecondsLong(inSeconds);
     }
   }
 }
