@@ -9,7 +9,6 @@ import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/ui/shared/account_list/list_tile.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/account_removal_dialog.dart";
-import "package:kaiteki/ui/shared/dialogs/dynamic_dialog_container.dart";
 import "package:kaiteki/utils/extensions.dart";
 
 class AccountListDialog extends ConsumerWidget {
