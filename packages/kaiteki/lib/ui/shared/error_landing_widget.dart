@@ -139,7 +139,9 @@ class _ErrorLandingWidgetState extends State<ErrorLandingWidget> {
     final report = ExceptionReport.fromException(
       widget.error.$1,
       stackTrace: widget.error.$2,
-      backend: account == null ? null : retrieveBackendInformation(account.adapter, account.type),
+      backend: account == null
+          ? null
+          : retrieveBackendInformation(account.adapter, account.type),
     );
 
     final result = await showDialog<ExceptionReport>(

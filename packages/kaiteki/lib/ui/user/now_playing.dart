@@ -1,4 +1,3 @@
-
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -36,7 +35,8 @@ class NowPlayingCard extends StatelessWidget {
       child: InkWell(
         onTap: trackUrl.andThen((url) {
           return () async {
-            final mode = ProviderScope.containerOf(context).read(preferredUrlLaunchMode);
+            final mode =
+                ProviderScope.containerOf(context).read(preferredUrlLaunchMode);
             await launchUrl(url, mode: mode);
           };
         }),
@@ -48,7 +48,7 @@ class NowPlayingCard extends StatelessWidget {
                 dimension: 72.0,
                 child: _CoverArt(
                   image: coverArtUrl.andThen(
-                        (url) => NetworkImage(url.toString()),
+                    (url) => NetworkImage(url.toString()),
                   ),
                 ),
               ),
@@ -57,7 +57,6 @@ class NowPlayingCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     if (title == null)
-
                       Text(
                         "No track playing right now",
                         style: theme.textTheme.labelSmall,
@@ -102,7 +101,8 @@ class NowPlayingCard extends StatelessWidget {
                             softWrap: false,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        ),],
+                        ),
+                    ],
                   ],
                 ),
               ),
@@ -136,15 +136,15 @@ class _CoverArt extends StatelessWidget {
       child: image == null
           ? placeholder
           : Image(
-        image: image,
-        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-          if (wasSynchronouslyLoaded) return child;
+              image: image,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) return child;
 
-          return child;
-        },
-        errorBuilder: (_, e, s) => placeholder,
-        fit: BoxFit.cover,
-      ),
+                return child;
+              },
+              errorBuilder: (_, e, s) => placeholder,
+              fit: BoxFit.cover,
+            ),
     );
   }
 }

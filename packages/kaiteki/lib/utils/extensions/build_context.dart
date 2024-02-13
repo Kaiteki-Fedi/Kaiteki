@@ -31,7 +31,7 @@ extension BuildContextExtensions on BuildContext {
       },
     );
   }
-  
+
   void showErrorSnackbar({
     required Widget text,
     required TraceableError error,

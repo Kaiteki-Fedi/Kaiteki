@@ -1,4 +1,4 @@
-class PostList<T>  {
+class PostList<T> {
   final T? source;
   final String name;
   final String id;

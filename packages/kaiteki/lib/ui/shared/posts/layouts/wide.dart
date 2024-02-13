@@ -78,7 +78,9 @@ class WidePostLayout extends ConsumerWidget {
               child: MetaBar(
                 post: post,
                 twolineAuthor: true,
-                onOpen: ref.watch(showDedicatedPostOpenButton).value ? onOpen : null,
+                onOpen: ref.watch(showDedicatedPostOpenButton).value
+                    ? onOpen
+                    : null,
               ),
             ),
           ],

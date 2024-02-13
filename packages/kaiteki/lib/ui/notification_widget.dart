@@ -177,8 +177,7 @@ class _NotificationWidgetState extends ConsumerState<NotificationWidget> {
 
   TextSpan buildTitle(BuildContext context, Notification notification) {
     final user = notification.user;
-    final relativeTime = DateTime.now()
-        .difference(notification.createdAt);
+    final relativeTime = DateTime.now().difference(notification.createdAt);
 
     final l10n = context.l10n;
 

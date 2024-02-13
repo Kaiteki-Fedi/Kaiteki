@@ -18,11 +18,7 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
     return GlitchAdapter._(instance, instanceInfo, cli);
   }
 
-  GlitchAdapter._(
-    this.instance,
-    this.instanceInfo,
-    super.client
-  );
+  GlitchAdapter._(this.instance, this.instanceInfo, super.client);
 
   @override
   GlitchCapabilities get capabilities {

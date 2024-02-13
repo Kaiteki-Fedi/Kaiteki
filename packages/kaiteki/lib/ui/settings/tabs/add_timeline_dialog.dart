@@ -73,7 +73,8 @@ class _AddTimelineDialogState extends State<AddTimelineDialog> {
             switch (_type) {
               TimelineSourceType.user => throw UnimplementedError(),
               TimelineSourceType.standard => throw AssertionError(
-                  "Standard timelines shouldn't be selectable",),
+                  "Standard timelines shouldn't be selectable",
+                ),
               TimelineSourceType.list => const ListSelection(),
               TimelineSourceType.hashtag => TextFormField(
                   decoration: const InputDecoration(

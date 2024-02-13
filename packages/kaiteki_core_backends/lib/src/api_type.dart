@@ -25,7 +25,7 @@ enum BackendType<T extends BackendAdapter> {
   ///
   /// If set to `null`, the probing is disabled.
   final int? probingPriority;
-  
+
   Type get adapterType => T;
 
   FutureOr<T> createAdapter(String instance) => _createAdapter(instance);

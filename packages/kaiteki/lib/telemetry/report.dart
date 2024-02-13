@@ -7,7 +7,11 @@ import "package:kaiteki/app.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 
-typedef BackendInformation = (String? host, Type adapterType, BackendType backendType);
+typedef BackendInformation = (
+  String? host,
+  Type adapterType,
+  BackendType backendType
+);
 
 class ExceptionReport {
   final String? stackTrace;
@@ -94,7 +98,8 @@ class ExceptionReport {
   }
 }
 
-BackendInformation retrieveBackendInformation(BackendAdapter adapter, BackendType type) {
+BackendInformation retrieveBackendInformation(
+    BackendAdapter adapter, BackendType type) {
   final host = adapter.safeCast<DecentralizedBackendAdapter>()?.instance;
   final adapterType = adapter.runtimeType;
   return (host, adapterType, type);

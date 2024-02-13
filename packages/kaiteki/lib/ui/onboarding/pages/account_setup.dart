@@ -48,7 +48,8 @@ class AccountSetupPage extends ConsumerWidget {
                         child: ListTile(
                           leading: Image.asset("assets/icons/fediverse.png"),
                           title: const Text("Fediverse"),
-                          subtitle: const Text("Mastodon, Pleroma, Misskey, etc."),
+                          subtitle:
+                              const Text("Mastodon, Pleroma, Misskey, etc."),
                         ),
                       ),
                     ),

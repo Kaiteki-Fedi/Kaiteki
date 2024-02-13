@@ -84,7 +84,8 @@ Future<void> main() async {
 }
 
 Future<List<Account>> getDemoAccounts() async {
-  final adapter = await DemoAdapter.create(BackendType.misskey, "fedi.software");
+  final adapter =
+      await DemoAdapter.create(BackendType.misskey, "fedi.software");
   final user = await adapter.getUserById(kKaiteki);
   return [
     Account(

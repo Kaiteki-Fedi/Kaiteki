@@ -16,7 +16,7 @@ String _getExtraKey(BackendType type, String host) =>
 
 Future<void> pushExtra(
   SharedPreferences preferences,
-    BackendType type,
+  BackendType type,
   String host,
   Map<String, String> extra,
 ) async {
@@ -38,7 +38,7 @@ Uri? getRedirectUri(BackendType type, String host) {
 
 Map<String, String>? popExtra(
   SharedPreferences preferences,
-    BackendType type,
+  BackendType type,
   String host,
 ) {
   final key = _getExtraKey(type, host);

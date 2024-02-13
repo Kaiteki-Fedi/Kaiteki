@@ -298,7 +298,6 @@ class _UserPanelState extends ConsumerState<UserPanel> {
                       coverArtUrl: data.$2,
                       trackUrl: data.$1.additionalInfo?.originUrl,
                     ),
-
                     const SizedBox(height: 8.0),
                   ],
                 );

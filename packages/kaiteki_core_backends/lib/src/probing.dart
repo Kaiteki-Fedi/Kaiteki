@@ -36,8 +36,9 @@ Future<InstanceProbe?> probeInstance(String host) async {
     return null;
   }
 
-  _logger
-      .fine('Detected ${result.type} on $host using ${result.method}',);
+  _logger.fine(
+    'Detected ${result.type} on $host using ${result.method}',
+  );
 
   return result;
 }
@@ -172,5 +173,5 @@ class InstanceProbe {
 
   final InstanceProbeMethod method;
 
-  const InstanceProbe(this.type,  this.instance, this.method);
+  const InstanceProbe(this.type, this.instance, this.method);
 }

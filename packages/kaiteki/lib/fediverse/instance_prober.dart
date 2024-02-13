@@ -7,4 +7,5 @@ part "instance_prober.g.dart";
 Future<probing.InstanceProbe?> probeInstance(
   ProbeInstanceRef? ref,
   String host,
-) async => probing.probeInstance(host);
+) async =>
+    probing.probeInstance(host);
