@@ -23,47 +23,15 @@ class TumblrAdapter extends CentralizedBackendAdapter
 
   @override
   FutureOr<void> applySecrets(
-      ClientSecret? clientSecret,
-      UserSecret userSecret,
-      ) {
+    ClientSecret? clientSecret,
+    UserSecret userSecret,
+  ) {
     super.applySecrets(clientSecret, userSecret);
     client.accessToken = userSecret.accessToken;
   }
 
   @override
   AdapterCapabilities get capabilities => const TumblrCapabilities();
-
-  @override
-  Future<void> deleteAccount(String password) {
-    // TODO: implement deleteAccount
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<User?> followUser(String id) {
-    // TODO: implement followUser
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<PaginatedList<String?, User>> getFollowers(
-      String userId, {
-        String? sinceId,
-        String? untilId,
-      }) {
-    // TODO: implement getFollowers
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<PaginatedList<String?, User>> getFollowing(
-      String userId, {
-        String? sinceId,
-        String? untilId,
-      }) {
-    // TODO: implement getFollowing
-    throw UnimplementedError();
-  }
 
   @override
   Future<User> getMyself() async {
@@ -84,20 +52,11 @@ class TumblrAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  Future<List<Post>> getStatusesOfUserById(
-      String id, {
-        TimelineQuery<String>? query,
-      }) async {
-    final response = await client.getBlogPosts(id);
-    return response.posts.map((e) => e.toKaiteki()).toList();
-  }
-
-  @override
   Future<List<Post>> getTimeline(
-      TimelineType type, {
-        TimelineQuery<String>? query,
-        PostFilter? filter,
-      }) async {
+    TimelineType type, {
+    TimelineQuery<String>? query,
+    PostFilter? filter,
+  }) async {
     final blogFields = [
       'name',
       'avatar',
@@ -152,23 +111,23 @@ class TumblrAdapter extends CentralizedBackendAdapter
 
     return await context.requestOAuth!((url) async {
       final authorizationUrl = Uri.https(
-          'tumblr.com',
-          '/oauth2/authorize',
-          {
-            'response_type': 'code',
-            'client_id': consumerKey,
-            'redirect_uri': url.toString(),
-            'scope': scopes.join(' '),
-            'state': state,
-          },
-        );
+        'tumblr.com',
+        '/oauth2/authorize',
+        {
+          'response_type': 'code',
+          'client_id': consumerKey,
+          'redirect_uri': url.toString(),
+          'scope': scopes.join(' '),
+          'state': state,
+        },
+      );
       return (authorizationUrl, {"redirect_uri": url.toString()});
     });
   }
 
   @override
-  Future<LoginResult> handleOAuth(Map<String, String> query, Map<String, String>? extra) async {
-
+  Future<LoginResult> handleOAuth(
+      Map<String, String> query, Map<String, String>? extra) async {
     final tokenResponse = await client.getToken(
       clientId: consumerKey,
       clientSecret: consumerSecret,
@@ -272,20 +231,22 @@ class TumblrAdapter extends CentralizedBackendAdapter
   }
 
   @override
-  Future<User?> unfollowUser(String id) {
-    // TODO: implement unfollowUser
-    throw UnimplementedError();
-  }
-  @override
-  Future<List<Notification>> getNotifications({String? sinceId, String? untilId,}) {
+  Future<List<Notification>> getNotifications({
+    String? sinceId,
+    String? untilId,
+  }) {
     // TODO: implement getNotifications
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Post>> getPostsOfUserById(String id, {TimelineQuery<String>? query, PostFilter? filter}) {
-    // TODO: implement getPostsOfUserById
-    throw UnimplementedError();
+  Future<List<Post>> getPostsOfUserById(
+    String id, {
+    TimelineQuery<String>? query,
+    PostFilter? filter,
+  }) async {
+    final response = await client.getBlogPosts(id);
+    return response.posts.map((e) => e.toKaiteki()).toList();
   }
 
   @override
