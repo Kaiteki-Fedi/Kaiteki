@@ -44,6 +44,7 @@ const List<String> permissions = [
   'write:following',
   'read:messaging',
   'write:messaging',
+  'write:report-abuse'
 ];
 
 // TODO(Craftplacer): add missing implementations
@@ -62,7 +63,8 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
         OAuthReceiver,
         PostTranslationSupport,
         ReactionSupport,
-        SearchSupport {
+        SearchSupport,
+        ReportSupport {
   final MisskeyClient client;
 
   static final _logger = Logger('MisskeyAdapter');
@@ -748,4 +750,15 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
 
   @override
   Future<void> unbookmarkPost(String id) => client.deleteFavorite(id);
+
+  @override
+  Future<Report?> submitReport({
+    required String userId,
+    required String? comment,
+    List<String> postIds = const [],
+    bool forwardToRemoteInstance = false,
+  }) async {
+    await client.reportAbuse(userId, comment ?? "");
+    return null;
+  }
 }

@@ -1,7 +1,10 @@
 import 'package:kaiteki_core/social.dart';
 
 class MastodonCapabilities extends AdapterCapabilities
-    implements HashtagSupportCapabilities, ExploreCapabilities {
+    implements
+        HashtagSupportCapabilities,
+        ExploreCapabilities,
+        ReportCapabilities {
   const MastodonCapabilities();
 
   @override
@@ -38,4 +41,14 @@ class MastodonCapabilities extends AdapterCapabilities
 
   @override
   bool get supportsTrendingLinks => true;
+
+  @override
+  bool get canForwardReportsToRemoteInstances => true;
+
+  @override
+  bool get canIncludePosts => true;
+
+  // https://github.com/mastodon/mastodon/blob/main/app/models/report.rb#L49
+  @override
+  int? get reportCommentLengthLimit => 1000;
 }

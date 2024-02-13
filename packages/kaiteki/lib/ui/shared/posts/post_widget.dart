@@ -11,6 +11,8 @@ import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/translation/language_identificator.dart";
 import "package:kaiteki/translation/translator.dart";
 import "package:kaiteki/ui/debug/text_render_dialog.dart";
+import "package:kaiteki/ui/report/dialog.dart";
+import "package:kaiteki/ui/report/special_user_alert_dialog.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/content_not_public_dialog.dart";
@@ -329,6 +331,8 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       const Divider(),
       ShareMenuItem(onPressed: () => share(context, _post)),
       buildOpenInMenuItem(context),
+      const Divider(),
+      ReportMenuItem(onPressed: _onReport),
       if (_post.content != null &&
           ref.watch(preferences.developerMode).value) ...[
         const Divider(),
@@ -646,6 +650,42 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     await launchUrl(
       _post.externalUrl!,
       mode: LaunchMode.externalApplication,
+    );
+  }
+
+  Future<void> _onReport() async {
+    if (_post.author.id == ref.read(currentAccountProvider)?.user.id) {
+      await showDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (_) => ReportSpecialUserAlertDialog(
+          reason: SpecialUserAlertReason.selfReport(),
+        ),
+      );
+      return;
+    }
+
+    if (_post.author.flags?.isAdministrator == true ||
+        _post.author.flags?.isModerator == true) {
+      await showDialog(
+        context: context,
+        useRootNavigator: false,
+        builder: (_) => ReportSpecialUserAlertDialog(
+          reason: SpecialUserAlertReason.staff(
+            _post.author.handle.toString(),
+          ),
+        ),
+      );
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      useRootNavigator: false,
+      builder: (_) => ReportDialog(
+        posts: [_post],
+        user: _post.author,
+      ),
     );
   }
 }

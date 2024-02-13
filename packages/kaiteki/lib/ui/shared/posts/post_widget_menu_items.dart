@@ -105,3 +105,18 @@ class DebugTextRenderingMenuItem extends StatelessWidget {
     );
   }
 }
+
+class ReportMenuItem extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const ReportMenuItem({super.key, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.flag_rounded),
+      onPressed: onPressed,
+      child: const Text("Report"),
+    );
+  }
+}

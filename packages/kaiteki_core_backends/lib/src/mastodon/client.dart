@@ -757,4 +757,28 @@ class MastodonClient {
         )
         .then(Tag.fromJson.fromResponse);
   }
+
+  Future<Report> fileReport(
+    String accountId, {
+    List<String>? statusIds,
+    String? comment,
+    ReportCategory? category,
+    List<int>? ruleIds,
+    bool? forward,
+  }) {
+    return client
+        .sendRequest(
+          HttpMethod.post,
+          'api/v1/reports',
+          body: {
+            'account_id': accountId,
+            if (statusIds != null) 'status_ids': statusIds,
+            if (comment != null) 'comment': comment,
+            if (category != null) 'category': category,
+            if (ruleIds != null) 'rule_ids': ruleIds,
+            if (forward != null) 'forward': forward,
+          }.jsonBody,
+        )
+        .then(Report.fromJson.fromResponse);
+  }
 }

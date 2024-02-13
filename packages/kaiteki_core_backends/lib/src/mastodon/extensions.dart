@@ -342,3 +342,16 @@ extension KaitekiMastodonTagExtension on mastodon.Tag {
     );
   }
 }
+
+extension KaitekiMastodonReportExtension on mastodon.Report {
+  Report toKaiteki(String localHost) {
+    return Report(
+      comment: comment,
+      id: id,
+      reportedUser: targetAccount?.toKaiteki(localHost),
+      resolved: actionTaken,
+      submittedAt: createdAt,
+      reportedUserId: targetAccount?.id,
+    );
+  }
+}

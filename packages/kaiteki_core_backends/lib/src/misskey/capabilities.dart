@@ -5,7 +5,8 @@ class MisskeyCapabilities extends AdapterCapabilities
     implements
         ChatSupportCapabilities,
         HashtagSupportCapabilities,
-        ReactionSupportCapabilities {
+        ReactionSupportCapabilities,
+        ReportCapabilities {
   @override
   final Set<TimelineType> supportedTimelines;
 
@@ -60,4 +61,14 @@ class MisskeyCapabilities extends AdapterCapabilities
 
   @override
   bool get supportsUnicodeEmojiReactions => true;
+
+  @override
+  bool get canForwardReportsToRemoteInstances => false;
+
+  @override
+  bool get canIncludePosts => false;
+
+  // according to https://dev.joinsharkey.org/api-doc#tag/users/operation/users/report-abuse
+  @override
+  int? get reportCommentLengthLimit => 2048;
 }

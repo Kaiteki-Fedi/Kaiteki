@@ -26,6 +26,7 @@ export 'src/mastodon/preview_card.dart';
 export 'src/mastodon/push_subscription.dart';
 export 'src/mastodon/push_subscription_alerts.dart';
 export 'src/mastodon/reaction.dart';
+export 'src/mastodon/report.dart';
 export 'src/mastodon/relationship.dart';
 export 'src/mastodon/replies_policy.dart';
 export 'src/mastodon/role.dart';

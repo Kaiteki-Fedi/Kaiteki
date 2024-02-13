@@ -15,4 +15,5 @@ export 'interfaces/oauth_receiver.dart';
 export 'interfaces/post_translation_support.dart';
 export 'interfaces/preview_support.dart';
 export 'interfaces/reaction_support.dart';
+export 'interfaces/report_support.dart';
 export 'interfaces/search_support.dart';

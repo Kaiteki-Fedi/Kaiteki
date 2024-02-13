@@ -842,4 +842,12 @@ class MisskeyClient {
         )
         .then(misskey.Favorite.fromJson.fromResponseList);
   }
+
+  Future<void> reportAbuse(String userId, String comment) async {
+    await client.sendRequest(
+      HttpMethod.post,
+      'api/users/report-abuse',
+      body: {'userId': userId, 'comment': comment}.jsonBody,
+    );
+  }
 }

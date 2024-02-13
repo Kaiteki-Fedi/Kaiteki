@@ -20,6 +20,7 @@ export 'src/social/model/post.dart';
 export 'src/social/model/post_list.dart';
 export 'src/social/model/post_scope.dart';
 export 'src/social/model/reaction.dart';
+export 'src/social/model/report.dart';
 export 'src/social/model/resolvable.dart';
 export 'src/social/model/timeline_query.dart';
 export 'src/social/model/timeline_type.dart';

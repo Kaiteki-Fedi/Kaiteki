@@ -29,7 +29,8 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         MuteSupport,
         NotificationSupport,
         OAuthReceiver,
-        SearchSupport {
+        SearchSupport,
+        ReportSupport {
   final T client;
 
   @override
@@ -644,5 +645,22 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
   Future<Hashtag> getHashtag(String hashtag) async {
     final tag = await client.getHashtag(hashtag);
     return tag.toKaiteki();
+  }
+
+  @override
+  Future<Report?> submitReport({
+    required String userId,
+    required String? comment,
+    List<String> postIds = const [],
+    bool forwardToRemoteInstance = false,
+  }) async {
+    final report = await client.fileReport(
+      userId,
+      comment: comment,
+      forward: forwardToRemoteInstance,
+      statusIds: postIds,
+    );
+
+    return report.toKaiteki(instance);
   }
 }
