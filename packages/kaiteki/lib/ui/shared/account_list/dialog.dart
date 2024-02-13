@@ -11,17 +11,39 @@ import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/account_removal_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
 
-class AccountListDialog extends ConsumerWidget {
+class AccountListDialog extends ConsumerStatefulWidget {
   const AccountListDialog({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AccountListDialog> createState() => _AccountListDialogState();
+}
+
+class _AccountListDialogState extends ConsumerState<AccountListDialog>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _bottomSheetAnimationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _bottomSheetAnimationController =
+        BottomSheet.createAnimationController(this);
+  }
+
+  @override
+  void dispose() {
+    _bottomSheetAnimationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
 
     if (WindowWidthSizeClass.fromContext(context) <=
         WindowWidthSizeClass.compact) {
       return BottomSheet(
+        animationController: _bottomSheetAnimationController,
         builder: (_) => _AccountListBody(
           children: [
             Padding(
@@ -104,7 +126,7 @@ class _AccountListBody extends ConsumerWidget {
               onTap: () => _switchAccount(context, e),
               trailing: buildMenuAnchor(context, ref, e),
             );
-          }).intersperse(const SizedBox(height: 8)),
+          }),
           ListTile(
             leading: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0),
