@@ -6,6 +6,7 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/ui/media/media.dart";
 import "package:kaiteki/ui/media_inspection/screen.dart";
+import "package:kaiteki/ui/report/dialog.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/icon_landing_widget.dart";
@@ -251,6 +252,16 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         ),
         leadingIcon: Icon(Icons.adaptive.share_rounded),
         child: const Text("Share"),
+      ),
+      MenuItemButton(
+        onPressed: () async {
+          await showDialog(
+            context: context,
+            builder: (_) => ReportDialog(user: user),
+          );
+        },
+        leadingIcon: const Icon(Icons.flag_rounded),
+        child: const Text("Report"),
       ),
     ];
   }
