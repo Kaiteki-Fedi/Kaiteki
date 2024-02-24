@@ -70,5 +70,6 @@ enum NotificationType {
   receiveFollowRequest,
   renote,
   reply,
+  roleAssigned,
   test,
 }

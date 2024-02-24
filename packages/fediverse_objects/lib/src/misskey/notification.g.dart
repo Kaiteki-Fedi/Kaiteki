@@ -71,5 +71,6 @@ const _$NotificationTypeEnumMap = {
   NotificationType.receiveFollowRequest: 'receiveFollowRequest',
   NotificationType.renote: 'renote',
   NotificationType.reply: 'reply',
+  NotificationType.roleAssigned: 'roleAssigned',
   NotificationType.test: 'test',
 };
