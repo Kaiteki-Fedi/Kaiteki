@@ -13,16 +13,16 @@ class AvatarWidget extends StatelessWidget {
   final List<AvatarDecoration> decorations;
 
   AvatarWidget(
-    User user, {
+    User? user, {
     super.key,
     this.size = 48,
     this.onTap,
     this.shape,
     this.focusNode,
-  })  : url = user.avatarUrl,
-        blurHash = user.avatarBlurHash,
-        type = user.type,
-        decorations = user.avatarDecorations;
+  })  : url = user?.avatarUrl,
+        blurHash = user?.avatarBlurHash,
+        type = user?.type ?? UserType.person,
+        decorations = user?.avatarDecorations ?? const [];
 
   const AvatarWidget.url(
     this.url, {
