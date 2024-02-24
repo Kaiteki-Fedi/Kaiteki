@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/theming/themes.dart";
 import "package:kaiteki/ui/pride.dart";
+import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
 final theme = createEnumSettingProvider<AppTheme>(
@@ -89,9 +90,10 @@ final showUserBadges = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
-final useWidePostLayout = createSettingProvider<bool>(
-  key: "useWidePostLayout",
-  initialValue: false,
+final postLayout = createEnumSettingProvider<PostWidgetLayout>(
+  key: "postLayout",
+  values: PostWidgetLayout.values,
+  initialValue: PostWidgetLayout.normal,
   provider: sharedPreferencesProvider,
 );
 
