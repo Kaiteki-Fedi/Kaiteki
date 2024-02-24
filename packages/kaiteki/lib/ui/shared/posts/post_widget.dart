@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter/semantics.dart";
-import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
@@ -148,10 +147,10 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final canFavorite = isAuthenticated && adapter is FavoriteSupport;
     final canReact = isAuthenticated && adapter is ReactionSupport;
     final callbacks = InteractionCallbacks(
-      onReply: isAuthenticated ? Option.of(_onReply) : const Option.none(),
-      onFavorite: canFavorite ? Option.of(_onFavorite) : const Option.none(),
-      onRepeat: isAuthenticated ? Option.of(_onRepeat) : const Option.none(),
-      onReact: canReact ? Option.of(_onReact) : const Option.none(),
+      onReply: isAuthenticated ? InteractionCallback(_onReply) : const InteractionCallback.unavailable(),
+      onFavorite: canFavorite ? InteractionCallback(_onFavorite) : const InteractionCallback.unavailable(),
+      onRepeat: isAuthenticated ? InteractionCallback(_onRepeat) : const InteractionCallback.unavailable(),
+      onReact: canReact ? InteractionCallback(_onReact) : const InteractionCallback.unavailable(),
       onShowFavoritees: _onShowFavoritees,
       onShowRepeatees: _onShowRepeatees,
       onShowMenu: _onShowMenu,

@@ -40,16 +40,16 @@ class _InteractionBarState extends State<InteractionBar> {
     final callbacks = widget.callbacks;
 
     var buttons = <Widget>[
-      if (callbacks.onReply.isSome())
+      if (callbacks.onReply is! UnavailableInteractionCallback)
         _ReplyButton.infer(
           callbacks: callbacks,
           metrics: widget.metrics,
           showLabel: widget.showLabels,
         ),
-      if (callbacks.onRepeat.isSome())
+      if (callbacks.onRepeat is! UnavailableInteractionCallback)
         if (true)
           _RepeatButton(
-            onTap: callbacks.onRepeat.toNullable(),
+            onTap: callbacks.onRepeat.callback,
             showLabel: widget.showLabels,
             count: widget.metrics.repeatCount,
             onSecondary: callbacks.onShowRepeatees,
@@ -66,7 +66,7 @@ class _InteractionBarState extends State<InteractionBar> {
             },
             menuChildren: [
               PopupMenuItem(
-                onTap: callbacks.onRepeat.toNullable(),
+                onTap: callbacks.onRepeat.callback,
                 child: const ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.repeat_rounded),
@@ -75,14 +75,14 @@ class _InteractionBarState extends State<InteractionBar> {
               ),
             ],
           ),
-      if (callbacks.onFavorite.isSome())
+      if (callbacks.onFavorite is! UnavailableInteractionCallback)
         _FavoriteButton.infer(
           callbacks: callbacks,
           isFavorited: widget.favorited ?? false,
           metrics: widget.metrics,
           showLabel: widget.showLabels,
         ),
-      if (callbacks.onReact.isSome())
+      if (callbacks.onReact is! UnavailableInteractionCallback)
         _ReactButton.infer(
           callbacks: callbacks,
           metrics: widget.metrics,
@@ -140,7 +140,7 @@ class _ReplyButton extends ConsumerWidget {
     bool showLabel = true,
   }) {
     return _ReplyButton(
-      onTap: callbacks.onReply.toNullable(),
+      onTap: callbacks.onReply.callback,
       showLabel: showLabel,
       count: metrics.replyCount,
     );
@@ -183,7 +183,7 @@ class _FavoriteButton extends ConsumerWidget {
   }) {
     return _FavoriteButton(
       isFavorited,
-      onTap: callbacks.onFavorite.toNullable(),
+      onTap: callbacks.onFavorite.callback,
       onSecondary: callbacks.onShowFavoritees,
       showLabel: showLabel,
       count: metrics.favoriteCount,
@@ -225,7 +225,7 @@ class _ReactButton extends ConsumerWidget {
     bool showLabel = true,
   }) {
     return _ReactButton(
-      onTap: callbacks.onReact.toNullable(),
+      onTap: callbacks.onReact.callback,
       showLabel: showLabel,
     );
   }
@@ -261,7 +261,7 @@ class _RepeatButton extends ConsumerWidget {
     bool showLabel = true,
   }) {
     return _RepeatButton(
-      onTap: callbacks.onRepeat.toNullable(),
+      onTap: callbacks.onRepeat.callback,
       showLabel: showLabel,
       count: metrics.repeatCount,
     );
