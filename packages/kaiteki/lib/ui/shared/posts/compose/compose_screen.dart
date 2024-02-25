@@ -22,11 +22,13 @@ import "package:kaiteki/ui/shortcuts/activators.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
 import "package:kaiteki/ui/shortcuts/shortcuts.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki/utils/reply_chain.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 
 import "attach_bottom_sheet.dart";
 import "attachment_text_dialog.dart";
 import "language_switcher.dart";
+import "mention_dialog.dart";
 import "poll_dialog.dart";
 import "post_preview.dart";
 
@@ -50,27 +52,11 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   Formatting? _formatting;
   PollDraft? _poll;
   late String _language;
+  late List<String> _mentionedUsers;
+  late List<String> _inThisConversation;
+  String? _opHandle;
 
   String? get initialBody {
-    final op = widget.replyTo;
-
-    if (op != null) {
-      final currentUser = ref.read(currentAccountProvider)!.user;
-
-      final handles = <String>[
-        if (op.author.id != currentUser.id) op.author.handle.toString(),
-        ...?op.mentionedUsers
-            ?.where((u) => u.username != null && u.host != null)
-            .where((u) {
-          return !(u.username == currentUser.username &&
-              u.host == currentUser.host);
-        }).map((u) => "@${u.username!}@${u.host!}"),
-      ].distinct();
-
-      // ignore: prefer_interpolation_to_compose_strings
-      if (handles.isNotEmpty) return handles.join(" ") + " ";
-    }
-
     return null;
   }
 
@@ -96,7 +82,19 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   PostDraft get postDraft {
     final subject =
         _subjectController.text.isEmpty ? null : _subjectController.text;
-    final content = _bodyController.value.text;
+
+    var content = _bodyController.value.text;
+
+    final currentUser = ref.read(currentAccountProvider)!.user;
+    if (_opHandle != currentUser.handle.toString()) {
+      content = "$_opHandle $content";
+    }
+
+    final mentioned = _mentionedUsers;
+    if (mentioned.isNotEmpty) {
+      content = "${mentioned.join(" ")} $content";
+    }
+
 
     return PostDraft(
       subject: subject,
@@ -127,11 +125,11 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
         ? DialogCloseButton(tooltip: l10n.discardButtonTooltip)
         : null;
 
-    final backgroundColor = switch (Theme.of(context).colorScheme.brightness) {
-      Brightness.light =>
-        Theme.of(context).colorScheme.corePalette.neutral.get(95),
-      Brightness.dark =>
-        Theme.of(context).colorScheme.corePalette.neutral.get(10),
+    final theme = Theme.of(context);
+
+    final backgroundColor = switch (theme.colorScheme.brightness) {
+      Brightness.light => theme.colorScheme.corePalette.neutral.get(95),
+      Brightness.dark => theme.colorScheme.corePalette.neutral.get(10),
     };
 
     return PopScope(
@@ -162,7 +160,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                       ? Text(l10n.composeDialogTitle)
                       : Text.rich(replyTextSpan),
                   forceMaterialTransparency: true,
-                  foregroundColor: Theme.of(context).colorScheme.onSurface,
+                  foregroundColor: theme.colorScheme.onSurface,
                 ),
               Expanded(
                 flex: fullscreen ? 1 : 0,
@@ -178,45 +176,43 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
   Widget buildEdit(BuildContext context, bool expands) {
     final adapter = ref.watch(adapterProvider);
     final l10n = context.l10n;
+    final opHandle = _opHandle;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
+          _MentionList(
+            mentions: [
+              if (opHandle != null) opHandle,
+              ..._mentionedUsers,
+            ],
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            onTap: _onTapMentions,
+          ),
+          const Divider(),
           if (_enableSubject)
             Column(
               children: [
                 TextField(
                   decoration: InputDecoration(
                     hintText: l10n.composeContentWarningHint,
-                    border: InputBorder.none,
+                    border: const UnderlineInputBorder(),
                   ),
                   controller: _subjectController,
                 ),
-                const Divider(),
                 const SizedBox(height: 8),
               ],
             ),
           Expanded(
             flex: expands ? 1 : 0,
-            child: TextField(
-              autofocus: true,
-              textInputAction: TextInputAction.newline,
-              decoration: InputDecoration(
-                hintText: l10n.composeBodyHint,
-                border: InputBorder.none,
-              ),
-              contentInsertionConfiguration: ContentInsertionConfiguration(
-                onContentInserted: _onContentInserted,
-              ),
-              textAlignVertical: TextAlignVertical.top,
-              expands: expands,
-              minLines: expands ? null : 6,
-              maxLines: expands ? null : 8,
+            child: _BodyTextField(
               controller: _bodyController,
               maxLength: adapter.capabilities.maxPostContentLength,
-              maxLengthEnforcement: MaxLengthEnforcement.none,
+              expand: expands,
+              onContentInserted: _onContentInserted,
             ),
           ),
         ],
@@ -377,8 +373,20 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     super.initState();
 
     final op = widget.replyTo;
-    if (op?.visibility != null) {
-      _visibility = op!.visibility!;
+    if (op != null) {
+      final visibility = op.visibility;
+      if (visibility != null) _visibility = visibility;
+
+      _opHandle = widget.replyTo?.author.handle.toString();
+
+      final currentUser = ref.read(currentAccountProvider)!.user;
+      _inThisConversation = continueReplyChainFromPost(currentUser, op)
+          .where((e) => e != _opHandle)
+          .toList();
+      _mentionedUsers = List.from(_inThisConversation);
+    } else {
+      _inThisConversation = const [];
+      _mentionedUsers = const [];
     }
 
     _bodyController = TextEditingController(text: initialBody)
@@ -700,5 +708,108 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
         ),
       );
     });
+  }
+
+  Future<void> _onTapMentions() async {
+    final result = await showDialog<List<String>>(
+      context: context,
+      builder: (context) {
+        return MentionListDialog(
+          originalPoster: _opHandle,
+          mentioned: _mentionedUsers,
+          inThisConversation: _inThisConversation,
+        );
+      },
+    );
+
+    if (result == null) return;
+
+    setState(() => _mentionedUsers = result);
+  }
+}
+
+class _MentionList extends StatelessWidget {
+  const _MentionList({
+    super.key,
+    this.mentions = const [],
+    this.onRemoveMention,
+    this.padding = EdgeInsets.zero,
+    this.onTap,
+  });
+
+  final List<String> mentions;
+  final VoidCallback? onTap;
+  final Function(String handle)? onRemoveMention;
+  final EdgeInsets padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: padding,
+        child: Row(
+          children: [
+            const Icon(Icons.alternate_email_rounded, size: 18),
+            const SizedBox(width: 8),
+            Text(
+              "Mentions ",
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Expanded(
+              child: Text(
+                mentions.join(", "),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BodyTextField extends StatelessWidget {
+  final bool expand;
+  final Function(KeyboardInsertedContent)? onContentInserted;
+  final TextEditingController? controller;
+  final int? maxLength;
+
+  const _BodyTextField({
+    this.expand = false,
+    this.onContentInserted,
+    this.controller,
+    this.maxLength,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      autofocus: true,
+      textInputAction: TextInputAction.newline,
+      decoration: InputDecoration(
+        hintText: context.l10n.composeBodyHint,
+        border: InputBorder.none,
+      ),
+      contentInsertionConfiguration: onContentInserted.andThen(
+        (onContentInserted) {
+          return ContentInsertionConfiguration(
+            onContentInserted: onContentInserted,
+          );
+        },
+      ),
+      textAlignVertical: TextAlignVertical.top,
+      expands: expand,
+      minLines: expand ? null : 6,
+      maxLines: expand ? null : 8,
+      controller: controller,
+      maxLength: maxLength,
+      maxLengthEnforcement: MaxLengthEnforcement.none,
+    );
   }
 }
