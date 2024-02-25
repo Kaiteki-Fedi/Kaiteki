@@ -102,7 +102,6 @@ Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
   if (await sessions.isEmpty) {
     // If there are no active user sessions (first launch), yield appropriate state
     yield const StartupStarting();
-    return;
   }
 
   await for (final account in sessions) {
@@ -112,9 +111,6 @@ Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
 
     lastAccount = account;
   }
-
-  sessions.last; // force sessions to continue restoring
-
   yield const StartupStarting();
 }
 
