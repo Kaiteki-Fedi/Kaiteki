@@ -47,8 +47,9 @@ class PlaceholderPostWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!(isWide || isExpanded) && showAvatar) ...[
-                const AvatarSurface(
-                  child: SizedBox.square(dimension: 48),
+                AvatarWidget(
+                  null,
+                  size: 48,
                 ),
                 const SizedBox(width: 8),
               ],
