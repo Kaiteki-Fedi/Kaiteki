@@ -25,7 +25,7 @@ git clone https://github.com/Kaiteki-Fedi/Kaiteki.git
 git submodule update --init
 ```
 
-## Compiling
+## Preparing the project
 
 ```sh
 $ melos bootstrap # Bootstrap melos and get packages
@@ -56,7 +56,7 @@ Generating IntelliJ IDE files...
 
  -> 8 packages bootstrapped
 
-$ melos run build_runner
+$ melos run build_runner # (Re-)generated generated source code
 melos run build_runner
   └> melos exec -c 1 -- "dart run build_runner build --delete-conflicting-outputs"
      └> RUNNING
@@ -72,6 +72,27 @@ Select a package to run the build_runner script:
 
 # press enter to build all (default)
 ```
+
+## Compiling
+
+> [!IMPORTANT]
+> Don't forget the build flavor
+> 
+> Kaiteki uses builds flavors in its Android builds. Flutter can't detect them by itself, so you need to pass `--flavor unsignedfoss` (no app signing + FOSS build) for Flutter to properly detect where the app has been built.
+>
+> The same applies when trying to debug.
+
+```sh
+$ flutter build apk --flavor unsignedfoss # Build for Android
+
+Running Gradle task 'assembleUnsignedfossRelease'...            
+Font asset "materialdesignicons-webfont.ttf" was tree-shaken, reducing it from 1004940 to 1388 bytes (99.9% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 31752 bytes (98.1% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Font asset "CupertinoIcons.ttf" was tree-shaken, reducing it from 283452 to 1896 bytes (99.3% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Running Gradle task 'assembleUnsignedfossRelease'...              228.0s
+✓  Built build/app/outputs/flutter-apk/app-unsignedfoss-release.apk (35.0MB).
+```
+
 
 ## Other commands
 
