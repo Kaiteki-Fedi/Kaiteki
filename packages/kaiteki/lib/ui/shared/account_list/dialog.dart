@@ -10,6 +10,7 @@ import "package:kaiteki/ui/shared/account_list/list_tile.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/account_removal_dialog.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 
 class AccountListDialog extends ConsumerStatefulWidget {
   const AccountListDialog({super.key});
@@ -114,7 +115,7 @@ class _AccountListBody extends ConsumerWidget {
             AccountListTile(
               account: currentAccount,
               // selected: true,
-              onTap: () => context.showUser(currentAccount.user, ref),
+              onTap: () => _viewCurrentProfile(context, ref, currentAccount.user),
               trailing: buildMenuAnchor(context, ref, currentAccount),
             ),
             if (unselectedAccounts.isNotEmpty) divider,
@@ -138,6 +139,16 @@ class _AccountListBody extends ConsumerWidget {
           const SizedBox(height: 8),
         ],
       ),
+    );
+  }
+  void _viewCurrentProfile(BuildContext context, WidgetRef ref, User user) {
+    Navigator.of(context).pop();
+    context.pushNamed(
+      "user",
+      pathParameters: {
+        ...ref.accountRouterParams,
+        "id": user.id,
+      },
     );
   }
 
