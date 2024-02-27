@@ -1,0 +1,1 @@
+<p><i>Kaiteki</i> 是一個跨平臺的社群軟體。現在支援Mastodon, Pleroma, Misskey以及Twitter。未來將支援更多。</p>
