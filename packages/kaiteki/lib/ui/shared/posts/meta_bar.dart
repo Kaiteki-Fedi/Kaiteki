@@ -65,7 +65,6 @@ class MetaBar extends ConsumerWidget {
   }
 
   Iterable<Widget> buildLeft(BuildContext context, WidgetRef ref) sync* {
-    final theme = Theme.of(context);
     final author = _post.author;
     final isAdministrator = author.flags?.isAdministrator ?? false;
     final isModerator = author.flags?.isModerator ?? false;

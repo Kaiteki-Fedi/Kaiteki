@@ -635,8 +635,6 @@ class _NameListDialogState extends State<NameListDialog> {
     );
   }
 
-  void _onCancel() => Navigator.of(context).pop();
-
   void _onConfirm([String? name]) {
     Navigator.of(context).pop(name ?? _controller.text);
   }

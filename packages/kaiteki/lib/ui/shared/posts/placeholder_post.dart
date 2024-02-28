@@ -49,7 +49,6 @@ class PlaceholderPostWidget extends StatelessWidget {
               if (!(isWide || isExpanded) && showAvatar) ...[
                 AvatarWidget(
                   null,
-                  size: 48,
                 ),
                 const SizedBox(width: 8),
               ],

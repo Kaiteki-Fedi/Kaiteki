@@ -56,7 +56,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
 
     if (adapter == null) {
       return AlertDialog(
-        title: Text("Filing reports is not possible"),
+        title: const Text("Filing reports is not possible"),
         content:
             Text("${account!.key.host} does not support receiving reports."),
         actions: [
@@ -96,7 +96,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
       },
       steps: [
         Step(
-          title: Text("Basic information"),
+          title: const Text("Basic information"),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -108,7 +108,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
                   controlAffinity: ListTileControlAffinity.leading,
                   value: _includePosts,
                   onChanged: (value) => setState(() => _includePosts = value!),
-                  title: Text("Include user's post(s)"),
+                  title: const Text("Include user's post(s)"),
                 ),
                 if (widget.posts.length == 1 && _includePosts)
                   EmbeddedPostWidget(widget.posts.first),
@@ -117,7 +117,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
           ),
         ),
         Step(
-          title: Text("Additional information"),
+          title: const Text("Additional information"),
           content: Form(
             key: _additionalInformationFormKey,
             child: Padding(
@@ -131,11 +131,14 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
                 maxLength: commentLengthLimit,
                 maxLengthEnforcement: MaxLengthEnforcement.none,
                 validator: (value) {
-                  if (value == null || commentLengthLimit == null) return null;
-                  if (value.length > commentLengthLimit)
-                    return "Comment must be less than $commentLengthLimit characters";
+                  if (value != null) {
+                    if (commentLengthLimit != null && value.length > commentLengthLimit) {
+                      return "Comment must be less than $commentLengthLimit characters";
+                    }
+                  }
+                  return null;
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Comment",
                   alignLabelWithHint: true,
@@ -145,33 +148,33 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
           ),
         ),
         Step(
-          title: Text("Confirm report"),
+          title: const Text("Confirm report"),
           content: Column(
             children: [
               ListTile(
                 leading: AvatarWidget(widget.user, size: 40.0),
-                title: Text("User to be reported"),
+                title: const Text("User to be reported"),
                 subtitle: Text(widget.user.handle.toString()),
                 contentPadding: EdgeInsets.zero,
               ),
               if (hasPosts)
                 ListTile(
-                  leading: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  leading: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Icon(Icons.article_rounded),
                   ),
-                  title: Text("Posts to be included"),
+                  title: const Text("Posts to be included"),
                   subtitle: _includePosts
                       ? Text("${widget.posts.length} posts")
-                      : Text("None"),
+                      : const Text("None"),
                   contentPadding: EdgeInsets.zero,
                 ),
               ListTile(
-                leading: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                leading: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: Icon(Icons.short_text_rounded),
                 ),
-                title: Text("Comment"),
+                title: const Text("Comment"),
                 subtitle: ListenableBuilder(
                   listenable: _commentController,
                   builder: (_, __) => Text(
@@ -186,7 +189,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
                 contentPadding: EdgeInsets.zero,
               ),
               if (widget.user.host != account!.key.host) ...[
-                Divider(),
+                const Divider(),
                 CheckboxListTile(
                   contentPadding: EdgeInsets.zero,
                   controlAffinity: ListTileControlAffinity.leading,
@@ -195,7 +198,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
                   isThreeLine: true,
                   title: Text("Forward to ${widget.user.host}"),
                   subtitle: Text(
-                      "Your report is also sent to ${widget.user.host}. This can be a risk if the administration team of ${widget.user.host} is malicious."),
+                      "Your report is also sent to ${widget.user.host}. This can be a risk if the administration team of ${widget.user.host} is malicious.",),
                 ),
               ],
             ],
@@ -210,7 +213,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
         canPop: false,
         onPopInvoked: _onPopInvoked,
         child: Scaffold(
-          appBar: AppBar(title: Text("File a report")),
+          appBar: AppBar(title: const Text("File a report")),
           body: stepper,
         ),
       );
@@ -228,7 +231,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 24.0, top: 24.0 - 4.0, right: 24.0 - 4.0),
+                    left: 24.0, top: 24.0 - 4.0, right: 24.0 - 4.0,),
                 child: Row(
                   children: [
                     Expanded(
@@ -239,7 +242,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
                     ),
                     IconButton(
                       onPressed: _onCancel,
-                      icon: Icon(Icons.close_rounded),
+                      icon: const Icon(Icons.close_rounded),
                     ),
                   ],
                 ),
@@ -292,9 +295,13 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
       comment: comment,
       forwardToRemoteInstance: _forward,
       postIds: widget.posts.map((e) => e.id).toList(growable: false),
-    )
-        .catchError((error, stackTrace) {
-      final snackBar = SnackBar(
+    ).then((_) {
+      const snackBar = SnackBar(
+        content: Text("Report submitted successfully"),
+      );
+      scaffoldMessenger.showSnackBar(snackBar);
+    }).catchError((error, stackTrace) {
+      const snackBar = SnackBar(
         content: Text("Report couldn't be submitted"),
       );
 
@@ -302,11 +309,6 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
 
       Logger("ReportDialog")
           .warning("Report couldn't be submitted", error, stackTrace);
-    }).then((_) {
-      final snackBar = SnackBar(
-        content: Text("Report submitted successfully"),
-      );
-      scaffoldMessenger.showSnackBar(snackBar);
     });
 
     Navigator.of(context).pop();
@@ -320,7 +322,7 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
       builder: (context) {
         final materialL10n = context.materialL10n;
         return AlertDialog(
-          title: Text("Discard report?"),
+          title: const Text("Discard report?"),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),

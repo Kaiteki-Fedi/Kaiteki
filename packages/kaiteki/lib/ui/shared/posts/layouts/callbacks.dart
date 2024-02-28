@@ -24,14 +24,16 @@ class InteractionCallbacks {
 sealed class InteractionCallback {
   VoidCallback? get callback;
 
-  const factory InteractionCallback(VoidCallback callback) = NormalInteractionCallback;
+  const factory InteractionCallback(VoidCallback callback) =
+      NormalInteractionCallback;
   const InteractionCallback._();
-  const factory InteractionCallback.unavailable() = UnavailableInteractionCallback;
+  const factory InteractionCallback.unavailable() =
+      UnavailableInteractionCallback;
   const factory InteractionCallback.disabled() = DisabledInteractionCallback;
 }
 
 /// Action is available
-class NormalInteractionCallback extends InteractionCallback  {
+class NormalInteractionCallback extends InteractionCallback {
   @override
   final VoidCallback callback;
 
@@ -46,9 +48,8 @@ class UnavailableInteractionCallback extends InteractionCallback {
   Null get callback => null;
 }
 
-
 /// Action is disabled, "greyed-out"
-class DisabledInteractionCallback  extends InteractionCallback{
+class DisabledInteractionCallback extends InteractionCallback {
   @override
   Null get callback => null;
 

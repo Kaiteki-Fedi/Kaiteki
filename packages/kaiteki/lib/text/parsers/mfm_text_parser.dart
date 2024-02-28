@@ -67,7 +67,7 @@ class MfmTextParser implements TextParser {
         );
       case "font" when part.args.containsKey("monospace"):
         yield TextStyleElement(
-          const TextElementStyle(font: TextElementFont.monospace),
+          TextElementStyle.kMonospace,
           children.toList(),
         );
       case "scale":

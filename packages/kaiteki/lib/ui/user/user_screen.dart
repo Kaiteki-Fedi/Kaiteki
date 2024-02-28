@@ -516,7 +516,9 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     if (user?.id == ref.watch(currentAccountProvider)?.user.id) {
       if (small) {
         return IconButton.filled(
-          onPressed: ref.watch(AppExperiment.profileEditing.provider)? () => _onEditProfile(user!) : null,
+          onPressed: ref.watch(AppExperiment.profileEditing.provider)
+              ? () => _onEditProfile(user!)
+              : null,
           icon: const Icon(Icons.edit_rounded),
           tooltip: context.l10n.editProfileButtonLabel,
         );

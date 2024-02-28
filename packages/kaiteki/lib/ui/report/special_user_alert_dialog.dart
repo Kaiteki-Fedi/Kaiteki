@@ -27,14 +27,14 @@ class ReportSpecialUserAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final reason = this.reason;
     return AlertDialog(
-      title: Text("This user can't be reported"),
+      title: const Text("This user can't be reported"),
       content: ConstrainedBox(
         constraints: kDialogConstraints,
         child: switch (reason) {
-          _CannotReportOneself() => Text(
-              "You can't report yourself. Consider deleting your account instead."),
+          _CannotReportOneself() => const Text(
+              "You can't report yourself. Consider deleting your account instead.",),
           _CannotReportStaff() => Text(
-              "${reason.handle} is a member of the staff team and therefore can't be reported."),
+              "${reason.handle} is a member of the staff team and therefore can't be reported.",),
         },
       ),
       actions: [

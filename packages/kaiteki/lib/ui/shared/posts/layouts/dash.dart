@@ -47,7 +47,6 @@ class _DashPostLayoutState extends ConsumerState<DashPostLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     const padding = EdgeInsets.all(8);
 
     final repeatOf = widget.post.repeatOf;
@@ -72,7 +71,6 @@ class _DashPostLayoutState extends ConsumerState<DashPostLayout> {
       );
     }
 
-    final adapter = ref.watch(adapterProvider);
     final postTheme = PostWidgetTheme.of(context);
 
     final children = [
@@ -232,7 +230,7 @@ class _DashInteractionListState extends State<DashInteractionList> {
                     const Icon(Icons.star_rounded),
                     const SizedBox(width: 8),
                     Text(widget.metrics?.favoriteCount.toString() ??
-                        "Favorites"),
+                        "Favorites",),
                   ],
                 ),
               ),
@@ -268,7 +266,7 @@ class DashMetaBar extends ConsumerWidget {
     final isModerator = author.flags?.isModerator ?? false;
     final isBot = author.type == UserType.bot;
 
-    var pronouns;
+    List<List<String>>? pronouns;
 
     if (ref.watch(highlightPronouns).value) {
       pronouns = author.details.fields
@@ -321,7 +319,7 @@ class DashMetaBar extends ConsumerWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

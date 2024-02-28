@@ -153,7 +153,6 @@ class AvatarWidget extends StatelessWidget {
   }
 }
 
-
 class FallbackAvatar extends StatelessWidget {
   final Widget? icon;
 

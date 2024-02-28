@@ -18,7 +18,6 @@ extension BuildContextExtensions on BuildContext {
   }
 
   Future<void> showUser(User user, WidgetRef ref) async {
-    // FIXME(Craftplacer): We aren't able to pass an user object as parameter, https://github.com/Kaiteki-Fedi/Kaiteki/issues/195
     push("/${ref.getCurrentAccountHandle()}/users/${user.id}");
   }
 

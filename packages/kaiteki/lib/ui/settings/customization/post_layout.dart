@@ -70,7 +70,6 @@ class PostLayoutSettingsScreen extends StatelessWidget {
               ),
               SettingsSection(
                 children: [
-
                   Consumer(
                     builder: (context, ref, _) {
                       return ListTile(

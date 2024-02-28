@@ -75,11 +75,11 @@ class _EditProfileDialogState extends State<EditProfileDialog>
     final fields = settings.fields;
     _profileFieldControllers = [
       if (fields != null)
-        for (var kv in fields)
+        for (final kv in fields)
           (
             TextEditingController(text: kv.key),
             TextEditingController(text: kv.value),
-          )
+          ),
     ];
 
     _avatarImage =
@@ -166,7 +166,7 @@ class _EditProfileDialogState extends State<EditProfileDialog>
                                 border: OutlineInputBorder(),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -291,7 +291,6 @@ class _EditProfileDialogState extends State<EditProfileDialog>
   }
 
   void _onCancel() {
-
     if (_isChangingPictures) {
       setState(() => _isChangingPictures = false);
     }
@@ -333,7 +332,6 @@ class _ChangePicturesButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const _ChangePicturesButton({
-    super.key,
     this.onPressed,
   });
 
@@ -356,7 +354,6 @@ class _ChangePicturesButton extends StatelessWidget {
 
 class _ProfileFieldsPage extends StatelessWidget {
   const _ProfileFieldsPage({
-    super.key,
     required this.profileFieldControllers,
     required this.newFieldKeyController,
     required this.newFieldValueController,
@@ -400,7 +397,7 @@ class _ProfileFieldsPage extends StatelessWidget {
             keyController: newFieldKeyController,
             valueController: newFieldValueController,
           ),
-        )
+        ),
       ],
     );
   }
@@ -545,7 +542,6 @@ class _ChangeProfilePicturesBodyState
 
 class _ProfileAvatarRow extends StatelessWidget {
   const _ProfileAvatarRow({
-    super.key,
     required this.image,
     this.onRemoveAvatar,
     this.onChangeAvatar,
@@ -559,7 +555,7 @@ class _ProfileAvatarRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatarImage = this.image;
+    final avatarImage = image;
 
     final buttonStyle = FilledButton.styleFrom(
       visualDensity: VisualDensity.standard,
@@ -601,7 +597,7 @@ class _ProfileAvatarRow extends StatelessWidget {
                       backgroundColor: Theme.of(context).colorScheme.surface,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -628,7 +624,7 @@ class _ProfileAvatarRow extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -636,7 +632,6 @@ class _ProfileAvatarRow extends StatelessWidget {
 
 class _WidescreenProfilePictureColumn extends StatelessWidget {
   const _WidescreenProfilePictureColumn({
-    super.key,
     required this.image,
     required this.header,
     this.onChange,
@@ -747,9 +742,10 @@ class _ProfileFieldRow extends StatelessWidget {
                 const SizedBox(width: 24 + 16 + 24 + 16)
               else ...[
                 IconButton(
-                    icon: const Icon(Icons.close_rounded),
-                    onPressed: onRemove,
-                    tooltip: "Remove",),
+                  icon: const Icon(Icons.close_rounded),
+                  onPressed: onRemove,
+                  tooltip: "Remove",
+                ),
                 ReorderableDragStartListener(
                   index: index,
                   child: const Padding(
@@ -771,7 +767,6 @@ class _DisplayNameField extends StatelessWidget {
   final TextEditingController? controller;
 
   const _DisplayNameField({
-    super.key,
     this.controller,
   });
 
@@ -792,7 +787,6 @@ class _DescriptionField extends StatelessWidget {
   final TextEditingController? controller;
 
   const _DescriptionField({
-    super.key,
     this.controller,
   });
 
@@ -817,7 +811,6 @@ class _ProfilePicturesHeader extends StatelessWidget {
   final VoidCallback? onChangePictures;
 
   const _ProfilePicturesHeader({
-    super.key,
     this.avatarImage,
     this.bannerImage,
     this.onChangePictures,
@@ -852,7 +845,7 @@ class _ProfilePicturesHeader extends StatelessWidget {
                     top: 8.0,
                     right: 8.0,
                     child: _ChangePicturesButton(onPressed: onChangePictures),
-                  )
+                  ),
               ],
             ),
           ),

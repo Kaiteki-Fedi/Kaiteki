@@ -95,7 +95,6 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
       content = "${mentioned.join(" ")} $content";
     }
 
-
     return PostDraft(
       subject: subject,
       content: content,
@@ -730,11 +729,10 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
 
 class _MentionList extends StatelessWidget {
   const _MentionList({
-    super.key,
     this.mentions = const [],
-    this.onRemoveMention,
     this.padding = EdgeInsets.zero,
     this.onTap,
+    this.onRemoveMention,
   });
 
   final List<String> mentions;

@@ -148,10 +148,18 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final canFavorite = isAuthenticated && adapter is FavoriteSupport;
     final canReact = isAuthenticated && adapter is ReactionSupport;
     final callbacks = InteractionCallbacks(
-      onReply: isAuthenticated ? InteractionCallback(_onReply) : const InteractionCallback.unavailable(),
-      onFavorite: canFavorite ? InteractionCallback(_onFavorite) : const InteractionCallback.unavailable(),
-      onRepeat: isAuthenticated ? InteractionCallback(_onRepeat) : const InteractionCallback.unavailable(),
-      onReact: canReact ? InteractionCallback(_onReact) : const InteractionCallback.unavailable(),
+      onReply: isAuthenticated
+          ? InteractionCallback(_onReply)
+          : const InteractionCallback.unavailable(),
+      onFavorite: canFavorite
+          ? InteractionCallback(_onFavorite)
+          : const InteractionCallback.unavailable(),
+      onRepeat: isAuthenticated
+          ? InteractionCallback(_onRepeat)
+          : const InteractionCallback.unavailable(),
+      onReact: canReact
+          ? InteractionCallback(_onReact)
+          : const InteractionCallback.unavailable(),
       onShowFavoritees: _onShowFavoritees,
       onShowRepeatees: _onShowRepeatees,
       onShowMenu: _onShowMenu,
@@ -183,13 +191,13 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           onOpen: widget.onOpen,
         ),
       PostWidgetLayout.dash => DashPostLayout(
-        _post,
-        callbacks: callbacks,
-        onReact: _onChangeReaction,
-        menuFocusNode: _menuButtonFocusNode,
-        onTap: _onTap,
-        onOpen: widget.onOpen,
-      ),
+          _post,
+          callbacks: callbacks,
+          onReact: _onChangeReaction,
+          menuFocusNode: _menuButtonFocusNode,
+          onTap: _onTap,
+          onOpen: widget.onOpen,
+        ),
     };
 
     Widget child = InkWell(
