@@ -133,13 +133,7 @@ class _MentionListDialogState extends State<MentionListDialog> {
     }
 
     return AlertDialog(
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.materialL10n.cancelButtonLabel),
-        ),
-        okButton,
-      ],
+      actions: [const CancelTextButton(), okButton],
       contentPadding: const EdgeInsets.only(bottom: 8.0),
       title: title,
       content: ConstrainedBox(

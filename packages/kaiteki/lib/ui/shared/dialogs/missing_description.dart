@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 class MissingDescriptionDialog extends StatelessWidget {
   const MissingDescriptionDialog({super.key});
@@ -11,10 +12,7 @@ class MissingDescriptionDialog extends StatelessWidget {
       title: Text(context.l10n.missingDescriptionDialogTitle),
       content: Text(context.l10n.missingDescriptionDialogDescription),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.materialL10n.cancelButtonLabel),
-        ),
+        const CancelTextButton(),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
           child: Text(context.l10n.postAnywayButtonLabel),

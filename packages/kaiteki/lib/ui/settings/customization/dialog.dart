@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 
 class ThemeDialog extends StatefulWidget {
@@ -39,10 +40,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.materialL10n.cancelButtonLabel),
-        ),
+        const CancelTextButton(),
         TextButton(
           onPressed: () => Navigator.of(context).pop(_themeMode),
           child: Text(context.l10n.applyButtonLabel),

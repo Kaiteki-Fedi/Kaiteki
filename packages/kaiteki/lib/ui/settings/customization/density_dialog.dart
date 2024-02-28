@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 import "density_list_tile.dart";
 
@@ -58,10 +59,7 @@ class _DensityDialogState extends State<DensityDialog> {
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.materialL10n.cancelButtonLabel),
-        ),
+        const CancelTextButton(),
         TextButton(
           onPressed: () {
             final visualDensity = this.visualDensity;

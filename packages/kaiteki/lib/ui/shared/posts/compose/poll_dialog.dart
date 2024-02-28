@@ -264,13 +264,7 @@ class _PollDialogState extends ConsumerState<PollDialog> {
           ),
           child: form,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.materialL10n.cancelButtonLabel),
-          ),
-          saveButton,
-        ],
+        actions: [const CancelTextButton(), saveButton],
       );
     }
   }

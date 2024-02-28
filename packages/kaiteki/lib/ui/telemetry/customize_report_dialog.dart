@@ -3,6 +3,7 @@ import "package:kaiteki/app.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/telemetry/report.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 class CustomizeReportDialog extends ConsumerStatefulWidget {
   final ExceptionReport report;
@@ -97,10 +98,7 @@ class _CustomizeReportDialogState extends ConsumerState<CustomizeReportDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(context.materialL10n.cancelButtonLabel),
-        ),
+        const CancelTextButton(),
         TextButton(
           onPressed: _onSubmit,
           child: Text(context.l10n.submitButtonTooltip),
