@@ -1,3 +1,4 @@
+import 'package:cross_file/cross_file.dart';
 import 'package:kaiteki_core/kaiteki_core.dart';
 
 import 'client.dart';
@@ -53,4 +54,23 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
     final tags = await client.getTrendingTags();
     return tags.map((t) => t.name).toList();
   }
+
+  @override
+  Future<void> setAvatar(XFile? image) {
+    // TODO: implement setAvatar
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setBackground(XFile? image) {
+    // TODO: implement setBackground
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setBanner(XFile? image) {
+    // TODO: implement setBanner
+    throw UnimplementedError();
+  }
+
 }

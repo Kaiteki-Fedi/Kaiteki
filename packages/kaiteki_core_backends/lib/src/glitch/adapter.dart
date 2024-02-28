@@ -1,10 +1,9 @@
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
-import 'package:kaiteki_core/model.dart';
+import 'package:kaiteki_core/social.dart';
 import 'package:kaiteki_core_backends/src/glitch/capabilities.dart';
 import 'package:kaiteki_core_backends/src/glitch/client.dart';
 import 'package:kaiteki_core_backends/src/mastodon/extensions.dart';
 import 'package:kaiteki_core_backends/src/mastodon/shared_adapter.dart';
-import 'package:kaiteki_core/src/social/interfaces/reaction_support.dart';
 
 class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
     implements ReactionSupport {
@@ -58,4 +57,5 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
   Future<void> removeReaction(Post post, Emoji emoji) async {
     await client.removeReaction(post.id, emoji.getTag(instance));
   }
+
 }

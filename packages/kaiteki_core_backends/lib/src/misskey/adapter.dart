@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:crypto/crypto.dart';
 import 'package:fediverse_objects/misskey.dart' as misskey;
 import 'package:http/http.dart';
@@ -760,5 +761,35 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
   }) async {
     await client.reportAbuse(userId, comment ?? "");
     return null;
+  }
+
+  @override
+  Future<ProfileSettings> getProfileSettings() {
+    // TODO: implement getProfileSettings
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setProfileSettings(ProfileSettings settings) {
+    // TODO: implement setProfileSettings
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setAvatar(XFile? image) {
+    // TODO: implement setAvatar
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setBackground(XFile? image) {
+    // TODO: implement setBackground
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setBanner(XFile? image) {
+    // TODO: implement setBanner
+    throw UnimplementedError();
   }
 }

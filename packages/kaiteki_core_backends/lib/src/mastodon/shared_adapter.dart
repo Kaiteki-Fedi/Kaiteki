@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
 import 'package:kaiteki_core/kaiteki_core.dart';
 
@@ -662,5 +663,41 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     );
 
     return report.toKaiteki(instance);
+  }
+
+  @override
+  Future<ProfileSettings> getProfileSettings() async {
+    final credentialAccount = await client.verifyCredentials();
+
+    return ProfileSettings(
+      description: credentialAccount.source?.note,
+      displayName: credentialAccount.displayName,
+      avatarUrl: Uri.parse(credentialAccount.avatar),
+      bannerUrl: Uri.parse(credentialAccount.header),
+    );
+  }
+
+  @override
+  Future<void> setProfileSettings(ProfileSettings settings) {
+    // TODO: implement setProfileSettings
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setAvatar(XFile? image) {
+    // TODO: implement setAvatar
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setBackground(XFile? image) {
+    // TODO: implement setBackground
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setBanner(XFile? image) {
+    // TODO: implement setBanner
+    throw UnimplementedError();
   }
 }

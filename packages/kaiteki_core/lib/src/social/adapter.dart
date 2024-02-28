@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:kaiteki_core/src/social/interfaces/login_support.dart';
 import 'package:meta/meta.dart';
 
@@ -7,6 +8,7 @@ import 'capabilities.dart';
 import 'model/attachment.dart';
 import 'model/instance.dart';
 import 'model/post.dart';
+import 'model/profile_settings.dart';
 import 'model/timeline_query.dart';
 import 'model/timeline_type.dart';
 import 'model/user.dart';
@@ -81,4 +83,17 @@ abstract class BackendAdapter {
   Future<User> lookupUser(String username, [String? host]);
 
   Future<Object?> resolveUrl(Uri url);
+
+  Future<ProfileSettings> getProfileSettings();
+
+  Future<void> setProfileSettings(ProfileSettings settings);
+
+  /// Sets the banner for the current user.
+  Future<void> setBanner(XFile? image);
+
+  /// Sets the background for the current user.
+  Future<void> setBackground(XFile? image);
+
+  /// Sets the avatar for the current user.
+  Future<void> setAvatar(XFile? image);
 }

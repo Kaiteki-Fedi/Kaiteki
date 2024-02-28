@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:kaiteki_core/social.dart';
 import 'package:uuid/uuid.dart';
 
@@ -252,6 +253,36 @@ class TumblrAdapter extends CentralizedBackendAdapter
   @override
   Future<Iterable<Post>> getThread(String postId) {
     // TODO: implement getThread
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ProfileSettings> getProfileSettings() {
+    // TODO: implement getProfileSettings
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setAvatar(XFile? image) {
+    // TODO: implement setAvatar
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setBackground(XFile? image) {
+    // TODO: implement setBackground
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setBanner(XFile? image) {
+    // TODO: implement setBanner
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setProfileSettings(ProfileSettings settings) {
+    // TODO: implement setProfileSettings
     throw UnimplementedError();
   }
 }
