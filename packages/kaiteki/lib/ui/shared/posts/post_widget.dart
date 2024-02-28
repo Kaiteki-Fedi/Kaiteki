@@ -29,6 +29,7 @@ import "package:kaiteki_core/kaiteki_core.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
+import "layouts/dash.dart";
 import "post_widget_menu_items.dart";
 
 const kArticleViewThreshold = 300;
@@ -91,7 +92,7 @@ class PostWidget extends ConsumerStatefulWidget {
   ConsumerState<PostWidget> createState() => _PostWidgetState();
 }
 
-enum PostWidgetLayout { normal, wide, expanded }
+enum PostWidgetLayout { normal, wide, expanded, dash }
 
 class _PostWidgetState extends ConsumerState<PostWidget> {
   late Post _post;
@@ -181,6 +182,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           onTap: _onTap,
           onOpen: widget.onOpen,
         ),
+      PostWidgetLayout.dash => DashPostLayout(
+        _post,
+        callbacks: callbacks,
+        onReact: _onChangeReaction,
+        menuFocusNode: _menuButtonFocusNode,
+        onTap: _onTap,
+        onOpen: widget.onOpen,
+      ),
     };
 
     Widget child = InkWell(
