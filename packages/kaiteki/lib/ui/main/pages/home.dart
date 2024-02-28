@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/timeline.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
-import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:kaiteki/ui/shared/timeline/source.dart";
 import "package:kaiteki/ui/shared/timeline/widget.dart";
 import "package:kaiteki/utils/extensions.dart";
@@ -240,9 +239,7 @@ class _TimelineTabPage extends ConsumerWidget {
           timeline,
           maxWidth: 600,
           scrollController: scrollController,
-          postLayout: ref.watch(useWidePostLayout).value
-              ? PostWidgetLayout.wide
-              : PostWidgetLayout.normal,
+          postLayout: ref.watch(postLayout).value,
         ),
       ),
     );

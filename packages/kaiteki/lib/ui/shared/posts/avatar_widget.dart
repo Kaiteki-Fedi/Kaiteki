@@ -13,16 +13,16 @@ class AvatarWidget extends StatelessWidget {
   final List<AvatarDecoration> decorations;
 
   AvatarWidget(
-    User user, {
+    User? user, {
     super.key,
     this.size = 48,
     this.onTap,
     this.shape,
     this.focusNode,
-  })  : url = user.avatarUrl,
-        blurHash = user.avatarBlurHash,
-        type = user.type,
-        decorations = user.avatarDecorations;
+  })  : url = user?.avatarUrl,
+        blurHash = user?.avatarBlurHash,
+        type = user?.type ?? UserType.person,
+        decorations = user?.avatarDecorations ?? const [];
 
   const AvatarWidget.url(
     this.url, {
@@ -67,7 +67,22 @@ class AvatarWidget extends StatelessWidget {
       avatar = InkWell(onTap: onTap, focusNode: focusNode, child: avatar);
     }
 
-    avatar = AvatarSurface(shape: shape, child: avatar);
+    final theme = Theme.of(context);
+    final shape = this.shape ??
+        theme.extension<AvatarTheme>()?.shape ??
+        const CircleBorder();
+
+    avatar = Material(
+      clipBehavior: Clip.antiAlias,
+      shape: shape,
+      color: theme.colorScheme.surfaceVariant,
+      child: IconTheme.merge(
+        data: IconThemeData(
+          color: theme.colorScheme.onSurface,
+        ),
+        child: avatar,
+      ),
+    );
 
     // only show the decoration if the avatar is big enough, otherwise it's
     // too small to be distinguishable
@@ -135,33 +150,6 @@ class AvatarWidget extends StatelessWidget {
         child: getChild(),
       );
     };
-  }
-}
-
-class AvatarSurface extends StatelessWidget {
-  final Widget? child;
-  final ShapeBorder? shape;
-
-  const AvatarSurface({super.key, this.child, this.shape});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final shape = this.shape ??
-        theme.extension<AvatarTheme>()?.shape ??
-        const CircleBorder();
-
-    return Material(
-      clipBehavior: Clip.antiAlias,
-      shape: shape,
-      color: theme.colorScheme.surfaceVariant,
-      child: IconTheme.merge(
-        data: IconThemeData(
-          color: theme.colorScheme.onSurface,
-        ),
-        child: child ?? const SizedBox(),
-      ),
-    );
   }
 }
 

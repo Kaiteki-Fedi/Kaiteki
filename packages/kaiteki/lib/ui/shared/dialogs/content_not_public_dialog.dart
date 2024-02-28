@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/ui/shared/common.dart";
 
 /// A dialog that shows up when the user tries to view a post or profile that
 /// is probably not accessible externally (e.g. via a link).
@@ -20,10 +21,7 @@ class ContentNotPublicDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(context.materialL10n.cancelButtonLabel),
-        ),
+        const CancelTextButton(),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
           child: Text(context.materialL10n.continueButtonLabel),

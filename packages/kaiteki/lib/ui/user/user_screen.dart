@@ -3,9 +3,11 @@ import "dart:math";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:kaiteki/di.dart";
+import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/theming/default/extensions.dart";
 import "package:kaiteki/ui/media/media.dart";
 import "package:kaiteki/ui/media_inspection/screen.dart";
+import "package:kaiteki/ui/profile_editing/dialog.dart";
 import "package:kaiteki/ui/report/dialog.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
@@ -485,6 +487,27 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     });
   }
 
+  Future<void> _onEditProfile(User user) async {
+    final ProfileSettings profileSettings;
+
+    try {
+      profileSettings = await ref.read(adapterProvider).getProfileSettings();
+    } catch (e) {
+      // TODO(Craftplacer): Show error message
+      return;
+    }
+
+    if (!mounted) {
+      assert(false, "Widget not mounted after trying to open profile settings");
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      builder: (context) => EditProfileDialog(settings: profileSettings),
+    );
+  }
+
   Widget? buildPrimaryButton(User? user, [bool small = false]) {
     final comfortableFilledButtonStyle = FilledButton.styleFrom(
       visualDensity: VisualDensity.comfortable,
@@ -493,14 +516,16 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     if (user?.id == ref.watch(currentAccountProvider)?.user.id) {
       if (small) {
         return IconButton.filled(
-          onPressed: () {},
+          onPressed: ref.watch(AppExperiment.profileEditing.provider)
+              ? () => _onEditProfile(user!)
+              : null,
           icon: const Icon(Icons.edit_rounded),
           tooltip: context.l10n.editProfileButtonLabel,
         );
       }
 
       return FilledButton(
-        onPressed: null,
+        onPressed: () => _onEditProfile(user!),
         style: comfortableFilledButtonStyle,
         child: Text(context.l10n.editProfileButtonLabel),
       );

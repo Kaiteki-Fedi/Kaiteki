@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter/semantics.dart";
-import "package:fpdart/fpdart.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
@@ -30,6 +29,7 @@ import "package:kaiteki_core/kaiteki_core.dart";
 import "package:logging/logging.dart";
 import "package:url_launcher/url_launcher.dart";
 
+import "layouts/dash.dart";
 import "post_widget_menu_items.dart";
 
 const kArticleViewThreshold = 300;
@@ -92,7 +92,7 @@ class PostWidget extends ConsumerStatefulWidget {
   ConsumerState<PostWidget> createState() => _PostWidgetState();
 }
 
-enum PostWidgetLayout { normal, wide, expanded }
+enum PostWidgetLayout { normal, wide, expanded, dash }
 
 class _PostWidgetState extends ConsumerState<PostWidget> {
   late Post _post;
@@ -148,10 +148,18 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
     final canFavorite = isAuthenticated && adapter is FavoriteSupport;
     final canReact = isAuthenticated && adapter is ReactionSupport;
     final callbacks = InteractionCallbacks(
-      onReply: isAuthenticated ? Option.of(_onReply) : const Option.none(),
-      onFavorite: canFavorite ? Option.of(_onFavorite) : const Option.none(),
-      onRepeat: isAuthenticated ? Option.of(_onRepeat) : const Option.none(),
-      onReact: canReact ? Option.of(_onReact) : const Option.none(),
+      onReply: isAuthenticated
+          ? InteractionCallback(_onReply)
+          : const InteractionCallback.unavailable(),
+      onFavorite: canFavorite
+          ? InteractionCallback(_onFavorite)
+          : const InteractionCallback.unavailable(),
+      onRepeat: isAuthenticated
+          ? InteractionCallback(_onRepeat)
+          : const InteractionCallback.unavailable(),
+      onReact: canReact
+          ? InteractionCallback(_onReact)
+          : const InteractionCallback.unavailable(),
       onShowFavoritees: _onShowFavoritees,
       onShowRepeatees: _onShowRepeatees,
       onShowMenu: _onShowMenu,
@@ -175,6 +183,14 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
           onOpen: widget.onOpen,
         ),
       PostWidgetLayout.expanded => ExpandedPostLayout(
+          _post,
+          callbacks: callbacks,
+          onReact: _onChangeReaction,
+          menuFocusNode: _menuButtonFocusNode,
+          onTap: _onTap,
+          onOpen: widget.onOpen,
+        ),
+      PostWidgetLayout.dash => DashPostLayout(
           _post,
           callbacks: callbacks,
           onReact: _onChangeReaction,

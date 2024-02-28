@@ -3,6 +3,7 @@ import "package:kaiteki/constants.dart" as consts;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/api_theme.dart";
 import "package:kaiteki/link_constants.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki_core_backends/kaiteki_core_backends.dart";
 import "package:url_launcher/url_launcher_string.dart";
 
@@ -43,10 +44,7 @@ class _ApiTypeDialogState extends State<ApiTypeDialog> {
           ],
         ),
         actions: <Widget>[
-          TextButton(
-            child: Text(l10n.cancelButtonLabel),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          const CancelTextButton(),
           TextButton(
             child: Text(l10n.okButtonLabel),
             onPressed: () => Navigator.of(context).pop(_api),

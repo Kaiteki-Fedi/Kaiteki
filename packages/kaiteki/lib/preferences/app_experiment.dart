@@ -14,7 +14,8 @@ enum AppExperiment {
   navigationBarTheming(
     "Navigation bar theming",
     "Adjust the Android navigation bar to the current theme",
-  );
+  ),
+  profileEditing("Profile editing");
 
   final String displayName;
   final String? description;

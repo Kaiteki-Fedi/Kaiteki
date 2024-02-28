@@ -61,9 +61,7 @@ class PostLayoutSettingsScreen extends StatelessWidget {
                               ),
                         child: PostWidget(
                           _example,
-                          layout: ref.watch(useWidePostLayout).value
-                              ? PostWidgetLayout.wide
-                              : PostWidgetLayout.normal,
+                          layout: ref.watch(postLayout).value,
                         ),
                       );
                     },
@@ -72,9 +70,13 @@ class PostLayoutSettingsScreen extends StatelessWidget {
               ),
               SettingsSection(
                 children: [
-                  PreferenceSwitchListTile(
-                    provider: useWidePostLayout,
-                    title: const Text("Wide layout"),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      return ListTile(
+                        title: const Text("Layout"),
+                        subtitle: Text(ref.watch(postLayout).value.name),
+                      );
+                    },
                   ),
                   PreferenceSwitchListTile(
                     provider: cropAttachments,

@@ -512,10 +512,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
           title: const Text("Delete list?"),
           content: const Text("The list will be deleted permanently"),
           actions: [
-            TextButton(
-              child: Text(context.materialL10n.cancelButtonLabel),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+            const CancelTextButton(),
             TextButton(
               child: Text(context.l10n.deleteButtonLabel),
               onPressed: () => Navigator.of(context).pop(true),
@@ -627,10 +624,7 @@ class _NameListDialogState extends State<NameListDialog> {
         autofocus: true,
       ),
       actions: [
-        TextButton(
-          onPressed: _onCancel,
-          child: Text(context.materialL10n.cancelButtonLabel),
-        ),
+        const CancelTextButton(),
         TextButton(
           onPressed: _onConfirm,
           child: create
@@ -640,8 +634,6 @@ class _NameListDialogState extends State<NameListDialog> {
       ],
     );
   }
-
-  void _onCancel() => Navigator.of(context).pop();
 
   void _onConfirm([String? name]) {
     Navigator.of(context).pop(name ?? _controller.text);

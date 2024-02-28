@@ -99,7 +99,9 @@ class ExceptionReport {
 }
 
 BackendInformation retrieveBackendInformation(
-    BackendAdapter adapter, BackendType type) {
+  BackendAdapter adapter,
+  BackendType type,
+) {
   final host = adapter.safeCast<DecentralizedBackendAdapter>()?.instance;
   final adapterType = adapter.runtimeType;
   return (host, adapterType, type);

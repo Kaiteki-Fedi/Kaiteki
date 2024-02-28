@@ -249,7 +249,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         name: "login",
         path: "/login",
-        builder: (_, __) => const LoginScreen(),
+        builder: (_, state) {
+          final username = state.uri.queryParameters["username"];
+          final instance = state.uri.queryParameters["instance"];
+          return LoginScreen(
+            prefillCredentials: (username == null && instance == null)
+                ? null
+                : PrefillCredentials(
+                    instance: instance,
+                    username: username,
+                  ),
+          );
+        },
         parentNavigatorKey: _rootNavigatorKey,
       ),
       GoRoute(

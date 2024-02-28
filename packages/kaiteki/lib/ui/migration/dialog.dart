@@ -72,10 +72,7 @@ class _MigrationDialogState extends ConsumerState<MigrationDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(context.l10n.cancelButtonLabel),
-        ),
+        const CancelTextButton(),
         TextButton(
           onPressed: _hasRead ? () => Navigator.of(context).pop(true) : null,
           child: const Text("Migrate"),

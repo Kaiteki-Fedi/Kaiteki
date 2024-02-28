@@ -15,11 +15,6 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki/utils/pronouns.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 
-const _kPronounsFieldKeys = [
-  "pronouns",
-  "pronomen",
-];
-
 class MetaBar extends ConsumerWidget {
   const MetaBar({
     super.key,
@@ -70,7 +65,6 @@ class MetaBar extends ConsumerWidget {
   }
 
   Iterable<Widget> buildLeft(BuildContext context, WidgetRef ref) sync* {
-    final theme = Theme.of(context);
     final author = _post.author;
     final isAdministrator = author.flags?.isAdministrator ?? false;
     final isModerator = author.flags?.isModerator ?? false;
@@ -79,7 +73,7 @@ class MetaBar extends ConsumerWidget {
     if (ref.watch(highlightPronouns).value) {
       final pronouns = author.details.fields
           ?.firstWhereOrNull(
-            (e) => _kPronounsFieldKeys.contains(e.key.trim().toLowerCase()),
+            (e) => kPronounsFieldKeys.contains(e.key.trim().toLowerCase()),
           )
           ?.value
           .andThen(parsePronouns);

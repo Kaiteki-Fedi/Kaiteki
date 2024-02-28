@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:kaiteki/constants.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/authentication_page.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/confirmation_page.dart";
 import "package:kaiteki/ui/shared/dialogs/account_deletion/in_progress_page.dart";
@@ -64,10 +65,7 @@ class _AccountDeletionDialogState extends State<AccountDeletionDialog> {
 
   List<Widget> _buildActions() {
     return [
-      TextButton(
-        onPressed: () => Navigator.of(context).pop(),
-        child: Text(context.materialL10n.cancelButtonLabel),
-      ),
+      const CancelTextButton(),
       TextButton(
         style: TextButton.styleFrom(
           foregroundColor: Theme.of(context).colorScheme.error,

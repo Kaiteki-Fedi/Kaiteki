@@ -63,9 +63,12 @@ class AccountSetupPage extends ConsumerWidget {
                         Brightness.dark =>
                           Image.asset("assets/icons/tumblr_white.png"),
                       },
+                      onTap: () => context.pushNamed(
+                        "login",
+                        queryParameters: {"instance": "tumblr.com"},
+                      ),
                       title: const Text("Tumblr"),
-                      subtitle: const Text("Coming soon™"),
-                      enabled: false,
+                      subtitle: const Text("Experimental"),
                     ),
                   ),
                   const SizedBox(height: 8),

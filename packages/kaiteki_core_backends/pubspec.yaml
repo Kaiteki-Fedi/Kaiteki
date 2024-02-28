@@ -1,5 +1,6 @@
 name: kaiteki_core_backends
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: ^3.4.0-99.0.dev
