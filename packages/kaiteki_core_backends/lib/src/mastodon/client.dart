@@ -350,11 +350,14 @@ class MastodonClient {
     } catch (_) {}
 
     if (json != null) {
+      dynamic errorValue = json['error'];
+      String? errorString = errorValue is String ? errorValue : response.reasonPhrase;
       throw HttpException(
         response.statusCode,
-        reasonPhrase: json['error'] as String? ?? response.reasonPhrase,
+        reasonPhrase: errorString,
       );
     }
+
   }
 
   Future<MediaAttachment> uploadMedia(

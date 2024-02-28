@@ -7,3 +7,11 @@
 *.ipr
 *.iws
 .idea/
+
+# Dart
+.dart_tool/
+build/
+doc/api/
+
+# Mac
+.DS_Store
