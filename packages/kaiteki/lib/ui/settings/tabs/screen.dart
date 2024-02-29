@@ -191,7 +191,6 @@ class _DestinationSwitchListTile extends ConsumerWidget {
     return switch (tab) {
       MainScreenTabType.home => true,
       MainScreenTabType.notifications => adapter is NotificationSupport,
-      MainScreenTabType.bookmarks => adapter is BookmarkSupport,
       MainScreenTabType.chats => adapter is ChatSupport,
       MainScreenTabType.explore => adapter is ExploreSupport
     };

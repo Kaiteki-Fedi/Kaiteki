@@ -18,6 +18,9 @@ class MainScreenDrawer extends ConsumerWidget {
     final adapter = ref.watch(adapterProvider);
     final feedbackEnabled = ref.watch(AppExperiment.feedback.provider);
 
+    final listsAvailable = adapter is ListSupport;
+    final bookmarksAvailable = adapter is BookmarkSupport;
+
     const divider = Divider(
       indent: 28,
       endIndent: 28,
@@ -26,9 +29,18 @@ class MainScreenDrawer extends ConsumerWidget {
     return NavigationDrawer(
       selectedIndex: null,
       onDestinationSelected: (i) {
-        if (i >= 5 && !feedbackEnabled) i++;
+        if (i >= 7 && !feedbackEnabled) i++;
+        if (i >= 1 && !bookmarksAvailable) i++;
+        if (i >= 2 && !listsAvailable) i++;
+
+        Scaffold.of(context).closeDrawer();
 
         switch (i) {
+          case 0:
+            context.pushNamed(
+              "bookmarks",
+              pathParameters: ref.accountRouterParams,
+            );
           case 1:
             context.pushNamed(
               "lists",
@@ -36,25 +48,31 @@ class MainScreenDrawer extends ConsumerWidget {
             );
             break;
           case 3:
+            // context.pushNamed(
+            //   "moderation",
+            //   pathParameters: ref.accountRouterParams,
+            // );
+            break;
+          case 5:
             context.pushNamed(
               "accountSettings",
               pathParameters: ref.accountRouterParams,
             );
             break;
 
-          case 4:
+          case 6:
             context.push("/settings");
             break;
 
-          case 5:
+          case 7:
             context.push("/send-feedback");
             break;
 
-          case 6:
+          case 8:
             showKeyboardShortcuts(context);
             break;
 
-          case 7:
+          case 9:
             context.push("/about");
             break;
 
@@ -66,10 +84,10 @@ class MainScreenDrawer extends ConsumerWidget {
         const DrawerHeadline(
           text: Text(kAppName),
         ),
+        if (adapter is BookmarkSupport)
         NavigationDrawerDestination(
-          icon: const Icon(Icons.mail_rounded),
-          label: Text(l10n.directMessagesTitle),
-          enabled: false,
+          icon: const Icon(Icons.bookmarks_rounded),
+          label: Text(l10n.bookmarksTab),
         ),
         if (adapter is ListSupport)
           NavigationDrawerDestination(
@@ -77,13 +95,27 @@ class MainScreenDrawer extends ConsumerWidget {
             label: Text(l10n.listsTitle),
           ),
         NavigationDrawerDestination(
-          icon: const Icon(Icons.flag_rounded),
-          label: Text(l10n.reportsTitle),
+          icon: const Icon(Icons.mail_rounded),
+          label: Text(l10n.directMessagesTitle),
           enabled: false,
         ),
         divider,
         DrawerHeadline(
-          text: Text(account.key.handle.toString()),
+          text: Text(account.key.host),
+        ),
+        const NavigationDrawerDestination(
+          icon: Icon(Icons.admin_panel_settings_rounded),
+          label: Text("Moderation"),
+          enabled: false,
+        ),
+        divider,
+        DrawerHeadline(
+          text: Text("@${account.key.username}"),
+        ),
+        NavigationDrawerDestination(
+          icon: const Icon(Icons.flag_rounded),
+          label: Text(l10n.reportsTitle),
+          enabled: false,
         ),
         NavigationDrawerDestination(
           icon: const Icon(Icons.manage_accounts_rounded),
