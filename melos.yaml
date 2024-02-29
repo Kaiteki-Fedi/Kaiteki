@@ -3,7 +3,6 @@ name: kaiteki
 packages:
   - packages/*
 
-
 scripts:
   build_runner:
     run: melos exec -c 1 -- "dart run build_runner build --delete-conflicting-outputs"
@@ -17,12 +16,19 @@ scripts:
     packageFilters:
       dependsOn: 'build_runner'
 
-  build:android:foss:
+  build:android:free:
     run: flutter pub global run melos exec -c 1 -- "flutter build apk --flavor free"
-    description: Build android release apk
+    description: Build free Android release APK
     packageFilters:
       flutter: true
       dir-exists: 'android'
       scope: "kaiteki"
 
+  build:android:nonfree:
+    run: flutter pub global run melos exec -c 1 -- "flutter build apk --flavor nonfree"
+    description: Build non-free Android release APK
+    packageFilters:
+      flutter: true
+      dir-exists: 'android'
+      scope: "kaiteki"
 
