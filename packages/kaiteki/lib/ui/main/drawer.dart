@@ -4,6 +4,7 @@ import "package:kaiteki/constants.dart" show kAppName;
 import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/ui/main/main_screen.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/social.dart";
 
@@ -62,7 +63,7 @@ class MainScreenDrawer extends ConsumerWidget {
         }
       },
       children: [
-        const _Headline(
+        const DrawerHeadline(
           text: Text(kAppName),
         ),
         NavigationDrawerDestination(
@@ -81,7 +82,7 @@ class MainScreenDrawer extends ConsumerWidget {
           enabled: false,
         ),
         divider,
-        _Headline(
+        DrawerHeadline(
           text: Text(account.key.handle.toString()),
         ),
         NavigationDrawerDestination(
@@ -107,34 +108,6 @@ class MainScreenDrawer extends ConsumerWidget {
           label: Text(l10n.settingsAbout),
         ),
       ],
-    );
-  }
-}
-
-class _Headline extends StatelessWidget {
-  final Text text;
-
-  const _Headline({
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28.0),
-      child: SizedBox(
-        height: 56,
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: DefaultTextStyle.merge(
-            style: theme.textTheme.titleSmall?.copyWith(
-              color: theme.colorScheme.onSurface,
-            ),
-            child: text,
-          ),
-        ),
-      ),
     );
   }
 }

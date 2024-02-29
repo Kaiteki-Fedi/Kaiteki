@@ -6,6 +6,7 @@ export 'src/async/async_block_widget.dart';
 export 'src/material/border_radii.dart';
 export 'src/material/cancel_text_button.dart';
 export 'src/material/dialog_button_bar.dart';
+export 'src/material/drawer_headline.dart';
 export 'src/material/focus_ring.dart';
 export 'src/material/main_switch_list_tile.dart';
 export 'src/material/shapes.dart';
