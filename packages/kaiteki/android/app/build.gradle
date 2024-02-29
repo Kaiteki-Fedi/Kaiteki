@@ -62,7 +62,6 @@ android {
     productFlavors {
         unsigned {
             dimension 'version'
-            applicationIdSuffix '.dev'
             getIsDefault().set(true)
         }
 
