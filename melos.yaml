@@ -16,3 +16,13 @@ scripts:
     description: Runs build_runner
     packageFilters:
       dependsOn: 'build_runner'
+
+  build:android:foss:
+    run: flutter pub global run melos exec -c 1 -- "flutter build apk --flavor unsignedfoss"
+    description: Build android release apk
+    packageFilters:
+      flutter: true
+      dir-exists: 'android'
+      scope: "kaiteki"
+
+
