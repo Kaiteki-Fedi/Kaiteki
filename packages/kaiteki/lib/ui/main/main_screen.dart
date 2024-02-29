@@ -12,7 +12,6 @@ import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
-import "package:kaiteki/ui/main/pages/bookmarks.dart";
 import "package:kaiteki/ui/main/pages/chats.dart";
 import "package:kaiteki/ui/main/pages/explore.dart";
 import "package:kaiteki/ui/main/pages/home.dart";
@@ -192,7 +191,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
         ),
       MainScreenTabType.notifications => const NotificationsPage(),
       MainScreenTabType.chats => const ChatsPage(),
-      MainScreenTabType.bookmarks => const BookmarksPage(),
       MainScreenTabType.explore => const ExplorePage(),
     };
   }
@@ -252,10 +250,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
         ref.invalidate(timelineServiceProvider(accountKey, timeline));
         break;
 
-      case MainScreenTabType.bookmarks:
-        ref.invalidate(bookmarksServiceProvider(accountKey));
-        break;
-
       case MainScreenTabType.chats:
       case MainScreenTabType.explore:
         break;
@@ -269,9 +263,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
         break;
       case AppLocation.notifications:
         _changeTab(MainScreenTabType.notifications);
-        break;
-      case AppLocation.bookmarks:
-        _changeTab(MainScreenTabType.bookmarks);
         break;
       case AppLocation.settings:
         context.push("/settings");

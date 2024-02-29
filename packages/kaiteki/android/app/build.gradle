@@ -22,6 +22,12 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace "moe.craftplacer.kaiteki"
     compileSdk flutter.compileSdkVersion
@@ -40,6 +46,15 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
     defaultConfig {
         applicationId "moe.craftplacer.kaiteki"
         minSdkVersion flutter.minSdkVersion
@@ -50,34 +65,24 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('keystore.pfx')
-            storePassword = System.getenv('KEYSTORE_PASSWORD')
-            keyAlias = 'release'
-            keyPassword = System.getenv('KEYSTORE_PASSWORD')
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
         }
     }
 
-    flavorDimensions 'version', 'distribution'
+    flavorDimensions 'distribution'
 
     productFlavors {
-        unsigned {
-            dimension 'version'
-            getIsDefault().set(true)
-        }
-
-        signed {
-            dimension 'version'
-            signingConfig signingConfigs.release
-        }
-
-        foss {
+        free {
             dimension 'distribution'
             getIsDefault().set(true)
         }
 
-        store {
+        nonfree {
             dimension 'distribution'
-            applicationIdSuffix '.store'
+            applicationIdSuffix '.nonfree'
         }
     }
 }

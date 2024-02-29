@@ -15,6 +15,7 @@ import "package:kaiteki/ui/account/settings_screen.dart";
 import "package:kaiteki/ui/announcements/dialog.dart";
 import "package:kaiteki/ui/auth/login/login_screen.dart";
 import "package:kaiteki/ui/auth/oauth_finalization_screen.dart";
+import "package:kaiteki/ui/bookmarks_screen.dart";
 import "package:kaiteki/ui/feedback_screen.dart";
 import "package:kaiteki/ui/follow_requests/dialog.dart";
 import "package:kaiteki/ui/hashtag/screen.dart";
@@ -383,6 +384,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                 name: "lists",
                 path: "lists",
                 builder: (_, __) => const ListsScreen(),
+              ),
+              GoRoute(
+                name: "bookmarks",
+                path: "bookmarks",
+                builder: (_, __) => const BookmarksScreen(),
               ),
               GoRoute(
                 name: "post",

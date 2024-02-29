@@ -7,7 +7,6 @@ import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:kaiteki_l10n/kaiteki_l10n.dart";
 
-part "bookmarks.dart";
 part "chats.dart";
 part "explore.dart";
 part "home.dart";
@@ -29,11 +28,6 @@ enum MainScreenTabType<T extends MainScreenTab> {
     Icon(Icons.forum_rounded),
     _ChatsMainScreenTab(),
   ),
-  bookmarks(
-    Icon(Icons.bookmark_border_rounded),
-    Icon(Icons.bookmark_rounded),
-    _BookmarksMainScreenTab(),
-  ),
   explore(
     Icon(Icons.explore_outlined),
     Icon(Icons.explore_rounded),
@@ -51,7 +45,6 @@ enum MainScreenTabType<T extends MainScreenTab> {
       MainScreenTabType.home => localizations.homeTab,
       MainScreenTabType.notifications => localizations.notificationsTab,
       MainScreenTabType.chats => localizations.chatsTab,
-      MainScreenTabType.bookmarks => localizations.bookmarksTab,
       MainScreenTabType.explore => "Explore",
     };
   }
