@@ -52,32 +52,34 @@ class SettingsScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: GoRouterState.of(context).uri.pathSegments.length > 1
-            ? child
-            : NestedScrollView(
-                headerSliverBuilder: (_, __) => [const _AppBar()],
-                body: ListView.builder(
-                  itemCount: _items.length,
-                  itemBuilder: (context, i) {
-                    final category = _items[i];
+      body: SafeArea(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: GoRouterState.of(context).uri.pathSegments.length > 1
+              ? child
+              : NestedScrollView(
+                  headerSliverBuilder: (_, __) => [const _AppBar()],
+                  body: ListView.builder(
+                    itemCount: _items.length,
+                    itemBuilder: (context, i) {
+                      final category = _items[i];
 
-                    if (category == null) {
-                      return const Divider();
-                    }
+                      if (category == null) {
+                        return const Divider();
+                      }
 
-                    final routeName = category.$1;
-                    return ListTile(
-                      leading: Icon(category.$3),
-                      title: Text(category.$2(context.l10n)),
-                      onTap: routeName == null
-                          ? null
-                          : () => context.push("/settings/$routeName"),
-                    );
-                  },
+                      final routeName = category.$1;
+                      return ListTile(
+                        leading: Icon(category.$3),
+                        title: Text(category.$2(context.l10n)),
+                        onTap: routeName == null
+                            ? null
+                            : () => context.push("/settings/$routeName"),
+                      );
+                    },
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }
