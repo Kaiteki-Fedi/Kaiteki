@@ -100,7 +100,7 @@ class _SettingsSidebar extends StatelessWidget {
     return NestedScrollView(
       headerSliverBuilder: (_, __) => [const _AppBar()],
       body: NavigationDrawer(
-        elevation: 0,
+        backgroundColor: Colors.transparent,
         selectedIndex: selectedIndex == -1 ? null : selectedIndex,
         onDestinationSelected: (i) {
           final category = categories.elementAt(i);
