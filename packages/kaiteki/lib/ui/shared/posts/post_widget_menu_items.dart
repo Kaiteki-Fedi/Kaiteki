@@ -120,3 +120,67 @@ class ReportMenuItem extends StatelessWidget {
     );
   }
 }
+
+class BlockMenuItem extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const BlockMenuItem({super.key, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.block_rounded),
+      onPressed: onPressed,
+      child: const Text("Block"),
+    );
+  }
+
+}
+
+class MuteMenuItem extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const MuteMenuItem({super.key, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.visibility_off_rounded),
+      onPressed: onPressed,
+      child: const Text("Mute"),
+    );
+  }
+
+}
+
+class EditMenuItem extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const EditMenuItem({super.key, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.edit_rounded),
+      onPressed: onPressed,
+      child: const Text("Edit"),
+    );
+  }
+
+}
+
+class DeleteMenuItem extends StatelessWidget {
+  final VoidCallback? onPressed;
+
+  const DeleteMenuItem({super.key, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuItemButton(
+      leadingIcon: const Icon(Icons.delete_rounded),
+      onPressed: onPressed,
+      child: const Text("Delete"),
+    );
+  }
+
+}

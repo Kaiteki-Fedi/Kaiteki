@@ -14,12 +14,16 @@ class PostState {
   /// Whether this post has been editd before.
   final bool edited;
 
+  /// Whether this post is muted because of the current user.
+  final bool muted;
+
   const PostState({
     this.favorited = false,
     this.repeated = false,
     this.bookmarked = false,
     this.pinned = false,
     this.edited = false,
+    this.muted = false,
   });
 
   PostState copyWith({
@@ -28,6 +32,7 @@ class PostState {
     bool? bookmarked,
     bool? pinned,
     bool? edited,
+    bool? muted,
   }) {
     return PostState(
       favorited: favorited ?? this.favorited,
@@ -35,6 +40,7 @@ class PostState {
       bookmarked: bookmarked ?? this.bookmarked,
       pinned: pinned ?? this.pinned,
       edited: edited ?? this.edited,
+      muted: muted ?? this.muted,
     );
   }
 }

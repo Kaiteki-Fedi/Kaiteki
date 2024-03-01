@@ -4,6 +4,7 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/fediverse/services/bookmarks.dart";
+import "package:kaiteki/fediverse/services/mutes.dart";
 import "package:kaiteki/model/auth/account.dart";
 import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/preferences/app_preferences.dart";
@@ -101,6 +102,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   late final FocusNode _menuButtonFocusNode;
   late final FocusNode _focusNode;
   final _menuAnchorKey = GlobalKey();
+  bool _overrideMute = false;
 
   Map<Type, Action<Intent>> get _actions {
     return {
@@ -118,6 +120,11 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   VoidCallback? get _onTap {
     final showOpenButton = ref.watch(showDedicatedPostOpenButton).value;
     return widget.onTap ?? (showOpenButton ? null : widget.onOpen);
+  }
+
+  bool get isHidden {
+    if (_overrideMute) return false;
+    return _post.state.muted;
   }
 
   void _onShowFavoritees() {
@@ -142,6 +149,20 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (isHidden) {
+      return InkWell(
+        customBorder: StadiumBorder(),
+        onTap: () => setState(() => _overrideMute = true),
+        child: Row(
+          children: [
+            Icon(Icons.visibility_off_rounded),
+            const SizedBox(width: 8),
+            Text(_post.author.handle.toString()),
+          ],
+        ),
+      );
+    }
+
     final adapter = ref.watch(adapterProvider);
 
     final isAuthenticated = adapter.authenticated;
@@ -285,6 +306,9 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   List<Widget> _buildMenuItems(BuildContext context) {
     final adapter = ref.read(adapterProvider);
 
+    final isOp =
+        ref.read(currentAccountProvider)?.user.handle == _post.author.handle;
+
     Widget buildOpenInMenuItem(BuildContext context) {
       final currentAccount = ref.read(currentAccountProvider);
       final federatedAccounts = ref.read(accountManagerProvider).accounts.where(
@@ -347,8 +371,16 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       const Divider(),
       ShareMenuItem(onPressed: () => share(context, _post)),
       buildOpenInMenuItem(context),
-      const Divider(),
-      ReportMenuItem(onPressed: _onReport),
+      if (isOp) ...[
+        const Divider(),
+        const EditMenuItem(),
+        const DeleteMenuItem(),
+      ] else ...[
+        const Divider(),
+        MuteMenuItem(onPressed: _onMute),
+        const BlockMenuItem(),
+        ReportMenuItem(onPressed: _onReport),
+      ],
       if (_post.content != null &&
           ref.watch(preferences.developerMode).value) ...[
         const Divider(),
@@ -703,5 +735,25 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         user: _post.author,
       ),
     );
+  }
+
+  Future<void> _onMute() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    final currentAccount = ref.read(currentAccountProvider)!.key;
+    final mutes = ref.read(mutesServiceProvider(currentAccount).notifier);
+    mutes.mute(_post.author.id).then((value) {
+      scaffoldMessenger.showSnackBar(
+        SnackBar(
+          content: Text("Muted ${_post.author.handle}"),
+        ),
+      );
+    }).catchError((e, s) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text("An error occurred while trying to mute"),
+        ),
+      );
+    });
   }
 }

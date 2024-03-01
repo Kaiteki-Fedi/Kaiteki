@@ -307,11 +307,11 @@ extension KaitekiMastodonStatusExtension on mastodon.Status {
         replyCount: repliesCount,
       ),
       state: PostState(
-        // shouldn't be null because we currently expect the user to be signed in
         repeated: reblogged ?? false,
         favorited: favourited ?? false,
         bookmarked: bookmarked ?? false,
         pinned: pinned ?? false,
+        muted: muted ?? false,
       ),
       poll: poll.andThen((e) => e.toKaiteki()),
       embeds: card.andThen((e) => [e.toKaiteki()]) ?? const [],
