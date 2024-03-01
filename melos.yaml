@@ -16,19 +16,59 @@ scripts:
     packageFilters:
       dependsOn: 'build_runner'
 
+  gen_l10n:
+    run: melos exec -c 1 -- "flutter gen-l10n"
+    packageFilters:
+      fileExists: 'l10n.yaml'
+      scope: 'kaiteki_l10n'
+
+  analyze:
+    run: melos exec -- "flutter --no-pub --no-fatal-infos --no-congratulate --no-preamble"
+    description: Analyze packages
+
+  build:windows:
+    run: melos exec -- "flutter build windows"
+    description: Build Windows binary
+    packageFilters:
+      flutter: true
+      dirExists: 'windows'
+      scope: 'kaiteki'
+
+  build:linux:
+    run: melos exec -- "flutter build linux"
+    description: Build Linux binary
+    packageFilters:
+      flutter: true
+      dirExists: 'linux'
+      scope: 'kaiteki'
+
+  build:web:
+    run: melos exec -- "flutter build web"
+    description: Build web version
+    packageFilters:
+      flutter: true
+      dirExists: 'web'
+      scope: 'kaiteki'
+
   build:android:free:
-    run: flutter pub global run melos exec -c 1 -- "flutter build apk --flavor free"
+    run: melos exec -- "flutter build apk --flavor free"
     description: Build free Android release APK
     packageFilters:
       flutter: true
-      dir-exists: 'android'
-      scope: "kaiteki"
+      dirExists: 'android'
+      scope: 'kaiteki'
 
   build:android:nonfree:
-    run: flutter pub global run melos exec -c 1 -- "flutter build apk --flavor nonfree"
+    run: melos exec -- "flutter build apk --flavor nonfree"
     description: Build non-free Android release APK
     packageFilters:
       flutter: true
-      dir-exists: 'android'
-      scope: "kaiteki"
+      dirExists: 'android'
+      scope: 'kaiteki'
 
+  test:
+    run: flutter test --coverage --no-pub -r expanded
+    exec:
+      failFast: true
+    packageFilters:
+      dirExists: 'test'

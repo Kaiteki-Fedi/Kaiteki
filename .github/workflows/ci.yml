@@ -8,10 +8,10 @@ on:
     branches:
       - master
     paths:
-      - 'src/**'
-      - '!src/kaiteki/storybook/**'
-      - '!src/kaiteki/tools/**'
-      - '!src/kaiteki/README.md'
+      - 'packages/**'
+      - '!packages/kaiteki/storybook/**'
+      - '!packages/kaiteki/tools/**'
+      - '!packages/kaiteki/README.md'
   pull_request:
   workflow_dispatch:
 
@@ -35,12 +35,15 @@ jobs:
         with:
           channel: 'master'
           cache: true
+
+      - name: Activate Melos
+        run: 'flutter pub global activate melos'
   
-      - name: Get packages
-        run: 'flutter pub get'
+      - name: Bootstrap packages
+        run: 'flutter pub run melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter gen-l10n'
+        run: 'flutter pub run melos run gen_l10n'
 
       - name: Analyze
         uses: invertase/github-action-dart-analyzer@v2.0.0
@@ -48,7 +51,7 @@ jobs:
           working-directory: ${{ env.SOURCE_PATH }}
 
       - name: Test
-        run: 'flutter test --coverage -r expanded --no-pub'
+        run: 'flutter pub run melos run test'
 
       - name: Provide build variables
         id: build-variables
@@ -84,17 +87,17 @@ jobs:
           sudo apt-get update --fix-missing
           sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev libblkid-dev libhandy-1-dev
 
-      - name: Enable Linux Desktop
-        run: 'flutter config --enable-linux-desktop'
+      - name: Activate Melos
+        run: 'flutter pub global activate melos'
 
-      - name: Get packages
-        run: 'flutter pub get'
+      - name: Bootstrap packages
+        run: 'flutter pub run melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter gen-l10n'
+        run: 'flutter pub run melos run gen_l10n'
 
       - name: Build
-        run: 'make build-linux ${{needs.test.outputs.make-args}}'
+        run: 'flutter pub run melos run build:linux -- ${{needs.test.outputs.build-args}}'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -184,15 +187,14 @@ jobs:
           channel: 'master'
           cache: true
 
-      - name: Get packages
-        run: 'flutter pub get'
+      - name: Activate Melos
+        run: 'flutter pub global activate melos'
+
+      - name: Bootstrap packages
+        run: 'flutter pub run melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter gen-l10n'
-
-      - name: Build (unsigned)
-        if: github.event_name == 'pull_request'
-        run: 'make build-android ${{needs.test.outputs.make-args}}'
+        run: 'flutter pub run melos run gen_l10n'
 
       - name: Dump signing key
         uses: timheuer/base64-to-file@v1.2
@@ -202,11 +204,8 @@ jobs:
           fileDir: '${{ env.SOURCE_PATH }}/android/app/'
           encodedString: ${{ secrets.ANDROID_KEYSTORE }}
 
-      - name: Build (signed)
-        if: github.event_name != 'pull_request'
-        run: 'make build-android SIGNED=TRUE ${{needs.test.outputs.make-args}}'
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      - name: Build
+        run: 'flutter pub run melos run build:android:free -- ${{needs.test.outputs.build-args}}'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -232,19 +231,19 @@ jobs:
         with:
           channel: 'master'
           cache: true
-        
-      - name: Enable Windows Desktop
-        run: 'flutter config --enable-windows-desktop'
 
-      - name: Get packages
-        run: 'flutter pub get'
+      - name: Activate Melos
+        run: 'flutter pub global activate melos'
+
+      - name: Bootstrap packages
+        run: 'flutter pub run melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter gen-l10n'
+        run: 'flutter pub run melos run gen_l10n'
 
       - name: Build
-        run: 'make build-windows'
-        
+        run: 'flutter pub run melos run build:windows -- ${{needs.test.outputs.build-args}}'
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -269,17 +268,17 @@ jobs:
           channel: 'master'
           cache: true
 
-      - name: Enable web
-        run: flutter config --enable-web
+      - name: Activate Melos
+        run: 'flutter pub global activate melos'
 
-      - name: Get packages
-        run: 'flutter pub get'
+      - name: Bootstrap packages
+        run: 'flutter pub run melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter gen-l10n'
+        run: 'flutter pub run melos run gen_l10n'
 
       - name: Build
-        run: 'make build-web'
+        run: 'flutter pub run melos run build:web -- ${{needs.test.outputs.build-args}}'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
