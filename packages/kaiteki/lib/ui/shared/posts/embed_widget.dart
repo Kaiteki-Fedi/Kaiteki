@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki_core/model.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -15,7 +16,7 @@ class EmbedWidget extends StatelessWidget {
       child: InkWell(
         onTap: () => launchUrl(embed.uri),
         child: SizedBox(
-          height: 8 * 12,
+          height: 8 * 13,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -23,8 +24,8 @@ class EmbedWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surfaceContainerHighest,
                 ),
-                child: AspectRatio(
-                  aspectRatio: 1,
+                child: SizedBox(
+                  width: 128,
                   child: buildIcon(context),
                 ),
               ),
@@ -38,8 +39,10 @@ class EmbedWidget extends StatelessWidget {
                       if (embed.title != null)
                         Text(
                           embed.title!,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: theme.textTheme.titleSmall,
                           maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
                         ),
                       if (description != null && description.isNotEmpty)
                         Text(
@@ -49,21 +52,18 @@ class EmbedWidget extends StatelessWidget {
                               .join(" "),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall,
                         ),
                       Text(
                         embed.uri.host,
-                        style: TextStyle(
-                          color: Theme.of(context).disabledColor,
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
-                      // Spacer(),
-                      // Row(
-                      //   children: [
-                      //     if (card.pleroma.opengraph["site_name"] != null)
-                      //       Text(card.pleroma.opengraph["site_name"])
-                      //   ],
-                      // )
-                    ],
+                    ].spacedVertically(8.0),
                   ),
                 ),
               ),
@@ -75,23 +75,22 @@ class EmbedWidget extends StatelessWidget {
   }
 
   Widget buildIcon(BuildContext context) {
+    final fallback = Center(
+      child: Icon(
+        Icons.public_rounded,
+        size: 32,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+    );
+
     if (embed.imageUrl == null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Icon(
-            Icons.public_rounded,
-            size: 32,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
-      );
+      return fallback;
     }
 
     return Image.network(
       embed.imageUrl!.toString(),
-      width: 120,
       fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => fallback,
     );
   }
 }
