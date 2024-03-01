@@ -32,9 +32,7 @@ class _OAuthFinalizationScreenState
   @override
   void initState() {
     super.initState();
-    finalizeOAuth().then((success) {
-      if (success) return;
-
+    finalizeOAuth().then((_) {
       final goRouter = GoRouter.of(context);
 
       if (!goRouter.canPop()) {
@@ -47,7 +45,6 @@ class _OAuthFinalizationScreenState
   }
 
   Future<bool> finalizeOAuth() async {
-    final router = GoRouter.of(context);
     final accountManager = ref.read(accountManagerProvider.notifier);
     final BackendAdapter adapter;
 
@@ -91,7 +88,7 @@ class _OAuthFinalizationScreenState
     );
 
     await accountManager.add(account);
-    router.goNamed("home", pathParameters: account.key.routerParams);
+    accountManager.change(account);
 
     return true;
   }
