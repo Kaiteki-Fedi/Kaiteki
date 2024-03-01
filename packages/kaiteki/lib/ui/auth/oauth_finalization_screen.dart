@@ -33,7 +33,6 @@ class _OAuthFinalizationScreenState
   void initState() {
     super.initState();
     finalizeOAuth().then((success) {
-      if (success) return;
 
       final goRouter = GoRouter.of(context);
 
@@ -91,7 +90,6 @@ class _OAuthFinalizationScreenState
     );
 
     await accountManager.add(account);
-    router.goNamed("home", pathParameters: account.key.routerParams);
 
     return true;
   }
