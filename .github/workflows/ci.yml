@@ -40,10 +40,10 @@ jobs:
         run: 'flutter pub global activate melos'
   
       - name: Bootstrap packages
-        run: 'flutter pub run melos bootstrap'
+        run: 'melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter pub run melos run gen_l10n'
+        run: 'melos run gen_l10n'
 
       - name: Analyze
         uses: invertase/github-action-dart-analyzer@v2.0.0
@@ -51,7 +51,7 @@ jobs:
           working-directory: ${{ env.SOURCE_PATH }}
 
       - name: Test
-        run: 'flutter pub run melos run test'
+        run: 'melos run test'
 
       - name: Provide build variables
         id: build-variables
@@ -91,13 +91,13 @@ jobs:
         run: 'flutter pub global activate melos'
 
       - name: Bootstrap packages
-        run: 'flutter pub run melos bootstrap'
+        run: 'melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter pub run melos run gen_l10n'
+        run: 'melos run gen_l10n'
 
       - name: Build
-        run: 'flutter pub run melos run build:linux -- ${{needs.test.outputs.build-args}}'
+        run: 'melos run build:linux -- ${{needs.test.outputs.build-args}}'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -191,10 +191,10 @@ jobs:
         run: 'flutter pub global activate melos'
 
       - name: Bootstrap packages
-        run: 'flutter pub run melos bootstrap'
+        run: 'melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter pub run melos run gen_l10n'
+        run: 'melos run gen_l10n'
 
       - name: Dump signing key
         uses: timheuer/base64-to-file@v1.2
@@ -205,7 +205,7 @@ jobs:
           encodedString: ${{ secrets.ANDROID_KEYSTORE }}
 
       - name: Build
-        run: 'flutter pub run melos run build:android:free -- ${{needs.test.outputs.build-args}}'
+        run: 'melos run build:android:free -- ${{needs.test.outputs.build-args}}'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -236,13 +236,13 @@ jobs:
         run: 'flutter pub global activate melos'
 
       - name: Bootstrap packages
-        run: 'flutter pub run melos bootstrap'
+        run: 'melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter pub run melos run gen_l10n'
+        run: 'melos run gen_l10n'
 
       - name: Build
-        run: 'flutter pub run melos run build:windows -- ${{needs.test.outputs.build-args}}'
+        run: 'melos run build:windows -- ${{needs.test.outputs.build-args}}'
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -272,13 +272,13 @@ jobs:
         run: 'flutter pub global activate melos'
 
       - name: Bootstrap packages
-        run: 'flutter pub run melos bootstrap'
+        run: 'melos bootstrap'
 
       - name: Generate Localizations
-        run: 'flutter pub run melos run gen_l10n'
+        run: 'melos run gen_l10n'
 
       - name: Build
-        run: 'flutter pub run melos run build:web -- ${{needs.test.outputs.build-args}}'
+        run: 'melos run build:web -- ${{needs.test.outputs.build-args}}'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
