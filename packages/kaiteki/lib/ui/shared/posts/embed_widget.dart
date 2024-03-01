@@ -21,7 +21,7 @@ class EmbedWidget extends StatelessWidget {
             children: [
               DecoratedBox(
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceVariant,
+                  color: theme.colorScheme.surfaceContainerHighest,
                 ),
                 child: AspectRatio(
                   aspectRatio: 1,

@@ -23,11 +23,6 @@ class ThemeScreen extends StatelessWidget {
                 title: const Text("Material colors"),
                 divideChildren: false,
                 children: [
-                  _ColorPatch(
-                    "Background",
-                    colorScheme.background,
-                    colorScheme.onBackground,
-                  ),
                   Row(
                     children: [
                       Expanded(
@@ -35,13 +30,6 @@ class ThemeScreen extends StatelessWidget {
                           "Surface",
                           colorScheme.surface,
                           colorScheme.onSurface,
-                        ),
-                      ),
-                      Expanded(
-                        child: _ColorPatch(
-                          "Variant",
-                          colorScheme.surfaceVariant,
-                          colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],

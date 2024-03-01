@@ -85,10 +85,10 @@ class MainScreenDrawer extends ConsumerWidget {
           text: Text(kAppName),
         ),
         if (adapter is BookmarkSupport)
-        NavigationDrawerDestination(
-          icon: const Icon(Icons.bookmarks_rounded),
-          label: Text(l10n.bookmarksTab),
-        ),
+          NavigationDrawerDestination(
+            icon: const Icon(Icons.bookmarks_rounded),
+            label: Text(l10n.bookmarksTab),
+          ),
         if (adapter is ListSupport)
           NavigationDrawerDestination(
             icon: const Icon(Icons.article_rounded),

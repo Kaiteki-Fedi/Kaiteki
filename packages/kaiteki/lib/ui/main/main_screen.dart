@@ -292,7 +292,8 @@ class MainScreenState extends ConsumerState<MainScreen> {
           theme.colorScheme.surfaceTint,
           3,
         ),
-        systemNavigationBarDividerColor: theme.colorScheme.surfaceVariant,
+        systemNavigationBarDividerColor:
+            theme.colorScheme.surfaceContainerHighest,
         systemNavigationBarIconBrightness:
             theme.colorScheme.brightness.inverted,
       ),

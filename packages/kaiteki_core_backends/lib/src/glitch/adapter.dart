@@ -57,5 +57,4 @@ class GlitchAdapter extends SharedMastodonAdapter<GlitchClient>
   Future<void> removeReaction(Post post, Emoji emoji) async {
     await client.removeReaction(post.id, emoji.getTag(instance));
   }
-
 }

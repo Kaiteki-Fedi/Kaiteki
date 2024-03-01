@@ -56,7 +56,7 @@ class _PollButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ),
-      color: theme.colorScheme.surfaceVariant,
+      color: theme.colorScheme.surfaceContainerHighest,
       elevation: 4.0,
       child: InkWell(
         onTap: onTap,

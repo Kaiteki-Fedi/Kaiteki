@@ -63,8 +63,8 @@ Future<String> generateLandingPage(ColorScheme? colorScheme) async {
   final cssBuffer = StringBuffer(":root{")
     ..writeAll(
       {
-        "background": colorScheme.background,
-        "foreground": colorScheme.onBackground,
+        "background": colorScheme.surface,
+        "foreground": colorScheme.onSurface,
         "primary-container": colorScheme.primaryContainer,
         "on-primary-container": colorScheme.onPrimaryContainer,
       }.entries.map((kv) {

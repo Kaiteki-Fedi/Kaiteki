@@ -55,10 +55,10 @@ class _AttachmentTrayItemState extends State<AttachmentTrayItem> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        color: theme.colorScheme.surfaceVariant,
+        color: theme.colorScheme.surfaceContainerHighest,
         elevation: 4.0,
         child: PopupMenuButton(
-          color: theme.colorScheme.surfaceVariant,
+          color: theme.colorScheme.surfaceContainerHighest,
           itemBuilder: buildItemActions,
           tooltip: "",
           child: SizedBox(

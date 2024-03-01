@@ -229,8 +229,9 @@ class _DashInteractionListState extends State<DashInteractionList> {
                   children: [
                     const Icon(Icons.star_rounded),
                     const SizedBox(width: 8),
-                    Text(widget.metrics?.favoriteCount.toString() ??
-                        "Favorites",),
+                    Text(
+                      widget.metrics?.favoriteCount.toString() ?? "Favorites",
+                    ),
                   ],
                 ),
               ),

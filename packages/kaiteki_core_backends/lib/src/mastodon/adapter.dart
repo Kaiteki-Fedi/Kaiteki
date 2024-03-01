@@ -72,5 +72,4 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
     // TODO: implement setBanner
     throw UnimplementedError();
   }
-
 }

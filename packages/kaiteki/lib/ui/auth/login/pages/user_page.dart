@@ -216,7 +216,7 @@ class _IconPlaceholder extends StatelessWidget {
       dimension: _instanceIconSize,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: theme.colorScheme.background,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Icon(

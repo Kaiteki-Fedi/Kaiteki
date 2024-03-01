@@ -132,7 +132,8 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
                 maxLengthEnforcement: MaxLengthEnforcement.none,
                 validator: (value) {
                   if (value != null) {
-                    if (commentLengthLimit != null && value.length > commentLengthLimit) {
+                    if (commentLengthLimit != null &&
+                        value.length > commentLengthLimit) {
                       return "Comment must be less than $commentLengthLimit characters";
                     }
                   }
@@ -198,7 +199,8 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
                   isThreeLine: true,
                   title: Text("Forward to ${widget.user.host}"),
                   subtitle: Text(
-                      "Your report is also sent to ${widget.user.host}. This can be a risk if the administration team of ${widget.user.host} is malicious.",),
+                    "Your report is also sent to ${widget.user.host}. This can be a risk if the administration team of ${widget.user.host} is malicious.",
+                  ),
                 ),
               ],
             ],
@@ -231,7 +233,10 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 24.0, top: 24.0 - 4.0, right: 24.0 - 4.0,),
+                  left: 24.0,
+                  top: 24.0 - 4.0,
+                  right: 24.0 - 4.0,
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -295,7 +300,8 @@ class _ReportDialogState extends ConsumerState<ReportDialog> {
       comment: comment,
       forwardToRemoteInstance: _forward,
       postIds: widget.posts.map((e) => e.id).toList(growable: false),
-    ).then((_) {
+    )
+        .then((_) {
       const snackBar = SnackBar(
         content: Text("Report submitted successfully"),
       );

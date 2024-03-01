@@ -356,7 +356,7 @@ class _ListCardState extends ConsumerState<_ListCard> {
       elevation: 0.0,
       borderOnForeground: false,
       margin: const EdgeInsets.all(8.0),
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: ExpansionTile(
         title: Text(widget.list.name),
         trailing: Row(

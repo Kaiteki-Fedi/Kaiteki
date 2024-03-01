@@ -32,9 +32,11 @@ class ReportSpecialUserAlertDialog extends StatelessWidget {
         constraints: kDialogConstraints,
         child: switch (reason) {
           _CannotReportOneself() => const Text(
-              "You can't report yourself. Consider deleting your account instead.",),
+              "You can't report yourself. Consider deleting your account instead.",
+            ),
           _CannotReportStaff() => Text(
-              "${reason.handle} is a member of the staff team and therefore can't be reported.",),
+              "${reason.handle} is a member of the staff team and therefore can't be reported.",
+            ),
         },
       ),
       actions: [

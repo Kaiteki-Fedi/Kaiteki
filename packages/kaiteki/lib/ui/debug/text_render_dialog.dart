@@ -50,7 +50,7 @@ class _TextRenderDialogState extends ConsumerState<TextRenderDialog> {
                   actions: [if (!fullscreen) closeButton],
                   leading: fullscreen ? closeButton : null,
                   elevation: 0,
-                  backgroundColor: Theme.of(context).colorScheme.background,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),

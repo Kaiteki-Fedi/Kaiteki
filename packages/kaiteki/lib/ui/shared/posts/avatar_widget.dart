@@ -75,7 +75,7 @@ class AvatarWidget extends StatelessWidget {
     avatar = Material(
       clipBehavior: Clip.antiAlias,
       shape: shape,
-      color: theme.colorScheme.surfaceVariant,
+      color: theme.colorScheme.surfaceContainerHighest,
       child: IconTheme.merge(
         data: IconThemeData(
           color: theme.colorScheme.onSurface,

@@ -114,7 +114,8 @@ class _AccountListBody extends ConsumerWidget {
             AccountListTile(
               account: currentAccount,
               // selected: true,
-              onTap: () => _viewCurrentProfile(context, ref, currentAccount.user),
+              onTap: () =>
+                  _viewCurrentProfile(context, ref, currentAccount.user),
               trailing: buildMenuAnchor(context, ref, currentAccount),
             ),
             if (unselectedAccounts.isNotEmpty) divider,
@@ -140,6 +141,7 @@ class _AccountListBody extends ConsumerWidget {
       ),
     );
   }
+
   void _viewCurrentProfile(BuildContext context, WidgetRef ref, User user) {
     Navigator.of(context).pop();
     context.pushNamed(

@@ -226,7 +226,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     final theme = Theme.of(context);
     final backgroundColor = switch (theme.colorScheme.brightness) {
       Brightness.light => Color(theme.colorScheme.corePalette.neutral.get(98)),
-      Brightness.dark => theme.colorScheme.background,
+      Brightness.dark => theme.colorScheme.surface,
     };
 
     final hasPoll = _poll != null;
