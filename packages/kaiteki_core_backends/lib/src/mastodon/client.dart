@@ -784,4 +784,8 @@ class MastodonClient {
         )
         .then(Report.fromJson.fromResponse);
   }
+
+  Future<void> deleteStatus(String id) {
+    return client.sendRequest(HttpMethod.delete, 'api/v1/statuses/$id');
+  }
 }

@@ -96,4 +96,6 @@ abstract class BackendAdapter {
 
   /// Sets the avatar for the current user.
   Future<void> setAvatar(XFile? image);
+
+  Future<void> deletePost(String id);
 }

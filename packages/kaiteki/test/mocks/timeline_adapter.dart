@@ -117,6 +117,9 @@ class TimelineAdapter extends BackendAdapter {
     // TODO: implement setProfileSettings
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> deletePost(String id) => throw UnimplementedError();
 }
 
 class TimelineAdapterCapabilities extends AdapterCapabilities {

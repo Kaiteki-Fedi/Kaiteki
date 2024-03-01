@@ -129,6 +129,9 @@ class DummyAdapter extends BackendAdapter {
     // TODO: implement setProfileSettings
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> deletePost(String id) => throw UnimplementedError();
 }
 
 class DummyAdapterCapability extends AdapterCapabilities {

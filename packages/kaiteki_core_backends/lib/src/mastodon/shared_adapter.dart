@@ -700,4 +700,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     // TODO: implement setBanner
     throw UnimplementedError();
   }
+
+
+  @override
+  Future<void> deletePost(String id) async {
+    await client.deleteStatus(id);
+  }
 }

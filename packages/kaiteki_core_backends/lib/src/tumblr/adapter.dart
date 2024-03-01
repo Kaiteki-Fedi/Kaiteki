@@ -285,4 +285,10 @@ class TumblrAdapter extends CentralizedBackendAdapter
     // TODO: implement setProfileSettings
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> deletePost(String id) {
+    // TODO: implement deletePost
+    throw UnimplementedError();
+  }
 }

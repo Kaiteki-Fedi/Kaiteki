@@ -374,7 +374,7 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
       if (isOp) ...[
         const Divider(),
         const EditMenuItem(),
-        const DeleteMenuItem(),
+        DeleteMenuItem(onPressed: _onDelete),
       ] else ...[
         const Divider(),
         MuteMenuItem(onPressed: _onMute),
@@ -755,5 +755,12 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
         ),
       );
     });
+  }
+
+  Future<void> _onDelete() async  {
+    final messenger = ScaffoldMessenger.of(context);
+    final adapter = ref.read(adapterProvider);
+    await adapter.deletePost(_post.id);
+    messenger.showSnackBar(const SnackBar(content: Text("Post deleted")));
   }
 }

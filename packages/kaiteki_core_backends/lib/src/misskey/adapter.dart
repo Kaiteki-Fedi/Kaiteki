@@ -792,4 +792,7 @@ class MisskeyAdapter extends DecentralizedBackendAdapter
     // TODO: implement setBanner
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> deletePost(String id) => client.deleteNote(id);
 }

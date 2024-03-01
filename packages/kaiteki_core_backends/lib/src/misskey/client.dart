@@ -850,4 +850,12 @@ class MisskeyClient {
       body: {'userId': userId, 'comment': comment}.jsonBody,
     );
   }
+
+  Future<void> deleteNote(String noteId) {
+    return client.sendRequest(
+      HttpMethod.post,
+      'api/notes/delete',
+      body: {'noteId': noteId}.jsonBody,
+    );
+  }
 }
