@@ -137,7 +137,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
     final containerColor = theme.colorScheme.surfaceContainer;
 
     final scaffold = Scaffold(
-      backgroundColor: showPride ? Colors.transparent : containerColor,
+      backgroundColor: isCompact ? null : showPride ? Colors.transparent : containerColor,
       appBar: appBar,
       body: _BodyWrapper(
         tabTypes: _tabs,
