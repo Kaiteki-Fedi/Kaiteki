@@ -83,21 +83,23 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     final subject =
         _subjectController.text.isEmpty ? null : _subjectController.text;
 
-    var content = _bodyController.value.text;
+    final content = _bodyController.value.text;
+
+    final parts = [];
 
     final currentUser = ref.read(currentAccountProvider)!.user;
     if (_opHandle != null && _opHandle != currentUser.handle.toString()) {
-      content = "$_opHandle ";
+      parts.add(_opHandle);
     }
 
     final mentioned = _mentionedUsers;
-    if (mentioned.isNotEmpty) {
-      content = "${mentioned.join(" ")} $content";
-    }
+    if (mentioned.isNotEmpty)  parts.addAll(mentioned);
+
+    if (content.isNotEmpty) parts.add(content);
 
     return PostDraft(
       subject: subject,
-      content: content,
+      content: parts.join(" "),
       visibility: _visibility,
       formatting: _formatting ?? Formatting.plainText,
       replyTo: widget.replyTo,
