@@ -146,7 +146,6 @@ class RenderAttachmentFlex extends RenderBox
           i * (rowHeight + _crossAxisSpacing),
         );
         childParentData.offset = childOffset;
-        debugPrint("$childOffset; $childConstraints");
       }
     }
 
