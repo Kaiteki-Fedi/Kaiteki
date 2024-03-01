@@ -86,8 +86,8 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     var content = _bodyController.value.text;
 
     final currentUser = ref.read(currentAccountProvider)!.user;
-    if (_opHandle != currentUser.handle.toString()) {
-      content = "$_opHandle $content";
+    if (_opHandle != null && _opHandle != currentUser.handle.toString()) {
+      content = "$_opHandle ";
     }
 
     final mentioned = _mentionedUsers;
