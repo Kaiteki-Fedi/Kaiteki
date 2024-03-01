@@ -132,8 +132,12 @@ class MainScreenState extends ConsumerState<MainScreen> {
             suggestionsBuilder: _suggestionsBuilder,
           ) as PreferredSizeWidget;
 
+
+    final theme = Theme.of(context);
+    final containerColor = theme.colorScheme.surfaceContainer;
+
     final scaffold = Scaffold(
-      backgroundColor: showPride ? Colors.transparent : null,
+      backgroundColor: showPride ? Colors.transparent : containerColor,
       appBar: appBar,
       body: _BodyWrapper(
         tabTypes: _tabs,
@@ -156,12 +160,11 @@ class MainScreenState extends ConsumerState<MainScreen> {
       drawer: const MainScreenDrawer(),
     );
 
-    final theme = Theme.of(context);
     Widget widget = scaffold;
 
     if (showPride) {
       widget = ColoredBox(
-        color: theme.colorScheme.surfaceContainer,
+        color: containerColor,
         child: Stack(
           children: [
             Positioned.fill(
