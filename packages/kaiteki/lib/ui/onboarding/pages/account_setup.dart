@@ -3,7 +3,6 @@ import "package:go_router/go_router.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/onboarding/widgets/back_button.dart";
-import "package:kaiteki/utils/extensions.dart";
 
 class AccountSetupPage extends ConsumerWidget {
   const AccountSetupPage({super.key});
@@ -91,15 +90,13 @@ class AccountSetupPage extends ConsumerWidget {
                 const BackButton(),
                 const Spacer(),
                 if (hasAccounts)
-                  Directionality(
-                    textDirection: Directionality.of(context).inverted,
-                    child: FilledButton.icon(
-                      icon: const Icon(Icons.chevron_left_rounded),
-                      label: Text(context.l10n.nextButtonLabel),
-                      onPressed: () => context.push("/onboarding/preferences"),
-                      style: FilledButton.styleFrom(
-                        visualDensity: VisualDensity.standard,
-                      ),
+                  FilledButton.icon(
+                    icon: const Icon(Icons.chevron_right_rounded),
+                    iconAlignment: IconAlignment.end,
+                    label: Text(context.l10n.nextButtonLabel),
+                    onPressed: () => context.push("/onboarding/preferences"),
+                    style: FilledButton.styleFrom(
+                      visualDensity: VisualDensity.standard,
                     ),
                   ),
               ],

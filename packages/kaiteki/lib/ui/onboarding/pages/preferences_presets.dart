@@ -4,7 +4,6 @@ import "package:kaiteki/di.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
 import "package:kaiteki/preferences/theme_preferences.dart";
 import "package:kaiteki/ui/onboarding/widgets/back_button.dart";
-import "package:kaiteki/utils/extensions.dart";
 
 class PreferencesSetupPage extends StatefulWidget {
   const PreferencesSetupPage({super.key});
@@ -73,31 +72,29 @@ class _PreferencesSetupPageState extends State<PreferencesSetupPage> {
             children: [
               const BackButton(),
               const Spacer(),
-              Directionality(
-                textDirection: Directionality.of(context).inverted,
-                child: FilledButton.icon(
-                  onPressed: () {
-                    final container = ProviderScope.containerOf(context);
+              FilledButton.icon(
+                onPressed: () {
+                  final container = ProviderScope.containerOf(context);
 
-                    // TODO(Craftplacer): Set pronouns when implemented
-                    // if (_queerPreset) {
-                    // }
+                  // TODO(Craftplacer): Set pronouns when implemented
+                  // if (_queerPreset) {
+                  // }
 
-                    if (_wellbeingPreset) {
-                      container.read(useNaturalBadgeColors).value = true;
-                      container.read(showReplyCounts).value = false;
-                      container.read(showFavoriteCounts).value = false;
-                      container.read(showRepeatCounts).value = false;
-                    }
+                  if (_wellbeingPreset) {
+                    container.read(useNaturalBadgeColors).value = true;
+                    container.read(showReplyCounts).value = false;
+                    container.read(showFavoriteCounts).value = false;
+                    container.read(showRepeatCounts).value = false;
+                  }
 
-                    context.push("/onboarding/theme");
-                  },
-                  style: FilledButton.styleFrom(
-                    visualDensity: VisualDensity.standard,
-                  ),
-                  icon: const Icon(Icons.chevron_left_rounded),
-                  label: Text(context.l10n.nextButtonLabel),
+                  context.push("/onboarding/theme");
+                },
+                style: FilledButton.styleFrom(
+                  visualDensity: VisualDensity.standard,
                 ),
+                iconAlignment: IconAlignment.end,
+                icon: const Icon(Icons.chevron_right_rounded),
+                label: Text(context.l10n.nextButtonLabel),
               ),
             ],
           ),

@@ -2,7 +2,6 @@ import "package:async/async.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:kaiteki/ui/onboarding/widgets/benefits.dart";
-import "package:kaiteki/utils/extensions.dart";
 
 const _slideDuration = Duration(seconds: 5);
 
@@ -19,17 +18,15 @@ class IntroductionPage extends StatelessWidget {
           Expanded(child: _UserBenefits()),
           const SizedBox(height: 16.0),
           Center(
-            child: Directionality(
-              textDirection: Directionality.of(context).inverted,
-              child: FilledButton.icon(
-                onPressed: () => context.push("/onboarding/account-setup"),
-                icon: const Icon(Icons.chevron_left_rounded),
-                label: const Text("Get Started"),
-                style: FilledButton.styleFrom(
-                  visualDensity: VisualDensity.standard,
-                ),
-                autofocus: true,
+            child: FilledButton.icon(
+              onPressed: () => context.push("/onboarding/account-setup"),
+              icon: const Icon(Icons.chevron_right_rounded),
+              iconAlignment: IconAlignment.end,
+              label: const Text("Get Started"),
+              style: FilledButton.styleFrom(
+                visualDensity: VisualDensity.standard,
               ),
+              autofocus: true,
             ),
           ),
         ],
