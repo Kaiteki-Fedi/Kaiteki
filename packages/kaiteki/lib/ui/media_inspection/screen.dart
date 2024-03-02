@@ -120,7 +120,7 @@ class _MediaInspectionScreenState extends State<MediaInspectionScreen> {
                       foregroundColor: switch (Theme.of(context).brightness) {
                         Brightness.dark => null,
                         Brightness.light =>
-                          Theme.of(context).colorScheme.inverseOnSurface,
+                          Theme.of(context).colorScheme.onInverseSurface,
                       },
                       backgroundColor:
                           Theme.of(context).colorScheme.scrim.withOpacity(.5),
@@ -291,7 +291,7 @@ class _PaginationFab extends StatelessWidget {
     };
 
     final fabForegroundColor = switch (theme.colorScheme.brightness) {
-      Brightness.dark => theme.colorScheme.inverseOnSurface,
+      Brightness.dark => theme.colorScheme.onInverseSurface,
       Brightness.light => theme.colorScheme.onSurface,
     };
 

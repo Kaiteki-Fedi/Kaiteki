@@ -133,26 +133,6 @@ extension NullableTextStyleExtensions on TextStyle? {
   TextStyle get fallback => this ?? const TextStyle();
 }
 
-extension SurfaceColorExtensions on ColorScheme {
-  Color _getNeutralColor(int lightTone, int darkTone) {
-    final value = switch (brightness) {
-      Brightness.light => corePalette.neutral.get(lightTone),
-      Brightness.dark => corePalette.neutral.get(darkTone),
-    };
-    return Color(value);
-  }
-
-  CorePalette get corePalette => CorePalette.of(primary.value);
-
-  Color get surfaceContainerHigh => _getNeutralColor(92, 17);
-
-  Color get surfaceContainerHighest => _getNeutralColor(90, 22);
-
-  Color get surfaceContainer => _getNeutralColor(94, 12);
-
-  Color get inverseOnSurface => _getNeutralColor(95, 20);
-}
-
 Locale parseLocale(String locale) {
   final split = locale.split("-");
   return switch (split.length) {

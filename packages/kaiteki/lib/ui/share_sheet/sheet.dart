@@ -223,7 +223,7 @@ class _ShareTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final inverseSurface = Theme.of(context).colorScheme.inverseSurface;
-    final inverseOnSurface = Theme.of(context).colorScheme.inverseOnSurface;
+    final inverseOnSurface = Theme.of(context).colorScheme.onInverseSurface;
     return InkWell(
       onTap: onTap,
       child: Padding(

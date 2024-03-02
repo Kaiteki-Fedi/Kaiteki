@@ -128,16 +128,11 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
 
     final theme = Theme.of(context);
 
-    final backgroundColor = switch (theme.colorScheme.brightness) {
-      Brightness.light => theme.colorScheme.corePalette.neutral.get(95),
-      Brightness.dark => theme.colorScheme.corePalette.neutral.get(10),
-    };
-
     return PopScope(
       canPop: false,
       onPopInvoked: _onPopInvoked,
       child: ResponsiveDialog(
-        backgroundColor: Color(backgroundColor),
+        backgroundColor: theme.colorScheme.surfaceContainer,
         builder: (context, axis) {
           final fullscreen = axis != null;
           return Column(
@@ -226,10 +221,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
     const minimal = false;
 
     final theme = Theme.of(context);
-    final backgroundColor = switch (theme.colorScheme.brightness) {
-      Brightness.light => Color(theme.colorScheme.corePalette.neutral.get(98)),
-      Brightness.dark => theme.colorScheme.surface,
-    };
+    final backgroundColor = theme.colorScheme.surface;
 
     final hasPoll = _poll != null;
 
