@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:fediverse_objects/mastodon.dart' as mastodon;
@@ -31,7 +33,10 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
         NotificationSupport,
         OAuthReceiver,
         SearchSupport,
-        ReportSupport {
+        ReportSupport,
+        StreamSupport {
+  final _streams = <StreamType, Stream<mastodon.Event>>{};
+
   final T client;
 
   @override
@@ -701,9 +706,71 @@ abstract class SharedMastodonAdapter<T extends MastodonClient>
     throw UnimplementedError();
   }
 
-
   @override
   Future<void> deletePost(String id) async {
     await client.deleteStatus(id);
+  }
+
+  @override
+  Stream<AuxiliaryEvent> listenToAuxiliaryEvents() async* {
+    _streams[StreamType.user]  ??= client.watch(StreamType.user).asBroadcastStream();
+
+    yield* _streams[StreamType.user]!.where((e) {
+      return e.event == mastodon.EventType.notification;
+    }).map((event) {
+      switch (event.event) {
+        case mastodon.EventType.notification:
+          final notification =
+              mastodon.Notification.fromJson(jsonDecode(event.payload));
+          return NotificationEvent(notification.toKaiteki(instance));
+        default:
+          throw UnimplementedError();
+      }
+    });
+  }
+
+  @override
+  Stream<TimelineEvent> listenToTimeline(TimelineType timelineType) async* {
+    Stream<mastodon.Event> stream;
+
+    switch (timelineType) {
+      case TimelineType.following:
+        _streams[StreamType.user] ??= client.watch(StreamType.user).asBroadcastStream();
+        stream = _streams[StreamType.user]!.where((e) {
+          return e.event == mastodon.EventType.update;
+        });
+
+      case TimelineType.federated:
+        _streams[StreamType.public] ??= client.watch(StreamType.public);
+        stream = _streams[StreamType.public]!;
+        break;
+
+      case TimelineType.local:
+        _streams[StreamType.publicLocal] ??= client.watch(StreamType.public);
+        stream = _streams[StreamType.publicLocal]!;
+        break;
+
+      default:
+        throw UnimplementedError();
+    }
+
+    yield* stream.map((event) {
+      switch (event.event) {
+        case mastodon.EventType.update:
+          final map = jsonDecode(event.payload);
+          final status = mastodon.Status.fromJson(map);
+          final post = status.toKaiteki(instance);
+          return PostEvent(post);
+        case mastodon.EventType.delete:
+          return PostDeletedEvent(event.payload as String);
+        case mastodon.EventType.statusUpdate:
+          final map = jsonDecode(event.payload);
+          final status = mastodon.Status.fromJson(map);
+          final post = status.toKaiteki(instance);
+          return PostEditedEvent(post);
+        default:
+          throw Exception();
+      }
+    });
   }
 }

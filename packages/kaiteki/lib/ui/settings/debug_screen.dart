@@ -8,6 +8,7 @@ import "package:kaiteki/preferences/app_preferences.dart" as preferences;
 import "package:kaiteki/ui/settings/settings_container.dart";
 import "package:kaiteki/ui/settings/settings_section.dart";
 import "package:kaiteki/utils/extensions.dart";
+import "package:kaiteki_core/social.dart";
 import "package:kaiteki_ui/kaiteki_ui.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -76,6 +77,12 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
                         onTap: onOpenExceptionDialog,
                         enabled: developerMode,
                       ),
+                      ListTile(
+                        leading: const SizedBox(),
+                        title: const Text("Begin stream"),
+                        onTap: _onBeginStreaming,
+                        enabled: developerMode,
+                      ),
                     ],
                   ),
                 ],
@@ -99,6 +106,15 @@ class _DebugScreenState extends ConsumerState<DebugScreen> {
       throw Exception("Test exception");
     } catch (e, s) {
       await context.showExceptionDialog((e, s));
+    }
+  }
+
+  Future<void> _onBeginStreaming() async {
+    final streaming = ref.read(adapterProvider) as StreamSupport;
+
+    await for (final event
+        in streaming.listenToTimeline(TimelineType.following)) {
+      print(event);
     }
   }
 }

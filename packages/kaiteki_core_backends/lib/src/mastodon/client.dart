@@ -15,6 +15,7 @@ import 'package:kaiteki_core_backends/src/mastodon/responses/context.dart';
 import 'package:kaiteki_core_backends/src/mastodon/responses/login.dart';
 import 'package:kaiteki_core_backends/src/mastodon/responses/marker.dart';
 import 'package:kaiteki_core/utils.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class MastodonClient {
   late final KaitekiClient client;
@@ -788,4 +789,70 @@ class MastodonClient {
   Future<void> deleteStatus(String id) {
     return client.sendRequest(HttpMethod.delete, 'api/v1/statuses/$id');
   }
+
+  Stream<Event> watch(StreamType stream) async* {
+    final wsUrl = Uri(
+        scheme: "wss",
+        host: instance,
+        path: "/api/v1/streaming",
+        queryParameters: {
+          "access_token": accessToken!,
+          "stream": stream.value,
+        }
+    );
+
+    final channel = WebSocketChannel.connect(wsUrl);
+    await channel.ready;
+    yield* channel.stream.map((message) {
+      final event = Event.fromJson(jsonDecode(message));
+      return event;
+    });
+  }
+}
+
+enum StreamType {
+  /// All public posts known to the server.
+  ///
+  /// Analogous to the federated timeline.
+  ///
+  /// Available since v1.0.0
+  public("public"),
+  /// All public posts known to the server, filtered for media attachments.
+  ///
+  /// Analogous to the federated timeline with “only media” enabled.
+  ///
+  /// Available since v2.4.0
+  publicMedia("public:media"),
+  /// All public posts originating from this server.
+  ///
+  /// Analogous to the local timeline.
+  ///
+  /// Available since v1.1
+  publicLocal("public:local"),
+  /// All public posts originating from this server, filtered for media attachments.
+  ///
+  /// Analogous to the local timeline with “only media” enabled.
+  ///
+  /// Available since v2.4.0
+  publicLocalMedia("public:local:media"),
+  /// All public posts originating from other servers.
+  ///
+  /// Available since v3.1.4
+  publicRemote("public:remote"),
+  /// All public posts originating from other servers, filtered for media attachments.
+  ///
+  /// Available since v3.1.4
+  publicRemoteMedia("public:remote:media"),
+  /// Events related to the current user, such as home feed updates and notifications.
+  ///
+  /// Available since v1.0.0
+  user("user"),
+  /// Notifications for the current user.
+  ///
+  /// Available since v1.4.2
+  userNotification("user:notification");
+
+  final String value;
+
+  const StreamType(this.value);
 }

@@ -9,6 +9,7 @@ import "package:http/http.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/pagination_state.dart";
+import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/utils/image.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:logging/logging.dart";
@@ -19,6 +20,7 @@ part "notifications.g.dart";
 @Riverpod(keepAlive: true)
 class NotificationService extends _$NotificationService {
   static final _logger = Logger("NotificationService");
+  StreamSubscription<AuxiliaryEvent>? _stream;
 
   late NotificationSupport _backend;
 
@@ -47,6 +49,27 @@ class NotificationService extends _$NotificationService {
         .accounts
         .firstWhere((a) => a.key == key);
     _backend = account.adapter as NotificationSupport;
+
+    ref.onDispose(() => _stream?.cancel());
+
+    if (_backend is StreamSupport) {
+      final streaming = _backend as StreamSupport;
+      _stream = streaming.listenToAuxiliaryEvents().listen((event) {
+        final previousState = state.valueOrNull;
+
+        if (previousState == null) return;
+
+        switch (event) {
+          case NotificationEvent():
+            state = AsyncValue.data(
+              PaginationState(
+                [event.notification, ...previousState.items],
+                canPaginateFurther: previousState.canPaginateFurther,
+              ),
+            );
+        }
+      });
+    }
 
     final notifications = await _backend.getNotifications();
     return PaginationState(

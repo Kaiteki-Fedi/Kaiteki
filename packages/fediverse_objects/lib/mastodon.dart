@@ -7,6 +7,7 @@ export 'src/mastodon/announcement_status.dart';
 export 'src/mastodon/application.dart';
 export 'src/mastodon/credential_account.dart';
 export 'src/mastodon/custom_emoji.dart';
+export 'src/mastodon/event.dart';
 export 'src/mastodon/field.dart';
 export 'src/mastodon/instance.dart';
 export 'src/mastodon/instance_configuration.dart';

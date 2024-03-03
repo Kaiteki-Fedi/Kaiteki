@@ -1,5 +1,6 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
+import "package:riverpod_annotation/riverpod_annotation.dart";
 
 enum AppExperiment {
   denseReactions(
@@ -15,17 +16,16 @@ enum AppExperiment {
     "Navigation bar theming",
     "Adjust the Android navigation bar to the current theme",
   ),
-  profileEditing("Profile editing");
+  profileEditing("Profile editing"),
+  timelineStreaming("Timeline streaming", "Allow Kaiteki to listen to timeline updates",);
 
   final String displayName;
   final String? description;
 
   const AppExperiment(this.displayName, [this.description]);
 
-  Provider<bool> get provider => experimentsProvider(this);
+  AlwaysAliveProviderListenable<bool> get provider {
+    return experiments.select((v) => v.value.contains(this));
+  }
 }
 
-final experimentsProvider = Provider.family<bool, AppExperiment>(
-  (ref, e) => ref.watch(experiments.select((v) => v.value.contains(e))),
-  dependencies: [experiments],
-);

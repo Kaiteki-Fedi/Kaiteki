@@ -8,6 +8,7 @@ export 'src/social/model/deadline.dart';
 export 'src/social/model/embed.dart';
 export 'src/social/model/emoji.dart';
 export 'src/social/model/emoji_category.dart';
+export 'src/social/model/event.dart';
 export 'src/social/model/formatting.dart';
 export 'src/social/model/gif.dart';
 export 'src/social/model/hashtag.dart';

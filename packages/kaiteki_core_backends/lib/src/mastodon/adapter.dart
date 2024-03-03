@@ -1,5 +1,6 @@
 import 'package:cross_file/cross_file.dart';
 import 'package:kaiteki_core/kaiteki_core.dart';
+import 'package:kaiteki_core/src/social/model/event.dart';
 
 import 'client.dart';
 import 'extensions.dart';
@@ -72,4 +73,5 @@ class MastodonAdapter extends SharedMastodonAdapter<MastodonClient>
     // TODO: implement setBanner
     throw UnimplementedError();
   }
+
 }
