@@ -20,10 +20,6 @@ extension ThemeDataExtensions on ThemeData {
       floatingActionButtonTheme: floatingActionButtonTheme.copyWith(
         extendedTextStyle: textTheme.labelLarge,
       ),
-      cardTheme: cardTheme.copyWith(
-        shadowColor: Colors.transparent,
-        margin: EdgeInsets.zero,
-      ),
       appBarTheme: appBarTheme.copyWith(),
       snackBarTheme: snackBarTheme.copyWith(
         shape: const RoundedRectangleBorder(borderRadius: borderRadius),
