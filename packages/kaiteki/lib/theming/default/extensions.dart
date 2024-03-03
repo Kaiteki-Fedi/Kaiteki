@@ -61,27 +61,11 @@ extension ThemeDataExtensions on ThemeData {
   }
 
   ThemeData applyDefaultTweaks() {
-    final navigationBarForegroundColor =
-        colorScheme.brightness == Brightness.dark
-            ? colorScheme.onSurface
-            : colorScheme.onPrimary;
     return copyWith(
       snackBarTheme: snackBarTheme.copyWith(
         behavior: SnackBarBehavior.floating,
       ),
-      floatingActionButtonTheme: floatingActionButtonTheme.copyWith(
-        extendedTextStyle: textTheme.labelLarge ?? const TextStyle(),
-      ),
       dividerTheme: dividerTheme.copyWith(space: 1, thickness: 1),
-      bottomNavigationBarTheme: bottomNavigationBarTheme.copyWith(
-        backgroundColor: colorScheme.brightness == Brightness.dark
-            ? colorScheme.surface
-            : colorScheme.primary,
-        selectedItemColor: navigationBarForegroundColor,
-        unselectedItemColor: navigationBarForegroundColor.withOpacity(0.76),
-        showSelectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-      ),
     );
   }
 
