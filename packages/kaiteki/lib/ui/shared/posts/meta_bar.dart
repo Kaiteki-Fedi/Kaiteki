@@ -160,49 +160,38 @@ class MetaBar extends ConsumerWidget {
 }
 
 class PronounBadge extends StatelessWidget {
-  final List<Color>? colors;
   final List<List<String>> pronouns;
 
   const PronounBadge({
     super.key,
-    this.colors,
     required this.pronouns,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = this.colors;
-    final hasColors = colors != null && colors.isNotEmpty;
     final textStyle = theme.textTheme.labelSmall;
-    final color = hasColors ? Colors.white : textStyle?.color;
 
     var text = pronouns[0][0];
     if (pronouns.length > 1) text += "+";
 
+    final foregroundColor = theme.colorScheme.onSecondaryContainer;
     return Tooltip(
       message: "Pronouns: ${pronouns.map((e) => e.join("/")).join(", ")}",
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: hasColors
-              ? LinearGradient(
-                  colors: colors,
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                )
-              : null,
-          color: hasColors ? null : theme.colorScheme.secondaryContainer,
+          color: theme.colorScheme.secondaryContainer,
           borderRadius: BorderRadii.extraSmall,
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(2.0, 2.0, 4.0, 2.0),
           child: Row(
             children: [
-              Icon(Icons.loyalty_rounded, size: 16, color: color),
+              Icon(Icons.loyalty_rounded, size: 16, color: foregroundColor),
               const SizedBox(width: 4),
               DefaultTextStyle.merge(
                 child: Text(text),
-                style: textStyle?.copyWith(color: color),
+                style: textStyle?.copyWith(color: foregroundColor),
               ),
             ],
           ),
