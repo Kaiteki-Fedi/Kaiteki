@@ -85,13 +85,15 @@ class _UserDisplayNameWidgetState extends ConsumerState<UserDisplayNameWidget> {
           children: [
             Row(
               children: [
-                RepaintBoundary(
-                  child: Text.rich(
-                    user.renderText(context, ref, _primaryText),
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    style: primaryTextStyle,
+                Flexible(
+                  child: RepaintBoundary(
+                    child: Text.rich(
+                      user.renderText(context, ref, _primaryText),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                      style: primaryTextStyle,
+                    ),
                   ),
                 ),
                 if (trailing.isNotEmpty) ...[
