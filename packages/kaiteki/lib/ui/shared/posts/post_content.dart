@@ -88,17 +88,9 @@ class _PostContentWidgetState extends ConsumerState<PostContent> {
             const SizedBox(height: 8),
             AttachmentRow(post: post),
           ],
-          if (post.embeds.isNotEmpty) ...[
+          for (final embed in post.embeds) ...[
             const SizedBox(height: 8),
-            Card(
-              margin: EdgeInsets.zero,
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: <Widget>[
-                  for (final embed in post.embeds) EmbedWidget(embed),
-                ].joinWithValue(const Divider(height: 1)),
-              ),
-            ),
+            EmbedWidget(embed),
           ],
           if (post.quotedPost != null) ...[
             const SizedBox(height: 16),
