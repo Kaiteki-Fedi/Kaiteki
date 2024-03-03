@@ -509,10 +509,6 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 
   Widget? buildPrimaryButton(User? user, [bool small = false]) {
-    final comfortableFilledButtonStyle = FilledButton.styleFrom(
-      visualDensity: VisualDensity.comfortable,
-    );
-
     if (user?.id == ref.watch(currentAccountProvider)?.user.id) {
       if (small) {
         return IconButton.filled(
@@ -526,51 +522,22 @@ class _UserScreenState extends ConsumerState<UserScreen> {
 
       return FilledButton(
         onPressed: () => _onEditProfile(user!),
-        style: comfortableFilledButtonStyle,
+        style: FilledButton.styleFrom(
+          visualDensity: VisualDensity.standard,
+        ),
         child: Text(context.l10n.editProfileButtonLabel),
       );
     }
 
     final followState = user?.state.follow;
 
+    if (followState == null) return null;
+
     Future<void> onPressed() => _onFollow(context, user!);
 
-    return switch (followState) {
-      UserFollowState.following => small
-          ? IconButton.filledTonal(
-              onPressed: onPressed,
-              icon: const Icon(Icons.person_remove_rounded),
-              tooltip: context.l10n.unfollowButtonLabel,
-            )
-          : FilledButton.tonal(
-              onPressed: onPressed,
-              style: comfortableFilledButtonStyle,
-              child: Text(context.l10n.unfollowButtonLabel),
-            ),
-      UserFollowState.notFollowing => small
-          ? IconButton.filled(
-              onPressed: onPressed,
-              icon: const Icon(Icons.person_add_rounded),
-              tooltip: context.l10n.followButtonLabel,
-            )
-          : FilledButton(
-              onPressed: onPressed,
-              style: comfortableFilledButtonStyle,
-              child: Text(context.l10n.followButtonLabel),
-            ),
-      UserFollowState.pending => small
-          ? IconButton.filled(
-              onPressed: onPressed,
-              icon: const Icon(Icons.lock_clock_rounded),
-              tooltip: context.l10n.pendingFollowRequestButtonLabel,
-            )
-          : FilledButton.tonal(
-              onPressed: onPressed,
-              style: comfortableFilledButtonStyle,
-              child: Text(context.l10n.pendingFollowRequestButtonLabel),
-            ),
-      null => null,
-    };
+    return small
+        ? _FollowButton.icon(followState, onPressed: onPressed)
+        : _FollowButton(followState, onPressed: onPressed);
   }
 
   Future<void> _onViewAvatar(User user) async {
@@ -607,6 +574,56 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         );
       },
     );
+  }
+}
+
+class _FollowButton extends StatelessWidget {
+  final UserFollowState followState;
+  final bool asIcon;
+  final VoidCallback? onPressed;
+
+  const _FollowButton(this.followState, {this.onPressed}) : asIcon = false;
+
+  const _FollowButton.icon(this.followState, {this.onPressed}) : asIcon = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final buttonStyle = FilledButton.styleFrom(
+      visualDensity: VisualDensity.standard,
+    );
+
+    return switch ((asIcon, followState)) {
+      (true, UserFollowState.following) => IconButton.filledTonal(
+          onPressed: onPressed,
+          icon: const Icon(Icons.remove_rounded),
+          tooltip: context.l10n.unfollowButtonLabel,
+        ),
+      (false, UserFollowState.following) => FilledButton.tonal(
+          onPressed: onPressed,
+          style: buttonStyle,
+          child: Text(context.l10n.unfollowButtonLabel),
+        ),
+      (true, UserFollowState.notFollowing) => IconButton.filled(
+          onPressed: onPressed,
+          icon: const Icon(Icons.add_rounded),
+          tooltip: context.l10n.followButtonLabel,
+        ),
+      (false, UserFollowState.notFollowing) => FilledButton(
+          onPressed: onPressed,
+          style: buttonStyle,
+          child: Text(context.l10n.followButtonLabel),
+        ),
+      (true, UserFollowState.pending) => IconButton.filled(
+          onPressed: onPressed,
+          icon: const Icon(Icons.lock_clock_rounded),
+          tooltip: context.l10n.pendingFollowRequestButtonLabel,
+        ),
+      (false, UserFollowState.pending) => FilledButton.tonal(
+          onPressed: onPressed,
+          style: buttonStyle,
+          child: Text(context.l10n.pendingFollowRequestButtonLabel),
+        ),
+    };
   }
 }
 
