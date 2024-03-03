@@ -3,7 +3,6 @@ import "package:flutter/services.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shortcuts/intents.dart";
-import "package:kaiteki/utils/extensions.dart";
 import "package:kaiteki_core/model.dart";
 import "package:url_launcher/url_launcher.dart";
 
@@ -47,14 +46,16 @@ class _MediaInspectionScreenState extends State<MediaInspectionScreen> {
   bool _immerse = false;
 
   // bool _showThread = false;
-  int _currentPage = 0;
+  late int _currentPage;
   late PageController _controller;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = PageController(initialPage: widget.initialIndex ?? 0);
+    _controller = PageController(
+      initialPage: _currentPage = widget.initialIndex ?? 0,
+    );
   }
 
   @override
