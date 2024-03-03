@@ -151,14 +151,17 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   Widget build(BuildContext context) {
     if (isHidden) {
       return InkWell(
-        customBorder: StadiumBorder(),
+        customBorder: const StadiumBorder(),
         onTap: () => setState(() => _overrideMute = true),
-        child: Row(
-          children: [
-            Icon(Icons.visibility_off_rounded),
-            const SizedBox(width: 8),
-            Text(_post.author.handle.toString()),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              const Icon(Icons.visibility_off_rounded),
+              const SizedBox(width: 8),
+              Text(_post.author.handle.toString()),
+            ],
+          ),
         ),
       );
     }
