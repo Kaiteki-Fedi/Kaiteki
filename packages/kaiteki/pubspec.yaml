@@ -22,7 +22,6 @@ dependencies:
   equatable: ^2.0.5
   fast_immutable_collections: ^9.0.0
   fediverse_objects: ^0.0.1
-  file_picker: ^6.1.1
   file_selector: ^1.0.1
   flutter:
     sdk: flutter

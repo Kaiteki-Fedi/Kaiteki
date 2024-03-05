@@ -1,6 +1,6 @@
 import "dart:convert";
 
-import "package:file_picker/file_picker.dart";
+import "package:file_selector/file_selector.dart";
 import "package:flutter/material.dart";
 import "package:infinite_scroll_pagination/infinite_scroll_pagination.dart";
 import "package:kaiteki/di.dart";
@@ -92,17 +92,17 @@ class _MutesScreenState extends ConsumerState<MutesScreen> {
   }
 
   Future<void> _onImport() async {
-    final result = await FilePicker.platform.pickFiles(
-      dialogTitle: "Import mute list",
-      type: FileType.custom,
-      allowedExtensions: ["csv"],
-      withReadStream: true,
+    const csvTypeGroup = XTypeGroup(
+      extensions: ["csv"],
+      label: "Comma-separated values",
+      mimeTypes: ["text/csv"],
     );
+
+    final result = await openFile(acceptedTypeGroups: [csvTypeGroup]);
 
     if (result == null) return;
 
-    final file = result.files.first;
-    final csv = await utf8.decodeStream(file.readStream!);
+    final csv = await utf8.decodeStream(result.openRead());
     final list = csv.split("\n");
 
     if (!mounted) return;
