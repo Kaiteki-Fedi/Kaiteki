@@ -86,6 +86,7 @@ extension KaitekiMastodonAccountExtension on mastodon.Account {
       username: username,
       bannerUrl: header.andThen(Uri.parse),
       avatarUrl: avatar.andThen(Uri.parse),
+      backgroundUrl: pleroma?.backgroundImage,
       joinDate: createdAt,
       id: id,
       description: note,
@@ -101,7 +102,10 @@ extension KaitekiMastodonAccountExtension on mastodon.Account {
         follow: getFollowState(),
       ),
       host: _getHost(acct) ?? localHost,
-      details: UserDetails(fields: _parseFields(fields)),
+      details: UserDetails(
+        fields: _parseFields(fields),
+        birthday: pleroma?.birthday,
+      ),
       url: url.andThen(Uri.parse),
       flags: UserFlags(
         isModerator: pleroma?.isModerator,

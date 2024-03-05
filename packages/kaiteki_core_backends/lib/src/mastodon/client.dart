@@ -850,7 +850,11 @@ enum StreamType {
   /// Notifications for the current user.
   ///
   /// Available since v1.4.2
-  userNotification("user:notification");
+  userNotification("user:notification"),
+  userPleromaChat("user:pleroma_chat"),
+  hashtag("hashtag"),
+  list("list"),
+  direct("direct");
 
   final String value;
 

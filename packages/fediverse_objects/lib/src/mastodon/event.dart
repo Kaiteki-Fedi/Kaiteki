@@ -29,4 +29,11 @@ enum EventType {
   @JsonValue("status.update")
   statusUpdate,
   encryptedMessage,
+  @JsonValue("pleroma:follow_relationships_update")
+  pleromaFollowRelationshipsUpdate,
+  @JsonValue("pleroma:respond")
+  pleromaRespond,
+  @JsonValue("pleroma:chat_update")
+  pleromaChatUpdate,
+
 }
