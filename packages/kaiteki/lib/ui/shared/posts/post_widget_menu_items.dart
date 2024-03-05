@@ -41,7 +41,7 @@ class ShareMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MenuItemButton(
-      leadingIcon: const Icon(Icons.share_rounded),
+      leadingIcon: Icon(Icons.adaptive.share_rounded),
       onPressed: onPressed,
       child: Text(context.l10n.shareButtonLabel),
     );
