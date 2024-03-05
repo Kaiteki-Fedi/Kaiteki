@@ -22,37 +22,27 @@ class InteractionEventBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const avatarMargin = EdgeInsets.only(
-      left: 28,
-      right: 16,
-    );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+      padding: const EdgeInsets.fromLTRB(40, 6, 11, 6),
       child: Row(
         children: [
-          Padding(
-            padding: avatarMargin,
-            child: AvatarWidget(user, size: 16),
-          ),
-          Text.rich(
-            TextSpan(
-              children: [
-                user.renderDisplayName(context, ref),
-                const TextSpan(text: " "),
-                WidgetSpan(
-                  child: Icon(
-                    icon,
-                    size: DefaultTextStyle.of(context)
-                        .style
-                        .fontSize
-                        .andThen((size) => size * 1.25),
-                    color: color,
-                  ),
-                ),
-                const TextSpan(text: " "),
-                TextSpan(text: text),
-              ],
+          Icon(Icons.repeat_rounded, color: color, size: 18),
+          const SizedBox(width: 8),
+          AvatarWidget(user, size: 16),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  user.renderDisplayName(context, ref),
+                  const TextSpan(text: " "),
+                  TextSpan(text: text),
+                ],
+              ),
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              maxLines: 1,
             ),
           ),
         ],

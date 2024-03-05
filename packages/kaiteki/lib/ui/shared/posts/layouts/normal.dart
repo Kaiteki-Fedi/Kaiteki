@@ -55,10 +55,12 @@ class NormalPostLayout extends ConsumerWidget {
               user: post.author,
             ),
           ),
+          const Divider(),
           PostWidget(
             repeatOf,
             onOpen: onOpen,
             onTap: onTap,
+            useCard: false,
           ),
         ],
       );

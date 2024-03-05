@@ -57,11 +57,13 @@ class ExpandedPostLayout extends ConsumerWidget {
               user: post.author,
             ),
           ),
+          const Divider(),
           PostWidget(
             repeatOf,
             layout: PostWidgetLayout.expanded,
             onOpen: onOpen,
             onTap: onTap,
+            useCard: false,
           ),
         ],
       );
