@@ -132,12 +132,15 @@ class MainScreenState extends ConsumerState<MainScreen> {
             suggestionsBuilder: _suggestionsBuilder,
           ) as PreferredSizeWidget;
 
-
     final theme = Theme.of(context);
     final containerColor = theme.colorScheme.surfaceContainer;
 
     final scaffold = Scaffold(
-      backgroundColor: isCompact ? null : showPride ? Colors.transparent : containerColor,
+      backgroundColor: isCompact
+          ? null
+          : showPride
+              ? Colors.transparent
+              : containerColor,
       appBar: appBar,
       body: _BodyWrapper(
         tabTypes: _tabs,
@@ -379,7 +382,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
   }
 }
 
-class _BodyWrapper extends StatelessWidget {
+class _BodyWrapper extends ConsumerWidget {
   final Widget child;
   final List<MainScreenTabType>? tabTypes;
   final int currentIndex;
@@ -397,7 +400,9 @@ class _BodyWrapper extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+
     Widget body = Focus(
       autofocus: true,
       child: PageTransitionSwitcher(
@@ -409,7 +414,7 @@ class _BodyWrapper extends StatelessWidget {
           );
         },
         child: Material(
-          color: Theme.of(context).colorScheme.surface,
+          color: theme.colorScheme.surface,
           child: child,
         ),
       ),
@@ -419,12 +424,25 @@ class _BodyWrapper extends StatelessWidget {
         WindowWidthSizeClass.compact;
     if (isCompact) return body;
 
+    var shape = const RoundedRectangleBorder(
+      borderRadius: BorderRadiusDirectional.vertical(
+        top: Radius.circular(16.0),
+      ),
+    );
+
+    if (ref.watch(useHighContrast).value) {
+      shape = shape.copyWith(
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant,
+        ),
+      );
+    }
+
     body = Padding(
       padding: const EdgeInsets.only(right: 24.0),
-      child: ClipRRect(
-        borderRadius: const BorderRadiusDirectional.vertical(
-          top: Radius.circular(16.0),
-        ),
+      child: Material(
+        clipBehavior: Clip.antiAlias,
+        shape: shape,
         child: body,
       ),
     );

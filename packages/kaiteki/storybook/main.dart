@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:kaiteki/theming/default/themes.dart";
+import "package:kaiteki/theming/fallback.dart";
 import "package:kaiteki_l10n/kaiteki_l10n.dart";
 import "package:storybook_flutter/storybook_flutter.dart";
 
@@ -17,8 +17,8 @@ class KaitekiStorybook extends StatelessWidget {
   Widget build(BuildContext context) {
     return Storybook(
       wrapperBuilder: (context, child) => MaterialApp(
-        theme: makeDefaultTheme(Brightness.light),
-        darkTheme: makeDefaultTheme(Brightness.dark),
+        theme: fallbackTheme,
+        darkTheme: fallbackDarkTheme,
         debugShowCheckedModeBanner: false,
         home: Builder(
           builder: (context) => Scaffold(

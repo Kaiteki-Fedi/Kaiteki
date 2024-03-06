@@ -154,3 +154,10 @@ String? getLocaleName(Locale locale) {
   if (isDefaultLanguageName && !isEnglish) return null;
   return languageName;
 }
+
+typedef ThemeSet = ({
+  ThemeData theme,
+  ThemeData darkTheme,
+  ThemeData highContrastTheme,
+  ThemeData highContrastDarkTheme,
+});

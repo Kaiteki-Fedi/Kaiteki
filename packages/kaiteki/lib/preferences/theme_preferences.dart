@@ -1,15 +1,15 @@
 import "package:flutter/material.dart";
 import "package:kaiteki/di.dart";
-import "package:kaiteki/theming/themes.dart";
+import "package:kaiteki/theming/accent.dart";
 import "package:kaiteki/ui/pride.dart";
 import "package:kaiteki/ui/shared/posts/post_widget.dart";
 import "package:notified_preferences_riverpod/notified_preferences_riverpod.dart";
 
-final theme = createEnumSettingProvider<AppTheme>(
+final theme = createEnumSettingProvider<AppAccent>(
   key: "theme",
-  initialValue: AppTheme.system,
+  initialValue: AppAccent.system,
   provider: sharedPreferencesProvider,
-  values: AppTheme.values,
+  values: AppAccent.values,
 );
 
 final themeMode = createEnumSettingProvider<ThemeMode>(

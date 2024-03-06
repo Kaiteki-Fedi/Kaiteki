@@ -11,7 +11,8 @@ import "package:kaiteki/hive.dart" as hive;
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/startup_state.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:kaiteki/theming/default/themes.dart";
+import "package:kaiteki/theming/accent.dart";
+import "package:kaiteki/theming/fallback.dart";
 import "package:kaiteki/ui/shared/crash_screen.dart";
 import "package:kaiteki/ui/splash_screen.dart";
 import "package:kaiteki_core/http.dart";
@@ -41,8 +42,8 @@ Future<void> main() async {
     runApp(
       MaterialApp(
         home: SplashScreen(stream: startup),
-        theme: makeDefaultTheme(Brightness.light),
-        darkTheme: makeDefaultTheme(Brightness.dark),
+        theme: fallbackTheme,
+        darkTheme: fallbackDarkTheme,
       ),
     );
 
@@ -114,8 +115,12 @@ Stream<StartupState> _startup(SharedPreferences sharedPreferences) async* {
 
 void handleFatalError(TraceableError error) {
   final crashScreen = MaterialApp(
-    theme: makeDefaultTheme(Brightness.light),
-    darkTheme: makeDefaultTheme(Brightness.dark),
+    theme: ThemeData.from(
+      colorScheme: AppAccent.affection.getColorScheme(Brightness.light)!,
+    ),
+    darkTheme: ThemeData.from(
+      colorScheme: AppAccent.affection.getColorScheme(Brightness.dark)!,
+    ),
     localizationsDelegates: KaitekiLocalizations.localizationsDelegates,
     supportedLocales: KaitekiLocalizations.supportedLocales,
     home: CrashScreen(error),

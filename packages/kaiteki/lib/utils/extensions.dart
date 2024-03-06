@@ -4,7 +4,6 @@ import "package:html/dom.dart";
 import "package:kaiteki/di.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
-import "package:material_color_utilities/material_color_utilities.dart";
 
 export "package:kaiteki/text/rendering_extensions.dart";
 export "package:kaiteki/utils/extensions/build_context.dart";

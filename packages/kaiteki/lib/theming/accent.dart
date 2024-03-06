@@ -1,8 +1,6 @@
 import "package:flutter/material.dart";
 
-import "default/m3_color_schemes.dart" as kaiteki;
-
-enum AppTheme {
+enum AppAccent {
   system,
   affection(Colors.red),
   joy(Colors.orange),
@@ -14,20 +12,12 @@ enum AppTheme {
 
   final Color? baseColor;
 
-  const AppTheme([this.baseColor]);
+  const AppAccent([this.baseColor]);
 
   ColorScheme? getColorScheme(Brightness brightness) {
     final baseColor = this.baseColor;
 
     if (baseColor == null) return null;
-
-    // Here we're being cheeky and use Kaiteki's theme for red.
-    if (this == AppTheme.affection) {
-      return switch (brightness) {
-        Brightness.dark => kaiteki.darkColorScheme,
-        Brightness.light => kaiteki.lightColorScheme,
-      };
-    }
 
     return ColorScheme.fromSeed(seedColor: baseColor, brightness: brightness);
   }
