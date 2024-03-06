@@ -115,6 +115,12 @@ final showAttachmentDescriptionWarning = createSettingProvider<bool>(
   provider: sharedPreferencesProvider,
 );
 
+final showAltTextWarningOnRepeat = createSettingProvider<bool>(
+  key: "showAltTextWarningOnRepeat",
+  initialValue: false,
+  provider: sharedPreferencesProvider,
+);
+
 final readDisplayNameOnly = createSettingProvider<bool>(
   key: "readDisplayNameOnly",
   initialValue: false,

@@ -16,6 +16,7 @@ import "package:kaiteki/ui/report/special_user_alert_dialog.dart";
 import "package:kaiteki/ui/share_sheet/share.dart";
 import "package:kaiteki/ui/shared/common.dart";
 import "package:kaiteki/ui/shared/dialogs/content_not_public_dialog.dart";
+import "package:kaiteki/ui/shared/dialogs/missing_description.dart";
 import "package:kaiteki/ui/shared/emoji/emoji_selector_bottom_sheet.dart";
 import "package:kaiteki/ui/shared/posts/avatar_widget.dart";
 import "package:kaiteki/ui/shared/posts/layouts/callbacks.dart";
@@ -566,6 +567,19 @@ class _PostWidgetState extends ConsumerState<PostWidget> {
   Future<void> _onRepeat() async {
     final adapter = ref.read(adapterProvider);
     final l10n = context.l10n;
+
+    if (ref.read(showAltTextWarningOnRepeat).value) {
+      final hasAltText = _post.attachments?.isNotEmpty != true ||( _post.attachments?.map((e) => e.description).any((e) => e != null && e.isEmpty) ?? false);
+      if (!hasAltText) {
+        final result = await showDialog(
+          context: context,
+          builder: (_) => const MissingAltTextOnRepeatDialog(),
+        );
+
+        if (result != true) return;
+      }
+    }
+
     try {
       final PostState newState;
 

@@ -25,3 +25,26 @@ class MissingDescriptionDialog extends StatelessWidget {
     );
   }
 }
+
+class MissingAltTextOnRepeatDialog extends StatelessWidget {
+  const MissingAltTextOnRepeatDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      icon: const Icon(Icons.accessibility_new_rounded),
+      title: Text(context.l10n.missingAltTextOnRepeatDialogTitle),
+      content: ConstrainedBox(
+        constraints: kDialogConstraints,
+        child: Text(context.l10n.missingAltTextOnRepeatDialogDescription),
+      ),
+      actions: [
+        const CancelTextButton(),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(context.l10n.postAnywayButtonLabel),
+        ),
+      ],
+    );
+  }
+}

@@ -26,12 +26,19 @@ class AccessibilitySettingsScreen extends StatelessWidget {
                   PreferenceSwitchListTile(
                     secondary: const Icon(Icons.image_rounded),
                     title: const Text(
-                      "Show warning for missing attachment descriptions",
+                      "Warn when posting with missing alt text",
                     ),
                     subtitle: const Text(
                       "Prevent you from accidentally uploading attachments without a description",
                     ),
                     provider: showAttachmentDescriptionWarning,
+                  ),
+                  PreferenceSwitchListTile(
+                    secondary: const SizedBox(),
+                    title: const Text(
+                      "Warn when repeating posts with missing alt text",
+                    ),
+                    provider: showAltTextWarningOnRepeat,
                   ),
                 ],
               ),
