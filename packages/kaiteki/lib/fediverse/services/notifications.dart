@@ -9,7 +9,6 @@ import "package:http/http.dart";
 import "package:kaiteki/account_manager.dart";
 import "package:kaiteki/model/auth/account_key.dart";
 import "package:kaiteki/model/pagination_state.dart";
-import "package:kaiteki/preferences/app_experiment.dart";
 import "package:kaiteki/utils/image.dart";
 import "package:kaiteki_core/kaiteki_core.dart";
 import "package:logging/logging.dart";

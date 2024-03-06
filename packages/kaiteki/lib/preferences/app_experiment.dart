@@ -1,6 +1,5 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:kaiteki/preferences/app_preferences.dart";
-import "package:riverpod_annotation/riverpod_annotation.dart";
 
 enum AppExperiment {
   denseReactions(
