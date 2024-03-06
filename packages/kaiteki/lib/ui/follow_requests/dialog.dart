@@ -59,7 +59,7 @@ class _FollowRequestsDialogState extends ConsumerState<FollowRequestsDialog> {
       builderDelegate: PagedChildBuilderDelegate(
         itemBuilder: (context, user, i) => UserListTile(
           user: user,
-          titleAlignment: ListTileTitleAlignment.center,
+          titleAlignment: ListTileTitleAlignment.top,
           content: [
             const SizedBox(height: 8),
             Row(

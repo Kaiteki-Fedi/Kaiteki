@@ -96,7 +96,7 @@ class NormalPostLayout extends ConsumerWidget {
     const leftPostContentInset = 8 + 48;
 
     final metaArea = Padding(
-      padding: EdgeInsets.only(top: padding.top),
+      padding: EdgeInsets.only(top: padding.top, right: padding.end - 8.0),
       child: Row(
         children: [
           if (postTheme?.showAvatar ?? true) ...[
@@ -141,7 +141,12 @@ class NormalPostLayout extends ConsumerWidget {
             Semantics(
               focusable: false,
               child: Padding(
-                padding: const EdgeInsets.only(left: leftPostContentInset - 8),
+                padding: EdgeInsetsDirectional.only(
+                  start: leftPostContentInset - 8,
+                  top: 4.0,
+                  bottom: 4.0,
+                  end: padding.end - 4.0,
+                ),
                 child: InteractionBar(
                   metrics: post.metrics,
                   callbacks: callbacks,

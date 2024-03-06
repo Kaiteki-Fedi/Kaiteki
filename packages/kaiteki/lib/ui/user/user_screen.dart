@@ -87,38 +87,26 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         final theme = Theme.of(context);
         return FutureBuilder(
           future: (user?.bannerUrl ?? user?.avatarUrl)?.andThen(
-            (url) => ColorScheme.fromImageProvider(
-              provider: NetworkImage(url.toString()),
-              brightness: theme.brightness,
-            ),
+            (url) {
+              return ColorScheme.fromImageProvider(
+                provider: NetworkImage(url.toString()),
+                brightness: theme.brightness,
+              );
+            },
           ),
           builder: (context, snapshot) {
             return Theme(
-              data: theme
-                  .copyWith(colorScheme: snapshot.data)
-                  .applyDefaultTweaks(),
+              data: theme.copyWith(colorScheme: snapshot.data).applyTweaks(),
               child: DefaultTabController(
                 length: 3,
-                child: Builder(
-                  builder: (context) {
-                    return isCompact
-                        ? buildBodyCompact(context, user, includeReplies)
-                        : buildBody(context, user, includeReplies);
-                  },
-                ),
+                child: isCompact
+                    ? buildBodyCompact(context, user, includeReplies)
+                    : buildBody(context, user, includeReplies),
               ),
             );
           },
         );
       },
-    );
-  }
-
-  Color _getBackgroundColor(BuildContext context) {
-    return ElevationOverlay.applySurfaceTint(
-      Theme.of(context).colorScheme.surface,
-      Theme.of(context).colorScheme.surfaceTint,
-      2,
     );
   }
 
@@ -128,108 +116,121 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       user,
       MediaQuery.sizeOf(context).width < 840,
     );
-    return Scaffold(
-      backgroundColor: _getBackgroundColor(context),
-      body: SafeArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton.filledTonal(
-                onPressed: Navigator.of(context).maybePop,
-                icon: Icon(Icons.adaptive.arrow_back),
-                tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-              ),
+    final backgroundUrl = user?.backgroundUrl;
+    final theme = Theme.of(context);
+    return Stack(
+      children: [
+        if (backgroundUrl != null)
+          Positioned.fill(
+            child: Image.network(
+              backgroundUrl.toString(),
+              fit: BoxFit.cover,
             ),
-            // https://m3.material.io/foundations/layout/canonical-layouts/supporting-pane#13c3c489-9cc7-4830-b44a-fe6c2d431c1f
-            SizedBox(
-              // HACK(Craftplacer): Material 3 advises to only show the supporting
-              // pane when the screen hits the expanded layout class. Since the
-              // recommended side pane width is 360dp, we use what is lower of
-              // width and a third of the screen, so the content pane doesn't get
-              // too squished.
-              width: min(
-                MediaQuery.sizeOf(context).width / 3,
-                360,
-              ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomLeft,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: a),
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(16),
-                            ),
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: _Banner.fromUser(user),
-                            ),
-                          ),
-                        ),
-                        if (user != null)
-                          Positioned(
-                            left: 16.0,
-                            child: AvatarWidget(
-                              user,
-                              size: avatarSize,
-                              onTap: () => _onViewAvatar(user),
-                            ),
-                          ),
-                        Positioned(
-                          left: 16.0 + avatarSize,
-                          right: 0,
-                          bottom: 0,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              if (primaryButton != null) primaryButton,
-                              const SizedBox(width: 8),
-                              buildMenuButton(user),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (user != null) ...[
-                      const SizedBox(height: 16),
-                      UserPanel(user),
-                    ],
-                  ],
+          ),
+        Scaffold(
+          backgroundColor: theme.colorScheme.surfaceContainer,
+          body: SafeArea(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton.filledTonal(
+                    onPressed: Navigator.of(context).maybePop,
+                    icon: Icon(Icons.adaptive.arrow_back),
+                    tooltip:
+                        MaterialLocalizations.of(context).backButtonTooltip,
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  child: ColoredBox(
-                    color: Theme.of(context).colorScheme.surface,
+                // https://m3.material.io/foundations/layout/canonical-layouts/supporting-pane#13c3c489-9cc7-4830-b44a-fe6c2d431c1f
+                SizedBox(
+                  // HACK(Craftplacer): Material 3 advises to only show the supporting
+                  // pane when the screen hits the expanded layout class. Since the
+                  // recommended side pane width is 360dp, we use what is lower of
+                  // width and a third of the screen, so the content pane doesn't get
+                  // too squished.
+                  width: min(
+                    MediaQuery.sizeOf(context).width / 3,
+                    360,
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
                       children: [
-                        Material(child: buildTabBar()),
-                        Expanded(
-                          child: Material(
-                            child: buildTabBarView(includeReplies),
-                          ),
+                        Stack(
+                          alignment: Alignment.bottomLeft,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: a),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(16),
+                                ),
+                                child: AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: _Banner.fromUser(user),
+                                ),
+                              ),
+                            ),
+                            if (user != null)
+                              Positioned(
+                                left: 16.0,
+                                child: AvatarWidget(
+                                  user,
+                                  size: avatarSize,
+                                  onTap: () => _onViewAvatar(user),
+                                ),
+                              ),
+                            Positioned(
+                              left: 16.0 + avatarSize,
+                              right: 0,
+                              bottom: 0,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  if (primaryButton != null) primaryButton,
+                                  const SizedBox(width: 8),
+                                  buildMenuButton(user),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
+                        if (user != null) ...[
+                          const SizedBox(height: 16),
+                          UserPanel(user),
+                        ],
                       ],
                     ),
                   ),
                 ),
-              ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Material(
+                      clipBehavior: Clip.antiAlias,
+                      color: theme.colorScheme.surface,
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      child: Column(
+                        children: [
+                          Ink(child: buildTabBar()),
+                          Expanded(
+                            child: Ink(
+                              child: buildTabBarView(includeReplies),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+              ],
             ),
-            const SizedBox(width: 16),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -255,6 +256,14 @@ class _UserScreenState extends ConsumerState<UserScreen> {
         leadingIcon: Icon(Icons.adaptive.share_rounded),
         child: const Text("Share"),
       ),
+      const Divider(),
+      MenuItemButton(
+        onPressed: user.url.andThen(
+          (url) => () async => share(context, url),
+        ),
+        leadingIcon: const Icon(Icons.visibility_off_rounded),
+        child: const Text("Mute"),
+      ),
       MenuItemButton(
         onPressed: () async {
           await showDialog(
@@ -276,8 +285,11 @@ class _UserScreenState extends ConsumerState<UserScreen> {
     final primaryButton = buildPrimaryButton(
       user,
     );
+
+    final backgroundColor = Theme.of(context).colorScheme.surfaceContainer;
+
     return Scaffold(
-      backgroundColor: _getBackgroundColor(context),
+      backgroundColor: backgroundColor,
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           IconButton adaptiveIconButton({
@@ -309,7 +321,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
                 onPressed: () => Navigator.of(context).maybePop(),
                 tooltip: MaterialLocalizations.of(context).backButtonTooltip,
               ),
-              backgroundColor: _getBackgroundColor(context),
+              backgroundColor: backgroundColor,
               scrolledUnderElevation: 0,
               actions: [moreButton, kAppBarActionsSpacer],
               title: AnimatedSwitcher(
@@ -365,7 +377,7 @@ class _UserScreenState extends ConsumerState<UserScreen> {
               ),
             CustomSliverPersistentHeader(
               child: Material(
-                color: _getBackgroundColor(context),
+                color: backgroundColor,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,

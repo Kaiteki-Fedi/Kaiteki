@@ -13,6 +13,7 @@ class EmbedWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final description = embed.description;
     return Card.outlined(
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => launchUrl(embed.uri),
         child: SizedBox(
