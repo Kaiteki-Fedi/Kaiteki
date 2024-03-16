@@ -1,0 +1,1 @@
+<p><i>Kaiteki</i> is een cross-platform client voor sociale netwerksites. Het ondersteunt momenteel Mastodon, Pleroma, Misskey en Twitter. Toekomstige back-ends zouden kunnen volgen.</p>
