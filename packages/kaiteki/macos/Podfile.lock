@@ -1,9 +1,13 @@
 PODS:
   - dynamic_color (0.0.2):
     - FlutterMacOS
+  - file_selector_macos (0.0.1):
+    - FlutterMacOS
   - flutter_local_notifications (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
+  - package_info_plus (0.0.1):
+    - FlutterMacOS
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -14,26 +18,36 @@ PODS:
     - FlutterMacOS
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
-  - wakelock_macos (0.0.1):
+  - video_player_avfoundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - wakelock_plus (0.0.1):
     - FlutterMacOS
 
 DEPENDENCIES:
   - dynamic_color (from `Flutter/ephemeral/.symlinks/plugins/dynamic_color/macos`)
+  - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - flutter_local_notifications (from `Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
-  - wakelock_macos (from `Flutter/ephemeral/.symlinks/plugins/wakelock_macos/macos`)
+  - video_player_avfoundation (from `Flutter/ephemeral/.symlinks/plugins/video_player_avfoundation/darwin`)
+  - wakelock_plus (from `Flutter/ephemeral/.symlinks/plugins/wakelock_plus/macos`)
 
 EXTERNAL SOURCES:
   dynamic_color:
     :path: Flutter/ephemeral/.symlinks/plugins/dynamic_color/macos
+  file_selector_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos
   flutter_local_notifications:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_local_notifications/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
+  package_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
   share_plus:
@@ -42,19 +56,24 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   url_launcher_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
-  wakelock_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/wakelock_macos/macos
+  video_player_avfoundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/video_player_avfoundation/darwin
+  wakelock_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/wakelock_plus/macos
 
 SPEC CHECKSUMS:
   dynamic_color: 2eaa27267de1ca20d879fbd6e01259773fb1670f
+  file_selector_macos: 468fb6b81fac7c0e88d71317f3eec34c3b008ff9
   flutter_local_notifications: 3805ca215b2fb7f397d78b66db91f6a747af52e4
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
+  package_info_plus: 02d7a575e80f194102bef286361c6c326e4c29ce
+  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   share_plus: 76dd39142738f7a68dd57b05093b5e8193f220f7
-  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
-  url_launcher_macos: 5335912b679c073563f29d89d33d10d459f95451
-  wakelock_macos: bc3f2a9bd8d2e6c89fee1e1822e7ddac3bd004a9
+  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
+  video_player_avfoundation: 02011213dab73ae3687df27ce441fbbcc82b5579
+  wakelock_plus: 4783562c9a43d209c458cb9b30692134af456269
 
 PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.15.2
