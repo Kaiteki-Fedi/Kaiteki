@@ -540,10 +540,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_native_splash
-      sha256: "58fb249fb19ffe979e4ad288de018a118768988b1f497e6ff0b23ead6f5a1bc5"
+      sha256: "558f10070f03ee71f850a78f7136ab239a67636a294a44a06b6b7345178edb1e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.13"
+    version: "2.3.10"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -824,10 +824,10 @@ packages:
     dependency: transitive
     description:
       name: js
-      sha256: c1b2e9b5ea78c45e1a0788d29606ba27dc5f71f019f32ca5140f61ef071838cf
+      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.1"
+    version: "0.6.7"
   json_annotation:
     dependency: "direct main"
     description:
@@ -1698,10 +1698,10 @@ packages:
     dependency: transitive
     description:
       name: wakelock_plus
-      sha256: "26ebc8b5e0037c15e2a1b661dcec8a475cb7205befcce8a33f545ae8c86b367c"
+      sha256: f268ca2116db22e57577fb99d52515a24bdc1d570f12ac18bb762361d43b043d
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.6"
+    version: "1.1.4"
   wakelock_plus_platform_interface:
     dependency: transitive
     description:

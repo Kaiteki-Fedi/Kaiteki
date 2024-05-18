@@ -65,7 +65,13 @@ scripts:
       flutter: true
       dirExists: 'android'
       scope: 'kaiteki'
-
+  build:macos:
+    run: melos exec -- "flutter build macos"
+    description: Build MacOS binary
+    packageFilters:
+      flutter: true
+      dirExists: 'macos'
+      scope: 'kaiteki'
   test:
     run: flutter test --coverage --no-pub -r expanded
     exec:
